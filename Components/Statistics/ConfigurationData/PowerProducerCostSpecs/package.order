@@ -1,0 +1,16 @@
+PartialPowerPlantCostSpecs
+BrownCoal
+HardCoal
+GasCCGT
+GasTurbine
+WindOnshore
+WindOffshore
+PV
+Nuclear
+RunOffHydro
+PumpedStorage
+GarbageBoiler
+Biomass
+P2H
+GasBoiler
+BoilerCost

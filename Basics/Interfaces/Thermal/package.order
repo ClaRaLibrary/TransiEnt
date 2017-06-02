@@ -1,0 +1,13 @@
+FluidPort
+FluidPortIn
+FluidPortMSL
+FluidPortOut
+HeatFlowRateIn
+HeatFlowRateOut
+HeatPort
+HeatPort_a
+HeatPort_b
+MassFlowRateIn
+MassFlowRateOut
+TemperatureIn
+TemperatureOut

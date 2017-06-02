@@ -1,0 +1,125 @@
+within TransiEnt.Components.Gas.Compressor;
+model CompressorRealGasIsentropicEff_L1_simple "Simple compressor or fan for a one phase VLE fluid"
+
+//___________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.0.1                        //
+//                                                                           //
+// Licensed by Hamburg University of Technology under Modelica License 2.    //
+// Copyright 2017, Hamburg University of Technology.                         //
+//___________________________________________________________________________//
+//                                                                           //
+// TransiEnt.EE is a research project supported by the German Federal        //
+// Ministry of Economics and Energy (FKZ 03ET4003).                          //
+// The TransiEnt.EE research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
+// Institute of Energy Systems (Hamburg University of Technology),           //
+// Institute of Electrical Power Systems and Automation                      //
+// (Hamburg University of Technology),                                       //
+// and is supported by                                                       //
+// XRG Simulation GmbH (Hamburg, Germany).                                   //
+//___________________________________________________________________________//
+
+  // enthalpy difference is calculated using a fluid model for the isentropic compression //
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
+  extends Base.PartialCompressorRealGas_L1_simple(summary(outline(
+                                                  eta = eta_is*eta_mech*eta_el)));
+
+  // _____________________________________________
+  //
+  //        Constants and Hidden Parameters
+  // _____________________________________________
+
+  // _____________________________________________
+  //
+  //             Visible Parameters
+  // _____________________________________________
+
+  parameter Real eta_is = 0.8 "Isentropic efficiency" annotation (Dialog(group="Fundamental Definitions"));
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+protected
+  TILMedia.VLEFluid_ph flueGas_outlet_isentropic(
+    h=hOut_is,
+    p=gasPortOut.p,
+    xi=gasIn.xi,
+    vleFluidType=medium,
+    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{30,-32},{50,-12}})));
+
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
+protected
+  SI.SpecificEnthalpy deltah "Specific enthalpy difference between outlet and inlet";
+  SI.SpecificEnthalpy hOut_is "Specific enthalpy after an isentropic compression";
+
+equation
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
+  hOut =gasIn.h + deltah;
+  P_hyd =deltah*gasPortIn.m_flow;
+  flueGas_outlet_isentropic.s =gasIn.s;
+  eta_is =(hOut_is - gasIn.h)/deltah;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
+               annotation(dialog(tab = "Advanced"),
+              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),  Icon(coordinateSystem(preserveAspectRatio=false,
+          extent={{-100,-100},{100,100}}),
+                                      graphics),
+          Documentation(info="<html>
+<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<p>This model represents a compressor for real gases. It is a modified version of the model ClaRa.Components.TurboMachines.Compressors.CompressorGas_L1_simple from ClaRa version 1.2.1. The model is documented there and here only the changes are described. </p>
+<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>The model was changed to work with real gases and mechanical and electrical efficiencies were added. </p>
+<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<p>Only valid for real gases and positive pressure differences. Variable efficiencies and time-dependent behavior are not considered.</p>
+<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<p>gasPortIn: real gas inlet </p>
+<p>gasPortOut: real gas outlet </p>
+<p>m_flow_in: input for mass flow rate </p>
+<p>V_flow_in: input for volume flow rate </p>
+<p>P_el_in: input for electrical power </p>
+<p>dp_in: input for pressure difference </p>
+<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<p>The electrical power is determined using the mechanical and electrical efficiencies.</p>
+<p><br><img src=\"modelica://TransiEnt/Images/equations/equation_CompressorRealGasesIsentropicEff.png\" alt=\"\"/><br></p>
+<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<p>(no remarks) </p>
+<h4><span style=\"color:#008000\">9. References</span></h4>
+<p>(no remarks) </p>
+<h4><span style=\"color:#008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Sep 20 2016<br> </p>
+</html>"));
+end CompressorRealGasIsentropicEff_L1_simple;

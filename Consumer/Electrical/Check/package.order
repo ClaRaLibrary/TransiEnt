@@ -1,0 +1,7 @@
+CheckAverageLoadConsumer
+CheckLinearElectricConsumerSimpler
+CheckLinearElectricConsumer
+CheckSLPElectricConsumer
+CheckTableBasedElectricConsumer
+CheckExponentialElectricConsumer
+CheckExponentialElectricConsumer2

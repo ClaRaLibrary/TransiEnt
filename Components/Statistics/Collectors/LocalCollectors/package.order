@@ -1,0 +1,13 @@
+Check
+CollectElectricPower
+CollectHeatingPower
+CollectGwpEmissionsElectric
+CollectGwpEmissionsHeat
+PartialCollectCosts
+CollectCostsGeneral
+CollectCosts_HydrogenStorageStartGas
+PowerPlantCost
+HeatingPlantCost
+CogenerationPlantCost
+StorageCost
+CollectKineticEnergy

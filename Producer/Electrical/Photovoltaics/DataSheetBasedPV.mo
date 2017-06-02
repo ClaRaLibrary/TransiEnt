@@ -1,0 +1,120 @@
+within TransiEnt.Producer.Electrical.Photovoltaics;
+model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
+
+//___________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.0.1                        //
+//                                                                           //
+// Licensed by Hamburg University of Technology under Modelica License 2.    //
+// Copyright 2017, Hamburg University of Technology.                         //
+//___________________________________________________________________________//
+//                                                                           //
+// TransiEnt.EE is a research project supported by the German Federal        //
+// Ministry of Economics and Energy (FKZ 03ET4003).                          //
+// The TransiEnt.EE research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
+// Institute of Energy Systems (Hamburg University of Technology),           //
+// Institute of Electrical Power Systems and Automation                      //
+// (Hamburg University of Technology),                                       //
+// and is supported by                                                       //
+// XRG Simulation GmbH (Hamburg, Germany).                                   //
+//___________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
+  import TransiEnt;
+  extends Base.PartialPhotovoltaicModule;
+
+  // _____________________________________________
+  //
+  //                   Parameters
+  // _____________________________________________
+
+  parameter SI.Area A_module=1 "PV Module surface ";
+
+  // _____________________________________________
+  //
+  //                Complex Components
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-84,-10},{-64,10}})));
+  Modelica.Blocks.Sources.RealExpression GlobalSolarRadiation(y=
+        simCenter.ambientConditions.globalSolarRadiation.value)
+    annotation (Placement(transformation(extent={{-52,-16},{-36,20}})));
+
+  TransiEnt.Producer.Electrical.Photovoltaics.Base.MPPEfficiencyModel efficiencyModel annotation (Placement(transformation(extent={{-20,-31},{2,-11}})));
+
+  Modelica.Blocks.Sources.RealExpression AmbientTemperature(y=simCenter.T_amb_var)
+    annotation (Placement(transformation(extent={{-52,-44},{-36,-8}})));
+  TransiEnt.Components.Boundaries.Electrical.Power pQ_To_EPP(change_sign=true) annotation (Placement(transformation(extent={{86,-9},{68,9}})));
+  Modelica.Blocks.Math.MultiProduct Efficiency(nu=2)
+    annotation (Placement(transformation(extent={{12,-7},{26,7}})));
+  Modelica.Blocks.Math.Gain SurfacePower(k(unit="m2", value=A_module))
+    annotation (Placement(transformation(extent={{35,-7},{49,7}})));
+equation
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+  connect(pQ_To_EPP.epp, epp) annotation (Line(
+      points={{86.09,-0.09},{82,-0.09},{82,0},{100,0}},
+      color={0,127,0},
+      smooth=Smooth.None));
+  connect(SurfacePower.u, Efficiency.y) annotation (Line(
+      points={{33.6,8.88178e-016},{27.19,8.88178e-016}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(GlobalSolarRadiation.y, Efficiency.u[1]) annotation (Line(
+      points={{-35.2,2},{-6,2},{-6,2.45},{12,2.45}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(efficiencyModel.y, Efficiency.u[2]) annotation (Line(
+      points={{3.1,-21},{12,-21},{12,-2.45}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(GlobalSolarRadiation.y, efficiencyModel.u[1]) annotation (Line(
+      points={{-35.2,2},{-28,2},{-28,-21},{-22.2,-21}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(AmbientTemperature.y, efficiencyModel.u[2]) annotation (Line(
+      points={{-35.2,-26},{-32,-26},{-32,-21},{-22.2,-21}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(SurfacePower.y, pQ_To_EPP.P_el_set) annotation (Line(points={{49.7,0},{62,0},{62,24},{82.4,24},{82.4,10.8}}, color={0,0,127}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}}),                                                                     graphics={
+                                                     Line(
+          points={{-80,0},{-48,0}},
+          color={95,95,95},
+          smooth=Smooth.None,
+          pattern=LinePattern.Dash,
+          thickness=0.5),                            Line(
+          points={{-72,0},{-72,-26},{-50,-26},{-50,-26}},
+          color={95,95,95},
+          smooth=Smooth.None,
+          pattern=LinePattern.Dash,
+          thickness=0.5)}), Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p>Efficiency&nbsp;based&nbsp;on&nbsp;Temperature&nbsp;and&nbsp;Radiation.</p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+</html>"));
+end DataSheetBasedPV;

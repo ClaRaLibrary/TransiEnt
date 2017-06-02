@@ -1,0 +1,10 @@
+TestFlywheelDischarge
+TestFlywheelEfficiency
+TestIdealStorageLoadSmoothing
+TestPrimaryControlWithBattery
+TestFlywheelPark_L2_Efficiency
+TestLeadAcidBattery
+TestLithiumIonBattery
+TestCAES
+TestPumpedStorage
+TestSuperCapacitor

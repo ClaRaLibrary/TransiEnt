@@ -1,0 +1,39 @@
+#1 
+double default(36,3) #Target values for supply and return temperatures as function of ambient temperature in the local heating network of the Energieverbund Wilhelmsburg Mitte taken from Lorenzen, Peter: Das Waermenetz als Speicher im Smart Grid: Betriebsfuehrung eines Waermenetzes in Kombination mit einem stromgefuehrten Heizkraftwerk, Masterthesis, Hamburg, 2013, p. 69.
+-15	90	50
+-14	88.13	49.17
+-13	86.25	48.33
+-12	84.38	47.5
+-11	82.5	46.67
+-10	80.63	45.83
+-9	78.75	45
+-8	76.88	44.17
+-7	75	43.33
+-6	75	42.5
+-5	75	41.67
+-4	75	40.83
+-3	75	40
+-2	75	39.17
+-1	75	38.33
+0	75	37.5
+1	75	36.67
+2	75	35.83
+3	75	35
+4	75	35
+5	75	35
+6	75	35
+7	75	35
+8	75	35
+9	75	35
+10	75	35
+11	75	35
+12	75	35
+13	75	35
+14	75	35
+15	75	35
+16	75	35
+17	75	35
+18	75	35
+19	75	35
+20	75	35
+

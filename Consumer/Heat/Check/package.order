@@ -1,0 +1,6 @@
+TestIdealHeatingNetworkConsumer
+TestFirstOrderHeatingNetworkConsumer
+TestFirstOrderHeatingNetworkConsumer_withPlant
+TestThermalHeatConsumer
+TestConstantHeatConsumer
+TestTableBased

@@ -1,0 +1,200 @@
+within TransiEnt.Producer.Combined.SmallScaleCHP.Controller;
+model ControllerHeatLed "Controller that gets target temperatures from simCenter and has an input for storage Temperature"
+
+//___________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.0.1                        //
+//                                                                           //
+// Licensed by Hamburg University of Technology under Modelica License 2.    //
+// Copyright 2017, Hamburg University of Technology.                         //
+//___________________________________________________________________________//
+//                                                                           //
+// TransiEnt.EE is a research project supported by the German Federal        //
+// Ministry of Economics and Energy (FKZ 03ET4003).                          //
+// The TransiEnt.EE research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
+// Institute of Energy Systems (Hamburg University of Technology),           //
+// Institute of Electrical Power Systems and Automation                      //
+// (Hamburg University of Technology),                                       //
+// and is supported by                                                       //
+// XRG Simulation GmbH (Hamburg, Germany).                                   //
+//___________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+  import TransiEnt;
+  extends TransiEnt.Producer.Combined.SmallScaleCHP.Base.PartialCHPController;
+
+  // _____________________________________________
+  //
+  //           Constants and Parameters
+  // _____________________________________________
+  parameter Integer nDevices=1 "Number of CHP Units";
+  parameter Modelica.SIunits.Temperature T_turnOn=333.15 "Minimal allowed return/storage temperature";
+  //   parameter SI.Temperature softlimitTemperature = T_turnOff-10
+  //     "Temperature at which CHP will stop charging storage";
+  parameter Modelica.SIunits.Temperature T_turnOff=363.15 "Maximum allowed Storage temperature";
+
+  parameter Boolean useT_stor=false "if false T_return will be used";
+  parameter Modelica.SIunits.Temperature T_stor_target=363.15 "Target Storage Temperature" annotation (Dialog(enable=useT_stor));
+  parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.PID "Type of controller" annotation(Dialog(tab="Controller"));
+  parameter Real k(
+    min=0,
+    unit="1") = 1 "Gain of controller" annotation(Dialog(tab="Controller"));
+  parameter Modelica.SIunits.Time Ti(
+    min=Modelica.Constants.small,
+    start=0.5)=0.1 "Time constant of Integrator block" annotation (Dialog(
+        tab="Controller", enable=controllerType == SimpleController.PI or
+          controllerType == SimpleController.PID));
+  parameter Modelica.SIunits.Time Td(
+    min=0,
+    start=0.1)=0 "Time constant of Derivative block" annotation (Dialog(tab=
+         "Controller", enable=controllerType == SimpleController.PD or
+          controllerType == SimpleController.PID));
+  parameter Real yMax(start=1) = nDevices*Specification.P_el_max "Upper limit of output"
+                                                                                        annotation(Dialog(tab="Controller"));
+  parameter Real yMin=Specification.P_el_min "Lower limit of output" annotation(Dialog(tab="Controller"));
+  parameter Real wp(min=0) = 1 "Set-point weight for Proportional block (0..1)" annotation(Dialog(tab="Controller"));
+  parameter Real wd(min=0) = 0 "Set-point weight for Derivative block (0..1)" annotation(Dialog(tab="Controller",enable=controllerType==SimpleController.PD or
+                                controllerType==SimpleController.PID));
+  parameter Real Ni(min=100*Modelica.Constants.eps) = 0.9 "Ni*Ti is time constant of anti-windup compensation"  annotation(Dialog(tab="Controller",enable=controllerType==SimpleController.PI or
+                              controllerType==SimpleController.PID));
+  parameter Real Nd(min=100*Modelica.Constants.eps) = 10 "The higher Nd, the more ideal the derivative block" annotation(Dialog(tab="Controller",enable=controllerType==SimpleController.PD or
+                                controllerType==SimpleController.PID));
+  parameter Modelica.Blocks.Types.InitPID initType=Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState
+  "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation(Evaluate=true,
+      Dialog(tab="Controller",group="Initialization"));
+  parameter Boolean limitsAtInit=true "= false, if limits are ignored during initializiation" annotation(Evaluate=true, Dialog(tab="Controller",group="Initialization",
+                       enable=controllerType==SimpleController.PI or
+                              controllerType==SimpleController.PID));
+  parameter Real xi_start=0 "Initial or guess value value for integrator output (= integrator state)" annotation (Dialog(tab="Controller",group="Initialization",
+                enable=controllerType==SimpleController.PI or
+                       controllerType==SimpleController.PID));
+  parameter Real xd_start=0 "Initial or guess value for state of derivative block" annotation (Dialog(tab="Controller",group="Initialization",
+                         enable=controllerType==SimpleController.PD or
+                                controllerType==SimpleController.PID));
+  parameter Real y_start=Specification.P_el_max "Initial value of output" annotation(Dialog(tab="Controller",enable=initType == InitPID.InitialOutput, group=
+          "Initialization"));
+
+  // _____________________________________________
+  //
+  //                    Variables
+  // _____________________________________________
+  Boolean offCondition;
+  Boolean onCondition;
+  Modelica.SIunits.Temperature T_return_target;
+
+  // _____________________________________________
+  //
+  //                Complex Components
+  // _____________________________________________
+
+  Modelica.Blocks.Continuous.LimPID PID(
+    Ti=Ti,
+    Td=Td,
+    k=k,
+    xi_start=xi_start,
+    y_start=y_start,
+    limitsAtInit=limitsAtInit,
+    initType=initType,
+    wp=wp,
+    Nd=Nd,
+    wd=wd,
+    yMax=yMax,
+    yMin=yMin)
+    annotation (Placement(transformation(extent={{-12,20},{8,0}})));
+
+  // _____________________________________________
+  //
+  //                Interfaces
+  // _____________________________________________
+  Modelica.Blocks.Interfaces.RealInput T_stor_in if useT_stor annotation (enabled=useT_stor,Placement(
+        transformation(
+        extent={{-20,-20},{20,20}},
+        rotation=-90,
+        origin={-2,100}),  iconTransformation(
+        extent={{20,-20},{-20,20}},
+        rotation=-90,
+        origin={60,-80})));
+protected
+  Modelica.Blocks.Interfaces.RealInput T_meas "Internal connector for T_stor";
+
+  // _____________________________________________
+  //
+  //         Instances of other classes
+  // _____________________________________________
+public
+  Modelica.Blocks.Math.Gain signChanger(k=1) annotation (Placement(transformation(extent={{56,6},{64,14}})));
+
+equation
+  onCondition = (not switch) and ((T_return < T_turnOn) and PID.u_m <
+    T_turnOn and (time - stopTime) > t_OnOff);
+  offCondition = (T_return > T_return_max) or T_meas>T_turnOff
+     and (timer.y) > t_OnOff;
+  //Power off if T_return too high:
+  if ((pre(switch) == true) and pre(offCondition)) then
+    switch = false;
+    //Power on if T_return too low:
+  elseif ((pre(switch) == false) and pre(onCondition)) then
+    switch = true;
+    //else: keep doing whatever you where doing
+  else
+    switch = pre(switch);
+  end if;
+
+  T_return_target = simCenter.heatingCurve.T_return;
+  if useGridTemperatures then
+    PID.u_s=simCenter.heatingCurve.T_return;
+  else
+    PID.u_s = T_stor_target;
+  end if;
+  if useT_stor then
+    connect(PID.u_m, T_stor_in)  annotation (Line(
+      points={{-2,22},{-2,100}},
+      color={0,0,127},
+      smooth=Smooth.None));
+
+    //Emergency Shutdown when return Temperature too high
+  else
+    connect(PID.u_m, T_return)  annotation (Line(
+      points={{-2,22},{-2,50},{80,50}},
+      color={0,0,127},
+      smooth=Smooth.None));
+
+  end if;
+
+  if (not useT_stor) then
+    T_meas = T_stor_target;
+  end if;
+
+  connect(T_stor_in, T_meas);
+  connect(PID.y, signChanger.u) annotation (Line(points={{9,10},{55.2,10}}, color={0,0,127}));
+  connect(signChanger.y, P_el_set) annotation (Line(points={{64.4,10},{64.4,10},{80,10}}, color={0,0,127}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),           Icon(coordinateSystem(
+          preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
+          Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Model for heat-led control of CHP.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Created by Arne Koeppen (arne.koeppen@tuhh.de), Jun 2013</p>
+<p>Revised by Lisa Andresen (andresen@tuhh.de), Aug 2013</p>
+</html>"));
+end ControllerHeatLed;

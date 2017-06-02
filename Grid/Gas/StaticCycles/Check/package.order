@@ -1,0 +1,12 @@
+StatCyc2Sources4Pipes2Sinks
+StatCycFlowReversal
+StatCycMix
+StatCycMix2
+StatCycSourcePipeSink
+StatCycSplit
+TestStatCyc2Source4Pipes2Sinks
+TestStatCycFlowReversal
+TestStatCycMix
+TestStatCycMix2
+TestStatCycSourcePipeSink
+TestStatCycSplit

@@ -1,0 +1,4 @@
+CheckActivePowerGenerator
+CheckVariableSpeedActivePowerGenerator
+CheckMSLSynchronousMachine
+CheckLinearSynchronousMachine
