@@ -1,22 +1,24 @@
 within TransiEnt.Basics.Adapters.Check;
 model TestRealGasAdapters
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_SG_var realGas_ng7_sg "Real NG7_SG gas model";
@@ -30,7 +32,7 @@ model TestRealGasAdapters
   Gas.RealH2_to_RealNG h2toNG annotation (Placement(transformation(extent={{-10,90},{10,110}})));
   inner TransiEnt.SimCenter simCenter(
     redeclare Media.Gases.VLE_VDIWA_H2_SRK                  gasModel3,
-    redeclare Media.Gases.VLE_VDIWA_NG7_H2_var                  gasModel1,
+    redeclare Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1,
     p_eff_2=1500000)                                                                                       annotation (Placement(transformation(extent={{-120,0},{-100,20}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorBefore(medium=simCenter.gasModel3, compositionDefinedBy=1) annotation (Placement(transformation(extent={{-62,100},{-42,120}})));
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorBefore(medium=simCenter.gasModel3) annotation (Placement(transformation(extent={{-36,100},{-16,120}})));
@@ -41,7 +43,7 @@ model TestRealGasAdapters
     medium=water,
     m_flow_const=1,
     T_const(displayUnit="degC") = simCenter.T_ground)                                                                annotation (Placement(transformation(extent={{-88,60},{-68,80}})));
-  Gas.RealH2O_to_RealNG7_SG h2toNG1(medium_water=water, medium_ng7_sg=realGas_ng7_sg)
+  Gas.RealH2O_to_RealNG7_SG realH2O_to_RealNG7_SG(medium_water=water, medium_ng7_sg=realGas_ng7_sg)
                                     annotation (Placement(transformation(extent={{-10,60},{10,80}})));
   ClaRa.Components.Sensors.SensorVLE_L1_T temperatureSensorBefore1(medium=water)
                                                                    annotation (Placement(transformation(extent={{-36,70},{-16,90}})));
@@ -53,7 +55,7 @@ model TestRealGasAdapters
     medium=realGas_ng7_sg,
     xi_const={0.7,0,0,0,0.1,0.1,0.05,0.02}) annotation (Placement(transformation(extent={{-88,30},{-68,50}})));
   Gas.RealNG7_SG_to_RealSG6
-                       h2toNG2(medium_ng7_sg=realGas_ng7_sg, medium_sg6=realGas_sg6)
+                       realNG7_SG_to_RealSG6(medium_ng7_sg=realGas_ng7_sg, medium_sg6=realGas_sg6)
                               annotation (Placement(transformation(extent={{-10,30},{10,50}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorBefore2(compositionDefinedBy=1, medium=realGas_ng7_sg) annotation (Placement(transformation(extent={{-62,40},{-42,60}})));
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorBefore2(medium=realGas_ng7_sg) annotation (Placement(transformation(extent={{-36,40},{-16,60}})));
@@ -62,7 +64,7 @@ model TestRealGasAdapters
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink3(medium=realGas_ng7_sg) annotation (Placement(transformation(extent={{88,0},{68,20}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source3(m_flow_const=-1) annotation (Placement(transformation(extent={{-88,0},{-68,20}})));
   Gas.RealNG7_to_RealNG7_SG
-                       h2toNG3(medium_ng7_sg=realGas_ng7_sg)
+                       realNG7_to_RealNG7_SG(medium_ng7_sg=realGas_ng7_sg)
                               annotation (Placement(transformation(extent={{-10,0},{10,20}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorBefore3(compositionDefinedBy=1) annotation (Placement(transformation(extent={{-62,10},{-42,30}})));
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorBefore3 annotation (Placement(transformation(extent={{-36,10},{-16,30}})));
@@ -71,7 +73,7 @@ model TestRealGasAdapters
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink4(medium=realGas_ng7_sg_o2) annotation (Placement(transformation(extent={{88,-30},{68,-10}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source4(m_flow_const=-1) annotation (Placement(transformation(extent={{-88,-30},{-68,-10}})));
   Gas.RealNG7_to_RealNG7_SG_O2
-                       h2toNG4(medium_ng7=simCenter.gasModel1, medium_ng7_sg_o2=realGas_ng7_sg_o2)
+                       realNG7_to_RealNG7_SG_O2(medium_ng7=simCenter.gasModel1, medium_ng7_sg_o2=realGas_ng7_sg_o2)
                               annotation (Placement(transformation(extent={{-10,-30},{10,-10}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorBefore4(compositionDefinedBy=1) annotation (Placement(transformation(extent={{-62,-20},{-42,0}})));
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorBefore4 annotation (Placement(transformation(extent={{-36,-20},{-16,0}})));
@@ -80,7 +82,7 @@ model TestRealGasAdapters
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink5(medium=realGas_ng7_sg) annotation (Placement(transformation(extent={{88,-60},{68,-40}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source5(m_flow_const=-1, medium=realGas_sg6) annotation (Placement(transformation(extent={{-88,-60},{-68,-40}})));
   Gas.RealSG6_to_RealNG7_SG
-                       h2toNG5(medium_ng7_sg=realGas_ng7_sg, medium_sg6=realGas_sg6)
+                       realSG6_to_RealNG7_SG(medium_ng7_sg=realGas_ng7_sg, medium_sg6=realGas_sg6)
                               annotation (Placement(transformation(extent={{-10,-60},{10,-40}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorBefore5(compositionDefinedBy=1, medium=realGas_sg6) annotation (Placement(transformation(extent={{-62,-50},{-42,-30}})));
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorBefore5(medium=realGas_sg6) annotation (Placement(transformation(extent={{-36,-50},{-16,-30}})));
@@ -89,7 +91,7 @@ model TestRealGasAdapters
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink6(medium=realGas_ng7_sg_o2) annotation (Placement(transformation(extent={{88,-90},{68,-70}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source6(m_flow_const=-1, medium=realGas_sg6) annotation (Placement(transformation(extent={{-88,-90},{-68,-70}})));
   Gas.RealSG6_to_RealNG7_SG_O2
-                       h2toNG6(medium_sg6=realGas_sg6, medium_ng7_sg_o2=realGas_ng7_sg_o2)
+                       realSG6_to_RealNG7_SG_O2(medium_sg6=realGas_sg6, medium_ng7_sg_o2=realGas_ng7_sg_o2)
                               annotation (Placement(transformation(extent={{-10,-90},{10,-70}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorBefore6(compositionDefinedBy=1, medium=realGas_sg6) annotation (Placement(transformation(extent={{-62,-80},{-42,-60}})));
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorBefore6(medium=realGas_sg6) annotation (Placement(transformation(extent={{-36,-80},{-16,-60}})));
@@ -97,8 +99,7 @@ model TestRealGasAdapters
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorAfter6(medium=realGas_ng7_sg_o2) annotation (Placement(transformation(extent={{42,-80},{62,-60}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink7 annotation (Placement(transformation(extent={{102,-120},{82,-100}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source7(m_flow_const=-1, medium=simCenter.gasModel1) annotation (Placement(transformation(extent={{-102,-120},{-82,-100}})));
-  Gas.Real_to_Ideal    h2toNG7(real=simCenter.gasModel1, ideal=simCenter.gasModel2)
-                              annotation (Placement(transformation(extent={{-24,-120},{-4,-100}})));
+  Gas.Real_to_Ideal real_to_ideal(real=simCenter.gasModel1, ideal=simCenter.gasModel2) annotation (Placement(transformation(extent={{-24,-120},{-4,-100}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorBefore7(compositionDefinedBy=1, medium=simCenter.gasModel1) annotation (Placement(transformation(extent={{-76,-110},{-56,-90}})));
   TransiEnt.Components.Sensors.RealGas.TemperatureSensor temperatureSensorBefore7(medium=simCenter.gasModel1) annotation (Placement(transformation(extent={{-50,-110},{-30,-90}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor compositionSensorAfter7(compositionDefinedBy=1) annotation (Placement(transformation(extent={{30,-110},{50,-90}})));
@@ -114,24 +115,12 @@ equation
       points={{-42,100},{-36,100}},
       color={255,255,0},
       thickness=1.5));
-  connect(temperatureSensorBefore.gasPortOut, h2toNG.gasPortIn) annotation (Line(
-      points={{-16,100},{-10,100}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(h2toNG.gasPortOut, compositionSensorAfter.gasPortIn) annotation (Line(
-      points={{10,100},{16,100}},
-      color={255,255,0},
-      thickness=1.5));
   connect(compositionSensorAfter.gasPortOut, temperatureSensorAfter.gasPortIn) annotation (Line(
       points={{36,100},{42,100}},
       color={255,255,0},
       thickness=1.5));
   connect(temperatureSensorAfter.gasPortOut, sink.gasPort) annotation (Line(
       points={{62,100},{68,100}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(h2toNG1.gasPortOut, compositionSensorAfter1.gasPortIn) annotation (Line(
-      points={{10,70},{16,70}},
       color={255,255,0},
       thickness=1.5));
   connect(compositionSensorAfter1.gasPortOut, temperatureSensorAfter1.gasPortIn) annotation (Line(
@@ -142,28 +131,12 @@ equation
       points={{62,70},{68,70}},
       color={255,255,0},
       thickness=1.5));
-  connect(h2toNG1.waterPortIn, temperatureSensorBefore1.port) annotation (Line(
-      points={{-10,70},{-18,70},{-26,70}},
-      color={175,0,0},
-      thickness=0.5));
-  connect(h2toNG1.waterPortIn, source1.steam_a) annotation (Line(
-      points={{-10,70},{-68,70}},
-      color={175,0,0},
-      thickness=0.5));
   connect(compositionSensorAfter2.gasPortOut, temperatureSensorAfter2.gasPortIn) annotation (Line(
       points={{36,40},{39,40},{42,40}},
       color={255,255,0},
       thickness=1.5));
   connect(temperatureSensorAfter2.gasPortOut, sink2.gasPort) annotation (Line(
       points={{62,40},{65,40},{68,40}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(h2toNG2.gasPortOut, compositionSensorAfter2.gasPortIn) annotation (Line(
-      points={{10,40},{13,40},{16,40}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(temperatureSensorBefore2.gasPortOut, h2toNG2.gasPortIn) annotation (Line(
-      points={{-16,40},{-13,40},{-10,40}},
       color={255,255,0},
       thickness=1.5));
   connect(compositionSensorBefore2.gasPortOut, temperatureSensorBefore2.gasPortIn) annotation (Line(
@@ -182,14 +155,6 @@ equation
       points={{62,10},{65,10},{68,10}},
       color={255,255,0},
       thickness=1.5));
-  connect(h2toNG3.gasPortOut, compositionSensorAfter3.gasPortIn) annotation (Line(
-      points={{10,10},{13,10},{16,10}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(temperatureSensorBefore3.gasPortOut, h2toNG3.gasPortIn) annotation (Line(
-      points={{-16,10},{-13,10},{-10,10}},
-      color={255,255,0},
-      thickness=1.5));
   connect(compositionSensorBefore3.gasPortOut, temperatureSensorBefore3.gasPortIn) annotation (Line(
       points={{-42,10},{-39,10},{-36,10}},
       color={255,255,0},
@@ -204,14 +169,6 @@ equation
       thickness=1.5));
   connect(temperatureSensorAfter4.gasPortOut, sink4.gasPort) annotation (Line(
       points={{62,-20},{65,-20},{68,-20}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(h2toNG4.gasPortOut, compositionSensorAfter4.gasPortIn) annotation (Line(
-      points={{10,-20},{13,-20},{16,-20}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(temperatureSensorBefore4.gasPortOut, h2toNG4.gasPortIn) annotation (Line(
-      points={{-16,-20},{-13,-20},{-10,-20}},
       color={255,255,0},
       thickness=1.5));
   connect(compositionSensorBefore4.gasPortOut, temperatureSensorBefore4.gasPortIn) annotation (Line(
@@ -230,14 +187,6 @@ equation
       points={{62,-50},{65,-50},{68,-50}},
       color={255,255,0},
       thickness=1.5));
-  connect(h2toNG5.gasPortOut, compositionSensorAfter5.gasPortIn) annotation (Line(
-      points={{10,-50},{13,-50},{16,-50}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(temperatureSensorBefore5.gasPortOut, h2toNG5.gasPortIn) annotation (Line(
-      points={{-16,-50},{-13,-50},{-10,-50}},
-      color={255,255,0},
-      thickness=1.5));
   connect(compositionSensorBefore5.gasPortOut, temperatureSensorBefore5.gasPortIn) annotation (Line(
       points={{-42,-50},{-39,-50},{-36,-50}},
       color={255,255,0},
@@ -252,14 +201,6 @@ equation
       thickness=1.5));
   connect(temperatureSensorAfter6.gasPortOut, sink6.gasPort) annotation (Line(
       points={{62,-80},{65,-80},{68,-80}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(h2toNG6.gasPortOut, compositionSensorAfter6.gasPortIn) annotation (Line(
-      points={{10,-80},{13,-80},{16,-80}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(temperatureSensorBefore6.gasPortOut, h2toNG6.gasPortIn) annotation (Line(
-      points={{-16,-80},{-13,-80},{-10,-80}},
       color={255,255,0},
       thickness=1.5));
   connect(compositionSensorBefore6.gasPortOut, temperatureSensorBefore6.gasPortIn) annotation (Line(
@@ -278,7 +219,7 @@ equation
       points={{76,-110},{79,-110},{82,-110}},
       color={255,255,0},
       thickness=1.5));
-  connect(temperatureSensorBefore7.gasPortOut, h2toNG7.gasPortIn) annotation (Line(
+  connect(temperatureSensorBefore7.gasPortOut, real_to_ideal.gasPortIn) annotation (Line(
       points={{-30,-110},{-30,-110},{-24,-110}},
       color={255,255,0},
       thickness=1.5));
@@ -290,12 +231,72 @@ equation
       points={{-82,-110},{-82,-110},{-76,-110}},
       color={255,255,0},
       thickness=1.5));
-  connect(h2toNG7.gasPortOut, ideal_to_Real.gasPortIn) annotation (Line(
+  connect(real_to_ideal.gasPortOut, ideal_to_Real.gasPortIn) annotation (Line(
       points={{-4,-110},{0,-110},{4,-110}},
       color={255,213,170},
       thickness=1.25));
   connect(ideal_to_Real.gasPortOut, compositionSensorAfter7.gasPortIn) annotation (Line(
       points={{24,-110},{30,-110}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(temperatureSensorBefore.gasPortOut, h2toNG.gasPortIn) annotation (Line(
+      points={{-16,100},{-10,100}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(h2toNG.gasPortOut, compositionSensorAfter.gasPortIn) annotation (Line(
+      points={{10,100},{16,100}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(realH2O_to_RealNG7_SG.gasPortOut, compositionSensorAfter1.gasPortIn) annotation (Line(
+      points={{10,70},{16,70}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(realNG7_SG_to_RealSG6.gasPortOut, compositionSensorAfter2.gasPortIn) annotation (Line(
+      points={{10,40},{16,40}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(temperatureSensorBefore2.gasPortOut, realNG7_SG_to_RealSG6.gasPortIn) annotation (Line(
+      points={{-16,40},{-10,40}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(temperatureSensorBefore3.gasPortOut, realNG7_to_RealNG7_SG.gasPortIn) annotation (Line(
+      points={{-16,10},{-10,10}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(realNG7_to_RealNG7_SG.gasPortOut, compositionSensorAfter3.gasPortIn) annotation (Line(
+      points={{10,10},{16,10}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(compositionSensorAfter4.gasPortIn, realNG7_to_RealNG7_SG_O2.gasPortOut) annotation (Line(
+      points={{16,-20},{10,-20}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(realNG7_to_RealNG7_SG_O2.gasPortIn, temperatureSensorBefore4.gasPortOut) annotation (Line(
+      points={{-10,-20},{-16,-20}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(temperatureSensorBefore6.gasPortOut, realSG6_to_RealNG7_SG_O2.gasPortIn) annotation (Line(
+      points={{-16,-80},{-10,-80}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(compositionSensorAfter6.gasPortIn, realSG6_to_RealNG7_SG_O2.gasPortOut) annotation (Line(
+      points={{16,-80},{10,-80}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(realH2O_to_RealNG7_SG.waterPortIn, temperatureSensorBefore1.port) annotation (Line(
+      points={{-10,70},{-26,70}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(realH2O_to_RealNG7_SG.waterPortIn, source1.steam_a) annotation (Line(
+      points={{-10,70},{-68,70}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(temperatureSensorBefore5.gasPortOut, realSG6_to_RealNG7_SG.gasPortIn) annotation (Line(
+      points={{-16,-50},{-10,-50}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(realSG6_to_RealNG7_SG.gasPortOut, compositionSensorAfter5.gasPortIn) annotation (Line(
+      points={{10,-50},{16,-50}},
       color={255,255,0},
       thickness=1.5));
   annotation (

@@ -1,22 +1,24 @@
 within TransiEnt.Grid.Electrical.LumpedPowerGrid.Check;
 model LocalPlantInteractingWithUCTE "Example how the continental europe grid interacts with a local grid"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Example;
   inner TransiEnt.SimCenter  simCenter(         thres=1e-9,
     Td=450,
@@ -37,15 +39,15 @@ model LocalPlantInteractingWithUCTE "Example how the continental europe grid int
         rotation=0,
         origin={63,-43})));
   TransiEnt.Components.Sensors.ElectricActivePower P_12(change_of_sign=true) annotation (Placement(transformation(extent={{16,19},{-6,41}})));
-  TransiEnt.Producer.Electrical.Conventional.Components.NonlinearThreeStatePlant HKW_Wedel(
+  TransiEnt.Producer.Electrical.Conventional.Components.NonlinearThreeStatePlant Gen(
     typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     P_el_n=simCenter.P_n_ref_1,
     primaryBalancingController(k_part=0.5, providedDroop=0.2/50/(3/150 - 0.2*0.01)),
     isPrimaryControlActive=true,
     fixedStartValue_w=false,
-    P_init=-HKW_Wedel_set.k,
-    isSecondaryControlActive=true) annotation (Placement(transformation(extent={{66,8},{38,36}})));
+    isSecondaryControlActive=true,
+    P_init=-Gen_set.k) annotation (Placement(transformation(extent={{66,8},{38,36}})));
 
   TransiEnt.Grid.Electrical.LumpedPowerGrid.LumpedGrid UCTE(
     delta_pr=0.2/50/(3/150 - 0.2*0.01),
@@ -57,7 +59,7 @@ model LocalPlantInteractingWithUCTE "Example how the continental europe grid int
     k_pr=simCenter.P_n_ref_2/UCTE.P_el_n*0.5,
     P_L=simCenter.P_n_low - 5e9,
     beta=0.5) annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
-  Modelica.Blocks.Sources.Constant HKW_Wedel_set(k=-2e9) annotation (Placement(transformation(extent={{96,36},{76,56}})));
+  Modelica.Blocks.Sources.Constant Gen_set(k=-2e9) annotation (Placement(transformation(extent={{96,36},{76,56}})));
   Modelica.Blocks.Sources.Constant Load(k=2e9) annotation (Placement(transformation(extent={{30,-26},{50,-6}})));
   Components.AGC aGC(
     K_r=simCenter.P_n_ref_1/(simCenter.P_n_ref_1 + simCenter.P_n_ref_2)*3e9/0.2,
@@ -65,7 +67,7 @@ model LocalPlantInteractingWithUCTE "Example how the continental europe grid int
     T_r=150,
     changeSignOfTieLinePower=true) annotation (Placement(transformation(extent={{14,46},{40,70}})));
 equation
-  connect(HKW_Wedel.epp, P_12.epp_IN) annotation (Line(
+  connect(Gen.epp, P_12.epp_IN) annotation (Line(
       points={{38.7,29.84},{24,29.84},{24,30},{15.12,30}},
       color={0,135,135},
       thickness=0.5));
@@ -81,10 +83,10 @@ equation
       points={{15.12,30},{27,30},{27,46}},
       color={0,135,135},
       thickness=0.5));
-  connect(aGC.P_sec_set, HKW_Wedel.P_SB_set) annotation (Line(points={{40.78,58},{64.46,58},{64.46,34.46}}, color={0,0,127}));
+  connect(aGC.P_sec_set, Gen.P_SB_set) annotation (Line(points={{40.78,58},{64.46,58},{64.46,34.46}}, color={0,0,127}));
   connect(P_12.P, aGC.P_tie_is) annotation (Line(points={{9.18,38.58},{9.18,80},{27,80},{27,70}}, color={0,0,127}));
   connect(Load.y, Demand.P_el_set) annotation (Line(points={{51,-16},{58,-16},{63,-16},{63,-25.6}},                color={0,0,127}));
-  connect(HKW_Wedel_set.y, HKW_Wedel.P_el_set) annotation (Line(points={{75,46},{54.1,46},{54.1,35.86}}, color={0,0,127}));
+  connect(Gen_set.y, Gen.P_el_set) annotation (Line(points={{75,46},{54.1,46},{54.1,35.86}}, color={0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{100,100}})),
     experiment(

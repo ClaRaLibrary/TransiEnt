@@ -1,23 +1,25 @@
 within TransiEnt.Storage.Gas;
 model GasStorage_varXi_L2 "Model of a simple gas storage volume for variable composition"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -57,7 +59,18 @@ protected
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectCostsGeneral collectCosts_Storage(
     redeclare model CostRecordGeneral = CostSpecsStorage (size1=V_geo),
     der_E_n=0,
-    E_n=0) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+    E_n=0,
+    produces_P_el=false,
+    consumes_P_el=false,
+    produces_Q_flow=false,
+    consumes_Q_flow=false,
+    produces_H_flow=false,
+    consumes_H_flow=false,
+    produces_other_flow=false,
+    consumes_other_flow=false,
+    produces_m_flow_CDE=false,
+    consumes_m_flow_CDE=false)
+           annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 public
   inner Summary summary(
     gasPortIn(
@@ -149,7 +162,7 @@ equation
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>No validation necessary because only fundamental equations are used.</p>
+<p>This model is not validated and might produce different results depending on the energy balance equation used in the base model.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

@@ -1,22 +1,24 @@
 within TransiEnt.Examples.Gas;
 model GasGrid_SubSystem "Very simple gas grid featuring the main components"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   outer TransiEnt.SimCenter simCenter;
   // _____________________________________________
@@ -54,7 +56,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
   parameter Real phi_H2max=0.1;
 
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     xi_start=init.junction1.xi_in,
     h_start=init.junction1.h_in,
     volume=1,
@@ -65,7 +67,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
   TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe1(
     frictionAtInlet=true,
     frictionAtOutlet=true,
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     length=1000,
     N_cv=5,
     h_start=ones(pipe1.N_cv)*init.pipe1.h_in,
@@ -106,7 +108,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
   TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe2(
     frictionAtInlet=true,
     frictionAtOutlet=true,
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     h_start=ones(pipe2.N_cv)*init.pipe2.h_in,
     p_start=linspace(
         init.pipe2.p_in,
@@ -123,7 +125,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
   TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe3(
     frictionAtInlet=true,
     frictionAtOutlet=true,
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     h_start=ones(pipe3.N_cv)*init.pipe3.h_in,
     p_start=linspace(
         init.pipe3.p_in,
@@ -140,7 +142,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
   TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe4(
     frictionAtInlet=true,
     frictionAtOutlet=true,
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     h_start=ones(pipe4.N_cv)*init.pipe4.h_in,
     p_start=linspace(
         init.pipe4.p_in,
@@ -155,7 +157,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
         rotation=0,
         origin={0,-98})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     p_start=init.junction2.p,
     xi_start=init.junction2.xi_out,
     h_start=init.junction2.h_out,
@@ -164,7 +166,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
         rotation=270,
         origin={-60,12})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     xi_start=init.junction3.xi_in,
     h_start=init.junction3.h_in,
     volume=1,
@@ -173,7 +175,7 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
         rotation=0,
         origin={60,62})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     p_start=init.junction4.p,
     xi_start=init.junction4.xi_out,
     h_start=init.junction4.h_out,
@@ -201,7 +203,7 @@ protected
         origin={-112,8.5})));
 public
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn1(
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     xi_start=init.junction1.xi_in,
     h_start=init.junction1.h_in,
     volume=0.1,
@@ -217,7 +219,7 @@ protected
         origin={144,62})));
 public
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn2(
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     xi_start=init.junction1.xi_in,
     h_start=init.junction1.h_in,
     volume=0.1,
@@ -439,5 +441,6 @@ Documentation(info="<html>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Johannes Brunnemann (brunnemann@xrg-simulation.de), Jan 2017</p>
 <p>Edited and revised by Lisa Andresen (andresen@tuhh.de), Apr 2017</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (fixed for update to ClaRa 1.3.0)</p>
 </html>"));
 end GasGrid_SubSystem;

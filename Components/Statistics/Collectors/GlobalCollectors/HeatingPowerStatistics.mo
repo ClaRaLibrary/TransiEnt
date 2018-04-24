@@ -1,23 +1,25 @@
 within TransiEnt.Components.Statistics.Collectors.GlobalCollectors;
 model HeatingPowerStatistics "showing heat power and energy by type"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   import TransiEnt.Basics.Types;
   constant Integer nTypes=Types.nTypeOfResource;
@@ -33,7 +35,7 @@ protected
   SI.Energy E[nTypes](each start=0, each fixed=true, each stateSelect=StateSelect.never);
  // Heat flow rate
 public
-  SI.HeatFlowRate Q_flow_consumed=heatFlowCollector[EnergyResource.Consumer];
+  SI.HeatFlowRate Q_flow_consumed=-heatFlowCollector[EnergyResource.Consumer];
   SI.HeatFlowRate Q_flow_gen_conventional=heatFlowCollector[EnergyResource.Conventional];
   SI.HeatFlowRate Q_flow_gen_cogeneration=heatFlowCollector[EnergyResource.Cogeneration];
   SI.HeatFlowRate Q_flow_gen_renewable=heatFlowCollector[EnergyResource.Renewable];
@@ -42,7 +44,7 @@ public
   SI.HeatFlowRate Q_flow_losses=Q_flow_gen_total-Q_flow_consumed;
 
    // Energy
-  SI.Energy E_consumed=E[EnergyResource.Consumer];
+  SI.Energy E_consumed=-E[EnergyResource.Consumer];
   SI.Energy E_conventional=E[EnergyResource.Conventional];
   SI.Energy E_cogeneration=E[EnergyResource.Cogeneration];
   SI.Energy E_renewable=E[EnergyResource.Renewable];

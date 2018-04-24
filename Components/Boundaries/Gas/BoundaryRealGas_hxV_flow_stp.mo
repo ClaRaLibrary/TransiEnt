@@ -1,23 +1,25 @@
 within TransiEnt.Components.Boundaries.Gas;
 model BoundaryRealGas_hxV_flow_stp "A real gas boundary defining enthalpy, molar composition and volume flow at STP (1.013 bar, 273.15 K)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -39,9 +41,9 @@ model BoundaryRealGas_hxV_flow_stp "A real gas boundary defining enthalpy, molar
   parameter Boolean variable_x=false "True, if composition defined by variable input"    annotation(Dialog(group="Define Variable Boundaries"));
 
   parameter SI.VolumeFlowRate V_flow_n_const=0 "Constant volume flow rate under normal conditions (negative sign for outflowing)"
-                                                                                                    annotation (Dialog(group="Constant Boundaries", enable=not variable_m_flow));
-  parameter SI.SpecificEnthalpy h_const=8e5 "Constant specific enthalpy of source" annotation (Dialog(group="Constant Boundaries", enable=not variable_T));
-  parameter SI.MoleFraction x_const[medium.nc - 1] = zeros(medium.nc-1) "Constant molar composition" annotation (Dialog(group="Constant Boundaries", enable=not variable_xi));
+                                                                                                    annotation (Dialog(group="Constant Boundaries", enable=not variable_V_flow_n));
+  parameter SI.SpecificEnthalpy h_const=8e5 "Constant specific enthalpy of source" annotation (Dialog(group="Constant Boundaries", enable=not variable_h));
+  parameter SI.MoleFraction x_const[medium.nc - 1] = zeros(medium.nc-1) "Constant molar composition" annotation (Dialog(group="Constant Boundaries", enable=not variable_x));
   parameter SI.Pressure p_nom=1e5 "Nominal flange pressure" annotation (Dialog(group="Nominal Values"));
   parameter SI.MassFlowRate m_flow_nom=0 "Nominal flange mass flow (zero refers to ideal boundary)" annotation (Dialog(group="Nominal Values"));
 

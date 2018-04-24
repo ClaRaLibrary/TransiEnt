@@ -2,23 +2,25 @@ within TransiEnt.Grid.Heat.HeatGridTopology.Check;
 model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
   import TransiEnt;
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -37,13 +39,13 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
   inner TransiEnt.SimCenter simCenter(p_n={420000,460000})
                                       annotation (Placement(transformation(extent={{-358,240},{-338,260}})));
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP HKW_Wedel2(
-    typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_WW2(),
     P_el_n=137e6,
     p_nom=20e5,
     m_flow_nom=1100,
     h_nom=120*4.2) annotation (Placement(transformation(extent={{-334,-112},{-256,-48}})));
+    //typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
   ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow massFlowSource_Wedel(
     m_flow_const=2*1905,
     T_const=52 + 273,
@@ -56,12 +58,12 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP HKW_Tiefstack(
     P_el_n=200e6,
     Q_flow_init=300e6,
-    typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_WT(),
     p_nom=20e5,
     m_flow_nom=1500,
     h_nom=120*4.2) annotation (Placement(transformation(extent={{340,-50},{272,18}})));
+    //typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
   ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow massFlowSource_Tiefstack(
     m_flow_const=2*1905,
     T_const=52 + 273,
@@ -73,7 +75,7 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
         origin={263,-98})));
   TransiEnt.Grid.Heat.HeatGridControl.Controllers.SimpleDHNDispatcher simpleHeatDispatcher annotation (Placement(transformation(rotation=0, extent={{-340,168},{-278,230}})));
 
-  TransiEnt.Producer.Heat.SimpleGasboilerGasport HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas, p_drop=50000) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, p_drop=50000) annotation (Placement(transformation(
         extent={{-19,-18},{19,18}},
         rotation=0,
         origin={-73,-110})));
@@ -96,13 +98,13 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
         origin={-101,-164})));
   TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations.DHG_Topology_HH_1port_3sites_SimpleGrid dHN_Topology_HH_SimpleGrid_3sites annotation (Placement(transformation(extent={{-102,-74},{150,100}})));
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP HKW_Wedel1(
-    typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_WW1(),
     P_el_n=150e6,
     p_nom=20e5,
     m_flow_nom=1100,
     h_nom=120*4.2) annotation (Placement(transformation(extent={{-334,-42},{-256,22}})));
+    //typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
   Modelica.Blocks.Sources.RealExpression P_set(y=simpleHeatDispatcher.P_el_WW/2) annotation (Placement(transformation(extent={{-354,32},{-334,52}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_set(y=simpleHeatDispatcher.Q_flow_WW/2) annotation (Placement(transformation(extent={{-318,58},{-298,78}})));
   Modelica.Blocks.Sources.RealExpression m_flow_set(y=-1*simpleHeatDispatcher.m_flow_WW) annotation (Placement(transformation(extent={{-272,-172},{-252,-152}})));

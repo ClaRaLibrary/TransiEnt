@@ -1,22 +1,24 @@
 within TransiEnt.Components.Boundaries.FluidFlow;
 model BoundaryVLE_pTxi "A boundary defining pressure, temperature and composition"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -60,7 +62,7 @@ model BoundaryVLE_pTxi "A boundary defining pressure, temperature and compositio
   Modelica.Blocks.Interfaces.RealInput xi[medium.nc-1](value=xi_in) if
        (variable_xi) "Variable composition"
     annotation (Placement(transformation(extent={{-120,-80},{-80,-40}})));
-  Basics.Interfaces.Thermal.FluidPortIn fluidPortIn(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{88,-12},{108,8}})));
+  Basics.Interfaces.Thermal.FluidPortIn fluidPortIn(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
   ClaRa.Basics.Interfaces.EyeOut eye if boundaryConditions.showData
     annotation (Placement(transformation(extent={{96,-78},{108,-66}}),
         iconTransformation(extent={{94,-86},{106,-74}})));
@@ -69,7 +71,7 @@ protected
   SI.Temperature T_in;
   Modelica.SIunits.MassFraction xi_in[medium.nc-1];
 
-  ClaRa.Basics.Interfaces.EyeIn eye_int
+  ClaRa.Basics.Interfaces.EyeIn eye_int[1]
     annotation (Placement(transformation(extent={{65,-72},{66,-73}}),
         iconTransformation(extent={{55,-55},{57,-53}})));
 
@@ -96,11 +98,11 @@ equation
     xi_in=boundaryConditions.xi_const;
   end if;
 
-  eye_int.m_flow = fluidPortIn.m_flow;
-  eye_int.T = fluidIn.T-273.15;
-  eye_int.s = fluidIn.s/1e3;
-  eye_int.p = fluidPortIn.p/1e5;
-  eye_int.h = actualStream(fluidPortIn.h_outflow)/1e3;
+  eye_int[1].m_flow = fluidPortIn.m_flow;
+  eye_int[1].T = fluidIn.T-273.15;
+  eye_int[1].s = fluidIn.s/1e3;
+  eye_int[1].p = fluidPortIn.p/1e5;
+  eye_int[1].h = actualStream(fluidPortIn.h_outflow)/1e3;
 
   // _____________________________________________
   //
@@ -114,7 +116,7 @@ equation
       points={{100,0},{55,0},{10,0}},
       color={175,0,0},
       thickness=0.5));
-  connect(eye, eye_int) annotation (Line(points={{102,-72},{84,-72},{84,-72.5},{65.5,-72.5}},
+  connect(eye, eye_int[1]) annotation (Line(points={{102,-72},{84,-72},{84,-72.5},{65.5,-72.5}},
       color={255,204,51},
       thickness=0.5,
       smooth=Smooth.None));
@@ -125,6 +127,5 @@ equation
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
         textString="T
-xi")}),                                                          Diagram(coordinateSystem(preserveAspectRatio=false)),
-              Icon(coordinateSystem(preserveAspectRatio=false)),                                                          Diagram(coordinateSystem(preserveAspectRatio=false)));
+xi")}),                                                          Diagram(coordinateSystem(preserveAspectRatio=false)));
 end BoundaryVLE_pTxi;

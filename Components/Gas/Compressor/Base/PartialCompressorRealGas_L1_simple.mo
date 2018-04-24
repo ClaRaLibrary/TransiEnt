@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.Compressor.Base;
 partial model PartialCompressorRealGas_L1_simple "Partial compressor model for real gases with constant efficiency"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -63,6 +65,17 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
 
   // _____________________________________________
   //
+  //             Variable Declarations
+  // _____________________________________________
+  Real hOut;
+  SI.Pressure Delta_p(final start=100) "pressure increase";
+  SI.Power P_hyd "Hydraulic power";
+  SI.Power P_shaft "Drive power";
+  SI.Power P_el "Electrical power";
+  SI.VolumeFlowRate V_flow;
+
+  // _____________________________________________
+  //
   //                 Outer Models
   // _____________________________________________
 
@@ -102,12 +115,6 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
                        iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-80,110})));
-public
-  ClaRa.Basics.Interfaces.EyeOut eyeOut annotation (Placement(transformation(extent={{72,-78},
-            {112,-42}}),          iconTransformation(extent={{92,-70},{112,-50}})));
-protected
-  ClaRa.Basics.Interfaces.EyeIn eye_int annotation (Placement(transformation(extent={{48,-68},
-            {32,-52}}),           iconTransformation(extent={{90,-84},{84,-78}})));
 
   // _____________________________________________
   //
@@ -142,6 +149,7 @@ public
       P_hyd=P_hyd,
       P_shaft=P_shaft,
       P_el=P_el,
+      W_el=collectElectricPower.E,
       Pi=gasPortOut.p/gasPortIn.p,
       Delta_p=gasPortOut.p - gasPortIn.p,
       eta=eta_mech*eta_el),
@@ -170,6 +178,7 @@ public
       oMCosts=collectCosts.costsCollector.OMCosts,
       otherCosts=collectCosts.costsCollector.OtherCosts,
       revenues=collectCosts.costsCollector.Revenues)) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+
 protected
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=typeOfResource) annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectCostsGeneral collectCosts(
@@ -177,12 +186,18 @@ protected
     redeclare model CostRecordGeneral = CostSpecsGeneral,
     E_n=0,
     Cspec_demAndRev_el=Cspec_demAndRev_el,
-    P_el=P_el) annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
+    P_el=P_el,
+    produces_P_el=false,
+    produces_Q_flow=false,
+    consumes_Q_flow=false,
+    produces_H_flow=false,
+    consumes_H_flow=false,
+    produces_other_flow=false,
+    consumes_other_flow=false,
+    produces_m_flow_CDE=false,
+    consumes_m_flow_CDE=false)
+               annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
 
-  // _____________________________________________
-  //
-  //             Variable Declarations
-  // _____________________________________________
 
 protected
   model Outline
@@ -191,6 +206,7 @@ protected
     input SI.Power P_hyd "Hydraulic power";
     input SI.Power P_shaft "Shaft power";
     input SI.Power P_el "Electric power";
+    input SI.Work W_el "Electric work";
     input Real Pi "Pressure ratio";
     input SI.PressureDifference Delta_p "Pressure difference";
     input Real eta "Isentropic efficiency";
@@ -204,12 +220,7 @@ protected
     TransiEnt.Basics.Records.Costs costs;
   end Summary;
 
-  Real hOut;
-  SI.Pressure Delta_p(final start=100) "pressure increase";
-  SI.Power P_hyd "Hydraulic power";
-  SI.Power P_shaft "Drive power";
-  SI.Power P_el "Electrical power";
-  SI.VolumeFlowRate V_flow;
+
 
 equation
   //____________________ Boundary equations _________________
@@ -251,13 +262,6 @@ equation
   P_hyd/eta_mech = P_shaft;
   P_shaft/eta_el = P_el;
 
-  //______________Eye port variable definition________________________
-  eye_int.m_flow =-gasPortOut.m_flow;
-  eye_int.T =gasOut.T - 273.15;
-  eye_int.s =gasOut.s/1e3;
-  eye_int.p =gasOut.p/1e5;
-  eye_int.h =gasOut.h/1e3;
-
   //collectors
   collectElectricPower.powerCollector.P=P_el;
 
@@ -288,12 +292,8 @@ equation
       points={{80,110},{80,76},{8,76},{8,52}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(eye_int,eyeOut)  annotation (Line(
-      points={{40,-60},{92,-60}},
-      color={190,190,190},
-      smooth=Smooth.None));
 
-                                                annotation(dialog(tab = "Advanced"),
+                                                annotation (
               Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),  Icon(coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}}),

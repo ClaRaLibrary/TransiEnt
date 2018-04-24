@@ -1,22 +1,24 @@
 within TransiEnt.Components.Visualization;
 model DHG_PressureDiagram "Pressure diagram of district heating grids (pressure as a function of grid length) "
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   input ClaRa.Basics.Units.Pressure p_supply[n]=zeros(n) "Pressure values at supply pipes' inputs and outputs in Pa" annotation(Dialog(group="Input", enable=not showInterface));
   input ClaRa.Basics.Units.Pressure p_return[m]=zeros(m) "Pressure values at return pipes' inputs and outputs in Pa" annotation(Dialog(group="Input", enable=not showInterface));
@@ -35,8 +37,8 @@ model DHG_PressureDiagram "Pressure diagram of district heating grids (pressure 
   parameter String Unit="[-]" "Unit for plot variable" annotation(Dialog(group="Layout"));
 
 public
-  constant ClaRa.Basics.Types.Color colorh={167,25,48} "Line color"         annotation (Hide=false, Dialog(group="Layout"));
-  constant ClaRa.Basics.Types.Color colorc={0,131,169} "Line color"         annotation (Hide=false, Dialog(group="Layout"));
+  constant ClaRa.Basics.Types.Color colorh={167,25,48} "Line color"         annotation (HideResult=false, Dialog(group="Layout"));
+  constant ClaRa.Basics.Types.Color colorc={0,131,169} "Line color"         annotation (HideResult=false, Dialog(group="Layout"));
 
   // _____________________________________________
   //
@@ -47,8 +49,8 @@ protected
   Real y_return[ size(relative_positions_return, 1)];
 
 public
-  final Real[size(relative_positions_supply, 1), 2] point_supply=transpose({relative_positions_supply*100,y_supply})  annotation(Hide=false);
-  final Real[size(relative_positions_return, 1), 2] point_return=transpose({relative_positions_return*100,y_return})  annotation(Hide=false);
+  final Real[size(relative_positions_supply, 1), 2] point_supply=transpose({relative_positions_supply*100,y_supply})  annotation(HideResult=false);
+  final Real[size(relative_positions_return, 1), 2] point_return=transpose({relative_positions_return*100,y_return})  annotation(HideResult=false);
 
 equation
   // _____________________________________________
@@ -184,11 +186,7 @@ annotation (    Icon(coordinateSystem(preserveAspectRatio=true, extent={{0,0},{
         Text(
           extent={{0,-10},{100,-30}},
           lineColor={0,134,134},
-          textString="%name")},
-          Diagram(coordinateSystem(preserveAspectRatio=true,
-          extent={{-30,-10},{110,120}},
-        grid={2,2},
-        initialScale=0.1), graphics)), Diagram(coordinateSystem(extent={{0,0},{
+          textString="%name")}), Diagram(coordinateSystem(extent={{0,0},{
             100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>

@@ -1,27 +1,29 @@
 within TransiEnt.Basics.Blocks;
 model OnOffRelais "Three state dynamic model - operating at init"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
-  //                   Import
+  //          Imports and Class Hierarchy
   // _____________________________________________
 
    import TransiEnt.Basics.Types;
@@ -29,7 +31,7 @@ model OnOffRelais "Three state dynamic model - operating at init"
 
   // _____________________________________________
   //
-  //                   Parameters
+  //               Visible Parameters
   // _____________________________________________
 
    parameter SI.Time t_min_on = 3600 "Min on time after startup";
@@ -37,8 +39,19 @@ model OnOffRelais "Three state dynamic model - operating at init"
    parameter Types.OnOffRelaisStatus init_state "State of relais at initialization"
                                                                                    annotation (__Dymola_editText=false);
 
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
   Modelica.Blocks.Interfaces.BooleanInput u "Input signal (e.g. output of OnOff Controller)" annotation (Placement(transformation(extent={{-120,-16},{-88,16}}, rotation=0)));
   Modelica.Blocks.Interfaces.BooleanOutput y "Limited signal to plant" annotation (Placement(transformation(extent={{94,-16},{126,16}}, rotation=0)));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
     inner Modelica.StateGraph.StateGraphRoot
                          stateGraphRoot
       annotation (Placement(transformation(extent={{-100,82},{-86,96}})));
@@ -82,7 +95,19 @@ model OnOffRelais "Three state dynamic model - operating at init"
     waitTime=t_min_off,
     enableTimer=true,
     condition=init_state == Types.on_blocked);
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
   connect(on_blocked.outPort[1], t_min_on_passed.inPort) annotation (Line(points={{40.5,40},{40.5,40},{50,40}}, color={0,0,0}));
   connect(t_min_on_passed.outPort, on_ready.inPort[1]) annotation (Line(points={{55.5,40},{60,40},{75,40},{75,40.5}},
                                                                                                     color={0,0,0}));
@@ -106,6 +131,7 @@ equation
   connect(init.outPort[3], initOnBlocked.inPort);
   connect(initOffBlocked.outPort, off_blocked.inPort[2]);
   connect(initOnBlocked.outPort, on_blocked.inPort[2]);
+
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Simple time relais. If the input changes from false to true, the time t_min_on has to past before the output changes to false again. In the same way t_min_off has to pass before starting up againg after a shutdown.</span></p>
@@ -126,7 +152,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on Mon Aug 18 2014</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised (code conventinos) by Pascal Dubucq (dubucq@tuhh.de) on 21.04.2017</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de), Aug 2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised by Pascal Dubucq (dubucq@tuhh.de), Apr 2017 : code conventions</span></p>
 </html>"));
 end OnOffRelais;

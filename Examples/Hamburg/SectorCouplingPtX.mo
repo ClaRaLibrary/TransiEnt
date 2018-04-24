@@ -1,22 +1,24 @@
 within TransiEnt.Examples.Hamburg;
 model SectorCouplingPtX "Coupled electric, district heating and gas grids for Hamburg with PtX 2035"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   //Imports and extends
   extends TransiEnt.Basics.Icons.Example;
@@ -59,7 +61,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
 
   //Pipe Network
   parameter Real Nper10km=2 "Number of discrete volumes in 10 km pipe length";
-  parameter Boolean productMassBalance=false "Set to true for product component mass balance formulation in pipe";
+  parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
 
   //___________________
   //Components
@@ -67,7 +69,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
   TransiEnt.Grid.Gas.GasGridHamburg gasGridHamburg(
     phi_H2max=phi_H2max,
     Nper10km=Nper10km,
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{-124,-522},{282,-274}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{-124,-522},{282,-274}})));
 
   TransiEnt.Basics.Tables.Ambient.Temperature_Hamburg_Fuhlsbuettel_172800s_2012 temperatureHH_900s_01012012_0000_31122012_2345_1 annotation (Placement(transformation(extent={{-266,-190},{-246,-170}})));
   TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction.HeatingGenerationCharline heatingLoadCharline(
@@ -79,7 +81,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
   //Components-Visualization
   TransiEnt.Grid.Heat.HeatGridControl.SupplyAndReturnTemperatureDHG supplyandReturnTemperature annotation (Placement(transformation(extent={{-229,-167},{-219,-157}})));
 
-  TransiEnt.Producer.Heat.SimpleGasboilerGasport HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, p_drop=1000) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, p_drop=1000) annotation (Placement(transformation(
         extent={{-11,-11},{11,11}},
         rotation=0,
         origin={9,-201})));
@@ -166,12 +168,14 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel3,
     redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1,
                           thres=1e-9,
-    useThresh=true,
     Td=450,
     redeclare TransiEnt.Examples.Hamburg.ExampleGenerationPark2035 generationPark,
     p_amb=101343,
     T_amb=283.15,
-    tableInterpolationSmoothness=Modelica.Blocks.Types.Smoothness.LinearSegments)
+    tableInterpolationSmoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
+    isExpertmode=true,
+    useThresh=false,
+    useHomotopy=false)
     annotation (Placement(transformation(extent={{-290,238},{-270,258}})));
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-268,238},{-248,258}})));
@@ -210,8 +214,9 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     isPrimaryControlActive=true,
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.BrownCoal,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.GAR],
-    isSecondaryControlActive=true) "Garbage" annotation (Placement(transformation(extent={{25,71},{65,109}})));
+    isSecondaryControlActive=true,
+    P_init=UC.P_init[UC.schedule.GAR])
+                                   "Garbage" annotation (Placement(transformation(extent={{25,71},{65,109}})));
   TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC(
     K_r=simCenter.P_n_ref_1/(simCenter.P_n_ref_1 + simCenter.P_n_ref_2)*3e9/0.2,
     changeSignOfTieLinePower=false,
@@ -241,10 +246,10 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     primaryBalancingController(providedDroop=0.2/50/(3/150 - 0.2*0.01)),
     isPrimaryControlActive=false,
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.Biomass,
-    t_startup=0,
-    P_init=UC.P_init[UC.schedule.BM],
     isSecondaryControlActive=true,
-    isExternalSecondaryController=true) annotation (Placement(transformation(extent={{83,71},{123,109}})));
+    isExternalSecondaryController=true,
+    t_startup=200,
+    P_init=UC.P_init[UC.schedule.BM])   annotation (Placement(transformation(extent={{83,71},{123,109}})));
   TransiEnt.Producer.Electrical.Others.PumpedStoragePlant PumpedStorage(
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PumpedStorage,
     t_startup=60,
@@ -450,14 +455,14 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
         extent={{7.5,-6},{-7.5,6}},
         rotation=0,
         origin={266.5,-154})));
-  TransiEnt.Producer.Heat.SimpleBoiler spiVo_Wedel(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, Q_flow_n=250000000) annotation (Placement(transformation(extent={{-18,-158},{2,-138}})));
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler spiVo_Wedel(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, Q_flow_n=250000000) annotation (Placement(transformation(extent={{-18,-158},{2,-138}})));
   TransiEnt.Components.Visualization.InfoBoxLargeCHP infoBoxLargeCHP4 annotation (Placement(transformation(extent={{4,-178},{22,-158}})));
 
-  TransiEnt.Producer.Heat.TwoFuelBoiler twoFuelBoiler(redeclare TransiEnt.Producer.Heat.SimpleBoiler boiler2(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, Q_flow_n=160e6 + 160e6), redeclare TransiEnt.Producer.Heat.SimpleBoiler boiler1(
+  TransiEnt.Producer.Heat.Gas2Heat.TwoFuelBoiler twoFuelBoiler(redeclare TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler boiler2(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, Q_flow_n=160e6 + 160e6), redeclare TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler boiler1(
       Q_flow_n=100e6,
       redeclare model BoilerCostModel = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GarbageBoiler,
       typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.Garbage)) annotation (Placement(transformation(extent={{122,-164},{106,-150}})));
-  TransiEnt.Producer.Heat.SimpleBoiler wuWSpaldingStr(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler wuWSpaldingStr(
     Q_flow_n=100e6,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.Garbage,
     redeclare model BoilerCostModel = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GarbageBoiler) annotation (Placement(transformation(extent={{102,-224},{82,-204}})));
@@ -482,7 +487,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Harburg.length/10000) < 2 then 2 else integer(Nper10km*Harburg.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{30,-461},{50,-441}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{30,-461},{50,-441}})));
   TransiEnt.Consumer.Gas.GasConsumerPipe_HFlow Altona(
     length(displayUnit="km") = 5150,
     diameter=0.235,
@@ -502,7 +507,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Altona.length/10000) < 2 then 2 else integer(Nper10km*Altona.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{10,-409},{30,-389}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{10,-409},{30,-389}})));
   TransiEnt.Consumer.Gas.GasConsumerPipe_HFlow Eimsbuettel(
     length(displayUnit="km") = 2740,
     diameter=0.235,
@@ -522,7 +527,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Eimsbuettel.length/10000) < 2 then 2 else integer(Nper10km*Eimsbuettel.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{26,-384},{46,-364}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{26,-384},{46,-364}})));
   TransiEnt.Consumer.Gas.GasConsumerPipe_HFlow HHNord(
     length(displayUnit="km") = 10560,
     diameter=0.235,
@@ -542,7 +547,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*HHNord.length/10000) < 2 then 2 else integer(Nper10km*HHNord.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={64,-310})));
@@ -565,7 +570,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Wandsbek.length/10000) < 2 then 2 else integer(Nper10km*Wandsbek.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={94,-364})));
@@ -588,7 +593,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*HHMitte.length/10000) < 2 then 2 else integer(Nper10km*HHMitte.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={72,-414})));
@@ -611,7 +616,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Bergedorf.length/10000) < 2 then 2 else integer(Nper10km*Bergedorf.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={94,-455})));
@@ -679,8 +684,8 @@ public
     P_el_min=P_el_min*f_Tor,
     P_el_overload=P_el_overload*f_Tor,
     V_geo=V_geo*f_Tor,
-    p_low=p_minLow,
-    p_high=p_minHigh,
+    p_minLow=p_minLow,
+    p_minHigh=p_minHigh,
     p_start_junction=Init.mixH2_Tornesch.p,
     h_start_junction=Init.source_H2_Tornesch.h) annotation (Placement(transformation(
         extent={{-19.75,-19},{19.75,19}},
@@ -706,8 +711,8 @@ public
     P_el_min=P_el_min*f_Lev,
     P_el_overload=P_el_overload*f_Lev,
     V_geo=V_geo*f_Lev,
-    p_low=p_minLow,
-    p_high=p_minHigh,
+    p_minLow=p_minLow,
+    p_minHigh=p_minHigh,
     p_start_junction=Init.mixH2_Leversen.p,
     m_flow_start=Init.m_flow_feedIn_Leversen,
     h_start_junction=Init.source_H2_Leversen.h) annotation (Placement(transformation(
@@ -744,8 +749,8 @@ public
     P_el_min=P_el_min*f_Rei,
     P_el_overload=P_el_overload*f_Rei,
     V_geo=V_geo*f_Rei,
-    p_low=p_minLow,
-    p_high=p_minHigh,
+    p_minLow=p_minLow,
+    p_minHigh=p_minHigh,
     p_start_junction=Init.mixH2_Reitbrook.p,
     m_flow_start=Init.m_flow_feedIn_Reitbrook,
     h_start_junction=Init.source_H2_Reitbrook.h) annotation (Placement(transformation(
@@ -770,6 +775,78 @@ public
     xi_start=Init.mixH2_Reitbrook.xi_out) annotation (Placement(transformation(extent={{108,-404},{88,-424}})));
 public
   Modelica.Blocks.Routing.Replicator replicator(nout=3) annotation (Placement(transformation(extent={{-230,-448},{-210,-428}})));
+  inner TransiEnt.Grid.Gas.StatCycleGasGridHamburg
+                                 Nom(
+    m_flow_feedIn_Tornesch=0,
+    m_flow_feedIn_Leversen=0,
+    m_flow_feedIn_Reitbrook=0,
+    m_flow_unscaled=Nom.m_flow_nom_unscaled,
+    f_Rei=f_Rei,
+    f_Lev=f_Lev,
+    f_Tor=f_Tor,
+    Delta_p_nom_Ringline=ringPipes.Delta_p_nom[2],
+    Delta_p_nom_Ringline1=ringPipes.Delta_p_nom[3],
+    Delta_p_nom_Ringline2=ringPipes.Delta_p_nom[4],
+    Delta_p_nom_Ringline3=ringPipes.Delta_p_nom[5],
+    Delta_p_nom_Ringline4=ringPipes.Delta_p_nom[6],
+    Delta_p_nom_Ringline5=ringPipes.Delta_p_nom[7],
+    Delta_p_nom_Ringline6=ringPipes.Delta_p_nom[8],
+    Delta_p_nom_Ringline7=ringPipes.Delta_p_nom[9],
+    Delta_p_nom_Ringline8=ringPipes.Delta_p_nom[10],
+    Delta_p_nom_Leversen=ringPipes.Delta_p_nom[1],
+    Delta_p_nom_Tornesch=ringPipes.Delta_p_nom[12],
+    m_flow_Harburg=districtPipes.m_flow_nom[1],
+    m_flow_Altona=districtPipes.m_flow_nom[2],
+    m_flow_Eimsbuettel=districtPipes.m_flow_nom[3],
+    m_flow_HHNord=districtPipes.m_flow_nom[4],
+    m_flow_Wandsbek=districtPipes.m_flow_nom[5],
+    m_flow_HHMitte=districtPipes.m_flow_nom[6],
+    m_flow_Bergedorf=districtPipes.m_flow_nom[7],
+    m_flow_nom_Harburg=districtPipes.m_flow_nom[1],
+    m_flow_nom_Altona=districtPipes.m_flow_nom[2],
+    m_flow_nom_Eimsbuettel=districtPipes.m_flow_nom[3],
+    m_flow_nom_HHNord=districtPipes.m_flow_nom[4],
+    m_flow_nom_Wandsbek=districtPipes.m_flow_nom[5],
+    m_flow_nom_HHMitte=districtPipes.m_flow_nom[6],
+    m_flow_nom_Bergedorf=districtPipes.m_flow_nom[7],
+    m_flow_nom_Ringline=ringPipes.m_flow_nom[2],
+    m_flow_nom_Ringline1=ringPipes.m_flow_nom[3],
+    m_flow_nom_Ringline2=ringPipes.m_flow_nom[4],
+    m_flow_nom_Ringline3=ringPipes.m_flow_nom[5],
+    m_flow_nom_Ringline4=ringPipes.m_flow_nom[6],
+    m_flow_nom_Ringline5=ringPipes.m_flow_nom[7],
+    m_flow_nom_Ringline6=ringPipes.m_flow_nom[8],
+    m_flow_nom_Ringline7=ringPipes.m_flow_nom[9],
+    m_flow_nom_Ringline8=ringPipes.m_flow_nom[10],
+    m_flow_nom_Leversen=ringPipes.m_flow_nom[1],
+    m_flow_nom_Tornesch=ringPipes.m_flow_nom[12],
+    Delta_p_nom_Harburg=districtPipes.Delta_p_nom[1],
+    Delta_p_nom_Altona=districtPipes.Delta_p_nom[2],
+    Delta_p_nom_Eimsbuettel=districtPipes.Delta_p_nom[3],
+    Delta_p_nom_HHNord=districtPipes.Delta_p_nom[4],
+    Delta_p_nom_Wandsbek=districtPipes.Delta_p_nom[5],
+    Delta_p_nom_HHMitte=districtPipes.Delta_p_nom[6],
+    Delta_p_nom_Bergedorf=districtPipes.Delta_p_nom[7],
+    splitRatioEimsbuettel=0.027784862,
+    splitRatioWandsbek=0.397988049,
+    quadraticPressureLoss=false,
+    T_feedIn_Tornesch=325.45,
+    T_feedIn_Leversen=325.45,
+    T_feedIn_Reitbrook=325.45)                          annotation (Placement(transformation(extent={{234,-314},{285,-278}})));
+  inner TransiEnt.Basics.Records.PipeParameter ringPipes(
+    N_pipes=12,
+    length={2353.4,9989.1,10203.5,11846.6,7285.6,10878.7,4420.5,11961.1,10915.2,13932.2,28366.9,16710},
+    diameter(displayUnit="m") = {0.6,0.4,0.4,0.4,0.4,0.4,0.5,0.4,0.4,0.607307197,0.6,0.5},
+    m_flow_nom={20.2,10.1,10.1,12.4,0.3,10.5,21.9,6.7,10.1,30.6,3.6,32.4},
+    Delta_p_nom(displayUnit="Pa") = {10605,63939.6,63939.6,184435.5,56.5,125548.4,67207.8,56975.5,116965.7,140705.4,3963.8,133488.2}) annotation (Placement(transformation(extent={{252,-344},{272,-324}})));
+  inner TransiEnt.Basics.Records.PipeParameter districtPipes(
+    N_pipes=7,
+    f_mFlow={0.0869,0.1346,0.1199,0.1688,0.187,0.2267,0.076},
+    length={3774,5152,2739,10564,4075,9480,6770},
+    diameter={0.221,0.221,0.221,0.221,0.221,0.221,0.221},
+    N_ducts={4,5,5,6,7,8,3},
+    m_flow_nom={7.83,12.12,10.8,15.2,16.83,20.42,6.84},
+    Delta_p_nom(displayUnit="Pa") = {31226.22,78102.46,31207.91,126637.22,63836.59,152213.2,73490.95}) annotation (Placement(transformation(extent={{282,-344},{302,-324}})));
 equation
 
   connect(temperatureHH_900s_01012012_0000_31122012_2345_1.y1,
@@ -793,13 +870,13 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(HW_HafenCity.inlet, massflow_Tm_flow1.fluidPortOut) annotation (Line(
-      points={{-1.78,-201},{28.08,-201},{28.08,-205.94}},
+      points={{-1.78,-201},{28,-201},{28,-206}},
       color={175,0,0},
       thickness=0.5));
   connect(T_return2.y, massflow_Tm_flow2.T) annotation (Line(points={{151,-187.5},{149,-187.5},{149,-182.8},{147,-182.8}},
                                                                                                     color={0,0,127}));
   connect(massflow_Tm_flow2.fluidPortOut, Tiefstack_HardCoal.inlet) annotation (Line(
-      points={{147.06,-174.08},{147.06,-166.08},{147.74,-166.08},{147.74,-161.85}},
+      points={{147,-174},{147,-166.08},{147.74,-166.08},{147.74,-161.85}},
       color={175,0,0},
       thickness=0.5));
   connect(m_flow_return2.y, massflow_Tm_flow2.m_flow) annotation (Line(points={{144,-187.5},{144,-186},{145,-186},{145.86,-186},{145.86,-182.8},{145.2,-182.8}},
@@ -821,8 +898,6 @@ equation
       points={{261,-43},{261,-43.5},{255.13,-43.5}},
       color={0,135,135},
       thickness=0.5));
-  connect(P_set_BM.y,Biomass. P_el_set) annotation (Line(points={{95,126},{100,126},{100,108.81}},
-                                                                                              color={0,0,127}));
   connect(P_set_Offshore.y,WindOffshorePlant. P_el_set) annotation (Line(points={{-85,222},{-78,222},{-78,214.81}},    color={0,0,127}));
   connect(P_set_Onshore.y,WindOnshorePlant. P_el_set) annotation (Line(points={{-27,220},{-18,220},{-18,214.81}},    color={0,0,127}));
   connect(P_set_PV.y,PVPlant. P_el_set) annotation (Line(points={{35,220},{42,220},{42,214.81}},    color={0,0,127}));
@@ -830,24 +905,23 @@ equation
                                                                                                     color={0,0,127}));
   connect(P_set_BCG.y,BrownCoal. P_el_set) annotation (Line(points={{-87,126},{-78,126},{-78,108.81}}, color={0,0,127}));
   connect(P_set_OIL.y,OIL. P_el_set) annotation (Line(points={{-29,126},{-18,126},{-18,108.81}}, color={0,0,127}));
-  connect(P_set_GAR.y,GAR. P_el_set) annotation (Line(points={{31,126},{42,126},{42,108.81}}, color={0,0,127}));
   connect(P_set_SB_CCP.y,CCP. P_SB_set) annotation (Line(points={{-177,6},{-166.8,6},{-166.8,-1.09}},      color={0,0,127}));
   connect(P_set_CCP.y,CCP. P_el_set) annotation (Line(points={{-155,18},{-152,18},{-152,16},{-152,0.81}},      color={0,0,127}));
   connect(P_set_GT2.y,Gasturbine2. P_el_set) annotation (Line(points={{-3,12},{-6,12},{-6,-1.19}},      color={0,0,127}));
   connect(WindOffshorePlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{-56,206.64},{-44,206.64},{-44,206},{-44,160},{140,160},{140,196},{151,196}},
+      points={{-57,209.3},{-44,209.3},{-44,206},{-44,160},{140,160},{140,196},{151,196}},
       color={0,135,135},
       thickness=0.5));
   connect(WindOnshorePlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{4,206.64},{6,206.64},{6,206},{18,206},{18,160},{140,160},{140,196},{151,196}},
+      points={{3,209.3},{6,209.3},{6,206},{18,206},{18,160},{140,160},{140,196},{151,196}},
       color={0,135,135},
       thickness=0.5));
   connect(PVPlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{64,206.64},{74,206.64},{74,206},{74,160},{140,160},{140,196},{151,196}},
+      points={{63,209.3},{74,209.3},{74,206},{74,160},{140,160},{140,196},{151,196}},
       color={0,135,135},
       thickness=0.5));
   connect(RunOfWaterPlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{124,206.64},{140,206.64},{140,204},{140,196},{151,196}},
+      points={{123,209.3},{140,209.3},{140,204},{140,196},{151,196}},
       color={0,135,135},
       thickness=0.5));
   connect(P_RE_curtailement.epp_out,Demand. epp) annotation (Line(
@@ -855,31 +929,31 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(BrownCoal.epp,Demand. epp) annotation (Line(
-      points={{-56,100.64},{-46,100.64},{-46,52},{231.4,52}},
+      points={{-57,103.3},{-46,103.3},{-46,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(OIL.epp,Demand. epp) annotation (Line(
-      points={{4,100.64},{12,100.64},{12,52},{231.4,52}},
+      points={{3,103.3},{12,103.3},{12,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(GAR.epp,Demand. epp) annotation (Line(
-      points={{64,100.64},{74,100.64},{74,52},{231.4,52}},
+      points={{63,103.3},{74,103.3},{74,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(Biomass.epp,Demand. epp) annotation (Line(
-      points={{122,100.64},{128,100.64},{128,52},{231.4,52}},
+      points={{121,103.3},{128,103.3},{128,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(Gasturbine2.epp,Demand. epp) annotation (Line(
-      points={{16,-9.36},{32,-9.36},{32,52},{231.4,52}},
+      points={{15,-6.7},{32,-6.7},{32,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(PumpedStorage.epp,Demand. epp) annotation (Line(
-      points={{178,-9.36},{178,-10},{212,-10},{212,52},{231.4,52}},
+      points={{177,-6.7},{177,-10},{212,-10},{212,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(P_12.epp_IN,PumpedStorage. epp) annotation (Line(
-      points={{228.16,-43.5},{218,-43.5},{218,-10},{178,-10},{178,-9.36}},
+      points={{228.16,-43.5},{218,-43.5},{218,-10},{177,-10},{177,-6.7}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set_SB_PS.y,PumpedStorage. P_SB_set) annotation (Line(points={{133,2},{136,2},{141.2,2},{141.2,-3.09}},
@@ -894,33 +968,30 @@ equation
   connect(P_set_SB_BCG.y,BrownCoal. P_SB_set) annotation (Line(points={{-95,112},{-94,112},{-94,106.91},{-92.8,106.91}}, color={0,0,127}));
   connect(P_set_SB_OIL.y,OIL. P_SB_set) annotation (Line(points={{-39,112},{-34,112},{-34,106.91},{-32.8,106.91}},
                                                                                                     color={0,0,127}));
-  connect(P_set_SB_GAR.y,GAR. P_SB_set) annotation (Line(points={{21,112},{27.2,112},{27.2,106.91}}, color={0,0,127}));
-  connect(P_set_SB_BM.y,Biomass. P_SB_set) annotation (Line(points={{79,112},{82,112},{82,106.91},{85.2,106.91}},
-                                                                                                    color={0,0,127}));
   connect(P_sec_pos.y,aGC. P_SB_max_pos) annotation (Line(points={{-217,-92},{-207.24,-92},{-207.24,-93.1}},    color={0,0,127}));
   connect(P_sec_neg.y,aGC. P_SB_max_neg) annotation (Line(points={{-217,-110},{-212,-110},{-212,-107.9},{-207.24,-107.9}}, color={0,0,127}));
   connect(P_set_BC.y,BlackCoal. P_el_set) annotation (Line(points={{167,128},{170,128},{170,110.81}},
                                                                                                    color={0,0,127}));
   connect(P_set_SB_BC.y,BlackCoal. P_SB_set) annotation (Line(points={{149,114},{149,114},{155.2,114},{155.2,108.91}}, color={0,0,127}));
   connect(BlackCoal.epp,Demand. epp) annotation (Line(
-      points={{192,102.64},{202,102.64},{202,52},{231.4,52}},
+      points={{191,105.3},{202,105.3},{202,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set_SB_GT.y,Gasturbine2. P_SB_set) annotation (Line(points={{-19,10},{-12,10},{-12,2},{-20,2},{-20,-3.09},{-20.8,-3.09}},         color={0,0,127}));
   connect(P_set_GT3.y,Gasturbine3. P_el_set) annotation (Line(points={{73,14},{70,14},{70,0.81}},     color={0,0,127}));
   connect(P_set_SB_GT1.y,Gasturbine3. P_SB_set) annotation (Line(points={{57,12},{64,12},{64,4},{56,4},{56,-1.09},{55.2,-1.09}},         color={0,0,127}));
   connect(Gasturbine3.epp,Demand. epp) annotation (Line(
-      points={{92,-7.36},{96,-7.36},{96,-8},{108,-8},{108,52},{231.4,52}},
+      points={{91,-4.7},{96,-4.7},{96,-8},{108,-8},{108,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(CCP.epp,Demand. epp) annotation (Line(
-      points={{-130,-7.36},{-128,-7.36},{-128,-6},{-122,-6},{-122,52},{231.4,52}},
+      points={{-131,-4.7},{-128,-4.7},{-128,-6},{-122,-6},{-122,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set_GT1.y,Gasturbine1. P_el_set) annotation (Line(points={{-79,12},{-82,12},{-82,-1.19}},    color={0,0,127}));
   connect(P_set_SB_GT2.y,Gasturbine1. P_SB_set) annotation (Line(points={{-95,10},{-88,10},{-88,2},{-96,2},{-96,-3.09},{-96.8,-3.09}},            color={0,0,127}));
   connect(Gasturbine1.epp,Demand. epp) annotation (Line(
-      points={{-60,-9.36},{-52,-9.36},{-52,-10},{-44,-10},{-44,52},{231.4,52}},
+      points={{-61,-6.7},{-52,-6.7},{-52,-10},{-44,-10},{-44,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(aGC.epp,Demand. epp) annotation (Line(
@@ -936,7 +1007,7 @@ equation
   connect(m_flow_return3.y,massflow_Tm_flow3. m_flow) annotation (Line(points={{-64,-171.5},{-64,-169.75},{-61.8,-169.75},{-61.8,-166.8}},
                                                                                                     color={0,0,127}));
   connect(massflow_Tm_flow3.fluidPortOut,HKW_Wedel. inlet) annotation (Line(
-      points={{-59.94,-158.08},{-59.94,-155.08},{-64.8,-155.08},{-64.8,-152.5}},
+      points={{-60,-158},{-60,-155.08},{-64.8,-155.08},{-64.8,-152.5}},
       color={175,0,0},
       thickness=0.5));
   connect(P_set_CHP_West.y, HKW_Wedel.P_set) annotation (Line(points={{-89,-124},{-86,-124},{-86,-126},{-81.1,-126},{-81.1,-140.333}},
@@ -1004,7 +1075,7 @@ equation
   connect(HeatFlowEastPlusWUWSPS.y, heatSchedulerEast.Q_flow_total) annotation (Line(points={{-183.75,-189.5},{-183.75,-195.75},{-170,-195.75},{-170,-198}}, color={0,0,127}));
   connect(massflow_Tm_flow6.p, p_set_WT2.y) annotation (Line(points={{244,-153.8},{252,-153.8},{252,-154},{258.25,-154}}, color={0,0,127}));
   connect(GUDTS.outlet, massflow_Tm_flow6.fluidPortIn) annotation (Line(
-      points={{224.25,-151.425},{231.125,-151.425},{231.125,-151.94},{236.08,-151.94}},
+      points={{224.25,-151.425},{231.125,-151.425},{231.125,-152},{236,-152}},
       color={175,0,0},
       thickness=0.5));
   connect(spiVo_Wedel.outlet, DistrictHeatingGrid.fluidPortWest) annotation (Line(
@@ -1028,7 +1099,7 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(massflow_Tm_flow4.fluidPortOut, wuWSpaldingStr.inlet) annotation (Line(
-      points={{106.08,-211.94},{104,-211.94},{104,-214},{101.8,-214}},
+      points={{106,-212},{104,-212},{104,-214},{101.8,-214}},
       color={175,0,0},
       thickness=0.5));
   connect(Q_set_WUWSPS.y, wuWSpaldingStr.Q_flow_set) annotation (Line(points={{91.9,-197},{92,-197},{92,-204}}, color={0,0,127}));
@@ -1067,27 +1138,27 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Wandsbek.fluidPortIn,gasGridHamburg. offTakeWandsbek) annotation (Line(
-      points={{104,-364},{94,-364},{94,-362.259},{126.059,-362.259}},
+      points={{104,-364},{94,-364},{94,-360.071},{145.871,-360.071}},
       color={255,255,0},
       thickness=1.5));
   connect(Bergedorf.fluidPortIn,gasGridHamburg. offTakeBergedorf) annotation (Line(
-      points={{104,-455},{106,-455},{106,-453.435},{142.668,-453.435}},
+      points={{104,-455},{106,-455},{106,-451.976},{166.171,-451.976}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeAltona,Altona. fluidPortIn) annotation (Line(
-      points={{2.41364,-398.729},{10,-398.729},{10,-399}},
+      points={{-14.1412,-397.271},{10,-397.271},{10,-399}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeEimsbuettel,Eimsbuettel. fluidPortIn) annotation (Line(
-      points={{18.1,-373.2},{18.1,-374},{26,-374}},
+      points={{6.15882,-371.012},{6.15882,-374},{26,-374}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeHarburg,Harburg. fluidPortIn) annotation (Line(
-      points={{21.7909,-449.059},{30,-449.059},{30,-451}},
+      points={{7.35294,-447.6},{30,-447.6},{30,-451}},
       color={255,255,0},
       thickness=1.5));
   connect(HHNord.fluidPortIn,gasGridHamburg. offTakeNord) annotation (Line(
-      points={{74,-310},{79,-310},{79,-325.788}},
+      points={{74,-310},{83.7765,-310},{83.7765,-324.329}},
       color={255,255,0},
       thickness=1.5));
   connect(GTS_Tornesch.gasPort,maxH2MassFlow_Tor. gasPortIn) annotation (Line(
@@ -1103,19 +1174,19 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(vleCompositionSensor_Tornesch.gasPortOut,gasGridHamburg. GTSTor) annotation (Line(
-      points={{-62,-302},{-56,-302},{-56,-301.718},{-40.0318,-301.718}},
+      points={{-62,-302},{-56,-302},{-56,-301.718},{-90.5647,-301.718}},
       color={255,255,0},
       thickness=1.5));
   connect(vleCompositionSensor_Leversen.gasPortOut,gasGridHamburg. GTSLev) annotation (Line(
-      points={{-4,-498},{17.1773,-498},{17.1773,-495.012}},
+      points={{-4,-498},{-9.36471,-498},{-9.36471,-498.659}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeBergedorf,vleCompositionSensor_Reitbrook. gasPortOut) annotation (Line(
-      points={{142.668,-453.435},{150.459,-453.435},{150.459,-454},{154,-454}},
+      points={{166.171,-451.976},{150.459,-451.976},{150.459,-454},{154,-454}},
       color={255,255,0},
       thickness=1.5));
   connect(gainTor.y,FeedIn_Tornesch. P_el_set) annotation (Line(
-      points={{-70.6,-368},{-70.5,-368},{-70.5,-367.2},{-84.75,-367.2}},
+      points={{-70.6,-368},{-70.5,-368},{-70.5,-371.76},{-104.5,-371.76}},
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Tornesch.gasPort2,FeedIn_Tornesch. gasPortOut) annotation (Line(
@@ -1127,11 +1198,11 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(gainLev.y,FeedIn_Leversen. P_el_set) annotation (Line(
-      points={{-10.6,-556.5},{-14.5,-556.5},{-14.5,-556.2},{-28.75,-556.2}},
+      points={{-10.6,-556.5},{-14.5,-556.5},{-14.5,-560.76},{-48.5,-560.76}},
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(gainRei.y,FeedIn_Reitbrook. P_el_set) annotation (Line(
-      points={{156.6,-555.5},{155.5,-555.5},{155.5,-555.2},{172,-555.2}},
+      points={{156.6,-555.5},{155.5,-555.5},{155.5,-559.76},{191.75,-559.76}},
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Reitbrook.gasPort2,FeedIn_Reitbrook. gasPortOut) annotation (Line(
@@ -1170,7 +1241,7 @@ equation
   connect(maxH2MassFlow_Lev.m_flow_H2_max,FeedIn_Leversen. m_flow_feedIn) annotation (Line(points={{-80,-507},{-80,-507},{-80,-554},{-80,-556.2},{-68.25,-556.2}},     color={0,0,127},
       pattern=LinePattern.Dash));
   connect(JunctionHHMitte.gasPort1, gasGridHamburg.offTakeMitte) annotation (Line(
-      points={{108,-414},{114,-414},{114,-418},{116,-418},{116,-415.506},{118.677,-415.506}},
+      points={{108,-414},{114,-414},{114,-418},{116,-418},{116,-413.318},{136.318,-413.318}},
       color={255,255,0},
       thickness=1.5));
   connect(HHMitte.fluidPortIn, JunctionHHMitte.gasPort3) annotation (Line(
@@ -1206,6 +1277,10 @@ equation
       points={{-84.75,-352},{-46,-352},{-46,-406},{-312,-406},{-312,-54},{-44,-54},{-44,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
+  connect(P_set_GAR.y, GAR.P_el_set) annotation (Line(points={{31,126},{42,126},{42,108.81}}, color={0,0,127}));
+  connect(P_set_BM.y, Biomass.P_el_set) annotation (Line(points={{95,126},{100,126},{100,108.81}}, color={0,0,127}));
+  connect(P_set_SB_GAR.y, GAR.P_SB_set) annotation (Line(points={{21,112},{24,112},{24,106.91},{27.2,106.91}}, color={0,0,127}));
+  connect(P_set_SB_BM.y, Biomass.P_SB_set) annotation (Line(points={{79,112},{80,112},{80,114},{85.2,114},{85.2,106.91}}, color={0,0,127}));
    annotation (
     experiment(StopTime=86400, Interval=900),
     Diagram(coordinateSystem(

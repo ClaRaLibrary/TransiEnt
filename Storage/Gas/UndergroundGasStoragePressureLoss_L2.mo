@@ -1,23 +1,25 @@
 within TransiEnt.Storage.Gas;
 model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume for constant composition with adiabatic inlet and outlet pipes with pressure losses"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -85,7 +87,7 @@ model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium) annotation (
+  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choicesAllMatching,
     Placement(transformation(extent={{-10,-10},{10,10}})));
@@ -99,7 +101,9 @@ public
     diameter_i=0.3,
     z_in=-1000,
     z_out=0,
-    N_tubes=1) annotation (
+    N_tubes=1,
+    showExpertSummary=true)
+               annotation (
     Dialog(group="Fundamental Definitions"),
     choices(choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi "Constant composition", choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi "Variable composition"),
     Placement(transformation(
@@ -116,7 +120,9 @@ public
     N_tubes=1,
     N_cv=1,
     z_in=-1000,
-    z_out=0) annotation (
+    z_out=0,
+    showExpertSummary=true)
+             annotation (
     Dialog(group="Fundamental Definitions"),
     choices(choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi "Constant composition", choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi "Variable composition"),
     Placement(transformation(
@@ -127,13 +133,13 @@ public
   inner Summary summary(
     gasPortIn(
       mediumModel=medium,
-      xi=pipeIn.summary.gasPortIn.xi,
-      x=pipeIn.summary.gasPortIn.x,
-      m_flow=pipeIn.summary.gasPortIn.m_flow,
-      T=pipeIn.summary.gasPortIn.T,
-      p=pipeIn.summary.gasPortIn.p,
-      h=pipeIn.summary.gasPortIn.h,
-      rho=pipeIn.summary.gasPortIn.rho),
+      xi=pipeIn.summary.inlet.xi,
+      x=pipeIn.summary.inlet.x,
+      m_flow=pipeIn.summary.inlet.m_flow,
+      T=pipeIn.summary.inlet.T,
+      p=pipeIn.summary.inlet.p,
+      h=pipeIn.summary.inlet.h,
+      rho=pipeIn.summary.inlet.rho),
     gasPortIntoStorage(
       mediumModel=medium,
       xi=storage.summary.gasPortIn.xi,
@@ -163,16 +169,16 @@ public
       rho=storage.summary.gasPortOut.rho),
     gasPortOut(
       mediumModel=medium,
-      xi=pipeOut.summary.gasPortOut.xi,
-      x=pipeOut.summary.gasPortOut.x,
-      m_flow=pipeOut.summary.gasPortOut.m_flow,
-      T=pipeOut.summary.gasPortOut.T,
-      p=pipeOut.summary.gasPortOut.p,
-      h=pipeOut.summary.gasPortOut.h,
-      rho=pipeOut.summary.gasPortOut.rho),
+      xi=pipeOut.summary.outlet.xi,
+      x=pipeOut.summary.outlet.x,
+      m_flow=pipeOut.summary.outlet.m_flow,
+      T=pipeOut.summary.outlet.T,
+      p=pipeOut.summary.outlet.p,
+      h=pipeOut.summary.outlet.h,
+      rho=pipeOut.summary.outlet.rho),
     heat(
-      Q_flow=storage.heat.Q_flow,
-      T=storage.heat.T),
+      Q_flow=-heatStorage.Q_flow,
+      T=heatStorage.T),
     costs(
       costs=storage.summary.costs.costs,
       investCosts=storage.summary.costs.investCosts,

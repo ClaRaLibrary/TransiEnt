@@ -1,23 +1,25 @@
 within TransiEnt.Storage.Heat;
 model HotWaterStorage_L2 "Stratified hot water storage without spatial discretisation (based on analytic solution for output temperature at steady state)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
 // _____________________________________________
 //
@@ -70,7 +72,7 @@ constant Modelica.SIunits.ThermalConductivity lambda_water= 0.597 "thermal condu
   //                    Variables
   // _____________________________________________
 public
-Modelica.SIunits.Energy E_stor(start=4200*T_start*Volume*988) "Stored Energy (with cp and density of the Storage medium";
+Modelica.SIunits.Energy  E_stor(start=Volume*Tank_Medium.d*Tank_Medium.cp*(T_start-273.15)) "Stored Energy (with cp and density of the Storage medium";
     Modelica.SIunits.HeatFlowRate Q_flow_gen( start=1000) "heat flow from heat generator";
     Modelica.SIunits.HeatFlowRate Q_flow_con( start=1000) "heat flow to heat consumer";
 Modelica.SIunits.HeatFlowRate Q_flow_loss "surface losses to the environment";
@@ -248,7 +250,7 @@ GenOut.h_outflow=h_outflow_gen;
   k_pipe_con=0.1;
  end if;
 
-T_stor=E_stor/(Volume*Tank_Medium.d*Tank_Medium.cp);
+T_stor-273.15=E_stor/(Volume*Tank_Medium.d*Tank_Medium.cp);
 T_stor=T_Stor;
 Q_gen=-Q_flow_gen;
  if noEvent(ConIn.m_flow>0.0001) then
@@ -373,7 +375,7 @@ annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100}
           smooth=Smooth.None,
           pattern=LinePattern.Dot)}),
                                   Diagram(coordinateSystem(
-        preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),Documentation(info="<html>
+        preserveAspectRatio=false, extent={{-100,-100},{100,100}})),          Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Hot water storage without spatial discretisation (based on analytic solution for output temperature at steady state)</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

@@ -1,23 +1,25 @@
 within TransiEnt.Components.Turbogroups.OperatingStates;
 model PumpstorageStates "Limits input signal by value and gradient depending on active state out of three possible operating states (halt, startup, operating)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   extends TransiEnt.Components.Turbogroups.OperatingStates.PartialStateDynamic;
 
@@ -51,33 +53,28 @@ model PumpstorageStates "Limits input signal by value and gradient depending on 
                                                                   annotation (Placement(transformation(extent={{70,84},{90,104}},rotation=0)));
   Modelica.StateGraph.StepWithSignal startupPump(nOut=2, nIn=1) annotation (Placement(transformation(extent={{-16,84},{4,104}},rotation=0)));
   Modelica.StateGraph.Transition thresholdPump(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_set_star >= P_min_operating_pump - Modelica.Constants.eps)
-                                                  annotation (Placement(transformation(extent={{-48,84},{-28,104}},rotation=0)));
+    condition=P_set_star >= P_min_operating_pump + thres,
+    enableTimer=true)                             annotation (Placement(transformation(extent={{-48,84},{-28,104}},rotation=0)));
   Modelica.StateGraph.Transition noThreshold(
     enableTimer=true,
-    waitTime=t_eps,
-    condition=P_set_star < P_min_operating_pump - Modelica.Constants.eps)
-                                                   annotation (Placement(transformation(extent={{4,118},{-16,138}},rotation=0)));
+    condition=P_set_star < P_min_operating_pump - thres,
+    waitTime=t_eps)                                annotation (Placement(transformation(extent={{4,118},{-16,138}},rotation=0)));
   Modelica.StateGraph.Transition noThreshold2(
+    condition=P_set_star < P_min_operating_pump - thres,
     enableTimer=true,
-    waitTime=t_eps,
-    condition=P_set_star < P_min_operating_pump - Modelica.Constants.eps)
-                    annotation (Placement(transformation(extent={{44,138},{24,158}},
+    waitTime=t_eps) annotation (Placement(transformation(extent={{44,138},{24,158}},
                                                                                    rotation=0)));
 
   Modelica.StateGraph.Transition thresholdTurb(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_set_star <= -P_min_operating_turb + Modelica.Constants.eps)
-                                                   annotation (Placement(transformation(extent={{-48,50},{-28,70}}, rotation=0)));
+    condition=P_set_star <= -P_min_operating_turb - thres,
+    enableTimer=true)                              annotation (Placement(transformation(extent={{-48,50},{-28,70}}, rotation=0)));
   Modelica.StateGraph.StepWithSignal startupTurb(nOut=2, nIn=1) annotation (Placement(transformation(extent={{-16,50},{4,70}}, rotation=0)));
   Modelica.StateGraph.Transition noThreshold1(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_set_star > -P_min_operating_turb + Modelica.Constants.eps)
-                                                   annotation (Placement(transformation(extent={{4,20},{-16,40}},  rotation=0)));
+    condition=P_set_star > -P_min_operating_turb + thres,
+    enableTimer=true)                              annotation (Placement(transformation(extent={{4,20},{-16,40}},  rotation=0)));
   Modelica.StateGraph.Transition startupTurbSuccess(
     condition=true,
     enableTimer=true,
@@ -85,9 +82,9 @@ model PumpstorageStates "Limits input signal by value and gradient depending on 
   Modelica.StateGraph.StepWithSignal operatingTurb(       nOut=1, nIn=2)
                                                                   annotation (Placement(transformation(extent={{70,50},{90,70}}, rotation=0)));
   Modelica.StateGraph.Transition noThreshold3(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_set_star > -P_min_operating_turb + Modelica.Constants.eps)
+    condition=P_set_star > -P_min_operating_turb + thres,
+    enableTimer=true)
                     annotation (Placement(transformation(extent={{44,2},{24,22}},  rotation=0)));
   Modelica.StateGraph.InitialStep init(nIn=0, nOut=3) annotation (Placement(transformation(extent={{-128,-90},{-108,-70}})));
   Modelica.StateGraph.Transition initHalt(condition=init_state == TransiEnt.Basics.Types.off) annotation (Placement(transformation(extent={{-90,-90},{-70,-70}})));

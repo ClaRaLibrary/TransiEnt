@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Electrical.Wind;
 model Windturbine "Pitch controlled wind turbine model based on cp-lambda characteristic"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -35,10 +37,8 @@ model Windturbine "Pitch controlled wind turbine model based on cp-lambda charac
   parameter SI.Velocity v_wind_small = 0.1 "Wind velocity considered as negligible" annotation (Dialog(tab="Wind Turbine Data"));
   parameter Real J = 12e6 "Moment of inertia of entire plant" annotation (Dialog(tab="Wind Turbine Data"));
   final parameter SI.Length D_Rotor=Rotor.D "Rotor diameter of wind turbine" annotation (Dialog(tab="Wind Turbine Data"));
-  parameter Characteristics.VariableSpeed.BetzCoefficientApproximation turbineCharacteristics=Characteristics.VariableSpeed.MOD2() "Characteristic behaviour of betz factor"
-                                                                                                    annotation (choicesAllMatching=true, Dialog(tab="Wind Turbine Data"));
-  parameter Characteristics.VariableSpeed.WindSpeedOperationRanges operationRanges=Characteristics.VariableSpeed.ExampleTurbineRanges() "Wind speed operation ranges"
-                                                                                                    annotation (choicesAllMatching=true, Dialog(tab="Wind Turbine Data"));
+  parameter TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.BetzCoefficientApproximation turbineCharacteristics=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.MOD2() "Characteristic behaviour of betz factor" annotation (choicesAllMatching=true, Dialog(tab="Wind Turbine Data"));
+  parameter TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.WindSpeedOperationRanges operationRanges=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.ExampleTurbineRanges() "Wind speed operation ranges" annotation (choicesAllMatching=true, Dialog(tab="Wind Turbine Data"));
   parameter Modelica.Blocks.Types.SimpleController controllerType_p=.Modelica.Blocks.Types.SimpleController.PID "Type of controller"
                                                                                                     annotation (Dialog(tab="Controller", group="Pitch"),choicesAllMatching=true);
   parameter Real k_p=5e-5 "Gain of controller" annotation (Dialog(tab="Controller", group="Pitch"));
@@ -77,7 +77,7 @@ public
   Modelica.Blocks.Sources.RealExpression v_wind1(y=max(v_wind_small, v_wind_internal))
                                                                    annotation (Placement(transformation(extent={{-72,-18},{-56,2}})));
   TransiEnt.Producer.Electrical.Wind.Controller.PitchController pitchController(
-    turbine=Characteristics.VariableSpeed.ExampleTurbineRanges(),
+    turbine=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.ExampleTurbineRanges(),
     k=k_p,
     Ti=Ti_p,
     yMax=yMax_p,
@@ -129,7 +129,7 @@ equation
   //               Connect Statements
   // _____________________________________________
   connect(Generator.epp, epp) annotation (Line(
-      points={{46.14,-7.15},{54,-7.15},{54,60},{100,60}},
+      points={{46.14,-7.15},{54,-7.15},{54,78},{100,78}},
       color={0,135,135},
       thickness=0.5));
   connect(v_wind1.y, Rotor.v_wind) annotation (Line(points={{-55.2,-8},{-39.4,-8},
@@ -148,7 +148,7 @@ equation
   connect(torqueController.y, Generator.T_set) annotation (Line(points={{33.6,64},{33.6,64},{42,64},{42,28},{31.58,28},{31.58,7.85}},
                                                                                                                                   color={0,0,127}));
   connect(pitchController.beta_set, Rotor.beta_set) annotation (Line(points={{-46.4,48.2},{-44,48.2},{-44,30},{-30,30},{-30,1.6}}, color={0,0,127}));
-    annotation (Line(points={{15.4,89},{22,89},{22,74.2}}, color={0,0,127}),
+    annotation (
               Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),                                                                     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>

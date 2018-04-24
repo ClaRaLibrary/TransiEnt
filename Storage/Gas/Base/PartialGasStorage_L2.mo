@@ -1,23 +1,25 @@
 within TransiEnt.Storage.Gas.Base;
 partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume for real gases"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -26,6 +28,7 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
 
   import TransiEnt;
   import SI = Modelica.SIunits;
+  import Modelica.Constants.pi;
 
   extends TransiEnt.Basics.Icons.StorageGenericGas;
 
@@ -33,6 +36,9 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   //
   //        Constants and Hidden Parameters
   // _____________________________________________
+
+  final parameter SI.Diameter diameter=sqrt(4*V_geo/(pi*height)) "Diameter of storage";
+  final parameter SI.Area A_heat=pi/2*diameter^2+pi*diameter*height "Surface area of storage";
 
   // _____________________________________________
   //
@@ -42,9 +48,9 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium in the gas storage" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
 
   parameter SI.Volume V_geo=1 "geometric inner volume of the storage cylinder" annotation(Dialog(group="Geometry"));
+  parameter SI.Height height=3.779*V_geo^(1/3) "Height of storage" annotation(Dialog(group="Geometry")); //based on height to diameter ratio 6.51:1
 
   parameter Boolean includeHeatTransfer=true "false for neglecting heat transfer" annotation(Dialog(group="Heat Transfer"));
-  parameter SI.Area A_heat=7.420*V_geo^(2/3) "Inner heat transfer area" annotation(Dialog(group="Heat Transfer")); //based on height to diameter ratio 6.51:1
   parameter SI.CoefficientOfHeatTransfer alpha_nom=4 "heat transfer coefficient inside the storage cylinder" annotation(Dialog(group="Heat Transfer"));
 
   parameter Boolean start_pressure=true "true if a start pressure is defined, false if a start mass is defined" annotation(Dialog(group="Initialization"));
@@ -146,8 +152,9 @@ equation
   V_geo*drhodt=gasPortIn.m_flow+gasPortOut.m_flow "Conservation of Mass";
 
   //der(m_gas)*(h_gas-gas.p/gas.d) + m_gas*der(h_gas-gas.p/gas.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy";
-  V_geo*drhodt*(h_gas - gasBulk.p/gasBulk.d) + m_gas*der(h_gas - gasBulk.p/gasBulk.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy";
-                                                                                                                                                                                                        //u=h-p*v
+  //V_geo*drhodt*(h_gas - gasBulk.p/gasBulk.d) + m_gas*der(h_gas - gasBulk.p/gasBulk.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //creates the same results like the next but one equation for constant composition but different results for variable composition
+  //V_geo*drhodt*h_gas - p_gas*V_geo/gasBulk.d*drhodt + m_gas*der(h_gas) - V_geo*der(p_gas) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //definitely wrong, produces wrong p and T curves
+  V_geo*drhodt*h_gas - der(p_gas)*V_geo + m_gas*der(h_gas) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //formulation used in ClaRa pipe models
 
   Q_flow_ht=if includeHeatTransfer then heatTransfer.heat.Q_flow else 0;
   gasBulk.d = m_gas/V_geo;
@@ -192,6 +199,7 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Wed Oct 07 2015</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (changes due to ClaRa changes: changed parameters)</p>
 </html>"),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));

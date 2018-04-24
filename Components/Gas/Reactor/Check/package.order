@@ -2,3 +2,5 @@ TestControllerH2AndH2OForReformer
 TestPrereformer_L1
 TestSteamMethaneReformer_L4
 TestWaterGasShiftReactor_L1
+TestMethanator_L4_T_var
+TestMethanator_L4_m_flow_var

@@ -25,23 +25,25 @@ within ;
 
 
 package TransiEnt "Library for transient simulation of coupled energy networks with high share of renewable energy"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
 
 extends TransiEnt.Basics.Icons.Package;
@@ -159,11 +161,11 @@ annotation (uses(
     ModelicaReference(version="3.2.2"),
     Modelica_StateGraph2(version="2.0.3"),
     DataFiles(version="1.0.4"),
-    ClaRa(version="1.2.1"),
-    TILMedia(version="1.2.1 ClaRa"),
+    TILMedia(version="1.3.0 ClaRa"),
     Design(version="1.0.5"),
     Modelica_LinearSystems2(version="2.3.4"),
-    DymolaCommands(version="1.2")),   Icon(coordinateSystem(
+    DymolaCommands(version="1.4"),
+    ClaRa(version="1.3.0")),        Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
           Rectangle(
           extent={{-56,-4},{52,-16}},
@@ -185,9 +187,10 @@ annotation (uses(
 <h4><span style=\"color: #008000\">List of developers (2013 - 2017)</span></h4>
 <p>Coordinating developers:</p>
 <ul>
-<li>Andresen, Lisa</li>
-<li>Dubucq, Pascal</li>
-<li>Peniche Garcia, Ricardo</li>
+<li>Bode, Carsten</li>
+<li>Heckel, Jan-Peter</li>
+<li>Schuelting, Oliver</li>
+<li>Senkel, Anne</li>
 </ul>
 <p>Consulting developers:</p>
 <ul>
@@ -195,13 +198,14 @@ annotation (uses(
 </ul>
 <p>Other developers:</p>
 <ul>
+<li>Andresen, Lisa</li>
 <li>Becke, Tobias</li>
 <li>Bixel, Tonio</li>
-<li>Bode, Carsten</li>
 <li>Braune, Jan</li>
 <li>Denninger, Rebekka</li>
 <li>Doerschlag, Arne</li>
 <li>Drake, Russell</li>
+<li>Dubucq, Pascal</li>
 <li>Ernst, Malte</li>
 <li>Gaeth, Jakobus</li>
 <li>Goettsch, Patrick</li>
@@ -215,17 +219,21 @@ annotation (uses(
 <li>Koeppen, Arne</li>
 <li>Lange, Jelto</li>
 <li>Lindemann, Tom Oliver</li>
+<li>Peniche Garcia, Ricardo</li>
 <li>Ramm, Tobias</li>
 <li>Schroeder, Vitja</li>
-<li>Schuelting, Oliver</li>
-<li>Senkel, Anne</li>
 <li>Toerber, Tobias</li>
 <li>Wagner, Philipp</li>
 <li>Weilbach, Simon</li>
 <li>Zaczek, Alexander</li>
 </ul>
 </html>"),
-  version="0.3",
-  conversion(noneFromVersion=""));
+  version="1.1.0",
+  conversion(from(version="0.3", to="1.1.0", script="modelica://Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
+  from(version="1.0.1", to="1.1.0", script="modelica://Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos")));
 end TransiEnt;
+
+
+
+
 

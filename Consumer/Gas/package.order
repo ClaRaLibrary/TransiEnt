@@ -3,4 +3,5 @@ Control
 GasConsumerPipe_mFlow
 GasConsumerPipe_HFlow
 GasConsumer_HFlow
+GasConsumer_HFlow_NCV
 TableBasedGasBurningConsumer

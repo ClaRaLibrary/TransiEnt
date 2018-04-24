@@ -1,22 +1,24 @@
 ﻿within TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction;
 model WeeklyHeatProfile "Normalized typical daily load profile is applied to input heat demand"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -66,7 +68,8 @@ model WeeklyHeatProfile "Normalized typical daily load profile is applied to inp
     columns={2},
     relativepath="heat/DistrictHeatingWeeklyHeatProfileSummer_900s.txt") "H. Gadd and S. Werner, “Heat load patterns in district heating substations,” Appl. Energy, vol. 108, pp. 176–183, 2013." annotation (Placement(transformation(extent={{-38,-74},{-18,-54}})));
   Modelica.Blocks.Logical.Switch switch1 annotation (Placement(transformation(extent={{18,-30},{38,-10}})));
-  Modelica.Blocks.Sources.BooleanExpression isHeatingPeriod(y=time < t_hp_end or time > t_hp_start) annotation (Placement(transformation(extent={{-40,22},{-20,42}})));
+  Modelica.Blocks.Sources.BooleanExpression isHeatingPeriod(y=time < t_hp_end or time >= t_hp_start)
+                                                                                                    annotation (Placement(transformation(extent={{-40,22},{-20,42}})));
 equation
 
   // _____________________________________________

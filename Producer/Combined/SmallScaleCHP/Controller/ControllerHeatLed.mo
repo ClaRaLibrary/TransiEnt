@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Combined.SmallScaleCHP.Controller;
 model ControllerHeatLed "Controller that gets target temperatures from simCenter and has an input for storage Temperature"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -45,36 +47,36 @@ model ControllerHeatLed "Controller that gets target temperatures from simCenter
   parameter Modelica.SIunits.Time Ti(
     min=Modelica.Constants.small,
     start=0.5)=0.1 "Time constant of Integrator block" annotation (Dialog(
-        tab="Controller", enable=controllerType == SimpleController.PI or
-          controllerType == SimpleController.PID));
+        tab="Controller", enable=controllerType == Modelica.Blocks.Types.SimpleController.PI or
+          controllerType == Modelica.Blocks.Types.SimpleController.PID));
   parameter Modelica.SIunits.Time Td(
     min=0,
     start=0.1)=0 "Time constant of Derivative block" annotation (Dialog(tab=
-         "Controller", enable=controllerType == SimpleController.PD or
-          controllerType == SimpleController.PID));
+         "Controller", enable=controllerType == Modelica.Blocks.Types.SimpleController.PD or
+          controllerType == Modelica.Blocks.Types.SimpleController.PID));
   parameter Real yMax(start=1) = nDevices*Specification.P_el_max "Upper limit of output"
                                                                                         annotation(Dialog(tab="Controller"));
   parameter Real yMin=Specification.P_el_min "Lower limit of output" annotation(Dialog(tab="Controller"));
   parameter Real wp(min=0) = 1 "Set-point weight for Proportional block (0..1)" annotation(Dialog(tab="Controller"));
-  parameter Real wd(min=0) = 0 "Set-point weight for Derivative block (0..1)" annotation(Dialog(tab="Controller",enable=controllerType==SimpleController.PD or
-                                controllerType==SimpleController.PID));
-  parameter Real Ni(min=100*Modelica.Constants.eps) = 0.9 "Ni*Ti is time constant of anti-windup compensation"  annotation(Dialog(tab="Controller",enable=controllerType==SimpleController.PI or
-                              controllerType==SimpleController.PID));
-  parameter Real Nd(min=100*Modelica.Constants.eps) = 10 "The higher Nd, the more ideal the derivative block" annotation(Dialog(tab="Controller",enable=controllerType==SimpleController.PD or
-                                controllerType==SimpleController.PID));
+  parameter Real wd(min=0) = 0 "Set-point weight for Derivative block (0..1)" annotation(Dialog(tab="Controller",enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
+                                controllerType==Modelica.Blocks.Types.SimpleController.PID));
+  parameter Real Ni(min=100*Modelica.Constants.eps) = 0.9 "Ni*Ti is time constant of anti-windup compensation"  annotation(Dialog(tab="Controller",enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
+                              controllerType==Modelica.Blocks.Types.SimpleController.PID));
+  parameter Real Nd(min=100*Modelica.Constants.eps) = 10 "The higher Nd, the more ideal the derivative block" annotation(Dialog(tab="Controller",enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
+                                controllerType==Modelica.Blocks.Types.SimpleController.PID));
   parameter Modelica.Blocks.Types.InitPID initType=Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState
   "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation(Evaluate=true,
       Dialog(tab="Controller",group="Initialization"));
   parameter Boolean limitsAtInit=true "= false, if limits are ignored during initializiation" annotation(Evaluate=true, Dialog(tab="Controller",group="Initialization",
-                       enable=controllerType==SimpleController.PI or
-                              controllerType==SimpleController.PID));
+                       enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
+                              controllerType==Modelica.Blocks.Types.SimpleController.PID));
   parameter Real xi_start=0 "Initial or guess value value for integrator output (= integrator state)" annotation (Dialog(tab="Controller",group="Initialization",
-                enable=controllerType==SimpleController.PI or
-                       controllerType==SimpleController.PID));
+                enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
+                       controllerType==Modelica.Blocks.Types.SimpleController.PID));
   parameter Real xd_start=0 "Initial or guess value for state of derivative block" annotation (Dialog(tab="Controller",group="Initialization",
-                         enable=controllerType==SimpleController.PD or
-                                controllerType==SimpleController.PID));
-  parameter Real y_start=Specification.P_el_max "Initial value of output" annotation(Dialog(tab="Controller",enable=initType == InitPID.InitialOutput, group=
+                         enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
+                                controllerType==Modelica.Blocks.Types.SimpleController.PID));
+  parameter Real y_start=Specification.P_el_max "Initial value of output" annotation(Dialog(tab="Controller",enable=initType == Modelica.Blocks.Types.InitPID.InitialOutput, group=
           "Initialization"));
 
   // _____________________________________________
@@ -109,7 +111,7 @@ model ControllerHeatLed "Controller that gets target temperatures from simCenter
   //
   //                Interfaces
   // _____________________________________________
-  Modelica.Blocks.Interfaces.RealInput T_stor_in if useT_stor annotation (enabled=useT_stor,Placement(
+  Modelica.Blocks.Interfaces.RealInput T_stor_in if useT_stor annotation (Placement(
         transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,

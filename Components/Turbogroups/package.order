@@ -5,3 +5,5 @@ FirstOrderThreeStateTurbine
 Gasturbine
 Hydroturbine
 ThreeStateTurbine
+StatelessTurbine
+StatelessHydroturbine

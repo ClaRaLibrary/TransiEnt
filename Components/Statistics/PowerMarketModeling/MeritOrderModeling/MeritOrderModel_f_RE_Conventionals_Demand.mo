@@ -1,22 +1,24 @@
 within TransiEnt.Components.Statistics.PowerMarketModeling.MeritOrderModeling;
 model MeritOrderModel_f_RE_Conventionals_Demand "Simplified electricity spot market with inputs: renewable energy generation and demand"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Model;
 
   //Demand
@@ -94,7 +96,8 @@ equation
 
  else
  PowerPrice=-1; //for error identification
- end if
+ end if;
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={
         Rectangle(extent={{-70,70},{68,-72}}, lineColor={255,0,0}),
@@ -118,9 +121,7 @@ equation
           lineColor={0,0,0},
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid,
-          textString="MW")}));
-
-  annotation (Documentation(info="<html>
+          textString="MW")}),Documentation(info="<html>
 <p>Simple merit order model sketch.</p>
 <p>Suggested testing procedure:</p>
 <p>1. Fix the Demand (for instance : 300 MWh)</p>
@@ -130,38 +131,5 @@ equation
 <p><br>Assumptions: inelastic demand, stepwise-offers (all plants of one type have the same marginal costs).</p>
 <p><br>Notes: the marginal costs and the offered energy amounts were randomly chosen, these still have to be corrected to reflect the reality.</p>
 <p><br>This is a passive model since it only calculates a power price. For active components which define set points based in the merit order see <a href=\"modelica://TransiEnt.Producer.Electrical.Controllers.AGC_MeritOrder\">TransiEnt.Producer.Electrical.Controllers.AGC_MeritOrder</a> and simliar components</p>
-</html>"), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics(
-        Text(
-          extent={{-140,-91},{160,-131}},
-          lineColor={0,134,134},
-          textString="%name"),
-        Text(
-          extent={{-140,-91},{160,-131}},
-          lineColor={0,134,134},
-          textString="%name"),
-        Text(
-          extent={{-140,-91},{160,-131}},
-          lineColor={0,134,134},
-          textString="%name")) =                                                               {
-        Text(
-          extent={{-96,86},{-86,62}},
-          lineColor={28,108,200},
-          textString="RE"),
-        Text(
-          extent={{-100,106},{12,66}},
-          lineColor={28,108,200},
-          textString="RE"),
-        Text(
-          extent={{-94,80},{-68,70}},
-          lineColor={0,0,0},
-          fillColor={0,0,255},
-          fillPattern=FillPattern.Solid,
-          textString="RE
-"),     Text(
-          extent={{-96,22},{-70,12}},
-          lineColor={0,0,0},
-          fillColor={0,0,255},
-          fillPattern=FillPattern.Solid,
-          textString="Gas")}));
+</html>"), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end MeritOrderModel_f_RE_Conventionals_Demand;

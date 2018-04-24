@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Electrical.Base;
 partial model PartialElectricPowerPlant "Abstract model of an electric power plant with L1 on electric side"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -64,7 +66,7 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{90,50},{110,70}}), iconTransformation(extent={{80,42},{110,70}})));
+  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{90,68},{110,88}}), iconTransformation(extent={{80,60},{100,80}})));
 
   // _____________________________________________
   //
@@ -73,7 +75,19 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
 
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=typeOfPrimaryEnergyCarrier) annotation (Placement(transformation(extent={{56,-100},{76,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts(
+    P_n=P_el_n,
+    redeclare model PowerPlantCostModel = ProducerCosts,
+    Q_flow_fuel_is=Q_flow_fuel_is,
+    m_flow_CDE_is=m_flow_CDE,
+    P_el_is=P_el_is,
+    produces_Q_flow=false)
+                     annotation (HideResult=false, Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={90,-90})));
 //  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectInertiaConstant collectInertiaConstant;
+
   // _____________________________________________
   //
   //                    Variables
@@ -92,15 +106,6 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
 
 protected
   TransiEnt.Components.Statistics.Functions.GetFuelSpecificCO2Emissions fuelSpecificCO2Emissions(typeOfPrimaryEnergyCarrier=typeOfPrimaryEnergyCarrier);
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts(
-    P_n=P_el_n,
-    redeclare model PowerPlantCostModel = ProducerCosts,
-    Q_flow_fuel_is=Q_flow_fuel_is,
-    m_flow_CDE_is=m_flow_CDE,
-    P_el_is=P_el_is) annotation (HideResult=false, Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={90,-90})));
 
 public
   Real delta_f_star = (epp.f-simCenter.f_n)/simCenter.f_n;

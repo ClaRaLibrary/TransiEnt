@@ -1,22 +1,24 @@
 within TransiEnt.Consumer.Gas;
 model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representing the distance to a consumer within this district"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.GasSink;
   import SI = ClaRa.Basics.Units;
   outer TransiEnt.SimCenter simCenter;
@@ -41,7 +43,7 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   parameter SI.Pressure p_start[pipe.N_cv]=ones(pipe.N_cv)*15e5 "|Pipe Network|Initialization|Pressure";
   parameter SI.EnthalpyMassSpecific h_start[pipe.N_cv]=ones(pipe.N_cv)*788440 "|Pipe Network|Initialization|Enthalpy";
   parameter SI.MassFlowRate m_flow_start[pipe.N_cv + 1]=ones(pipe.N_cv + 1)*140 "|Pipe Network|Initialization|Mass flow rate";
-  parameter Boolean productMassBalance=true "|Pipe Network||Set to false for different (faster) component mass balance formulation";
+  parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
   replaceable model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4
     constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "|Pipes|Pressure loss model" annotation (choicesAllMatching);
 
@@ -63,7 +65,7 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
     N_cv=N_cv,
     frictionAtOutlet=true,
     frictionAtInlet=true,
-    productMassBalance=productMassBalance,
+    massBalance=massBalance,
     redeclare model PressureLoss = PressureLoss) annotation (Placement(transformation(extent={{-82,-5},{-54,5}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink(
     medium=simCenter.gasModel1,

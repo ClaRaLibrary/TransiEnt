@@ -1,22 +1,24 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Check;
 model TestSmartFridgeFreezer
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
     extends TransiEnt.Basics.Icons.Checkmodel;
 
   Modelica.Blocks.Sources.TimeTable f_grid(table=[0,49.977; 1,49.977; 2,49.977; 3,49.979; 4,49.98; 5,49.982; 6,49.982; 7,49.981; 8,49.98; 9,49.982; 10,49.983; 11,49.984; 12,49.984; 13,49.985; 14,49.985; 15,49.985; 16,49.985; 17,49.985; 18,49.983; 19,49.982; 20,49.979; 21,49.978; 22,49.978; 23,49.978; 24,49.977; 25,49.977; 26,49.977; 27,49.975; 28,49.973; 29,49.971; 30,49.97; 31,49.97; 32,49.97; 33,49.97; 34,49.969; 35,49.969; 36,49.968; 37,49.967; 38,49.969; 39,49.968; 40,49.969; 41,49.969; 42,49.97; 43,49.971; 44,49.971; 45,49.974; 46,49.974; 47,49.974; 48,49.974; 49,49.974; 50,49.975; 51,49.975; 52,49.975; 53,49.976; 54,49.98; 55,49.98; 56,49.981; 57,49.984; 58,49.985; 59,49.987; 60,49.988; 61,49.988; 62,49.985; 63,49.983; 64,49.984; 65,49.986; 66,49.986; 67,49.987; 68,49.986; 69,49.987; 70,49.988; 71,49.989; 72,49.989; 73,49.989; 74,49.986; 75,49.986; 76,49.985; 77,49.985; 78,49.985; 79,49.985; 80,49.987; 81,49.989; 82,49.99; 83,49.99; 84,49.989; 85,49.987; 86,49.985; 87,49.984; 88,
@@ -372,7 +374,7 @@ equation
       color={0,135,135},
       thickness=0.5));
 
-  connect(f_grid.y, electricGrid.f_set) annotation (Line(points={{15,64},{32,64},{32,12},{32.6,12}}, color={0,0,127}));
+  connect(f_grid.y, electricGrid.f_set) annotation (Line(points={{25,42},{32,42},{32,12},{32.6,12}}, color={0,0,127}));
 public
 function plotResult
 

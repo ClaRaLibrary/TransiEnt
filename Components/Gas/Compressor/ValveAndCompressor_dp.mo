@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.Compressor;
 model ValveAndCompressor_dp
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -38,18 +40,29 @@ model ValveAndCompressor_dp
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium to be used" annotation(Dialog(group="Fundamental Definitions"));
-  parameter SI.Volume volumeSplit = 0.01 "Volume of the split" annotation(Dialog(group="Split and Junction"));
-  parameter SI.Volume volumeJunction = 0.01 "Volume of the junction" annotation(Dialog(group="Split and Junction"));
+  parameter SI.Volume volumeSplit = 0.1 "Volume of the split" annotation(Dialog(group="Split and Junction"));
+  parameter SI.Volume volumeJunction = 0.1 "Volume of the junction" annotation(Dialog(group="Split and Junction"));
 
   parameter SI.Pressure p_startSplit = 1e5 "Start pressure in the split" annotation(Dialog(group="Initial Values"));
   parameter SI.Pressure p_startJunction = 1e5 "Start pressure in the junction" annotation(Dialog(group="Initial Values"));
   parameter SI.MassFraction xi_startSplit[medium.nc-1] = medium.xi_default "Start composition in the split" annotation(Dialog(group="Initial Values"));
   parameter SI.MassFraction xi_startJunction[medium.nc-1] = medium.xi_default "Start composition in the junction" annotation(Dialog(group="Initial Values"));
-  parameter SI.SpecificEnthalpy h_startSplit = 800e3 "Start specific enthalpy in the split" annotation(Dialog(group="Initial Values"));
-  parameter SI.SpecificEnthalpy h_startJunction = 800e3 "Start specific enthalpy in the Junction" annotation(Dialog(group="Initial Values"));
-  parameter ClaRa.Basics.Choices.Init initTypeSplit=ClaRa.Basics.Choices.Init.noInit "Type of initialisation" annotation(Dialog(group="Initial Values", choicesAllMatching));
-  parameter ClaRa.Basics.Choices.Init initTypeJunction=ClaRa.Basics.Choices.Init.noInit "Type of initialisation" annotation(Dialog(group="Initial Values", choicesAllMatching));
-
+  parameter SI.SpecificEnthalpy h_startSplit = -180e3 "Start specific enthalpy in the split" annotation(Dialog(group="Initial Values"));
+  parameter SI.SpecificEnthalpy h_startJunction = -180e3 "Start specific enthalpy in the Junction" annotation(Dialog(group="Initial Values"));
+  parameter Integer initOptionSplit=0 "Type of initialisation" annotation (Dialog(tab="Initialisation"), choices(
+      choice=0 "Use guess values",
+      choice=1 "Steady state",
+      choice=201 "Steady pressure",
+      choice=202 "Steady enthalpy",
+      choice=208 "Steady pressure and enthalpy",
+      choice=210 "Steady density"));
+  parameter Integer initOptionJunction=0 "Type of initialisation" annotation (Dialog(tab="Initialisation"), choices(
+      choice=0 "Use guess values",
+      choice=1 "Steady state",
+      choice=201 "Steady pressure",
+      choice=202 "Steady enthalpy",
+      choice=208 "Steady pressure and enthalpy",
+      choice=210 "Steady density"));
   // _____________________________________________
   //
   //                 Outer Models
@@ -62,34 +75,6 @@ model ValveAndCompressor_dp
   //
   //             Variable Declarations
   // _____________________________________________
-
-protected
-  record ValveRecord
-    extends TransiEnt.Basics.Icons.Record;
-    input SI.MassFlowRate m_flow "Mass flow rate";
-    input SI.PressureDifference Delta_p "Pressure difference";
-  end ValveRecord;
-
-  record CompressorRecord
-    extends TransiEnt.Basics.Icons.Record;
-    input SI.MassFlowRate m_flow "Mass flow rate";
-    input SI.VolumeFlowRate V_flow "Volume flow rate";
-    input SI.Power P_hyd "Hydraulic power";
-    input SI.Power P_shaft "Shaft power";
-    input SI.Power P_el "Electric power";
-    input Real Pi "Pressure ratio";
-    input SI.PressureDifference Delta_p "Pressure difference";
-    input Real eta "Isentropic efficiency";
-  end CompressorRecord;
-
-  inner model Summary
-    extends TransiEnt.Basics.Icons.Record;
-    TransiEnt.Basics.Records.FlangeRealGas gasPortIn;
-    TransiEnt.Basics.Records.FlangeRealGas gasPortOut;
-    CompressorRecord compressor;
-    ValveRecord valve;
-    TransiEnt.Basics.Records.Costs costs;
-  end Summary;
 
   // _____________________________________________
   //
@@ -112,20 +97,115 @@ public
   // _____________________________________________
 
 protected
+  model ValveRecord
+    extends TransiEnt.Basics.Icons.Record;
+    input SI.MassFlowRate m_flow "Mass flow rate";
+    input SI.PressureDifference Delta_p "Pressure difference";
+    input SI.Temperature T_in "Inlet temperature";
+    input SI.Temperature T_out "Outlet temperature";
+    input SI.Pressure p_in "Inlet pressure";
+    input SI.Pressure p_out "Outlet pressure";
+    input SI.SpecificEnthalpy h_in "Inlet specific enthalpy";
+    input SI.SpecificEnthalpy h_out "Outlet specific enthalpy";
+  end ValveRecord;
+
+  model CompressorRecord
+    extends TransiEnt.Basics.Icons.Record;
+    input SI.MassFlowRate m_flow "Mass flow rate";
+    input SI.VolumeFlowRate V_flow "Volume flow rate";
+    input SI.Power P_hyd "Hydraulic power";
+    input SI.Power P_shaft "Shaft power";
+    input SI.Power P_el "Electric power";
+    input SI.Work W_el "Electric work";
+    input Real Pi "Pressure ratio";
+    input SI.PressureDifference Delta_p "Pressure difference";
+    input Real eta "Isentropic efficiency";
+    input SI.Temperature T_in "Inlet temperature";
+    input SI.Temperature T_out "Outlet temperature";
+    input SI.Pressure p_in "Inlet pressure";
+    input SI.Pressure p_out "Outlet pressure";
+    input SI.SpecificEnthalpy h_in "Inlet specific enthalpy";
+    input SI.SpecificEnthalpy h_out "Outlet specific enthalpy";
+  end CompressorRecord;
+
+  inner model Summary
+    extends TransiEnt.Basics.Icons.Record;
+    TransiEnt.Basics.Records.FlangeRealGas gasPortIn;
+    TransiEnt.Basics.Records.FlangeRealGas gasPortOut;
+    CompressorRecord compressor;
+    ValveRecord valve;
+    TransiEnt.Basics.Records.Costs costs;
+  end Summary;
+
+public
+  inner Summary  summary(
+   gasPortIn(
+    mediumModel=medium,
+    xi=split.summary.gasPort1.xi,
+    x=split.summary.gasPort1.x,
+    m_flow=split.summary.gasPort1.m_flow,
+    T=split.summary.gasPort1.T,
+    p=split.summary.gasPort1.p,
+    h=split.summary.gasPort1.h,
+    rho=split.summary.gasPort1.rho),
+   gasPortOut(
+    mediumModel=medium,
+    xi=junction.summary.gasPort3.xi,
+    x=junction.summary.gasPort3.x,
+    m_flow=junction.summary.gasPort3.m_flow,
+    T=junction.summary.gasPort3.T,
+    p=junction.summary.gasPort3.p,
+    h=junction.summary.gasPort3.h,
+    rho=junction.summary.gasPort3.rho),
+   compressor(
+    m_flow=compressor.summary.gasPortIn.m_flow,
+    V_flow=compressor.summary.outline.V_flow,
+    P_hyd=compressor.summary.outline.P_hyd,
+    P_shaft=compressor.summary.outline.P_shaft,
+    P_el=compressor.summary.outline.P_el,
+    W_el=compressor.summary.outline.W_el,
+    Pi=compressor.summary.outline.Pi,
+    Delta_p=compressor.summary.outline.Delta_p,
+    eta=compressor.summary.outline.eta,
+    T_in=compressor.summary.gasPortIn.T,
+    T_out=compressor.summary.gasPortOut.T,
+    p_in=compressor.summary.gasPortIn.p,
+    p_out=compressor.summary.gasPortOut.p,
+    h_in=compressor.summary.gasPortIn.h,
+    h_out=compressor.summary.gasPortOut.h),
+   valve(
+    m_flow=valve.summary.gasPortIn.m_flow,
+    Delta_p=valve.gasPortIn.p-gasPortOut.p,
+    T_in=valve.summary.gasPortIn.T,
+    T_out=valve.summary.gasPortOut.T,
+    p_in=valve.summary.gasPortIn.p,
+    p_out=valve.summary.gasPortOut.p,
+    h_in=valve.summary.gasPortIn.h,
+    h_out=valve.summary.gasPortOut.h),
+   costs(
+    costs=compressor.summary.costs.costs,
+    investCosts=compressor.summary.costs.investCosts,
+    demandCosts=compressor.summary.costs.demandCosts,
+    oMCosts=compressor.summary.costs.oMCosts,
+    otherCosts=compressor.summary.costs.otherCosts,
+    revenues=compressor.summary.costs.revenues))
+  annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+
+protected
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction(
     medium=medium,
     volume=volumeJunction,
     p_start=p_startJunction,
     xi_start=xi_startJunction,
     h_start=h_startJunction,
-    initType=initTypeJunction) annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+    initOption=initOptionJunction) annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split(
     medium=medium,
     volume=volumeSplit,
     p_start=p_startSplit,
     xi_start=xi_startSplit,
     h_start=h_startSplit,
-    initType=initTypeSplit) annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+    initOption=initOptionSplit) annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Controller.ControllerValveAndCompressor_dp                                     controllerValveOrCompressor annotation (Placement(transformation(extent={{-10,32},{10,52}})));
 
   Compressor compressor(
@@ -136,13 +216,7 @@ protected
     medium=medium)
               annotation (Placement(transformation(extent={{-10,-36},{10,-24}})));
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlowSensoreBefore(medium=medium) annotation (Placement(transformation(extent={{-70,0},{-50,20}})));
-public
-  inner Summary  summary(gasPortIn(mediumModel=medium,xi=split.summary.gasPort1.xi,x=split.summary.gasPort1.x,m_flow=split.summary.gasPort1.m_flow,  T=split.summary.gasPort1.T, p=split.summary.gasPort1.p, h=split.summary.gasPort1.h, rho=split.summary.gasPort1.rho),
-                         gasPortOut(mediumModel=medium,xi=junction.summary.gasPort3.xi,x=junction.summary.gasPort3.x,m_flow=junction.summary.gasPort3.m_flow,  T=junction.summary.gasPort3.T, p=junction.summary.gasPort3.p, h=junction.summary.gasPort3.h, rho=junction.summary.gasPort3.rho),
-                         compressor(m_flow=compressor.summary.gasPortIn.m_flow,V_flow=compressor.summary.outline.V_flow,P_hyd=compressor.summary.outline.P_hyd,P_shaft=compressor.summary.outline.P_shaft,P_el=compressor.summary.outline.P_el,Pi=compressor.summary.outline.Pi,Delta_p=compressor.summary.outline.Delta_p,eta=compressor.summary.outline.eta),
-                         valve(m_flow=valve.summary.gasPortIn.m_flow,Delta_p=valve.gasPortIn.p-gasPortOut.p),
-                         costs(costs=compressor.summary.costs.costs,investCosts=compressor.summary.costs.investCosts,demandCosts=compressor.summary.costs.demandCosts,oMCosts=compressor.summary.costs.oMCosts,otherCosts=compressor.summary.costs.otherCosts,revenues=compressor.summary.costs.revenues))
-  annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+
 
 equation
   // _____________________________________________
@@ -171,7 +245,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(junction.gasPort3, gasPortOut) annotation (Line(
-      points={{40,0},{100,0},{100,0}},
+      points={{40,0},{100,0}},
       color={255,255,0},
       thickness=1.5));
   connect(dp_desired, controllerValveOrCompressor.dp_desired) annotation (Line(points={{0,100},{0,100},{0,68},{0,52}},                   color={0,0,127}));
@@ -218,6 +292,7 @@ equation
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Feb 10 2017</p>
-<p><br>Modified by Lisa Andresen (andresen@tuhh.de) on Feb 16 2017 (changed output from m_flowDesired to dp_desired)</p>
+<p>Modified by Lisa Andresen (andresen@tuhh.de) on Feb 16 2017 (changed output from m_flowDesired to dp_desired)</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (fixed for update to ClaRa 1.3.0)</p>
 </html>"));
 end ValveAndCompressor_dp;

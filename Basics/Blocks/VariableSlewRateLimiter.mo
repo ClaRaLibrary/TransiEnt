@@ -1,23 +1,25 @@
 within TransiEnt.Basics.Blocks;
 block VariableSlewRateLimiter "Limits the signal with upper and lower boundary based on ClaRa VariableGradientLimiter"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -30,14 +32,8 @@ block VariableSlewRateLimiter "Limits the signal with upper and lower boundary b
 
   // _____________________________________________
   //
-  //        Constants and Parameters
+  //        Constants and Hidden Parameters
   // _____________________________________________
-
-  parameter Boolean useConstantLimits= true "True, if gradient limits are constant";
-  parameter Real maxGrad_const(final unit="1/s")=1/60 annotation (Dialog(enable = useConstantLimits));
-  parameter Real minGrad_const(final unit="1/s")=-maxGrad_const annotation (Dialog(enable = useConstantLimits));
-  parameter Real Td(final unit="s")=0.1;
-  parameter Real y_start=0;
 
   final parameter Real Nd(min=Modelica.Constants.small)=1/Td "|Expert Settings|Input - Output Coupling|The higher Nd, the closer y follows u";
 
@@ -47,9 +43,28 @@ block VariableSlewRateLimiter "Limits the signal with upper and lower boundary b
                            annotation (Dialog(enable = useThresh,tab="Expert Settings",group="Numerical Noise Suppression"));
   parameter Boolean strict=true "= true, if strict limits with noEvent(..)"
     annotation (Evaluate=true, choices(checkBox=true), Dialog(tab="Expert Settings"));
+
   // _____________________________________________
   //
-  //        Interfaces
+  //               Visible Parameters
+  // _____________________________________________
+
+  parameter Boolean useConstantLimits= true "True, if gradient limits are constant";
+  parameter Real maxGrad_const(final unit="1/s")=1/60 annotation (Dialog(enable = useConstantLimits));
+  parameter Real minGrad_const(final unit="1/s")=-maxGrad_const annotation (Dialog(enable = useConstantLimits));
+  parameter Real Td(final unit="s")=0.1;
+  parameter Real y_start=0;
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
+
+  // _____________________________________________
+  //
+  //                  Interfaces
   // _____________________________________________
 
   Modelica.Blocks.Interfaces.RealInput maxGrad(value=maxGrad_) if not useConstantLimits "Maximum Gradient allowd"
@@ -68,6 +83,11 @@ protected
   Real maxGrad_;
   Real minGrad_;
   Real y_aux;
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
 equation
 
   if useConstantLimits then
@@ -76,11 +96,14 @@ equation
   end if;
   der(y_aux) = smooth(1,noEvent(min(maxGrad_,max(minGrad_,(u-y_aux)*Nd))));
 
-  if useThresh then
-     y= homotopy(actual=Stepsmoother(1, 0.1, abs(der(y_aux))/thres)*y_aux + (1-Stepsmoother(1, 0.1, abs(der(y_aux))/thres))*u, simplified=y_start);
-  else
-    y=homotopy(actual=y_aux,simplified=y_start);
-  end if;
+
+     if useThresh then
+      y= if simCenter.useHomotopy then homotopy(actual=Stepsmoother(1, 0.1, abs(der(y_aux))/thres)*y_aux + (1-Stepsmoother(1, 0.1, abs(der(y_aux))/thres))*u, simplified=y_start) else homotopy(actual=y_aux,simplified=y_start);
+     else  y= if simCenter.useHomotopy then homotopy(actual=y_aux, simplified= 0) else y_aux;
+     end if;
+
+
+
 
   annotation (Icon(graphics={
     Line(points={{-90,0},{68,0}}, color={192,192,192}),
@@ -106,9 +129,9 @@ equation
       smooth=Smooth.None)}),
 Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><i><span style=\"font-family: MS Shell Dlg 2;\">The model is based on </span></i><code></span><span style=\"color: #006400;\">ClaRa&nbsp;<a href=\"ClaRa.Components.Utilities.Blocks.VariableGradientLimiter\">VariableGradientLimiter</a></code></p>
-<pre>It adds some diagnostic variables to provide more inside if numerical issues lead to odd behaviour. Furthermore the initialization is a little more robust by using the homotopy operator and
-a start value with fixed=true. </pre>
+<p><i><span style=\"font-family: MS Shell Dlg 2;\">The model is based on </i><span style=\"font-family: Courier New; color: #006400;\">ClaRa&nbsp;<a href=\"ClaRa.Components.Utilities.Blocks.VariableGradientLimiter\">VariableGradientLimiter</a></span></p>
+<p><span style=\"font-family: Courier New;\">It adds some diagnostic variables to provide more inside if numerical issues lead to odd behaviour. Furthermore the initialization is a little more robust by using the homotopy operator and</span></p>
+<p><span style=\"font-family: Courier New;\">a start value with fixed=true. </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -126,8 +149,8 @@ a start value with fixed=true. </pre>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on Mon Aug 18 2014</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised (code conventions) by Pascal Dubucq (dubucq@tuhh.de) on 21.04.2017</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de), Aug 2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised by Pascal Dubucq (dubucq@tuhh.de), Apr 2017 : code conventions</span></p>
 </html>",
 revisions="<html>
 <table cellspacing=\"0\" cellpadding=\"2\" border=\"1\"><tr>

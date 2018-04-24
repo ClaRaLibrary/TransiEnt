@@ -1,22 +1,24 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base;
 model BivalentHeatpumpSystem "Heatpump system with bivalent control, floor heating and lumped heat storage"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Producer.Heat.Power2Heat.Base.PartialHeatPumpSystemModel(                  final nStor=2,  final E_stor={Room.C*params.DTdb_heatpump, Storage.C*(T_stor_ref_max - T_stor_ref_min)});
 
   parameter SI.Temperature T_stor_ref_max = 90+273.15 "Maximum storage temperature for SOC and Capacity calculation";
@@ -26,6 +28,9 @@ model BivalentHeatpumpSystem "Heatpump system with bivalent control, floor heati
   Real SOC_set[nStor];
   SI.Power P_el_pl_electric;
   SI.Power P_el_n_pl_electric;
+  SI.Energy W_HPS(start=0, fixed=true);
+  SI.Energy Q_HPS(start=0,fixed=true);
+  Real JAZ = Q_HPS / max(W_HPS, simCenter.E_small);
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor
                                               Room(C=params.C_room, T(start=params.T_room_start, fixed=true))
@@ -61,7 +66,7 @@ model BivalentHeatpumpSystem "Heatpump system with bivalent control, floor heati
     E_start=0,
     unit="kWh",
     decimalSpaces=3,
-    P=-Q_flow_peakload.y/1e3) annotation (Placement(transformation(extent={{-42,-96},{-22,-76}})));
+    P=Q_flow_peakload.y/1e3)  annotation (Placement(transformation(extent={{-42,-96},{-22,-76}})));
   Modelica.Blocks.Sources.RealExpression x_PeakLoad_per_Cent(y=E_Peakload.E/(E_Heatpump.E + E_Peakload.E + 0.0001)*100) annotation (Placement(transformation(extent={{82,-98},{102,-78}})));
   Producer.Heat.Power2Heat.Components.Heatpump Heatpump(
     Delta_T_db=params.DTdb_heatpump,
@@ -118,6 +123,9 @@ equation
 
   Q_flow_max = params.Q_flow_n_peakunit + Heatpump.COP.y*Heatpump.P_el_n;
   Q_flow_gen = Heatpump.Q_flow.y + Q_flow_peakload.y;
+
+  der(Q_HPS) = Q_flow_gen;
+  der(W_HPS) = P_el_pl_electric;
 
     connect(T_amb.port, wall_a.port_a) annotation (Line(points={{144,54},{144,54},{150,54}},
                                                                                           color={191,0,0}));

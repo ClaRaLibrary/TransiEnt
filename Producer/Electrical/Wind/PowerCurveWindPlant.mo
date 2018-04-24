@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Electrical.Wind;
 model PowerCurveWindPlant "Wind plant model based on v-P-Power Curve. Can be scaled to model windparks "
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -29,10 +31,18 @@ model PowerCurveWindPlant "Wind plant model based on v-P-Power Curve. Can be sca
 
   // _____________________________________________
   //
-  //             Visible Parameters
+  //        Constants and Parameters
   // _____________________________________________
 
   parameter Real efficiency=1 "effiency factor for losses due to availability, wires and screening";
+  parameter TransiEnt.Producer.Electrical.Wind.Characteristics.GenericPowerCurve PowerCurveChar=Characteristics.VestasV164_8000kW() annotation (Dialog(group="Physical Constraints"), __Dymola_choicesAllMatching=true);
+
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
+  Real FLH "Full Load hours";
 
   // _____________________________________________
   //
@@ -40,7 +50,6 @@ model PowerCurveWindPlant "Wind plant model based on v-P-Power Curve. Can be sca
   // _____________________________________________
 
     //Power-Curve characteristics
-  parameter TransiEnt.Producer.Electrical.Wind.Characteristics.GenericPowerCurve PowerCurveChar=Characteristics.VestasV164_8000kW() annotation (Dialog(group="Power Curve Definition"), __Dymola_choicesAllMatching=true);
 
     //Power-Curve
     Modelica.Blocks.Tables.CombiTable1Ds PowerCurve(
@@ -75,6 +84,8 @@ equation
 
   PowerCurve.u=v_windHub;
   isOperating.u=v_windHub;
+
+  FLH=-collectElectricPower.E/P_el_n/3600;
   connect(PowerCurve.y[1], P_mech.u) annotation (Line(points={{-7,-16},{-4.5,-16},{-2,-16}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">Wind Turbine L0_scale</span></h4>

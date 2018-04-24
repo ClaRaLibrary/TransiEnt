@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.Combustion.Controller;
 model ControllerFuelForBurner "Controller to control the fuel mass flow rate for the burner"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -44,19 +46,15 @@ model ControllerFuelForBurner "Controller to control the fuel mass flow rate for
   parameter Real Ti=0.1 "Integrator time constant" annotation(Dialog(group="Control Definitions",enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or controllerType==Modelica.Blocks.Types.SimpleController.PID));
   parameter Real Td=0.1 "Derivative time constant" annotation(Dialog(group="Control Definitions",enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or controllerType==Modelica.Blocks.Types.SimpleController.PID));
 
-  parameter .Modelica.Blocks.Types.InitPID initType= Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)"
-                                     annotation(Evaluate=true,
-      Dialog(group="Initialization"));
+    parameter Integer initOption = 501 "Initialisation option" annotation(choicesAllMatching, Dialog(group="Initialization"), choices(choice = 501 "No init (y_start and x_start as guess values)",
+                                                                                                    choice=502 "Steady state",
+                                                                                                    choice=503 "Force y_start/y_inactive at output"));
   parameter Real xi_start=0 "Initial or guess value value for integrator output (= integrator state)"
-    annotation (Dialog(group="Initialization",
-                enable=controllerType==.Modelica.Blocks.Types.SimpleController.PI or
-                       controllerType==.Modelica.Blocks.Types.SimpleController.PID));
-  parameter Real xd_start=0 "Initial or guess value for state of derivative block"
-    annotation (Dialog(group="Initialization",
-                         enable=controllerType==.Modelica.Blocks.Types.SimpleController.PD or
-                                controllerType==.Modelica.Blocks.Types.SimpleController.PID));
+    annotation (Dialog(enable= initOption == 501,  group="Initialization"));
+
+
   parameter Real y_start=0 "Initial value of output"
-    annotation(Dialog(enable=initType == .Modelica.Blocks.Types.InitPID.InitialOutput, group=
+    annotation(Dialog(enable=(initOption == 503 or initOption == 502), group=
           "Initialization"));
 
   // _____________________________________________
@@ -90,14 +88,12 @@ model ControllerFuelForBurner "Controller to control the fuel mass flow rate for
     k=k,
     controllerType=controllerType,
     y_start=y_start,
-    initType=initType,
     xi_start=xi_start,
-    xd_start=xd_start,
     y_max=1e15,
     Tau_i=Ti,
     Tau_d=Td,
-    y_min=0)
-            annotation (Placement(transformation(
+    y_min=0,
+    initOption=initOption)                                                                                                                                                                                                         annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=0,
         origin={40,-50})));

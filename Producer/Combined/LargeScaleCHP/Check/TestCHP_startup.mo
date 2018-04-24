@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestCHP_startup "Example how the continuous plant model behaves when ramping up"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-100,79},{-80,99}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-70,79},{-50,99}})));
@@ -25,8 +27,8 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
         transformation(
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
-        origin={-49,25.5})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{20,50},{32,62}})));
+        origin={-51,65.5})));
+  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{18,82},{30,94}})));
   CHP Plant(
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     typeOfCO2AllocationMethod=2,
@@ -39,11 +41,13 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
     P_el_n=200e6,
     Q_flow_n_CHP=290e6,
     Q_flow_n_Peak=0,
-    T_feed_init=363.15,
     P_el_init=0,
     Q_flow_init=0,
     Q_flow_SG_init=0,
-    t_startup=7200) annotation (Placement(transformation(extent={{-36,-22},{10,22}})));
+    t_startup=7200,
+    T_feed_init=363.15,
+    UseGasPort=false)
+                    annotation (Placement(transformation(extent={{-38,18},{8,62}})));
 
   Modelica.Blocks.Sources.Ramp Q_flow_set(
     height=-290e6,
@@ -52,12 +56,12 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
     startTime=0) annotation (Placement(transformation(
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
-        origin={-19,47.5})));
+        origin={-21,87.5})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow source(T_const(displayUnit="degC") = 338.15, m_flow_const=1000) annotation (Placement(transformation(
         extent={{-7,-9},{7,9}},
         rotation=180,
-        origin={35,-10})));
-  ClaRa.Visualisation.Quadruple quadruple annotation (Placement(transformation(extent={{46,1},{82,22}})));
+        origin={33,30})));
+  ClaRa.Visualisation.Quadruple quadruple annotation (Placement(transformation(extent={{44,41},{80,62}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi sink(
     m_flow_nom=577.967,
     Delta_p=0,
@@ -65,29 +69,83 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
     T_const(displayUnit="degC")) annotation (Placement(transformation(
         extent={{-7,-8},{7,8}},
         rotation=180,
-        origin={31,34})));
-  Components.Visualization.PQDiagram_Display PQDiagram(PQCharacteristics=Base.Characteristics.PQ_Characteristics_WT()) annotation (Placement(transformation(extent={{66,-34},{96,-6}})));
-  Components.Visualization.InfoBoxLargeCHP infoBoxLargeCHP annotation (Placement(transformation(extent={{26,-51},{44,-29}})));
+        origin={29,74})));
+  Components.Visualization.PQDiagram_Display PQDiagram(PQCharacteristics=Base.Characteristics.PQ_Characteristics_WT()) annotation (Placement(transformation(extent={{64,6},{94,34}})));
+  Components.Visualization.InfoBoxLargeCHP infoBoxLargeCHP annotation (Placement(transformation(extent={{28,-11},{46,11}})));
+  Modelica.Blocks.Sources.RealExpression P_min1(y=-Plant.pQDiagram.P_min)
+                                                        annotation (Placement(
+        transformation(
+        extent={{-11,-9.5},{11,9.5}},
+        rotation=0,
+        origin={-59,-38.5})));
+  Components.Boundaries.Electrical.Frequency           Grid1(useInputConnector=false)
+                                                                                     annotation (Placement(transformation(extent={{10,-14},{22,-2}})));
+  CHP Plant1(
+    typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
+    typeOfCO2AllocationMethod=2,
+    h_nom=547e3,
+    eta_th_const=0.696296,
+    p_nom=20e5,
+    m_flow_nom=750,
+    redeclare model ProducerCosts = Components.Statistics.ConfigurationData.PowerProducerCostSpecs.HardCoal,
+    PQCharacteristics=Base.Characteristics.PQ_Characteristics_WT(),
+    P_el_n=200e6,
+    Q_flow_n_CHP=290e6,
+    Q_flow_n_Peak=0,
+    P_el_init=0,
+    Q_flow_init=0,
+    Q_flow_SG_init=0,
+    t_startup=7200,
+    T_feed_init=363.15,
+    UseGasPort=true)
+                    annotation (Placement(transformation(extent={{-46,-82},{0,-38}})));
+  Modelica.Blocks.Sources.Ramp Q_flow_set1(
+    height=-290e6,
+    duration=86400,
+    offset=0,
+    startTime=0) annotation (Placement(transformation(
+        extent={{-11,-9.5},{11,9.5}},
+        rotation=0,
+        origin={-29,-16.5})));
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow source1(T_const(displayUnit="degC") = 338.15, m_flow_const=1000)
+                                                                                                                            annotation (Placement(transformation(
+        extent={{-7,-9},{7,9}},
+        rotation=180,
+        origin={25,-70})));
+  ClaRa.Visualisation.Quadruple quadruple1
+                                          annotation (Placement(transformation(extent={{36,-63},{72,-42}})));
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi sink1(
+    m_flow_nom=577.967,
+    Delta_p=0,
+    p_const(displayUnit="bar") = 1600000,
+    T_const(displayUnit="degC")) annotation (Placement(transformation(
+        extent={{-7,-8},{7,8}},
+        rotation=180,
+        origin={21,-30})));
+  Components.Visualization.PQDiagram_Display PQDiagram1(PQCharacteristics=Base.Characteristics.PQ_Characteristics_WT())
+                                                                                                                       annotation (Placement(transformation(extent={{56,-94},{86,-66}})));
+  Components.Visualization.InfoBoxLargeCHP infoBoxLargeCHP1
+                                                           annotation (Placement(transformation(extent={{16,-111},{34,-89}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(extent={{78,-32},{58,-12}})));
 equation
   connect(Plant.epp,Grid. epp) annotation (Line(
-      points={{8.85,6.6},{10,6.6},{10,55.94},{19.94,55.94}},
+      points={{6.85,46.6},{8,46.6},{8,87.94},{17.94,87.94}},
       color={0,135,135},
       thickness=0.5));
-  connect(Plant.P_set,P_min. y) annotation (Line(points={{-27.03,16.8667},{-27.03,25.5},{-36.9,25.5}},
+  connect(Plant.P_set,P_min. y) annotation (Line(points={{-29.03,56.8667},{-29.03,65.5},{-38.9,65.5}},
                                                                                            color={0,0,127}));
-  connect(Q_flow_set.y, Plant.Q_flow_set) annotation (Line(points={{-6.9,47.5},{-4,47.5},{-4,16.8667},{-4.49,16.8667}},   color={0,0,127}));
+  connect(Q_flow_set.y, Plant.Q_flow_set) annotation (Line(points={{-8.9,87.5},{-6,87.5},{-6,56.8667},{-6.49,56.8667}},   color={0,0,127}));
   connect(Plant.outlet, sink.steam_a) annotation (Line(
-      points={{10.46,-4.76667},{14,-4.76667},{14,34},{24,34}},
+      points={{8.46,35.2333},{12,35.2333},{12,74},{22,74}},
       color={175,0,0},
       thickness=0.5));
   connect(source.steam_a, Plant.inlet) annotation (Line(
-      points={{28,-10},{22,-10},{22,-9.9},{10.46,-9.9}},
+      points={{26,30},{20,30},{20,30.1},{8.46,30.1}},
       color={0,131,169},
       thickness=0.5));
-  connect(source.eye, quadruple.eye) annotation (Line(points={{28,-2.8},{28,-2.8},{28,-10},{28,11.5},{46,11.5}},
-                                                                                                             color={190,190,190}));
-  connect(Plant.eye, PQDiagram.eyeIn) annotation (Line(points={{12.3,-20.1667},{20,-20.1667},{20,-20},{61.8,-20}}, color={28,108,200}));
-  connect(Plant.eye, infoBoxLargeCHP.eye) annotation (Line(points={{12.3,-20.1667},{20,-20.1667},{20,-38},{24,-38},{24,-38.2},{26.9,-38.2}}, color={28,108,200}));
+  connect(source.eye, quadruple.eye) annotation (Line(points={{26,37.2},{26,51.5},{44,51.5}},                color={190,190,190}));
+  connect(Plant.eye, PQDiagram.eyeIn) annotation (Line(points={{10.3,19.8333},{18,19.8333},{18,20},{59.8,20}},     color={28,108,200}));
+  connect(Plant.eye, infoBoxLargeCHP.eye) annotation (Line(points={{10.3,19.8333},{18,19.8333},{18,2},{22,2},{22,1.8},{28.9,1.8}},           color={28,108,200}));
 public
 function plotResult
 
@@ -107,6 +165,28 @@ createPlot(id=1, position={745, 0, 728, 206}, y={"Plant.plantState.startup.activ
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
+equation
+  connect(Plant1.epp, Grid1.epp) annotation (Line(
+      points={{-1.15,-53.4},{0,-53.4},{0,-8.06},{9.94,-8.06}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Plant1.P_set, P_min1.y) annotation (Line(points={{-37.03,-43.1333},{-37.03,-38.5},{-46.9,-38.5}}, color={0,0,127}));
+  connect(Q_flow_set1.y, Plant1.Q_flow_set) annotation (Line(points={{-16.9,-16.5},{-14,-16.5},{-14,-43.1333},{-14.49,-43.1333}}, color={0,0,127}));
+  connect(Plant1.outlet, sink1.steam_a) annotation (Line(
+      points={{0.46,-64.7667},{4,-64.7667},{4,-30},{14,-30}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(source1.steam_a, Plant1.inlet) annotation (Line(
+      points={{18,-70},{12,-70},{12,-69.9},{0.46,-69.9}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(source1.eye, quadruple1.eye) annotation (Line(points={{18,-62.8},{18,-52.5},{36,-52.5}}, color={190,190,190}));
+  connect(Plant1.eye, PQDiagram1.eyeIn) annotation (Line(points={{2.3,-80.1667},{10,-80.1667},{10,-80},{51.8,-80}}, color={28,108,200}));
+  connect(Plant1.eye, infoBoxLargeCHP1.eye) annotation (Line(points={{2.3,-80.1667},{10,-80.1667},{10,-98},{14,-98},{14,-98.2},{16.9,-98.2}}, color={28,108,200}));
+  connect(Plant1.gasPortIn, boundary_pTxi.gasPort) annotation (Line(
+      points={{0,-44.9667},{40,-44.9667},{40,-22},{58,-22}},
+      color={255,255,0},
+      thickness=1.5));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=86400),
     __Dymola_experimentSetupOutput(equidistant=false),

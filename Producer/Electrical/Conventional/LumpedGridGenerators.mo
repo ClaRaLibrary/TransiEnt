@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Electrical.Conventional;
 model LumpedGridGenerators "Lumped model of a number of generators for the use in a non-detailed electric grid model (including primary and secondary control models)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -157,7 +159,7 @@ equation
       color={95,95,95},
       smooth=Smooth.None));
   connect(Generator.epp, epp) annotation (Line(
-      points={{58.185,-40.18},{100.093,-40.18},{100.093,60},{100,60}},
+      points={{58.185,-40.18},{100.093,-40.18},{100.093,78},{100,78}},
       color={0,0,0},
       smooth=Smooth.None));
 
@@ -171,8 +173,7 @@ equation
   connect(sum1.y, Turbine.P_mech_set) annotation (Line(points={{-60,-9},{-60,-18.76}},              color={0,0,127}));
   connect(secondaryBalancingController.y, PT1Transient.u) annotation (Line(points={{-24.15,18},{-31.6402,18}}, color={0,0,127}));
   connect(PT1Transient.y, sum1.u[3]) annotation (Line(points={{-46.6527,18},{-46.6527,18},{-58.6667,18},{-58.6667,14}}, color={0,0,127}));
-     annotation (Placement(transformation(extent={{-52,-78},{-28,-56}})),
-              Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
+     annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-62,-30},{28,-76}},
           lineColor={244,125,35},
           textString="G")}),     Diagram(coordinateSystem(preserveAspectRatio=false,

@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP;
 model TwoBlockCHP "Example model of plants consisting of several units"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -46,6 +48,8 @@ model TwoBlockCHP "Example model of plants consisting of several units"
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium=simCenter.fluid1 "Medium to be used" annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
+  parameter Boolean UseGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if UseGasPort==true "Gas Medium to be used - only if UseGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if UseGasPort==true then true else false));
 
   // _____________________________________________
   //
@@ -58,11 +62,15 @@ model TwoBlockCHP "Example model of plants consisting of several units"
    //Complex Components
   replaceable ContinuousCHP Block_1(
     PQCharacteristics=Base.Characteristics.PQ_Characteristics_WW1(),
-    P_el_n = 150.369e6) constrainedby Base.PartialCHP annotation (choicesAllMatching=true, Placement(transformation(extent={{-46,16},{-26,36}})));
+    P_el_n = 150.369e6,
+    UseGasPort=UseGasPort)
+                        constrainedby Base.PartialCHP annotation (choicesAllMatching=true, Placement(transformation(extent={{-46,16},{-26,36}})));
 
   replaceable ContinuousCHP Block_2(
     PQCharacteristics=Base.Characteristics.PQ_Characteristics_WW2(),
-    P_el_n = 137.106e6)  constrainedby Base.PartialCHP annotation (choicesAllMatching=true, Placement(transformation(extent={{-4,14},{16,34}})));
+    P_el_n = 137.106e6,
+    UseGasPort=UseGasPort)
+                         constrainedby Base.PartialCHP annotation (choicesAllMatching=true, Placement(transformation(extent={{-4,14},{16,34}})));
 
   //Boundaries
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_Txim_flow massflow_Tm_flow4(variable_m_flow=true, variable_T=true) annotation (Placement(transformation(
@@ -140,6 +148,9 @@ model TwoBlockCHP "Example model of plants consisting of several units"
         origin={-98,-146})));
   Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{238,122},{258,142}}), iconTransformation(extent={{238,122},{258,142}})));
 
+  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{240,72},{260,92}})));
+
+
   //Sensors
   Components.Sensors.TemperatureSensor T_out_sensor annotation (Placement(transformation(extent={{114,26},{134,46}})));
   Components.Sensors.TemperatureSensor T_in_sensor annotation (Placement(transformation(extent={{72,-2},{92,18}})));
@@ -174,11 +185,11 @@ equation
   //Connect statements
 
   connect(massflow_Tm_flow4.fluidPortOut, Block_1.inlet) annotation (Line(
-      points={{-18.94,7.92},{-18.94,22},{-25.8,22},{-25.8,21.5}},
+      points={{-19,8},{-19,22},{-25.8,22},{-25.8,21.5}},
       color={175,0,0},
       thickness=0.5));
   connect(massflow_Tm_flow3.fluidPortOut, Block_2.inlet) annotation (Line(
-      points={{19.06,7.92},{19.06,20},{16.2,20},{16.2,19.5}},
+      points={{19,8},{19,20},{16.2,20},{16.2,19.5}},
       color={175,0,0},
       thickness=0.5));
   connect(Block_1.eye, infoBoxLargeCHP3.eye) annotation (Line(points={{-25,16.8333},{-24,16.8333},{-24,16},{-24,0},{-56,0},{-60.3,0},{-60.3,-43.0909}},
@@ -226,7 +237,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(massflow_Tm_flow3.fluidPortOut, T_in_sensor.port) annotation (Line(
-      points={{19.06,7.92},{64,7.92},{64,-2},{82,-2}},
+      points={{19,8},{64,8},{64,-2},{82,-2}},
       color={175,0,0},
       thickness=0.5));
 
@@ -241,6 +252,16 @@ equation
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
+  if UseGasPort then
+    connect(Block_2.gasPortIn, gasPortIn) annotation (Line(
+      points={{16,30.8333},{56,30.8333},{56,82},{250,82}},
+      color={255,255,0},
+      thickness=1.5));
+    connect(Block_1.gasPortIn, gasPortIn) annotation (Line(
+      points={{-26,32.8333},{-22,32.8333},{-22,82},{250,82}},
+      color={255,255,0},
+      thickness=1.5));
+  end if;
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-220,-160},{240,160}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>

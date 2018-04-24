@@ -1,27 +1,39 @@
 within TransiEnt.Basics.Blocks;
 block DiscreteTimeSlewRateLimiter "Limits the signal with upper and lower boundary using a discrete block with given sample time"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
 
   // setting constantlimits to final because if true, model does not check!
   extends Modelica.Blocks.Interfaces.DiscreteSISO;
   extends TransiEnt.Basics.Icons.DiscreteBlock;
+
+  // _____________________________________________
+  //
+  //               Visible Parameters
+  // _____________________________________________
 
   parameter Real Rising(final unit="1/s")=1/60 "Maximum rate of change of input when rising";
   parameter Real Falling(final unit="1/s")=-Rising "Maximum rate of change of input when falling";
@@ -29,10 +41,20 @@ block DiscreteTimeSlewRateLimiter "Limits the signal with upper and lower bounda
   parameter Real Max=1/Modelica.Constants.eps "Can be used to limit absolute value as well as slew rate";
   parameter Real Min=-Max "Can be used to limit absolute value as well as slew rate";
 
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
   // states
   Real y_rcbl_by_rate_max "Reachable output in next step if input is only limited by rising rate";
   Real y_rcbl_by_rate_min "Reachable output in next step if input is only limited by falling rate";
   Real y_limited_by_rate "Limited value without absolute value limit";
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
 
 algorithm
   when {initial()} then
@@ -73,8 +95,8 @@ algorithm
       smooth=Smooth.None)}),
 Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">The <code></span><span style=\"font-family: Courier New,courier;\">SlewRateLimiter</code></span><span style=\"font-family: MS Shell Dlg 2;\"> block limits the slew rate of its input signal in the range of <code></span><span style=\"font-family: Courier New,courier;\">[Falling, Rising]</code></span><span style=\"font-family: MS Shell Dlg 2;\">.</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">To ensure this for arbitrary inputs and in order to produce a differential output, the input is numerically differentiated with derivative time constant <code></span><span style=\"font-family: Courier New,courier;\">Td</code></span><span style=\"font-family: MS Shell Dlg 2;\">. Smaller time constant <code></span><span style=\"font-family: Courier New,courier;\">Td</code></span><span style=\"font-family: MS Shell Dlg 2;\"> means nearer ideal derivative.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The </span><code>SlewRateLimiter</code><span style=\"font-family: MS Shell Dlg 2;\"> block limits the slew rate of its input signal in the range of </span><code>[Falling, Rising]</code><span style=\"font-family: MS Shell Dlg 2;\">.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">To ensure this for arbitrary inputs and in order to produce a differential output, the input is numerically differentiated with derivative time constant </span><code>Td</code><span style=\"font-family: MS Shell Dlg 2;\">. Smaller time constant </span><code>Td</code><span style=\"font-family: MS Shell Dlg 2;\"> means nearer ideal derivative.</span></p>
 <p><i><span style=\"font-family: MS Shell Dlg 2;\">Note: The user has to choose the derivative time constant according to the nature of the input signal.</span></i></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
@@ -93,7 +115,7 @@ Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on Mon Aug 18 2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de), Aug 2014</span></p>
 </html>",
 revisions="<html>
 <table cellspacing=\"0\" cellpadding=\"2\" border=\"1\"><tr>

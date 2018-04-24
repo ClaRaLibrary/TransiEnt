@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Heat.SolarThermal;
 model SolarCollector_L1 "Solar flat plate collector model (EN 12975) with effective heat capacity for transient behavior"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -125,14 +127,23 @@ public
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterPortIn(Medium=medium) annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
   Modelica.Blocks.Interfaces.RealOutput T_in=fluidIn.T annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-80,86})));
+        origin={-80,86}), iconTransformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={-80,90})));
   Modelica.Blocks.Interfaces.RealOutput T_out=fluidOut.T annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={56,86})));
+        origin={56,86}), iconTransformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={60,90})));
   Modelica.Blocks.Interfaces.RealOutput G=G_total annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={78,86})));
+        origin={80,90}), iconTransformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={80,90})));
   // _____________________________________________
   //
   //           Instances of other Classes
@@ -169,7 +180,17 @@ public
     der_E_n=Q_flow_n,
     E_n=0,
     redeclare model CostRecordGeneral = CostRecordSolarThermal (size1=area),
-    Q_flow=Q_flow_out) annotation (Placement(transformation(
+    Q_flow=Q_flow_out,
+    produces_P_el=false,
+    consumes_P_el=false,
+    consumes_Q_flow=false,
+    produces_H_flow=false,
+    consumes_H_flow=false,
+    produces_other_flow=false,
+    consumes_other_flow=false,
+    produces_m_flow_CDE=false,
+    consumes_m_flow_CDE=false)
+                       annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-10,90})));
@@ -266,7 +287,8 @@ equation
 \"/></p>
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-BTvGh3Xd.png\" alt=\"  waterOut.p =  if noFriction then waterIn.p+gravAcc*fluidIn.d*(z1-z2) else waterIn.p+gravAcc*fluidIn.d*(z1-z2)-(a*waterOut.m_flow+b*waterOut.m_flow^2)\"/></p>
 <p>Values for T_in and T_out are calculated by instances of other classes.</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>Note that the inlet temperature should never fall below 0 &deg;C. A possible controller for this case can be looked at under TransiEnt.Producer.Heat.SolarThermal.Controller.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>not validated yet</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

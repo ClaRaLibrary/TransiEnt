@@ -1,25 +1,27 @@
 within TransiEnt.Components.Gas.VolumesValvesFittings;
 model ThreeWayValveRealGas_L1_simple "Three way valve for one phase vle media | no reverse flow | works for zero flow | no pressure dependency |"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
-  // modified component of the ClaRa library, version 1.0.0                    //
+  // modified component of the ClaRa library, version 1.3.0                    //
   // Path: ClaRa.Components.VolumesValvesFittings.Valves.ThreeWayValveVLE_L1_simple //
   // inlet h_outflow and xi_outflow are set to instreaming values of outlet1   //
   // outlet1.m_flow is set to zero for inlet.m_flow<eps                        //
@@ -29,7 +31,7 @@ model ThreeWayValveRealGas_L1_simple "Three way valve for one phase vle media | 
   parameter Real eps=1e-10 "Numerical Stability|Mass flow of outlet1 is set to zero for inlet mass flows below this value";
 
 protected
-  record Outline
+  model Outline
     extends TransiEnt.Basics.Icons.Record;
     input Real splitRatio "Split ratio";
   end Outline;
@@ -101,26 +103,27 @@ annotation (defaultComponentName="TWV",
         extent={{-100,-100},{100,80}},
         grid={2,2})),
           Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
-<p>This model represents a three way valve for real gas flows. It works also for zero flow. It is a modified version of the model ClaRa.Components.VolumesValvesFittings.Valves.ThreeWayValve_L1_simple from ClaRa version 1.2.1. The model is documented there and here only the changes are described. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This model represents a three way valve for real gas flows. It works also for zero flow. It is a modified version of the model ClaRa.Components.VolumesValvesFittings.Valves.ThreeWayValve_L1_simple from ClaRa version 1.3.0. The model is documented there and here only the changes are described. </p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The two-phase region is deactivated and the valve works for zero flow. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid if changes in density and the two-phase region of the fluid can be neglected.</p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The mass flow calculation for outlet 1 (eps is the smallest possible number in Modelica) and the composition calculation at the inlet ensure that there is no division by zero for zero mass flow at the inlet.</p>
-<p><br><img src=\"modelica://TransiEnt/Images/equations/equation_TWVRealGas.png\" alt=\"\"/><br></p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<p><br><br><img src=\"modelica://TransiEnt/Images/equations/equation_TWVRealGas.png\"/></p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Sep 20 2016<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Sep 20 2016</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (updated to ClaRa 1.3.0)</p>
 </html>"));
 end ThreeWayValveRealGas_L1_simple;

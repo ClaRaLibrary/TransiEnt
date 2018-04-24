@@ -1,23 +1,25 @@
 within TransiEnt.Storage.Electrical.Base;
 model GenericElectricStorage "Generic storage model that can be used for most electric storage types in quasistationary power system simulations "
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -31,6 +33,7 @@ model GenericElectricStorage "Generic storage model that can be used for most el
   //                 Outer Models
   // _____________________________________________
   outer TransiEnt.ModelStatistics modelStatistics;
+  outer TransiEnt.SimCenter simCenter;
 
   // _____________________________________________
   //
@@ -74,19 +77,21 @@ model GenericElectricStorage "Generic storage model that can be used for most el
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 </html>"));
 
-  replaceable TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.PartialStorageCostSpecs CostModel constrainedby TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.PartialStorageCostSpecs "Cost statistics model" annotation (Dialog(group="Statistics"), __Dymola_choicesAllMatching=true);
+  replaceable model CostModel = TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.PartialStorageCostSpecs constrainedby TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.PartialStorageCostSpecs "Cost statistics model" annotation (Dialog(group="Statistics"), __Dymola_choicesAllMatching=true);
   TransiEnt.Components.Boundaries.Electrical.Power terminal annotation (Placement(transformation(extent={{52,-10},{32,10}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.StorageCost collectCosts(
     P_n=StorageModelParams.P_max_unload,
-    redeclare model StorageCostModel = TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.ElectricStorageGeneral,
+    redeclare model StorageCostModel = CostModel,
     Delta_E_n=StorageModelParams.E_max,
-    P_el_is=storageModel.P_is) annotation (Placement(transformation(extent={{72,-100},{100,-74}})));
+    P_el_is=storageModel.P_is,
+    produces_Q_flow=false,
+    consumes_Q_flow=false)     annotation (Placement(transformation(extent={{72,-100},{100,-74}})));
 equation
 
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
   connect(P_set, storageModel.P_set) annotation (Line(points={{-104,36},{-49.04,36},{-49.04,36.04}}, color={0,0,127}));
   connect(terminal.epp, epp) annotation (Line(
-      points={{52.1,-0.1},{76,-0.1},{76,0},{100,0}},
+      points={{52,0},{76,0},{76,0},{100,0}},
       color={0,135,135},
       thickness=0.5));
   connect(storageModel.P_is, terminal.P_el_set) annotation (Line(points={{-1.28,36.76},{-1.28,36.76},{48,36.76},{48,12}}, color={0,0,127}));

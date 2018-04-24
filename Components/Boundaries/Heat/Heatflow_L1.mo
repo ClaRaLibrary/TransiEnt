@@ -1,23 +1,25 @@
 within TransiEnt.Components.Boundaries.Heat;
 model Heatflow_L1 "Ideal Heat flow boundary with constant or prescribed power and constant pressure loss"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -48,7 +50,7 @@ model Heatflow_L1 "Ideal Heat flow boundary with constant or prescribed power an
         iconTransformation(
         extent={{20,-20},{-20,20}},
         rotation=90,
-        origin={-70,92})));
+        origin={-60,80})));
 
 protected
   Modelica.Blocks.Interfaces.RealInput Q_flow_internal "Needed for conditional connector";
@@ -95,7 +97,7 @@ equation
   connect(Q_flow_prescribed, Q_flow_internal);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {100,100}}), graphics), Documentation(info="<html>
+            {100,100}})),           Documentation(info="<html>
 <h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
 <p>Ideal boundary model with prescribed or constant heat flow and without fluid volume. Pressure loss is constant and given via parameter.</p>
 <h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

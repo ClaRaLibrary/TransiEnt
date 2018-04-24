@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model DetailedSteamPowerPlant_InitCycle
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -87,13 +89,13 @@ model DetailedSteamPowerPlant_InitCycle
   //           Instances of other Classes
   // _____________________________________________
   ClaRa.StaticCycles.HeatExchanger.Condenser condenser(p_condenser=p_condenser) annotation (Placement(transformation(extent={{74,-20},{94,0}})));
-  ClaRa.StaticCycles.Machines.Pump Pump_cond(efficiency=efficiency_Pump_cond) annotation (Placement(transformation(extent={{80,-70},{60,-50}})));
+  ClaRa.StaticCycles.Machines.Pump1 Pump_cond(efficiency=efficiency_Pump_cond) annotation (Placement(transformation(extent={{80,-70},{60,-50}})));
   ClaRa.StaticCycles.HeatExchanger.Preheater1 preheater_LP1(m_flow_tap_nom=preheater_LP1_m_flow_tap, p_tap_nom=preheater_LP1_p_tap) annotation (Placement(transformation(extent={{54,-70},{34,-50}})));
-  ClaRa.StaticCycles.Machines.Pump Pump_preheater_LP1(efficiency=efficiency_Pump_preheater_LP1) annotation (Placement(transformation(extent={{34,-90},{14,-70}})));
+  ClaRa.StaticCycles.Machines.Pump1 Pump_preheater_LP1(efficiency=efficiency_Pump_preheater_LP1) annotation (Placement(transformation(extent={{34,-90},{14,-70}})));
   ClaRa.StaticCycles.ValvesConnects.Valve_dp_nom3 valve_LP2(Delta_p_nom=valve_LP2_Delta_p_nom) annotation (Placement(transformation(extent={{24,-64},{14,-58}})));
   ClaRa.StaticCycles.Storage.Feedwatertank4 feedwatertank(m_flow_nom=m_flow_nom*P_target_, p_FWT_nom=p_FWT) annotation (Placement(transformation(extent={{-6,-64},{-26,-52}})));
   ClaRa.StaticCycles.Fittings.Mixer1 join_LP_main annotation (Placement(transformation(extent={{-2,-66},{8,-60}})));
-  ClaRa.StaticCycles.Machines.Pump Pump_FW(efficiency=efficiency_Pump_FW) annotation (Placement(transformation(extent={{-40,-70},{-60,-50}})));
+  ClaRa.StaticCycles.Machines.Pump1 Pump_FW(efficiency=efficiency_Pump_FW) annotation (Placement(transformation(extent={{-40,-70},{-60,-50}})));
   ClaRa.StaticCycles.HeatExchanger.Preheater1 preheater_HP(m_flow_tap_nom=preheater_HP_m_flow_tap, p_tap_nom=preheater_HP_p_tap) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,

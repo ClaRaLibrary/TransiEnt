@@ -2,5 +2,6 @@ Activation
 Check
 AGC
 AGC_StateEstimation
+AGC_zeroCrossing
 SecondaryBalancingController
 FirstOrderStateEstimation

@@ -1,22 +1,24 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base;
 model HeatpumpSystemPool
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Model;
 
@@ -63,11 +65,12 @@ protected
     output String filename;
     algorithm
     if poolsize == Types.N1 then
-      filename := "heatpumpSystem_N1.mat";
+      filename := Basics.Functions.fullPathName(Modelica.Utilities.System.getEnvironmentVariable(Types.PUBLIC_DATA) + "/electricity/HeatpumpSystemPool/HeatpumpSystem_N1.mat");
+      //"PUBLIC_DATA"+"/electricity/HeatPumpSystemPool/heatpumpSystem_N1.mat";
     elseif poolsize == Types.N20 then
-      filename := "heatpumpSystem_N20.mat";
+      filename := Basics.Functions.fullPathName(Modelica.Utilities.System.getEnvironmentVariable(Types.PUBLIC_DATA)+"/electricity/HeatpumpSystemPool/HeatpumpSystem_N20.mat");
     elseif poolsize == Types.N100 then
-      filename := "heatpumpSystem_N100.mat";
+     filename := Basics.Functions.fullPathName(Modelica.Utilities.System.getEnvironmentVariable(Types.PUBLIC_DATA)+"/electricity/HeatpumpSystemPool/HeatpumpSystem_N100.mat");
     end if;
     end getFileName;
 
@@ -78,7 +81,7 @@ equation
   end for;
 
   connect(Power.epp, epp) annotation (Line(
-      points={{80.1,-0.1},{89.05,-0.1},{89.05,0},{100,0}},
+      points={{80,0},{89.05,0},{89.05,0},{100,0}},
       color={0,135,135},
       thickness=0.5));
   connect(P_el_bdry.y, Power.P_el_set) annotation (Line(points={{65,22},{76,22},{76,12}}, color={0,0,127}));

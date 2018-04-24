@@ -1,40 +1,82 @@
 within TransiEnt.Basics.Blocks;
 model DelayedBooleanReplicator
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends Modelica.Blocks.Icons.BooleanBlock;
+
+  // _____________________________________________
+  //
+  //        Constants and Hidden Parameters
+  // _____________________________________________
+
+  final parameter Integer ntime=integer(t_pred/samplePeriod+1);
+
+  // _____________________________________________
+  //
+  //               Visible Parameters
+  // _____________________________________________
 
   parameter SI.Time t_pred(min=0)=3600 "Time horizon of prediction input (min=0)";
   parameter SI.Time samplePeriod=60 "Period of one cycle";
-  final parameter Integer ntime=integer(t_pred/samplePeriod+1);
   parameter Integer nout=1;
 
-  Modelica.Blocks.Math.BooleanToReal booleanToReal[nout] annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
-  Modelica.Blocks.Math.RealToBoolean realToBoolean[nout,ntime] annotation (Placement(transformation(extent={{52,-10},{72,10}})));
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
   Modelica.Blocks.Interfaces.BooleanInput u[nout] annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
   Modelica.Blocks.Interfaces.BooleanOutput y[nout,ntime] annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+  Modelica.Blocks.Math.RealToBoolean realToBoolean[nout,ntime] annotation (Placement(transformation(extent={{52,-10},{72,10}})));
+  BooleanToReal booleanToReal[nout] annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   DelayedReplicator delayedReplicator[nout](each t_pred=t_pred, each samplePeriod=samplePeriod) annotation (Placement(transformation(extent={{-12,-10},{8,10}})));
 
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
   connect(u, booleanToReal.u) annotation (Line(points={{-120,0},{-101,0},{-82,0}}, color={255,0,255}));
-  connect(realToBoolean.y, y) annotation (Line(points={{73,0},{110,0},{110,0}}, color={255,0,255}));
+  connect(realToBoolean.y, y) annotation (Line(points={{73,0},{110,0}},         color={255,0,255}));
   connect(booleanToReal.y, delayedReplicator.u) annotation (Line(points={{-59,0},{-36,0},{-14,0}}, color={0,0,127}));
   connect(delayedReplicator.y, realToBoolean.u) annotation (Line(points={{9,0},{30,0},{50,0}}, color={0,0,127}));
+
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
         Line(points={{-80,80},{-88,80}}, color={192,192,192}),
         Line(points={{-80,-80},{-88,-80}}, color={192,192,192}),
@@ -90,7 +132,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on Mon Aug 18 2014</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised (code conventinos) by Pascal Dubucq (dubucq@tuhh.de) on 21.04.2017</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de), Aug 2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised by Pascal Dubucq (dubucq@tuhh.de), Apr 2017 : code conventions</span></p>
 </html>"));
 end DelayedBooleanReplicator;

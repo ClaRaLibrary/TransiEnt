@@ -1,24 +1,29 @@
 within TransiEnt.Components.Gas.VolumesValvesFittings;
 model ValveRealGas_L1 "Valve for real gas models without phase change with replaceable flow models"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
-// Adapted to real gas ports and media
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // Modified component of the ClaRa library, version: 1.3.0
+  // path: ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1
+  // Adapted to real gas ports and media (renamed ports and fluid objects)
 
 //  extends ClaRa.Basics.Icons.Valve;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L1");
@@ -138,26 +143,31 @@ protected
     p_in=gasPortIn.p,
     p_out=gasPortOut.p,
     opening_leak_=opening_leak_,
-    rho_in(start=1) = if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then gasIn.d else (if useHomotopy then homotopy(ClaRa.Basics.Functions.Stepsmoother(
-      10,
-      -10,
-      pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
-      -10,
-      10,
-      pressureLoss.Delta_p)*gasOut.d, gasIn.d) else ClaRa.Basics.Functions.Stepsmoother(
-      10,
-      -10,
-      pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
-      -10,
-      10,
-      pressureLoss.Delta_p)*gasOut.d),
-    gamma_in=gasIn.gamma,
+    rho_in(start=1)=if (checkValve == true and opening_leak_ <= 0) or opening_ <
+        opening_leak_ then gasIn.d else (if useHomotopy then homotopy(
+        ClaRa.Basics.Functions.Stepsmoother(
+        10,
+        -10,
+        pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
+        -10,
+        10,
+        pressureLoss.Delta_p)*gasOut.d, gasIn.d) else
+        ClaRa.Basics.Functions.Stepsmoother(
+        10,
+        -10,
+        pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
+        -10,
+        10,
+        pressureLoss.Delta_p)*gasOut.d),
+        gamma_in=gasIn.gamma,
     gamma_out=gasOut.gamma,
-    opening_=opening_) "if (checkValve == true and opening_leak_<=0) or opening_<opening_leak_ then fluidIn.d else (if useHomotopy then homotopy(ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, inlet.m_flow)*fluidIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, inlet.m_flow)*fluidOut.d, fluidIn.d) else ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, inlet.m_flow)*fluidIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, inlet.m_flow)*fluidOut.d)" annotation (Placement(transformation(extent={{-60,-52},{-40,-32}})));
+    opening_=opening_,
+    h_in=gasIn.h)    "if (checkValve == true and opening_leak_<=0) or opening_<opening_leak_ then gasIn.d else (if useHomotopy then homotopy(ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, gasPortIn.m_flow)*fluidIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, gasPortIn.m_flow)*gasOut.d, gasIn.d) else ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, gasPortIn.m_flow)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, gasPortIn.m_flow)*gasOut.d)"
+    annotation (Placement(transformation(extent={{-60,-52},{-40,-32}})));
 public
   ClaRa.Basics.Interfaces.EyeOut eye if showData annotation (Placement(transformation(extent={{90,-68},{110,-48}}), iconTransformation(extent={{90,-50},{110,-30}})));
 protected
-  ClaRa.Basics.Interfaces.EyeIn eye_int annotation (Placement(transformation(extent={{45,-59},{47,-57}})));
+  ClaRa.Basics.Interfaces.EyeIn eye_int[1] annotation (Placement(transformation(extent={{45,-59},{47,-57}})));
 
 equation
   if (not openingInputIsActive) then
@@ -186,13 +196,13 @@ equation
   gasPortOut.xi_outflow = inStream(gasPortIn.xi_outflow);
 
 //______________Eye port variable definition________________________
-  eye_int.m_flow =-gasPortOut.m_flow;
-  eye_int.T =gasOut.T - 273.15;
-  eye_int.s =gasOut.s/1e3;
-  eye_int.p =gasPortOut.p/1e5;
-  eye_int.h =gasOut.h/1e3;
+  eye_int[1].m_flow =-gasPortOut.m_flow;
+  eye_int[1].T =gasOut.T - 273.15;
+  eye_int[1].s =gasOut.s/1e3;
+  eye_int[1].p =gasPortOut.p/1e5;
+  eye_int[1].h =gasOut.h/1e3;
 
-  connect(eye,eye_int)  annotation (Line(
+  connect(eye,eye_int[1])  annotation (Line(
       points={{100,-58},{46,-58}},
       color={255,204,51},
       thickness=0.5,
@@ -250,6 +260,7 @@ initial equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p><br>Created by Lisa Andresen (andresen@tuhh.de), Apr 2016</p>
+<p>Created by Lisa Andresen (andresen@tuhh.de), Apr 2016</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (updated to ClaRa 1.3.0)</p>
 </html>"));
 end ValveRealGas_L1;

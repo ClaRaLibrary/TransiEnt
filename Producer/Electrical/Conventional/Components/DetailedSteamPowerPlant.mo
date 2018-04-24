@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model DetailedSteamPowerPlant "A closed steam cycle including single reheat, feedwater tank, LP and HP preheaters"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -65,7 +67,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         NOM.Turbine_HP.h_in),
     eta_mech=1,
     allowFlowReversal=true,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,NOM.efficiency_Turb_HP; 1,NOM.efficiency_Turb_HP])),
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,NOM.efficiency_Turb_HP; 1,NOM.efficiency_Turb_HP])),
     p_in_start=INIT.Turbine_HP.p_in,
     p_out_start=INIT.Turbine_HP.p_out) annotation (Placement(transformation(extent={{-58,38},{-48,58}})));
 
@@ -100,7 +102,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         NOM.Turbine_IP.h_in),
     eta_mech=1,
     allowFlowReversal=true,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,NOM.Turbine_IP.efficiency; 1,NOM.Turbine_IP.efficiency])),
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,NOM.Turbine_IP.efficiency; 1,NOM.Turbine_IP.efficiency])),
     p_in_start=INIT.Turbine_IP.p_in,
     p_out_start=INIT.Turbine_IP.p_out) annotation (Placement(transformation(extent={{-12,38},{-2,58}})));
 
@@ -114,7 +116,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         NOM.Turbine_LP2.h_in),
     eta_mech=1,
     allowFlowReversal=true,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,NOM.Turbine_LP2.efficiency; 1,NOM.Turbine_LP2.efficiency])),
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,NOM.Turbine_LP2.efficiency; 1,NOM.Turbine_LP2.efficiency])),
     p_in_start=INIT.Turbine_LP2.p_in,
     p_out_start=INIT.Turbine_LP2.p_out) annotation (Placement(transformation(extent={{232,6},{242,26}})));
 
@@ -175,7 +177,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
   Modelica.Blocks.Sources.RealExpression realPlantPower_1(y=-(turbine_HP1.P_t +
         Turbine_IP.P_t + Turbine_LP1.P_t + Turbine_LP2.P_t))
     annotation (Placement(transformation(extent={{-218,-28},{-198,-8}})));
-  ClaRa.Components.MechanicalSeparation.FeedWaterTank_L3_advanced feedWaterTank(
+  ClaRa.Components.MechanicalSeparation.FeedWaterTank_L3 feedWaterTank(
     level_rel_start=0.5,
     diameter=5,
     orientation=ClaRa.Basics.Choices.GeometryOrientation.horizontal,
@@ -200,13 +202,12 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     y_ref=1e6,
     k=50,
     Tau_d=30,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     Tau_i=300,
     y_max=NOM.Pump_cond.P_pump*10,
     y_min=NOM.Pump_cond.P_pump/200,
-    y_start=INIT.Pump_cond.P_pump)
-    annotation (Placement(transformation(extent={{232,-162},{212,-142}})));
+    y_start=INIT.Pump_cond.P_pump,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(extent={{232,-162},{212,-142}})));
   ClaRa.Visualisation.Quadruple quadruple6
     annotation (Placement(transformation(extent={{-14,-172},{46,-152}})));
   ClaRa.Components.VolumesValvesFittings.Fittings.SplitVLE_L2_Y join_IP(
@@ -237,7 +238,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         NOM.Turbine_LP1.h_in),
     eta_mech=1,
     allowFlowReversal=true,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,NOM.Turbine_LP1.efficiency; 1,NOM.Turbine_LP1.efficiency])),
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,NOM.Turbine_LP1.efficiency; 1,NOM.Turbine_LP1.efficiency])),
     p_in_start=INIT.Turbine_LP1.p_in,
     p_out_start=INIT.Turbine_LP1.p_out) annotation (Placement(transformation(extent={{88,22},{98,42}})));
 
@@ -447,15 +448,14 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
   ClaRa.Components.Utilities.Blocks.LimPID PI_preheater1(
     sign=-1,
     Tau_d=30,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     y_max=NOM.Pump_preheater_LP1.P_pump*1.5,
     y_min=NOM.Pump_preheater_LP1.P_pump/100,
     y_ref=1e5,
     y_start=INIT.Pump_preheater_LP1.P_pump,
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     k=200,
-    Tau_i=200)
-    annotation (Placement(transformation(extent={{122,-202},{102,-182}})));
+    Tau_i=200,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(extent={{122,-202},{102,-182}})));
   ClaRa.Visualisation.Quadruple quadruple8
     annotation (Placement(transformation(extent={{-27,-8},{27,8}},
         rotation=0,
@@ -613,7 +613,7 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
 
-  connect(Pump_FW.inlet, feedWaterTank.outlet)
+  connect(Pump_FW.inlet, feedWaterTank.feedwater)
                                             annotation (Line(
       points={{-56,-138},{-8,-138}},
       color={0,131,169},

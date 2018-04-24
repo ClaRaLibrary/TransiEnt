@@ -1,36 +1,38 @@
 within TransiEnt.Grid.Electrical.SecondaryControl.Check;
 model TestAGC_compareActivation "Compares three variants of secondary balancing control activation"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
 TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC_ProRata(
     samplePeriod=60,
     startTime=60,
     isExternalTielineSetpoint=true,
-    redeclare Activation.ProRataActivation SecondaryControlActivation "Pro Rata Activation") annotation (Placement(transformation(extent={{6,18},{26,38}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{66,-6},{86,14}})));
-  Modelica.Blocks.Sources.Constant P_tie_set(k=0) annotation (Placement(transformation(extent={{-58,60},{-38,80}})));
+    redeclare Activation.ProRataActivation SecondaryControlActivation "Pro Rata Activation") annotation (Placement(transformation(extent={{6,10},{26,30}})));
+  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{66,-14},{86,6}})));
+  Modelica.Blocks.Sources.Constant P_tie_set(k=0) annotation (Placement(transformation(extent={{-58,52},{-38,72}})));
   Modelica.Blocks.Sources.Step P_tie_is(
     height=10e6,
     offset=0,
-    startTime=3600) annotation (Placement(transformation(extent={{-58,34},{-38,54}})));
-  TransiEnt.Basics.Blocks.Sources.ConstantVectorSource P_res_const(nout=simCenter.generationPark.nDispPlants, k=fill(100e6, P_res_const.nout)) annotation (Placement(transformation(extent={{-58,-2},{-38,18}})));
+    startTime=3600) annotation (Placement(transformation(extent={{-58,26},{-38,46}})));
+  TransiEnt.Basics.Blocks.Sources.ConstantVectorSource P_res_const(nout=simCenter.generationPark.nDispPlants, k=fill(100e6, P_res_const.nout)) annotation (Placement(transformation(extent={{-58,-10},{-38,10}})));
   inner TransiEnt.SimCenter  simCenter(         thres=1e-9,
     Td=450,
     useThresh=true,
@@ -48,37 +50,38 @@ TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC_MeritOrder_var1(
     samplePeriod=60,
     startTime=60,
     isExternalTielineSetpoint=true,
-    redeclare Activation.MeritOrderActivation_Var1 SecondaryControlActivation(C_var_pos=simCenter.generationPark.C_var, C_var_neg=simCenter.generationPark.C_var) "Merit Order Activation Var1") annotation (Placement(transformation(extent={{6,-38},{26,-18}})));
+    redeclare Activation.MeritOrderActivation_Var1 SecondaryControlActivation(C_var_pos=simCenter.generationPark.C_var, C_var_neg=simCenter.generationPark.C_var) "Merit Order Activation Var1") annotation (Placement(transformation(extent={{6,-46},{26,-26}})));
 TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC_MeritOrder_var2(
     samplePeriod=60,
     startTime=60,
     isExternalTielineSetpoint=true,
-    redeclare Activation.MeritOrderActivation_Var2 SecondaryControlActivation(C_var_pos=simCenter.generationPark.C_var, C_var_neg=simCenter.generationPark.C_var) "Merit Order Activation Var2") "Merit order activation with maximum possible gradient" annotation (Placement(transformation(extent={{8,-80},{28,-60}})));
+    redeclare Activation.MeritOrderActivation_Var2 SecondaryControlActivation(C_var_pos=simCenter.generationPark.C_var, C_var_neg=simCenter.generationPark.C_var) "Merit Order Activation Var2") "Merit order activation with maximum possible gradient" annotation (Placement(transformation(extent={{8,-88},{28,-68}})));
+  inner ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-70,80},{-50,100}})));
 equation
   connect(ElectricGrid.epp, aGC_ProRata.epp) annotation (Line(
-      points={{65.9,3.9},{16,3.9},{16,18}},
+      points={{65.9,-4.1},{16,-4.1},{16,10}},
       color={0,135,135},
       thickness=0.5));
-  connect(aGC_ProRata.P_tie_set, P_tie_set.y) annotation (Line(points={{20.2,38},{20,38},{20,44},{20,70},{-37,70}},  color={0,0,127}));
-  connect(P_tie_is.y, aGC_ProRata.P_tie_is) annotation (Line(points={{-37,44},{-30,44},{12,44},{12,38}},     color={0,0,127}));
-  connect(P_res_const.y, aGC_ProRata.P_SB_max_pos) annotation (Line(points={{-37,8},{-8,8},{-8,24},{6.4,24}}, color={0,0,127}));
-  connect(P_res_const.y, aGC_ProRata.P_SB_max_neg) annotation (Line(points={{-37,8},{-8,8},{-8,32},{6.4,32}}, color={0,0,127}));
-  connect(P_tie_set.y, aGC_MeritOrder_var1.P_tie_set) annotation (Line(points={{-37,70},{-24,70},{-24,-10},{20.2,-10},{20.2,-18}}, color={0,0,127}));
-  connect(P_tie_is.y, aGC_MeritOrder_var1.P_tie_is) annotation (Line(points={{-37,44},{-28,44},{-28,-14},{12,-14},{12,-18}}, color={0,0,127}));
-  connect(P_res_const.y, aGC_MeritOrder_var1.P_SB_max_neg) annotation (Line(points={{-37,8},{-32,8},{-32,-24},{6.4,-24}}, color={0,0,127}));
-  connect(P_res_const.y, aGC_MeritOrder_var1.P_SB_max_pos) annotation (Line(points={{-37,8},{-32,8},{-32,-32},{6.4,-32}}, color={0,0,127}));
+  connect(aGC_ProRata.P_tie_set, P_tie_set.y) annotation (Line(points={{20.2,30},{20,30},{20,62},{-37,62}},          color={0,0,127}));
+  connect(P_tie_is.y, aGC_ProRata.P_tie_is) annotation (Line(points={{-37,36},{12,36},{12,30}},              color={0,0,127}));
+  connect(P_res_const.y, aGC_ProRata.P_SB_max_pos) annotation (Line(points={{-37,0},{-8,0},{-8,16},{6.4,16}}, color={0,0,127}));
+  connect(P_res_const.y, aGC_ProRata.P_SB_max_neg) annotation (Line(points={{-37,0},{-8,0},{-8,24},{6.4,24}}, color={0,0,127}));
+  connect(P_tie_set.y, aGC_MeritOrder_var1.P_tie_set) annotation (Line(points={{-37,62},{-24,62},{-24,-18},{20.2,-18},{20.2,-26}}, color={0,0,127}));
+  connect(P_tie_is.y, aGC_MeritOrder_var1.P_tie_is) annotation (Line(points={{-37,36},{-28,36},{-28,-22},{12,-22},{12,-26}}, color={0,0,127}));
+  connect(P_res_const.y, aGC_MeritOrder_var1.P_SB_max_neg) annotation (Line(points={{-37,0},{-32,0},{-32,-32},{6.4,-32}}, color={0,0,127}));
+  connect(P_res_const.y, aGC_MeritOrder_var1.P_SB_max_pos) annotation (Line(points={{-37,0},{-32,0},{-32,-40},{6.4,-40}}, color={0,0,127}));
   connect(aGC_MeritOrder_var1.epp, ElectricGrid.epp) annotation (Line(
-      points={{16,-38},{16,-52},{48,-52},{48,3.9},{65.9,3.9}},
+      points={{16,-46},{16,-60},{48,-60},{48,-4.1},{65.9,-4.1}},
       color={0,135,135},
       thickness=0.5));
   connect(aGC_MeritOrder_var2.epp, ElectricGrid.epp) annotation (Line(
-      points={{18,-80},{18,-80},{18,-88},{48,-88},{48,3.9},{65.9,3.9}},
+      points={{18,-88},{18,-96},{48,-96},{48,-4.1},{65.9,-4.1}},
       color={0,135,135},
       thickness=0.5));
-  connect(P_tie_set.y, aGC_MeritOrder_var2.P_tie_set) annotation (Line(points={{-37,70},{-24,70},{-24,-56},{22.2,-56},{22.2,-60}}, color={0,0,127}));
-  connect(P_tie_is.y, aGC_MeritOrder_var2.P_tie_is) annotation (Line(points={{-37,44},{-28,44},{-28,-60},{14,-60}}, color={0,0,127}));
-  connect(P_res_const.y, aGC_MeritOrder_var2.P_SB_max_neg) annotation (Line(points={{-37,8},{-32,8},{-32,-66},{8.4,-66}}, color={0,0,127}));
-  connect(P_res_const.y, aGC_MeritOrder_var2.P_SB_max_pos) annotation (Line(points={{-37,8},{-32,8},{-32,-74},{8.4,-74}}, color={0,0,127}));
+  connect(P_tie_set.y, aGC_MeritOrder_var2.P_tie_set) annotation (Line(points={{-37,62},{-24,62},{-24,-64},{22.2,-64},{22.2,-68}}, color={0,0,127}));
+  connect(P_tie_is.y, aGC_MeritOrder_var2.P_tie_is) annotation (Line(points={{-37,36},{-28,36},{-28,-68},{14,-68}}, color={0,0,127}));
+  connect(P_res_const.y, aGC_MeritOrder_var2.P_SB_max_neg) annotation (Line(points={{-37,0},{-32,0},{-32,-74},{8.4,-74}}, color={0,0,127}));
+  connect(P_res_const.y, aGC_MeritOrder_var2.P_SB_max_pos) annotation (Line(points={{-37,0},{-32,0},{-32,-82},{8.4,-82}}, color={0,0,127}));
 public
 function plotResult
 

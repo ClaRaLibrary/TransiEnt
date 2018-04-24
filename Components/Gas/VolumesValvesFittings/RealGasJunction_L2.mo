@@ -1,30 +1,35 @@
 within TransiEnt.Components.Gas.VolumesValvesFittings;
 model RealGasJunction_L2 "Adiabatic Volume Junction for real gases"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
-  // Modified component of the ClaRa library, version: 1.2.1                   //
-  // Path: ClaRa.Components.VolumesValvesFittings.Fittings.FlueGasJunction_L2  //
-  // changed ports and simCenter to TransiEnt versions                         //
-  // changed fluid models from ideal gas to real gas and their names           //
-  // changed start temperature to start enthalpy                               //
-  // changed start value for composition to default value                      //
+  // Modified component of the ClaRa library, version: 1.3.0
+  // Path: ClaRa.Components.VolumesValvesFittings.Fittings.FlueGasJunction_L2
+  // changed ports and simCenter to TransiEnt versions
+  // changed fluid models from ideal gas to real gas and their names (in summary as well)
+  // changed start temperature to start enthalpy
+  // changed start value for composition to default value
+  // deleted "model Gas..."
+  // changed eyeGas to eye
+
 
   extends ClaRa.Basics.Icons.Tpipe2;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L2");
@@ -40,8 +45,13 @@ protected
   end Summary;
 
 public
-  inner parameter ClaRa.Basics.Choices.Init initType=ClaRa.Basics.Choices.Init.noInit "Type of initialisation"
-                             annotation(Dialog(tab="Initialisation", choicesAllMatching));
+  inner parameter Integer initOption=0 "Type of initialisation" annotation (Dialog(tab="Initialisation"), choices(
+      choice=0 "Use guess values",
+      choice=1 "Steady state",
+      choice=201 "Steady pressure",
+      choice=202 "Steady enthalpy",
+      choice=208 "Steady pressure and enthalpy",
+      choice=210 "Steady density"));
 
 // ***************************** defintion of medium used in cell *************************************************
 
@@ -82,6 +92,8 @@ protected
     xi=xi,
     stateSelectPreferForInputs=true,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
+
+  parameter Boolean showData=true "|Summary and Visualisation||True, if a data port containing p,T,h,s,m_flow shall be shown, else false";
 
   /****************** Initial values *******************/
 
@@ -141,18 +153,48 @@ public
       x=gasBulk.x,
       rho=gasBulk.d)) annotation (Placement(transformation(extent={{-60,-102},{-40,-82}})));
 
+public
+  ClaRa.Basics.Interfaces.EyeOut
+                           eye1 if
+                                  showData
+    annotation (Placement(transformation(extent={{100,-60},{120,-40}}),
+        iconTransformation(extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={110,-50})));
+protected
+  ClaRa.Basics.Interfaces.EyeIn
+                          eye_int[2]
+    annotation (Placement(transformation(extent={{55,-51},{57,-49}})));
+public
+  ClaRa.Basics.Interfaces.EyeOut
+                           eye2 if
+                                  showData
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={30,-110}),
+        iconTransformation(extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={40,-110})));
 initial equation
 
-  if initType == ClaRa.Basics.Choices.Init.steadyState then
-    der(h)=0;
-    der(p)=0;
-  elseif initType == ClaRa.Basics.Choices.Init.steadyPressure then
-    der(p)=0;
-  elseif initType == ClaRa.Basics.Choices.Init.steadyEnthalpy then
-    der(h)=0;
-  elseif initType == ClaRa.Basics.Choices.Init.steadyDensity then
-    drhodt=0;
-  end if;
+    if initOption == 1 then //steady state
+      der(h)=0;
+      der(p)=0;
+      der(xi)=zeros(medium.nc-1);
+    elseif initOption == 201 then //steady pressure
+      der(p)=0;
+    elseif initOption == 202 then //steady enthalpy
+      der(h)=0;
+    elseif initOption == 208 then // steady pressure and enthalpy
+      der(h)=0;
+      der(p)=0;
+    elseif initOption == 210 then //steady density
+      drhodt=0;
+    elseif initOption == 0 then //no init
+    // do nothing
+    else
+     assert(initOption == 0,"Invalid init option");
+    end if;
 
 equation
 
@@ -184,13 +226,33 @@ equation
   gasPort1.p - gasPort2.p = 0 "Momentum balance";
   gasPort1.p - gasPort3.p = 0 "Momentum balance";
 
+  eye_int[1].T= gas2.T-273.15;
+    eye_int[1].s=gas2.s/1e3;
+    eye_int[1].p=gas2.p/1e5;
+    eye_int[1].h=gas2.h/1e3;
+    eye_int[2].T= gas3.T-273.15;
+    eye_int[2].s=gas3.s/1e3;
+    eye_int[2].p=gas3.p/1e5;
+    eye_int[2].h=gas3.h/1e3;
+    eye_int[1].m_flow=-gasPort2.m_flow;
+    eye_int[2].m_flow=-gasPort3.m_flow;
+
+    connect(eye_int[1],eye1)  annotation (Line(
+      points={{56,-50.5},{84,-50.5},{84,-50},{110,-50}},
+      color={190,190,190},
+      smooth=Smooth.None));
+  connect(eye_int[2],eye2)  annotation (Line(
+      points={{56,-49.5},{56,-90},{30,-90},{30,-110}},
+      color={190,190,190},
+      smooth=Smooth.None));
+
   annotation (defaultComponentName="junction",Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=true)),
                                  Icon(coordinateSystem(extent={{-100,-100},{100,100}},
                    preserveAspectRatio=false)),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This model represents a junction for real gases. It is a modified version of the model ClaRa.Components.VolumesValvesFittings.Fittings.FlueGasJunction_L2 from ClaRa version 1.2.1. The model is documented there and here only the changes are described. </p>
+<p>This model represents a junction for real gases. It is a modified version of the model ClaRa.Components.VolumesValvesFittings.Fittings.FlueGasJunction_L2 from ClaRa version 1.3.0. The model is documented there and here only the changes are described. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The two-phase region is deactivated. </p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -210,6 +272,7 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Christopher Helbig (christopher.helbig@tuhh.de), Nov 2014</p>
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Feb 2015</p>
-<p><br>Edited by Carsten Bode (c.bode@tuhh.de), Apr 2016</p>
+<p>Edited by Carsten Bode (c.bode@tuhh.de), Apr 2016</p>
+<p>Revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (updated to new ClaRa version 1.3.0)</p>
 </html>"));
 end RealGasJunction_L2;

@@ -1,23 +1,25 @@
 within TransiEnt.Storage.Base;
 model GenericStorage "Highly adaptable but non-physical model for all kinds of energy storages"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -97,7 +99,7 @@ model GenericStorage "Highly adaptable but non-physical model for all kinds of e
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 </html>"));
 
-  StationaryLossModel stationaryLoss annotation (Placement(transformation(extent={{-68,-70},{-48,-50}})));
+  StationaryLossModel stationaryLoss annotation (Placement(transformation(extent={{-72,-74},{-50,-52}})));
 
   Modelica.Blocks.Sources.RealExpression E_is(y=E) "Internal energy level before stationary loss (energy level directly after load or unloading)" annotation (Placement(transformation(extent={{-67,-28},{-47,-8}})));
 ClaRa.Components.Utilities.Blocks.VariableGradientLimiter
@@ -120,8 +122,7 @@ ClaRa.Components.Utilities.Blocks.VariableGradientLimiter
   Modelica.Blocks.Logical.LessEqualThreshold isStorageEmpty(threshold=params.E_min)
                                                                                annotation (Placement(transformation(extent={{-33,-35},{-20,-22}})));
   Modelica.Blocks.Logical.Nor CapacityOk annotation (Placement(transformation(extent={{15,-20},{28,-6}})));
-  Modelica.Blocks.Sources.Constant CapacityLimit(k=0) annotation (Placement(transformation(extent={{8,-47},
-            {21,-35}})));
+  Modelica.Blocks.Sources.Constant CapacityLimit(k=0) annotation (Placement(transformation(extent={{24,-47},{37,-35}})));
   Modelica.Blocks.Logical.Switch P_is_external annotation (Placement(transformation(extent={{54,-21},{70,-5}})));
   Modelica.Blocks.Logical.And EmptyAndDischarging
     annotation (Placement(transformation(extent={{-8,-30},{5,-16}})));
@@ -142,6 +143,9 @@ ClaRa.Components.Utilities.Blocks.VariableGradientLimiter
   Modelica.Blocks.Sources.RealExpression eta_unload(y=1/params.eta_unload) annotation (Placement(transformation(extent={{9,-67},{22,-55}})));
   Modelica.Blocks.Sources.RealExpression P_max_load(y=params.P_max_load) annotation (Placement(transformation(extent={{-95,55},{-82,67}})));
   Modelica.Blocks.Sources.RealExpression P_max_unload_neg(y=-params.P_max_unload) annotation (Placement(transformation(extent={{-95,39},{-82,51}})));
+  Modelica.Blocks.Logical.Switch stationaryLoss_internal annotation (Placement(transformation(extent={{-34,-65},{-18,-49}})));
+  Modelica.Blocks.Sources.Constant CapacityLimit1(k=0)
+                                                      annotation (Placement(transformation(extent={{-50,-39},{-44,-32}})));
 equation
 
   // _____________________________________________
@@ -150,6 +154,7 @@ equation
   // _____________________________________________
 
   der(E) = P_is_internal.y - stationaryLoss.P_statloss;
+  //der(E) = P_is_internal.y - stationaryLoss_internal.y;
   stationaryLoss.E_is = E;
 
   // _____________________________________________
@@ -158,7 +163,7 @@ equation
   // _____________________________________________
 
   connect(CapacityLimit.y, P_is_external.u3) annotation (Line(
-      points={{21.65,-41},{48,-41},{48,-18},{50,-18},{50,-19.4},{52.4,-19.4}},
+      points={{37.65,-41},{48,-41},{48,-20},{50,-20},{50,-19.4},{52.4,-19.4}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(FullAndCharging.y,CapacityOk. u1) annotation (Line(
@@ -183,16 +188,19 @@ equation
   connect(E_is.y, isStorageFull.u) annotation (Line(points={{-46,-18},{-42,-18},{-42,-7},{-33.3,-7}}, color={0,0,127}));
   connect(E_is.y, isStorageEmpty.u) annotation (Line(points={{-46,-18},{-42,-18},{-42,-28.5},{-34.3,-28.5}}, color={0,0,127}));
   connect(PowerLimit.y, PowerRateLimit.u) annotation (Line(points={{-47,52},{-38.5,52},{-30,52}}, color={0,0,127}));
-  connect(PowerRateLimit.y, P_is_external.u1) annotation (Line(points={{-7,52},{30,52},{30,-6.6},{52.4,-6.6}}, color={0,0,127}));
   connect(PowerLimit.u, P_set) annotation (Line(points={{-70,52},{-78,52},{-78,-4},{-96,-4}},          color={0,0,127}));
   connect(DischargeDemand.y, ChargeDemand.u) annotation (Line(points={{-19.45,27},{-12,27},{12,27},{12,17},{8.2,17}}, color={255,0,255}));
   connect(DischargeDemand.y, EmptyAndDischarging.u1) annotation (Line(points={{-19.45,27},{-14,27},{-14,-23},{-9.3,-23}}, color={255,0,255}));
   connect(DischargeDemand.y, conversionEfficiency.u2) annotation (Line(points={{-19.45,27},{-14,27},{-14,-73},{36.4,-73}}, color={255,0,255}));
   connect(ChargeDemand.y, FullAndCharging.u1) annotation (Line(points={{-5.6,17},{-12,17},{-12,-1},{-6.3,-1}}, color={255,0,255}));
   connect(CapacityOk.y, P_is_external.u2) annotation (Line(points={{28.65,-13},{52.4,-13},{52.4,-13}}, color={255,0,255}));
-  connect(PowerRateLimit.y, DischargeDemand.u) annotation (Line(points={{-7,52},{0,52},{0,36},{-40,36},{-40,27},{-32.1,27}}, color={0,0,127}));
   connect(P_max_load.y, PowerLimit.limit1) annotation (Line(points={{-81.35,61},{-70,61},{-70,60}}, color={0,0,127}));
   connect(P_max_unload_neg.y, PowerLimit.limit2) annotation (Line(points={{-81.35,45},{-70,45},{-70,44}}, color={0,0,127}));
+  connect(DischargeDemand.u, PowerRateLimit.y) annotation (Line(points={{-32.1,27},{-36,27},{-36,36},{-4,36},{-4,52},{-7,52}}, color={0,0,127}));
+  connect(PowerRateLimit.y, P_is_external.u1) annotation (Line(points={{-7,52},{36,52},{36,-6.6},{52.4,-6.6}}, color={0,0,127}));
+  connect(EmptyAndDischarging.y, stationaryLoss_internal.u2) annotation (Line(points={{5.65,-23},{10,-23},{10,-44},{-40,-44},{-40,-57},{-35.6,-57}}, color={255,0,255}));
+  connect(stationaryLoss.P_statloss, stationaryLoss_internal.u3) annotation (Line(points={{-49.34,-63},{-40,-63},{-40,-63.4},{-35.6,-63.4}}, color={0,0,127}));
+  connect(stationaryLoss_internal.u1, CapacityLimit1.y) annotation (Line(points={{-35.6,-50.6},{-38,-50.6},{-38,-50},{-42,-50},{-42,-36},{-43.7,-36},{-43.7,-35.5}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics={
         Line(
@@ -202,7 +210,7 @@ equation
           thickness=0.5,
           arrow={Arrow.None,Arrow.Filled}),
         Line(
-          points={{-58,-24},{-58,-26},{-58,-38},{-80,-38},{-80,-60},{-74,-60}},
+          points={{-58,-24},{-58,-26},{-58,-38},{-80,-38},{-80,-62},{-74,-62}},
           color={135,135,135},
           pattern=LinePattern.Dot,
           thickness=0.5,

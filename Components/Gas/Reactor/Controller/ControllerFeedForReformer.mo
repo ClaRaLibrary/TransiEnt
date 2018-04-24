@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.Reactor.Controller;
 model ControllerFeedForReformer "Controller to control the feed mass flow rate for the steam methane reformer"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -87,20 +89,18 @@ model ControllerFeedForReformer "Controller to control the feed mass flow rate f
   //           Instances of other Classes
   // _____________________________________________
 
-  ClaRa.Components.Utilities.Blocks.LimPID
-                                       limPID(
+  ClaRa.Components.Utilities.Blocks.LimPID limPID(
     k=k,
     controllerType=controllerType,
     y_start=y_start,
-    initType=initType,
     xi_start=xi_start,
     xd_start=xd_start,
     y_max=1e15,
     y_min=0,
     Tau_i=Ti,
     Tau_d=Td,
-    t_activation=t_activation)
-            annotation (Placement(transformation(
+    t_activation=t_activation,
+    initOption=if ((initType) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((initType) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((initType) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((initType) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=0,
         origin={40,-50})));

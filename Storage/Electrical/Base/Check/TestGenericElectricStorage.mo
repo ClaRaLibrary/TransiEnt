@@ -1,22 +1,24 @@
 within TransiEnt.Storage.Electrical.Base.Check;
 model TestGenericElectricStorage
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   GenericElectricStorage
@@ -30,7 +32,7 @@ model TestGenericElectricStorage
       P_grad_max=baseparams.P_grad_max,
       eta_unload=baseparams.eta_unload,
       eta_load=baseparams.eta_load),
-    redeclare TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery CostModel)
+    redeclare model CostModel=TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery)
                                      annotation (Placement(transformation(extent={{-15,24},{15,54}})));
 
   GenericElectricStorage
@@ -44,7 +46,7 @@ model TestGenericElectricStorage
       P_grad_max=baseparams.P_grad_max,
       eta_unload=0.8,
       eta_load=0.7),
-    redeclare TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery CostModel)
+    redeclare model CostModel=TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery)
                                      annotation (Placement(transformation(extent={{-15,-68},{15,-38}})));
 
   GenericElectricStorage
@@ -58,7 +60,7 @@ model TestGenericElectricStorage
       P_grad_max=baseparams.P_grad_max,
       eta_unload=baseparams.eta_unload,
       eta_load=baseparams.eta_load),
-    redeclare TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery CostModel)
+    redeclare model CostModel=TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery)
                                      annotation (Placement(transformation(extent={{-15,-23},{15,7}})));
   TransiEnt.Storage.Base.GenericStorageParameters baseparams(
     E_start=baseparams.E_min,

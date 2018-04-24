@@ -1,22 +1,24 @@
 within TransiEnt.Basics.Blocks;
 block RealToVector "Takes single input signal and puts it in a specific location in a vector (all other elements are zero)"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -27,10 +29,11 @@ block RealToVector "Takes single input signal and puts it in a specific location
 
   // _____________________________________________
   //
-  //                 Parameters
+  //               Visible Parameters
   // _____________________________________________
 
   parameter Integer nout=1 "Number of outputs";
+  parameter Integer index;
 
   // _____________________________________________
   //
@@ -42,14 +45,12 @@ block RealToVector "Takes single input signal and puts it in a specific location
   Modelica.Blocks.Interfaces.RealOutput y[nout] "Connector of Real output signals" annotation (Placement(
         transformation(extent={{100,-10},{120,10}})));
 
-  parameter Integer index;
-
-equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
 
+equation
   for i in 1:nout loop
     if i == index then
       y[i] = u;
@@ -132,29 +133,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on Mon Aug 18 2014</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised (code conventinos) by Pascal Dubucq (dubucq@tuhh.de) on 21.04.2017</span></p>
-</html>"),      Documentation(info="<html>
-<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
-<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Pascal Dubucq (dubucq@tuhh.de) <span style=\"font-family: MS Shell Dlg 2;\">on 01.10.2014</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Quality check (Code conventions) by Rebekka Denninger on 01.10.2016</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de), Aug 2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised by Pascal Dubucq (dubucq@tuhh.de), Apr 2017 : code conventions</span></p>
 </html>"));
 end RealToVector;

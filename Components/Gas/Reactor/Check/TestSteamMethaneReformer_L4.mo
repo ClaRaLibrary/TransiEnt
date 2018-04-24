@@ -1,22 +1,24 @@
 within TransiEnt.Components.Gas.Reactor.Check;
 model TestSteamMethaneReformer_L4
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_SG6_var vle_sg6;
@@ -90,8 +92,8 @@ public
   Real rel_Delta_n_flow_N=Delta_n_flow_N/n_flow_N_In;
 
 equation
-  n_flow_In=moleCompIn.gasPortIn.m_flow/moleCompIn.fluid.M;
-  n_flow_Out=moleCompOut.gasPortIn.m_flow/moleCompOut.fluid.M;
+  n_flow_In=moleCompIn.gasPortIn.m_flow/moleCompIn.molarMass;
+  n_flow_Out=moleCompOut.gasPortIn.m_flow/moleCompOut.molarMass;
 
   n_flow_C_In=n_flow_In*(1*moleCompIn.fraction[1]+1*moleCompIn.fraction[2]+1*moleCompIn.fraction[5]);
   n_flow_C_Out=n_flow_Out*(1*moleCompOut.fraction[1]+1*moleCompOut.fraction[2]+1*moleCompOut.fraction[5]);

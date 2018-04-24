@@ -1,23 +1,25 @@
 within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model HeatingPlantCost "Cost model for conventional thermal or renewable power plants generating heat"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   // _____________________________________________
   //
   //            Imports
@@ -60,12 +62,21 @@ model HeatingPlantCost "Cost model for conventional thermal or renewable power p
     final other_flow=0,
     final other_demand(start=0),
     final other_revenue(start=0),
-    final m_CDE(start=0),
+    final m_CDE_consumed(start=0),
+    final m_CDE_produced(start=0),
     final m_flow_CDE=m_flow_CDE_is,
     final der_E_n=Q_flow_n,
     final E_n=0,
     final Cspec_demAndRev_gas_fuel=costRecordGeneral.Cspec_fuel,
-    final H_flow=Q_flow_fuel_is);
+    final H_flow=Q_flow_fuel_is,
+    final produces_P_el=false,
+    final consumes_P_el=false,
+    final produces_Q_flow=true,
+    final consumes_Q_flow=false,
+    final produces_H_flow=false,
+    final produces_other_flow=false,
+    final consumes_other_flow=false,
+    final consumes_m_flow_CDE=false);
 
   // _____________________________________________
   //
@@ -82,7 +93,7 @@ model HeatingPlantCost "Cost model for conventional thermal or renewable power p
   //         Variables appearing in dialog
   // _____________________________________________
 
-  SI.ActivePower Q_flow_is=0 "Electric power generation of plant" annotation(Dialog(group="Variables"));
+  SI.ActivePower Q_flow_is=0 "Thermal power generation of plant" annotation(Dialog(group="Variables"));
   SI.EnthalpyFlowRate Q_flow_fuel_is=0 "Enthalpy rate of consumed fuel" annotation(Dialog(group="Variables"));
   SI.MassFlowRate m_flow_CDE_is=Q_flow_fuel_is*costRecordGeneral.m_flow_CDEspec_fuel "Produced CDE mass flow" annotation(Dialog(group="Variables"));
 
@@ -93,6 +104,6 @@ model HeatingPlantCost "Cost model for conventional thermal or renewable power p
 
   TransiEnt.Basics.Units.MonetaryUnitPerEnergy LCOH=C/max(simCenter.E_small, Q_demand)*3.6e9 "Levelized cost of heat";
   TransiEnt.Basics.Units.MonetaryUnit C_fuel(displayUnit="EUR") = H_demand*Cspec_demAndRev_gas_fuel "Fuel costs";
-  TransiEnt.Basics.Units.MonetaryUnit C_CO2_Certificates(displayUnit="EUR") = Cspec_CO2*m_CDE "Fuel costs";
+  TransiEnt.Basics.Units.MonetaryUnit C_CO2_Certificates(displayUnit="EUR") = Cspec_CO2*m_CDE_produced "Fuel costs";
 
 end HeatingPlantCost;

@@ -1,23 +1,25 @@
 within TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer;
 model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction kinetics depending on input gascomposition, including mass fraction balance and reaction volume (input natural gas, output H2 rich syngas)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -128,14 +130,14 @@ model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction
     T=T_gas,
     xi= {xi_ch4,xi_o2,xi_co2,xi_h2o,xi_h2,xi_co},
     gasType=Syngas)
-    annotation (extent=[-20,20; 0,40], Placement(transformation(extent={{66,-12},{86,8}})));
+    annotation (Placement(transformation(extent={{66,-12},{86,8}})));
 
             TILMedia.Gas_pT START(
     p=p_reformer,
     T= inStream(feed.T_outflow),
     xi= inStream(feed.xi_outflow),
     gasType=Syngas)
-    annotation (extent=[-20,20; 0,40], Placement(transformation(extent={{-86,-12},{-66,8}})));
+    annotation (Placement(transformation(extent={{-86,-12},{-66,8}})));
 
 equation
   // _____________________________________________

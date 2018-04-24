@@ -1,23 +1,25 @@
 within TransiEnt.Components.Turbogroups.OperatingStates;
 model ThreeStateDynamic "Three state dynamic model - operating at init"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -57,23 +59,23 @@ model ThreeStateDynamic "Three state dynamic model - operating at init"
   Modelica.StateGraph.Transition startupSuccess(
     condition=true,
     enableTimer=true,
-    waitTime=t_startup) annotation (Placement(transformation(extent={{32,20},{52,40}},rotation=0)));
+    waitTime=t_startup) annotation (Placement(transformation(extent={{26,20},{46,40}},rotation=0)));
   Modelica.StateGraph.StepWithSignal
                            startup(       nOut=2, nIn=2)
                                    annotation (Placement(transformation(extent={{6,20},{26,40}},     rotation=0)));
   Modelica.StateGraph.Transition threshold(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_set_star <= -P_min_operating + Modelica.Constants.eps)                        annotation (Placement(transformation(extent={{-18,20},{2,40}},    rotation=0)));
+    enableTimer=true,
+    condition=P_set_star <= -P_min_operating + thres)                                         annotation (Placement(transformation(extent={{-18,20},{2,40}},    rotation=0)));
   Modelica.StateGraph.Transition noThreshold(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_set_star > -P_min_operating + Modelica.Constants.eps)
+    enableTimer=true,
+    condition=P_set_star > -P_min_operating + 2*thres)
                                                    annotation (Placement(transformation(extent={{26,54},{6,74}},   rotation=0)));
   Modelica.StateGraph.Transition noThreshold2(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_set_star > -P_min_operating + Modelica.Constants.eps)
+    enableTimer=true,
+    condition=P_set_star > -P_min_operating + 2*thres)
                     annotation (Placement(transformation(extent={{66,74},{46,94}}, rotation=0)));
  Modelica.StateGraph.Transition initOff(
     waitTime=0,
@@ -115,13 +117,13 @@ equation
   connect(halt.outPort[1], threshold.inPort)
     annotation (Line(points={{-29.5,20},{-12,20},{-12,30}},    color={0,0,0}));
   connect(startupSuccess.outPort, operating.inPort[1])
-    annotation (Line(points={{43.5,30},{45,30},{45,20.6667}},
+    annotation (Line(points={{37.5,30},{45,30},{45,20.6667}},
                                                            color={0,0,0}));
   connect(operating.outPort[1], noThreshold2.inPort) annotation (Line(points={{66.5,20.25},{70,20.25},{70,84},{60,84}},
                                                    color={0,0,0}));
   connect(threshold.outPort,startup. inPort[1]) annotation (Line(points={{-6.5,30},{0,30},{0,30.5},{5,30.5}},
                                                                                                     color={0,0,0}));
-  connect(startup.outPort[1],startupSuccess. inPort) annotation (Line(points={{26.5,30.25},{30,30},{38,30}},
+  connect(startup.outPort[1],startupSuccess. inPort) annotation (Line(points={{26.5,30.25},{30,30},{32,30}},
                                                                                                     color={0,0,0}));
   connect(startup.outPort[2],noThreshold. inPort) annotation (Line(points={{26.5,29.75},{28,29.75},{28,32},{28,64},{20,64}},         color={0,0,0}));
 

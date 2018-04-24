@@ -1,24 +1,27 @@
 within TransiEnt.Components.Gas.GasCleaning.Check;
 model TestDryer_L1
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_SG6_var vle_sg;
+  parameter TILMedia.VLEFluidTypes.TILMedia_SplineWater water;
 
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source(
     medium=vle_sg,
@@ -32,7 +35,9 @@ model TestDryer_L1
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={26,0})));
-  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink_water(medium=vle_sg, variable_p=true) annotation (Placement(transformation(
+  Boundaries.FluidFlow.BoundaryVLE_pTxi                    sink_water(               variable_p=true,
+    medium=water,
+    boundaryConditions(showData=false))                                                               annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={0,26})));
@@ -53,7 +58,10 @@ model TestDryer_L1
     duration=1000,
     startTime=7000,
     height=-20e5)  annotation (Placement(transformation(extent={{66,-4},{46,16}})));
-  TransiEnt.Components.Gas.GasCleaning.Dryer_L1 dryer(pressureLoss=20000) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+  TransiEnt.Components.Gas.GasCleaning.Dryer_L1 dryer(
+    medium_gas=vle_sg,
+    medium_water=water,
+    pressureLoss=20000)                                                   annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.Ramp ramp3(
     duration=1000,
     height=-4e5,
@@ -62,36 +70,36 @@ model TestDryer_L1
                    annotation (Placement(transformation(extent={{40,34},{20,54}})));
 
   Modelica.SIunits.MassFlowRate m_flow_CH4_in=dryer.gasPortIn.m_flow*inStream(dryer.gasPortIn.xi_outflow[1]);
-  Modelica.SIunits.MassFlowRate m_flow_CH4_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[1] + dryer.fluidPortOut.m_flow*dryer.fluidPortOut.xi_outflow[1]);
+  Modelica.SIunits.MassFlowRate m_flow_CH4_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[1]);
   Modelica.SIunits.MassFlowRate m_flow_CO2_in=dryer.gasPortIn.m_flow*inStream(dryer.gasPortIn.xi_outflow[2]);
-  Modelica.SIunits.MassFlowRate m_flow_CO2_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[2] + dryer.fluidPortOut.m_flow*dryer.fluidPortOut.xi_outflow[2]);
+  Modelica.SIunits.MassFlowRate m_flow_CO2_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[2]);
   Modelica.SIunits.MassFlowRate m_flow_H2O_in=dryer.gasPortIn.m_flow*inStream(dryer.gasPortIn.xi_outflow[3]);
-  Modelica.SIunits.MassFlowRate m_flow_H2O_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[3] + dryer.fluidPortOut.m_flow*dryer.fluidPortOut.xi_outflow[3]);
+  Modelica.SIunits.MassFlowRate m_flow_H2O_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[3] + dryer.fluidPortOut.m_flow);
   Modelica.SIunits.MassFlowRate m_flow_H2_in=dryer.gasPortIn.m_flow*inStream(dryer.gasPortIn.xi_outflow[4]);
-  Modelica.SIunits.MassFlowRate m_flow_H2_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[4] + dryer.fluidPortOut.m_flow*dryer.fluidPortOut.xi_outflow[4]);
+  Modelica.SIunits.MassFlowRate m_flow_H2_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[4]);
   Modelica.SIunits.MassFlowRate m_flow_CO_in=dryer.gasPortIn.m_flow*inStream(dryer.gasPortIn.xi_outflow[5]);
-  Modelica.SIunits.MassFlowRate m_flow_CO_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[5] + dryer.fluidPortOut.m_flow*dryer.fluidPortOut.xi_outflow[5]);
+  Modelica.SIunits.MassFlowRate m_flow_CO_out=-(dryer.gasPortOut.m_flow*dryer.gasPortOut.xi_outflow[5]);
   Modelica.SIunits.MassFlowRate m_flow_N2_in=dryer.gasPortIn.m_flow*(1-sum(inStream(dryer.gasPortIn.xi_outflow)));
-  Modelica.SIunits.MassFlowRate m_flow_N2_out=-(dryer.gasPortOut.m_flow*(1 - sum(dryer.gasPortOut.xi_outflow)) + dryer.fluidPortOut.m_flow*(1 - sum(dryer.fluidPortOut.xi_outflow)));
+  Modelica.SIunits.MassFlowRate m_flow_N2_out=-(dryer.gasPortOut.m_flow*(1 - sum(dryer.gasPortOut.xi_outflow)));
 
 equation
   connect(combiTimeTable.y, source.xi) annotation (Line(points={{-47,-6},{-47,-6},{-38,-6}}, color={0,0,127}));
   connect(ramp2.y, sink_syngas.p) annotation (Line(points={{45,6},{45,6},{38,6}}, color={0,0,127}));
   connect(ramp.y, source.m_flow) annotation (Line(points={{-47,54},{-42,54},{-42,6},{-38,6}}, color={0,0,127}));
   connect(ramp1.y, source.T) annotation (Line(points={{-47,24},{-44,24},{-44,0},{-38,0}}, color={0,0,127}));
-  connect(ramp3.y, sink_water.p) annotation (Line(points={{19,44},{-6,44},{-6,38}}, color={0,0,127}));
+  connect(ramp3.y, sink_water.p) annotation (Line(points={{19,44},{-6,44},{-6,36}}, color={0,0,127}));
   connect(source.gasPort, dryer.gasPortIn) annotation (Line(
       points={{-16,0},{-13,0},{-10,0}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(sink_water.gasPort, dryer.fluidPortOut) annotation (Line(
-      points={{0,16},{0,13},{0,10}},
       color={255,255,0},
       thickness=1.5));
   connect(sink_syngas.gasPort, dryer.gasPortOut) annotation (Line(
       points={{16,0},{13,0},{10,0}},
       color={255,255,0},
       thickness=1.5));
+  connect(dryer.fluidPortOut, sink_water.fluidPortIn) annotation (Line(
+      points={{0,10},{0,14},{0,16},{-1.83187e-015,16}},
+      color={175,0,0},
+      thickness=0.5));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-20},{100,100}}),  graphics={Text(
           extent={{-40,98},{38,78}},
           lineColor={0,140,72},

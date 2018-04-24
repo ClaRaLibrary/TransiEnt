@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Electrical.EconomicDispatch;
 model MeritOrderDispatcher "Forward-looking control, min, max and gradient constraints"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -43,29 +45,29 @@ model MeritOrderDispatcher "Forward-looking control, min, max and gradient const
   parameter Integer ntime=20 "Number of future points in time to be considered";
 
   parameter Modelica.SIunits.Power P_init[nout]=zeros(nout);
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy C_var[nout]=simCenter.generationPark.C_var_MOD;
   parameter Real P_grad_max_star[nout]=simCenter.generationPark.P_grad_max_star_MOD "Specific Power gradient in 1/s";
   parameter Modelica.SIunits.Power P_min_const[nout]=simCenter.generationPark.P_min_MOD;
   parameter Modelica.SIunits.Power P_max_const[nout]=P_nom;
-  parameter Boolean useVarLimits = false annotation(Evaluate=true, choices(__Dymola_checkBox=true),tab="Time varying operating boundaries");
+  parameter Boolean useVarLimits = false annotation(Evaluate=true, choices(__Dymola_checkBox=true),Dialog(tab="Time varying operating boundaries"));
   parameter Integer nVarLimits=1 annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
   parameter Integer iVarLimits[nVarLimits]=1:nVarLimits annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
+  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy C_var[nout]=simCenter.generationPark.C_var_MOD;
 
   parameter Modelica.SIunits.Power P_nom[nout]=simCenter.generationPark.P_max_MOD;
 
   // _____________________________________________
   //
-  //                 Variables
+  //                 Interfaces
   // _____________________________________________
 
   Modelica.Blocks.Interfaces.RealInput u[ntime] "Load Prediction" annotation (Placement(transformation(extent={{-140,-20},{-100,20}}), iconTransformation(extent={{-140,-20},{-100,20}})));
   Modelica.Blocks.Interfaces.RealOutput y[nout](start=P_init, fixed=true) annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  Modelica.Blocks.Interfaces.BooleanInput z[nout] "Plant status (true=on)" annotation (Placement(transformation(extent={{20,-20},{-20,20}},
-        rotation=270,
+  Modelica.Blocks.Interfaces.BooleanInput z[nout] "Plant status (true=on)" annotation (Placement(transformation(extent={{20,-20},{-20,20}},        rotation=270,
         origin={0,-120}),                                                                                                   iconTransformation(
         extent={{20,-20},{-20,20}},
         rotation=270,
         origin={0,-120})));
+
   Modelica.Blocks.Interfaces.RealInput P_R_pos[nout] "Upwards reserve constraint, reduces maximum production (values are supposed to be positive)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
@@ -81,6 +83,12 @@ model MeritOrderDispatcher "Forward-looking control, min, max and gradient const
         rotation=-90,
         origin={40,120})));
 
+  // _____________________________________________
+  //
+  //                 Variables
+  // _____________________________________________
+
+
   Modelica.SIunits.Power P_load[ntime];
   Real[nout] C_varsorted;
   Integer[nout] merit_order;
@@ -95,8 +103,8 @@ model MeritOrderDispatcher "Forward-looking control, min, max and gradient const
   Modelica.SIunits.Power P_min_total;
   Modelica.SIunits.Power P_init_total=sum(P_init);
 
-  Modelica.SIunits.Power P_max[nout](start=P_max_const, fixed=true);//=simCenter.generationPark.P_max;
-  Modelica.SIunits.Power P_min[nout](start=P_min_const, fixed=true);//=simCenter.generationPark.P_max;
+  Modelica.SIunits.Power P_max[nout](start=P_max_const, fixed=true);
+  Modelica.SIunits.Power P_min[nout](start=P_min_const, fixed=true);
   Modelica.SIunits.Power P_max_var[nVarLimits]=P_max[iVarLimits] annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
   Modelica.SIunits.Power P_min_var[nVarLimits]=P_min[iVarLimits] annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
   Modelica.SIunits.Power P_min_var_total=sum(P_min_var);

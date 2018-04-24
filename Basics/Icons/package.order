@@ -28,6 +28,7 @@ Example
 ExamplesPackage
 ExpansionVessel
 ExponentialBlock
+FeedInStation
 FixedBedReactor_L2
 FixedBedReactor_L4
 Flywheel
@@ -109,3 +110,4 @@ Battery
 RecordModel
 FluidToRealAdapter
 HPGasGridHamburg
+HeatPump

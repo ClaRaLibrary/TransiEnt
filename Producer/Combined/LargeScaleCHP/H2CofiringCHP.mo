@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP;
 model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring (e.g. from power-2-gas technologies)"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -56,6 +58,8 @@ model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring 
       medium,
       p_nom,
       T_feed_init) "Start value of sytsem specific enthalpy" annotation(Dialog(group="Heating condenser parameters"));
+  parameter Boolean UseGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if UseGasPort==true "Gas Medium to be used - only if UseGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if UseGasPort==true then true else false));
 
   // _____________________________________________
   //
@@ -114,6 +118,8 @@ model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring 
         origin={-71,106})));
 
   Modelica.SIunits.HeatFlowRate Q_flow_input_basefuel = if h2Available then Q_flow_input * (1 - simCenter.k_H2_fraction) else Q_flow_input;
+  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{80,82},{60,102}})));
+  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
 equation
   // _____________________________________________
   //
@@ -149,17 +155,26 @@ equation
   connect(steamGenerator.y,product1. u1) annotation (Line(points={{-43,22},{-36,22},{-36,-7.6},{-26.8,-7.6}}, color={0,0,127}));
   connect(product1.y,heatingCondenser. u) annotation (Line(points={{-17.6,-10},{-14,-10},{-10,-10}},   color={0,0,127}));
   connect(heatingCondenser.y,prescribedHeatFlow. Q_flow) annotation (Line(points={{13,-10},{22,-10}},                  color={0,0,127}));
-  connect(steamGenerator.u, Q_flow_set_SG.Q_flow_input) annotation (Line(points={{-66,22},{-76,22},{-76,26},{-76,78},{0,78},{0,79}}, color={0,0,127}));
+  connect(steamGenerator.u, Q_flow_set_SG.Q_flow_input) annotation (Line(points={{-66,22},{-76,22},{-76,26},{-76,78},{-0.909091,78},{-0.909091,79}},
+                                                                                                                                     color={0,0,127}));
   connect(prescribedHeatFlow.port, HX.heat) annotation (Line(points={{40,-10},{52,-10}},                   color={191,0,0}));
   connect(terminal.epp, epp) annotation (Line(
-      points={{82.1,59.9},{82,59.9},{82,60},{100,60}},
+      points={{82,60},{82,60},{82,60},{100,60}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set,P_el_set_pos. u) annotation (Line(points={{-84,144},{-84,144},{-84,106},{-78.2,106}}, color={0,0,127}));
   connect(pQDiagram.P_min, P_limit_on.limit2) annotation (Line(points={{-11,121},{-50,121},{-50,98},{-46,98}}, color={0,0,127}));
   connect(P_limit_on.limit1, pQDiagram.P_max) annotation (Line(points={{-46,114},{-46,114},{-46,122},{-46,128.4},{-11,128.4}}, color={0,0,127}));
   connect(P_el_set_pos.y, P_limit_on.u) annotation (Line(points={{-64.4,106},{-64.4,106},{-46,106}},         color={0,0,127}));
-  connect(P_limit_on.y, Q_flow_set_SG.P) annotation (Line(points={{-23,106},{-7,106},{-7,102}}, color={0,0,127}));
+  connect(P_limit_on.y, Q_flow_set_SG.P) annotation (Line(points={{-23,106},{-7.27273,106},{-7.27273,102}},
+                                                                                                color={0,0,127}));
+  if UseGasPort==true then
+    connect(gasConsumer_HFlow_NCV.fluidPortIn,gasPortIn)  annotation (Line(
+      points={{80,92},{88,92},{88,102},{100,102}},
+      color={255,255,0},
+      thickness=1.5));
+    connect(steamGenerator.y,gasConsumer_HFlow_NCV. H_flow) annotation (Line(points={{-43,22},{-38,22},{-38,-4},{-92,-4},{-92,70},{40,70},{40,92},{59,92}},     color={0,0,127}));
+  end if;
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,120}})), Icon(coordinateSystem(extent={{-100,-100},{100,120}}),
                                                                                                          graphics={
         Ellipse(

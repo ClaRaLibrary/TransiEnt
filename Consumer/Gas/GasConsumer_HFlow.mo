@@ -1,22 +1,24 @@
 within TransiEnt.Consumer.Gas;
 model GasConsumer_HFlow "Gas sink dependent on gross calorific value"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.GasSink;
   import SI = ClaRa.Basics.Units;
   outer TransiEnt.SimCenter simCenter;
@@ -39,13 +41,14 @@ model GasConsumer_HFlow "Gas sink dependent on gross calorific value"
         extent={{-20,-20},{20,20}},
         rotation=180,
         origin={110,0})));
-  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(xiNumber=massflowSensor.medium.nc) annotation (Placement(transformation(extent={{6,0},{26,20}})));
+  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(xiNumber=massflowSensor.medium.nc, medium=medium)
+                                                                                                        annotation (Placement(transformation(extent={{6,0},{26,20}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink(
-    medium=simCenter.gasModel1,
     T_const=T_const,
     xi_const=xi_const,
     variable_m_flow=true,
-    m(fixed=true)) annotation (Placement(transformation(
+    m(fixed=true),
+    medium=medium) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={44,0})));
@@ -54,8 +57,10 @@ model GasConsumer_HFlow "Gas sink dependent on gross calorific value"
     k=k,
     Ti=Ti,
     Td=Td) annotation (Placement(transformation(extent={{82,-16},{62,4}})));
-  TransiEnt.Components.Sensors.RealGas.WobbeGCVSensor vleGCVSensor annotation (Placement(transformation(extent={{-24,0},{-4,20}})));
-  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-50,0},{-30,20}})));
+  TransiEnt.Components.Sensors.RealGas.WobbeGCVSensor vleGCVSensor(medium=medium)
+                                                                   annotation (Placement(transformation(extent={{-24,0},{-4,20}})));
+  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2, medium=medium)
+                                                                                                      annotation (Placement(transformation(extent={{-50,0},{-30,20}})));
 equation
 
   connect(gCVController.m_flow_desired, sink.m_flow) annotation (Line(points={{61,-6},{56,-6}}, color={0,0,127}));

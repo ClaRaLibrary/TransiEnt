@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Electrical.Controllers;
 model PrimaryBalancingController "Primary balancing controller model based on Weissbach (2009)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -29,20 +31,13 @@ model PrimaryBalancingController "Primary balancing controller model based on We
 
   // _____________________________________________
   //
-  //                 Outer Models
-  // _____________________________________________
-
-  outer TransiEnt.SimCenter simCenter;
-
-  // _____________________________________________
-  //
   //                   Parameters
   // _____________________________________________
 
   parameter TransiEnt.Basics.Types.ControlPlantType plantType=TransiEnt.Basics.Types.ControlPlantType.Provided "Droop of Turbine (Relative frequency change, when demanded power changes)" annotation (Evaluate=true, Dialog(group="Droop"));
   parameter Real providedDroop=0.2/50/maxValuePrCtrl "Value used if plantType is set to 'Provided' (full activation at 200mHz for 50Hz nom. freq.)"
                                                    annotation (Dialog(enable=(
-          plantType == Characteristics.PlantType.Custom), group="Droop"));
+          plantType == TransiEnt.Basics.Types.ControlPlantType.Provided), group="Droop"));
   parameter Real k_part=1 "Participation factor"
                            annotation(Dialog(group="Droop"));
   parameter Real maxGradientPrCtrl = 0.02/30 "Two percent of design case power in 30s"
@@ -50,7 +45,6 @@ model PrimaryBalancingController "Primary balancing controller model based on We
   parameter Real maxValuePrCtrl = 0.02 "Two percent of design case power"
                                        annotation(Dialog(group="Dynamic"));
 
-  parameter Modelica.SIunits.Power P_nom=simCenter.P_n_low;
   parameter SI.Time Td_GradientLimiter=0.001 "Time step of derivative calculation"
                                            annotation(Dialog(tab="Expert Settings"));
 

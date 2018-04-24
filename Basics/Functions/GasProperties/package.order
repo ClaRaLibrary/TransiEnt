@@ -2,6 +2,8 @@ Check
 L_idealGas
 comps2Elements_idealGas
 comps2Elements_realGas
+getIdealGasNCVVector
+getIdealGasGCVVector
 getIdealGasGCV_xi
 getIdealGasGCV_xM
 getIdealGasNCV_xi

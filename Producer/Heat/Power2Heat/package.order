@@ -4,3 +4,5 @@ Components
 Controller
 BivalentHeatpumpSystem
 ElectricBoiler
+HeatPumpElectricCharlineHeatPort_L1
+HeatPumpElectricCharlineFluidPorts

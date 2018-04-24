@@ -1,22 +1,24 @@
 within TransiEnt.Grid.Electrical.SecondaryControl;
 model AGC "Automatic generation control model including secondary controller and replaceable model for control unit activation"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -99,13 +101,16 @@ public
         rotation=270,
         origin={42,100})));
 
-  TransiEnt.Basics.Blocks.LimPIDReset H_lfr(
+  Modelica.Blocks.Continuous.LimPID   H_lfr(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
-    yMax=57e6,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     k=k,
-    Ti=Ti) annotation (Placement(transformation(extent={{6,-10},{26,10}})));
-  replaceable TransiEnt.Grid.Electrical.SecondaryControl.Activation.MeritOrderActivation_Var1 SecondaryControlActivation(C_var_pos=simCenter.generationPark.C_var, C_var_neg=simCenter.generationPark.C_var) constrainedby TransiEnt.Grid.Electrical.SecondaryControl.Activation.PartialActivationType(
+    Ti=Ti,
+    I(initType=Modelica.Blocks.Types.Init.InitialState, y_start=0),
+    yMax=P_SB_max,
+    initType=Modelica.Blocks.Types.InitPID.NoInit)
+           annotation (Placement(transformation(extent={{6,-10},{26,10}})));
+  replaceable TransiEnt.Grid.Electrical.SecondaryControl.Activation.MeritOrderActivation_Var1 SecondaryControlActivation(C_var_pos=simCenter.generationPark.C_var, C_var_neg=simCenter.generationPark.C_var,
+    P_SB_max=P_SB_max)                                                                                                                                                                                       constrainedby TransiEnt.Grid.Electrical.SecondaryControl.Activation.PartialActivationType(
     final samplePeriod=samplePeriod,
     final startTime=startTime,
     final P_respond=P_respond,
@@ -119,15 +124,15 @@ public
 
   Modelica.Blocks.Sources.Constant f_n(k=simCenter.f_n) annotation (Placement(transformation(extent={{-70,-58},{-50,-38}})));
   Modelica.Blocks.Math.Sum e_set(nin=2, k={1,K_r}) annotation (Placement(transformation(extent={{-26,-35},{-12,-21}})));
-  Modelica.Blocks.Math.Sum e_is(nin=2, k={1,K_r}) annotation (Placement(transformation(extent={{-26,-7},{-12,7}})));
-  Modelica.Blocks.Logical.ZeroCrossing zeroCrossing annotation (Placement(transformation(extent={{36,32},{16,52}})));
-  Modelica.Blocks.Sources.BooleanConstant alwaysOn(k=true) annotation (Placement(transformation(extent={{40,14},{30,24}})));
+  Modelica.Blocks.Math.Sum e_meas(nin=2, k={1,K_r}) annotation (Placement(transformation(extent={{-24,-7},{-10,7}})));
+
   parameter Real k=0.5 "Gain of controller";
   parameter SI.Time Ti=150 "Time constant of controller";
-  Modelica.Blocks.Math.Sum G(nin=2, k={1,-1}) annotation (Placement(transformation(extent={{2,65},{16,79}})));
+  Modelica.Blocks.Math.Sum G(nin=2, k={-1,1}) annotation (Placement(transformation(extent={{2,65},{16,79}})));
   SI.Power P_sec_set_total = sum(P_sec_set);
 public
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower_tielineIs annotation (Placement(transformation(extent={{62,-100},{82,-80}})));
+  parameter SI.Power P_SB_max=57e6 "Total reserved secondary balancing power";
 equation
   if not isExternalTielineSetpoint then
     P_tie_set_internal = 0;
@@ -153,15 +158,12 @@ equation
   connect(P_SB_max_neg, SecondaryControlActivation.P_R_neg) annotation (Line(points={{72,100},{72,60},{64,60},{64,12}}, color={0,0,127}));
   connect(P_tie_set_internal, e_set.u[1]) annotation (Line(points={{-76,20},{-58,20},{-58,-28.7},{-27.4,-28.7}}, color={0,0,127}));
   connect(f_n.y, e_set.u[2]) annotation (Line(points={{-49,-48},{-44,-48},{-40,-48},{-40,-27.3},{-27.4,-27.3}}, color={0,0,127}));
-  connect(changeSign.y, e_is.u[1]) annotation (Line(points={{-63,66},{-56,66},{-32,66},{-32,-0.7},{-27.4,-0.7}}, color={0,0,127}));
-  connect(f_is.f, e_is.u[2]) annotation (Line(points={{-73.6,-14},{-36,-14},{-36,0.7},{-27.4,0.7}}, color={0,0,127}));
-  connect(zeroCrossing.y, H_lfr.trigger) annotation (Line(points={{15,42},{4,42},{4,22},{15.8,22},{15.8,10.6}}, color={255,0,255}));
-  connect(alwaysOn.y, zeroCrossing.enable) annotation (Line(points={{29.5,19},{26,19},{26,30}}, color={255,0,255}));
-  connect(G.y, zeroCrossing.u) annotation (Line(points={{16.7,72},{24,72},{24,70},{44,70},{44,42},{38,42}}, color={0,0,127}));
-  connect(e_is.y, H_lfr.u_s) annotation (Line(points={{-11.3,0},{4,0}}, color={0,0,127}));
-  connect(e_set.y, H_lfr.u_m) annotation (Line(points={{-11.3,-28},{16,-28},{16,-12}}, color={0,0,127}));
+  connect(changeSign.y, e_meas.u[1]) annotation (Line(points={{-63,66},{-56,66},{-32,66},{-32,-0.7},{-25.4,-0.7}}, color={0,0,127}));
+  connect(f_is.f, e_meas.u[2]) annotation (Line(points={{-73.6,-14},{-36,-14},{-36,0.7},{-25.4,0.7}}, color={0,0,127}));
   connect(e_set.y, G.u[2]) annotation (Line(points={{-11.3,-28},{-4,-28},{-4,72.7},{0.6,72.7}}, color={0,0,127}));
-  connect(e_is.y, G.u[1]) annotation (Line(points={{-11.3,0},{-8,0},{-8,71.3},{0.6,71.3}}, color={0,0,127}));
+  connect(e_meas.y, G.u[1]) annotation (Line(points={{-9.3,0},{-8,0},{-8,71.3},{0.6,71.3}}, color={0,0,127}));
+  connect(e_set.y, H_lfr.u_s) annotation (Line(points={{-11.3,-28},{0,-28},{0,0},{4,0}}, color={0,0,127}));
+  connect(e_meas.y, H_lfr.u_m) annotation (Line(points={{-9.3,0},{-8,0},{-8,-20},{16,-20},{16,-12}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
                                                                      preserveAspectRatio=false)),
                                                                        Icon(coordinateSystem(extent={{-100,-100},{100,100}}, preserveAspectRatio=false)));

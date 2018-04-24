@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Heat.SolarThermal.Check;
 model TestCollectorFieldFluidCycle
-  //___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+  //________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -119,11 +121,14 @@ model TestCollectorFieldFluidCycle
     m_flow_min=0.05,
     k_PID=10,
     T_set=358.15,
-    Delta_p=50000) annotation (Placement(transformation(extent={{156,40},{186,64}})));
+    Delta_p=50000,
+    T_stor=273.15 + 75)
+                   annotation (Placement(transformation(extent={{156,40},{186,64}})));
 
   ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pumpVLE_L1_simple annotation (Placement(transformation(extent={{-34,24},{-14,44}})));
 
   inner ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-90,60},{-70,80}})));
+  Components.Sensors.TemperatureSensor temperatureSensor annotation (Placement(transformation(extent={{102,40},{122,60}})));
 equation
   // _____________________________________________
   //
@@ -171,6 +176,11 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(controller.P_drive, pumpVLE_L1_simple.P_drive) annotation (Line(points={{158,58},{-24,58},{-24,46}}, color={0,0,127}));
+  connect(temperatureSensor.port, valveVLE_L1_2.outlet) annotation (Line(
+      points={{112,40},{100,40},{100,34}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(temperatureSensor.T, controller.T_in) annotation (Line(points={{123,50},{126,50},{126,52},{134,52},{134,54.4},{158,54.4}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{200,100}})),
     experiment(
       StopTime=3.1536e+007,
@@ -192,7 +202,7 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(no remarks)</p>
+<p>Note that the inlet temperature should never fall below 0 &deg;C. A possible controller for this case can be looked at under TransiEnt.Producer.Heat.SolarThermal.Controller.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

@@ -1,28 +1,56 @@
 within TransiEnt.Components.Sensors.RealGas;
 model CompositionSensor "One Port VLE Composition Sensor"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
 
   extends TransiEnt.Components.Sensors.RealGas.Base.RealGas_SensorBase;
-  outer TransiEnt.SimCenter simCenter;
+
+  // _____________________________________________
+  //
+  //        Constants and Hidden Parameters
+  // _____________________________________________
+
+  // _____________________________________________
+  //
+  //             Visible Parameters
+  // _____________________________________________
 
   parameter Integer compositionDefinedBy=1 "Output gives mass or mole fraction"  annotation(Dialog(group="Fundamental Definitions"),choices(choice = 1 "mass", choice = 2 "mole", __Dymola_radioButtons=true));
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
 
   Modelica.Blocks.Interfaces.RealOutput fraction[medium.nc](
     final quantity="MassFraction",
@@ -30,6 +58,17 @@ model CompositionSensor "One Port VLE Composition Sensor"
     annotation (Placement(transformation(extent={{44,60},{64,80}},  rotation=
            0), iconTransformation(extent={{100,-10},{120,10}})));
 
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
+  Modelica.SIunits.MolarMass molarMass=fluid.M;
 protected
   TILMedia.VLEFluid_ph fluid(
     vleFluidType=medium,
@@ -40,6 +79,11 @@ protected
     deactivateTwoPhaseRegion=true)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
 if compositionDefinedBy == 1 then
   fraction[1:medium.nc-1] = {fluid.xi[i] for i in 1:medium.nc-1};
@@ -48,6 +92,12 @@ else
   fraction[1:medium.nc-1] = {fluid.x[i] for i in 1:medium.nc-1};
   fraction[medium.nc] = 1-sum(fluid.x[i] for i in 1:medium.nc-1);
 end if;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
  annotation (Diagram(graphics), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                      graphics={
        Polygon(

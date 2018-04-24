@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.DNIDHI_Input;
 model Radiation_InclinedSurface
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -42,7 +44,6 @@ model Radiation_InclinedSurface
   //
   //             Variable Declarations
   // _____________________________________________
-
   Real DtR "conversion factor from degree to radian";
 
   Real J "daycount";
@@ -169,11 +170,8 @@ equation
     IAM=1;
   end if;
 
-  if DNI_in * (cos((90-gamma_s)*DtR)) > 0 then
-    Edir_horizontal = DNI_in * (cos((90-gamma_s)*DtR));
-  else
-    Edir_horizontal = 0;
-  end if;
+  Edir_horizontal = max(0,DNI_in * sin(gamma_s*DtR));
+
   if DHI_in > 0 then
     Edif_horizontal = DHI_in;
   else
@@ -189,13 +187,9 @@ equation
   end if;
 
   //diffuse irradiation on tilted surface according to Klucher
-  if GHI<=0.0001 then
-    F=0;
-    Edif_inclined=0;
-  else
-    F=1-(Edif_horizontal/GHI)^2;
+
+    F=1-(Edif_horizontal/(max(0.0001,GHI))^2);
     Edif_inclined=Edif_horizontal*((1+cos(Tilt*DtR))/2)*(1+F*sin(Tilt*DtR/2)^3)*(1+F*cos(theta_gen*DtR)^2*cos(gamma_s*DtR)^3)*((100-Soiling)/100);
-  end if;
 
   Eground_inclined=GHI*Albedo*(1-cos(Tilt*DtR))/2*(100-Soiling)/100;
 

@@ -1,26 +1,37 @@
 within TransiEnt.Basics.Blocks;
 model SplineLim "Spline smoothed limiter"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
 extends Modelica.Blocks.Interfaces.SISO;
-  parameter Real uMax = 1 "Maximum";
-  parameter Real uMin = -uMax "Minimum";
-  parameter Real thres(max=0.5, min=Modelica.Constants.eps) = 0.1 "Share of (uMax-uMin) from which on spline interpolation shall be used";
+
+  // _____________________________________________
+  //
+  //        Constants and Hidden Parameters
+  // _____________________________________________
+
   final parameter Real lim=(uMax-uMin)*thres;
 
   final parameter Real xa=uMin - lim*sqrt(2);
@@ -37,6 +48,35 @@ protected
   final parameter Real dyb=1;
   parameter Real[4] coef1(fixed=false);
   parameter Real[4] coef2(fixed=false);
+
+  // _____________________________________________
+  //
+  //               Visible Parameters
+  // _____________________________________________
+
+public
+  parameter Real uMax = 1 "Maximum";
+  parameter Real uMin = -uMax "Minimum";
+  parameter Real thres(max=0.5, min=Modelica.Constants.eps) = 0.1 "Share of (uMax-uMin) from which on spline interpolation shall be used";
+
+
+  // _____________________________________________
+  //
+  //     Private Functions (only for plotResult protected function)
+  // _____________________________________________
+
+  //   function plotResult
+  //   constant String resultFileName = "InsertModelNameHere.mat";
+  //   algorithm
+  //     TransiEnt.Basics.Functions.plotResult(resultFileName);
+  //     createPlot(...); // obtain content by calling function plotSetup() in the commands window
+  //     //add ,filename=resultFileName at the end of first createPlot command
+  //   end plotResult;
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
 
 initial equation
   assert(uMax >= uMin, "Limiter: Limits must be consistent. However, uMax (=" + String(uMax) +
@@ -60,6 +100,12 @@ equation
     elseif u > xa and u < xb then coef1[1] + u*coef1[2] + u^2*coef1[3] + u^3*coef1[4]
     elseif u > xc and u < xd then coef2[1] + u*coef2[2] + u^2*coef2[3] + u^3*coef2[4]
     else u));
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
 
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics), Icon(coordinateSystem(

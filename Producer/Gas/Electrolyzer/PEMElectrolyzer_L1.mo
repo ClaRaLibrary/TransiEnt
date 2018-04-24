@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Gas.Electrolyzer;
 model PEMElectrolyzer_L1 "Proton exchange membrane electrolyzer"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -79,6 +81,7 @@ protected
     input SI.Power P_el "Consumed electric power";
     input SI.Energy W_el "Consumed electric energy";
     input SI.Mass mass_H2 "Produced hydrogen mass";
+    input SI.Mass mass_H2O "Consumed water mass";
     input SI.Efficiency eta "Efficiency";
   end Outline;
 
@@ -158,13 +161,23 @@ protected
     Cspec_demAndRev_el=Cspec_demAndRev_el,
     Cspec_demAndRev_other=Cspec_demAndRev_other,
     P_el=P_el,
-    other_flow=m_flow_water) annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
+    other_flow=m_flow_water,
+    produces_P_el=false,
+    produces_Q_flow=false,
+    consumes_Q_flow=false,
+    produces_H_flow=false,
+    consumes_H_flow=false,
+    produces_other_flow=false,
+    produces_m_flow_CDE=false,
+    consumes_m_flow_CDE=false)
+                             annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
 public
   inner Summary summary(
     outline(
       P_el=P_el,
       W_el=collectCosts.W_el_demand,
       mass_H2=mass_H2,
+      mass_H2O=specificWaterConsumption*mass_H2,
       eta=eta),
     gasPortOut(
       mediumModel=medium,

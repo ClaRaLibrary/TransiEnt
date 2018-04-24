@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.Engines;
 model Engine_idealGas "Motorblock for ideal gas combustion and choosable mechanical and thermal behavior"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -32,6 +34,13 @@ model Engine_idealGas "Motorblock for ideal gas combustion and choosable mechani
   // _____________________________________________
   parameter SI.SpecificEnthalpy NCV_const = 40e6 "set to zero for composition dependent NCV calculation";
   parameter Real lambda = 1;
+
+  parameter SI.PressureDifference Delta_p_nom=1e5 "Nominal pressure drop in heat flow model";
+  parameter SI.MassFlowRate m_flow_nom=heatFlowModel.simCenter.m_flow_nom "Nominal mass flow rate in heat flow model";
+
+  //Initialization
+  parameter Modelica.SIunits.Temperature T_init=293.15 "|Initialization||Initial temperature of medium in heat exchangers in heat flow model";
+  parameter Modelica.SIunits.Pressure p_init=6e5 "|Initialization||Initial pressure of medium in heat exchangers in heat flow model";
 
   // _____________________________________________
   //
@@ -54,7 +63,11 @@ model Engine_idealGas "Motorblock for ideal gas combustion and choosable mechani
 
   CombustionModel combustionModel(final lambda=lambda) annotation(Placement(transformation(extent={{-36,24},{-6,56}})));
   MechanicModel mechanicModel(redeclare function efficiencyFunction = efficiencyFunction) annotation(Placement(transformation(extent={{-36,-16},{-6,16}})));
-  HeatFlowModel heatFlowModel annotation(Placement(transformation(extent={{-36,-62},{-6,-34}})));
+  HeatFlowModel heatFlowModel(
+    Delta_p_nom=Delta_p_nom,
+    m_flow_nom=m_flow_nom,
+    T_init=T_init,
+    p_init=p_init)            annotation(Placement(transformation(extent={{-36,-62},{-6,-34}})));
 
 equation
   if switch then

@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.HeatExchanger;
 model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and one fluid with fixed temperature at one end"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -26,7 +28,7 @@ model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and o
 
   extends ClaRa.Basics.Icons.HEX03;
   import SI = Modelica.SIunits;
-  import Modelica.Constants.eps;
+  //import Modelica.Constants.eps;
 
   // _____________________________________________
   //
@@ -46,6 +48,8 @@ model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and o
 
   parameter Boolean fixedTemperatureRealGas=true "true if the real gas temperature is fixed" annotation(Dialog(group="Heat Transfer"));
   parameter SI.Temperature T_out_fixed=293.15 "Fixed temperature of one of the mediums at its outlet" annotation(Dialog(group="Heat Transfer"));
+
+  parameter Real eps=1e-10 "Small number under which equations change due to small mass flows" annotation(Dialog(group="Numerics"));
 
   // _____________________________________________
   //

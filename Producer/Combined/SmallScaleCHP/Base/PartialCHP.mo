@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Combined.SmallScaleCHP.Base;
 partial model PartialCHP "Model consisting of replaceable engine and generator and control interface"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -42,9 +44,11 @@ partial model PartialCHP "Model consisting of replaceable engine and generator a
   replaceable TransiEnt.Producer.Combined.SmallScaleCHP.Specifications.Dachs_HKA_G_5_5kW Specification constrainedby TransiEnt.Producer.Combined.SmallScaleCHP.Base.BaseCHPSpecification "|Specification|Record containing technical data of CHP" annotation (choicesAllMatching=true);
   replaceable model Motorblock = TransiEnt.Components.Gas.Engines.Engine_idealGas constrainedby TransiEnt.Components.Gas.Engines.Base.PartialEngine_idealGas "|Specification|Engine model containing mechanic, thermal, and combustion model" annotation(choicesAllMatching=true);
   replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator generator constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "|Specification|Electric generator model" annotation (choicesAllMatching, Placement(transformation(extent={{50,-18},{76,7}})));
+  replaceable function EfficiencyFunction = TransiEnt.Basics.Functions.efficiency_linear constrainedby TransiEnt.Basics.Functions.efficiency_base "|Specification|Efficiency function" annotation (choicesAllMatching=true);
 
-  replaceable function EfficiencyFunction = TransiEnt.Basics.Functions.efficiency_linear "|Specification|Efficiency function" annotation (choicesAllMatching=true);
   parameter SI.Temperature T_site=290 "|Specification|Average ambient temperature at plant site";
+  parameter SI.PressureDifference Delta_p_nom=1e5 "|Specification|Nominal pressure drop in heat flow model";
+  parameter SI.MassFlowRate m_flow_nom=motorblock.heatFlowModel.simCenter.m_flow_nom "|Specification|Nominal mass flow rate in heat flow model";
 
   //Combustion
   parameter SI.SpecificEnthalpy NCV_const=40e6 "|Combustion|Constant value for net calorific value (set to 0 for medium dependent NCV calculation)";
@@ -123,18 +127,27 @@ public
     H_flow=Q_flow_fuel,
     m_flow_CDE=-m_flow_CDE,
     E_n=0,
-    Cspec_demAndRev_gas_fuel=Cspec_demAndRev_gas_fuel) annotation (Placement(transformation(extent={{-20,-100},{0,-80}})));
+    Cspec_demAndRev_gas_fuel=Cspec_demAndRev_gas_fuel,
+    consumes_P_el=false,
+    consumes_Q_flow=false,
+    produces_H_flow=false,
+    produces_other_flow=false,
+    consumes_other_flow=false,
+    consumes_m_flow_CDE=false)                         annotation (Placement(transformation(extent={{-20,-100},{0,-80}})));
 
   // _____________________________________________
   //
   //          Instances of other Classes
   // _____________________________________________
-protected
   Motorblock motorblock(
     final Specification=Specification,
     final T_site=T_site,
     final NCV_const=NCV_const,
-    final lambda=lambda) annotation (Placement(transformation(extent={{-46,-16},{38,70}})));
+    final lambda=lambda,
+    Delta_p_nom=Delta_p_nom,
+    m_flow_nom=m_flow_nom,
+    T_init=T_init,
+    p_init=p_init)       annotation (Placement(transformation(extent={{-46,-16},{38,70}})));
 protected
   ClaRa.Components.Sensors.SensorVLE_L1_T returnTemperatureSensor(medium=WaterMedium) annotation (Placement(transformation(extent={{-6,-55},{-21,-40}})));
   ClaRa.Components.Sensors.SensorVLE_L1_T supplyTemperatureSensor(medium=WaterMedium) annotation (Placement(transformation(extent={{29,-40},{15,-26}})));
@@ -227,11 +240,7 @@ equation
       smooth=Smooth.None));
   annotation (
     Dialog(group="Characteristics"),
-    choicesAllMatching=true,
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-    Placement(transformation(extent={{24,-38},{44,-18}})),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}}), graphics),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             100,100}}),
         graphics),

@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model TotalFeedInStorageController "Controller to control the electrolyzer and storage system for feeding into a natural gas grid"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -41,6 +43,7 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
   parameter SI.ActivePower P_el_min=0.02*P_el_n "Maximum power of the electrolyzer" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.ActivePower P_el_max=3*P_el_n "Maximum power of the electrolyzer" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.ActivePower P_el_overload=1.5*P_el_n "Power at which the overload region of the electrolyzer begins" annotation(Dialog(group="Fundamental Definitions"));
+  parameter SI.ActivePower P_el_cooldown=P_el_n "Power below which cooldown starts" annotation(Dialog(group="Fundamental Definitions"));
   parameter Modelica.SIunits.Efficiency eta_n(
     min=0,
     max=1)=0.75 "Nominal efficiency coefficient (min = 0, max = 1)" annotation(Dialog(group="Fundamental Definitions"));
@@ -60,6 +63,8 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
 
   parameter SI.Pressure p_maxLow=29e5 "|Controller|Lower limit of the maximum pressure in storage";
   parameter SI.Pressure p_maxHigh=30e5 "|Controller|Upper limit of the maximum pressure in storage";
+
+  parameter Boolean StoreAllHydrogen=false "|Controller|All Hydrogen is stored before beeing fed in";
 
   // _____________________________________________
   //
@@ -122,7 +127,7 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
         rotation=270,
         origin={-60,26})));
 protected
-  TransiEnt.Producer.Gas.Electrolyzer.Controller.FeedInStorageTWVController feedInStorageTWVController annotation (Placement(transformation(extent={{-10,-46},{10,-26}})));
+  TransiEnt.Producer.Gas.Electrolyzer.Controller.FeedInStorageTWVController feedInStorageTWVController(StoreAllHydrogen=StoreAllHydrogen) annotation (Placement(transformation(extent={{-10,-46},{10,-26}})));
   Modelica.Blocks.Math.Feedback feedback annotation (Placement(transformation(extent={{-10,10},{10,-10}},
         rotation=270,
         origin={60,-60})));
@@ -131,7 +136,9 @@ protected
     P_el_overload=P_el_overload,
     t_overload=t_overload,
     coolingToHeatingRatio=coolingToHeatingRatio,
-    startState=startState) annotation (Placement(transformation(
+    startState=startState,
+    P_el_cooldown=P_el_cooldown)
+                           annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-60,-12})));

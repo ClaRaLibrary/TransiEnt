@@ -1,22 +1,24 @@
 within TransiEnt.Examples.Hamburg;
 model ElectricGrid "Example of an electric grid with several generators, frequency control and economic dispatch models"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Example;
 
@@ -569,10 +571,18 @@ equation
           lineColor={175,175,175},
           pattern=LinePattern.Dash)}),
     experiment(
-      StopTime=86400,
+      StopTime=18000,
       Interval=900,
-      Tolerance=1e-006),
+      __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput(events=false),
     Icon(coordinateSystem(extent={{-300,-240},{300,160}})),
-    __Dymola_Commands(executeCall=TransiEnt.Examples.Hamburg.ElectricGenerationPark.plotResult() "Plot example results"));
+    __Dymola_Commands(executeCall=TransiEnt.Examples.Hamburg.ElectricGenerationPark.plotResult() "Plot example results"),
+    __Dymola_experimentFlags(
+      Advanced(
+        EvaluateAlsoTop=false,
+        GenerateVariableDependencies=false,
+        OutputModelicaCode=false),
+      Evaluate=true,
+      OutputCPUtime=true,
+      OutputFlatModelica=false));
 end ElectricGrid;

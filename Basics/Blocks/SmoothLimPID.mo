@@ -1,27 +1,57 @@
 within TransiEnt.Basics.Blocks;
 block SmoothLimPID "P, PI, PD, and PID controller with smoothed limited output, anti-windup compensation and setpoint weighting"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   import Modelica.Blocks.Types.InitPID;
   import Modelica.Blocks.Types.Init;
   import Modelica.Blocks.Types.SimpleController;
   extends Modelica.Blocks.Interfaces.SVcontrol;
   output Real controlError = u_s - u_m "Control error (set point - measurement)";
+
+  // _____________________________________________
+  //
+  //        Constants and Hidden Parameters
+  // _____________________________________________
+protected
+  parameter Boolean with_I = controllerType==SimpleController.PI or
+                             controllerType==SimpleController.PID annotation(Evaluate=true, HideResult=true);
+  parameter Boolean with_D = controllerType==SimpleController.PD or
+                             controllerType==SimpleController.PID annotation(Evaluate=true, HideResult=true);
+public
+  Modelica.Blocks.Sources.Constant Dzero(k=0) if not with_D annotation (
+      Placement(transformation(extent={{-30,20},{-20,30}}, rotation=0)));
+  Modelica.Blocks.Sources.Constant Izero(k=0) if not with_I annotation (
+      Placement(transformation(extent={{10,-55},{0,-45}}, rotation=0)));
+
+  constant Modelica.SIunits.Time unitTime=1 annotation (HideResult=true);
+
+  // _____________________________________________
+  //
+  //               Visible Parameters
+  // _____________________________________________
 
   parameter .Modelica.Blocks.Types.SimpleController controllerType=
          .Modelica.Blocks.Types.SimpleController.PID "Type of controller";
@@ -66,7 +96,13 @@ block SmoothLimPID "P, PI, PD, and PID controller with smoothed limited output, 
           "Initialization"));
 //   parameter Boolean strict=false "= true, if strict limits with noEvent(..)"
 //     annotation (Evaluate=true, choices(checkBox=true), Dialog(tab="Advanced"));
-  constant Modelica.SIunits.Time unitTime=1 annotation (HideResult=true);
+
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
   Modelica.Blocks.Math.Add addP(k1=wp, k2=-1) annotation (Placement(
         transformation(extent={{-80,40},{-60,60}}, rotation=0)));
   Modelica.Blocks.Math.Add addD(k1=wd, k2=-1) if with_D annotation (Placement(
@@ -105,16 +141,12 @@ block SmoothLimPID "P, PI, PD, and PID controller with smoothed limited output, 
     uMax=yMax,
     uMin=yMin,
     thres=thres) annotation (Placement(transformation(extent={{70,-10},{90,10}}, rotation=0)));
-protected
-  parameter Boolean with_I = controllerType==SimpleController.PI or
-                             controllerType==SimpleController.PID annotation(Evaluate=true, HideResult=true);
-  parameter Boolean with_D = controllerType==SimpleController.PD or
-                             controllerType==SimpleController.PID annotation(Evaluate=true, HideResult=true);
-public
-  Modelica.Blocks.Sources.Constant Dzero(k=0) if not with_D annotation (
-      Placement(transformation(extent={{-30,20},{-20,30}}, rotation=0)));
-  Modelica.Blocks.Sources.Constant Izero(k=0) if not with_I annotation (
-      Placement(transformation(extent={{10,-55},{0,-45}}, rotation=0)));
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 initial equation
   if initType==InitPID.InitialOutput then
      gainPID.y = y_start;
@@ -130,6 +162,11 @@ equation
 //          "LimPID: During initialization the limits have been switched off.\n" +
 //          "After initialization, the output y (=" + String(y) +
 //          ") is outside of the limits of yMin (=" + String(yMin) +") and yMax (=" + String(yMax) + ")");
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
   connect(u_s, addP.u1) annotation (Line(points={{-120,0},{-96,0},{-96,56},{
           -82,56}}, color={0,0,127}));

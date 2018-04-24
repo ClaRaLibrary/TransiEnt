@@ -1,27 +1,30 @@
 within TransiEnt.Basics.Media.Gases.Check;
 model TestMediaRecords
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   parameter Modelica.SIunits.Temperature T_start=283.15;
-  parameter Modelica.SIunits.Pressure p_start=1.014e5+16e5;
+  parameter Modelica.SIunits.Pressure p_start=1.014e5+120e5;
   Modelica.SIunits.Temperature T;
   Modelica.SIunits.Pressure p;
+  Modelica.SIunits.Temperature T_ph_H2_SRK=TILMedia.VLEFluidFunctions.temperature_phxi(vleFluid_H2SRK_pT.vleFluidType,1e5,vleFluid_H2SRK_pT.h);
 
   Modelica.Blocks.Sources.Ramp T_ramp(
     height=50,
@@ -146,6 +149,16 @@ model TestMediaRecords
       T=T,
      redeclare Gas_VDIWA_SG7_var gasType)
            annotation (Placement(transformation(extent={{46,-32},{66,-12}})));
+   TILMedia.VLEFluid_ph vleFluid_H2SRK_ph(
+    deactivateTwoPhaseRegion=true,
+    redeclare VLE_VDIWA_H2_SRK vleFluidType,
+    h=vleFluid_H2SRK_pT.h,
+    p=100000) annotation (Placement(transformation(extent={{2,-76},{22,-56}})));
+   TILMedia.VLEFluid_ph vleFluid_H2_ph(
+    deactivateTwoPhaseRegion=true,
+    redeclare VLE_VDIWA_H2 vleFluidType,
+    h=vleFluid_H2_pT.h,
+    p=100000) annotation (Placement(transformation(extent={{2,-100},{22,-80}})));
 equation
   p=p_ramp.y;
   T=T_ramp.y;
@@ -154,6 +167,19 @@ equation
           extent={{-98,96},{94,50}},
           lineColor={28,108,200},
           horizontalAlignment=TextAlignment.Left,
-          textString="Note that enthalpies are zero at reference state (STP: 273.15 K, 1e5 Pa)")}),
+          textString="Note that enthalpies are zero at reference state (STP: 273.15 K, 1e5 Pa)"),                                 Text(
+          extent={{28,-70},{98,-86}},
+          lineColor={28,108,200},
+          horizontalAlignment=TextAlignment.Left,
+          textString="Same enthalpy as vleFluid_H2SRK_pT
+Look at change in temperature due to pressure drop:
+- Joule-Thomson-Effect increases temperature of H2
+- SRK EOS gives realistic temperature increase
+
+Same enthalpy as vleFluid_H2_pT
+Look at change in temperature due to pressure drop:
+- Joule-Thomson-Effect increases temperature of H2
+- PR EOS gives too small temperature increase
+")}),
     experiment(StopTime=130));
 end TestMediaRecords;

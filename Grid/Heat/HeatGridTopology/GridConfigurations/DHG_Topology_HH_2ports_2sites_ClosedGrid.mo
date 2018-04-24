@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
 model DHG_Topology_HH_2ports_2sites_ClosedGrid
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -236,9 +238,9 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_max=2e6,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     sign=1,
-    y_start=2e6) annotation (Placement(transformation(
+    y_start=2e6,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-238,372})));
@@ -264,12 +266,12 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     u_ref=3e5,
     y_ref=2e6,
     y_max=4e6,
     y_start=2e6,
-    sign=-1) annotation (Placement(transformation(
+    sign=-1,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-428,206})));
@@ -280,13 +282,13 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
   ClaRa.Components.Utilities.Blocks.LimPID PID2(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     u_ref=4.6e5,
     y_ref=1,
     y_max=1,
     y_start=1,
     Tau_i=100,
-    sign=1) annotation (Placement(transformation(
+    sign=1,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={18,300})));
@@ -301,13 +303,13 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
   ClaRa.Components.Utilities.Blocks.LimPID PID3(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     u_ref=4.6e5,
     y_ref=1,
     y_max=1,
     y_start=1,
     Tau_i=100,
-    sign=1) annotation (Placement(transformation(
+    sign=1,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={18,194})));
@@ -327,12 +329,12 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     u_ref=3e5,
     y_max=4e6,
     y_start=2e6,
     sign=-1,
-    y_ref=1e6) annotation (Placement(transformation(
+    y_ref=1e6,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-282,114})));
@@ -344,12 +346,12 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     y_max=4e6,
     sign=-1,
     u_ref=1.9e5,
     y_ref=0.5e6,
-    y_start=1e6) annotation (Placement(transformation(
+    y_start=1e6,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-152,114})));
@@ -510,9 +512,9 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_max=2e6,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     sign=1,
-    y_start=2e6) annotation (Placement(transformation(
+    y_start=2e6,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={200,374})));
@@ -539,12 +541,12 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     u_ref=3e5,
     y_ref=2e6,
     y_max=4e6,
     y_start=2e6,
-    sign=-1) annotation (Placement(transformation(
+    sign=-1,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={428,208})));
@@ -560,12 +562,12 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     u_ref=3e5,
     y_max=4e6,
     y_start=2e6,
     sign=-1,
-    y_ref=1e6) annotation (Placement(transformation(
+    y_ref=1e6,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={338,116})));
@@ -577,12 +579,12 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
     Tau_i=10,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
     y_max=4e6,
     sign=-1,
     u_ref=1.9e5,
     y_ref=0.5e6,
-    y_start=1e6) annotation (Placement(transformation(
+    y_start=1e6,
+    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={180,118})));

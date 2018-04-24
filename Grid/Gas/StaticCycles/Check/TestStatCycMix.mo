@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycMix
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Checkmodel;
 
@@ -34,9 +36,9 @@ model TestStatCycMix
     h_start=ones(pipe1.N_cv)*Init.pipe1.h_in,
     length=100,
     diameter_i=0.4,
-    productMassBalance=true,
     N_cv=2,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4) annotation (Placement(transformation(
+    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4,
+    massBalance=1)                                                                                                            annotation (Placement(transformation(
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={-12,86})));
@@ -53,9 +55,9 @@ model TestStatCycMix
         Init.pipe2.p_in,
         Init.pipe2.p_out,
         pipe2.N_cv),
-    productMassBalance=true,
     N_cv=6,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4) annotation (Placement(transformation(
+    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4,
+    massBalance=1)                                                                                                            annotation (Placement(transformation(
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={52,86})));
@@ -113,7 +115,7 @@ model TestStatCycMix
         Init.pipe1.p_out,
         pipe3.N_cv),
     N_cv=2,
-    productMassBalance=false,
+    massBalance=3,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4) annotation (Placement(transformation(
         extent={{14,-5},{-14,5}},
         rotation=180,
@@ -132,7 +134,7 @@ model TestStatCycMix
         Init.pipe2.p_out,
         pipe4.N_cv),
     N_cv=6,
-    productMassBalance=false,
+    massBalance=3,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4) annotation (Placement(transformation(
         extent={{14,-5},{-14,5}},
         rotation=180,

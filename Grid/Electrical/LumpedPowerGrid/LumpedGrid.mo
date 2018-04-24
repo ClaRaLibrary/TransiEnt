@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Electrical.LumpedPowerGrid;
 model LumpedGrid
   import TransiEnt;
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -45,6 +47,7 @@ model LumpedGrid
   parameter Real k_pr=1 "Participation factor primary control"   annotation(Dialog(group="Primary Frequency Control"));
 
   // **** Secondary Frequency Control
+  parameter Boolean isSecondaryControlActive=false;
   parameter Real P_sec_grad_max_star=0.12/60 "Maximum secondary power gradient (= 12% in five Minutes)"  annotation(Dialog(enable=false, group="Secondary Frequency Control"));
   parameter Real beta=0.5 "Gain of secondary balancing power"  annotation(Dialog(enable=false, group="Secondary Frequency Control"));
   parameter Real T_r=150 "Time constant of secondary balancing power"    annotation(Dialog(enable=false, group="Secondary Frequency Control"));
@@ -77,7 +80,9 @@ model LumpedGrid
     beta=beta,
     T_r=T_r,
     lambda_sec=lambda_sec,
-    kpf=kpf) annotation (Placement(transformation(extent={{-38,-36},{40,36}})));
+    kpf=kpf,
+    isSecondaryControlActive=isSecondaryControlActive)
+             annotation (Placement(transformation(extent={{-38,-36},{40,36}})));
 
   Components.GlobalStatisticsAdapter LocalStatisticsAdapter annotation (Placement(transformation(extent={{-100,60},{-58,100}})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(rotation=0, extent={{90,-10},{110,10}})));

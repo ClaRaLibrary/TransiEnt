@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Electrical.Wind.Base;
 partial model PartialWindTurbine "Base class for wind turbine models"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -43,11 +45,11 @@ partial model PartialWindTurbine "Base class for wind turbine models"
   //                  Parameters
   // _____________________________________________
 
-  parameter Real height_data = 120 "height where wind velocity was measured"  annotation (Dialog(tab="Wind Turbine Data"));
-  parameter Real height_hub = 120 "height of hub of wind turbine" annotation (Dialog(tab="Wind Turbine Data"));
+  parameter Real height_data = 120 "height where wind velocity was measured"  annotation (Dialog(tab="Wind speed calculation"));
+  parameter Real height_hub = 120 "height of hub of wind turbine" annotation (Dialog(tab="Wind speed calculation"));
   parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.WindOnshore "Type of primary energy carrier for co2 emissions global statistics" annotation (Dialog(group="Statistics"), HideResult=true);
-  parameter Characteristics.RoughnessCharacteristics.OwnValue Roughness "Roughness factor of ground for calculation of Wind velocity in different heights";
-  parameter Boolean use_v_wind_input = true "False, outer simCenter.ambientConditions will be used";
+  parameter Characteristics.RoughnessCharacteristics.OwnValue Roughness=TransiEnt.Producer.Electrical.Wind.Characteristics.RoughnessCharacteristics.OwnValue() "Roughness factor of ground for calculation of Wind velocity in different heights" annotation (__Dymola_choicesAllMatching=true,Dialog(tab="Wind speed calculation"));
+  parameter Boolean use_v_wind_input = true "False, outer simCenter.ambientConditions will be used" annotation(Dialog(tab="Wind speed calculation"));
   parameter TransiEnt.Basics.Types.TypeOfResource typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable "Type of energy resource for global model statistics" annotation (
     Dialog(group="Statistics"),
     HideResult=true,
@@ -82,9 +84,8 @@ equation
   //           Characteristic equations
   // _____________________________________________
 
-  if height_data == height_hub then
-
   //Calculation of wind velocity in hub height via roughness length
+  if height_data == height_hub then
      v_windHub = v_wind;
    else
      v_windHub = v_wind*Modelica.Math.log(height_hub/Roughness.RoughnessLength)/Modelica.Math.log(height_data/Roughness.RoughnessLength);
@@ -98,8 +99,7 @@ equation
 
   // _____________________________________________
 
-    annotation (Placement(transformation(extent={{90,-10},{110,10}}),
-        iconTransformation(extent={{76,-22},{110,10}})),
+    annotation (
               Icon(graphics={      Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
@@ -152,33 +152,8 @@ equation
           fillColor={255,240,19},
           fillPattern=FillPattern.Solid,
           textString="v_Wind")}), Diagram(coordinateSystem(preserveAspectRatio=
-            false, extent={{-100,-100},{100,100}}), graphics),                                                  choicesAllMatching,
-              Documentation(info="<html>
-</html>"), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {100,100}}), graphics),
+            false, extent={{-100,-100},{100,100}}), graphics),
                 Documentation(info="<html>
-<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
-<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Pascal Dubucq (dubucq@tuhh.de) <span style=\"font-family: MS Shell Dlg 2;\">on 01.10.2014</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Quality check (Code conventions) by Rebekka Denninger on 01.10.2016</span></p>
-</html>"),      Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

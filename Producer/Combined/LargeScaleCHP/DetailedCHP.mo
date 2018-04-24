@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP;
 model DetailedCHP "Example of how a detailed thermodynamic cycle model of a steam turbine combined heat and power plant can be modeled"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -26,6 +28,8 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
 
   extends TransiEnt.Producer.Combined.LargeScaleCHP.Base.PartialCHP;
 
+  Real test3;
+  Real test4;
  // _____________________________________________
   //
   //           Instances of other Classes
@@ -33,12 +37,13 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
 
   ClaRa.Components.TurboMachines.Turbines.SteamTurbineVLE_L1 steamTurbine_HP(
     medium=simCenter.fluid1,
-    rho_nom=55.7,
-    m_flow_nom=120,
-    p_nom=18100000,
-    Pi=38.49e5/181e5,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
-    p_in_start=18100000) annotation (Placement(transformation(extent={{-324,114},{-314,134}})));
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
+    p_nom=NOM.p_LS_out_nom,
+    m_flow_nom=NOM.m_flow_nom,
+    rho_nom=NOM.Turbine_HP.rho_in,
+    p_in_start=INIT.Turbine_HP.p_in,
+    p_out_start=INIT.Turbine_HP.p_out,
+    Pi=NOM.Turbine_HP.p_out/NOM.Turbine_HP.p_in) annotation (Placement(transformation(extent={{-324,114},{-314,134}})));
 
   ClaRa.Visualisation.DynDisplay dynDisplay(
     unit="MW",
@@ -47,32 +52,35 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     annotation (Placement(transformation(extent={{148,-2},{228,20}})));
   ClaRa.SubSystems.Boiler.SteamGenerator_L1 steamGenerator(
     medium=simCenter.fluid1,
-    Delta_p_nomHP=218.482e5 - 184.864e5,
-    Delta_p_nomIP=37.75e5 - 37.46e5,
-    m_flow_nomLS=112.8,
-    p_LS_nom=18486400,
-    p_RH_nom=3746000,
-    T_LS=808.15,
-    T_RH_nom=808.05)
+    p_LS_nom=NOM.p_LS_out_nom,
+    m_flow_nomLS=NOM.m_flow_nom,
+    p_RH_nom=NOM.p_RS_out_nom,
+    T_LS=NOM.T_LS_nom,
+    T_RH_nom=NOM.T_RS_nom,
+    Delta_p_nomHP=NOM.Delta_p_LS_nom,
+    Delta_p_nomIP=NOM.Delta_p_RS_nom,
+    CL_mLS_QF_=NOM.boiler.CharLine_Delta_p_HP_mLS_,
+    CL_pLS_QF_=NOM.boiler.CharLine_Delta_p_IP_mRS_)
     annotation (Placement(transformation(extent={{-394,112},{-374,144}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massFlowSource_h(
     medium=simCenter.fluid1,
     m_flow_const=108.326,
     variable_m_flow=true,
-    h_const=1365e3,
-    showData=true) annotation (Placement(transformation(
+    showData=true,
+    h_const=NOM.source_steamGenerator.h,
+    p_nom=NOM.source_steamGenerator.p)
+                   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-382,32})));
-  Modelica.Blocks.Sources.RealExpression m_flow_boiler(y=1*Q_flow_boiler.y*
-        steamGenerator.m_flow_nomLS)
-    annotation (Placement(transformation(extent={{-436,-2},{-394,20}})));
+        origin={-384,62})));
+  Modelica.Blocks.Sources.RealExpression m_flow_boiler(y=1*steamGenerator.QF_setl_*steamGenerator.m_flow_nomLS)
+    annotation (Placement(transformation(extent={{-442,36},{-400,58}})));
   ClaRa.Visualisation.Quadruple quadruple3
     annotation (Placement(transformation(extent={{-366,154},{-336,172}})));
   ClaRa.Visualisation.Quadruple quadruple4
     annotation (Placement(transformation(extent={{-398,144},{-428,162}})));
   ClaRa.Visualisation.Quadruple quadruple5
-    annotation (Placement(transformation(extent={{-370,24},{-340,42}})));
+    annotation (Placement(transformation(extent={{-372,54},{-342,72}})));
   ClaRa.Visualisation.DynDisplay dynDisplay1(
     unit="MW",
     varname="Power output MP turbine",
@@ -80,81 +88,31 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     annotation (Placement(transformation(extent={{136,50},{212,72}})));
   ClaRa.Components.VolumesValvesFittings.Fittings.SplitVLE_L2_Y split_MP2_LP_A4(
     medium=simCenter.fluid1,
-    h_nom=2793e3,
-    p_nom=1.034e5,
     preciseTwoPhase=false,
-    h_start=2793e3,
-    m_flow_out_nom={19,45},
-    p_start=1.034e5,
-    initOption=0) annotation (Placement(transformation(extent={{-236,54},{-216,34}})));
+    initOption=0,
+    p_nom=NOM.split3_2.p,
+    h_nom=NOM.split3_2.h1,
+    h_start=INIT.split3_2.h1,
+    p_start=INIT.split3_2.p,
+    m_flow_out_nom={NOM.split3_2.m_flow_2,NOM.split3_2.m_flow_3})
+                  annotation (Placement(transformation(extent={{-236,54},{-216,34}})));
   ClaRa.Components.TurboMachines.Turbines.SteamTurbineVLE_L1 steamTurbine_LP(
     medium=simCenter.fluid1,
-    m_flow_nom=21.025,
-    rho_nom=0.252,
-    Pi=0.017e5/0.472e5,
-    p_nom=47200,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
-    p_in_start=47200) annotation (Placement(transformation(extent={{-186,114},{-176,134}})));
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
+    p_nom=NOM.Turbine_LP.p_in,
+    Pi=NOM.Turbine_LP.p_out/NOM.Turbine_LP.p_in,
+    rho_nom=NOM.Turbine_LP.rho_in,
+    p_in_start=INIT.Turbine_LP.p_in,
+    p_out_start=INIT.Turbine_LP.p_out,
+    m_flow_nom=NOM.Turbine_LP.m_flow) annotation (Placement(transformation(extent={{-186,114},{-176,134}})));
   ClaRa.Visualisation.DynDisplay dynDisplay2(
     unit="MW",
     varname="Power output LP turbine",
     x1=steamTurbine_LP.summary.outline.P_mech/1e6)
     annotation (Placement(transformation(extent={{142,104},{216,126}})));
-  ClaRa.Visualisation.Quadruple quadruple10
-    annotation (Placement(transformation(extent={{-140,-214},{-108,-198}})));
-  ClaRa.Visualisation.Quadruple quadruple14
-    annotation (Placement(transformation(extent={{-146,-138},{-114,-122}})));
-  ClaRa.Components.TurboMachines.Pumps.PumpVLE_L2_affinity pump_1(
-    medium=simCenter.fluid1,
-    steadyStateTorque=false,
-    clearSection=0.01,
-    exp_rpm=0.15,
-    exp_flow=2.8,
-    showExpertSummary=true,
-    rpm_fixed=4600,
-    Tau_stab=1e-2,
-    volume_fluid=0.02,
-    eta_hyd_nom=0.82,
-    useMechanicalPort=true,
-    J=10,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L2,
-    rpm_nom=3000,
-    h_start=470.0e3,
-    m_flow_nom=600,
-    p_start(displayUnit="Pa") = 20.0e5,
-    V_flow_max=0.608 + 0.2,
-    Delta_p_max=22e5 - 9.81e5,
-    p_nom=2000000,
-    initOption=0) annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-114,-106})));
-  ClaRa.Components.TurboMachines.Pumps.PumpVLE_L2_affinity pump_2(
-    medium=simCenter.fluid1,
-    steadyStateTorque=false,
-    clearSection=0.01,
-    exp_rpm=0.15,
-    exp_flow=2.8,
-    showExpertSummary=true,
-    rpm_fixed=4600,
-    Tau_stab=1e-2,
-    eta_hyd_nom=0.82,
-    useMechanicalPort=true,
-    J=10,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L2,
-    h_start=226640,
-    rpm_nom=3000,
-    volume_fluid=0.2,
-    m_flow_nom=600,
-    V_flow_max=0.2 + 0.586,
-    Delta_p_max=2.0e5 + 10e5 - 4.5e5,
-    p_nom=1000000,
-    p_start(displayUnit="Pa") = 11.5e5,
-    initOption=0) annotation (Placement(transformation(
-        extent={{10,10},{-10,-10}},
-        rotation=0,
-        origin={-114,-178})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_phxi pressureSink_ph2(medium=simCenter.fluid1, p_const=0.115e5, h_const=55.575e3) annotation (Placement(transformation(
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_phxi pressureSink_ph2(medium=simCenter.fluid1,
+    p_const=NOM.sink_green2.p,
+    h_const=NOM.sink_green2.h)                                                                                                      annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-178,24})));
@@ -165,13 +123,6 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     varname="Total generated Power ",
     x1=(steamTurbine_HP.summary.outline.P_mech + steamTurbine_MP1.summary.outline.P_mech + steamTurbine_MP2.summary.outline.P_mech + steamTurbine_LP.summary.outline.P_mech)/1e6)
     annotation (Placement(transformation(extent={{126,154},{210,172}})));
-  Modelica.Mechanics.Rotational.Sources.Speed shaft(useSupport=false)
-    annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={-98,-72})));
-  Modelica.Blocks.Sources.RealExpression Q_flow_boiler(y=Q_flow_set_SG.Q_flow_input/363e6)
-    annotation (Placement(transformation(extent={{-426,110},{-406,130}})));
   ClaRa.Visualisation.DynDisplay dynDisplay5(
     unit="%",
     varname="Electric efficiency (bruto)",
@@ -183,57 +134,57 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     x1=(steamTurbine_HP.summary.outline.P_mech + steamTurbine_MP1.summary.outline.P_mech + steamTurbine_MP2.summary.outline.P_mech + steamTurbine_LP.summary.outline.P_mech + (-1*A4.summary.outline.Q_flow) + (-1*A5.summary.outline.Q_flow))/Q_flow_set_SG.Q_flow_input*100)
     annotation (Placement(transformation(extent={{156,-146},{236,-100}})));
   ClaRa.Components.HeatExchangers.IdealShell_L2 idealShell_L2_1(medium=simCenter.fluid1, redeclare model PressureLoss =
-        ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (             Delta_p_nom=0.1)) annotation (Placement(transformation(
+        ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (             Delta_p_nom=0.1),
+    m_flow_nom=NOM.condenser.m_flow_in,
+    p_nom=NOM.condenser.p_in,
+    h_nom=NOM.condenser.h_in,
+    h_start=INIT.condenser.h_in,
+    p_start=INIT.condenser.p_in)                                                                                               annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=90,
         origin={-176,62})));
   ClaRa.Components.BoundaryConditions.PrescribedHeatFlowScalar
     prescribedHeatFlowScalar
     annotation (Placement(transformation(extent={{-140,52},{-160,72}})));
-  Modelica.Blocks.Sources.RealExpression Q_flow_cond(y=-46.939e6) annotation (
-      Placement(transformation(
-        extent={{20,-11},{-20,11}},
-        rotation=0,
-        origin={-104,62})));
   TransiEnt.Components.Boundaries.Mechanical.Power prescribedPower(change_sign=true) annotation (Placement(transformation(extent={{-70,18},{-50,38}})));
-  Modelica.Blocks.Sources.RealExpression P_out(y=(steamTurbine_HP.summary.outline.P_mech
-         + steamTurbine_MP1.summary.outline.P_mech + steamTurbine_MP2.summary.outline.P_mech
-         + steamTurbine_LP.summary.outline.P_mech))
-    annotation (Placement(transformation(
-        extent={{-20,-11},{20,11}},
+  Modelica.Blocks.Sources.RealExpression P_out_mech(y=(steamTurbine_HP.summary.outline.P_mech + steamTurbine_MP1.summary.outline.P_mech + steamTurbine_MP2.summary.outline.P_mech + steamTurbine_LP.summary.outline.P_mech)) annotation (Placement(transformation(
+        extent={{-23,-10.5},{23,10.5}},
         rotation=0,
-        origin={-100,44})));
+        origin={-103,44.5})));
   TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) annotation (choicesAllMatching=true, Placement(transformation(
         extent={{-12.5,-12},{12.5,12}},
         rotation=0,
-        origin={11.5,28})));
-  TransiEnt.Components.Mechanical.ConstantInertia constantInertia(J=10e6, w(fixed=false, start=2*50*Modelica.Constants.pi)) annotation (Placement(transformation(extent={{-44,18},{-24,38}})));
+        origin={13.5,30})));
+  TransiEnt.Components.Mechanical.ConstantInertia constantInertia(J=10e6, w(fixed=true, start=2*50*Modelica.Constants.pi))  annotation (Placement(transformation(extent={{-44,18},{-24,38}})));
   ClaRa.Components.TurboMachines.Turbines.SteamTurbineVLE_L1 steamTurbine_MP1(
     medium=simCenter.fluid1,
-    m_flow_nom=105,
-    rho_nom=10.08,
-    Pi=4.272e5/36.707e5,
-    p_nom=3670700,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
-    p_in_start=3670700) annotation (Placement(transformation(extent={{-302,112},{-292,132}})));
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
+    p_nom=NOM.Turbine_IP.p_in,
+    m_flow_nom=NOM.Turbine_IP.m_flow,
+    Pi=NOM.Turbine_IP.p_out/NOM.Turbine_IP.p_in,
+    rho_nom=NOM.Turbine_IP.rho_in,
+    p_in_start=INIT.Turbine_IP.p_in,
+    p_out_start=INIT.Turbine_IP.p_out) annotation (Placement(transformation(extent={{-302,112},{-292,132}})));
   ClaRa.Components.VolumesValvesFittings.Fittings.SplitVLE_L2_Y split_MP1_MP2_A5(
     medium=simCenter.fluid1,
-    h_nom=2931e3,
-    h_start=2931e3,
     preciseTwoPhase=false,
-    m_flow_out_nom={40,64},
-    p_nom=4.27e5,
-    p_start=4.27e5,
-    initOption=0) annotation (Placement(transformation(extent={{-274,54},{-254,34}})));
+    initOption=0,
+    p_nom=NOM.split3_1.p,
+    h_nom=NOM.split3_1.h1,
+    h_start=INIT.split3_1.h1,
+    p_start=INIT.split3_1.p,
+    m_flow_out_nom={NOM.split3_1.m_flow_2,NOM.split3_1.m_flow_3})
+                  annotation (Placement(transformation(extent={{-274,54},{-254,34}})));
   ClaRa.Components.TurboMachines.Turbines.SteamTurbineVLE_L1 steamTurbine_MP2(
     medium=simCenter.fluid1,
-    m_flow_nom=77,
-    rho_nom=1.5,
-    p_nom=427200,
-    Pi=1.034e5/4.272e5,
-    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.EfficiencyModels.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
-    p_in_start=4.272e5) annotation (Placement(transformation(extent={{-250,112},{-240,132}})));
-  ClaRa.Components.HeatExchangers.HEXvle2vle_L3_2ph_CU_ntu A4(
+    redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
+    p_nom=NOM.Turbine_IP2.p_in,
+    Pi=NOM.Turbine_IP2.p_out/NOM.Turbine_IP2.p_in,
+    rho_nom=NOM.Turbine_IP2.rho_in,
+    p_in_start=INIT.Turbine_IP2.p_in,
+    p_out_start=INIT.Turbine_IP2.p_out,
+    m_flow_nom=NOM.Turbine_IP2.m_flow) annotation (Placement(transformation(extent={{-250,112},{-240,132}})));
+  ClaRa.Components.HeatExchangers.HEXvle2vle_L3_2ph_CU_simple A4(
     length=10.334,
     diameter=1.924,
     z_in_shell=3.409,
@@ -241,7 +192,6 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     N_baffle=0,
     radius_flange=0.65,
     mass_struc=0,
-    m_flow_nom_shell=45.3407,
     N_passes=2,
     diameter_i=0.022,
     diameter_o=0.025,
@@ -252,7 +202,6 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     redeclare model HeatTransferTubes =
         ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L2 (                      alpha_nom=8725.7),
     m_flow_nom_tubes=600,
-    h_nom_shell=2727e3,
     N_tubes=2146,
     length_tubes=9.118,
     redeclare model PressureLossShell =
@@ -262,15 +211,21 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     p_nom_tubes=10e5,
     h_nom_tubes=221.2e3,
     h_start_tubes=221.2e3,
-    p_nom_shell(
-      displayUnit="Pa",
-      nominal=3e5) = 1.81e5,
     z_in_tubes=0.548,
     z_out_tubes=2.898,
     Out1(m_flow(start=-45.0)),
-    p_start_shell=1.008e5 - 0.2e5,
-    p_start_tubes=11.0e5) annotation (Placement(transformation(extent={{-222,-104},{-202,-84}})));
-  ClaRa.Components.HeatExchangers.HEXvle2vle_L3_2ph_CU_ntu A5(
+    p_nom_shell(
+      displayUnit="Pa",
+      nominal=3e5) = NOM.A4.p_in,
+    h_nom_shell=NOM.A4.h_in,
+    h_liq_start=INIT.A4.h_in,
+    h_vap_start=INIT.A4.h_out,
+    p_start_shell=INIT.A4.p_in,
+    level_rel_start=0.3,
+    p_start_tubes=19.5e5,
+    m_flow_nom_shell=NOM.A4_m_flow_nom)
+                          annotation (Placement(transformation(extent={{-222,-104},{-202,-84}})));
+  ClaRa.Components.HeatExchangers.HEXvle2vle_L3_2ph_CU_simple A5(
     N_baffle=0,
     mass_struc=0,
     N_passes=2,
@@ -287,12 +242,6 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     z_in_shell=3.259,
     z_out_shell=0.523,
     radius_flange=0.639,
-    m_flow_nom_shell=47.013,
-    p_nom_shell(
-      displayUnit="Pa",
-      nominal=3e5) = 4.272e5,
-    h_nom_shell=2830.12e3,
-    p_start_shell=4.272e5,
     redeclare model HeatTransfer_Shell =
         ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L3 (                      alpha_nom={10372,10372}),
     redeclare model HeatTransferTubes =
@@ -305,7 +254,17 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     h_start_tubes=395.85e3,
     redeclare model PressureLossTubes =
         ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (             Delta_p_nom=0.2e5),
-    p_start_tubes=9.8e5) annotation (Placement(transformation(extent={{-224,-44},{-204,-24}})));
+    p_nom_shell(
+      displayUnit="Pa",
+      nominal=3e5) = NOM.A5.p_in,
+    h_nom_shell=NOM.A5.h_in,
+    h_liq_start=INIT.A5.h_in,
+    h_vap_start=INIT.A5.h_out,
+    p_start_shell=INIT.A5.p_in,
+    level_rel_start=0.3,
+    p_start_tubes=19e5,
+    m_flow_nom_shell=NOM.A5_m_flow_nom)
+                         annotation (Placement(transformation(extent={{-224,-44},{-204,-24}})));
   ClaRa.Visualisation.DynDisplay dynDisplay4(
     unit="MW_th",
     decimalSpaces=2,
@@ -321,11 +280,6 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
         extent={{-7,-10},{7,10}},
         rotation=0,
         origin={-369,-188})));
-  Modelica.Blocks.Sources.Ramp ramp1(
-    duration=3600,
-    offset=1,
-    startTime=2*3600,
-    height=0) annotation (Placement(transformation(extent={{-300,-166},{-280,-144}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi pressureSink_pT_3(
     medium=simCenter.fluid1,
     m_flow_nom=45.3407,
@@ -333,7 +287,7 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     p_const=0.5e5) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={-376,-122})));
+        origin={-372,-122})));
   ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L2(
     medium=simCenter.fluid1,
     showExpertSummary=true,
@@ -346,13 +300,7 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
         m_flow_nom=45))        annotation (Placement(transformation(
         extent={{10,-6},{-10,6}},
         rotation=0,
-        origin={-260,-122})));
-  Modelica.Blocks.Sources.Ramp ramp3(
-    duration=3600,
-    offset=1,
-    startTime=2*3600,
-    height=0)
-    annotation (Placement(transformation(extent={{-300,-102},{-280,-80}})));
+        origin={-262,-122})));
   ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L3(
     medium=simCenter.fluid1,
     opening_const_=1,
@@ -365,24 +313,7 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
         m_flow_nom=35))            annotation (Placement(transformation(
         extent={{-10,-6},{10,6}},
         rotation=270,
-        origin={-216,24})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L4(
-    medium=simCenter.fluid1,
-    showExpertSummary=true,
-    redeclare model PressureLoss =
-   ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (
-         Kvs=2100),
-    openingInputIsActive=false,
-    opening_const_=1)          annotation (Placement(transformation(
-        extent={{-10,-6},{10,6}},
-        rotation=0,
-        origin={-204,140})));
-  Modelica.Blocks.Sources.Ramp ramp2(
-    duration=2,
-    startTime=3000,
-    height=0*500*2*3.1416/60,
-    offset=3000*2*3.1416/60)
-    annotation (Placement(transformation(extent={{-120,-6},{-100,14}})));
+        origin={-214,24})));
   ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L5(
     redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (
@@ -393,22 +324,10 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
         extent={{-10,-6},{10,6}},
         rotation=270,
         origin={-252,26})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L6(
-    redeclare model PressureLoss =
-        ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (
-         Kvs=2100),
-    opening_const_=1,
-    openingInputIsActive=false)
-                               annotation (Placement(transformation(
-        extent={{-10,-6},{10,6}},
-        rotation=0,
-        origin={-264,138})));
 
   ClaRa.Visualisation.Quadruple quadruple1
     annotation (Placement(transformation(extent={{-354,100},{-316,112}})));
 
-  ClaRa.Visualisation.Quadruple quadruple2
-    annotation (Placement(transformation(extent={{-290,176},{-252,188}})));
   ClaRa.Visualisation.Quadruple quadruple6
     annotation (Placement(transformation(extent={{-358,-136},{-320,-124}})));
   ClaRa.Visualisation.Quadruple quadruple8
@@ -421,28 +340,6 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     annotation (Placement(transformation(extent={{-300,10},{-262,22}})));
   ClaRa.Visualisation.Quadruple quadruple13
     annotation (Placement(transformation(extent={{-206,-6},{-168,6}})));
-  ClaRa.Visualisation.Quadruple quadruple15
-    annotation (Placement(transformation(extent={{-182,-34},{-144,-22}})));
-  ClaRa.Visualisation.Quadruple quadruple16
-    annotation (Placement(transformation(extent={{-178,-62},{-140,-50}})));
-  ClaRa.Visualisation.Quadruple quadruple17
-    annotation (Placement(transformation(extent={{-176,-102},{-138,-90}})));
-  ClaRa.Visualisation.Quadruple quadruple18
-    annotation (Placement(transformation(extent={{-178,-128},{-140,-116}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L7(
-    opening_const_=1,
-    openingInputIsActive=false,
-    redeclare model PressureLoss =
-        ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticNominalPoint (
-        Delta_p_nom=0.2e5,
-        rho_in_nom=950,
-        m_flow_nom=600),
-    fluidIn(d(start=900.0)),
-    useStabilisedMassFlow=true)
-                               annotation (Placement(transformation(
-        extent={{10,-6},{-10,6}},
-        rotation=270,
-        origin={-194,-72})));
   ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1(
     medium=simCenter.fluid1,
     showExpertSummary=true,
@@ -460,6 +357,69 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
   ClaRa.Visualisation.Quadruple quadruple19
     annotation (Placement(transformation(extent={{-212,84},{-174,96}})));
 
+  TransiEnt.Producer.Combined.LargeScaleCHP.Base.InitCycle_CHP INIT annotation (Placement(transformation(extent={{-424,-154},{-404,-134}})));
+  TransiEnt.Producer.Combined.LargeScaleCHP.Base.InitCycle_CHP NOM annotation (Placement(transformation(extent={{-424,-184},{-404,-164}})));
+  Modelica.Blocks.Continuous.LimPID PID_steamGenerator(
+    yMax=1,
+    yMin=0,
+    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
+    y_start=0.5,
+    Ti=1,
+    Td=0.001,
+    k=0.000000000003) annotation (Placement(transformation(extent={{-422,112},{-402,132}})));
+  Modelica.Blocks.Sources.RealExpression PowerOutput(y=-epp.P) annotation (Placement(transformation(extent={{-440,74},{-414,98}})));
+  Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-324,202},{-344,222}})));
+  ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pumpVLE_L1_simple annotation (Placement(transformation(extent={{-136,-108},{-156,-88}})));
+  Modelica.Blocks.Continuous.LimPID PID_pump_DH(
+    yMin=0,
+    Ti=1,
+    Td=0.001,
+    yMax=800000,
+    y_start=600000,
+    k=100,
+    initType=Modelica.Blocks.Types.InitPID.InitialOutput) annotation (Placement(transformation(extent={{-162,-46},{-142,-66}})));
+  ClaRa.Components.Sensors.SensorVLE_L1_p sensorVLE_L1_p annotation (Placement(transformation(extent={{-172,-38},{-152,-18}})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_boiler4(y=20e5)
+    annotation (Placement(transformation(extent={{-190,-66},{-170,-46}})));
+  Modelica.Blocks.Continuous.LimPID PID_HEIKOS(
+    yMin=0,
+    yMax=2,
+    y_start=2,
+    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
+    k=0.000000000001,
+    Ti=0.1,
+    Td=10000)         annotation (Placement(transformation(extent={{-400,-38},{-380,-18}})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_is_input(y=Q_flow_is) annotation (Placement(transformation(extent={{-428,-58},{-408,-38}})));
+  Modelica.Blocks.Math.Add add annotation (Placement(transformation(extent={{-360,-54},{-340,-34}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter_A5(uMax=1, uMin=0) annotation (Placement(transformation(extent={{-324,-54},{-304,-34}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter_A4(uMax=1, uMin=0) annotation (Placement(transformation(extent={{-324,-20},{-304,0}})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_cond(y=-(steamTurbine_LP.summary.outlet.h - TILMedia.VLEFluidFunctions.bubbleSpecificEnthalpy_pxi(simCenter.fluid1, NOM.p_condenser))*steamTurbine_LP.summary.outlet.m_flow) annotation (Placement(transformation(
+        extent={{20,-11},{-20,11}},
+        rotation=0,
+        origin={-104,62})));
+  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L6(
+    redeclare model PressureLoss =
+        ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (
+         Kvs=2100),
+    opening_const_=1,
+    openingInputIsActive=false)
+                               annotation (Placement(transformation(
+        extent={{-10,-6},{10,6}},
+        rotation=0,
+        origin={-266,144})));
+  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L4(
+    medium=simCenter.fluid1,
+    showExpertSummary=true,
+    redeclare model PressureLoss =
+   ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (
+         Kvs=2100),
+    openingInputIsActive=false,
+    opening_const_=1)          annotation (Placement(transformation(
+        extent={{-10,-6},{10,6}},
+        rotation=0,
+        origin={-204,144})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_boiler5(y=-1)
+    annotation (Placement(transformation(extent={{-400,-76},{-380,-56}})));
 equation
 
   // _____________________________________________
@@ -467,8 +427,10 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  Q_flow_input = Q_flow_boiler.y;
+  Q_flow_input = 0;
 
+ test3=outlet.h_outflow;
+ test4=inStream(inlet.h_outflow);
   // _____________________________________________
   //
   //               Connect Statements
@@ -482,7 +444,7 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(massFlowSource_h.steam_a, steamGenerator.feedwater) annotation (Line(
-      points={{-382,42},{-384,42},{-384,112.4}},
+      points={{-384,72},{-384,112.4}},
       color={0,131,169},
       thickness=0.5));
   connect(steamGenerator.eye_RH, quadruple3.eye) annotation (Line(
@@ -492,27 +454,15 @@ equation
       points={{-388,144.6},{-394,144.6},{-394,153},{-398,153}},
       color={190,190,190}));
   connect(massFlowSource_h.eye, quadruple5.eye) annotation (Line(
-      points={{-374,42},{-340,42},{-340,33},{-370,33}},
+      points={{-376,72},{-342,72},{-342,63},{-372,63}},
       color={190,190,190}));
   connect(steamGenerator.livesteam, steamTurbine_HP.inlet) annotation (Line(
       points={{-384,144},{-384,176},{-330,176},{-330,130},{-324,130}},
       color={0,131,169},
       thickness=0.5));
-  connect(pump_2.eye, quadruple10.eye) annotation (Line(
-      points={{-125,-172},{-125,-206},{-140,-206}},
-      color={190,190,190}));
-  connect(pump_1.eye, quadruple14.eye) annotation (Line(
-      points={{-103,-112},{-146,-112},{-146,-130}},
-      color={190,190,190}));
   connect(pressureSink_ph2.eye, quadruple7.eye) annotation (Line(
       points={{-170,34},{-170,32},{-160,32}},
       color={190,190,190}));
-  connect(shaft.flange, pump_2.shaft) annotation (Line(
-      points={{-98,-82},{-98,-134},{-114,-134},{-114,-187.9}},
-      color={0,0,0}));
-  connect(shaft.flange, pump_1.shaft) annotation (Line(
-      points={{-98,-82},{-98,-90},{-114,-90},{-114,-96.1}},
-      color={0,0,0}));
   connect(idealShell_L2_1.inlet, steamTurbine_LP.outlet) annotation (Line(
       points={{-176,72},{-176,114}},
       color={0,131,169},
@@ -525,14 +475,9 @@ equation
       points={{-166,62},{-160,62}},
       color={167,25,48},
       thickness=0.5));
-  connect(prescribedHeatFlowScalar.Q_flow, Q_flow_cond.y) annotation (Line(
-      points={{-140,62},{-126,62}},
-      color={0,0,127}));
-  connect(P_out.y, prescribedPower.P_mech_set) annotation (Line(
-      points={{-78,44},{-60,44},{-60,39.8}},
-      color={0,0,127}));
+  connect(P_out_mech.y, prescribedPower.P_mech_set) annotation (Line(points={{-77.7,44.5},{-60,44.5},{-60,39.8}}, color={0,0,127}));
   connect(constantInertia.mpp_b, Generator.mpp) annotation (Line(
-      points={{-24,28},{-10,28},{-10,27.4},{-1.625,27.4}},
+      points={{-24,28},{-10,28},{-10,29.4},{0.375,29.4}},
       color={95,95,95}));
   connect(constantInertia.mpp_a, prescribedPower.mpp) annotation (Line(
       points={{-44,28},{-50,28}},
@@ -549,39 +494,20 @@ equation
       points={{-240,112},{-240,44},{-236,44}},
       color={0,131,169},
       thickness=0.5));
-  connect(pump_2.outlet, A4.In2) annotation (Line(
-      points={{-124,-178},{-190,-178},{-190,-98},{-202,-98}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(A5.Out2, pump_1.inlet) annotation (Line(
-      points={{-204,-28},{-136,-28},{-136,-106},{-124,-106}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(ramp3.y,valveVLE_L2. opening_in) annotation (Line(
-      points={{-279,-91},{-258.5,-91},{-258.5,-113},{-260,-113}},
-      color={0,0,127}));
   connect(A4.Out1, valveVLE_L2.inlet) annotation (Line(
-      points={{-212,-104},{-212,-122},{-250,-122}},
+      points={{-212,-104},{-212,-122},{-252,-122}},
       color={0,131,169},
       thickness=0.5));
   connect(valveVLE_L2.outlet, pressureSink_pT_3.steam_a) annotation (Line(
-      points={{-270,-122},{-366,-122}},
+      points={{-272,-122},{-318,-122},{-362,-122}},
       color={0,131,169},
       thickness=0.5));
   connect(split_MP2_LP_A4.outlet1, valveVLE_L3.inlet) annotation (Line(
-      points={{-216,44},{-216,34}},
+      points={{-216,44},{-216,40},{-216,34},{-214,34}},
       color={0,131,169},
       thickness=0.5));
   connect(valveVLE_L3.outlet, A4.In1) annotation (Line(
-      points={{-216,14},{-216,4},{-232,4},{-232,-54},{-212,-54},{-212,-84.2}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(split_MP2_LP_A4.outlet2, valveVLE_L4.inlet) annotation (Line(
-      points={{-226,54},{-226,140},{-214,140}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(valveVLE_L4.outlet, steamTurbine_LP.inlet) annotation (Line(
-      points={{-194,140},{-186,140},{-186,130}},
+      points={{-214,14},{-214,4},{-232,4},{-232,-54},{-212,-54},{-212,-84}},
       color={0,131,169},
       thickness=0.5));
   connect(split_MP1_MP2_A5.outlet1, valveVLE_L5.inlet) annotation (Line(
@@ -589,22 +515,11 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(valveVLE_L5.outlet, A5.In1) annotation (Line(
-      points={{-252,16},{-252,-12},{-214,-12},{-214,-24.2}},
+      points={{-252,16},{-252,-12},{-214,-12},{-214,-24}},
       color={0,131,169},
       thickness=0.5));
-  connect(valveVLE_L6.outlet, steamTurbine_MP2.inlet) annotation (Line(
-      points={{-254,138},{-252,138},{-252,128},{-250,128}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(split_MP1_MP2_A5.outlet2, valveVLE_L6.inlet) annotation (Line(
-      points={{-264,54},{-278,54},{-278,138},{-274,138}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(steamTurbine_MP1.eye, quadruple2.eye) annotation (Line(
-      points={{-291,116},{-292,116},{-292,182},{-290,182}},
-      color={190,190,190}));
   connect(pressureSink_pT_3.eye, quadruple6.eye) annotation (Line(
-      points={{-366,-130},{-358,-130}},
+      points={{-362,-130},{-362,-130},{-358,-130}},
       color={190,190,190}));
   connect(pressureSink_pT_2.eye, quadruple8.eye) annotation (Line(
       points={{-362,-196},{-360,-196},{-360,-194},{-356,-194}},
@@ -619,34 +534,8 @@ equation
       points={{-256,16},{-300,16}},
       color={190,190,190}));
   connect(valveVLE_L3.eye, quadruple13.eye) annotation (Line(
-      points={{-220,14},{-212,14},{-212,0},{-206,0}},
+      points={{-218,14},{-212,14},{-212,0},{-206,0}},
       color={190,190,190}));
-  connect(A5.eye2, quadruple15.eye) annotation (Line(
-      points={{-203,-26},{-192,-26},{-192,-28},{-182,-28}},
-      color={190,190,190}));
-  connect(A5.eye1, quadruple16.eye) annotation (Line(
-      points={{-210,-45},{-206,-45},{-206,-56},{-178,-56}},
-      color={190,190,190}));
-  connect(A4.eye2, quadruple17.eye) annotation (Line(
-      points={{-201,-86},{-190,-86},{-190,-96},{-176,-96}},
-      color={190,190,190}));
-  connect(A4.eye1, quadruple18.eye) annotation (Line(
-      points={{-208,-105},{-194,-105},{-194,-122},{-178,-122}},
-      color={190,190,190}));
-  connect(A4.Out2, valveVLE_L7.inlet) annotation (Line(
-      points={{-202,-88},{-198,-88},{-198,-82},{-194,-82}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(valveVLE_L7.outlet, A5.In2) annotation (Line(
-      points={{-194,-62},{-198,-62},{-198,-38},{-204,-38}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(m_flow_boiler.y, massFlowSource_h.m_flow) annotation (Line(
-      points={{-391.9,9},{-400.95,9},{-400.95,20},{-388,20}},
-      color={0,0,127}));
-  connect(Q_flow_boiler.y, steamGenerator.QF_setl_) annotation (Line(
-      points={{-405,120},{-412,120},{-412,122},{-396,122}},
-      color={0,0,127}));
   connect(A5.Out1, valveVLE_L1.inlet) annotation (Line(
       points={{-214,-44},{-232,-44},{-232,-188},{-252,-188}},
       color={0,131,169},
@@ -655,28 +544,71 @@ equation
       points={{-272,-188},{-362,-188}},
       color={0,131,169},
       thickness=0.5));
-  connect(ramp1.y, valveVLE_L1.opening_in) annotation (Line(
-      points={{-279,-155},{-279,-166.5},{-262,-166.5},{-262,-179}},
-      color={0,0,127}));
-  connect(ramp2.y, shaft.w_ref) annotation (Line(
-      points={{-99,4},{-98,4},{-98,-60}},
-      color={0,0,127}));
   connect(split_MP2_LP_A4.eye[1], quadruple19.eye) annotation (Line(
       points={{-216,50},{-212,50},{-212,90}},
       color={190,190,190}));
-  connect(pump_1.outlet, outlet) annotation (Line(
-      points={{-104,-106},{-104,-106},{-104,-104},{-2,-104},{-2,-26},{62,-26},{62,4},{100,4}},
-      color={0,131,169},
-      thickness=0.5));
-  connect(pump_2.inlet, inlet) annotation (Line(
-      points={{-104,-178},{128,-178},{128,-24},{100,-24}},
-      color={0,131,169},
-      thickness=0.5));
   connect(Generator.epp, epp) annotation (Line(
-      points={{24.125,27.88},{48,27.88},{48,28},{60,28},{60,60},{100,60}},
+      points={{26.125,29.88},{48,29.88},{48,30},{60,30},{60,60},{100,60}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set, Q_flow_set_SG.P) annotation (Line(points={{-84,144},{-86,144},{-86,108},{-86,108},{-7,108},{-7,102}}, color={0,0,127}));
+  connect(m_flow_boiler.y, massFlowSource_h.m_flow) annotation (Line(points={{-397.9,47},{-390,47},{-390,50}},   color={0,0,127}));
+  connect(P_set, gain.u) annotation (Line(points={{-84,144},{-86,144},{-86,108},{-124,108},{-124,212},{-322,212}},
+                                                                                                        color={0,0,127}));
+  connect(A4.In2, pumpVLE_L1_simple.outlet) annotation (Line(
+      points={{-202,-98},{-180,-98},{-156,-98}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(pumpVLE_L1_simple.inlet, inlet) annotation (Line(
+      points={{-136,-98},{-130,-98},{-130,-90},{-130,-24},{100,-24}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(sensorVLE_L1_p.p, PID_pump_DH.u_m) annotation (Line(points={{-151,-28},{-144,-28},{-144,-38},{-152,-38},{-152,-44}}, color={0,0,127}));
+  connect(PID_pump_DH.u_s, Q_flow_boiler4.y) annotation (Line(points={{-164,-56},{-166,-56},{-169,-56}}, color={0,0,127}));
+  connect(A5.Out2, T_out_sensor.port) annotation (Line(
+      points={{-204,-28},{-174,-28},{-174,4},{78,4},{78,4}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(A4.Out2, A5.In2) annotation (Line(
+      points={{-202,-88},{-198,-88},{-196,-88},{-196,-38},{-204,-38}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(pumpVLE_L1_simple.P_drive, PID_pump_DH.y) annotation (Line(points={{-146,-86},{-142,-86},{-142,-82},{-138,-82},{-138,-56},{-141,-56}}, color={0,0,127}));
+  connect(PID_HEIKOS.u_m, Q_flow_is_input.y) annotation (Line(points={{-390,-40},{-390,-40},{-390,-48},{-407,-48}}, color={0,0,127}));
+  connect(PID_HEIKOS.y, add.u1) annotation (Line(points={{-379,-28},{-374,-28},{-370,-28},{-370,-38},{-362,-38}}, color={0,0,127}));
+  connect(add.y, limiter_A5.u) annotation (Line(points={{-339,-44},{-332,-44},{-326,-44}}, color={0,0,127}));
+  connect(PID_HEIKOS.y, limiter_A4.u) annotation (Line(points={{-379,-28},{-370,-28},{-370,-10},{-326,-10}}, color={0,0,127}));
+  connect(prescribedHeatFlowScalar.Q_flow, Q_flow_cond.y) annotation (Line(points={{-140,62},{-136,62},{-126,62}}, color={0,0,127}));
+  connect(PID_steamGenerator.y, steamGenerator.QF_setl_) annotation (Line(points={{-401,122},{-401,122},{-396,122}}, color={0,0,127}));
+  connect(valveVLE_L2.opening_in, limiter_A4.y) annotation (Line(points={{-262,-113},{-262,-10},{-303,-10}}, color={0,0,127}));
+  connect(limiter_A5.y, valveVLE_L1.opening_in) annotation (Line(points={{-303,-44},{-294,-44},{-294,-160},{-284,-160},{-284,-160},{-262,-160},{-262,-179}}, color={0,0,127}));
+  connect(valveVLE_L6.outlet, steamTurbine_MP2.inlet) annotation (Line(
+      points={{-256,144},{-250,144},{-250,126},{-250,128}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(split_MP1_MP2_A5.outlet2,valveVLE_L6. inlet) annotation (Line(
+      points={{-264,54},{-274,54},{-274,62},{-282,62},{-282,144},{-276,144}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(split_MP2_LP_A4.outlet2,valveVLE_L4. inlet) annotation (Line(
+      points={{-226,54},{-226,144},{-214,144}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(valveVLE_L4.outlet, steamTurbine_LP.inlet) annotation (Line(
+      points={{-194,144},{-186,144},{-186,130}},
+      color={0,131,169},
+      thickness=0.5));
+  connect(add.u2, Q_flow_boiler5.y) annotation (Line(points={{-362,-50},{-372,-50},{-372,-66},{-379,-66}}, color={0,0,127}));
+  connect(PowerOutput.y, PID_steamGenerator.u_m) annotation (Line(points={{-412.7,86},{-412,86},{-412,110}}, color={0,0,127}));
+  connect(gain.y, PID_steamGenerator.u_s) annotation (Line(points={{-345,212},{-345,212},{-434,212},{-434,122},{-424,122}}, color={0,0,127}));
+  connect(A5.Out2, sensorVLE_L1_p.port) annotation (Line(
+      points={{-204,-28},{-200,-28},{-176,-28},{-176,-38},{-162,-38}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(Q_flow_set_pos.y, PID_HEIKOS.u_s) annotation (Line(points={{57.4,110},{54,110},{54,86},{120,86},{120,-204},{-436,-204},{-436,-28},{-402,-28}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-440,-220},{280,220}}),
                       graphics={
         Text(
@@ -696,7 +628,7 @@ equation
           lineColor={0,128,0},
           textString="LP"),
         Text(
-          extent={{-402,-52},{-238,-64}},
+          extent={{-446,22},{-282,10}},
           lineColor={0,0,255},
           textString="GruVos A4 und A5 from W1 (FK-Aspen)"),
         Text(

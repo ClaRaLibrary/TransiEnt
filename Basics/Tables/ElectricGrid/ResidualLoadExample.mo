@@ -1,25 +1,37 @@
 within TransiEnt.Basics.Tables.ElectricGrid;
 model ResidualLoadExample "Residual load of volatile renewable powers (measured 2015) with fixed powers for Hamburg 2050"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
 
   import TransiEnt;
   extends TransiEnt.Basics.Icons.TableIcon;
+
+  // _____________________________________________
+  //
+  //               Visible Parameters
+  // _____________________________________________
 
   parameter Boolean posResidualLoad = false "Set to true get only positive residual load power as output" annotation(Dialog(enable=not negResidualLoad));
   parameter Boolean negResidualLoad = false "Set to true get only negative residual load power as output" annotation(Dialog(enable=not posResidualLoad));
@@ -30,7 +42,18 @@ model ResidualLoadExample "Residual load of volatile renewable powers (measured 
   parameter Real share_BM_chp=0.443 "Share of biomass chp plants of total installed biomass capacity";
   parameter Real scaleFactor=1 "Output is multiplied with scaleFactor";
   parameter Modelica.Blocks.Types.Smoothness smoothness=simCenter.tableInterpolationSmoothness "Smoothness of table interpolation";
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
   inner TransiEnt.SimCenter simCenter;
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
 
   TransiEnt.Basics.Tables.ElectricGrid.ElectricityDemand_HH_900s_2012 RunOffWater(
     relativepath="electricity/RunOfWaterPlant_normalized_1J_2012.txt",
@@ -78,6 +101,11 @@ public
     relativepath="electricity/CHPPowerCurve_SLPGasHMF_capacityFactor_2012_3600s.txt",
     constantfactor=share_BM_chp*227e6) annotation (Placement(transformation(extent={{-80,-64},{-60,-44}})));
 
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
 
   if posResidualLoad then
@@ -87,6 +115,11 @@ equation
   else
     P_el = gain.y;
   end if;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
   connect(add.u2, multiSum.y) annotation (Line(points={{10,-6},{1.02,-6}},               color={0,0,127}));
   connect(add.y, gain.u) annotation (Line(points={{33,0},{32,0},{44,0}},          color={0,0,127}));
@@ -103,5 +136,29 @@ equation
           lineColor={28,108,200},
           textString="set to cover
 60 percent of
-heat demand")}),                                                                                    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+heat demand")}),                                                                                    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Example for the residual load of volatile renewable Powers with fixed powers for Hamburg in 2050.</p>
+<p>Renewable Powers measured in 2015</p>
+<p>Electricity Demand for Hamburg measured in 2012</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end ResidualLoadExample;

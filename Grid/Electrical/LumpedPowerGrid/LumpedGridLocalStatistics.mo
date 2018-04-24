@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Electrical.LumpedPowerGrid;
 model LumpedGridLocalStatistics "Model of generation and load in a lumped grid including load forecast errors (providing realistic frequency series)"
 
- //___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+ //________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -146,7 +148,7 @@ equation
   //               Connect Statements
   // _____________________________________________
   connect(PowerPlants.epp, Demand.epp) annotation (Line(
-      points={{-19.6,-30.76},{10.2,-30.76},{10.2,-46},{40.38,-46}},
+      points={{-21.2,-26.7},{10.2,-26.7},{10.2,-46},{40.38,-46}},
       color={0,135,135},
       thickness=0.5));
   connect(Demand.epp, epp) annotation (Line(
@@ -160,8 +162,7 @@ equation
   connect(P_tie_is, PowerPlants.P_tie_is) annotation (Line(points={{-38,100},{-38,2},{-32.4,2},{-32.4,-21.19}}, color={0,0,127}));
   connect(Load.y, Demand.P_el_set) annotation (Line(points={{71,18},{59,18},{59,-23.96}},       color={0,0,127}));
   connect(PowerPlants.P_el_set, PowerPlantsGen.y) annotation (Line(points={{-54.8,-18.29},{-54.8,18},{-25,18}}, color={0,0,127}));
-    annotation (Placement(transformation(extent={{-100,80},{-80,100}})),
-              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Rectangle(

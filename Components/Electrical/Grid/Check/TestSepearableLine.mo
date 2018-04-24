@@ -1,22 +1,24 @@
 within TransiEnt.Components.Electrical.Grid.Check;
 model TestSepearableLine
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends Basics.Icons.Checkmodel;
   Producer.Electrical.Conventional.Components.SimplePowerPlant Gen_A(P_el_n=3e9) annotation (Placement(transformation(extent={{-92,-16},{-72,4}})));
   Modelica.Blocks.Interaction.Show.RealValue realValue(use_numberPort=false, number=1e-9*Load.epp.P) annotation (Placement(transformation(extent={{40,26},{70,54}})));
@@ -25,7 +27,10 @@ model TestSepearableLine
     P_init=147e9,
     J=10*150e9/(100*3.14)^2,
     P_el_n=300e9,
-    primaryBalancingController(providedDroop=0.18/50/(3/150 - 0.18*0.01), maxValuePrCtrl=0.02)) annotation (Placement(transformation(extent={{-42,-86},{-22,-66}})));
+    primaryBalancingController(
+      maxGradientPrCtrl=0.01/30,
+      maxValuePrCtrl=0.01,
+      providedDroop=0.18*300e9/(3e9*50 - 0.18*150e9*0.5)))                                      annotation (Placement(transformation(extent={{-42,-86},{-22,-66}})));
 
   Modelica.Blocks.Sources.Constant Psched1(k=-147e9) annotation (Placement(transformation(extent={{-66,-66},{-46,-46}})));
   inner SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
@@ -39,7 +44,7 @@ model TestSepearableLine
         transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
-        origin={68,6})));
+        origin={70,16})));
 equation
   connect(Gen_A.epp, separableLine_L1_1.epp_1) annotation (Line(
       points={{-72.5,-0.4},{-59.25,-0.4},{-59.25,-4.1},{-45.9,-4.1}},
@@ -54,7 +59,7 @@ equation
       points={{-22.5,-70.4},{6,-70.4},{6,-18},{22.32,-18}},
       color={0,135,135},
       thickness=0.5));
-  connect(Load_A.y, Load.P_el_set) annotation (Line(points={{57,6},{54,6},{54,8},{50,8},{50,16},{38,16},{38,1.72}},       color={0,0,127}));
+  connect(Load_A.y, Load.P_el_set) annotation (Line(points={{59,16},{52,16},{50,16},{38,16},{38,1.72}},                   color={0,0,127}));
   connect(Psched1.y, Gen_A1.P_el_set) annotation (Line(points={{-45,-56},{-33.5,-56},{-33.5,-66.1}}, color={0,0,127}));
   connect(Psched.y, Gen_A.P_el_set) annotation (Line(points={{-77,38},{-72,38},{-72,12},{-83.5,12},{-83.5,3.9}}, color={0,0,127}));
 public
@@ -83,7 +88,7 @@ end plotResult;
     experiment(
       StopTime=300,
       __Dymola_NumberOfIntervals=1000,
-      Tolerance=1e-006,
+      Tolerance=1e-009,
       __Dymola_Algorithm="Dassl"),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput(equidistant=false));
 end TestSepearableLine;

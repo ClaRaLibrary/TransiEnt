@@ -1,42 +1,47 @@
 within TransiEnt.Producer.Electrical.Wind.Check;
 model TestPowerCurveWindPlant
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Basics.Tables.Ambient.Wind_Hamburg_Fuhlsbuettel_3600s_2012 wind_Hamburg_3600s_175m annotation (Placement(transformation(extent={{-76,-14},{-56,6}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{70,-16},{90,4}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-104,80},{-84,100}})));
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
   PowerCurveWindPlant windTurbine_L0_scale_SenvionM104(
-    PowerCurveChar=Characteristics.SenvionM104_3400kW(),
+    PowerCurveChar=TransiEnt.Producer.Electrical.Wind.Characteristics.SenvionM104_3400kW(),
     P_el_n=51e6,
-    height_data=175,
-    height_hub=125) annotation (Placement(transformation(extent={{-8,26},{12,46}})));
+    height_hub=100,
+    Roughness=TransiEnt.Producer.Electrical.Wind.Characteristics.RoughnessCharacteristics.Meadow(),
+    height_data=10)                                                                                 annotation (Placement(transformation(extent={{-8,26},{12,46}})));
   PowerCurveWindPlant windTurbine_L0_scale_EnerconE82(
-    PowerCurveChar=Characteristics.EnerconE82_2000kW(),
-    height_data=175,
-    height_hub=125) annotation (Placement(transformation(extent={{-8,-22},{12,-2}})));
+    PowerCurveChar=TransiEnt.Producer.Electrical.Wind.Characteristics.EnerconE82_2000kW(),
+    height_hub=100,
+    Roughness=TransiEnt.Producer.Electrical.Wind.Characteristics.RoughnessCharacteristics.Meadow(),
+    height_data=10)                                                                                 annotation (Placement(transformation(extent={{-8,-22},{12,-2}})));
   PowerCurveWindPlant windTurbine_L0_scale_VestasV164_Offshore(
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.WindOffshore,
-    height_data=100,
     P_el_n=68e6,
-    height_hub=100) annotation (Placement(transformation(extent={{-6,-70},{14,-50}})));
+    height_hub=100,
+    Roughness=TransiEnt.Producer.Electrical.Wind.Characteristics.RoughnessCharacteristics.Meadow(),
+    height_data=10)                                                                                 annotation (Placement(transformation(extent={{-6,-70},{14,-50}})));
   inner TransiEnt.Components.Boundaries.Ambient.AmbientConditions ambientConditions annotation (Placement(transformation(extent={{-60,80},{-40,100}})));
+  TransiEnt.Basics.Tables.Ambient.Wind_Hamburg_Fuhlsbuettel_3600s_2012 wind_Hamburg_Fuhlsbuettel_3600s_2012_1 annotation (Placement(transformation(extent={{-80,-16},{-60,4}})));
 equation
   connect(constantFrequency_L1_1.epp, windTurbine_L0_scale_SenvionM104.epp) annotation (Line(
       points={{69.9,-6.1},{36,-6.1},{36,41.6},{11.5,41.6}},
@@ -70,9 +75,9 @@ createPlot(id=1, position={0, 0, 793, 338}, y={"windTurbine_L0_scale_SenvionM104
 
 end plotResult;
 equation
-  connect(wind_Hamburg_3600s_175m.y1, windTurbine_L0_scale_SenvionM104.v_wind) annotation (Line(points={{-55,-4},{-32,-4},{-32,-6},{-32,42.1},{-6.9,42.1}},          color={0,0,127}));
-  connect(wind_Hamburg_3600s_175m.y1, windTurbine_L0_scale_EnerconE82.v_wind) annotation (Line(points={{-55,-4},{-40,-4},{-6.9,-4},{-6.9,-5.9}},          color={0,0,127}));
-  connect(wind_Hamburg_3600s_175m.y1, windTurbine_L0_scale_VestasV164_Offshore.v_wind) annotation (Line(points={{-55,-4},{-32,-4},{-32,-54},{-4.9,-54},{-4.9,-53.9}}, color={0,0,127}));
+  connect(wind_Hamburg_Fuhlsbuettel_3600s_2012_1.y1, windTurbine_L0_scale_SenvionM104.v_wind) annotation (Line(points={{-59,-6},{-52,-6},{-32,-6},{-32,42.1},{-6.9,42.1}}, color={0,0,127}));
+  connect(wind_Hamburg_Fuhlsbuettel_3600s_2012_1.y1, windTurbine_L0_scale_EnerconE82.v_wind) annotation (Line(points={{-59,-6},{-32,-6},{-32,-5.9},{-6.9,-5.9}}, color={0,0,127}));
+  connect(wind_Hamburg_Fuhlsbuettel_3600s_2012_1.y1, windTurbine_L0_scale_VestasV164_Offshore.v_wind) annotation (Line(points={{-59,-6},{-32,-6},{-32,-53.9},{-4.9,-53.9}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
                                      Text(
           extent={{-16,26},{22,12}},
@@ -90,7 +95,7 @@ equation
           lineColor={0,0,255},
           textString="Enercon E82: 2 MW
 34 x 2=68"),                         Text(
-          extent={{-16,-70},{22,-84}},
+          extent={{-14,-76},{24,-90}},
           lineColor={0,0,255},
           textString="Vestas V164: 8MW
 scaled up to 68MW

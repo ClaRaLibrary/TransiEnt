@@ -2,5 +2,5 @@ TestCHP_startup
 TestCHP_balancingControlOffer
 TestContinuousCHP_startup
 TestH2CofiringCHP
-TestDetailedCHP
 TestTwoBlockCHP
+TestDetailedCHP

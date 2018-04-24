@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Gas.StaticCycles.Check;
 model StatCycMix
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   import TransiEnt;
   extends TransiEnt.Basics.Icons.ModelStaticCycle;
@@ -68,8 +70,7 @@ model StatCycMix
     quadraticPressureLoss=quadraticPressureLoss) annotation (Placement(transformation(extent={{28,36},{48,44}})));
   TransiEnt.Grid.Gas.StaticCycles.Adapter_H2toNG adapter_H2toNG(
     mediumIn=mediumH2,
-    mediumOut=mediumNG,
-    T_H2=T_H2) annotation (Placement(transformation(
+    mediumOut=mediumNG) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={0,8})));
@@ -86,7 +87,7 @@ equation
   connect(pipe2.outlet, sink.inlet) annotation (Line(points={{48.2,40},{48.2,40},{64.12,40}},                    color={0,131,169}));
   connect(pipe1.outlet, mix.inlet1) annotation (Line(points={{-27.8,40},{-11.04,40},{-11.04,40.3333}},color={0,0,0}));
   connect(mix.outlet, pipe2.inlet) annotation (Line(points={{12.96,40.3333},{21.48,40.3333},{21.48,40},{29.7,40}}, color={0,0,0}));
-  connect(mix.inlet2, adapter_H2toNG.outlet) annotation (Line(points={{0,28.0667},{0,28.0667},{0,19},{6.66134e-016,19}},     color={0,0,0}));
+  connect(mix.inlet2, adapter_H2toNG.outlet) annotation (Line(points={{0,28.0667},{0,28.0667},{0,19},{6.66134e-16,19}},      color={0,0,0}));
   connect(adapter_H2toNG.inlet, pipeH2.outlet) annotation (Line(points={{-5.55112e-016,-0.5},{0,-0.5},{0,-19.8},{-0.1,-19.8}}, color={0,0,0}));
   connect(source_H2.outlet, pipeH2.inlet) annotation (Line(points={{3.10862e-015,-56.82},{0,-56.82},{0,-38.3},{-0.1,-38.3}}, color={0,0,0}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),

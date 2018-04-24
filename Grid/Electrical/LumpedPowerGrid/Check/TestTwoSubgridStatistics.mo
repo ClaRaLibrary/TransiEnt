@@ -2,23 +2,25 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid.Check;
 model TestTwoSubgridStatistics "Example of the component PowerPlant_PoutGrad_L1"
   import TransiEnt;
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
@@ -66,7 +68,7 @@ equation
       smooth=Smooth.None));
 
   connect(gasTurbines.epp, load.epp) annotation (Line(
-      points={{-40.5,39.6},{0,39.6},{0,-20},{16,-20},{16,-20},{32.2,-20}},
+      points={{-41,41},{0,41},{0,-20},{16,-20},{16,-20},{32.2,-20}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -76,13 +78,13 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(WindOnshorePlant.epp, load.epp) annotation (Line(
-      points={{-34.55,-42.62},{0,-42.62},{0,-20},{32.2,-20}},
+      points={{-35.1,-41.15},{0,-41.15},{0,-20},{32.2,-20}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
 
   connect(BrownCoal1.epp, load.epp) annotation (Line(
-      points={{-30.575,-1.5},{-30,-1.5},{-30,-2},{0,-2},{0,-20},{24,-20},{24,-20},{32.2,-20}},
+      points={{-31.15,0.25},{-30,0.25},{-30,-2},{0,-2},{0,-20},{24,-20},{24,-20},{32.2,-20}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -142,5 +144,13 @@ end plotResult;
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
-</html>"));
+</html>"),
+    __Dymola_experimentFlags(
+      Advanced(
+        EvaluateAlsoTop=false,
+        GenerateVariableDependencies=false,
+        OutputModelicaCode=false),
+      Evaluate=true,
+      OutputCPUtime=true,
+      OutputFlatModelica=false));
 end TestTwoSubgridStatistics;

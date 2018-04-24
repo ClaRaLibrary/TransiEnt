@@ -1,22 +1,24 @@
 within TransiEnt.Components.Boundaries.Ambient;
 model AmbientConditions "Contains the time varying ambient condition parameters used in simCenter block"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -47,11 +49,11 @@ model AmbientConditions "Contains the time varying ambient condition parameters 
   //
   //             Variable Declarations
   // _____________________________________________
-  Real summary_temperature = temperature.value;
-  Real summary_windSpeed = wind.value;
-  Real summary_gSolarRadiation = globalSolarRadiation.value;
-  Real summary_directSolarRadiation = directSolarRadiation.value;
-  Real summary_diffuseSolarRadiation = diffuseSolarRadiation.value;
+  Modelica.SIunits.Temp_C summary_temperature = temperature.value;
+  Modelica.SIunits.Velocity summary_windSpeed = wind.value;
+  Modelica.SIunits.Irradiance summary_gSolarRadiation = globalSolarRadiation.value;
+  Modelica.SIunits.Irradiance summary_directSolarRadiation = directSolarRadiation.value;
+  Modelica.SIunits.Irradiance summary_diffuseSolarRadiation = diffuseSolarRadiation.value;
 
  annotation (
     defaultComponentName="ambientConditions",

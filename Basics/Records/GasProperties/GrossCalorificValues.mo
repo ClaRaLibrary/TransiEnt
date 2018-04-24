@@ -1,31 +1,38 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
 record GrossCalorificValues "Record containing the gross calorific values for different molecules in MJ per kg for 25 °C"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // Reference: DIN EN ISO 6976, „Erdgas - Berechnung von Brenn- und Heizwert, Dichte, relativer Dichte und Wobbeindex aus der Zusammensetzung“, Deutsches Institut für Normung DIN, Berlin, Sep-2005.
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
 
   extends TransiEnt.Basics.Icons.Record;
 
   // _____________________________________________
   //
-  //             Visible Parameters
+  //        Constants and Hidden Parameters
   // _____________________________________________
 
   parameter String[:] components =  {"Water", "CARBON_MONOXIDE", "CO",     "HYDROGEN",  "HYDROGEN(eos=SRK,REF=STP)",      "H2",     "Nitrogen", "Nitrogen(eos=SRK,REF=STP)",   "N2",   "CARBON_DIOXIDE", "CARBON_DIOXIDE(eos=SRK,REF=STP)",   "CO2",   "Methane",  "Methane(eos=SRK,REF=STP)",  "CH4",  "Ethane",  "Ethane(eos=SRK,REF=STP)",  "C2H6", "Propane", "Propane(eos=SRK,REF=STP)", "C3H8",  "Butane", "Butane(eos=SRK,REF=STP)", "C4H10", "Oxygen", "O2"};

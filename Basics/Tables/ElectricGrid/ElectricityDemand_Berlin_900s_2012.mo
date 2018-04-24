@@ -1,31 +1,54 @@
 within TransiEnt.Basics.Tables.ElectricGrid;
 model ElectricityDemand_Berlin_900s_2012 "Electricity demand data in Berlin. Time resolution: 15 Minutes. Source: Stromnetz Berlin GmbH"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
-  extends TransiEnt.Basics.Tables.ElectricGrid.GenericPowerDataTable(relativepath="electricity/Electricity_Demand_BER_900s_01012012_31122012_.txt", datasource=DataPrivacy.isPublic)
-    annotation (Placement(transformation(extent={{-18,-16},{16,16}})));
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
+  extends TransiEnt.Basics.Tables.ElectricGrid.GenericPowerDataTable(relativepath="electricity/Electricity_Demand_BER_900s_01012012_31122012_.txt", datasource=DataPrivacy.isPublic);
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics), Documentation(info="<html>
-<h4><span style=\"color:#008000\">Description</span></h4>
-<p>Total electricity generation in Hamburg in the year 2012 with 15 minutes time resolution.</p>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Total electricity demand in Berlin in the year 2012 in [W] with 15 minutes time resolution.</p>
 <p>This profile was created by adding the generation on the high voltage, medium voltage and low voltage levels reported in [1].</p>
-<p><br><h4><span style=\"color:#008000\">Source</span></h4></p>
-<p>[1] Stromnetz Hamburg GmbH: <i>Jahresh&ouml;chstlast der Netzlast und Lastverlauf</i>. URL http://www.stromnetz-hamburg.de/de/jahreshoechstlast-der-netzlast.htm</p>
-<p><br><img src=\"modelica://TransiEnt/Graphics/ElectricityGeneration_HH_900s_2012.png\"/></p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>Source:</p>
+<p>[1] StromnetzBerlin2014. Stromnetz Berlin GmBH StromNZV Jahreshoechstlast</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
 </html>"));
 end ElectricityDemand_Berlin_900s_2012;

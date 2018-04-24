@@ -1,23 +1,25 @@
 within TransiEnt.Components.Electrical.FuelCellSystems.Base;
 model SyngasSensor "Sensor measuring fuel cell performance (including a simple gas burner model for burning of remainding H2 in flue gas)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -72,13 +74,13 @@ model SyngasSensor "Sensor measuring fuel cell performance (including a simple g
     xi= inStream(gasPortIn.xi_outflow),
     gasType=Syngas,
     p=100000)
-    annotation (extent=[-20,20; 0,40], Placement(transformation(extent={{-80,-12},{-56,12}})));
+    annotation (Placement(transformation(extent={{-80,-12},{-56,12}})));
 
     TILMedia.Gas_pT Syngas_AmbientCondition(
     T=T_ambient,
     xi=inStream(gasPortIn.xi_outflow),
     gasType=Syngas,
-    p=100000) annotation (extent=[-20,20; 0,40], Placement(transformation(extent={{6,64},{32,90}})));
+    p=100000) annotation (Placement(transformation(extent={{6,64},{32,90}})));
 
   // _____________________________________________
   //

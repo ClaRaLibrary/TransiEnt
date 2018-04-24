@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP;
 model CHP "Recommended model for large scale, combined heat and power plants with second order dynamics, three operating states and optional control power "
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -73,7 +75,8 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
 
   parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true), Dialog(tab="Advanced", group="Initialization"));
-
+  parameter Boolean UseGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if UseGasPort==true "Gas Medium to be used - only if UseGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if UseGasPort==true then true else false));
   // _____________________________________________
   //
   //               Components
@@ -94,27 +97,11 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
     initType=Modelica.Blocks.Types.Init.InitialOutput,
     y_start=Q_flow_init) annotation (Placement(transformation(extent={{-32,-46},{-12,-26}})));
 
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow(T_ref(displayUnit="degC"))
-     annotation (Placement(
-        transformation(
-        extent={{-5,-5.5},{5,5.5}},
-        rotation=0,
-        origin={37,-41.5})));
-  ClaRa.Components.HeatExchangers.TubeBundle_L2 HX(
-    length=15,
-    N_tubes=10,
-    N_passes=2,
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.IdealHeatTransfer_L2,
-    m_flow_nom=m_flow_nom,
-    p_nom(displayUnit="Pa") = p_nom,
-    h_nom=h_nom,
-    h_start=h_start,
-    p_start=p_nom,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L2,
-    initOption=1) annotation (Placement(transformation(
+  Components.Boundaries.Heat.Heatflow_L1        HX(change_sign=true)
+                  annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={58,-42})));
+        origin={54,-18})));
 
   Modelica.Blocks.Math.Product
                             ElectricEfficiency           annotation (Placement(transformation(extent={{-54,12},{-46,4}})));
@@ -140,7 +127,7 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
         rotation=0,
         origin={68.5,42})));
   Modelica.Blocks.Nonlinear.VariableLimiter P_limit_on annotation (Placement(transformation(extent={{-52,98},{-38,112}})));
-  Base.CHPStates_electricityled plantState(
+  replaceable Base.CHPStates_electricityled plantState(
     t_startup=t_startup,
     init_state=if P_el_init > 0 then TransiEnt.Basics.Types.on1 else TransiEnt.Basics.Types.off,
     P_el_min_operating=P_el_min_operating,
@@ -152,6 +139,8 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
         rotation=0,
         origin={-90,105})));
   Modelica.Blocks.Math.Sum P_limit(nin=2) annotation (Placement(transformation(extent={{-30,98},{-18,110}})));
+  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{80,74},{60,94}})));
+  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
 equation
 
   Q_flow_input=steamGenerator.u;
@@ -160,16 +149,6 @@ equation
   //
   //               Connect Statements
   // ____________________________________________
-  connect(outlet, HX.outlet) annotation (Line(
-      points={{100,4},{58,4},{58,-32}},
-      color={175,0,0},
-      thickness=0.5,
-      smooth=Smooth.None));
-  connect(inlet, HX.inlet) annotation (Line(
-      points={{100,-24},{98,-24},{98,-56},{94,-56},{94,-54},{58,-54},{58,-52}},
-      color={175,0,0},
-      thickness=0.5,
-      smooth=Smooth.None));
 
   //Annotations
   connect(Q_flow_CHP.u, product1.y) annotation (Line(points={{-34,-36},{-34,-36},{-37.6,-36}}, color={0,0,127}));
@@ -182,13 +161,11 @@ equation
   connect(steamGenerator.y, ElectricEfficiency.u1) annotation (Line(points={{-61,-14},{-58,-14},{-58,5.6},{-54.8,5.6}}, color={0,0,127}));
   connect(eta_el_is.y, ElectricEfficiency.u2) annotation (Line(points={{-63,6},{-60,6},{-60,10.4},{-54.8,10.4}}, color={0,0,127}));
   connect(eta_th_is.y, product1.u2) annotation (Line(points={{-53,-38},{-46.8,-38},{-46.8,-38.4}}, color={0,0,127}));
-  connect(Q_flow.y, prescribedHeatFlow.Q_flow) annotation (Line(points={{20.5,-42},{32,-42},{32,-41.5}}, color={0,0,127}));
-  connect(prescribedHeatFlow.port, HX.heat) annotation (Line(points={{42,-41.5},{44,-41.5},{44,-42},{48,-42}}, color={191,0,0}));
-  connect(Q_flow_CHP.y, Q_flow.u[1]) annotation (Line(points={{-11,-36},{-4,-36},{-4,-36},{-2,-36},{-2,-42.5},{9,-42.5}}, color={0,0,127}));
+  connect(Q_flow_CHP.y, Q_flow.u[1]) annotation (Line(points={{-11,-36},{-4,-36},{-2,-36},{-2,-42.5},{9,-42.5}},          color={0,0,127}));
   connect(Q_flow_peak.y, Q_flow.u[2]) annotation (Line(points={{-11,-64},{-4,-64},{-4,-41.5},{9,-41.5}}, color={0,0,127}));
   connect(isRunning.y, Shaft.isRunning) annotation (Line(points={{29,30},{32,30},{38.91,30},{38.91,17.765}}, color={255,0,255}));
   connect(Q_flow_set_SG.Q_flow_input, steamGenerator.u) annotation (Line(
-      points={{0,79},{0,72},{-94,72},{-94,-14},{-84,-14}},
+      points={{-0.909091,79},{-0.909091,72},{-94,72},{-94,-14},{-84,-14}},
       color={162,29,33},
       pattern=LinePattern.Dash));
   connect(prescribedPower.mpp, Shaft.mpp_a) annotation (Line(points={{22,9},{26,9},{26,9.5},{30,9.5}}, color={95,95,95}));
@@ -208,7 +185,24 @@ equation
   connect(P_set, P_set_total.u[1]) annotation (Line(points={{-84,144},{-84,144},{-84,122},{-100,122},{-100,104.5},{-96,104.5}}, color={0,0,127}));
   connect(pQDiagram.P_max, P_limit_on.limit1) annotation (Line(points={{-11,128.4},{-60,128.4},{-60,110.6},{-53.4,110.6}}, color={0,0,127}));
   connect(pQDiagram.P_min, P_limit_on.limit2) annotation (Line(points={{-11,121},{-62,121},{-62,99.4},{-53.4,99.4}}, color={0,0,127}));
-  connect(P_limit.y, Q_flow_set_SG.P) annotation (Line(points={{-17.4,104},{-7,104},{-7,102}}, color={0,0,127}));
+  connect(P_limit.y, Q_flow_set_SG.P) annotation (Line(points={{-17.4,104},{-7.27273,104},{-7.27273,102}},
+                                                                                               color={0,0,127}));
+  connect(inlet, HX.fluidPortIn) annotation (Line(
+      points={{100,-24},{90,-24},{90,-22},{64,-22},{64,-24}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(HX.fluidPortOut, outlet) annotation (Line(
+      points={{64,-12},{64,4},{100,4}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(Q_flow.y, HX.Q_flow_prescribed) annotation (Line(points={{20.5,-42},{32,-42},{32,-24},{46,-24}},   color={0,0,127}));
+  if UseGasPort==true then
+    connect(gasConsumer_HFlow_NCV.fluidPortIn, gasPortIn) annotation (Line(
+      points={{80,84},{88,84},{88,102},{100,102}},
+      color={255,255,0},
+      thickness=1.5));
+    connect(steamGenerator.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{-61,-14},{-58,-14},{-58,-28},{-92,-28},{-92,70},{50,70},{50,84},{59,84}}, color={0,0,127}));
+  end if;
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})), Icon(coordinateSystem(extent={{-100,-100},{100,140}}, preserveAspectRatio=false)),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>

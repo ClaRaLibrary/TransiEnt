@@ -1,0 +1,57 @@
+//___________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                        //
+//                                                                           //
+// Licensed by Hamburg University of Technology under Modelica License 2.    //
+// Copyright 2017, Hamburg University of Technology.                         //
+//___________________________________________________________________________//
+//                                                                           //
+// TransiEnt.EE is a research project supported by the German Federal        //
+// Ministry of Economics and Energy (FKZ 03ET4003).                          //
+// The TransiEnt.EE research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
+// Institute of Energy Systems (Hamburg University of Technology),           //
+// Institute of Electrical Power Systems and Automation                      //
+// (Hamburg University of Technology),                                       //
+// and is supported by                                                       //
+// XRG Simulation GmbH (Hamburg, Germany).                                   //
+//___________________________________________________________________________//
+//
+//
+// ---------------------------------------------------------------------------
+// Purpose of script:
+// ---------------------------------------------------------------------------
+// Conversion of existing packages which use the TransiEnt library 
+// to the new version of TransiEnt library. See Dymola User
+// Manual Volume 2 section 9.1. for information on how to use this.
+//
+// Converts from:	1.0.x 
+// Converts to: 	1.1.x
+//
+// Note, that changes of versions within the third digit do not 
+// need a convert script by definition.
+//
+// ---------------------------------------------------------------------------
+// Changed parameter names: 
+// (Syntax: convertElement("oldClass", "oldElement", "newElement");)
+// ---------------------------------------------------------------------------
+//
+convertElement("TransiEnt.Storage.Gas.UndergroundGasStorageHeatTransfer_L2", "thickness_material", "thickness_wall");
+convertElement("TransiEnt.Storage.Gas.UndergroundGasStorageHeatTransfer_L2", "mass", "mass_wall");
+convertElement("TransiEnt.Storage.Gas.UndergroundGasStorageHeatTransfer_L2", "T_material", "T_surrounding");
+convertElement("TransiEnt.Storage.Gas.UndergroundGasStorageHeatTransfer_L2", "T_material_start", "T_wall_start");
+convertElement("TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_CavernComp", "p_low", "p_minLow");
+convertElement("TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_CavernComp", "p_high", "p_minHigh");
+//
+// ---------------------------------------------------------------------------
+// Changed class names: 
+// (Syntax: convertClass("oldClass", "newClass"); 
+// conditional: convertClassIf("OldClassName","para","val","NewClassName"); )
+// ---------------------------------------------------------------------------
+//
+//
+// ---------------------------------------------------------------------------
+// Changed parameter values: 
+// Syntax: convertModifiers("oldClass", oldParameterBindings,newParameterBindings);
+// ---------------------------------------------------------------------------
+//
+

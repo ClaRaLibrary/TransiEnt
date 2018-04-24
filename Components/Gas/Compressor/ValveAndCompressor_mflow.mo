@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.Compressor;
 model ValveAndCompressor_mflow
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -38,8 +40,12 @@ model ValveAndCompressor_mflow
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium to be used" annotation(Dialog(group="Fundamental Definitions"));
+  parameter SI.Pressure p_before_low=1e5 "Lower limit for hysteresis to limit mass flow for too low pressures" annotation(Dialog(group="Controller"));
+  parameter SI.Pressure p_before_high=1.1e5 "Higher limit for hysteresis to limit mass flow for too low pressures" annotation(Dialog(group="Controller"));
+
   parameter SI.Volume volumeSplit = 0.01 "Volume of the split" annotation(Dialog(group="Split and Junction"));
   parameter SI.Volume volumeJunction = 0.01 "Volume of the junction" annotation(Dialog(group="Split and Junction"));
+
 
   parameter SI.Pressure p_startSplit = 1e5 "Start pressure in the split" annotation(Dialog(group="Initial Values"));
   parameter SI.Pressure p_startJunction = 1e5 "Start pressure in the junction" annotation(Dialog(group="Initial Values"));
@@ -47,8 +53,20 @@ model ValveAndCompressor_mflow
   parameter SI.MassFraction xi_startJunction[medium.nc-1] = medium.xi_default "Start composition in the junction" annotation(Dialog(group="Initial Values"));
   parameter SI.SpecificEnthalpy h_startSplit = 800e3 "Start specific enthalpy in the split" annotation(Dialog(group="Initial Values"));
   parameter SI.SpecificEnthalpy h_startJunction = 800e3 "Start specific enthalpy in the Junction" annotation(Dialog(group="Initial Values"));
-  parameter ClaRa.Basics.Choices.Init initTypeSplit=ClaRa.Basics.Choices.Init.noInit "Type of initialisation" annotation(Dialog(group="Initial Values", choicesAllMatching));
-  parameter ClaRa.Basics.Choices.Init initTypeJunction=ClaRa.Basics.Choices.Init.noInit "Type of initialisation" annotation(Dialog(group="Initial Values", choicesAllMatching));
+  parameter Integer initOptionSplit=0 "Type of initialisation" annotation (Dialog(tab="Initialisation"), choices(
+      choice=0 "Use guess values",
+      choice=1 "Steady state",
+      choice=201 "Steady pressure",
+      choice=202 "Steady enthalpy",
+      choice=208 "Steady pressure and enthalpy",
+      choice=210 "Steady density"));
+  parameter Integer initOptionJunction=0 "Type of initialisation" annotation (Dialog(tab="Initialisation"), choices(
+      choice=0 "Use guess values",
+      choice=1 "Steady state",
+      choice=201 "Steady pressure",
+      choice=202 "Steady enthalpy",
+      choice=208 "Steady pressure and enthalpy",
+      choice=210 "Steady density"));
 
   // _____________________________________________
   //
@@ -64,13 +82,13 @@ model ValveAndCompressor_mflow
   // _____________________________________________
 
 protected
-  record ValveRecord
+  model ValveRecord
     extends TransiEnt.Basics.Icons.Record;
     input SI.MassFlowRate m_flow "Mass flow rate";
     input SI.PressureDifference Delta_p "Pressure difference";
   end ValveRecord;
 
-  record CompressorRecord
+  model CompressorRecord
     extends TransiEnt.Basics.Icons.Record;
     input SI.MassFlowRate m_flow "Mass flow rate";
     input SI.VolumeFlowRate V_flow "Volume flow rate";
@@ -119,19 +137,22 @@ protected
     p_start=p_startJunction,
     xi_start=xi_startJunction,
     h_start=h_startJunction,
-    initType=initTypeJunction) annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+    initOption=initOptionJunction) annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split(
     medium=medium,
     volume=volumeSplit,
     p_start=p_startSplit,
     xi_start=xi_startSplit,
     h_start=h_startSplit,
-    initType=initTypeSplit) annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
-  Controller.ControllerValveAndCompressor_mflow controllerValveOrCompressor annotation (Placement(transformation(extent={{-22,30},{-2,50}})));
+    initOption=initOptionSplit) annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+  Controller.ControllerValveAndCompressor_mflow controllerValveOrCompressor(p_before_low=p_before_low, p_before_high=p_before_high)
+                                                                            annotation (Placement(transformation(extent={{-22,30},{-2,50}})));
+public
   Compressor compressor(
     final presetVariableType="m_flow",
     final m_flowInput=true,
     final medium=medium) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+protected
   TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredMassFlow valve(
     hysteresisWithDelta_p=false,
     medium=medium,
@@ -198,27 +219,28 @@ equation
           color={255,255,0},
           thickness=0.5)}),
           Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model combines a valve with a compressor delivering a certain mass flow rate. Depending on the sign of the pressure difference the compressor or the valve is used. The type of compressor can be chosen.</p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>When the pressure difference changes sign, the change of the device is executed without any time delay or time dependent behaviour. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid for negligible time delays and time dependencies in turn-on and shut-down behaviour of the components. </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: real gas inlet </p>
 <p>gasPortOut: real gas outlet </p>
 <p>m_flowDesired: input for desired mass flow rate </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>Chattering can occur if the pressure difference is around zero.</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Feb 10 2017<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Feb 10 2017</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (fixed for update to ClaRa 1.3.0)</p>
 </html>"));
 end ValveAndCompressor_mflow;

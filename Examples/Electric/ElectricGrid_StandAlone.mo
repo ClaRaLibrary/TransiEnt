@@ -1,22 +1,24 @@
 within TransiEnt.Examples.Electric;
 model ElectricGrid_StandAlone
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 extends TransiEnt.Basics.Icons.Example;
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP CHP(
     P_el_n=3e6,
@@ -94,20 +96,20 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(pVPlant.epp, line_L1_1.epp_1) annotation (Line(
-      points={{-181,-128.8},{-176,-128.8},{-176,-128},{-172,-128},{-172,-118.16},{-149.85,-118.16}},
+      points={{-182,-126},{-176,-126},{-176,-128},{-172,-128},{-172,-118.16},{-149.85,-118.16}},
       color={0,135,135},
       thickness=0.5));
   connect(windProduction.epp, line_L1_1.epp_1) annotation (Line(
-      points={{-181,-208.36},{-172,-208.36},{-172,-118},{-162,-118},{-162,-118.16},{-149.85,-118.16}},
+      points={{-182,-205.7},{-172,-205.7},{-172,-118},{-162,-118},{-162,-118.16},{-149.85,-118.16}},
       color={0,135,135},
       thickness=0.5));
   connect(CHP.Q_flow_set, constHeatDemandCHP.y) annotation (Line(points={{-194.9,27},{-194.9,-1.8},{-195,-1.8},{-195,-18}},   color={0,0,127}));
   connect(CHP.inlet, boundaryVLE_Txim_flow.fluidPortOut) annotation (Line(
-      points={{-175.4,63.5},{-133.8,63.5},{-133.8,63.8}},
+      points={{-175.4,63.5},{-134,63.5},{-134,64}},
       color={175,0,0},
       thickness=0.5));
   connect(boundaryVLE_pTxi.fluidPortIn, CHP.outlet) annotation (Line(
-      points={{-133.8,39.8},{-144,39.8},{-144,56.5},{-175.4,56.5}},
+      points={{-134,40},{-144,40},{-144,56.5},{-175.4,56.5}},
       color={175,0,0},
       thickness=0.5));
   connect(boundaryVLE_Txim_flow.T, returnTemperatureDNH.y) annotation (Line(points={{-112,64},{-104,64},{-104,55},{-89.4,55}}, color={0,0,127}));
@@ -122,7 +124,11 @@ equation
     experiment(StopTime=86400, Interval=900),
     __Dymola_experimentSetupOutput(inputs=false, events=false),
     __Dymola_experimentFlags(
-      Advanced(OutputModelicaCode=false),
+      Advanced(
+        EvaluateAlsoTop=false,
+        GenerateVariableDependencies=false,
+        OutputModelicaCode=false),
+      Evaluate=true,
       OutputCPUtime=true,
       OutputFlatModelica=false),
 Documentation(info="<html>

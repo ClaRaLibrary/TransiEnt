@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Heat.SolarThermal.Check;
 model TestCollectorFluidCycle
-  //___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+  //________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -31,8 +33,7 @@ model TestCollectorFluidCycle
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=293.15)
-                                                                                   annotation (Placement(transformation(extent={{-94,-6},{-74,14}})));
+ Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=293.15) annotation (Placement(transformation(extent={{-94,-6},{-74,14}})));
   inner TransiEnt.SimCenter simCenter(redeclare TILMedia.VLEFluidTypes.TILMedia_SplineWater fluid1, ambientConditions(
       redeclare TransiEnt.Basics.Tables.Ambient.GHI_Hamburg_3600s_2012_TMY globalSolarRadiation,
       redeclare TransiEnt.Basics.Tables.Ambient.DNI_Hamburg_3600s_2012_TMY directSolarRadiation,
@@ -96,7 +97,9 @@ model TestCollectorFluidCycle
     k_PID=40,
     m_flow_min=0.015,
     T_set=358.15,
-    Delta_p=15000)   annotation (Placement(transformation(extent={{148,50},{182,78}})));
+    Delta_p=15000,
+    T_stor=273.15 + 75)
+                     annotation (Placement(transformation(extent={{148,50},{182,78}})));
 
   ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1_2(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint)
                                                                                         annotation (Placement(transformation(extent={{56,38},{76,50}})));
@@ -124,10 +127,10 @@ equation
   // _____________________________________________
 
   connect(tubeBundle_L2_1.heat, fixedTemperature.port) annotation (Line(
-      points={{-66,4},{-74,4}},
-      color={167,25,48},
-      thickness=0.5,
-      smooth=Smooth.None));
+       points={{-66,4},{-74,4}},
+       color={167,25,48},
+       thickness=0.5,
+       smooth=Smooth.None));
 
   connect(tubeBundle_L2_1.outlet,idealizedExpansionVessel.waterPort)  annotation (Line(
       points={{-56,14},{-56,48},{-56,58}},
@@ -143,8 +146,9 @@ equation
       points={{-56,-6},{-56,-6},{-56,-28},{-56,-39},{-2,-39}},
       color={0,131,169},
       thickness=0.5));
-  connect(solarCollector.T_out, controller.T_out) annotation (Line(points={{120.6,0.4},{138,0.4},{138,61.6667},{150.267,61.6667}}, color={0,0,127}));
-  connect(controller.G_total,solarCollector. G) annotation (Line(points={{150.267,55.8333},{142,55.8333},{142,12},{142,-1.8},{120.6,-1.8}}, color={0,0,127}));
+  connect(solarCollector.T_out, controller.T_out) annotation (Line(points={{121,-1.77636e-015},{138,-1.77636e-015},{138,61.6667},{150.267,61.6667}},
+                                                                                                                                   color={0,0,127}));
+  connect(controller.G_total,solarCollector. G) annotation (Line(points={{150.267,55.8333},{142,55.8333},{142,12},{142,-2},{121,-2}},       color={0,0,127}));
   connect(valveVLE_L1_2.outlet, solarCollector.waterPortIn) annotation (Line(
       points={{76,44},{112,44},{112,14}},
       color={0,131,169},
@@ -164,6 +168,7 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(controller.P_drive, pumpVLE_L1_simple.P_drive) annotation (Line(points={{150.267,71},{150.267,71},{-30,71},{-30,54}}, color={0,0,127}));
+  connect(solarCollector.T_in, controller.T_in) annotation (Line(points={{121,14},{124,14},{124,66.8},{150.267,66.8}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{180,140}})),
     experiment(
       StopTime=3.1536e+007,
@@ -185,8 +190,8 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Note that the inlet temperature should never fall below 0 &deg;C. A possible controller for this case can be looked at under TransiEnt.Producer.Heat.SolarThermal.Controller.</p>
+<p><br><b><span style=\"color: #008000;\">8. Validation</span></b></p>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>

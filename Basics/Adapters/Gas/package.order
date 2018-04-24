@@ -7,3 +7,6 @@ RealNG7_to_RealNG7_SG
 RealNG7_to_RealNG7_SG_O2
 RealSG6_to_RealNG7_SG
 RealSG6_to_RealNG7_SG_O2
+RealH2_to_RealSG4
+RealSG4_var_to_RealNG7_H2_var
+RealNG7_H2_var_to_RealSG4_var

@@ -1,22 +1,24 @@
 within TransiEnt.Examples.Coupled;
 model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Example;
 
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP CHP(
@@ -27,7 +29,7 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
     m_flow_nom=38,
     h_nom=110*4.2e3,
     T_feed_init=383.15) annotation (Placement(transformation(extent={{-202,90},{-122,170}})));
-  TransiEnt.Producer.Heat.SimpleGasboilerGasport gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={40,24})));
@@ -56,7 +58,8 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
     lambda_sec=simCenter.P_n_ref_2/(simCenter.P_n_ref_1 + simCenter.P_n_ref_2)*3e9/0.2,
     P_pr_grad_max_star=0.02/30,
     beta=0.2,
-    redeclare TransiEnt.Grid.Electrical.Noise.TypicalLumpedGridError genericGridError) annotation (Placement(transformation(
+    redeclare TransiEnt.Grid.Electrical.Noise.TypicalLumpedGridError genericGridError,
+    isSecondaryControlActive=false)                                                    annotation (Placement(transformation(
         extent={{40,-40},{-40,40}},
         rotation=0,
         origin={60,-180})));
@@ -139,11 +142,11 @@ equation
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(DHN_source.fluidPortOut, CHP.inlet) annotation (Line(
-      points={{164.4,125.6},{122,125.6},{-30,125.6},{-30,112},{-121.2,112}},
+      points={{164,126},{122,126},{-30,126},{-30,112},{-121.2,112}},
       color={175,0,0},
       thickness=0.5));
   connect(dHN_sink.fluidPortIn, T_vl_is.port) annotation (Line(
-      points={{166.4,63.6},{158,63.6},{158,64},{148,64}},
+      points={{166,64},{158,64},{158,64},{148,64}},
       color={175,0,0},
       thickness=0.5));
   annotation (Icon(coordinateSystem(

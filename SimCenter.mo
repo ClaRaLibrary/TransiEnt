@@ -1,23 +1,25 @@
 ﻿within TransiEnt;
 model SimCenter "SimCenter for global parameters, ambient conditions and collecting statistics"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -233,7 +235,7 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
   parameter TransiEnt.Basics.Units.Time_year lifeTime_Cavern=100 annotation (Dialog(tab="Costs", group="Plant life for annuitiy"));
   parameter TransiEnt.Basics.Units.Time_year lifeTime_Electrolyzer=20 annotation (Dialog(tab="Costs", group="Plant life for annuitiy"));
   //Costs Oil
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cfue_Oil(displayUnit="EUR/J") = 45*1/159*1/3.6e6 annotation (Dialog(tab="Costs", group="Fuel costs in EUR/J_fuel"));
+  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cfue_Oil(displayUnit="EUR/J") = 45*1/159*1/36e6 annotation (Dialog(tab="Costs", group="Fuel costs in EUR/J_fuel"));
                                                                                                                                                                             //X [EUR/barrel]*1/159[barrel/liter]*1/36[liter/MJ]*3.6e9[J/MWh]
 
   //Costs pipelines in EUR/m
@@ -293,11 +295,11 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
   //             Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput T_amb_var(value=ambientConditions.temperature.value) "Temperature (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput v_wind(value=ambientConditions.wind.value) "Wind speed (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput i_global(value=ambientConditions.globalSolarRadiation.value) "Global solar radiation (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput i_direct(value=ambientConditions.directSolarRadiation.value) "Direct solar radiation (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput i_diffuse(value=ambientConditions.diffuseSolarRadiation.value) "Diffuse solar radiation (from component ambientConditions)";
+  Modelica.Blocks.Interfaces.RealOutput T_amb_var(value=ambientConditions.temperature.value,final quantity="Temp_C", unit="degC") "Temperature in degC (from component ambientConditions)";
+  Modelica.Blocks.Interfaces.RealOutput v_wind(value=ambientConditions.wind.value, final quantity="Velocity",unit="m/s") "Wind speed (from component ambientConditions)";
+  Modelica.Blocks.Interfaces.RealOutput i_global(value=ambientConditions.globalSolarRadiation.value,final quantity= "Irradiance", unit="W/m2") "Global solar radiation (from component ambientConditions)";
+  Modelica.Blocks.Interfaces.RealOutput i_direct(value=ambientConditions.directSolarRadiation.value,final quantity= "Irradiance", unit="W/m2") "Direct solar radiation (from component ambientConditions)";
+  Modelica.Blocks.Interfaces.RealOutput i_diffuse(value=ambientConditions.diffuseSolarRadiation.value,final quantity= "Irradiance", unit="W/m2") "Diffuse solar radiation (from component ambientConditions)";
 
    annotation ( defaultComponentName="simCenter",
     defaultComponentPrefixes="inner",

@@ -1,23 +1,25 @@
 ﻿within TransiEnt.Components.Gas.Reactor.Base;
 partial model PartialFixedbedReactorIdealGas_L4 "Discretized model of a fixed-bed reactor using ideal gas models"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
 // all values and formulas (except otherwise stated) are taken from Nandasana, A. D., Ray, A. K., & Gupta, S. K. (2003). Dynamic model of an industrial steam reformer and its use for multiobjective optimization. Industrial & engineering chemistry research, 42(17), 4028-4042.
   // Pantoleontos 2012: G. Pantoleontos, E.S. Kikkinides, M.C. Georgiadis. A heterogeneous dynamic model for the simulation and optimisation of the steam methane reforming reactor. Int. J. Hydrog. Energy (Mar. 2012), pp. 1–13
@@ -112,14 +114,14 @@ protected
     xi= if useHomotopy then homotopy(xi,xi_nom) else xi,
     each gasType=medium,
     each computeTransportProperties=true)
-    annotation (extent=[-20,20; 0,40], Placement(transformation(extent={{-10,-12},{10,8}})));
+    annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
   TILMedia.Gas_ph gasIn(
     p=gasPortIn.p,
     h= inStream(gasPortIn.h_outflow),
     xi= inStream(gasPortIn.xi_outflow),
     gasType=medium,
     computeTransportProperties=true)
-    annotation (extent=[-20,20; 0,40], Placement(transformation(extent={{-90,-12},{-70,8}})));
+    annotation (Placement(transformation(extent={{-90,-12},{-70,8}})));
 
   // _____________________________________________
   //

@@ -1,23 +1,25 @@
 within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CollectCostsGeneral "Cost collector for general components"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -52,6 +54,17 @@ model CollectCostsGeneral "Cost collector for general components"
 
   parameter TransiEnt.Basics.Units.MonetaryUnit C_OM_fix=0 "Fix annual operating and maintenance cost (independent from investment)";
 
+  parameter Boolean produces_P_el=true "true if the component produces electric power" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean consumes_P_el=true "true if the component consumes electric power" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean produces_Q_flow=true "true if the component produces a heat flow" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean consumes_Q_flow=true "true if the component consumes a heat flow" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean produces_H_flow=true "true if the component produces an enthalpy flow" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean consumes_H_flow=true "true if the component consumes an enthalpy flow" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean produces_other_flow=true "true if the component produces another flow" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean consumes_other_flow=true "true if the component consumes another flow" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean produces_m_flow_CDE=true "true if the component produces carbon dioxide emissions" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+  parameter Boolean consumes_m_flow_CDE=true "true if the component consumes carbon dioxide emissions" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
+
   // _____________________________________________
   //
   //              Variable Declarations
@@ -70,7 +83,8 @@ model CollectCostsGeneral "Cost collector for general components"
   Real other_demand(fixed=true, start=0, stateSelect=StateSelect.never) "Consumed other resource";
   Real other_revenue(fixed=true, start=0, stateSelect=StateSelect.never) "Produced other resource";
   SI.MassFlowRate m_flow_CDE=0 "Produced CDE mass flow" annotation(Dialog(group="CO2 Certificates"));
-  SI.Mass m_CDE(fixed=true, start=0, stateSelect=StateSelect.never) "Produced CDE";
+  SI.Mass m_CDE_produced(fixed=true, start=0, stateSelect=StateSelect.never) "Produced CDE";
+  SI.Mass m_CDE_consumed(fixed=true, start=0, stateSelect=StateSelect.never) "Consumed CDE";
 
 equation
   // _____________________________________________
@@ -78,44 +92,105 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  //Calculation of consumed electric energy
-  if P_el<eps then
-    der(W_el_demand)=0;
-    der(W_el_revenue)=P_el;
+  //Calculation of consumed/produced electric energy
+  if produces_P_el then
+    if noEvent(P_el<eps) then
+      der(W_el_revenue)=P_el;
+    else
+      der(W_el_revenue)=0;
+    end if;
   else
-    der(W_el_demand)=P_el;
-    der(W_el_revenue)=0;
+    W_el_revenue=0;
+  end if;
+  if consumes_P_el then
+    if noEvent(P_el<eps) then
+      der(W_el_demand)=0;
+    else
+      der(W_el_demand)=P_el;
+    end if;
+  else
+    W_el_demand=0;
   end if;
 
-  //Calculation of consumed heat
-  if Q_flow<eps then
-    der(Q_demand)=0;
-    der(Q_revenue)=Q_flow;
+  //Calculation of consumed/produced heat
+  if produces_Q_flow then
+    if noEvent(Q_flow<eps) then
+      der(Q_revenue)=Q_flow;
+    else
+      der(Q_revenue)=0;
+    end if;
   else
-    der(Q_demand)=Q_flow;
-    der(Q_revenue)=0;
+    Q_revenue=0;
+  end if;
+  if consumes_Q_flow then
+    if noEvent(Q_flow<eps) then
+      der(Q_demand)=0;
+    else
+      der(Q_demand)=Q_flow;
+    end if;
+  else
+    Q_demand=0;
   end if;
 
-  //Calculation of consumed gas enthalpy
-  if H_flow<eps then
-    der(H_demand)=0;
-    der(H_revenue)=H_flow;
+  //Calculation of consumed/produced gas enthalpy
+  if produces_H_flow then
+    if noEvent(H_flow<eps) then
+      der(H_revenue)=H_flow;
+    else
+      der(H_revenue)=0;
+    end if;
   else
-    der(H_demand)=H_flow;
-    der(H_revenue)=0;
+    H_revenue=0;
+  end if;
+  if consumes_H_flow then
+    if noEvent(H_flow<eps) then
+      der(H_demand)=0;
+    else
+      der(H_demand)=H_flow;
+    end if;
+  else
+    H_demand=0;
   end if;
 
-  //Calculation of consumed other resource
-  if other_flow<eps then
-    der(other_demand)=0;
-    der(other_revenue)=other_flow;
+  //Calculation of consumed/produced other resource
+  if produces_other_flow then
+    if noEvent(other_flow<eps) then
+      der(other_revenue)=other_flow;
+    else
+      der(other_revenue)=0;
+    end if;
   else
-    der(other_demand)=other_flow;
-    der(other_revenue)=0;
+    other_revenue=0;
+  end if;
+  if consumes_other_flow then
+    if noEvent(other_flow<eps) then
+      der(other_demand)=0;
+    else
+      der(other_demand)=other_flow;
+    end if;
+  else
+    other_demand=0;
   end if;
 
   //Calculation of CDE
-  der(m_CDE)=m_flow_CDE;
+  if produces_m_flow_CDE then
+    if noEvent(m_flow_CDE<eps) then
+      der(m_CDE_produced)=0;
+    else
+      der(m_CDE_produced)=m_flow_CDE;
+    end if;
+  else
+    m_CDE_produced=0;
+  end if;
+  if consumes_m_flow_CDE then
+    if noEvent(m_flow_CDE<eps) then
+      der(m_CDE_consumed)=m_flow_CDE;
+    else
+      der(m_CDE_consumed)=0;
+    end if;
+  else
+    m_CDE_consumed=0;
+  end if;
 
   //Calculation of investment costs
   C_inv=Cspec_inv_der_E*der_E_n+Cspec_inv_E*E_n+C_inv_size;
@@ -130,7 +205,7 @@ equation
   dynamic_C_revenue=(Cspec_demAndRev_el*W_el_revenue+Cspec_demAndRev_heat*Q_revenue+Cspec_demAndRev_gas_fuel*H_revenue+Cspec_demAndRev_other*other_revenue)*annuityFactor*dynamicPriceFactorRevenue;
 
   //Calculation of other costs
-  dynamic_C_other=(C_other_fix/timeYear*time+Cspec_CO2*m_CDE)*annuityFactor*dynamicPriceFactorOther;
+  dynamic_C_other=(C_other_fix/timeYear*time+Cspec_CO2*(m_CDE_consumed+m_CDE_produced))*annuityFactor*dynamicPriceFactorOther;
 
   annotation (
     defaultConnectionStructurallyInconsistent=true,

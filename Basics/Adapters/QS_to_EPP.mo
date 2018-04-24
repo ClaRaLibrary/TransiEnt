@@ -1,22 +1,24 @@
 within TransiEnt.Basics.Adapters;
 model QS_to_EPP
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -164,10 +166,7 @@ equation
         points={{99.2,46},{108,46},{110.75,46}},       color={0,127,0}));
   annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=false)), Icon(coordinateSystem(extent={{-100,-100},{100,100}},
-                       preserveAspectRatio=false), graphics={Line(points={{-98,0},{96,0},{92,0}}, color={28,108,200}), Line(points={{12,0},{100,0}}, color={0,127,0})}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false,
-                   extent={{-100,-100},{100,100}}), graphics={Line(points={{-100,0},{94,0},{90,0}}, color={28,108,200}), Line(points={{-96,0},{-8,0}}, color={0,127,0})}),
+                       preserveAspectRatio=false), graphics={Line(points={{-98,0},{96,0},{92,0}}, color={28,108,200}), Line(points={{12,0},{100,0}}, color={0,127,0}),Line(points={{-100,0},{94,0},{90,0}}, color={28,108,200}), Line(points={{-96,0},{-8,0}}, color={0,127,0})}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Adapter from MSL quasis stationary pin (QS) to Transient electric power port (EPP). Defines frequency and voltage on transient electric power port. Therefore it must be connected to Transient components defining power flows.</span></p>

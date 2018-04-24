@@ -1,0 +1,69 @@
+// -------------------------------------------------------------------
+// Possible unit conversions are defined below. They are used for
+// selecting display unit in Plot/Setup. Syntax:
+//
+// defineUnitConversion(<unit>, <derived unit>, <scale>, <opt. offset>);
+//
+// -------------------------------------------------------------------
+// 'Years' are mapped to Lux (lx)
+//----------------------------------------
+defineUnitConversion("lx", "years", 1);
+//defineUnitConversion("lx", "d", 365.25);
+//defineUnitConversion("lx", "h", 24*365.25);
+//defineUnitConversion("lx", "min", 60*24*365.25);
+//defineUnitConversion("lx", "s", 60*60*24*365.25);
+//
+//----------------------------------------
+// 'EUR' are mapped to lm 
+//----------------------------------------
+defineUnitConversion("lm", "EUR", 1);
+defineUnitConversion("lm", "TEUR", 1e-3);
+defineUnitConversion("lm", "MEUR", 1e-6);
+
+//
+//----------------------------------------
+// 'EUR'/kWh are mapped to lm/J 
+//----------------------------------------
+defineUnitConversion("lm/J", "EUR/J", 1);
+defineUnitConversion("lm/J", "EUR/kJ", 1e3);
+defineUnitConversion("lm/J", "EUR/MJ", 1e6);
+defineUnitConversion("lm/J", "EUR/GJ", 1e9);
+defineUnitConversion("lm/J", "EUR/GWh", 3.6e12);
+defineUnitConversion("lm/J", "EUR/MWh", 3.6e9);
+defineUnitConversion("lm/J", "EUR/kWh", 3.6e6);
+defineUnitConversion("lm/J", "cent/kWh", 3.6e8);
+//
+//----------------------------------------
+// 'EUR'/W are mapped to lm/W 
+//----------------------------------------
+defineUnitConversion("lm/W", "EUR/W", 1);
+defineUnitConversion("lm/W", "EUR/kW", 1e3);
+defineUnitConversion("lm/W", "EUR/MW", 1e6);
+defineUnitConversion("lm/W", "EUR/GW", 1e9);
+//
+// ---------------------------------------
+// Others
+// --------------------------------------
+
+//Volume flow
+defineUnitConversion("m3/s", "m3/h", 3600);
+
+//Work, Energy
+defineUnitConversion("J", "TJ", 1e-12);
+defineUnitConversion("J", "kWh", 1/3600/1000);
+defineUnitConversion("J", "MWh", 1/3600/1000000);
+defineUnitConversion("J", "GWh", 1/3600/1000000000);
+defineUnitConversion("J", "TWh", 1/3600/1000000000000);
+
+// PowerRate
+defineUnitConversion("W/s", "MW/h", 3.6e-3);
+
+//Mass flow
+defineUnitConversion("kg/s", "t/h", 3.6);
+
+//Mass
+defineUnitConversion("kg", "t", 1e-3);
+defineUnitConversion("kg", "Mt", 1e-9);
+
+//SpecificMassFlowOfCDE
+defineUnitConversion("kg/J", "g/kWh", 3.6e9);

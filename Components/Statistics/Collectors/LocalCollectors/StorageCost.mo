@@ -1,23 +1,25 @@
 within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model StorageCost "Generatl storage cost model (can be used by all kinds of storages)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   // _____________________________________________
   //
   //            Imports
@@ -60,13 +62,20 @@ model StorageCost "Generatl storage cost model (can be used by all kinds of stor
     final other_flow=0,
     final other_demand(start=0),
     final other_revenue(start=0),
-    final m_CDE(start=0),
+    final m_CDE_produced(start=0),
+    final m_CDE_consumed(start=0),
     final m_flow_CDE=0,
     final der_E_n=if isThermalStorage then Q_flow_n else P_n,
     final E_n=Delta_E_n,
     final Cspec_demAndRev_gas_fuel=0,
     final H_flow=0,
-    final C_OM_fix=der_E_n * costRecordGeneral.Cspec_fixOM);
+    final C_OM_fix=der_E_n * costRecordGeneral.Cspec_fixOM,
+    final consumes_H_flow=false,
+    final produces_H_flow=false,
+    final consumes_other_flow=false,
+    final produces_other_flow=false,
+    final consumes_m_flow_CDE=false,
+    final produces_m_flow_CDE=false);
 
   // _____________________________________________
   //

@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Heat.SolarThermal.Check;
 model TestCollectorEN12975
-  //___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+  //________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -75,7 +77,7 @@ public
     surfaceAzimuthAngle=0.17453292519943) annotation (Placement(transformation(extent={{-8,4},{12,24}})));
 
   inner ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
-  Modelica.Blocks.Sources.RealExpression realExpression(y=simCenter.T_amb_var + 273.15) annotation (Placement(transformation(extent={{-94,4},{-74,24}})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=20 + 273.15)                  annotation (Placement(transformation(extent={{-94,4},{-74,24}})));
 equation
   // _____________________________________________
   //
@@ -120,13 +122,13 @@ equation
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
-<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Note that the inlet temperature should never fall below 0 &deg;C. A possible controller for this case can be looked at under TransiEnt.Producer.Heat.SolarThermal.Controller.</p>
+<p><br><b><span style=\"color: #008000;\">10. Version History</span></b></p>
 <p>Model created by Max Mustermann (max.mustermann@mustermail.com) on Thu Apr 24 2014</p>
 </html>"), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-40},{120,100}})),
     experiment(

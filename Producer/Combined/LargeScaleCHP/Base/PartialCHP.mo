@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 partial model PartialCHP "Partial model of a large scale CHP plant with characteristics specified by PQ boundaries and PQ-Heat input table"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -44,14 +46,14 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
 
   parameter Modelica.SIunits.Power P_el_n=300e6 "Installed capacity for investment cost calculation" annotation(Dialog(group="Physical Constraints"));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_n_CHP=PQCharacteristics.PQboundaries[end,1] "Maximum possible heat flow according to PQ diagram" annotation(Dialog(group="Physical Constraints"));
+  parameter Modelica.SIunits.HeatFlowRate Q_flow_n_CHP=PQCharacteristics.PQboundaries[end,1]/PQCharacteristics.k_Q_flow "Maximum possible heat flow according to PQ diagram" annotation(Dialog(group="Physical Constraints"));
   parameter Modelica.SIunits.HeatFlowRate Q_flow_n_Peak=0 "Additional thermal capacity (e.g. peak load heaters)" annotation(Dialog(group="Physical Constraints"));
   final parameter Modelica.SIunits.HeatFlowRate Q_flow_n_total = Q_flow_n_CHP + Q_flow_n_Peak;
 
   parameter SI.ActivePower P_el_init=P_el_n "Initial or guess value of output (= state)" annotation(Dialog(group="Initialization", tab="Advanced"));
   parameter SI.HeatFlowRate Q_flow_init=Q_flow_n_total "Initial or guess value of output (= state)" annotation(Dialog(group="Initialization", tab="Advanced"));
   parameter Boolean useEfficiencyForInit = false "True, set efficiency; False set steam generator power at init" annotation(choices(__Dymola_checkBox=true),Dialog(group="Initialization", tab="Advanced"));
-  parameter SI.HeatFlowRate Q_flow_SG_init=Q_flow_n_total+P_el_init "Initial or guess value of output (= state) of steam generator" annotation(Dialog(group="Initialization", tab="Advanced", enable=not useEfficiencyForInit));
+  parameter SI.HeatFlowRate Q_flow_SG_init=Q_flow_init+P_el_init "Initial or guess value of output (= state) of steam generator" annotation(Dialog(group="Initialization", tab="Advanced", enable=not useEfficiencyForInit));
   parameter Real eta_el_init = 0.4 "Thermal efficiency used at init time" annotation(Dialog(group="Initialization", tab="Advanced",enable=useEfficiencyForInit));
 
   parameter Boolean useConstantEfficiencies = false "True, constant efficiency over load" annotation(Evaluate=true, choices(__Dymola_checkBox=true),Dialog(group="Physical Constraints"));
@@ -162,10 +164,10 @@ public
   Modelica.SIunits.HeatFlowRate Q_flow_is "Actual thermal power generation (>=0)";
   Modelica.SIunits.HeatFlowRate Q_flow_input;
 
-  Modelica.SIunits.Efficiency eta_el;
-  Modelica.SIunits.Efficiency eta_el_target "Calculated from setpoint and plant characteristic";
-  Modelica.SIunits.Efficiency eta_th;
-  Modelica.SIunits.Efficiency eta_th_target "Calculated from setpoint and plant characteristic";
+  Modelica.SIunits.Efficiency eta_el(max=1);
+  Modelica.SIunits.Efficiency eta_el_target(max=1) "Calculated from setpoint and plant characteristic";
+  Modelica.SIunits.Efficiency eta_th(max=1);
+  Modelica.SIunits.Efficiency eta_th_target(max=1) "Calculated from setpoint and plant characteristic";
   Modelica.SIunits.Efficiency eta_total = eta_el + eta_th;
 
   // Carbon dioxide emissions and allocation
@@ -206,10 +208,10 @@ equation
 
   // Efficiencies
   if not useConstantEfficiencies then
-    eta_el=min(1, P_el_is/max(Q_flow_input,simCenter.Q_flow_small));
-    eta_th=min(1, Q_flow_is/max(Q_flow_input,simCenter.Q_flow_small));
-    eta_el_target=Q_flow_set_SG.P/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small);
-    eta_th_target=Q_flow_set_SG.Q/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small);
+    eta_el=max(0,min(1, P_el_is/max(Q_flow_input,simCenter.Q_flow_small)));
+    eta_th=max(0,min(1, Q_flow_is/max(Q_flow_input,simCenter.Q_flow_small)));
+    eta_el_target=max(0, min(1, Q_flow_set_SG.P/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small)));
+    eta_th_target=max(0, min(1, Q_flow_set_SG.Q/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small)));
   else
     eta_el=eta_el_const;
     eta_el_target=eta_el_const;
@@ -272,7 +274,8 @@ equation
 
   connect(Q_flow_set_pos.y, Q_flow_set_CHP.u) annotation (Line(points={{57.4,110},{52,110},{48,110}}, color={0,0,127}));
 
-  connect(Q_flow_set_SG.Q, Q_flow_set_CHP.y) annotation (Line(points={{7,102},{8,102},{8,106},{18,106},{18,110},{25,110}}, color={0,0,127}));
+  connect(Q_flow_set_SG.Q, Q_flow_set_CHP.y) annotation (Line(points={{5.45455,102},{8,102},{8,106},{18,106},{18,110},{25,110}},
+                                                                                                                           color={0,0,127}));
 
   connect(Q_flow_set_CHP.y, pQDiagram.Q_flow) annotation (Line(points={{25,110},{18,110},{18,124},{12,124}}, color={0,0,127}));
 

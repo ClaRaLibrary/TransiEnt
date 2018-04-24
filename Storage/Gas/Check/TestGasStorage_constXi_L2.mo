@@ -1,22 +1,24 @@
 ﻿within TransiEnt.Storage.Gas.Check;
 model TestGasStorage_constXi_L2
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   //values from Olmos, Fernando ; Manousiouthakis, Vasilios I.: Hydrogen car fill-up process modeling and simulation. In: International Journal of Hydrogen Energy 38 (2013), Nr. 8, S. 3401–3418.
@@ -42,7 +44,7 @@ model TestGasStorage_constXi_L2
     p_start=p_start_1*ones(pipe_54.N_cv),
     h_start=h_start_1*ones(pipe_54.N_cv),
     heatTransfer(alpha_nom=6000),
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     N_cv=1,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L4) annotation (Placement(transformation(extent={{-70,-4},{-42,6}})));
                                                                          //length like given in the paper, d_i scaled with 1/10
@@ -55,7 +57,7 @@ model TestGasStorage_constXi_L2
     p_start=p_start_2*ones(pipe_32.N_cv),
     h_start=h_start_2*ones(pipe_32.N_cv),
     heatTransfer(alpha_nom=6000),
-    initType=ClaRa.Basics.Choices.Init.noInit,
+    initOption=0,
     N_cv=1,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L4) annotation (Placement(transformation(extent={{42,-4},{70,6}})));
                                                                       //length like given in the paper, d_i scaled with 1/10
@@ -63,50 +65,53 @@ model TestGasStorage_constXi_L2
   TransiEnt.Storage.Gas.GasStorage_constXi_L2 station_tank(
     medium=medium,
     V_geo=0.6,
-    A_heat=4.1,
     alpha_nom=4,
     p_gas_start=p_start_1,
     T_gas_start=T_start_1,
-    redeclare model CostSpecsStorage = Components.Statistics.ConfigurationData.GeneralCostSpecs.HydrogenStorageSmall,
     Cspec_demAndRev_el=simCenter.Cspec_demAndRev_el_70_150_GWh,
+    redeclare model CostSpecsStorage = Components.Statistics.ConfigurationData.GeneralCostSpecs.HydrogenBufferStorage,
     p_max=8200000) annotation (Placement(transformation(extent={{-70,-4},{-90,-24}})));
   TransiEnt.Storage.Gas.GasStorage_constXi_L2 vehicle_tank(
     medium=medium,
     V_geo=0.108,
-    A_heat=2.34,
     alpha_nom=60,
     p_gas_start=p_start_2,
     T_gas_start=T_start_2,
-    redeclare model CostSpecsStorage = Components.Statistics.ConfigurationData.GeneralCostSpecs.HydrogenStorageSmall,
     Cspec_demAndRev_el=simCenter.Cspec_demAndRev_el_70_150_GWh,
+    redeclare model CostSpecsStorage = Components.Statistics.ConfigurationData.GeneralCostSpecs.HydrogenBufferStorage,
     p_max=8200000) annotation (Placement(transformation(extent={{70,-24},{90,-4}})));
 
-  ClaRa.Basics.ControlVolumes.SolidVolumes.ThinWall_L2               wall_pipe_54(
-    mass=8238*0.00676,
-    T_start=T_start_1,
+  ClaRa.Basics.ControlVolumes.SolidVolumes.CylindricalThinWall_L4 wall_pipe_54(
     redeclare model Material = TILMedia.SolidTypes.TILMedia_Steel,
-    A_heat=0.3830,
-    thickness_wall=0.002)
-                       annotation (Placement(transformation(extent={{-66,18},{-46,28}})));
-  ClaRa.Basics.ControlVolumes.SolidVolumes.ThinWall_L2               wall_pipe_32(
-    mass=8238*0.00138,
-    T_start=T_start_1,
-    A_heat=0.0382,
-    thickness_wall=0.002,
-    redeclare model Material = TILMedia.SolidTypes.TILMedia_Steel)
-                       annotation (Placement(transformation(extent={{46,18},{66,28}})));
-  ClaRa.Basics.ControlVolumes.SolidVolumes.ThinWall_L2               wall_station_tank(
-    mass=8238*0.265,
-    T_start=T_start_1,
+    N_ax=1,
+    diameter_i=pipe_54.diameter_i,
+    length=pipe_54.length,
+    diameter_o=0.0142,
+    T_start=T_start_1*ones(wall_pipe_54.N_ax))
+                          annotation (Placement(transformation(extent={{-66,18},{-46,28}})));
+  ClaRa.Basics.ControlVolumes.SolidVolumes.CylindricalThinWall_L4 wall_pipe_32(
     redeclare model Material = TILMedia.SolidTypes.TILMedia_Steel,
-    thickness_wall=0.3081,
-    A_heat=4.86)       annotation (Placement(transformation(extent={{-100,18},{-80,28}}))); // assumed to be spherical --> d_i=0.5232
-  ClaRa.Basics.ControlVolumes.SolidVolumes.ThinWall_L2               wall_vehicle_tank(
-    mass=1642*0.0576,
-    T_start=T_start_2,
+    N_ax=1,
+    diameter_i=pipe_32.diameter_i,
+    length=pipe_32.length,
+    diameter_o=0.0094,
+    T_start=T_start_1*ones(wall_pipe_32.N_ax))                     annotation (Placement(transformation(extent={{46,18},{66,28}})));
+  ClaRa.Basics.ControlVolumes.SolidVolumes.CylindricalThinWall_L4 wall_station_tank(
     redeclare model Material = TILMedia.SolidTypes.TILMedia_Steel,
-    thickness_wall=0.2101,
-    A_heat=2.61)       annotation (Placement(transformation(extent={{80,18},{100,28}}))); // assumed to be spherical --> d_i=0.2954
+    N_ax=1,
+    diameter_i=0.5232,
+    diameter_o=0.7173,
+    length=2.494,
+    T_start=T_start_1*ones(wall_station_tank.N_ax))
+                 annotation (Placement(transformation(extent={{-100,18},{-80,28}})));       // assumed to be spherical --> d_i=0.5232
+  ClaRa.Basics.ControlVolumes.SolidVolumes.CylindricalThinWall_L4 wall_vehicle_tank(
+    redeclare model Material = TILMedia.SolidTypes.TILMedia_Steel,
+    N_ax=1,
+    diameter_i=0.2954,
+    diameter_o=0.3636,
+    length=2.521,
+    T_start=T_start_2*ones(wall_vehicle_tank.N_ax))
+                 annotation (Placement(transformation(extent={{80,18},{100,28}})));       // assumed to be spherical --> d_i=0.2954
 
   Base.ConstantHTOuterTemperature_L2 ht_pipe_54(alpha_nom=8, A_heat=0.68)
     annotation (Placement(transformation(
@@ -122,12 +127,12 @@ model TestGasStorage_constXi_L2
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
-        origin={-90,50})));
+        origin={-90,50}))); //cylindrical wall
   Base.ConstantHTOuterTemperature_L2 ht_vehicle_tank(alpha_nom=6, A_heat=2.88)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
-        origin={90,50})));
+        origin={90,50}))); //cylindrical wall
 
   Modelica.Blocks.Sources.Constant T_amb(k=300.15)
                                          annotation (Placement(transformation(
@@ -144,35 +149,35 @@ model TestGasStorage_constXi_L2
   inner ModelStatistics                                                   modelStatistics annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
 equation
 
-  connect(wall_pipe_54.innerPhase, pipe_54.heat[1]) annotation (Line(
+  connect(wall_pipe_54.innerPhase[1], pipe_54.heat[1]) annotation (Line(
       points={{-56,18},{-56,12},{-56,5}},
       color={167,25,48},
       thickness=0.5));
-  connect(wall_pipe_32.innerPhase, pipe_32.heat[1]) annotation (Line(
+  connect(wall_pipe_32.innerPhase[1], pipe_32.heat[1]) annotation (Line(
       points={{56,18},{56,5}},
       color={167,25,48},
       thickness=0.5));
-  connect(wall_pipe_32.outerPhase, ht_pipe_32.heat) annotation (Line(
+  connect(wall_pipe_32.outerPhase[1], ht_pipe_32.heat) annotation (Line(
       points={{56,28},{56,28},{56,40}},
       color={167,25,48},
       thickness=0.5));
-  connect(wall_station_tank.outerPhase, ht_station_tank.heat) annotation (Line(
+  connect(wall_station_tank.outerPhase[1], ht_station_tank.heat) annotation (Line(
       points={{-90,28},{-90,28},{-90,40}},
       color={167,25,48},
       thickness=0.5));
-  connect(wall_station_tank.innerPhase, station_tank.heat) annotation (Line(
+  connect(wall_station_tank.innerPhase[1], station_tank.heat) annotation (Line(
       points={{-90,18},{-90,18},{-90,-14},{-84,-14}},
       color={167,25,48},
       thickness=0.5));
-  connect(wall_vehicle_tank.outerPhase, ht_vehicle_tank.heat) annotation (Line(
+  connect(wall_vehicle_tank.outerPhase[1], ht_vehicle_tank.heat) annotation (Line(
       points={{90,28},{90,40}},
       color={167,25,48},
       thickness=0.5));
-  connect(ht_pipe_54.heat, wall_pipe_54.outerPhase) annotation (Line(
+  connect(ht_pipe_54.heat, wall_pipe_54.outerPhase[1]) annotation (Line(
       points={{-56,40},{-56,40},{-56,28}},
       color={167,25,48},
       thickness=0.5));
-  connect(wall_vehicle_tank.innerPhase, vehicle_tank.heat) annotation (Line(
+  connect(wall_vehicle_tank.innerPhase[1], vehicle_tank.heat) annotation (Line(
       points={{90,18},{90,18},{90,-14},{84,-14}},
       color={167,25,48},
       thickness=0.5));
@@ -209,5 +214,10 @@ equation
       thickness=1.5));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-60},{100,100}})),  experiment(StopTime=216, Interval=0.008),
     Icon(coordinateSystem(extent={{-100,-60},{100,100}})),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #4b8a49\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) in Sep 2016</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (changes due to ClaRa changes: exchanged wall models)</p>
+</html>"));
 end TestGasStorage_constXi_L2;

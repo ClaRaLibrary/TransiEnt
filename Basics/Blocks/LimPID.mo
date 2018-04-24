@@ -1,28 +1,52 @@
 within TransiEnt.Basics.Blocks;
 block LimPID "P, PI, PD, and PID controller with limited output, anti-windup compensation"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
 
   import Modelica.Blocks.Types.InitPID;
   import Modelica.Blocks.Types.SimpleController;
 
-//---------------------------------------
-//General Design of the Controller ------
+  // _____________________________________________
+  //
+  //        Constants and Hidden Parameters
+  // _____________________________________________
+
+protected
+  parameter Boolean with_I = controllerType==Modelica.Blocks.Types.SimpleController.PI or
+                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation(Evaluate=true, HideResult=true);
+  parameter Boolean with_D = controllerType==Modelica.Blocks.Types.SimpleController.PD or
+                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation(Evaluate=true, HideResult=true);
+
+  // _____________________________________________
+  //
+  //               Visible Parameters
+  // _____________________________________________
+
+  //General Design of the Controller ------
+
+public
   parameter Modelica.Blocks.Types.SimpleController controllerType=
          Modelica.Blocks.Types.SimpleController.PID "Type of controller" annotation(Dialog(group="General Design of Controller"));
   parameter Real sign= 1 "set to 1 if a positive control error leads to a positive control output, else -1"
@@ -38,14 +62,16 @@ block LimPID "P, PI, PD, and PID controller with limited output, anti-windup com
   parameter Real yMin=-yMax "Lower limit of output"
                                                    annotation(Dialog(group="Limiter for Controller Output"));
 
-//----------------------------------------
-//Time Resononse of the Controller -------
+
+
+  //Time Resononse of the Controller -------
+
   parameter Real k = 1 "Gain of Proportional block"
                                                    annotation(Dialog(group="Time Response of the Controller"));
   parameter Modelica.SIunits.Time Ti(min=Modelica.Constants.small)=0.5 "1/Ti is gain of integrator block"
                                       annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Time Response of the Controller"));
- parameter Modelica.SIunits.Time Td(min=0)=0.1 "Gain of derivative block"
+  parameter Modelica.SIunits.Time Td(min=0)=0.1 "Gain of derivative block"
                               annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Time Response of the Controller"));
 
@@ -55,7 +81,7 @@ block LimPID "P, PI, PD, and PID controller with limited output, anti-windup com
        annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Derivative Filtering"));
 
-//------------------- Controller activation --------------------
+  //------------------- Controller activation --------------------
 
 parameter Boolean use_activateInput = false "Provide Boolean input to switch controller on/off."
                                                     annotation(Dialog(tab="Controller activation"));
@@ -66,7 +92,7 @@ parameter ClaRa.Basics.Units.Time Tau_lag_I=0.0 "Time lag for activation of inte
 
 parameter Real output_inactive = 1 "Controller output if controller is not active" annotation(Dialog(tab="Controller activation"));
 
-//Signal Smoothening---------------------------
+  //Signal Smoothening---------------------------
 
 public
   parameter Real Tau_in(min=0)=0 "Time constant for input smoothening, Tau_in=0 refers to signal no smoothening"
@@ -74,7 +100,7 @@ public
   parameter Real Tau_out(min=0)=0 "time constant for output smoothening, Tau_out=0 refers to signal no smoothening"
            annotation(Evaluate=true, Dialog(tab="I/O Filters"));
 
-//Initialisation--------------------------
+  //Initialisation--------------------------
 public
   parameter InitPID initType=Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState "Type of initialization"
                                      annotation(Evaluate=true,
@@ -95,27 +121,32 @@ public
     annotation(Dialog(enable=initType == Modelica.Blocks.Types.InitPID.InitialOutput, tab=
           "Initialization"));
 
-//Expert Settings---------------------------------------------------------------
+  //Expert Settings---------------------------------------------------------------
   parameter Real Tau_add(min=0)=0 "Set to >0 for additional state after add block in controller, if DAE-index reduction fails."
     annotation(Dialog(tab="Expert Settings", group="DAE Index Reduction"));
 
-protected
-  parameter Boolean with_I = controllerType==Modelica.Blocks.Types.SimpleController.PI or
-                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation(Evaluate=true, Hide=true);
-  parameter Boolean with_D = controllerType==Modelica.Blocks.Types.SimpleController.PD or
-                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation(Evaluate=true, Hide=true);
-public
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
   Modelica.Blocks.Interfaces.RealInput u_s "Connector of setpoint input signal"
     annotation (Placement(transformation(extent={{-200.5,-20},{-160.5,20}},
           rotation=0), iconTransformation(extent={{-140,-20},{-100,20}})));
 
-    Modelica.Blocks.Interfaces.BooleanInput activateInput if use_activateInput "true, if controller is on"
+  Modelica.Blocks.Interfaces.BooleanInput activateInput if use_activateInput "true, if controller is on"
                                 annotation (Placement(transformation(extent={{-200.5,
             -100},{-160.5,-60}}), iconTransformation(extent={{-140,-100},{-100,-60}})));
 
   Modelica.Blocks.Interfaces.RealOutput y "Connector of actuator output signal"
     annotation (Placement(transformation(extent={{130,-10},{150,10}}, rotation=0),
         iconTransformation(extent={{99,-10},{119,10}})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
   Modelica.Blocks.Math.Gain P(k=k)
                      annotation (Placement(transformation(extent={{-30,90},{-11,
             109}},rotation=0)));
@@ -137,18 +168,9 @@ Modelica.Blocks.Types.Init.NoInit,
   ClaRa.Components.Utilities.Blocks.DerivativeClaRa D_approx(
     k=Td,
     x_start=xd_start,
-    initType=if initType == InitPID.SteadyState then
-Modelica.Blocks.Types.Init.SteadyState
- else
-     if initType == InitPID.InitialOutput then
-Modelica.Blocks.Types.Init.InitialOutput
- else
-     if initType == InitPID.InitialState then
-Modelica.Blocks.Types.Init.InitialState
- else
-Modelica.Blocks.Types.Init.NoInit,
-    Tau=Nd) if
-             with_D annotation (Placement(transformation(extent={{-30,50},{-10,69.5}}, rotation=0)));
+    Tau=Nd,
+    initOption=if ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit) == Modelica.Blocks.Types.Init.SteadyState) then 502 elseif ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit) == Modelica.Blocks.Types.Init.InitialState) then 799 elseif ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit)
+         == Modelica.Blocks.Types.Init.InitialOutput) then 504 elseif ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit) == Modelica.Blocks.Types.Init.NoInit) then 501 else 0) if with_D annotation (Placement(transformation(extent={{-30,50},{-10,69.5}}, rotation=0)));
 
   Modelica.Blocks.Math.Add3 addPID(
     k1=1,
@@ -229,6 +251,12 @@ public
   Modelica.Blocks.Routing.BooleanPassThrough activateIfNoSwitch if not use_activateInput
     annotation (Placement(transformation(extent={{-109,-98.5},{-102,-91.5}})));
   ClaRa.Components.Utilities.Blocks.FirstOrderClaRa smoothPIDOutput1(Tau=Tau_add) annotation (Placement(transformation(extent={{56,61.5},{63,68.5}})));
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
   assert(yMax >= yMin, "LimPID: Limits must be consistent. However, yMax (=" + String(yMax) +
                        ") < yMin (=" + String(yMin) + ")");
@@ -240,6 +268,12 @@ equation
          "LimPID: During initialization the limits have been switched off.\n" +
          "After initialization, the output y (=" + String(y) +
          ") is outside of the limits of yMin (=" + String(yMin) +") and yMax (=" + String(yMax) + ")");
+
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
   connect(P.y, addPID.u1) annotation (Line(points={{-10.05,99.5},{5,99.5},{5,63.5},
           {9.5,63.5}},
@@ -373,6 +407,7 @@ equation
       points={{-110.6,-0.25},{-135.8,-0.25},{-135.8,0},{-180.5,0}},
       color={0,0,127},
       smooth=Smooth.None));
+
   annotation (defaultComponentName="PID",
   Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -387,22 +422,17 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">15.04.09 First revision, Boris Michaelsen, XRG Simulation GmbH</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">25.11.09 Update to independently set the gain and time constants of the PID, added a new parameter \\&QUOT;sign\\&QUOT; for case dependent control error evaluation, Friedrich Gottelt, XRG Simulation GmbH</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">21.04.2017 Added Transient license header, Pascal Dubucq (dubucq@tuhh.de) </span></p>
+<p>Model revised by Boris Michaelsen (XRG Simulation GmbH), Apr 2009</p>
+<p>Model modified by Friedrich Gottelt (XRG Simulation GmbH), Nov 2009 : Update to independently set the gain and time constants of the PID, added a new parameter \\&quot;sign\\&quot; for case dependent control error evaluation</p>
+<p>Model modified by Pascal Dubucq (dubucq@tuhh.de), Apr 2017 : Added Transient license header</p>
 </html>"),
-    Window(
-      x=0.22,
-      y=0.02,
-      width=0.6,
-      height=0.72),
     Icon(coordinateSystem(
         preserveAspectRatio=true,
         extent={{-100,-100},{100,100}},

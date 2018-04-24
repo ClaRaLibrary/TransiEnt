@@ -1,23 +1,25 @@
 within TransiEnt.Components.Gas.GasCleaning;
 model Dryer_L1 "Ideally dries a syngas flow"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -33,13 +35,16 @@ model Dryer_L1 "Ideally dries a syngas flow"
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  final parameter Basics.Media.Gases.VLE_VDIWA_SG6_var medium "Medium in the dryer";
+  final parameter Integer N_comp_1=medium_gas.nc-1 "Number of components in the gas -1";
 
   // _____________________________________________
   //
   //             Visible Parameters
   // _____________________________________________
 
+  parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_SG4_var medium_gas "Gas medium in the dryer" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.TILMedia_SplineWater medium_water "Water medium in the dryer" annotation(Dialog(group="Fundamental Definitions"));
+  parameter Integer positionOfWater(min=1,max=N_comp_1+1)=3 "Position of the water component in the gas medium vector" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.PressureDifference pressureLoss=0e5 "Pressure loss in hydrogen flow direction" annotation(Dialog(group="Fundamental Definitions"));
 
   // _____________________________________________
@@ -54,9 +59,9 @@ model Dryer_L1 "Ideally dries a syngas flow"
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut fluidPortOut(Medium=medium) annotation (Placement(transformation(extent={{-10,90},{10,110}}), iconTransformation(extent={{-10,90},{10,110}})));
+  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
+  TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium_gas) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut fluidPortOut(Medium=medium_water) annotation (Placement(transformation(extent={{-10,90},{10,110}}), iconTransformation(extent={{-10,90},{10,110}})));
 
   // _____________________________________________
   //
@@ -65,29 +70,28 @@ model Dryer_L1 "Ideally dries a syngas flow"
 
 protected
   TILMedia.VLEFluid_ph gasIn(
-    vleFluidType=medium,
+    vleFluidType=medium_gas,
     p=gasPortIn.p,
     h=inStream(gasPortIn.h_outflow),
     xi=inStream(gasPortIn.xi_outflow),
     deactivateTwoPhaseRegion=true)  annotation (Placement(transformation(extent={{-80,-12},{-60,8}})));
 
   TILMedia.VLEFluid_ph gasOut(
-    vleFluidType=medium,
+    vleFluidType=medium_gas,
     p=gasPortOut.p,
     h=gasPortOut.h_outflow,
     xi=gasPortOut.xi_outflow,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{60,-12},{80,8}})));
 
   TILMedia.VLEFluid_ph fluidOut(
-    vleFluidType=medium,
+    vleFluidType=medium_water,
     p=fluidPortOut.p,
     h=fluidPortOut.h_outflow,
-    xi=fluidPortOut.xi_outflow,
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,58},{10,78}})));
+    xi=fluidPortOut.xi_outflow) annotation (Placement(transformation(extent={{-10,58},{10,78}})));
 public
   inner Summary summary(
     gasPortIn(
-      mediumModel=medium,
+      mediumModel=medium_gas,
       xi=gasIn.xi,
       x=gasIn.x,
       m_flow=gasPortIn.m_flow,
@@ -96,7 +100,7 @@ public
       h=gasIn.h,
       rho=gasIn.d),
     gasPortOut(
-      mediumModel=medium,
+      mediumModel=medium_gas,
       xi=gasOut.xi,
       x=gasOut.x,
       m_flow=-gasPortOut.m_flow,
@@ -105,7 +109,7 @@ public
       h=gasOut.h,
       rho=gasOut.d),
     fluidPortOut(
-      mediumModel=medium,
+      mediumModel=medium_water,
       xi=fluidOut.xi,
       x=fluidOut.x,
       m_flow=-fluidPortOut.m_flow,
@@ -135,7 +139,12 @@ equation
 
   //mass balance
   gasPortIn.m_flow + gasPortOut.m_flow + fluidPortOut.m_flow = 0;
-  fluidPortOut.m_flow = -gasIn.xi[3]*gasPortIn.m_flow;
+  if not
+        (positionOfWater==N_comp_1+1) then
+    fluidPortOut.m_flow = -gasIn.xi[positionOfWater]*gasPortIn.m_flow;
+  else
+    fluidPortOut.m_flow = -(1-sum(gasIn.xi))*gasPortIn.m_flow;
+  end if;
 
   //pressure
   gasPortOut.p = gasPortIn.p - pressureLoss;
@@ -144,16 +153,16 @@ equation
   fluidOut.T = gasIn.T;
   gasOut.T = gasIn.T;
 
-  //components
-  //gasOut_water
-  fluidOut.xi[1:2] = zeros(2);
-  fluidOut.xi[3] = 1;     //only H2O
-  fluidOut.xi[4:5] = zeros(2);
-  //gasOut_syngas
-  for i in {1,2,4,5} loop
-    gasOut.xi[i] = gasIn.xi[i]/(1 - gasIn.xi[3]);
-  end for;
-  gasOut.xi[3] = 0;        //no water left
+  //gasOut components
+  if not
+        (positionOfWater==N_comp_1+1) then
+    for i in cat(1,1:positionOfWater-1,positionOfWater+1:N_comp_1) loop
+      gasOut.xi[i] = gasIn.xi[i]/(1 - gasIn.xi[positionOfWater]);
+    end for;
+    gasOut.xi[positionOfWater] = 0;        //no water left
+  else
+    gasOut.xi = gasIn.xi/sum(gasIn.xi);
+  end if;
 
   //reverse flow
   gasPortIn.h_outflow =inStream(gasPortOut.h_outflow);

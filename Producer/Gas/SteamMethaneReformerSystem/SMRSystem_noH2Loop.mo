@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Gas.SteamMethaneReformerSystem;
 model SMRSystem_noH2Loop "Steam methane reformer system with sufficient H2 in feed containing prereformer, SMR, WGS, dryer, PSA and heat exchangers"
 
-  //___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+  //________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -50,8 +52,13 @@ model SMRSystem_noH2Loop "Steam methane reformer system with sufficient H2 in fe
   parameter SI.PressureDifference Delta_p_HEX_waterSG_water=0 "Pressure loss in the water/sg heat exchanger on the water side" annotation(Dialog(group="Heat Exchangers"));
   parameter SI.PressureDifference Delta_p_HEX_waterSG_SG=0 "Pressure loss in the water/sg heat exchanger on the SG side" annotation(Dialog(group="Heat Exchangers"));
 
-  parameter SI.Volume volume_junction=0.01 "Volume of the junction of feed and water" annotation(Dialog(group="Junction"));
-  parameter Real desiredMolarRatio=4.8 "Desired molar ratio of H2O to CH4 at the inlet of the SMR" annotation(Dialog(group="Junction"));
+  parameter SI.Volume volume_junction=0.01 "Volume of the junction of feed and water" annotation(Dialog(group="Steam Junction"));
+  parameter Boolean steamToCarbonRatioFromTable=false "true if table data is used for the steam to carbon ratio" annotation(Dialog(group="Steam Junction"));
+  parameter TransiEnt.Basics.Tables.DataPrivacy datasourceSteamToCarbonRatio=TransiEnt.Basics.Tables.DataPrivacy.isPublic "Source of table data"  annotation (Evaluate=true,HideResult=true,Dialog(enable=not use_absolute_path_SteamToCarbonRatio, group="Steam Junction"));
+  parameter String relativepathSteamToCarbonRatio = "gas/SteamToCarbonRatioExampleTimeseries.txt" "Path relative to source directory"
+                                                                                                                                     annotation(Evaluate=true, HideResult=true, Dialog(enable=not use_absolute_path_SteamToCarbonRatio, group="Steam Junction"));
+  parameter Boolean use_absolute_path_SteamToCarbonRatio = false "Should only be used for testing purposes" annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true), Dialog(group="Steam Junction"));
+  parameter String absolute_path_SteamToCarbonRatio = "" annotation(Evaluate=true, HideResult=true, Dialog(enable=use_absolute_path_SteamToCarbonRatio, group="Steam Junction"));
 
   parameter SI.PressureDifference Delta_p_prereformer=3e5 "Pressure loss in the prereformer" annotation(Dialog(group="Prereformer"));
 
@@ -80,7 +87,17 @@ model SMRSystem_noH2Loop "Steam methane reformer system with sufficient H2 in fe
   parameter SI.Temperature T_adi_SMR = 2200 "Adiabatic flame temperature" annotation(Dialog(tab="Steam methane reformer",group="Heat Transfer"));
   parameter Real N_burner_SMR = 112*N_tube_SMR/176 "Number of burners" annotation(Dialog(tab="Steam methane reformer",group="Heat Transfer"));
 
-  parameter ClaRa.Basics.Choices.Init initType_junction=ClaRa.Basics.Choices.Init.steadyDensityPressure "InitType of the junction of feed and water" annotation(Dialog(tab="Initialization",group="Junction"));
+  parameter SI.Temperature T_nom_SMR[N_cv_SMR]=(820.574 + 273.15)*ones(N_cv_SMR) "Nominal gas and catalyst temperature in the control volumes of the SMR" annotation(Dialog(tab="Steam methane reformer",group="Nominal Values"));
+  parameter SI.Pressure p_nom_SMR[N_cv_SMR]=24.338e5*ones(N_cv_SMR) "Nominal pressure in the control volumes of the SMR" annotation(Dialog(tab="Steam methane reformer",group="Nominal Values"));
+  parameter SI.MassFraction xi_nom_SMR[N_cv_SMR,5]=fill({0.0319,0.1893,0.6089,0.0575,0.1073}, N_cv_SMR) "Nominal values for mass fractions in the control volumes of the SMR" annotation(Dialog(tab="Steam methane reformer",group="Nominal Values"));
+
+  parameter Integer initOption_junction=201 "InitOption of the junction of feed and water" annotation (Dialog(tab="Initialization",group="Junction"), choices(
+      choice=0 "Use guess values",
+      choice=1 "Steady state",
+      choice=201 "Steady pressure",
+      choice=202 "Steady enthalpy",
+      choice=208 "Steady pressure and enthalpy",
+      choice=210 "Steady density"));
   parameter SI.SpecificEnthalpy h_start_junction=2.13667e6 "Initial specific enthalpy in the junction of feed and water" annotation(Dialog(tab="Initialization",group="Junction"));
   parameter SI.Pressure p_start_junction=29e5 "Initial pressure  in the junction of feed and water" annotation(Dialog(tab="Initialization",group="Junction"));
   parameter SI.MassFraction xi_start_junction[8]={0.0961314,0.0185838,0.00918786,0.034747,0.00354792,0.00311627,0.821655,0} "Initial mass fractions  in the junction of feed and water" annotation(Dialog(tab="Initialization",group="Junction"));
@@ -112,7 +129,10 @@ model SMRSystem_noH2Loop "Steam methane reformer system with sufficient H2 in fe
 
   outer TransiEnt.SimCenter simCenter;
   outer TransiEnt.ModelStatistics modelStatistics;
-  replaceable model CostSpecsGeneral = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "General Cost Record" annotation(Dialog(group="Statistics"),choicesAllMatching);
+  replaceable model CostSpecsGeneral = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs
+                                                                                                                                                                                                        "General Cost Record" annotation(Dialog(group="Statistics"),choicesAllMatching);
+  replaceable model ControllerH2OForReformer = Components.Gas.Reactor.Controller.ControllerH2OForReformer_StoCbeforeSMR  constrainedby TransiEnt.Components.Gas.Reactor.Controller.Base.PartialControllerH2OForReformer
+                                                                                                                                                                                                        "Controller for steam for reformer" annotation(Dialog(group="Statistics"),choicesAllMatching);
 
   // _____________________________________________
   //
@@ -157,13 +177,16 @@ protected
     em_flame=em_flame_SMR,
     em_tube=em_tube_SMR,
     T_adi=T_adi_SMR,
-    N_burner=N_burner_SMR) annotation (Placement(transformation(extent={{12,-10},{32,10}})));
+    N_burner=N_burner_SMR,
+    T_nom=T_nom_SMR,
+    p_nom=p_nom_SMR,
+    xi_nom=xi_nom_SMR)     annotation (Placement(transformation(extent={{12,-10},{32,10}})));
   TransiEnt.Basics.Adapters.Gas.Real_to_Ideal real_to_Ideal(real=realGas_sg6, ideal=idealGas_sg6) annotation (Placement(transformation(extent={{-12,-10},{8,10}})));
   TransiEnt.Basics.Adapters.Gas.Ideal_to_Real ideal_to_Real(real=realGas_sg6, ideal=idealGas_sg6) annotation (Placement(transformation(extent={{36,-10},{56,10}})));
   TransiEnt.Components.Gas.Reactor.WaterGasShiftReactor_L1 wGS(pressureLoss=Delta_p_WGS, conversion=conversionRate_WGS) annotation (Placement(transformation(extent={{84,-10},{104,10}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor massComp_feed(medium=realGas_ng7_sg, compositionDefinedBy=1) annotation (Placement(transformation(extent={{-180,0},{-160,20}})));
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlow_feed(medium=realGas_ng7_sg) annotation (Placement(transformation(extent={{-156,0},{-136,20}})));
-  TransiEnt.Components.Gas.Reactor.Controller.ControllerH2OForReformer controllerH2OForReformer(desiredMolarRatio=desiredMolarRatio) annotation (Placement(transformation(
+  ControllerH2OForReformer controllerH2OForReformer annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-138,-34})));
@@ -173,7 +196,8 @@ protected
     p_start=p_start_junction,
     xi_start=xi_start_junction,
     h_start=h_start_junction,
-    initType=initType_junction) annotation (Placement(transformation(extent={{-132,10},{-112,-10}})));
+    initOption=initOption_junction)
+                                  annotation (Placement(transformation(extent={{-132,10},{-112,-10}})));
   TransiEnt.Components.Gas.Reactor.Prereformer_L1 prereformer(pressureLoss=Delta_p_prereformer) annotation (Placement(transformation(extent={{-84,-10},{-64,10}})));
   TransiEnt.Basics.Adapters.Gas.RealNG7_SG_to_RealSG6 realNG7_SG_to_RealSG6_1(medium_ng7_sg=realGas_ng7_sg, medium_sg6=realGas_sg6) annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   TransiEnt.Components.Gas.HeatExchanger.HEXOneRealGasOneFluidIdeal_L1 heatExchanger_SynGasH2O(
@@ -183,11 +207,14 @@ protected
     Delta_p_fluid=Delta_p_HEX_waterSG_water,
     T_out_fixed=T_SG_HEX_out) annotation (Placement(transformation(extent={{108,-10},{128,10}})));
   TransiEnt.Components.Gas.GasCleaning.PressureSwingAdsorptionReactor_L1 pSA(pressureLoss=Delta_p_PSA, eta_h2=eta_H2_PSA) annotation (Placement(transformation(extent={{180,-10},{200,10}})));
-  TransiEnt.Components.Gas.GasCleaning.Dryer_L1 dryer(pressureLoss=Delta_p_dryer) annotation (Placement(transformation(extent={{156,-10},{176,10}})));
+  TransiEnt.Components.Gas.GasCleaning.Dryer_L1 dryer(pressureLoss=Delta_p_dryer,
+    medium_water=water,
+    positionOfWater=3,
+    medium_gas=realGas_sg6)                                                       annotation (Placement(transformation(extent={{156,-10},{176,10}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi     sink_H2O(
-    medium=realGas_sg6,
     T_const(displayUnit="K"),
-  p_const=100000)   annotation (Placement(transformation(
+  p_const=100000,
+    medium=water)   annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={166,26})));
@@ -227,7 +254,16 @@ protected
     E_n=0,
     redeclare model CostRecordGeneral = CostSpecsGeneral (size1=H_flow_H2_n),
     Cspec_demAndRev_other=Cspec_demAndRev_other_water,
-    other_flow=-(source_H2O.steam_a.m_flow + sink_H2O.steam_a.m_flow)) annotation (Placement(transformation(extent={{-160,-100},{-140,-80}})));
+    other_flow=-(source_H2O.steam_a.m_flow + sink_H2O.steam_a.m_flow),
+    produces_P_el=false,
+    consumes_P_el=false,
+    produces_Q_flow=false,
+    consumes_Q_flow=false,
+    produces_H_flow=false,
+    consumes_H_flow=false,
+    produces_other_flow=false,
+    produces_m_flow_CDE=false,
+    consumes_m_flow_CDE=false)                                         annotation (Placement(transformation(extent={{-160,-100},{-140,-80}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalCollector thermalCollector(m=N_cv_SMR) annotation (Placement(transformation(extent={{-10,80},{10,60}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensorDryGas moleCompDryGasBeforePreRe(
     medium=realGas_ng7_sg,
@@ -252,6 +288,12 @@ protected
 
 public
   Summary summary(
+    outline(
+      m_waterIn=source_H2O_m,
+      m_waterOut=sink_H2O_m,
+      Delta_m_water=source_H2O_m+sink_H2O_m,
+      P_el_pump=pump_H2O.summary.outline.P_el,
+      W_el_puimp=pump_H2O.summary.outline.W_el),
     gasPortIn(
       mediumModel=heatExchanger_feed.summary.gasPortIn.mediumModel,
       xi=heatExchanger_feed.summary.gasPortIn.xi,
@@ -402,7 +444,21 @@ public
   //             Variable Declarations
   // _____________________________________________
 
+  Real expressionSteamToCarbonRatio=4.8 "Desired molar ratio of H2O to C for the steam controller" annotation(Dialog(group="Steam Junction"));
+
+  SI.Mass source_H2O_m(start=0, fixed=true) "Mass from the water source";
+  SI.Mass sink_H2O_m(start=0, fixed=true) "Mass into the water sink";
+
 protected
+  model Outline
+    extends TransiEnt.Basics.Icons.Record;
+    input SI.Mass m_waterIn "Water entering the system";
+    input SI.Mass m_waterOut "Water leaving the system";
+    input SI.Mass Delta_m_water "Total water usage";
+    input SI.Power P_el_pump "Electric power of the water pump";
+    input SI.Work W_el_puimp "Electric work of the water pump";
+  end Outline;
+
   model MolarDryCompositions
     extends TransiEnt.Basics.Icons.Record;
     input SI.MassFraction molarDryCompAfterMix[9] "Molar dry composition after the feed water mixer";
@@ -422,6 +478,7 @@ protected
 
   model Summary
     extends TransiEnt.Basics.Icons.Record;
+    Outline outline;
     TransiEnt.Basics.Records.FlangeRealGas gasPortIn;
     TransiEnt.Basics.Records.FlangeRealGas gasAfterHEX1;
     TransiEnt.Basics.Records.FlangeRealGas gasAfterMix;
@@ -442,11 +499,25 @@ protected
     HeatSMR heatSMR;
   end Summary;
 
+public
+  Modelica.Blocks.Sources.RealExpression realExpression(y=expressionSteamToCarbonRatio)
+                                                                             annotation (Placement(transformation(extent={{-220,-78},{-200,-58}})));
+  Modelica.Blocks.Logical.Switch switch1 annotation (Placement(transformation(extent={{-182,-62},{-162,-42}})));
+  Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=steamToCarbonRatioFromTable)        annotation (Placement(transformation(extent={{-220,-62},{-200,-42}})));
+  Basics.Tables.GenericDataTable tableSteamToCarbonRatio(
+    change_of_sign=false,
+    datasource=datasourceSteamToCarbonRatio,
+    relativepath=relativepathSteamToCarbonRatio,
+    use_absolute_path=use_absolute_path_SteamToCarbonRatio,
+    absolute_path=absolute_path_SteamToCarbonRatio)                annotation (Placement(transformation(extent={{-220,-36},{-200,-16}})));
 equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
+
+  der(sink_H2O_m)=-sink_H2O.steam_a.m_flow;
+  der(source_H2O_m)=-source_H2O.steam_a.m_flow;
 
   // _____________________________________________
   //
@@ -566,32 +637,37 @@ connect(junction_feedH2O.gasPort3, moleCompDryGasBeforePreRe.gasPortIn) annotati
       color={175,0,0},
       thickness=0.5));
   connect(controllerH2OForReformer.m_flow_steam, pump_H2O.m_flow_in) annotation (Line(points={{-128,-34},{107,-34}}, color={0,0,127}));
+  connect(switch1.y, controllerH2OForReformer.desiredMolarRatio) annotation (Line(points={{-161,-52},{-161,-52},{-138,-52},{-138,-44}}, color={0,0,127}));
+  connect(booleanExpression.y, switch1.u2) annotation (Line(points={{-199,-52},{-184,-52}}, color={255,0,255}));
+  connect(realExpression.y, switch1.u3) annotation (Line(points={{-199,-68},{-192,-68},{-192,-60},{-184,-60}}, color={0,0,127}));
+  connect(tableSteamToCarbonRatio.y1, switch1.u1) annotation (Line(points={{-199,-26},{-192,-26},{-192,-44},{-184,-44}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-240,-100},{240,100}})),Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-240,-100},{240,100}})),
   Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents typical setup of a steam methane reformer system with enough hydrogen in the feed. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The feed is preheated, mixed with preheated steam and the higher hydrocarbons are decomposed. Thereafter, the steam methane reformer produces hydrogen out of methane and steam. Afterwards, the hydrogen yield is increased in the water gas shift reactor. In the end, the stream is cooled, dried and purified in a pressure swing adsorption reactor (PSA). In a real system there are many more heat exchangers but most of the models work simplified and thus independent of the temperature. Necessary for this process is heat for the preheaters and the steam methane reformer which is usually delivered by a burner in which the PSA off-gas is burned. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>The model is valid if there is enough hydrogen in the stream. The applicability of the submodels should be checked as well before using this model. </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: real gas inlet </p>
 <p>gasPortOut_offGas: real gas outlet for the PSA off-gas </p>
 <p>gasPortOut_hydrogen: real gas outlet for the produced hydrogen </p>
 <p>heatFeedPreheater: heat port for the feed preheater </p>
 <p>heatSteamPreheater: heat port for the steam preheater </p>
 <p>heatSMR: heat port for the steam methane reformer </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) in March 2017<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) in March 2017</p>
+<p><br>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (fixed for update to ClaRa 1.3.0)</p>
 </html>"));
 end SMRSystem_noH2Loop;

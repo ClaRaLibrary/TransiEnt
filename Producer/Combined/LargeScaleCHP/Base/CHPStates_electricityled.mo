@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model CHPStates_electricityled
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   extends TransiEnt.Basics.Icons.Block;
 
@@ -36,8 +38,9 @@ model CHPStates_electricityled
 
   parameter SI.Power P_el_min_operating=10e3 "Minimum operating thermal power";
   parameter SI.Power P_el_max_operating=1e9 "Maximum operating thermal power";
+  parameter SI.Power P_thresh = 0.1*P_el_min_operating "Threshold for state change";
   parameter SI.Time t_startup = 3600 "Startup time";
-  parameter SI.Time t_MDT=t_eps "Minimum downtime of plant";
+  parameter SI.Time t_MDT=0 "Minimum downtime of plant";
   parameter TransiEnt.Basics.Types.ThermalPlantStatus init_state "State of plant at initialization" annotation (__Dymola_editText=false);
 
   parameter SI.Time t_eps = 10 "Threshold time for transitions";
@@ -78,16 +81,19 @@ public
                                    annotation (Placement(transformation(extent={{8,22},{28,42}},     rotation=0)));
   Modelica.StateGraph.Transition threshold(
     enableTimer=true,
-    condition=P_el_set > P_el_min_operating,
-    waitTime=t_MDT)                          annotation (Placement(transformation(extent={{-16,22},{4,42}}, rotation=0)));
+    waitTime=t_MDT,
+    condition=P_el_set > P_el_min_operating - P_thresh)
+                                             annotation (Placement(transformation(extent={{-16,22},{4,42}}, rotation=0)));
   Modelica.StateGraph.Transition noThreshold(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_el_set <= P_el_min_operating) annotation (Placement(transformation(extent={{28,56},{8,76}}, rotation=0)));
+    enableTimer=true,
+    condition=P_el_set <= P_el_min_operating - 2*P_thresh)
+                                              annotation (Placement(transformation(extent={{28,56},{8,76}}, rotation=0)));
   Modelica.StateGraph.Transition noThreshold2(
-    enableTimer=true,
     waitTime=t_eps,
-    condition=P_el_set <= P_el_min_operating) annotation (Placement(transformation(extent={{68,76},{48,96}}, rotation=0)));
+    enableTimer=true,
+    condition=P_el_set <= P_el_min_operating - 2*P_thresh)
+                                              annotation (Placement(transformation(extent={{68,76},{48,96}}, rotation=0)));
 
  Modelica.StateGraph.Transition initOff(
     waitTime=0,

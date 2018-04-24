@@ -1,23 +1,25 @@
 within TransiEnt.Storage.Gas;
 model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume for constant composition with heat transfer to the cavern walls"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -26,6 +28,7 @@ model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume
 
   import TransiEnt;
   import SI = Modelica.SIunits;
+  import Modelica.Constants.pi;
 
   extends TransiEnt.Basics.Icons.StorageGenericGas;
 
@@ -41,15 +44,22 @@ model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium in the gas storage" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
 
-  parameter SI.Area A_heat=storage.A_heat "Inner heat transfer area" annotation(Dialog(group="Heat Transfer"));
+  //parameter SI.Area A_heat=storage.A_heat "Inner heat transfer area" annotation(Dialog(group="Heat Transfer"));
 
-  parameter SI.Thickness thickness_material=2 "Thickness of the surrounding material which takes part in the heat transfer"
+  parameter SI.Thickness thickness_wall=2 "Thickness of the surrounding material which takes part in the heat transfer"
                                                                                                     annotation(Dialog(group="Heat Transfer"));
-  parameter SI.Mass mass=thinWall_L2.solid.d*A_heat*thickness_material "Mass of the surrounding material which takes part in the heat transfer" annotation(Dialog(group="Heat Transfer"));
-  parameter SI.Temperature T_material=317.15 "Temperature of the surrounding" annotation(Dialog(group="Heat Transfer"));
-  parameter SI.Temperature T_material_start=317.15 "Initial temperature of the material" annotation(Dialog(group="Initialization"));
+  parameter SI.Temperature T_surrounding=317.15 "Constant temperature of the surrounding material" annotation(Dialog(group="Heat Transfer"));
+  parameter SI.Temperature T_wall_start=317.15 "Initial temperature of the material which takes part in the heat transfer" annotation(Dialog(group="Initialization"));
   parameter Integer stateLocation = 2 "Location of states" annotation(Dialog(group="Numerical Efficiency"), choices(choice=1 "Inner location of states",
                                     choice=2 "Central location of states",  choice=3 "Outer location of states"));
+  parameter Integer initOption=0 "Type of initialization" annotation (Dialog(group="Initialization"), choices(
+      choice=0 "Use guess values",
+      choice=1 "Steady state",
+      choice=203 "Steady temperature"));
+
+  parameter String suppressChattering="True" "Enable to suppress possible chattering in wall" annotation (Dialog(group="Numerical Efficiency"), choices(choice="False" "False (faster if no chattering occurs)",
+                                                                                            choice="True" "True (faster if chattering occurs)"));
+
 
   // _____________________________________________
   //
@@ -76,23 +86,35 @@ model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium) annotation (
+  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choicesAllMatching,
     Placement(transformation(extent={{-10,-10},{10,10}})));
 protected
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=T_material)
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=T_surrounding)
                                                                                     annotation (Placement(transformation(extent={{70,-10},{50,10}})));
-  ClaRa.Basics.ControlVolumes.SolidVolumes.ThinWall_L2 thinWall_L2(
-    redeclare model Material = TransiEnt.Basics.Media.Solids.Salt,
-    A_heat=A_heat,
-    thickness_wall=thickness_material,
-    mass=mass,
-    T_start(displayUnit="degC") = T_material_start,
-    stateLocation=stateLocation) annotation (Placement(transformation(
-        extent={{-10,5},{10,-5}},
-        rotation=90,
-        origin={30,1})));
+  ClaRa.Basics.ControlVolumes.SolidVolumes.CylindricalThinWall_L4 cylindricalWall(
+    redeclare model Material = Material,
+    T_start(displayUnit="degC") = T_wall_start*ones(cylindricalWall.N_ax),
+    stateLocation=stateLocation,
+    N_ax=1,
+    diameter_o=storage.diameter + thickness_wall,
+    diameter_i=storage.diameter,
+    length=storage.height,
+    initOption=initOption,
+    suppressChattering=suppressChattering) annotation (Placement(transformation(
+        extent={{-15,-5},{15,5}},
+        rotation=270,
+        origin={30,0})));
+  ClaRa.Basics.ControlVolumes.SolidVolumes.ThinPlateWall_L4 topBottomWall(
+    thickness_wall=thickness_wall,
+    length=storage.diameter,
+    redeclare model Material = Material,
+    width=pi/2*storage.diameter,
+    T_start=T_wall_start*ones(cylindricalWall.N_ax),
+    N_ax=1,
+    initOption=initOption,
+    stateLocation=stateLocation) annotation (Placement(transformation(extent={{8,-22},{28,-32}})));
 
 public
   inner Summary summary(
@@ -127,8 +149,8 @@ public
       Q_flow=storage.heat.Q_flow,
       T=storage.heat.T),
     heatMaterial(
-      Q_flow=thinWall_L2.outerPhase.Q_flow,
-      T=thinWall_L2.outerPhase.T),
+      Q_flow=fixedTemperature.port.Q_flow,
+      T=fixedTemperature.port.T),
     costs(
       costs=storage.summary.costs.costs,
       investCosts=storage.summary.costs.investCosts,
@@ -166,11 +188,6 @@ equation
   // _____________________________________________
 
   connect(p_gas, storage.p_gas) annotation (Line(points={{-50,0},{-5,0}}, color={0,0,127}));
-  connect(thinWall_L2.outerPhase, fixedTemperature.port) annotation (Line(
-      points={{35,1},{34.5,1},{34.5,0},{50,0}},
-      color={167,25,48},
-      thickness=0.5));
-  connect(storage.heat, thinWall_L2.innerPhase) annotation (Line(points={{4,0},{24,0},{24,1},{25,1}}, color={191,0,0}));
   connect(gasPortIn, storage.gasPortIn) annotation (Line(
       points={{0,49},{0,4.9}},
       color={255,255,0},
@@ -179,12 +196,28 @@ equation
       points={{0,-6.3},{0,-53}},
       color={255,255,0},
       thickness=1.5));
+  connect(cylindricalWall.outerPhase[1], fixedTemperature.port) annotation (Line(
+      points={{35,-8.88178e-16},{42.5,-8.88178e-16},{42.5,0},{50,0}},
+      color={167,25,48},
+      thickness=0.5));
+  connect(topBottomWall.innerPhase[1], storage.heat) annotation (Line(
+      points={{18,-22},{18,0},{4,0}},
+      color={167,25,48},
+      thickness=0.5));
+  connect(topBottomWall.outerPhase[1], fixedTemperature.port) annotation (Line(
+      points={{18,-32},{18,-38},{42,-38},{42,0},{50,0}},
+      color={167,25,48},
+      thickness=0.5));
+  connect(cylindricalWall.innerPhase[1], storage.heat) annotation (Line(
+      points={{25,0},{4,0}},
+      color={167,25,48},
+      thickness=0.5));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
   Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents an underground compressed gas storage without pressure losses.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>This model uses the models GasStorage_constXi_L2 or GasStorage_varXi_L2 and can be used for real gases with constant or variable compositions. A heat transfer to the surrounding material, e.g. salt, is considered with a replaceable heat transfer model. The heat conductance within that material is assumed to happen only within a specific thickness measured from the surface of the gas storage. The heat conductance is modeled using a thin wall model, see model ClaRa.Basics.ControlVolumes.SolidVolumes.ThinWall_L2 and outside of that thickness, the temperature is assumed to be constant, see Tietze and Stolten [1].</p>
+<p>This model uses the models GasStorage_constXi_L2 or GasStorage_varXi_L2 and can be used for real gases with constant or variable compositions. A heat transfer to the surrounding material, e.g. salt, is considered with a replaceable heat transfer model. The heat conductance within that material is assumed to happen only within a specific thickness measured from the surface of the gas storage and only through the lateral area of the cylinder. The heat conductance is modeled using a thin wall model, see model ClaRa.Basics.ControlVolumes.SolidVolumes.CylindricalThickWall_L4 and outside of that thickness, the temperature is assumed to be constant, see Tietze and Stolten [1].</p>
 <h4><span style=\"color: #008000\">3. Limits of validity</span></h4>
 <p>The model is only valid for negligible pressure losses and negligible changes of the heat transfer coefficient (other heat transfer models can be used). For high pressures there are errors due to errors in the gas models.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
@@ -203,6 +236,7 @@ equation
 <p>[1] Tietze, Vanessa, and Detlef Stolten. Comparison of hydrogen and methane storage by means of a thermodynamic analysis. International Journal of Hydrogen Energy 40.35 (2015): 11530-11537.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) in Oct 2016</p>
-<p><br>Revised by Lisa Andresen (andresen@tuhh.de) Dec 2016</p>
+<p>Revised by Lisa Andresen (andresen@tuhh.de) Dec 2016</p>
+<p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (changes due to ClaRa changes: exchanged wall model, added wall model for top and bottom)</p>
 </html>"));
 end UndergroundGasStorageHeatTransfer_L2;

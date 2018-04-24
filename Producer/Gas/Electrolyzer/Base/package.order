@@ -6,3 +6,4 @@ ElectrolyzerEfficiencyCharlineSilyzer200
 GetInputsElectrolyzer
 PartialElectrolyzerDynamics
 PartialElectrolyzerEfficiencyCharline
+PartialFeedInStation

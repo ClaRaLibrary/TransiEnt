@@ -1,23 +1,25 @@
 within TransiEnt.Examples.Electric;
 model ElectricGrid_SecondaryBalancing "Example for secondary balancing simulation of a two area grid"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
 extends TransiEnt.Basics.Icons.Example;
 
@@ -42,7 +44,9 @@ extends TransiEnt.Basics.Icons.Example;
     fixedStartValue_w=true,
     P_el_n=200e9,
     P_init=Load_1_set.k,
-    nSubgrid=1) annotation (Placement(transformation(extent={{-142,-36},{-94,12}})));
+    nSubgrid=1,
+    P_grad_max_star=0.06/60)
+                annotation (Placement(transformation(extent={{-142,-36},{-94,12}})));
 
   Modelica.Blocks.Sources.Constant Gen_1_set(k=-Load_1_set.k) annotation (Placement(transformation(extent={{-78,16},{-98,36}})));
   Modelica.Blocks.Sources.Constant Load_1_set(k=100e9)        annotation (Placement(transformation(
@@ -56,12 +60,13 @@ extends TransiEnt.Basics.Icons.Example;
   TransiEnt.Producer.Electrical.Conventional.Components.NonlinearThreeStatePlant Gen_2(
     J=10*Gen_2.P_el_n/(100*Modelica.Constants.pi)^2,
     primaryBalancingController(providedDroop=0.2/50/(3/150 - 0.2*0.01)),
-    P_grad_max_star=1/60,
     isSecondaryControlActive=true,
     fixedStartValue_w=false,
     P_el_n=100e9,
     P_init=-Gen_2_set.k,
-    nSubgrid=2) annotation (Placement(transformation(extent={{28,-60},{76,-12}})));
+    nSubgrid=2,
+    P_grad_max_star=0.06/60)
+                annotation (Placement(transformation(extent={{28,-60},{76,-12}})));
 
   Modelica.Blocks.Sources.Constant
                                Gen_2_set(k=-Load_2_set.k - P_Z.k)
@@ -75,8 +80,8 @@ extends TransiEnt.Basics.Icons.Example;
         rotation=0,
         origin={122,-22})));
   Modelica.Blocks.Sources.Constant P_Z(k=-1e9)  annotation (Placement(transformation(extent={{-132,-110},{-112,-90}})));
-  Modelica.Blocks.Sources.Constant SC_T(k=150)  annotation (Placement(transformation(extent={{-62,-112},{-42,-92}})));
-  Modelica.Blocks.Sources.Constant SC_K(k=0.5)  annotation (Placement(transformation(extent={{-28,-112},{-8,-92}})));
+  Modelica.Blocks.Sources.Constant SC_T(k=T)    annotation (Placement(transformation(extent={{-62,-112},{-42,-92}})));
+  Modelica.Blocks.Sources.Constant SC_K(k=K)    annotation (Placement(transformation(extent={{-28,-112},{-8,-92}})));
   Modelica.Blocks.Sources.Constant P_tie_set_2(k=0)   annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
@@ -108,6 +113,8 @@ extends TransiEnt.Basics.Icons.Example;
                                                   annotation (Placement(transformation(extent={{14,-90},{34,-70}})));
   TransiEnt.Components.Electrical.Grid.SeparableLine separableLine_L1_1 annotation (Placement(transformation(extent={{76,-107},{96,-87}})));
   Modelica.Blocks.Sources.BooleanStep Psched2(startValue=true, startTime=100) annotation (Placement(transformation(extent={{70,-82},{82,-70}})));
+  parameter Real T=200 "Constant output value";
+  parameter Real K=0.5 "Constant output value";
 equation
 
   connect(Gen_1_set.y, Gen_1.P_el_set) annotation (Line(

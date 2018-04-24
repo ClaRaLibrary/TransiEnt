@@ -10,3 +10,4 @@ NCVSensor
 WobbeGCVSensor
 EnthalpyFlowSensor
 CompositionSensorDryGas
+vleDensitySensor

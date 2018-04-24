@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Electrical.LumpedPowerGrid.Check;
 model TestTwoGridArchitecture
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
 extends TransiEnt.Basics.Icons.Checkmodel;
 
@@ -76,7 +78,7 @@ ExpectedResult expectedResult;
 equation
 
   connect(LocalGrid.epp, LocalDem.epp) annotation (Line(
-      points={{-10.85,-23.48},{3.4,-23.48},{3.4,-23.5},{20.3,-23.5}},
+      points={{-11.7,-21.1},{3.4,-21.1},{3.4,-23.5},{20.3,-23.5}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -89,7 +91,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(P_tie_12.epp_OUT, LocalGrid.epp) annotation (Line(
-      points={{5.4,56},{6,56},{6,-8},{6,-23.48},{-10.85,-23.48}},
+      points={{5.4,56},{6,56},{6,-8},{6,-21.1},{-11.7,-21.1}},
       color={0,135,135},
       thickness=0.5));
   connect(LocalGrid.P_tie_set, Gen_tie_set.y) annotation (Line(points={{-24.45,-17.87},{-24.45,8},{-39,8}}, color={0,0,127}));
@@ -105,5 +107,13 @@ equation
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p>This validation model produces results that correspond to Page A1-7 of the entso-e operational handbook appendix 1: Load-frequency control.</p>
-</html>"));
+</html>"),
+    __Dymola_experimentFlags(
+      Advanced(
+        EvaluateAlsoTop=false,
+        GenerateVariableDependencies=false,
+        OutputModelicaCode=false),
+      Evaluate=true,
+      OutputCPUtime=true,
+      OutputFlatModelica=false));
 end TestTwoGridArchitecture;

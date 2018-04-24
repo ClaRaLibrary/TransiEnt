@@ -2,23 +2,25 @@ within TransiEnt.Producer.Heat.Power2Heat;
 model ElectricBoiler "Electric Boiler with constant efficiency, spatial resolution can be chosen to be 0d or 1d"
   import TransiEnt;
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -56,7 +58,7 @@ model ElectricBoiler "Electric Boiler with constant efficiency, spatial resoluti
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{-10,88},{10,108}}), iconTransformation(extent={{-10,-110},{10,-90}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn inlet(Medium=medium) annotation (Placement(transformation(extent={{92,-50},{112,-30}}), iconTransformation(extent={{-108,-10},{-88,10}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortOut outlet(Medium=medium) annotation (Placement(transformation(extent={{90,40},{110,60}}), iconTransformation(extent={{90,-10},{110,10}})));
-  Modelica.Blocks.Interfaces.RealInput Q_flow_set "Setpoint for thermal heat"
+  Modelica.Blocks.Interfaces.RealInput Q_flow_set "Setpoint for thermal heat, should be negative"
     annotation (Placement(transformation(extent={{-114,-10},{-94,10}}),
         iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
@@ -68,7 +70,7 @@ model ElectricBoiler "Electric Boiler with constant efficiency, spatial resoluti
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Components.Boundaries.Heat.Heatflow_L1 heatFlowBoundary(p_drop=p_drop) constrainedby TransiEnt.Components.Boundaries.Heat.Base.PartialHeatBoundary annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Boundaries.Heat.Heatflow_L1 heatFlowBoundary(p_drop=p_drop, change_sign=true) constrainedby TransiEnt.Components.Boundaries.Heat.Base.PartialHeatBoundary annotation (choicesAllMatching=true, Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={36,7})));
@@ -79,7 +81,7 @@ public
         origin={-18,30})));
   Modelica.Blocks.Math.Gain efficiency(k=-1/eta)
     annotation (Placement(transformation(extent={{-36,54},{-18,72}})));
-  Modelica.Blocks.Math.Gain sign(k=-1)
+  Modelica.Blocks.Math.Gain sign(k=if heatFlowBoundary.change_sign==true then -1 else 1)
     annotation (Placement(transformation(extent={{-20,-9},{-2,9}})));
   parameter SI.Pressure p_drop=heatFlowBoundary.simCenter.p_n[2] -
       heatFlowBoundary.simCenter.p_n[1];
@@ -95,12 +97,19 @@ public
     Q_flow_fuel_is=0,
     m_flow_CDE_is=0,
     Q_flow_n=Q_flow_n,
-    Q_flow_is=Q_flow_is) annotation (Placement(transformation(extent={{10,-100},{30,-80}})));
+    Q_flow_is=Q_flow_is,
+    consumes_H_flow=false,
+    produces_m_flow_CDE=false)
+                         annotation (Placement(transformation(extent={{10,-100},{30,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
-  Modelica.SIunits.HeatFlowRate Q_flow_is = sign.y;
+  Modelica.SIunits.HeatFlowRate Q_flow_is = -Q_flow_set_limit.y;
+protected
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Consumer)
+                                                                                                                                      annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
 equation
 
+  collectElectricPower.powerCollector.P=epp.P;
   collectHeatingPower.heatFlowCollector.Q_flow = -Q_flow_is;
 
   // _____________________________________________
@@ -108,7 +117,8 @@ equation
   //                Connect Equations
   // _____________________________________________
 
-  connect(modelStatistics.heatFlowCollector[TransiEnt.Basics.Types.TypeOfResource.Conventional],collectHeatingPower.heatFlowCollector);
+  connect(modelStatistics.powerCollector[collectElectricPower.typeOfResource],collectElectricPower.powerCollector);
+  connect(modelStatistics.heatFlowCollector[collectHeatingPower.typeOfResource],collectHeatingPower.heatFlowCollector);
   connect(modelStatistics.costsCollector, collectCosts_HeatProducer.costsCollector);
 
   connect(inlet, heatFlowBoundary.fluidPortIn) annotation (Line(

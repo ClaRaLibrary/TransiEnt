@@ -1,22 +1,24 @@
 within TransiEnt.Components.Gas.VolumesValvesFittings.Check;
 model TestValves
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredMassFlow valveDesiredMassFlow(
@@ -31,16 +33,18 @@ model TestValves
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source2(variable_p=true) annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink2(p_const=100000) annotation (Placement(transformation(extent={{60,20},{40,40}})));
   Modelica.Blocks.Sources.TimeTable timeTable(table=[0,2e5; 0.1,2e5; 0.5,1e5; 0.9,2e5; 1,2e5]) annotation (Placement(transformation(extent={{-100,26},{-80,46}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore simpleValveDesiredPressureBefore annotation (Placement(transformation(extent={{-10,74},{10,86}})));
-  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source1(m_flow_const=-1, T_const=293.15) annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore simpleValveDesiredPressureBefore(p_BeforeValveDes=20000000)
+                                                                                                             annotation (Placement(transformation(extent={{-10,74},{10,86}})));
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source1(m_flow_const=-1, T_const(displayUnit="K") = 283.15)
+                                                                                                         annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink1(variable_p=true) annotation (Placement(transformation(extent={{60,70},{40,90}})));
-  inner SimCenter simCenter
+  inner SimCenter simCenter(redeclare Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel1)
     annotation (Placement(transformation(extent={{-90,-100},{-70,-80}})));
   Modelica.Blocks.Sources.Ramp ramp1(
     duration=0.8,
     startTime=0.1,
-    height=10e5,
-    offset=15e5)   annotation (Placement(transformation(extent={{90,76},{70,96}})));
+    offset=1e5,
+    height=16e5)   annotation (Placement(transformation(extent={{90,76},{70,96}})));
   ValveDesiredDp valve_p annotation (Placement(transformation(extent={{-10,-26},{10,-14}})));
   Boundaries.Gas.BoundaryRealGas_Txim_flow                 source3(variable_m_flow=true)
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));

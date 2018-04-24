@@ -1,52 +1,60 @@
 within TransiEnt.Components.Sensors.RealGas;
 model WobbeGCVSensor "Sensor calculating the Wobbe-Index and gross calorific value for for real gas mixtures"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
-  import TransiEnt;
+
   extends TransiEnt.Components.Sensors.RealGas.Base.RealGas_SensorBase;
-  outer TransiEnt.SimCenter simCenter;
 
   // _____________________________________________
   //
-  //        Constants and Parameters
+  //        Constants and Hidden Parameters
   // _____________________________________________
+
   constant Modelica.SIunits.Density rho_air_stp=1.2931 "Density of ambient air at T=273.15 K, p=1 bar";
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium to be used" annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
-  parameter SI.MassFraction xi_start[medium.nc-1]= medium.xi_default "Initial composition";
 
   // _____________________________________________
   //
-  //             Variable Declarations
+  //             Visible Parameters
   // _____________________________________________
-  SI.EnergyDensity GCV_stp(displayUnit="kWh/m3") "Gross calorific value in J/m3 at STP";
-  SI.MassFraction[medium.nc-1] xi(start=xi_start) "Mass fraction vector";
-  Real d_stp "Relative density of fluid at STP";
+
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium to be used" annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
+  parameter SI.MassFraction xi_start[medium.nc-1]= medium.xi_default "Initial composition" annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
+
   Modelica.Blocks.Interfaces.RealOutput W_S_stp(
      final quantity="EnergyDensity",
     displayUnit="kWh/m3",
@@ -61,6 +69,7 @@ model WobbeGCVSensor "Sensor calculating the Wobbe-Index and gross calorific val
   //
   //           Instances of other Classes
   // _____________________________________________
+
 protected
     TILMedia.VLEFluid_pT fluid_stp(
      p = 1.01325e5,
@@ -71,6 +80,21 @@ protected
      deactivateTwoPhaseRegion=true);
 
   TransiEnt.Basics.Media.RealGasGCV_xi realGasGCV_xi(realGasType=medium, xi_in=xi) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
+  SI.EnergyDensity GCV_stp(displayUnit="kWh/m3") "Gross calorific value in J/m3 at STP";
+  SI.MassFraction[medium.nc-1] xi(start=xi_start) "Mass fraction vector";
+  Real d_stp "Relative density of fluid at STP";
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
   xi = actualStream(gasPortIn.xi_outflow);
 
@@ -80,6 +104,11 @@ equation
 
   W_S_stp = fluid_stp.d*GCV / sqrt(d_stp);
   GCV_stp = fluid_stp.d*GCV;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                    graphics={

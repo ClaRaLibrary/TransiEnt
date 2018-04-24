@@ -1,23 +1,25 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP;
 model ContinuousCHP "Simple large CHP model with plant limits, time constants and fuel input matrix but without distinc operating states (always running)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -49,6 +51,8 @@ model ContinuousCHP "Simple large CHP model with plant limits, time constants an
       medium,
       p_nom,
       T_feed_init) "Start value of sytsem specific enthalpy" annotation(Dialog(group="Heating condenser parameters"));
+  parameter Boolean UseGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if UseGasPort==true "Gas Medium to be used - only if UseGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if UseGasPort==true then true else false));
 
   // _____________________________________________
   //
@@ -113,6 +117,8 @@ model ContinuousCHP "Simple large CHP model with plant limits, time constants an
         extent={{-6,-6},{6,6}},
         rotation=0,
         origin={-69,102})));
+  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{80,82},{60,102}})));
+  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
 equation
 
   // _____________________________________________
@@ -154,7 +160,7 @@ equation
                                                                                                                                       color={0,0,127}));
 
   connect(terminal.epp, epp) annotation (Line(
-      points={{80.1,59.9},{72,59.9},{72,60},{100,60}},
+      points={{80,60},{72,60},{72,60},{100,60}},
       color={0,135,135},
       thickness=0.5));
 
@@ -162,12 +168,21 @@ equation
   connect(steamGenerator.y, product1.u1) annotation (Line(points={{-53,12},{-46,12},{-46,-9.6},{-36.8,-9.6}}, color={0,0,127}));
   connect(product1.y, heatingCondenser.u) annotation (Line(points={{-27.6,-12},{-23.8,-12},{-20,-12}}, color={0,0,127}));
   connect(heatingCondenser.y, prescribedHeatFlow.Q_flow) annotation (Line(points={{3,-12},{12,-12},{12,-13},{22,-13}}, color={0,0,127}));
-  connect(steamGenerator.u, Q_flow_set_SG.Q_flow_input) annotation (Line(points={{-76,12},{-86,12},{-86,14},{-86,66},{0,66},{0,79}}, color={0,0,127}));
-  connect(P_limit_on.y, Q_flow_set_SG.P) annotation (Line(points={{-21,102},{-14,102},{-7,102}},color={0,0,127}));
+  connect(steamGenerator.u, Q_flow_set_SG.Q_flow_input) annotation (Line(points={{-76,12},{-86,12},{-86,14},{-86,66},{-0.909091,66},{-0.909091,79}},
+                                                                                                                                     color={0,0,127}));
+  connect(P_limit_on.y, Q_flow_set_SG.P) annotation (Line(points={{-21,102},{-7.27273,102},{-7.27273,102}},
+                                                                                                color={0,0,127}));
   connect(P_limit_on.limit1, pQDiagram.P_max) annotation (Line(points={{-44,110},{-44,110},{-54,110},{-54,128.4},{-11,128.4}}, color={0,0,127}));
   connect(pQDiagram.P_min, P_limit_on.limit2) annotation (Line(points={{-11,121},{-60,121},{-60,94},{-44,94}}, color={0,0,127}));
   connect(P_el_set_pos.y, P_limit_on.u) annotation (Line(points={{-62.4,102},{-62.4,102},{-44,102}},         color={0,0,127}));
   connect(P_set,P_el_set_pos. u) annotation (Line(points={{-84,144},{-84,144},{-84,102},{-76.2,102}}, color={0,0,127}));
+  if UseGasPort==true then
+    connect(gasConsumer_HFlow_NCV.fluidPortIn,gasPortIn)  annotation (Line(
+      points={{80,92},{88,92},{88,102},{100,102}},
+      color={255,255,0},
+      thickness=1.5));
+    connect(steamGenerator.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{-53,12},{-52,12},{-52,-16},{-92,-16},{-92,70},{40,70},{40,92},{59,92}},   color={0,0,127}));
+  end if;
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p>This model represents the simplest of all large scale CHP models in the library. It allows a quick representation of a CHP plant with three main characteristics:</p>

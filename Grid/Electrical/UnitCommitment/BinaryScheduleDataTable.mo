@@ -1,25 +1,79 @@
 within TransiEnt.Grid.Electrical.UnitCommitment;
 model BinaryScheduleDataTable "Adds constants for easy allocation of outputs"
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.Model;
 
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
   outer TransiEnt.SimCenter simCenter;
+
+  // _____________________________________________
+  //
+  //        Constants and Parameters
+  // _____________________________________________
+
+  parameter Boolean[nDispPlants] unit_blocked = cat(1, fill(false, nDispPlants-1), {true}) "Can bes used to constantly shut down a plant";
+  parameter Boolean[nDispPlants] unit_mustrun = fill(false, nDispPlants) "Can bes used to constantly run a plant";
+  parameter SI.Power P_init[nPlants]= zeros(nPlants);
+  parameter SI.Time t_start = 0 "Start time, e.g. -3600 starts simulation at second hour";
+  parameter SI.Time t_prediction = -3600 "e.g. -3600 means 1h ahead";
+  parameter SI.Time samplePeriod=60 "Period of one cycle (must be equal to period in MeritOrderDispatcher)";
+  parameter Integer[nDispPlants] controlPlants=1:nDispPlants "Indices of plants participating in secondary control";
+
+  final parameter Integer ntime=integer(-t_prediction/samplePeriod+1);
+  final parameter Integer nPlants =  simCenter.generationPark.nPlants "Total number of plants in day ahead planning";
+  final parameter Integer nDispPlants =  simCenter.generationPark.nDispPlants "Dispatchable number of plants in day ahead planning";
+  final parameter SI.Power[nDispPlants] P_min = simCenter.generationPark.P_min;
+
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
+  // Diagnostics:
+  Real y_scheduled_total = sum(schedule.y);
+  Real y_prediction_total = sum(prediction.y);
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
+  Modelica.Blocks.Interfaces.BooleanOutput[nDispPlants] z annotation (Placement(transformation(extent={{93,21},{133,59}})));
+  Modelica.Blocks.Interfaces.RealOutput[nDispPlants] P_sec_pos annotation (Placement(transformation(extent={{93,-45},{133,-7}})));
+  Modelica.Blocks.Interfaces.RealOutput[nDispPlants] P_sec_neg annotation (Placement(transformation(extent={{93,-91},{133,-53}})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
 
   replaceable TransiEnt.Grid.Electrical.UnitCommitment.ScheduleDataTable schedule(
     smoothness=simCenter.tableInterpolationSmoothness,
@@ -52,12 +106,8 @@ model BinaryScheduleDataTable "Adds constants for easy allocation of outputs"
     choicesAllMatching=true,
     Placement(transformation(extent={{-21,23},{19,61}})));
 
-    final parameter Integer nPlants =  simCenter.generationPark.nPlants "Total number of plants in day ahead planning";
-    final parameter Integer nDispPlants =  simCenter.generationPark.nDispPlants "Dispatchable number of plants in day ahead planning";
-    final parameter SI.Power[nDispPlants] P_min = simCenter.generationPark.P_min;
-
     replaceable TransiEnt.Grid.Electrical.UnitCommitment.ReserveScheduleDataTable reserveAllocation(
-    smoothness=schedule.smoothness,
+    smoothness=Modelica.Blocks.Types.Smoothness.ConstantSegments,
     datasource=schedule.datasource,
     columns=(2:3*nPlants + 1),
     relativepath=schedule.relativepath,
@@ -66,14 +116,6 @@ model BinaryScheduleDataTable "Adds constants for easy allocation of outputs"
     __Dymola_editText=false,
     choicesAllMatching=true,
     Placement(transformation(extent={{-21,-55},{19,-17}})));
-
-    parameter Boolean[nDispPlants] unit_blocked = cat(1, fill(false, nDispPlants-1), {true}) "Can bes used to constantly shut down a plant";
-    parameter Boolean[nDispPlants] unit_mustrun = fill(false, nDispPlants) "Can bes used to constantly run a plant";
-    parameter SI.Power P_init[nPlants]= zeros(nPlants);
-    parameter SI.Time t_start = 0 "Start time, e.g. -3600 starts simulation at second hour";
-    parameter SI.Time t_prediction = -3600 "e.g. -3600 means 1h ahead";
-    parameter SI.Time samplePeriod=60 "Period of one cycle (must be equal to period in MeritOrderDispatcher)";
-    final parameter Integer ntime=integer(-t_prediction/samplePeriod+1);
 
     ScheduleDataTable prediction(
     smoothness=schedule.smoothness,
@@ -87,6 +129,8 @@ model BinaryScheduleDataTable "Adds constants for easy allocation of outputs"
     GT1=schedule.GT1,
     columns=(2:nPlants+1),
     relativepath=schedule.relativepath,
+    absolute_path=schedule.absolute_path,
+    use_absolute_path=schedule.use_absolute_path,
     BM=schedule.BM,
     PS=schedule.PS,
     Curt=schedule.Curt,
@@ -101,18 +145,16 @@ model BinaryScheduleDataTable "Adds constants for easy allocation of outputs"
     BC=schedule.BC,
     startTime=t_prediction + schedule.startTime) "Generated with matlab script: \\\\transientee-sources\\matlab\\pd\\fahrplanoptimierung\\tageseinsatzplanung\\main.m" annotation (Placement(transformation(extent={{-91,27},{-51,65}})));
 
-    Modelica.Blocks.Interfaces.BooleanOutput[nDispPlants] z annotation (Placement(transformation(extent={{93,21},{133,59}})));
-
-    Modelica.Blocks.Interfaces.RealOutput[nDispPlants] P_sec_pos annotation (Placement(transformation(extent={{93,-45},{133,-7}})));
-    Modelica.Blocks.Interfaces.RealOutput[nDispPlants] P_sec_neg annotation (Placement(transformation(extent={{93,-91},{133,-53}})));
 equation
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
   for i in 1:nDispPlants loop
     z[i] = (not unit_blocked[i] and -schedule.y[i] >= P_min[i]) or unit_mustrun[i];
-  end for;
-
-  for i in 1:nDispPlants loop
-    P_sec_pos[i] = reserveAllocation.y[i];
-    P_sec_neg[i] = reserveAllocation.y[i];
+    P_sec_pos[i] = reserveAllocation.y[nPlants+controlPlants[i]];
+    P_sec_neg[i] = reserveAllocation.y[2*nPlants+controlPlants[i]];
   end for;
 
   annotation (Icon(graphics={

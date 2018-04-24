@@ -6,11 +6,12 @@ IonicCompressor
 Truck
 CavernGreenField
 CavernBrownField
-HydrogenStorageSmall
-HydrogenSphericalPressureVessel_low
-HydrogenSphericalPressureVessel_high
+HydrogenSphericalPressureVessel_10bar
+HydrogenSphericalPressureVessel_20bar
 HydrogenSphericalPressureVessel
+HydrogenBufferStorage
 HydrogenHighPressureVessel
+HydrogenPipeStorage
 HydrogenPipeline
 TrailerStateOfTheArt
 FillingStation
@@ -23,3 +24,4 @@ CHP_500kW
 CHP_10kW
 SolarThermal
 DistrictHeatingGrid
+Methanation

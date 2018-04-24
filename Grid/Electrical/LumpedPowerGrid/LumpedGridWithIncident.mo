@@ -1,23 +1,25 @@
 within TransiEnt.Grid.Electrical.LumpedPowerGrid;
 model LumpedGridWithIncident
   import TransiEnt;
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -36,12 +38,16 @@ model LumpedGridWithIncident
   parameter Real P_L=simCenter.P_n_low "Load in lumped grid (constant)";
   parameter SI.Time T_tc = simCenter.T_grid "Average time constant of plants";
   parameter Integer nSubgrid=2 "Subgrid assignment for statistics";
+  parameter Real kpf=0.5 "Frequency dependence of load";
+  parameter SI.Power P_Z=-3e9 "Power of incident";
+  parameter SI.Time t_incident=3600 "Time of incident";
 
   // **** Primary Frequency Control
-  parameter Real delta_pr=0.2 "Value used if plantType is set to 'Provided'" annotation(Dialog(group="Primary Frequency Control"));
+  parameter SI.Frequency Df_stat_ref = -0.18 "Stationary frequency deviation after reference incident";
+  parameter Real delta_pr=Df_stat_ref*P_el_n/(P_Z*simCenter.f_n-Df_stat_ref*P_L*kpf) "Value used if plantType is set to 'Provided'" annotation(Dialog(group="Primary Frequency Control"));
 
-  parameter Real P_pr_grad_max_star=0.02/30 "Two percent of design case power in 30s" annotation(Dialog(group="Primary Frequency Control"));
-  parameter Real P_pr_max_star=0.2 "Two percent of design case power" annotation(Dialog(group="Primary Frequency Control"));
+  parameter Real P_pr_grad_max_star=P_pr_max_star/30 "Two percent of design case power in 30s" annotation(Dialog(group="Primary Frequency Control"));
+  parameter Real P_pr_max_star=-P_Z/P_el_n "Two percent of design case power" annotation(Dialog(group="Primary Frequency Control"));
   parameter Real k_pr=1 "Participation factor primary control"   annotation(Dialog(group="Primary Frequency Control"));
 
   // **** Secondary Frequency Control
@@ -75,11 +81,10 @@ model LumpedGridWithIncident
     T_r=T_r,
     lambda_sec=lambda_sec,
     kpf=kpf,
-    P_el_n=P_el_n - P_Z,
-    P_L=P_L - P_Z,
-    k_pr=P_el_n/(P_el_n - P_Z)*k_pr,
-    isSecondaryControlActive=true)
-             annotation (Placement(transformation(extent={{-40,-36},{38,36}})));
+    isSecondaryControlActive=true,
+    P_el_n=P_el_n,
+    P_L=P_L + P_Z,
+    k_pr=1)  annotation (Placement(transformation(extent={{-40,-36},{38,36}})));
 
   Components.GlobalStatisticsAdapter LocalStatisticsAdapter annotation (Placement(transformation(extent={{-100,60},{-58,100}})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(rotation=0, extent={{90,-10},{110,10}})));
@@ -95,21 +100,20 @@ model LumpedGridWithIncident
   //           Characteristic Equations
   // _____________________________________________
 
-  parameter Real kpf=0.5 "Frequency dependence of load";
-  TransiEnt.Producer.Electrical.Conventional.Components.SimplePowerPlant FailingGen(P_el_n=3e9) annotation (Placement(transformation(extent={{-86,-91},{-66,-71}})));
-  Modelica.Blocks.Sources.Constant FailingGen_Set(k=-P_Z) annotation (Placement(transformation(extent={{-96,-71},{-86,-61}})));
+  TransiEnt.Producer.Electrical.Conventional.Components.SimplePowerPlant FailingGen(P_el_n=-P_Z)
+                                                                                                annotation (Placement(transformation(extent={{-86,-91},{-66,-71}})));
+  Modelica.Blocks.Sources.Constant FailingGen_Set(k=P_Z)  annotation (Placement(transformation(extent={{-96,-71},{-86,-61}})));
   TransiEnt.Components.Electrical.Grid.SeparableLine FailingLine annotation (Placement(transformation(extent={{-54,-85},{-34,-65}})));
   Modelica.Blocks.Sources.BooleanStep Incident(startValue=true, startTime=t_incident) annotation (Placement(transformation(extent={{-74,-61},{-54,-41}})));
   TransiEnt.Consumer.Electrical.LinearElectricConsumer DemandUncovered(kpf=kpf) annotation (Placement(transformation(
         extent={{-12,-10},{12,10}},
         rotation=0,
         origin={78,-75})));
-  Modelica.Blocks.Sources.Constant LoadUncovered(k=P_Z)  annotation (Placement(transformation(
+  Modelica.Blocks.Sources.Constant LoadUncovered(k=-P_Z) annotation (Placement(transformation(
         extent={{6,-6},{-6,6}},
         rotation=0,
         origin={94,-59})));
-  parameter SI.Power P_Z=3e9 "Constant output value";
-  parameter SI.Time t_incident=3600;
+
 equation
   connect(line_L1_1.epp_OUT, epp) annotation (Line(
       points={{73.4,0},{86.7,0},{100,0}},
@@ -139,7 +143,8 @@ equation
   connect(LoadUncovered.y, DemandUncovered.P_el_set) annotation (Line(points={{87.4,-59},{78,-59},{78,-63.4}},       color={0,0,127}));
   connect(FailingGen_Set.y, FailingGen.P_el_set) annotation (Line(points={{-85.5,-66},{-77.5,-66},{-77.5,-71.1}}, color={0,0,127}));
   connect(LumpedGrid.E_kin, LocalStatisticsAdapter.E_kin) annotation (Line(points={{-36.1,32.4},{-36.1,72.4},{-60.52,72.4}}, color={0,0,127}));
-  connect(LumpedGrid.P_load, LocalStatisticsAdapter.P_load) annotation (Line(points={{-36.1,32.4},{-36.1,72.4},{-60.52,72.4}}, color={0,0,127}));
+  connect(LumpedGrid.P_load, LocalStatisticsAdapter.P_load) annotation (Line(points={{-23.62,32.4},{-23.62,72.4},{-60.52,72.4}},
+                                                                                                                               color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                    graphics={
         Rectangle(

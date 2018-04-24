@@ -2,23 +2,25 @@ within TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base;
 model Buoyancy "Model to add buoyancy if there is a temperature inversion in the tank"
   // Model is bases on the model "Bouyancy in the "Buildings-library (https://github.com/lbl-srg/modelica-buildings.git)"
 
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -60,7 +62,7 @@ equation
   for i in 1:N_cv-1 loop
 
     // Driving temperature difference is from bottom to top (i.e. from i to i+1)
-    Delta_T[i] = heatPort[i].T-heatPort[i+1].T;
+    Delta_T[i] = -heatPort[i].T+heatPort[i+1].T;
 
     // No buoyancy effects if temperature difference zero. This formulation is inspired by Modelica Buildings-Library.
     Q_flow[i] = k*noEvent(smooth(1, if Delta_T[i]>0 then Delta_T[i]^2 else 0));
@@ -68,11 +70,11 @@ equation
   end for;
 
   // Heat ports are connected to control volumes. Note that if heatPort.Q_flow < 0 it will act like a source in the control volume!
-  heatPort[1].Q_flow = Q_flow[1];
+  heatPort[1].Q_flow = -Q_flow[1];
   for i in 2:N_cv-1 loop
-    heatPort[i].Q_flow = Q_flow[i]-Q_flow[i-1];
+    heatPort[i].Q_flow = -Q_flow[i]+Q_flow[i-1];
   end for;
-  heatPort[N_cv].Q_flow = -Q_flow[N_cv-1];
+  heatPort[N_cv].Q_flow = Q_flow[N_cv-1];
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

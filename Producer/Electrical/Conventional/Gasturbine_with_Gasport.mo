@@ -1,22 +1,24 @@
 within TransiEnt.Producer.Electrical.Conventional;
 model Gasturbine_with_Gasport
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
 
   // _____________________________________________
   //
@@ -31,8 +33,9 @@ model Gasturbine_with_Gasport
   //
   //             Visible Parameters
   // _____________________________________________
+  parameter Boolean useConstantHoC = false "if ticked, a constant heat of combustion for the fuel can be defined" annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Fuel properties"));
+  parameter Modelica.SIunits.SpecificEnthalpy HoC_gas=40e6 "heat of combustion of natural gas"  annotation(Dialog(enable = if useConstantHoC== false then false else true,group="Fuel properties"));
 
-  parameter Modelica.SIunits.SpecificEnthalpy HoC_gas=40e6 "heat of combustion of natural gas";
 
 equation
   // _____________________________________________
@@ -41,7 +44,11 @@ equation
   // _____________________________________________
 
     // === energy balance ===
-  m_flow_gas * HoC_gas * eta_total = epp.P;
+  if useConstantHoC==true then
+    m_flow_gas * HoC_gas * eta = -epp.P;
+  else
+    m_flow_gas *vleNCVSensor.NCV  * eta = -epp.P;
+  end if;
 
 annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                graphics={

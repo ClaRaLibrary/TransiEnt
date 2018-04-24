@@ -4,24 +4,26 @@ model GasGrid_PtG "Example of a high pressure gas grid with H2 feed-in at Gas Tr
   TransiEnt.Grid.Gas.GasGridHamburg gasGridHamburg(
     phi_H2max=phi_H2max,
     Nper10km=Nper10km,
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{-230,-182},{266,198}})));
-//___________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.0.1                        //
-//                                                                           //
-// Licensed by Hamburg University of Technology under Modelica License 2.    //
-// Copyright 2017, Hamburg University of Technology.                         //
-//___________________________________________________________________________//
-//                                                                           //
-// TransiEnt.EE is a research project supported by the German Federal        //
-// Ministry of Economics and Energy (FKZ 03ET4003).                          //
-// The TransiEnt.EE research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology)//
-// Institute of Energy Systems (Hamburg University of Technology),           //
-// Institute of Electrical Power Systems and Automation                      //
-// (Hamburg University of Technology),                                       //
-// and is supported by                                                       //
-// XRG Simulation GmbH (Hamburg, Germany).                                   //
-//___________________________________________________________________________//
+    massBalance=massBalance) annotation (Placement(transformation(extent={{-230,-182},{266,198}})));
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.1.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2018, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Checkmodel;
 
@@ -62,7 +64,7 @@ model GasGrid_PtG "Example of a high pressure gas grid with H2 feed-in at Gas Tr
 
   //Pipe Network
   parameter Real Nper10km=2 "Number of discrete volumes in 10 km pipe length";
-  parameter Boolean productMassBalance=false "Set to true for product component mass balance formulation in pipe";
+  parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
 
   // Variable declarations
   SI.Energy H_demand "Gas demand";
@@ -105,7 +107,7 @@ protected
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Harburg.length/10000) < 2 then 2 else integer(Nper10km*Harburg.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{-42,-81},{-22,-61}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{-42,-81},{-22,-61}})));
   TransiEnt.Consumer.Gas.GasConsumerPipe_HFlow Altona(
     length(displayUnit="km") = 5150,
     diameter=0.235,
@@ -125,7 +127,7 @@ protected
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Altona.length/10000) < 2 then 2 else integer(Nper10km*Altona.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{-62,-3},{-42,17}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{-62,-3},{-42,17}})));
   TransiEnt.Consumer.Gas.GasConsumerPipe_HFlow Eimsbuettel(
     length(displayUnit="km") = 2740,
     diameter=0.235,
@@ -145,7 +147,7 @@ protected
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Eimsbuettel.length/10000) < 2 then 2 else integer(Nper10km*Eimsbuettel.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(extent={{-42,34},{-22,54}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{-42,34},{-22,54}})));
   TransiEnt.Consumer.Gas.GasConsumerPipe_HFlow HHNord(
     length(displayUnit="km") = 10560,
     diameter=0.235,
@@ -165,7 +167,7 @@ protected
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*HHNord.length/10000) < 2 then 2 else integer(Nper10km*HHNord.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={2,84})));
@@ -188,7 +190,7 @@ protected
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Wandsbek.length/10000) < 2 then 2 else integer(Nper10km*Wandsbek.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={48,62})));
@@ -211,7 +213,7 @@ protected
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*HHMitte.length/10000) < 2 then 2 else integer(Nper10km*HHMitte.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={8,-20})));
@@ -234,7 +236,7 @@ protected
     Ti=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     N_cv=if integer(Nper10km*Bergedorf.length/10000) < 2 then 2 else integer(Nper10km*Bergedorf.length/10000),
-    productMassBalance=productMassBalance) annotation (Placement(transformation(
+    massBalance=massBalance) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={66,-77})));
@@ -302,8 +304,8 @@ public
     P_el_min=P_el_min*f_Tor,
     P_el_overload=P_el_overload*f_Tor,
     V_geo=V_geo*f_Tor,
-    p_low=p_minLow,
-    p_high=p_minHigh,
+    p_minLow=p_minLow,
+    p_minHigh=p_minHigh,
     p_start_junction=Init.mixH2_Tornesch.p,
     h_start_junction=Init.source_H2_Tornesch.h) annotation (Placement(transformation(
         extent={{-23,-23},{23,23}},
@@ -329,8 +331,8 @@ public
     P_el_min=P_el_min*f_Lev,
     P_el_overload=P_el_overload*f_Lev,
     V_geo=V_geo*f_Lev,
-    p_low=p_minLow,
-    p_high=p_minHigh,
+    p_minLow=p_minLow,
+    p_minHigh=p_minHigh,
     p_start_junction=Init.mixH2_Leversen.p,
     m_flow_start=Init.m_flow_feedIn_Leversen,
     h_start_junction=Init.source_H2_Leversen.h) annotation (Placement(transformation(
@@ -367,8 +369,8 @@ public
     P_el_min=P_el_min*f_Rei,
     P_el_overload=P_el_overload*f_Rei,
     V_geo=V_geo*f_Rei,
-    p_low=p_minLow,
-    p_high=p_minHigh,
+    p_minLow=p_minLow,
+    p_minHigh=p_minHigh,
     p_start_junction=Init.mixH2_Reitbrook.p,
     m_flow_start=Init.m_flow_feedIn_Reitbrook,
     h_start_junction=Init.source_H2_Reitbrook.h) annotation (Placement(transformation(
@@ -398,6 +400,78 @@ public
     p_start=Init.mixH2_Reitbrook.p,
     h_start=Init.mixH2_Reitbrook.h_out,
     xi_start=Init.mixH2_Reitbrook.xi_out) annotation (Placement(transformation(extent={{54,-30},{34,-10}})));
+  inner TransiEnt.Grid.Gas.StatCycleGasGridHamburg
+                                 Nom(
+    m_flow_feedIn_Tornesch=0,
+    m_flow_feedIn_Leversen=0,
+    m_flow_feedIn_Reitbrook=0,
+    m_flow_unscaled=Nom.m_flow_nom_unscaled,
+    f_Rei=f_Rei,
+    f_Lev=f_Lev,
+    f_Tor=f_Tor,
+    Delta_p_nom_Ringline=ringPipes.Delta_p_nom[2],
+    Delta_p_nom_Ringline1=ringPipes.Delta_p_nom[3],
+    Delta_p_nom_Ringline2=ringPipes.Delta_p_nom[4],
+    Delta_p_nom_Ringline3=ringPipes.Delta_p_nom[5],
+    Delta_p_nom_Ringline4=ringPipes.Delta_p_nom[6],
+    Delta_p_nom_Ringline5=ringPipes.Delta_p_nom[7],
+    Delta_p_nom_Ringline6=ringPipes.Delta_p_nom[8],
+    Delta_p_nom_Ringline7=ringPipes.Delta_p_nom[9],
+    Delta_p_nom_Ringline8=ringPipes.Delta_p_nom[10],
+    Delta_p_nom_Leversen=ringPipes.Delta_p_nom[1],
+    Delta_p_nom_Tornesch=ringPipes.Delta_p_nom[12],
+    m_flow_Harburg=districtPipes.m_flow_nom[1],
+    m_flow_Altona=districtPipes.m_flow_nom[2],
+    m_flow_Eimsbuettel=districtPipes.m_flow_nom[3],
+    m_flow_HHNord=districtPipes.m_flow_nom[4],
+    m_flow_Wandsbek=districtPipes.m_flow_nom[5],
+    m_flow_HHMitte=districtPipes.m_flow_nom[6],
+    m_flow_Bergedorf=districtPipes.m_flow_nom[7],
+    m_flow_nom_Harburg=districtPipes.m_flow_nom[1],
+    m_flow_nom_Altona=districtPipes.m_flow_nom[2],
+    m_flow_nom_Eimsbuettel=districtPipes.m_flow_nom[3],
+    m_flow_nom_HHNord=districtPipes.m_flow_nom[4],
+    m_flow_nom_Wandsbek=districtPipes.m_flow_nom[5],
+    m_flow_nom_HHMitte=districtPipes.m_flow_nom[6],
+    m_flow_nom_Bergedorf=districtPipes.m_flow_nom[7],
+    m_flow_nom_Ringline=ringPipes.m_flow_nom[2],
+    m_flow_nom_Ringline1=ringPipes.m_flow_nom[3],
+    m_flow_nom_Ringline2=ringPipes.m_flow_nom[4],
+    m_flow_nom_Ringline3=ringPipes.m_flow_nom[5],
+    m_flow_nom_Ringline4=ringPipes.m_flow_nom[6],
+    m_flow_nom_Ringline5=ringPipes.m_flow_nom[7],
+    m_flow_nom_Ringline6=ringPipes.m_flow_nom[8],
+    m_flow_nom_Ringline7=ringPipes.m_flow_nom[9],
+    m_flow_nom_Ringline8=ringPipes.m_flow_nom[10],
+    m_flow_nom_Leversen=ringPipes.m_flow_nom[1],
+    m_flow_nom_Tornesch=ringPipes.m_flow_nom[12],
+    Delta_p_nom_Harburg=districtPipes.Delta_p_nom[1],
+    Delta_p_nom_Altona=districtPipes.Delta_p_nom[2],
+    Delta_p_nom_Eimsbuettel=districtPipes.Delta_p_nom[3],
+    Delta_p_nom_HHNord=districtPipes.Delta_p_nom[4],
+    Delta_p_nom_Wandsbek=districtPipes.Delta_p_nom[5],
+    Delta_p_nom_HHMitte=districtPipes.Delta_p_nom[6],
+    Delta_p_nom_Bergedorf=districtPipes.Delta_p_nom[7],
+    splitRatioEimsbuettel=0.027784862,
+    splitRatioWandsbek=0.397988049,
+    quadraticPressureLoss=false,
+    T_feedIn_Tornesch=325.45,
+    T_feedIn_Leversen=325.45,
+    T_feedIn_Reitbrook=325.45)                          annotation (Placement(transformation(extent={{-270,178},{-219,214}})));
+  inner TransiEnt.Basics.Records.PipeParameter ringPipes(
+    N_pipes=12,
+    length={2353.4,9989.1,10203.5,11846.6,7285.6,10878.7,4420.5,11961.1,10915.2,13932.2,28366.9,16710},
+    diameter(displayUnit="m") = {0.6,0.4,0.4,0.4,0.4,0.4,0.5,0.4,0.4,0.607307197,0.6,0.5},
+    m_flow_nom={20.2,10.1,10.1,12.4,0.3,10.5,21.9,6.7,10.1,30.6,3.6,32.4},
+    Delta_p_nom(displayUnit="Pa") = {10605,63939.6,63939.6,184435.5,56.5,125548.4,67207.8,56975.5,116965.7,140705.4,3963.8,133488.2}) annotation (Placement(transformation(extent={{-222,184},{-202,204}})));
+  inner TransiEnt.Basics.Records.PipeParameter districtPipes(
+    N_pipes=7,
+    f_mFlow={0.0869,0.1346,0.1199,0.1688,0.187,0.2267,0.076},
+    length={3774,5152,2739,10564,4075,9480,6770},
+    diameter={0.221,0.221,0.221,0.221,0.221,0.221,0.221},
+    N_ducts={4,5,5,6,7,8,3},
+    m_flow_nom={7.83,12.12,10.8,15.2,16.83,20.42,6.84},
+    Delta_p_nom(displayUnit="Pa") = {31226.22,78102.46,31207.91,126637.22,63836.59,152213.2,73490.95}) annotation (Placement(transformation(extent={{-192,184},{-172,204}})));
 equation
    der(H_demand)=H_flow_demand.y1;
    der(m_H2_max)=maxH2MassFlow_Rei.m_flow_H2_max+maxH2MassFlow_Lev.m_flow_H2_max+maxH2MassFlow_Tor.m_flow_H2_max;
@@ -431,27 +505,27 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Wandsbek.fluidPortIn, gasGridHamburg.offTakeWandsbek) annotation (Line(
-      points={{58,62},{72,62},{72,62.7647},{75.4909,62.7647}},
+      points={{58,62},{72,62},{72,66.1176},{99.6941,66.1176}},
       color={255,255,0},
       thickness=1.5));
   connect(Bergedorf.fluidPortIn, gasGridHamburg.offTakeBergedorf) annotation (Line(
-      points={{76,-77},{92,-77},{92,-76.9412},{95.7818,-76.9412}},
+      points={{76,-77},{92,-77},{92,-74.7059},{124.494,-74.7059}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeAltona, Altona.fluidPortIn) annotation (Line(
-      points={{-75.5636,6.88235},{-62,6.88235},{-62,7}},
+      points={{-95.7882,9.11765},{-62,9.11765},{-62,7}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeEimsbuettel, Eimsbuettel.fluidPortIn) annotation (Line(
-      points={{-56.4,46},{-56.4,44},{-42,44}},
+      points={{-70.9882,49.3529},{-70.9882,44},{-42,44}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeHarburg, Harburg.fluidPortIn) annotation (Line(
-      points={{-51.8909,-70.2353},{-42,-70.2353},{-42,-71}},
+      points={{-69.5294,-68},{-42,-68},{-42,-71}},
       color={255,255,0},
       thickness=1.5));
   connect(HHNord.fluidPortIn, gasGridHamburg.offTakeNord) annotation (Line(
-      points={{12,84},{18,84},{18,118.647}},
+      points={{12,84},{23.8353,84},{23.8353,120.882}},
       color={255,255,0},
       thickness=1.5));
   connect(GTS_Tornesch.gasPort,maxH2MassFlow_Tor. gasPortIn) annotation (Line(
@@ -459,7 +533,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(vleCompositionSensor_Tornesch.gasPortOut, gasGridHamburg.GTSTor) annotation (Line(
-      points={{-136,154},{-127.418,154},{-127.418,155.529}},
+      points={{-136,154},{-189.153,154},{-189.153,155.529}},
       color={255,255,0},
       thickness=1.5));
   connect(GTS_Leversen.gasPort,maxH2MassFlow_Lev. gasPortIn) annotation (Line(
@@ -471,19 +545,19 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(vleCompositionSensor_Tornesch.gasPortOut, gasGridHamburg.GTSTor) annotation (Line(
-      points={{-136,154},{-130,154},{-130,155.529},{-127.418,155.529}},
+      points={{-136,154},{-130,154},{-130,155.529},{-189.153,155.529}},
       color={255,255,0},
       thickness=1.5));
   connect(vleCompositionSensor_Leversen.gasPortOut, gasGridHamburg.GTSLev) annotation (Line(
-      points={{-76,-140},{-57.5273,-140},{-57.5273,-140.647}},
+      points={{-76,-140},{-89.9529,-140},{-89.9529,-146.235}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeBergedorf, vleCompositionSensor_Reitbrook.gasPortOut) annotation (Line(
-      points={{95.7818,-76.9412},{116.459,-76.9412},{116.459,-76},{114,-76}},
+      points={{124.494,-74.7059},{116.459,-74.7059},{116.459,-76},{114,-76}},
       color={255,255,0},
       thickness=1.5));
   connect(gainTor.y,FeedIn_Tornesch. P_el_set) annotation (Line(
-      points={{-141,86},{-144.5,86},{-144.5,85.6},{-155.5,85.6}},
+      points={{-141,86},{-144.5,86},{-144.5,80.08},{-178.5,80.08}},
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Tornesch.gasPort2,FeedIn_Tornesch. gasPortOut) annotation (Line(
@@ -495,11 +569,11 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(gainLev.y,FeedIn_Leversen. P_el_set) annotation (Line(
-      points={{-83,-211},{-86.5,-211},{-86.5,-211.4},{-97.5,-211.4}},
+      points={{-83,-211},{-86.5,-211},{-86.5,-216.92},{-120.5,-216.92}},
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(gainRei.y,FeedIn_Reitbrook. P_el_set) annotation (Line(
-      points={{135,-212},{133.5,-212},{133.5,-211.4},{154.5,-211.4}},
+      points={{135,-212},{133.5,-212},{133.5,-216.92},{177.5,-216.92}},
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Reitbrook.gasPort2,FeedIn_Reitbrook. gasPortOut) annotation (Line(
@@ -565,7 +639,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(JunctionHHMitte.gasPort1, gasGridHamburg.offTakeMitte) annotation (Line(
-      points={{54,-20},{63,-20},{63,-18.8235},{66.4727,-18.8235}},
+      points={{54,-20},{63,-20},{63,-15.4706},{88.0235,-15.4706}},
       color={255,255,0},
       thickness=1.5));
   connect(HHMitte.fluidPortIn, JunctionHHMitte.gasPort3) annotation (Line(
