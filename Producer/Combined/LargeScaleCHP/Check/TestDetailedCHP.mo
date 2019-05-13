@@ -1,12 +1,12 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
-model TestDetailedCHP
+model TestDetailedCHP "Tester for DetailedCHP model"
   extends TransiEnt.Basics.Icons.Checkmodel;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,26 +59,26 @@ model TestDetailedCHP
     duration=2e4) annotation (Placement(transformation(extent={{-80,16},{-64,32}})));
 equation
   connect(detailedCHP.epp, electricGrid.epp) annotation (Line(
-      points={{14.7778,17.7455},{37.75,17.7455},{37.75,51.9},{49.9,51.9}},
+      points={{55.6,34.24},{37.75,34.24},{37.75,52},{50,52}},
       color={0,135,135},
       thickness=0.5));
-  connect(detailedCHP.eye, infoBoxLargeCHP.eye) annotation (Line(points={{18.4444,-18.0909},{24,-18.0909},{24,-38},{-14,-38},{-14,-42},{-14,-62.7273},{-7.6,-62.7273},{-7.6,-62.7273}},
+  connect(detailedCHP.eye, infoBoxLargeCHP.eye) annotation (Line(points={{68.8,-44.6},{24,-44.6},{24,-38},{-14,-38},{-14,-42},{-14,-62.7273},{-7.6,-62.7273},{-7.6,-62.7273}},
                                                                                           color={28,108,200}));
   connect(detailedCHP.outlet, T_out_sensor.port) annotation (Line(
-      points={{16.4889,2.52727},{20,2.52727},{20,32},{26,32}},
+      points={{61.76,0.76},{20,0.76},{20,32},{26,32}},
       color={175,0,0},
       thickness=0.5));
   connect(detailedCHP.inlet, pressure_Sink_ph.steam_a) annotation (Line(
-      points={{16.4889,-4.34545},{34,-4.34545},{34,-14},{50,-14}},
+      points={{61.76,-14.36},{34,-14.36},{34,-14},{50,-14}},
       color={175,0,0},
       thickness=0.5));
   connect(detailedCHP.outlet, boundaryVLE_Txim_flow.steam_a) annotation (Line(
-      points={{16.4889,2.52727},{55.2445,2.52727},{55.2445,6},{92,6}},
+      points={{61.76,0.76},{55.2445,0.76},{55.2445,6},{92,6}},
       color={175,0,0},
       thickness=0.5));
-  connect(ramp3.y, detailedCHP.Q_flow_set) annotation (Line(points={{-63.2,50},{-60,50},{-60,40},{0.6,40},{0.6,31.4909}}, color={0,0,127}));
-  connect(detailedCHP.eye, pQDiagram_Display.eyeIn) annotation (Line(points={{18.4444,-18.0909},{36,-18.0909},{36,-64},{39,-64}},    color={28,108,200}));
-  connect(ramp1.y, detailedCHP.P_set) annotation (Line(points={{-63.2,24},{-52,24},{-52,31.4909},{-23.3556,31.4909}}, color={0,0,127}));
+  connect(ramp3.y, detailedCHP.Q_flow_set) annotation (Line(points={{-63.2,50},{-60,50},{-60,40},{4.56,40},{4.56,64.48}}, color={0,0,127}));
+  connect(detailedCHP.eye, pQDiagram_Display.eyeIn) annotation (Line(points={{68.8,-44.6},{36,-44.6},{36,-64},{39,-64}},             color={28,108,200}));
+  connect(ramp1.y, detailedCHP.P_set) annotation (Line(points={{-63.2,24},{-52,24},{-52,64.48},{-81.68,64.48}},       color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
                                          Bitmap(extent={{-98,-96},{-20,-42}}, fileName="modelica://TransiEnt/Images/PQ_WW1.PNG")}), experiment(
       StopTime=86400,
@@ -92,5 +92,26 @@ equation
         OutputModelicaCode=false),
       Evaluate=true,
       OutputCPUtime=true,
-      OutputFlatModelica=false));
+      OutputFlatModelica=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the detailed chp model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestDetailedCHP;

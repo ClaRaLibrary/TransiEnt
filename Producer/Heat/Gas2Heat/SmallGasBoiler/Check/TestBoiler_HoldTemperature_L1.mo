@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Check;
 model TestBoiler_HoldTemperature_L1
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,8 +35,7 @@ model TestBoiler_HoldTemperature_L1
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-20,-60})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi waterSink(p_const=
-        simCenter.p_n[2]) annotation (Placement(transformation(
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi waterSink(p_const=simCenter.p_nom[2]) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={20,-60})));
@@ -48,9 +47,10 @@ model TestBoiler_HoldTemperature_L1
   Gasboiler_dynamic_L1 Boiler(
     holdTemperature=true,
     Q_flow_n=5e5,
-    dimension=2,
     modulating=false,
-    stages=2) annotation (Placement(transformation(extent={{-18,-18},{18,18}})));
+    stages=2,
+    dimension=3)
+              annotation (Placement(transformation(extent={{-18,-18},{18,18}})));
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
   Modelica.Blocks.Sources.Ramp ramp(
@@ -95,8 +95,30 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,
-            -100},{100,100}}), graphics), Icon(coordinateSystem(extent={{-120,-100},
+            -100},{100,100}}), graphics), Icon(graphics,
+                                               coordinateSystem(extent={{-120,-100},
             {100,100}})),
     experiment(StopTime=3600),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for a boiler with a hold temperature and level of detail L1 (defined in the CodingConventions)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestBoiler_HoldTemperature_L1;

@@ -24,12 +24,89 @@ within ;
 
 
 
-package TransiEnt "Library for transient simulation of coupled energy networks with high share of renewable energy"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package TransiEnt "Library for transient simulation of integrated energy networks with high share of renewable energy"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -164,8 +241,8 @@ annotation (uses(
     TILMedia(version="1.3.0 ClaRa"),
     Design(version="1.0.5"),
     Modelica_LinearSystems2(version="2.3.4"),
-    DymolaCommands(version="1.4"),
-    ClaRa(version="1.3.0")),        Icon(coordinateSystem(
+    ClaRa(version="1.3.0"),
+    DymolaCommands(version="1.6")),            Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
           Rectangle(
           extent={{-56,-4},{52,-16}},
@@ -184,7 +261,7 @@ annotation (uses(
         pattern=LinePattern.None)}),
   Documentation(info="<html>
 <p><img src=\"modelica://TransiEnt/Images/TransiEntLibraryInfo.png\"/></p>
-<h4><span style=\"color: #008000\">List of developers (2013 - 2017)</span></h4>
+<h4><span style=\"color: #008000\">List of developers (since 2013)</span></h4>
 <p>Coordinating developers:</p>
 <ul>
 <li>Bode, Carsten</li>
@@ -224,14 +301,19 @@ annotation (uses(
 <li>Schroeder, Vitja</li>
 <li>Toerber, Tobias</li>
 <li>Wagner, Philipp</li>
+<li>Westphal, Jan</li>
 <li>Weilbach, Simon</li>
 <li>Zaczek, Alexander</li>
 </ul>
 </html>"),
-  version="1.1.0",
-  conversion(from(version="0.3", to="1.1.0", script="modelica://Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
-  from(version="1.0.1", to="1.1.0", script="modelica://Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos")));
+  version="1.2.0",
+  conversion(from(version="0.3", to="1.1.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
+  from(version="1.0.1", to="1.1.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
+  from(version="1.1.0", to="1.2.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.1.0_to_1.2.0.mos")));
 end TransiEnt;
+
+
+
 
 
 

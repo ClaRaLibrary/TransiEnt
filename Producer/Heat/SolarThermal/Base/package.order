@@ -1,8 +1,10 @@
+IrradianceOnATiltedSurface
 IAM
 SolarTime
 ExtraTerrestrialIrradiance
+GHI_Splitter
+ScaleMassFlow
 SkymodelBase
 Skymodel_isotropicDiffuse
 Skymodel_HDKR
-IrradianceOnATiltedSurface
-ScaleMassFlow
+Skymodel_Klucher

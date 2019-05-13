@@ -4,12 +4,12 @@ model GasGrid_PtG "Example of a high pressure gas grid with H2 feed-in at Gas Tr
   TransiEnt.Grid.Gas.GasGridHamburg gasGridHamburg(
     phi_H2max=phi_H2max,
     Nper10km=Nper10km,
-    massBalance=massBalance) annotation (Placement(transformation(extent={{-230,-182},{266,198}})));
+    massBalance=massBalance) annotation (Placement(transformation(extent={{-170,-182},{208,196}})));
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -253,7 +253,7 @@ public
     p_const=Init.p_source,
     h_const=Init.h_source,
     xi_const=Init.xi_source) annotation (Placement(transformation(extent={{-268,138},{-236,170}})));
-  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_Tornesch(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-156,154},{-136,174}})));
+  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_Tornesch(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-168,154},{-148,174}})));
 protected
   TransiEnt.Grid.Gas.Controller.MaxH2MassFlow_phi maxH2MassFlow_Lev(phi_H2max=phi_H2max) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -282,7 +282,7 @@ public
         extent={{-18,17},{18,-17}},
         rotation=180,
         origin={258,-75})));
-  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_Reitbrook(compositionDefinedBy=2) annotation (Placement(transformation(extent={{134,-76},{114,-56}})));
+  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_Reitbrook(compositionDefinedBy=2) annotation (Placement(transformation(extent={{154,-76},{134,-56}})));
 protected
   Modelica.Blocks.Math.Gain gainTor(k=f_Tor) annotation (Placement(transformation(extent={{-120,76},{-140,96}})));
 public
@@ -310,7 +310,7 @@ public
     h_start_junction=Init.source_H2_Tornesch.h) annotation (Placement(transformation(
         extent={{-23,-23},{23,23}},
         rotation=180,
-        origin={-178.5,104})));
+        origin={-184.5,104})));
 protected
   Modelica.Blocks.Math.Gain gainLev(k=f_Lev) annotation (Placement(transformation(extent={{-62,-221},{-82,-201}})));
 public
@@ -340,14 +340,20 @@ public
         rotation=180,
         origin={-120.5,-193})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 Mix_Tornesch(
-    p_start=Init.mixH2_Tornesch.p,
-    h_start=Init.mixH2_Tornesch.h_out,
-    xi_start=Init.mixH2_Tornesch.xi_out,
-    volume=V_mixNG) annotation (Placement(transformation(extent={{-188,144},{-168,164}})));
+    p(
+    start = Init.mixH2_Tornesch.p),
+    h(
+    start = Init.mixH2_Tornesch.h_out),
+    xi(
+    start =  Init.mixH2_Tornesch.xi_out),
+    volume=V_mixNG) annotation (Placement(transformation(extent={{-194,144},{-174,164}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 Mix_Leversen(
-    p_start=Init.mixH2_Leversen.p,
-    h_start=Init.mixH2_Leversen.h_out,
-    xi_start=Init.mixH2_Leversen.xi_out,
+    p(
+    start = Init.mixH2_Leversen.p),
+    h(
+    start = Init.mixH2_Leversen.h_out),
+    xi(
+    start =  Init.mixH2_Leversen.xi_out),
     volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -381,9 +387,12 @@ protected
   Modelica.Blocks.Math.Gain gainRei(k=f_Rei) annotation (Placement(transformation(extent={{114,-222},{134,-202}})));
 public
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 Mix_Reitbrook(
-    p_start=Init.mixH2_Reitbrook.p,
-    h_start=Init.mixH2_Reitbrook.h_out,
-    xi_start=Init.mixH2_Reitbrook.xi_out,
+    p(
+    start = Init.mixH2_Reitbrook.p),
+    h(
+    start = Init.mixH2_Reitbrook.h_out),
+    xi(
+    start =  Init.mixH2_Reitbrook.xi_out),
     volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
@@ -397,9 +406,13 @@ public
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow extraGasSinkMitte(m_flow_const=1) annotation (Placement(transformation(extent={{14,-64},{34,-44}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 JunctionHHMitte(
     volume=1,
-    p_start=Init.mixH2_Reitbrook.p,
-    h_start=Init.mixH2_Reitbrook.h_out,
-    xi_start=Init.mixH2_Reitbrook.xi_out) annotation (Placement(transformation(extent={{54,-30},{34,-10}})));
+    p(
+    start = Init.mixH2_Reitbrook.p),
+    h(
+    start = Init.mixH2_Reitbrook.h_out),
+    xi(
+    start =  Init.mixH2_Reitbrook.xi_out))
+                                          annotation (Placement(transformation(extent={{54,-30},{34,-10}})));
   inner TransiEnt.Grid.Gas.StatCycleGasGridHamburg
                                  Nom(
     m_flow_feedIn_Tornesch=0,
@@ -505,35 +518,31 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Wandsbek.fluidPortIn, gasGridHamburg.offTakeWandsbek) annotation (Line(
-      points={{58,62},{72,62},{72,66.1176},{99.6941,66.1176}},
+      points={{58,62},{68,62},{68,64.8118},{81.2588,64.8118}},
       color={255,255,0},
       thickness=1.5));
   connect(Bergedorf.fluidPortIn, gasGridHamburg.offTakeBergedorf) annotation (Line(
-      points={{76,-77},{92,-77},{92,-74.7059},{124.494,-74.7059}},
+      points={{76,-77},{86,-77},{86,-75.2706},{100.159,-75.2706}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeAltona, Altona.fluidPortIn) annotation (Line(
-      points={{-95.7882,9.11765},{-62,9.11765},{-62,7}},
+      points={{-67.7176,8.11176},{-62,8.11176},{-62,7}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeEimsbuettel, Eimsbuettel.fluidPortIn) annotation (Line(
-      points={{-70.9882,49.3529},{-70.9882,44},{-42,44}},
+      points={{-48.8176,48.1353},{-48.8176,44},{-42,44}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeHarburg, Harburg.fluidPortIn) annotation (Line(
-      points={{-69.5294,-68},{-42,-68},{-42,-71}},
+      points={{-47.7059,-68.6},{-48,-68.6},{-48,-71},{-42,-71}},
       color={255,255,0},
       thickness=1.5));
   connect(HHNord.fluidPortIn, gasGridHamburg.offTakeNord) annotation (Line(
-      points={{12,84},{23.8353,84},{23.8353,120.882}},
+      points={{12,84},{23.4471,84},{23.4471,119.288}},
       color={255,255,0},
       thickness=1.5));
   connect(GTS_Tornesch.gasPort,maxH2MassFlow_Tor. gasPortIn) annotation (Line(
       points={{-236,154},{-236,154.5},{-224,154.5}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(vleCompositionSensor_Tornesch.gasPortOut, gasGridHamburg.GTSTor) annotation (Line(
-      points={{-136,154},{-189.153,154},{-189.153,155.529}},
       color={255,255,0},
       thickness=1.5));
   connect(GTS_Leversen.gasPort,maxH2MassFlow_Lev. gasPortIn) annotation (Line(
@@ -544,26 +553,18 @@ equation
       points={{240,-75},{240,-76},{222,-76}},
       color={255,255,0},
       thickness=1.5));
-  connect(vleCompositionSensor_Tornesch.gasPortOut, gasGridHamburg.GTSTor) annotation (Line(
-      points={{-136,154},{-130,154},{-130,155.529},{-189.153,155.529}},
-      color={255,255,0},
-      thickness=1.5));
   connect(vleCompositionSensor_Leversen.gasPortOut, gasGridHamburg.GTSLev) annotation (Line(
-      points={{-76,-140},{-89.9529,-140},{-89.9529,-146.235}},
+      points={{-76,-140},{-63.2706,-140},{-63.2706,-146.424}},
       color={255,255,0},
       thickness=1.5));
   connect(gasGridHamburg.offTakeBergedorf, vleCompositionSensor_Reitbrook.gasPortOut) annotation (Line(
-      points={{124.494,-74.7059},{116.459,-74.7059},{116.459,-76},{114,-76}},
+      points={{100.159,-75.2706},{104,-75.2706},{104,-76},{134,-76}},
       color={255,255,0},
       thickness=1.5));
   connect(gainTor.y,FeedIn_Tornesch. P_el_set) annotation (Line(
-      points={{-141,86},{-144.5,86},{-144.5,80.08},{-178.5,80.08}},
+      points={{-141,86},{-144.5,86},{-144.5,80.08},{-184.5,80.08}},
       color={0,0,127},
       pattern=LinePattern.Dash));
-  connect(Mix_Tornesch.gasPort2,FeedIn_Tornesch. gasPortOut) annotation (Line(
-      points={{-178,144},{-178,144},{-178,127.23},{-177.35,127.23}},
-      color={255,255,0},
-      thickness=1.5));
   connect(Mix_Leversen.gasPort2,FeedIn_Leversen. gasPortOut) annotation (Line(
       points={{-120,-150},{-120,-169.77},{-119.35,-169.77}},
       color={255,255,0},
@@ -585,7 +586,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(vleCompositionSensor_Reitbrook.gasPortIn, Mix_Reitbrook.gasPort3) annotation (Line(
-      points={{134,-76},{150,-76},{166,-76}},
+      points={{154,-76},{166,-76}},
       color={255,255,0},
       thickness=1.5));
   connect(maxH2MassFlow_Rei.m_flow_H2_max, FeedIn_Reitbrook.m_flow_feedIn) annotation (Line(points={{212,-85},{212,-211.4},{200.5,-211.4}}, color={0,0,127},
@@ -598,15 +599,7 @@ equation
       points={{-110,-140},{-110,-140},{-96,-140}},
       color={255,255,0},
       thickness=1.5));
-  connect(maxH2MassFlow_Tor.gasPortOut, Mix_Tornesch.gasPort1) annotation (Line(
-      points={{-204,154.5},{-194,154.5},{-194,154},{-188,154}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(Mix_Tornesch.gasPort3, vleCompositionSensor_Tornesch.gasPortIn) annotation (Line(
-      points={{-168,154},{-156,154}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(maxH2MassFlow_Tor.m_flow_H2_max, FeedIn_Tornesch.m_flow_feedIn) annotation (Line(points={{-214,145.05},{-214,145.05},{-214,85.6},{-201.5,85.6}}, color={0,0,127},
+  connect(maxH2MassFlow_Tor.m_flow_H2_max, FeedIn_Tornesch.m_flow_feedIn) annotation (Line(points={{-214,145.05},{-214,85.6},{-207.5,85.6}},               color={0,0,127},
       pattern=LinePattern.Dash));
   connect(maxH2MassFlow_Lev.m_flow_H2_max, FeedIn_Leversen.m_flow_feedIn) annotation (Line(points={{-152,-149},{-152,-149},{-152,-212},{-152,-211.4},{-143.5,-211.4}}, color={0,0,127},
       pattern=LinePattern.Dash));
@@ -619,15 +612,15 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(FeedIn_Leversen.epp, ElectricGrid.epp) annotation (Line(
-      points={{-97.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20.2},{-255.81,20.2}},
+      points={{-97.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20},{-256,20}},
       color={0,135,135},
       thickness=0.5));
   connect(FeedIn_Reitbrook.epp, ElectricGrid.epp) annotation (Line(
-      points={{154.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20.2},{-255.81,20.2}},
+      points={{154.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20},{-256,20}},
       color={0,135,135},
       thickness=0.5));
   connect(FeedIn_Tornesch.epp, ElectricGrid.epp) annotation (Line(
-      points={{-155.5,104},{-104,104},{-104,54},{-236,54},{-236,20},{-255.81,20.2}},
+      points={{-161.5,104},{-104,104},{-104,54},{-236,54},{-236,20},{-256,20}},
       color={0,135,135},
       thickness=0.5));
   connect(gainTor.u, P_residual_neg.P_el) annotation (Line(
@@ -639,18 +632,57 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(JunctionHHMitte.gasPort1, gasGridHamburg.offTakeMitte) annotation (Line(
-      points={{54,-20},{63,-20},{63,-15.4706},{88.0235,-15.4706}},
+      points={{54,-20},{60,-20},{60,-16.3471},{72.3647,-16.3471}},
       color={255,255,0},
       thickness=1.5));
   connect(HHMitte.fluidPortIn, JunctionHHMitte.gasPort3) annotation (Line(
       points={{18,-20},{26,-20},{34,-20}},
       color={255,255,0},
       thickness=1.5));
-  annotation (Diagram(coordinateSystem(extent={{-300,-240},{280,240}}, preserveAspectRatio=false)),
-                                                                         Icon(coordinateSystem(extent={{-300,-240},{280,240}})),
+  connect(Mix_Tornesch.gasPort2, FeedIn_Tornesch.gasPortOut) annotation (Line(
+      points={{-184,144},{-184,127.23},{-183.35,127.23}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(gasGridHamburg.GTSTor, vleCompositionSensor_Tornesch.gasPortOut) annotation (Line(
+      points={{-138.871,153.753},{-142,153.753},{-142,154},{-148,154}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(Mix_Tornesch.gasPort3, vleCompositionSensor_Tornesch.gasPortIn) annotation (Line(
+      points={{-174,154},{-168,154}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(Mix_Tornesch.gasPort1, maxH2MassFlow_Tor.gasPortOut) annotation (Line(
+      points={{-194,154},{-200,154},{-200,154.5},{-204,154.5}},
+      color={255,255,0},
+      thickness=1.5));
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-300,-240},{280,240}}, preserveAspectRatio=false)),
+                                                                         Icon(graphics,
+                                                                              coordinateSystem(extent={{-300,-240},{280,240}})),
     experiment(
       StopTime=604800,
       Interval=900,
       Tolerance=1e-008),
-    __Dymola_experimentSetupOutput(inputs=false, events=false));
+    __Dymola_experimentSetupOutput(inputs=false, events=false),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end GasGrid_PtG;

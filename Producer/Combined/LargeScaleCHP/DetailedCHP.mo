@@ -2,10 +2,10 @@ within TransiEnt.Producer.Combined.LargeScaleCHP;
 model DetailedCHP "Example of how a detailed thermodynamic cycle model of a steam turbine combined heat and power plant can be modeled"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -151,11 +151,15 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
         extent={{-23,-10.5},{23,10.5}},
         rotation=0,
         origin={-103,44.5})));
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-12.5,-12},{12.5,12}},
         rotation=0,
         origin={13.5,30})));
-  TransiEnt.Components.Mechanical.ConstantInertia constantInertia(J=10e6, w(fixed=true, start=2*50*Modelica.Constants.pi))  annotation (Placement(transformation(extent={{-44,18},{-24,38}})));
+  replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=180,
+        origin={44.5,64})));
+  TransiEnt.Components.Mechanical.ConstantInertia constantInertia(omega(fixed=true, start=2*50*Modelica.Constants.pi), J=10e6) annotation (Placement(transformation(extent={{-44,18},{-24,38}})));
   ClaRa.Components.TurboMachines.Turbines.SteamTurbineVLE_L1 steamTurbine_MP1(
     medium=simCenter.fluid1,
     redeclare model Efficiency = ClaRa.Components.TurboMachines.Fundamentals.TurbineEfficiency.TableMassFlow (eta_mflow=([0.0,0.98; 1,1])),
@@ -477,7 +481,7 @@ equation
       thickness=0.5));
   connect(P_out_mech.y, prescribedPower.P_mech_set) annotation (Line(points={{-77.7,44.5},{-60,44.5},{-60,39.8}}, color={0,0,127}));
   connect(constantInertia.mpp_b, Generator.mpp) annotation (Line(
-      points={{-24,28},{-10,28},{-10,29.4},{0.375,29.4}},
+      points={{-24,28},{-10,28},{-10,30},{1,30}},
       color={95,95,95}));
   connect(constantInertia.mpp_a, prescribedPower.mpp) annotation (Line(
       points={{-44,28},{-50,28}},
@@ -548,10 +552,11 @@ equation
       points={{-216,50},{-212,50},{-212,90}},
       color={190,190,190}));
   connect(Generator.epp, epp) annotation (Line(
-      points={{26.125,29.88},{48,29.88},{48,30},{60,30},{60,60},{100,60}},
+      points={{26.125,29.88},{48,29.88},{48,30},{72,30},{72,60},{100,60}},
       color={0,135,135},
       thickness=0.5));
-  connect(P_set, Q_flow_set_SG.P) annotation (Line(points={{-84,144},{-86,144},{-86,108},{-86,108},{-7,108},{-7,102}}, color={0,0,127}));
+  connect(P_set, Q_flow_set_SG.P) annotation (Line(points={{-84,144},{-86,144},{-86,108},{-86,108},{-7.27273,108},{-7.27273,102}},
+                                                                                                                       color={0,0,127}));
   connect(m_flow_boiler.y, massFlowSource_h.m_flow) annotation (Line(points={{-397.9,47},{-390,47},{-390,50}},   color={0,0,127}));
   connect(P_set, gain.u) annotation (Line(points={{-84,144},{-86,144},{-86,108},{-124,108},{-124,212},{-322,212}},
                                                                                                         color={0,0,127}));
@@ -609,7 +614,12 @@ equation
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(Q_flow_set_pos.y, PID_HEIKOS.u_s) annotation (Line(points={{57.4,110},{54,110},{54,86},{120,86},{120,-204},{-436,-204},{-436,-28},{-402,-28}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-440,-220},{280,220}}),
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{33.9,64},{12,64},{12,52},{13.125,52},{13.125,41.88}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{54.5,64},{64,64},{64,60},{100,60}},
+      color={0,135,135},
+      thickness=0.5));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                       graphics={
         Text(
           extent={{-246,24},{-202,134}},
@@ -643,7 +653,8 @@ equation
           extent={{-250,-26},{-228,-38}},
           lineColor={0,0,255},
           textString="A5")}),
-    Icon(coordinateSystem(extent={{-440,-220},{280,220}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p>Although in an early state of development, this model illustrates how a CHP plant can be modeled to increase the level of detail. The usage of the library interfaces allows the exchangability of the model with models of less level of detail. </p>
@@ -652,7 +663,11 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_set: input for power in [W] (connector of setpoint input signal)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_set: input for heat flow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">outlet: FluidPortOut</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">inlet: FluidPortIn</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">eye: EyeOut</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

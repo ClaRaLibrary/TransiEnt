@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Base.Check;
 model TestWindturbineRotor
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,7 +39,7 @@ createPlot(id=1, position={0, 0, 1616, 363}, y={"turb_high.delta_v_turb", "turb_
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  WindturbineRotor windturbineRotor(P_el_n=P_nom.k) annotation (Placement(transformation(extent={{-18,-10},{2,10}})));
+  WindturbineRotor windturbineRotor(P_el_n=P_n.k) annotation (Placement(transformation(extent={{-18,-10},{2,10}})));
   Modelica.Mechanics.Rotational.Sources.Torque torque annotation (Placement(transformation(extent={{64,-10},{44,10}})));
   Modelica.Blocks.Sources.Ramp ramp(
     height=85,
@@ -50,18 +50,17 @@ end plotResult;
     height=12,
     duration=3600,
     offset=0) annotation (Placement(transformation(extent={{-54,-10},{-34,10}})));
-  Modelica.Blocks.Sources.Constant P_nom(k=3e6) annotation (Placement(transformation(extent={{-92,60},{-72,80}})));
-  Modelica.Blocks.Sources.Constant w_nom(k=8*2*12/windturbineRotor.D) annotation (Placement(transformation(extent={{-64,60},{-44,80}})));
-  Modelica.Mechanics.Rotational.Components.Inertia Inertia(J=10*w_nom.k^2/P_nom.k, w(fixed=true, start=0))
-                                                                  annotation(Placement(transformation(extent={{32,-10},{12,10}})));
+  Modelica.Blocks.Sources.Constant P_n(k=3e6)   annotation (Placement(transformation(extent={{-92,60},{-72,80}})));
+  Modelica.Blocks.Sources.Constant w_n(k=8*2*12/windturbineRotor.D)   annotation (Placement(transformation(extent={{-64,60},{-44,80}})));
+  Modelica.Mechanics.Rotational.Components.Inertia Inertia(J=10*w_n.k^2/P_n.k, w(fixed=true, start=0)) annotation (Placement(transformation(extent={{32,-10},{12,10}})));
   Modelica.Blocks.Sources.RealExpression f_is(y=Inertia.w/2/Modelica.Constants.pi)
                                                              "Hz" annotation (Placement(transformation(extent={{40,16},{60,36}})));
   Modelica.Blocks.Continuous.LimPID T_set(
     wp=1,
-    k=P_nom.k/w_nom.k/w_nom.k*10,
+    k=P_n.k/w_n.k/w_n.k*10,
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
-    yMax=2*P_nom.k/w_nom.k)       "Time constant"                           annotation (Placement(transformation(extent={{54,46},{74,66}})));
-  Modelica.Blocks.Sources.Constant f_set(k=w_nom.k/2/Modelica.Constants.pi) "Hz" annotation (Placement(transformation(extent={{20,46},{40,66}})));
+    yMax=2*P_n.k/w_n.k) "Time constant" annotation (Placement(transformation(extent={{54,46},{74,66}})));
+  Modelica.Blocks.Sources.Constant f_set(k=w_n.k/2/Modelica.Constants.pi) "Hz" annotation (Placement(transformation(extent={{20,46},{40,66}})));
   inner TransiEnt.Components.Boundaries.Ambient.AmbientConditions ambientConditions annotation (Placement(transformation(extent={{-20,80},{0,100}})));
 equation
   connect(v_wind.y, windturbineRotor.v_wind) annotation (Line(points={{-33,0},{-17.4,0},{-17.4,-0.2}}, color={0,0,127}));
@@ -71,6 +70,29 @@ equation
   connect(windturbineRotor.flange, Inertia.flange_b) annotation (Line(points={{2.2,0},{12,0}}, color={0,0,0}));
   connect(Inertia.flange_a, torque.flange) annotation (Line(points={{32,0},{32,0},{44,0}}, color={0,0,0}));
   connect(T_set.y, torque.tau) annotation (Line(points={{75,56},{82,56},{82,54},{82,0},{66,0}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=4000));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
+    experiment(StopTime=4000),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for wind turbine rotors</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestWindturbineRotor;

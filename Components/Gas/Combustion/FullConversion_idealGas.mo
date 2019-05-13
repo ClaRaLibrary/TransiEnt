@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Combustion;
 model FullConversion_idealGas "Full conversion, fuel type independent combustion model for emission calculation purpose"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -125,9 +125,10 @@ equation
   xi_exh[7] = 0;
   xi_exh[8] = 0;
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}),
-                         graphics), Diagram(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),     Diagram(graphics,
+                                            coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"color: #008000;\">1. Purpose of model</span></b> </p>
@@ -176,7 +177,7 @@ equation
 <p><b><span style=\"color: #008000;\">7. Remarks for Usage</span></b> </p>
 <p>(no elements) </p>
 <p><b><span style=\"color: #008000;\">8. Validation</span></b> </p>
-<p>(no validation or testing necessary) </p>
+<p>Tested in check model &quot;TransiEnt.Components.Gas.Combustion.Check.TestCombustion&quot;</p>
 <p><b><span style=\"color: #008000;\">9. References</span></b> </p>
 <p>(no remarks) </p>
 <p><b><span style=\"color: #008000;\">10. Version History</span></b> </p>

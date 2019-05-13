@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckNonlinearThreeStatePlant_SecondaryControl "Example of the component PowerPlant_PoutGrad_L1"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,7 +30,7 @@ model CheckNonlinearThreeStatePlant_SecondaryControl "Example of the component P
     nSubgrid=2,
     fixedStartValue_w=false,
     isSecondaryControlActive=true,
-    P_init=-doubleRamp.offset) annotation (Placement(transformation(extent={{14,-88},{50,-54}})));
+    P_init_set=-doubleRamp.offset) annotation (Placement(transformation(extent={{14,-88},{50,-54}})));
   TransiEnt.Consumer.Electrical.LinearElectricConsumer LinearGrid(
     useInputConnectorP=false,
     P_el=300e6,
@@ -50,7 +50,7 @@ model CheckNonlinearThreeStatePlant_SecondaryControl "Example of the component P
   Modelica.Blocks.Sources.Constant SC_T(k=60)   annotation (Placement(transformation(extent={{22,62},{42,82}})));
   Modelica.Blocks.Sources.Constant SC_K(k=1)    annotation (Placement(transformation(extent={{62,62},{82,82}})));
   TransiEnt.Grid.Electrical.SecondaryControl.SecondaryBalancingController AGC_Grid_1(
-    P_nom=Gen_1.P_el_n,
+    P_n=Gen_1.P_el_n,
     K_r=1,
     is_singleton=false,
     T_r=SC_T.k,
@@ -60,12 +60,12 @@ model CheckNonlinearThreeStatePlant_SecondaryControl "Example of the component P
   TransiEnt.Components.Sensors.ElectricFrequency electricPower_L1_1 annotation (Placement(transformation(extent={{54,0},{74,20}})));
   TransiEnt.Components.Sensors.ElectricActivePower P_tie_is annotation (Placement(transformation(extent={{72,-24},{92,-4}})));
   Modelica.Blocks.Math.Feedback delta_f annotation (Placement(transformation(extent={{-80,-14},{-60,6}})));
-  Modelica.Blocks.Sources.Constant f_nom(k=50) annotation (Placement(transformation(extent={{-96,-38},{-76,-18}})));
+  Modelica.Blocks.Sources.Constant f_n(k=50)   annotation (Placement(transformation(extent={{-96,-38},{-76,-18}})));
 equation
 
   connect(AGC_Grid_1.P_tie_set, Gen_1_tie_set.y) annotation (Line(points={{-28.9,6.01},{-28.9,26},{-43,26}},  color={0,0,127}));
   connect(Gen_1.epp, P_tie_is.epp_IN) annotation (Line(
-      points={{49.1,-61.48},{49.1,-14},{72.8,-14}},
+      points={{48.2,-59.1},{48.2,-14},{72.8,-14}},
       color={0,135,135},
       thickness=0.5));
   connect(electricPower_L1_1.epp, P_tie_is.epp_IN) annotation (Line(
@@ -73,7 +73,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(delta_f.y, AGC_Grid_1.u) annotation (Line(points={{-61,-4},{-54,-4},{-32.2,-4}},            color={0,0,127}));
-  connect(f_nom.y, delta_f.u2) annotation (Line(points={{-75,-28},{-70,-28},{-70,-12}},    color={0,0,127}));
+  connect(f_n.y, delta_f.u2) annotation (Line(points={{-75,-28},{-70,-28},{-70,-12}}, color={0,0,127}));
   connect(electricPower_L1_1.f, delta_f.u1) annotation (Line(points={{74.4,10},{74.4,10},{74.4,46},{-90,46},{-90,-4},{-78,-4}},color={0,0,127}));
   connect(P_tie_is.P, AGC_Grid_1.P_tie_is) annotation (Line(points={{78.2,-6.2},{78.2,38},{-23.62,38},{-23.62,6.01}}, color={0,0,127}));
   connect(doubleRamp.y, Gen_1.P_el_set) annotation (Line(points={{-23,-32},{-23,-32},{30,-32},{30,-54.17},{29.3,-54.17}},color={0,0,127}));
@@ -98,7 +98,8 @@ Gen_1.epp.f
 AGC.Grid_1.y")}),
     experiment(StopTime=7200),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-160},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-160},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

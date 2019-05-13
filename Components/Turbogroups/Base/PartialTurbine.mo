@@ -2,10 +2,10 @@ within TransiEnt.Components.Turbogroups.Base;
 partial model PartialTurbine "Abstract model of a turbine defining nothing but the interfaces"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ partial model PartialTurbine "Abstract model of a turbine defining nothing but t
   // _____________________________________________
 
   TransiEnt.Basics.Interfaces.General.MechanicalPowerPort mpp annotation (Placement(transformation(extent={{90,-12},{110,8}}), iconTransformation(extent={{86,-16},{116,14}})));
-  Modelica.Blocks.Interfaces.RealInput P_target annotation (Placement(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_target annotation (Placement(
         transformation(extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,98}),                             iconTransformation(
@@ -49,23 +49,24 @@ partial model PartialTurbine "Abstract model of a turbine defining nothing but t
         rotation=270,
         origin={-1,85})));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}),                                                                  graphics), Diagram(
+            -100},{100,100}}),                                                                  graphics), Diagram(graphics,
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}}), graphics),
+            100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
-<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>Partial model/Base class for turbines without physical or technical insight</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight, defining nothing but the interfaces</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>mpp: mechanical power port</p>
+<p>P_target: input for electric power in W</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Producer.Combined.SmallScaleCHP.Base;
 record BaseCHPSpecification "Record used for specification of a CHP"
-//________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+  //________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,68 +26,67 @@ record BaseCHPSpecification "Record used for specification of a CHP"
   // _____________________________________________
 
   extends TransiEnt.Basics.Icons.Record;
-
+//  parameter Real CL_eta_el[:,2]=[P_el_min/P_el_max,eta_el_min/eta_el_max; 1.00,eta_el_max/eta_el_max] "Characteristic line eta/eta_max = f(Power output), x number of rows, 2 columns" annotation (Dialog(tab="General", group="Efficiencies"));
+//  parameter Real CL_eta_th[:,2]=[P_el_min/P_el_max,eta_th_max/eta_th_max; 1.00,eta_th_min/eta_th_max] "Characteristic line eta/eta_max = f(Power output), x number of rows, 2 columns" annotation (Dialog(tab="General", group="Efficiencies"));
   // _____________________________________________
   //
   //                   Parameters
   // _____________________________________________
-  parameter Modelica.SIunits.Power P_el_max=1e5 "Maximum power output in W"
-    annotation (Dialog(tab="Technical Specifications"));
-  parameter Modelica.SIunits.Power P_el_min=0.5*P_el_max "Minimum power output in W"
-    annotation (Dialog(tab="Technical Specifications"));
-  parameter Real lambda=1 "Air–fuel ratio";
+  parameter TransiEnt.Producer.Combined.SmallScaleCHP.Base.PartloadEfficiency.PartloadEfficiencyCharacteristic EfficiencyCharLine=TransiEnt.Producer.Combined.SmallScaleCHP.Base.PartloadEfficiency.PartloadEfficiencyCharacteristic(CL_eta_th=[P_el_min/P_el_max,eta_h_max /eta_h_max;  1.00,eta_h_min /eta_h_max], CL_eta_el=[P_el_min/P_el_max,eta_el_min/eta_el_max; 1.00,eta_el_max/eta_el_max]) "choose characteristic relative efficiency line" annotation(Dialog(tab="General", group="Efficiencies"), choicesAllMatching=true);
+
+  // Electrical Parameters
+  parameter Modelica.SIunits.Power P_el_max=1e5 "Maximum power output in W" annotation (Dialog(tab="General", group="Electrical Parameters"));
+  parameter Modelica.SIunits.Power P_el_min=0.5*P_el_max "Minimum power output in W" annotation (Dialog(tab="General", group="Electrical Parameters"));
+
+//   parameter Real Efficiency_el_Mat[:,2]=[P_el_max,eta_el_max; P_el_min,eta_el_min];
+//   parameter Real Efficiency_th_Mat[:,2]=[P_el_max,eta_th_min; P_el_min,eta_th_max];
+
+  // Efficiencies
   parameter Real eta_el_max(
     min=0,
-    max=1) = 0.30 "Maximum electrical efficiency"
-   annotation (Dialog(tab="Technical Specifications"));
+    max=1) = 0.30 "Maximum electrical efficiency" annotation (Dialog(tab="General", group="Efficiencies"));
   parameter Real eta_el_min(
     min=0,
-    max=1) = eta_el_max*0.85 "Electrical efficiency at P_el_min"
-   annotation (Dialog(tab="Technical Specifications"));
-  parameter Real[:,:] field_eta_el={{P_el_min,(P_el_min+P_el_max)/2,P_el_max},{eta_el_min,(eta_el_min+eta_el_max)/2,eta_el_max}} "Field of electrical efficiencies";
-  parameter Real[:,:] field_eta_h={{P_el_min,(P_el_min+P_el_max)/2,P_el_max},{eta_h_min,(eta_h_min+eta_h_max)/2,eta_h_max}} "Field of fuel utilization efficiencies";
+    max=1) = eta_el_max*0.85 "Electrical efficiency at P_el_min" annotation (Dialog(tab="General", group="Efficiencies"));
   parameter Real eta_h_max(
     min=0,
-    max=1.12) = 0.98 "Fuel utilization at P_el_min"
-   annotation (Dialog(tab="Technical Specifications"));
+    max=1.12) = 0.98 "Fuel utilization at P_el_min" annotation (Dialog(group="Efficiencies"));
   parameter Real eta_h_min(
     min=0,
-    max=1.12) = 0.95*eta_h_max "Fuel utilization at P_el_max"
-   annotation (Dialog(tab="Technical Specifications"));
-  parameter Real eta_m=0.9 "guessed value for mechanical efficiency (P_e/P_i=p_me/p_mi) (Hackbarth, Merhof)";
-    parameter Real thermalConductivity=Q_flow_out_max/200 "Thermal conductivity between engines core and casing";
-  parameter Modelica.SIunits.Power Q_flow_out_max=P_el_max/eta_el_max*(
-      eta_h_max - eta_el_max) "Maximum heat flow in W"
-    annotation (Dialog(tab="Technical Specifications"));
-  parameter Modelica.SIunits.Power Q_flow_out_min=P_el_min/eta_el_min*(
-      eta_h_min - eta_el_min) "Minimum heat flow in W"
-    annotation (Dialog(tab="Technical Specifications"));
+    max=1.12) = 0.95*eta_h_max "Fuel utilization at P_el_max" annotation (Dialog(group="Efficiencies"));
+  parameter Real eta_m=0.9 "guessed value for mechanical efficiency (P_e/P_i=p_me/p_mi) (Hackbarth, Merhof)" annotation (Dialog(tab="General", group="Efficiencies"));
 
-   parameter Modelica.SIunits.Mass m_engine=1000 "Approximate mass of motor"
-   annotation (Dialog(tab="Technical Specifications"));
-  parameter Modelica.SIunits.Length length=1.5 "Size of motor block";
-  parameter Modelica.SIunits.Height height=1 "Size of motor block";
-  parameter Modelica.SIunits.Length width=1 "Size of motor block";
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer k=20 "Coefficient of heat transfer";
-  parameter Modelica.SIunits.Conversions.NonSIunits.AngularVelocity_rpm n_n=1500 "nominal angular velocity in rpm";
+  //
+  // Thermal Parameters
+  parameter Modelica.SIunits.Temperature T_opt=338.15 "Temperature of warm engine" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.Temperature T_return_max=343.15 "Maximum allowed coolant temperature" annotation (Dialog(tab="General", group="Thermal Parameters"));
+  parameter Real shareExhaustHeat=0.3 "Share of exhaust heat flow Q_flow_exhaust on total heat flow fed into the grid Q_flow_out" annotation (Dialog(tab="General", group="Thermal Parameters"));
+  parameter Real lambda=1 "Air–fuel ratio" annotation (Dialog(tab="General", group="Thermal Parameters"));
+  parameter Real thermalConductivity=Q_flow_out_max/200 "Thermal conductivity between engines core and casing" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.Power Q_flow_out_max=P_el_max/eta_el_max*(eta_h_max - eta_el_max) "Maximum heat flow in W" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.Power Q_flow_out_min=P_el_min/eta_el_min*(eta_h_min - eta_el_min) "Minimum heat flow in W" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.CoefficientOfHeatTransfer k=20 "Coefficient of heat transfer" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+
+  // Geometric Parameters
+  parameter Modelica.SIunits.Mass m_engine=1000 "Approximate mass of motor" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.Length length=1.5 "Size of motor block" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.Height height=1 "Size of motor block" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.Length width=1 "Size of motor block" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Integer n_cylinder=4 "Number of cylinders" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
 
   //Default parameter of piston stroke assumes a ratio of piston stroke to diameter of 1
-  parameter Modelica.SIunits.Length pistonStroke=pistonDiameter "Piston stroke of engine";
-  parameter Modelica.SIunits.Diameter pistonDiameter=0.1 "Piston diameter of engine";
-  parameter Integer n_cylinder=4 "Number of cylinders";
+  parameter Modelica.SIunits.Length pistonStroke=pistonDiameter "Piston stroke of engine" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  parameter Modelica.SIunits.Diameter pistonDiameter=0.1 "Piston diameter of engine" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  final parameter Modelica.SIunits.Volume engineDisplacement=pistonDiameter^2/4*Modelica.Constants.pi*pistonStroke "Engine displacement of single cylinder" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
 
-  parameter Modelica.SIunits.Temperature T_opt=338.15 "Temperature of warm engine";
-  parameter Modelica.SIunits.Temperature T_return_max=343.15 "Maximum allowed coolant temperature";
-  parameter Real reactionTime=1/8 "Reaction time of engine";
-  parameter Real damping=3 "Damping of engine's transfer function";
-  parameter Real shareExhaustHeat=0.3 "Share of exhaust heat flow Q_flow_exhaust on total heat flow fed into the grid Q_flow_out";
-  parameter Modelica.SIunits.Time syncTime=90 "Time needed for synchronistion to the grid";
-  final parameter Modelica.SIunits.Volume engineDisplacement=pistonDiameter
-      ^2/4*Modelica.Constants.pi*pistonStroke "Engine displacement of single cylinder";
-  final parameter Modelica.SIunits.AngularVelocity omega_n=n_n/60*2*
-      Modelica.Constants.pi "Nominal angular velocity";
+  //Mechanical and Dynamic Parameters
+  parameter Real reactionTime=1/8 "Reaction time of engine" annotation (Dialog(tab="General", group="Dynamic Parameters"));
+  parameter Real damping=3 "Damping of engine's transfer function" annotation (Dialog(tab="General", group="Dynamic Parameters"));
+  parameter Modelica.SIunits.Time syncTime=90 "Time needed for synchronistion to the grid" annotation (Dialog(tab="General", group="Dynamic Parameters"));
+  parameter Modelica.SIunits.Conversions.NonSIunits.AngularVelocity_rpm n_n=1500 "nominal angular velocity in rpm" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
+  final parameter Modelica.SIunits.AngularVelocity omega_n=n_n/60*2*Modelica.Constants.pi "Nominal angular velocity" annotation (Dialog(tab="Technical Specifications", group="For informative purposes only"));
 
-      annotation(Documentation(info="<html>
+  annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Partial record for CHP specification data.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
@@ -109,5 +108,6 @@ record BaseCHPSpecification "Record used for specification of a CHP"
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Arne Koeppen (arne.koeppen@tuhh.de), Jun 2013</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Aug 2013</p>
+<p>Revised by Anne Senkel (anne.senkel@tuhh.de), Feb 2019</p>
 </html>"));
 end BaseCHPSpecification;

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups.Check;
 model TestSlewRateLimited2StateTurbine
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ model TestSlewRateLimited2StateTurbine
     is_singleton=false,
     T_r=5,
     beta=5,
-    P_nom=20) annotation (Placement(transformation(extent={{-110,9},{-88,31}})));
+    P_n=20) annotation (Placement(transformation(extent={{-110,9},{-88,31}})));
   Modelica.Blocks.Sources.Constant zero(k=0) annotation (Placement(transformation(extent={{-142,44},{-122,64}})));
 equation
   connect(sine.y, Grid.f_set) annotation (Line(
@@ -64,7 +64,8 @@ equation
   connect(zero.y, AGC_Grid_1.P_tie_set) annotation (Line(points={{-121,54},{-108.9,54},{-108.9,30.01}}, color={0,0,127}));
   connect(zero.y, AGC_Grid_1.u) annotation (Line(points={{-121,54},{-118,54},{-118,52},{-118,20},{-112.2,20}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=75),
     __Dymola_experimentSetupOutput);
 end TestSlewRateLimited2StateTurbine;

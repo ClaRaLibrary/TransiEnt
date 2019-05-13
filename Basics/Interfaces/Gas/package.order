@@ -1,8 +1,5 @@
 EnthalpyFlowRateIn
 EnthalpyFlowRateOut
-GasMassFlowIn
-GasMassFlowOut
-GasVolumeFlowOut
 IdealGasEnthPort
 IdealGasEnthPortIn
 IdealGasEnthPortOut

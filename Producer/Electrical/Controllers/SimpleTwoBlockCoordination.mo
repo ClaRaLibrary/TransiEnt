@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Controllers;
 model SimpleTwoBlockCoordination "Assigns load to first block until second block is needed to cover load"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,8 +20,6 @@ model SimpleTwoBlockCoordination "Assigns load to first block until second block
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-/// ***** MOST IMPORTANT RULE: BEFORE PUSHING YOUR CHANGES YOUR MODEL SHOULD "CHECK" *****
-/// (meaning if you press F8 or click the "check" Button there are no errors)
 
   // _____________________________________________
   //
@@ -72,7 +70,8 @@ equation
 
   end if;
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Assigns&nbsp;load&nbsp;to&nbsp;first&nbsp;block&nbsp;until&nbsp;second&nbsp;block&nbsp;is&nbsp;needed&nbsp;to&nbsp;cover&nbsp;load.</p>
@@ -81,7 +80,9 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>P_set: input for electric power in W</p>
+<p>P_set_Block1: output for electric power in W</p>
+<p>P_set_Block2: output for electric power in W</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -89,7 +90,7 @@ equation
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TestSimpleTwoBlockCoordination&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

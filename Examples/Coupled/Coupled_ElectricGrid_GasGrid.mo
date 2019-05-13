@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Coupled;
 model Coupled_ElectricGrid_GasGrid "Example for sector coupling in TransiEnt library"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,7 +25,7 @@ model Coupled_ElectricGrid_GasGrid "Example for sector coupling in TransiEnt lib
     P_el_n=3e6,
     Q_flow_n_CHP=CHP.P_el_n/0.3,
     PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_STGeneric(k_Q_flow=1/CHP.Q_flow_n_CHP, k_P_el=CHP.P_el_n)) annotation (Placement(transformation(extent={{-202,90},{-122,170}})));
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={38,34})));
@@ -149,20 +149,22 @@ equation
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(DHN_source.fluidPortOut, CHP.inlet) annotation (Line(
-      points={{204.4,155.6},{162,155.6},{10,155.6},{10,112},{-121.2,112}},
+      points={{204,156},{162,156},{10,156},{10,112},{-121.2,112}},
       color={175,0,0},
       thickness=0.5));
   connect(dHN_sink.fluidPortIn, T_vl_is.port) annotation (Line(
-      points={{206.4,93.6},{198,93.6},{198,94},{188,94}},
+      points={{206,94},{198,94},{198,94},{188,94}},
       color={175,0,0},
       thickness=0.5));
   connect(gasBoiler.outlet, valveVLE_L1_1.inlet) annotation (Line(
       points={{58,34},{70,34},{70,32},{82,32},{82,96},{152,96},{152,94}},
       color={175,0,0},
       thickness=0.5));
-  annotation (Icon(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(
         preserveAspectRatio=false,
-        initialScale=0.1)), Diagram(coordinateSystem(
+        initialScale=0.1)), Diagram(graphics,
+                                    coordinateSystem(
         preserveAspectRatio=false,
         extent={{-400,-300},{400,300}},
         initialScale=0.1)),

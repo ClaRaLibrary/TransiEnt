@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Compressor.Base;
 partial model PartialCompressorRealGas_L1_simple "Partial compressor model for real gases with constant efficiency"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,8 +27,6 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   // _____________________________________________
 
   import SI = Modelica.SIunits;
-  extends ClaRa.Basics.Icons.Compressor;
-
   // _____________________________________________
   //
   //        Constants and Hidden Parameters
@@ -60,6 +58,8 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   parameter Boolean V_flowInput=false "= true, if V_flow defined by input" annotation(Dialog(enable=(presetVariableType=="V_flow"), group="Volume Flow Rate"));
   parameter SI.VolumeFlowRate V_flow_fixed=0.5e-3 "Fixed value for gas volume flow rate" annotation(Dialog(enable=(not V_flowInput and presetVariableType=="V_flow"),group="Volume Flow Rate"));
 
+  parameter Boolean integrateElPower=simCenter.integrateElPower "true if electric powers shall be integrated" annotation (Dialog(group="Statistics"));
+  parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated"  annotation (Dialog(group="Statistics"));
   parameter SI.Power P_el_n = 1e3 "Nominal power for cost calculation" annotation(Dialog(group="Statistics"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el=simCenter.Cspec_demAndRev_free "Specific demand-related cost per electric energy" annotation (Dialog(group="Statistics"));
 
@@ -68,7 +68,7 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   //             Variable Declarations
   // _____________________________________________
   Real hOut;
-  SI.Pressure Delta_p(final start=100) "pressure increase";
+  SI.Pressure Delta_p(final start=100) "pressure increase" annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.Power P_hyd "Hydraulic power";
   SI.Power P_shaft "Drive power";
   SI.Power P_el "Electrical power";
@@ -94,22 +94,22 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
     powerAux=-P_hyd + P_el) if contributeToCycleSummary;
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium, m_flow(min=if allow_reverseFlow then -Modelica.Constants.inf else 1e-5)) "inlet flow" annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium, m_flow(max=if allow_reverseFlow then Modelica.Constants.inf else -1e-5)) "outlet flow" annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Modelica.Blocks.Interfaces.RealInput dp_in if  use_Delta_p_input "Prescribed pressure increase" annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
+  TransiEnt.Basics.Interfaces.General.PressureDifferenceIn dp_in if  use_Delta_p_input "Prescribed pressure increase" annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
         origin={80,110}),
                 iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={80,110})));
-  Modelica.Blocks.Interfaces.RealInput P_el_in if use_P_elInput "Prescribed pressure increase" annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_in if use_P_elInput "Prescribed electric power" annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
         origin={34,110}),
                 iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={30,110})));
-  Modelica.Blocks.Interfaces.RealInput V_flow_in if V_flowInput "Prescribed volume flow rate" annotation (Placement(transformation(extent={{-10,-10},{10,10}},   rotation=270,
+  TransiEnt.Basics.Interfaces.General.VolumeFlowRateIn V_flow_in if  V_flowInput "Prescribed volume flow rate" annotation (Placement(transformation(extent={{-10,-10},{10,10}},   rotation=270,
         origin={-32,110}),
                iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-30,110})));
-  Modelica.Blocks.Interfaces.RealInput m_flow_in if m_flowInput "Prescribed mass flow rate" annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_in if m_flowInput "Prescribed mass flow rate" annotation (Placement(transformation(extent={{-10,-10},{10,10}},
           rotation=270,
         origin={-80,110}),
                        iconTransformation(extent={{-10,-10},{10,10}},
@@ -180,7 +180,8 @@ public
       revenues=collectCosts.costsCollector.Revenues)) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
 protected
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=typeOfResource) annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=typeOfResource, integrateElPower=integrateElPower)
+                                                                                                                                      annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectCostsGeneral collectCosts(
     der_E_n=P_el_n,
     redeclare model CostRecordGeneral = CostSpecsGeneral,
@@ -195,7 +196,8 @@ protected
     produces_other_flow=false,
     consumes_other_flow=false,
     produces_m_flow_CDE=false,
-    consumes_m_flow_CDE=false)
+    consumes_m_flow_CDE=false,
+    calculateCost=calculateCost)
                annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
 
 
@@ -294,35 +296,70 @@ equation
       smooth=Smooth.None));
 
                                                 annotation (
-              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+              Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),  Icon(coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}}),
-                                      graphics),
+                                      graphics={
+        Ellipse(
+          extent={{100,-100},{-100,100}},
+          lineColor={215,215,215},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Ellipse(
+          extent={{-92,92},{92,-92}},
+          lineColor={215,215,215},
+          pattern=LinePattern.None,
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-2,94},{-2,94}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-2,92},{90,22},{92,32},{12,92},{-2,92}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-2,-92},{12,-92},{88,-34},{94,-20},{-2,-92}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid)}),
           Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model is a partial model for real gas compressors. It is a modified version of the model ClaRa.Components.TurboMachines.Compressors.CompressorGas_L1_simple from ClaRa version 1.2.1. The model is documented there and here only the changes are described. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The model was changed to work with real gases and mechanical and electrical efficiencies were added. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid for real gases and positive pressure differences. Variable efficiencies and time-dependent behavior are not considered.</p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: real gas inlet </p>
 <p>gasPortOut: real gas outlet </p>
-<p>m_flow_in: input for mass flow rate </p>
-<p>V_flow_in: input for volume flow rate </p>
-<p>P_el_in: input for electrical power </p>
-<p>dp_in: input for pressure difference </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<p>m_flow_in: input for mass flow rate in kg/s</p>
+<p>V_flow_in: input for volume flow rate in m3/s</p>
+<p>P_el_in: input for electrical power in W</p>
+<p>dp_in: input for pressure difference in Pa</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>Delta_p&nbsp;&quot;pressure&nbsp;increase&quot;</p>
+<p>P_hyd&nbsp;&quot;Hydraulic&nbsp;power&quot;</p>
+<p>P_shaft&nbsp;&quot;Drive&nbsp;power&quot;</p>
+<p>P_el&nbsp;&quot;Electrical&nbsp;power&quot;</p>
+<p>V_flow &quot;Volume flow rate&quot;</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Sep 20 2016<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Sep 20 2016</p>
 </html>"));
 end PartialCompressorRealGas_L1_simple;

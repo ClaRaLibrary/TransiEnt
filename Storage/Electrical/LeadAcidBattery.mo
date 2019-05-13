@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical;
-model LeadAcidBattery
+model LeadAcidBattery "Model of a lead acid battery"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,7 +28,21 @@ model LeadAcidBattery
   extends Base.Battery(
     StorageModelParams=Specifications.LeadAcidBattery(),
     redeclare model StationaryLossModel = TransiEnt.Storage.Base.SelfDischargeRate,
-    redeclare model CostModel = TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.ElectricStorageGeneral);
+    redeclare model CostModel = TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.ElectricStorageGeneral,
+    storageModel(use_PowerRateLimiter=use_PowerRateLimiter),
+    batteryPowerLimit(P_max_load_over_SOC(table=StorageModelParams.P_max_load_over_SOC), P_max_unload_over_SOC(table=StorageModelParams.P_max_unload_over_SOC)),
+    batterySystemEfficiency(
+      a=StorageModelParams.a,
+      b=StorageModelParams.b,
+      c=StorageModelParams.c,
+      d=StorageModelParams.d));
+
+   // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+
+   parameter Boolean use_PowerRateLimiter=true "Use Power Rate Limitation";
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model of a lead acid battery.</span></p>
@@ -37,7 +51,8 @@ model LeadAcidBattery
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>P_set: input for electric power in [W]</p>
+<p>epp: choice of power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -45,7 +60,7 @@ model LeadAcidBattery
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Tested in check model &quot;TransiEnt.Storage.Electrical.Check.TestLeadAcidBattery&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckBlackCoal
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,14 +20,14 @@ model CheckBlackCoal
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-BlackCoal blackCoal(
-  isPrimaryControlActive=false,
-  P_el_n=506e6,
-  eta_total=0.432,
-  T_plant=200,
-  P_init=0,
-  isSecondaryControlActive=false,
-  isExternalSecondaryController=false) annotation (Placement(transformation(extent={{-24,-64},{-4,-44}})));
+  BlackCoal blackCoal(
+    isPrimaryControlActive=false,
+    P_el_n=506e6,
+    eta_total=0.432,
+    T_plant=200,
+    P_init_set=0,
+    isSecondaryControlActive=false,
+    isExternalSecondaryController=false) annotation (Placement(transformation(extent={{-24,-64},{-4,-44}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{32,-58},{52,-38}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},
             {-70,100}})));
@@ -39,7 +39,7 @@ BlackCoal blackCoal(
     annotation (Placement(transformation(extent={{-56,-38},{-36,-18}})));
 equation
   connect(blackCoal.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{-4.5,-48.4},{31.9,-48.4},{31.9,-48.1}},
+      points={{-5,-47},{32,-47},{32,-48}},
       color={0,135,135},
       thickness=0.5));
   connect(timeTable.y, blackCoal.P_el_set) annotation (Line(points={{-35,-28},{-15.5,
@@ -60,6 +60,28 @@ createPlot(id=1, position={809, 0, 791, 733}, y={"blackCoal.epp.P", "blackCoal.P
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), experiment(StopTime=55000));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), experiment(StopTime=55000),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for black coal power plants</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end CheckBlackCoal;

@@ -1,11 +1,11 @@
 within TransiEnt.Storage.Gas;
-model GasStorage_varXi_L2 "Model of a simple gas storage volume for variable composition"
+model GasStorage_varXi_L2 "L2: Model of a simple gas storage volume for variable composition"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,6 +38,7 @@ model GasStorage_varXi_L2 "Model of a simple gas storage volume for variable com
   //             Visible Parameters
   // _____________________________________________
 
+  parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated"  annotation (Dialog(group="Statistics"));
   parameter SI.MassFraction xi_gas_start[medium.nc-1]=medium.xi_default "Mass composition of gas in storage at t=0" annotation(Dialog(group="Initialization"));
 
   // _____________________________________________
@@ -73,6 +74,13 @@ protected
            annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 public
   inner Summary summary(
+    outline(
+      H_flow_in_NCV=H_flow_in_NCV,
+      H_flow_out_NCV=H_flow_out_NCV,
+      H_gas_NCV=H_gas_NCV,
+      H_flow_in_GCV=H_flow_in_GCV,
+      H_flow_out_GCV=H_flow_out_GCV,
+      H_gas_GCV=H_gas_GCV),
     gasPortIn(
       mediumModel=medium,
       xi=gasIn.xi,
@@ -115,8 +123,18 @@ public
   // _____________________________________________
 
 protected
+  model Outline
+    input SI.EnergyFlowRate H_flow_in_NCV "Inflowing enthalpy flow based on NCV";
+    input SI.EnergyFlowRate H_flow_out_NCV "Inflowing enthalpy flow based on NCV";
+    input SI.Enthalpy H_gas_NCV "Enthalpy of the gas bulk based on NCV";
+    input SI.EnergyFlowRate H_flow_in_GCV "Inflowing enthalpy flow based on GCV";
+    input SI.EnergyFlowRate H_flow_out_GCV "Inflowing enthalpy flow based on GCV";
+    input SI.Enthalpy H_gas_GCV "Enthalpy of the gas bulk based on GCV";
+  end Outline;
+
   model Summary
     extends TransiEnt.Basics.Icons.Record;
+    Outline outline;
     TransiEnt.Basics.Records.RealGasBulk gasBulk;
     TransiEnt.Basics.Records.FlangeRealGas gasPortIn;
     TransiEnt.Basics.Records.FlangeRealGas gasPortOut;
@@ -167,6 +185,11 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Apr 07 2015</p>
-</html>"),Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+</html>"),Diagram(graphics,
+                  coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Icon(graphics={Text(
+          extent={{-30,12},{30,-48}},
+          lineColor={0,0,0},
+          textString="L2")},
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end GasStorage_varXi_L2;

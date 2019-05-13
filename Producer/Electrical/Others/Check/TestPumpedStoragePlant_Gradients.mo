@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Others.Check;
 model TestPumpedStoragePlant_Gradients
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,14 +56,13 @@ model TestPumpedStoragePlant_Gradients
   PumpedStoragePlant PS(
     isSecondaryControlActive=false,
     isExternalSecondaryController=false,
-    P_init=0,
+    P_init_set=0,
     t_startup=60,
-    P_grad_max_star=simCenter.generationPark.P_grad_max_star_PS)
-                annotation (Placement(transformation(extent={{-22,-21},{-2,-1}})));
+    P_grad_max_star=simCenter.generationPark.P_grad_max_star_PS) annotation (Placement(transformation(extent={{-22,-21},{-2,-1}})));
 equation
 
   connect(PS.epp, Grid.epp) annotation (Line(
-      points={{-2.5,-5.4},{29.9,-5.4},{29.9,-5.1}},
+      points={{-3,-4},{30,-4},{30,-5}},
       color={0,135,135},
       thickness=0.5));
   connect(sched.y, PS.P_el_set) annotation (Line(points={{-29,10},{-13.5,10},{-13.5,-1.1}}, color={0,0,127}));
@@ -84,5 +83,26 @@ is 1/60s ")}),
       Interval=10,
       Tolerance=1e-006),
     __Dymola_experimentSetupOutput,
-    __Dymola_Commands(executeCall=TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant_Gradients.run() "Run example"));
+    __Dymola_Commands(executeCall=TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant_Gradients.run() "Run example"),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for pumped storage plants</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestPumpedStoragePlant_Gradients;

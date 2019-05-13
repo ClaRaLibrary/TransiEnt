@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestCHP_startup "Example how the continuous plant model behaves when ramping up"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,7 +46,7 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
     Q_flow_SG_init=0,
     t_startup=7200,
     T_feed_init=363.15,
-    UseGasPort=false)
+    useGasPort=false)
                     annotation (Placement(transformation(extent={{-38,18},{8,62}})));
 
   Modelica.Blocks.Sources.Ramp Q_flow_set(
@@ -96,8 +96,11 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
     Q_flow_init=0,
     Q_flow_SG_init=0,
     t_startup=7200,
-    T_feed_init=363.15,
-    UseGasPort=true)
+    useGasPort=true,
+    integrateHeatFlow=false,
+    integrateElectricPower=false,
+    integrateElectricPowerChp=false,
+    T_feed_init=363.15)
                     annotation (Placement(transformation(extent={{-46,-82},{0,-38}})));
   Modelica.Blocks.Sources.Ramp Q_flow_set1(
     height=-290e6,
@@ -129,7 +132,7 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
   Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(extent={{78,-32},{58,-12}})));
 equation
   connect(Plant.epp,Grid. epp) annotation (Line(
-      points={{6.85,46.6},{8,46.6},{8,87.94},{17.94,87.94}},
+      points={{6.85,46.6},{8,46.6},{8,88},{18,88}},
       color={0,135,135},
       thickness=0.5));
   connect(Plant.P_set,P_min. y) annotation (Line(points={{-29.03,56.8667},{-29.03,65.5},{-38.9,65.5}},
@@ -167,7 +170,7 @@ createPlot(id=1, position={745, 0, 728, 206}, y={"Plant.plantState.startup.activ
 end plotResult;
 equation
   connect(Plant1.epp, Grid1.epp) annotation (Line(
-      points={{-1.15,-53.4},{0,-53.4},{0,-8.06},{9.94,-8.06}},
+      points={{-1.15,-53.4},{0,-53.4},{0,-8},{10,-8}},
       color={0,135,135},
       thickness=0.5));
   connect(Plant1.P_set, P_min1.y) annotation (Line(points={{-37.03,-43.1333},{-37.03,-38.5},{-46.9,-38.5}}, color={0,0,127}));
@@ -187,8 +190,31 @@ equation
       points={{0,-44.9667},{40,-44.9667},{40,-22},{58,-22}},
       color={255,255,0},
       thickness=1.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=86400),
     __Dymola_experimentSetupOutput(equidistant=false),
-    Icon(coordinateSystem(extent={{-120,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(extent={{-120,-100},{100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for an upramping combined heat and power plant</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestCHP_startup;

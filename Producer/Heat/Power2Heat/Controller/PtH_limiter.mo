@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Power2Heat.Controller;
 model PtH_limiter "Dispatcher for Power to Heat units"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,21 +31,21 @@ model PtH_limiter "Dispatcher for Power to Heat units"
   //
   //                  Interfaces
   // _____________________________________________
-  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_set_PtH annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_set_PtH "Heat flow rate output set value" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={0,-104}), iconTransformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={0,-110})));
-  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set_demand annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set_demand "Set value of demanded heat flow rate"  annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,114}), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,120})));
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_RE_curtail annotation (Placement(transformation(extent={{-120,-10},{-100,10}}), iconTransformation(extent={{-120,-10},{-100,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_RE_curtail "Electric power input" annotation (Placement(transformation(extent={{-120,-10},{-100,10}}), iconTransformation(extent={{-120,-10},{-100,10}})));
 
   // _____________________________________________
   //
@@ -90,7 +90,9 @@ equation
          end if;
        end if;
      end if;
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">This component calculates the set point of the heat production of a Power to Heat unit.</span></p>
@@ -105,11 +107,11 @@ equation
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">(no elements)</span></p>
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">6. Governing Equations</span></b></p>
-<p>                         <img src=\"modelica://TransiEnt/Images/PtHLimiter.jpg\"/></p>
-<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><img src=\"modelica://TransiEnt/Images/PtHLimiter.jpg\"/></p>
+<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p>This component can be used if the available otherwise curtailed renewable energy production is known in advance. Besides, the heat production profile to be convered by the heat production site should also be known.</p>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">8. Validation</span></b></p>
-<p>See test model: </p>
+<p>See test model: TransiEnt.Producer.Heat.Power2Heat.Check.TestPtH_limiter</p>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">none</span></p>
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">10. Version History</span></b></p>

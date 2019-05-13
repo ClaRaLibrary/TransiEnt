@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Reactor.Base;
 partial model PartialFixedBedReactorRealGas_L1 "Partial model for L1 reactor models using real gases"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -168,6 +168,8 @@ equation
 <h4><span style=\"color:#008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
 </html>"),
-Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(coordinateSystem(
+Icon(graphics,
+     coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(graphics,
+                                                                                           coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end PartialFixedBedReactorRealGas_L1;

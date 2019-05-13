@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.EconomicDispatch;
 model DiscretizePrediction "Produces short time predictions by linear interpolation between present value (P_is) and base prediction (P_prediction)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,10 +27,10 @@ model DiscretizePrediction "Produces short time predictions by linear interpolat
   final parameter Integer ntime = integer(t_pred/samplePeriod + 1);
   final parameter SI.Time t[ntime] = linspace(t_shift,t_pred+t_shift, ntime);
 
-  Modelica.Blocks.Interfaces.RealOutput[ntime] P_predictions annotation (Placement(transformation(rotation=0, extent={{100,-10},{120,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut[ntime] P_predictions annotation (Placement(transformation(rotation=0, extent={{100,-10},{120,10}})));
 
-  Modelica.Blocks.Interfaces.RealInput P_is annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealInput P_prediction annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_is annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_prediction annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={0,120})));
@@ -69,5 +69,29 @@ equation
           points={{-60,-20},{-68,-22},{-60,-24},{-60,-20}},
           lineColor={192,192,192},
           fillColor={192,192,192},
-          fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+          fillPattern=FillPattern.Solid)}), Diagram(graphics,
+                                                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This model produces short time prediction by interpolating between the present value and the base prediction.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>P_predictions[ntime]: Output for electric power in [W] (predicted value)</p>
+<p>P_is: input for electric power in [W] (present value)</p>
+<p>P_prediction: input for electric power in [W] (base prediction)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TransiEnt.Grid.Electrical.EconomicDispatch.Check.TestDiscretizePrediction&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end DiscretizePrediction;

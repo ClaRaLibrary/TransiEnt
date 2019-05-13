@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Controllers.Base;
 partial model PartialPrimaryBalancingController "Base primary balancing power (used for replaceable class option)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,15 +39,15 @@ partial model PartialPrimaryBalancingController "Base primary balancing power (u
   //                   Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Power P_nom=simCenter.P_n_low;
+  parameter SI.Power P_n=simCenter.P_n_low;
 
   // _____________________________________________
   //
   //               Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput delta_f "Connector of Real input signal" annotation (Placement(transformation(extent={{-130,-20},{-90,20}})));
-  Modelica.Blocks.Interfaces.RealOutput P_PBP_set "Primary balancing setpoint"      annotation (Placement(transformation(extent={{96,-10},{116,10}})));
+  TransiEnt.Basics.Interfaces.General.FrequencyIn delta_f "Connector of Real input signal" annotation (Placement(transformation(extent={{-130,-20},{-90,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_PBP_set "Primary balancing setpoint"      annotation (Placement(transformation(extent={{96,-10},{116,10}})));
 
   // _____________________________________________
   //
@@ -55,7 +55,8 @@ partial model PartialPrimaryBalancingController "Base primary balancing power (u
   // _____________________________________________
 
   annotation (defaultComponentName="PrimaryBalancingController",
-  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  Diagram(graphics,
+          coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                    Icon(coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-38,26},{38,-30}},

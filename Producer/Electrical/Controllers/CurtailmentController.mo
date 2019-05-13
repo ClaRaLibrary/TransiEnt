@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Controllers;
 model CurtailmentController "Ideal curtailment controller (reduces input depending on curtailment schedule)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,10 +23,25 @@ model CurtailmentController "Ideal curtailment controller (reduces input dependi
                                                                   final isValveMode=false, change_of_sign=true);
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable) annotation (Placement(transformation(extent={{-10,-100},{10,-80}})));
 
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
   outer TransiEnt.ModelStatistics modelStatistics;
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
 
 equation
     collectElectricPower.powerCollector.P=-u*sign;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
     connect(modelStatistics.powerCollector[TransiEnt.Basics.Types.TypeOfResource.Renewable], collectElectricPower.powerCollector);
 
@@ -42,5 +57,27 @@ equation
 generation in statistics
 This block reduces the 
 value depending on curtailment
-so that the sum is correct!")}));
+so that the sum is correct!")}), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>RE Generators put their generation in statistics. This block reduces the value depending on curtailment so that the sum is correct.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>epp_in: active power port</p>
+<p>epp_out: active power port</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end CurtailmentController;

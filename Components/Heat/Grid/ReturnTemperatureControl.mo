@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat.Grid;
 model ReturnTemperatureControl "Pump controlled for target return temperature"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -53,7 +53,7 @@ model ReturnTemperatureControl "Pump controlled for target return temperature"
   //             Variable Declarations
   // _____________________________________________
 
-  SI.Temperature T_return = returnTemperatureSensor.T;
+  SI.Temperature T_return=returnTemperatureSensor.T;
   SI.PressureDifference Delta_p=pump.Delta_p;
   SI.Power P_drive_pump = pump.P_drive;
 
@@ -134,7 +134,8 @@ equation
       points={{20,-40},{12,-40},{12,-42},{7,-42}},
       color={0,0,127},
       smooth=Smooth.None));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
         graphics={Ellipse(
@@ -152,9 +153,12 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>waterPortOut: fluidPortOut</p>
+<p>waterPortIn: fluidPortIn</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
+<p>T_return&nbsp;=&nbsp;returnTemperatureSensor.T is a temperature in K</p>
+<p>Delta_p=pump.Delta_p is a pressure difference in Pa</p>
+<p>P_drive_pump&nbsp;=&nbsp;pump.P_drive is a power in W</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

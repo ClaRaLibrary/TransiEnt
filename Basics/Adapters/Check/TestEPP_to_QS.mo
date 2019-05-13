@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Adapters.Check;
-model TestEPP_to_QS
+model TestEPP_to_QS "Model for testing an adapter from epp pin to quasi stationary"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,7 +48,7 @@ model TestEPP_to_QS
     startTime=100) annotation (Placement(transformation(extent={{-6,-10},{-26,10}})));
   inner SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 equation
-  connect(Adapter.epp, Grid.epp) annotation (Line(points={{-10,-34},{-10,-34.1},{-33.9,-34.1}},
+  connect(Adapter.epp, Grid.epp) annotation (Line(points={{-10,-34},{-10,-34},{-34,-34}},
                        color={0,127,0}));
   connect(Adapter.voltageP, Resistor.pin_p) annotation (Line(points={{10,-34},{10,-34},{38,-34}},
                                       color={85,170,255}));
@@ -71,7 +71,7 @@ Grid.epp.v
 Grid.epp.P
 Grid.epp.Q")}),                 Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Test environment for Adapter from epp pin to quasi stationary</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Test environment for Adapter from epp (apparent power port) to a quasi stationary pin. The model contains of a grid which defines frequency and voltage, the adapter and a consumer.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

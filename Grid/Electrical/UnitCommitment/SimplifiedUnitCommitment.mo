@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.UnitCommitment;
 model SimplifiedUnitCommitment "Very simple unit commitment model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -52,16 +52,16 @@ model SimplifiedUnitCommitment "Very simple unit commitment model"
   //               Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_loadpred "Load prediction" annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_loadpred "Load prediction" annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
   Modelica.Blocks.Interfaces.BooleanOutput z[nout] "Boolean operating state of individual units (unit commitment)" annotation (Placement(transformation(extent={{98,-10},{118,10}})));
-  Modelica.Blocks.Interfaces.RealInput P_R_pos[nout] "Upwards reserve constraint, reduces maximum production (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_R_pos[nout] "Upwards reserve constraint, reduces maximum production (values are supposed to be positive)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={-38,108}), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={-40,120})));
-  Modelica.Blocks.Interfaces.RealInput P_R_neg[nout] "Downwards reserve constraint, increases minimum production (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_R_neg[nout] "Downwards reserve constraint, increases minimum production (values are supposed to be positive)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={42,108}), iconTransformation(
@@ -129,7 +129,8 @@ algorithm
   end when;
 
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}})),
-      Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+      Diagram(graphics,
+              coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}})),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             100,100}}), graphics={
@@ -188,7 +189,7 @@ algorithm
 <p>(No remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(No remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>See 1.) and tester</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(No remarks)</p>

@@ -1,11 +1,11 @@
 within TransiEnt.Components.Boundaries.Mechanical;
-model Power
+model Power "Fixed mechanical power boundary"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,9 +40,9 @@ model Power
   //                  Interfaces
   // _____________________________________________
 
-  Basics.Interfaces.General.MechanicalPowerPort mpp(phi(start=0, fixed=true)) annotation (Placement(transformation(extent={{98,-4},{118,16}}), iconTransformation(extent={{82,-16},{118,16}})));
+  Basics.Interfaces.General.MechanicalPowerPort mpp annotation (Placement(transformation(extent={{98,-4},{118,16}}), iconTransformation(extent={{82,-16},{118,16}})));
 
-  Modelica.Blocks.Interfaces.RealInput P_mech_set     annotation (Placement(transformation(extent={{-140,60},{-100,100}},
+  Modelica.Blocks.Interfaces.RealInput P_mech_set(  final quantity= "Power", final unit="W", displayUnit="W")    annotation (Placement(transformation(extent={{-140,60},{-100,100}},
           rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
@@ -54,6 +54,9 @@ model Power
   // _____________________________________________
 
   SI.Power P_mech_is = -P_mech_set "Mechanical power";
+  SI.Torque tau_is(  start=0) = mpp.tau;
+  SI.Angle phi_is(start=0, fixed=true)=mpp.phi;
+
 equation
   // _____________________________________________
   //
@@ -102,12 +105,15 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>RealInput: mechanic power in [W]</p>
+<p>Mechanical power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
+<p>P_mech_is is the mechanical power</p>
+<p>tau_is is the torque</p>
+<p>phi_is is an angle</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

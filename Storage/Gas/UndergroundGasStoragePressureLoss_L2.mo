@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas;
 model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume for constant composition with adiabatic inlet and outlet pipes with pressure losses"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -60,6 +60,8 @@ model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume
   parameter SI.Diameter diameter_pipe_i= 0.3 "|Geometry|Inner diameter of the pipe";
   parameter Integer N_pipes= 1 "|Geometry|Number of parallel pipes";*/
 
+  parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated"  annotation (Dialog(group="Statistics"));
+
   // _____________________________________________
   //
   //                 Outer Models
@@ -78,8 +80,10 @@ model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume
 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) annotation (Placement(transformation(extent={{-10,39},{10,59}}), iconTransformation(extent={{-10,39},{10,59}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium) annotation (Placement(transformation(extent={{-10,-63},{10,-43}}), iconTransformation(extent={{-10,-73},{10,-53}})));
-  TransiEnt.Basics.Interfaces.Thermal.HeatPort_a heatStorage annotation (Placement(transformation(extent={{30,-18},{50,2}}), iconTransformation(extent={{30,-18},{50,2}})));
-  Modelica.Blocks.Interfaces.RealOutput p_gas(final quantity="Pressure", final unit = "Pa", displayUnit="bar") annotation (Placement(transformation(extent={{-40,-10},{-60,10}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatStorage annotation (Placement(transformation(extent={{30,-18},{50,2}}), iconTransformation(extent={{30,-18},{50,2}})));
+  TransiEnt.Basics.Interfaces.General.PressureOut p_gas annotation (Placement(transformation(extent={{-40,-10},{-60,10}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPipeIn[pipeIn.N_cv] annotation (Placement(transformation(extent={{30,24},{50,44}}), iconTransformation(extent={{30,24},{50,44}})));
+    Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPipeOut[pipeOut.N_cv] annotation (Placement(transformation(extent={{30,-58},{50,-38}}), iconTransformation(extent={{30,-58},{50,-38}})));
 
   // _____________________________________________
   //
@@ -87,7 +91,8 @@ model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
+  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(calculateCost=calculateCost)
+                                                                  constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choicesAllMatching,
     Placement(transformation(extent={{-10,-10},{10,10}})));
@@ -215,9 +220,6 @@ protected
   //               Connect Statements
   // _____________________________________________
 
-public
-  TransiEnt.Basics.Interfaces.Thermal.HeatPort_a heatPipeIn[pipeIn.N_cv] annotation (Placement(transformation(extent={{30,24},{50,44}}), iconTransformation(extent={{30,24},{50,44}})));
-  TransiEnt.Basics.Interfaces.Thermal.HeatPort_a heatPipeOut[pipeOut.N_cv] annotation (Placement(transformation(extent={{30,-58},{50,-38}}), iconTransformation(extent={{30,-58},{50,-38}})));
 equation
   connect(p_gas, storage.p_gas) annotation (Line(points={{-50,0},{-5,0}}, color={0,0,127}));
   connect(storage.heat, heatStorage) annotation (Line(points={{4,0},{30,0},{30,-8},{40,-8}}, color={191,0,0}));
@@ -240,7 +242,11 @@ equation
   connect(heatPipeIn, heatPipeIn) annotation (Line(points={{40,34},{44,34},{44,30},{44,34},{40,34}}, color={191,0,0}));
   connect(pipeOut.heat, heatPipeOut) annotation (Line(points={{22,-25},{40,-25},{40,-48}}, color={191,0,0}));
   connect(pipeIn.heat, heatPipeIn) annotation (Line(points={{22,23},{40,23},{40,34}}, color={191,0,0}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={Text(
+          extent={{-30,12},{30,-48}},
+          lineColor={0,0,0},
+          textString="L2")},                                                                             coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
   Documentation(info="<html>
 <h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
 <p>This model represents an underground compressed gas storage without detailed heat transfer but with heat ports for the heat flows out of/into the pipes/storage.</p>

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization;
 model DynDisplay
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,4 +20,8 @@ model DynDisplay
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends ClaRa.Visualisation.DynDisplay;
+  annotation (Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p>Model for dynamic display of variables</p>
+</html>"));
 end DynDisplay;

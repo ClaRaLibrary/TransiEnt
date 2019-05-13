@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycMix
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -73,9 +73,12 @@ model TestStatCycMix
         rotation=0,
         origin={-44,86})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(
-    p_start=Init.mix.p,
-    xi_start=Init.mix.xi_out,
-    h_start=Init.mix.h_out,
+    p(
+    start = Init.mix.p),
+    xi(
+    start =  Init.mix.xi_out),
+    h(
+    start = Init.mix.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -151,9 +154,12 @@ model TestStatCycMix
         rotation=0,
         origin={-44,-8})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio1(
-    p_start=Init.mix.p,
-    xi_start=Init.mix.xi_out,
-    h_start=Init.mix.h_out,
+    p(
+    start = Init.mix.p),
+    xi(
+    start =  Init.mix.xi_out),
+    h(
+    start = Init.mix.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,

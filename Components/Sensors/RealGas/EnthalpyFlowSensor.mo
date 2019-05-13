@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model EnthalpyFlowSensor "Two port VLE enthalpy flow sensor, enthalpy flow difference to STP conditions"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,6 +38,8 @@ model EnthalpyFlowSensor "Two port VLE enthalpy flow sensor, enthalpy flow diffe
   //             Visible Parameters
   // _____________________________________________
 
+  parameter Integer flowDefinition=1 "Defines which flow direction is considered" annotation(Dialog(group="Fundamental Definitions"),choices(choice = 1 "both", choice = 2 "both, noEvent", choice = 3 "in -> out", choice = 4 "out -> in"));
+
   // _____________________________________________
   //
   //                 Outer Models
@@ -48,9 +50,7 @@ model EnthalpyFlowSensor "Two port VLE enthalpy flow sensor, enthalpy flow diffe
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput enthalpyFlow(
-    final quantity="EnthalpyFlowRate",
-    final unit="W") "Enthalpy flow" annotation (Placement(transformation(extent={{44,60},{64,80}},  rotation=
+  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateOut enthalpyFlow "Enthalpy flow" annotation (Placement(transformation(extent={{44,60},{64,80}},  rotation=
            0), iconTransformation(extent={{100,-10},{120,10}})));
 
   // _____________________________________________
@@ -69,7 +69,7 @@ model EnthalpyFlowSensor "Two port VLE enthalpy flow sensor, enthalpy flow diffe
   // _____________________________________________
 
 equation
-  enthalpyFlow=gasPortIn.m_flow*actualStream(gasPortIn.h_outflow);
+  enthalpyFlow=gasPortIn.m_flow*(if flowDefinition==1 then actualStream(gasPortIn.h_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.h_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.h_outflow) else inStream(gasPortOut.h_outflow));
 
   // _____________________________________________
   //
@@ -117,21 +117,21 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Enthalpy flow rate sensor for VLEFluidTypes.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p>-</p>
+<p>(no remarks)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Can only be used for VLEFluidTypes.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p>GasPortIn, GasPortOut and RealOutput for enthalpy flow rate.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Tested in check model &quot;TransiEnt.Components.Sensors.RealGas.Check.TestRealGasSensors&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Carsten Bode (c.bode@tuhh.de) in Jun 2016</span></p>
 </html>"));

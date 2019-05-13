@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Controller;
 model TorqueController
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,8 +39,8 @@ model TorqueController
 //  parameter Real yMin_T=-2*T_nom "Lower limit of output" annotation (Dialog(tab="Controller", group="Torque"));
 //  parameter SI.Torque T_nom = 1.92 "Nominal torque of turbine";
   parameter Real k_turbine "Turbine control constant";
-  parameter SI.Torque T_nom;
-  parameter SI.Torque T_start=K_start*T_nom "Start value of torque";
+  parameter SI.Torque tau_n;
+  parameter SI.Torque tau_start=K_start*tau_n "Start value of torque";
   parameter Real K_start=-0.05 "Factor of torque at startup in pu";
   parameter SI.Time T_torqueControl=1 "Time Constant";
 
@@ -63,19 +63,18 @@ model TorqueController
 
   Modelica.Blocks.Logical.Hysteresis torqueControllerDisabled(uLow=0.98,
       uHigh=1.02)                                             annotation (Placement(transformation(extent={{-56,-8},{-42,6}})));
-  Modelica.Blocks.Logical.Switch T_set
+  Modelica.Blocks.Logical.Switch tau_set
     annotation (Placement(transformation(extent={{-26,-12},{-6,8}})));
 
-  Modelica.Blocks.Interfaces.RealInput omega_is annotation (Placement(
+  TransiEnt.Basics.Interfaces.General.AngularVelocityIn omega_is "Input for angular velocity" annotation (Placement(
         transformation(rotation=0, extent={{-110,-70},{-90,-50}})));
   Modelica.Blocks.Interfaces.RealOutput y annotation (Placement(transformation(rotation=0, extent={{106,-10},{126,10}})));
   Modelica.Blocks.Sources.RealExpression v_wind_is(y=v_wind/wind_fullload)
                                                              annotation (Placement(transformation(extent={{-84,-10},{-68,10}})));
-  Modelica.Blocks.Sources.RealExpression T_set_partload(y=omega_is^2*
-        k_turbine)
+  Modelica.Blocks.Sources.RealExpression tau_set_partload(y=omega_is^2*k_turbine)
     annotation (Placement(transformation(extent={{-98,-48},{-46,-16}})));
 
-  Modelica.Blocks.Interfaces.RealInput wind_fullload annotation (Placement(
+  TransiEnt.Basics.Interfaces.Ambient.VelocityIn wind_fullload "Input for wind velocity at full load" annotation (Placement(
         transformation(rotation=0, extent={{-110,50},{-90,70}})));
   Modelica.Blocks.Nonlinear.Limiter
                            limiter1(
@@ -85,22 +84,21 @@ model TorqueController
     uMin=0)
     annotation (Placement(transformation(extent={{28,-16},{48,4}},  rotation=
             0)));
-  Modelica.Blocks.Logical.Switch T_set1
+  Modelica.Blocks.Logical.Switch tau_set1
     annotation (Placement(transformation(extent={{62,6},{74,-6}})));
   Modelica.Blocks.Sources.RealExpression v_wind_is1(y=v_wind/v_cutIn)
                                                              annotation (Placement(transformation(extent={{4,8},{20,28}})));
   Modelica.Blocks.Logical.Hysteresis torqueControllerDisabled1(
                                                               uLow=0.98,
       uHigh=1.02)                                             annotation (Placement(transformation(extent={{30,10},{44,24}})));
-  Modelica.Blocks.Math.Gain              T_friction(k=K_start)
-                                                             annotation (Placement(transformation(extent={{38,34},{50,46}})));
+  Modelica.Blocks.Math.Gain tau_friction(k=K_start)          annotation (Placement(transformation(extent={{38,34},{50,46}})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder(
     k=1,
     T=T_torqueControl,
     initType=Modelica.Blocks.Types.Init.InitialOutput,
-    y_start=T_start) annotation (Placement(transformation(extent={{82,-7},{96,7}})));
+    y_start=tau_start) annotation (Placement(transformation(extent={{82,-7},{96,7}})));
 
-  Modelica.Blocks.Sources.RealExpression T_nom_set(y=T_nom) annotation (Placement(transformation(extent={{-66,26},{-36,52}})));
+  Modelica.Blocks.Sources.RealExpression tau_n_set(y=tau_n) annotation (Placement(transformation(extent={{-66,26},{-36,52}})));
 equation
   // _____________________________________________
   //
@@ -111,21 +109,20 @@ equation
   //
   //               Connect Statements
   // _____________________________________________
-  connect(torqueControllerDisabled.y, T_set.u2) annotation (Line(points={{-41.3,-1},{-36,-1},{-36,-2},{-28,-2}},
-                                            color={255,0,255}));
+  connect(torqueControllerDisabled.y, tau_set.u2) annotation (Line(points={{-41.3,-1},{-36,-1},{-36,-2},{-28,-2}}, color={255,0,255}));
   connect(v_wind_is.y, torqueControllerDisabled.u) annotation (Line(points={{-67.2,0},{-57.4,0},{-57.4,-1}}, color={0,0,127}));
-  connect(T_set_partload.y, T_set.u3) annotation (Line(points={{-43.4,-32},{-34,-32},{-34,-10},{-28,-10}},
-                                    color={0,0,127}));
+  connect(tau_set_partload.y, tau_set.u3) annotation (Line(points={{-43.4,-32},{-34,-32},{-34,-10},{-28,-10}}, color={0,0,127}));
   connect(v_wind_is1.y, torqueControllerDisabled1.u) annotation (Line(points={{20.8,18},{28.6,18},{28.6,17}}, color={0,0,127}));
-  connect(torqueControllerDisabled1.y, T_set1.u2) annotation (Line(points={{44.7,17},{54,17},{54,0},{60.8,0}}, color={255,0,255}));
-  connect(T_set1.u1, limiter1.y) annotation (Line(points={{60.8,-4.8},{56,-4.8},{56,-6},{49,-6}}, color={0,0,127}));
-  connect(T_set1.u3, T_friction.y) annotation (Line(points={{60.8,4.8},{58,4.8},{58,40},{50.6,40}}, color={0,0,127}));
-  connect(T_set.y, limiter1.u) annotation (Line(points={{-5,-2},{26,-2},{26,-6}}, color={0,0,127}));
-  connect(T_set1.y, firstOrder.u) annotation (Line(points={{74.6,0},{80.6,0}}, color={0,0,127}));
+  connect(torqueControllerDisabled1.y, tau_set1.u2) annotation (Line(points={{44.7,17},{54,17},{54,0},{60.8,0}}, color={255,0,255}));
+  connect(tau_set1.u1, limiter1.y) annotation (Line(points={{60.8,-4.8},{56,-4.8},{56,-6},{49,-6}}, color={0,0,127}));
+  connect(tau_set1.u3, tau_friction.y) annotation (Line(points={{60.8,4.8},{58,4.8},{58,40},{50.6,40}}, color={0,0,127}));
+  connect(tau_set.y, limiter1.u) annotation (Line(points={{-5,-2},{26,-2},{26,-6}}, color={0,0,127}));
+  connect(tau_set1.y, firstOrder.u) annotation (Line(points={{74.6,0},{80.6,0}}, color={0,0,127}));
   connect(firstOrder.y, y) annotation (Line(points={{96.7,0},{116,0}}, color={0,0,127}));
-  connect(T_nom_set.y, T_set.u1) annotation (Line(points={{-34.5,39},{-32,39},{-32,6},{-28,6}}, color={0,0,127}));
-  connect(T_nom_set.y, T_friction.u) annotation (Line(points={{-34.5,39},{36.8,39},{36.8,40}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  connect(tau_n_set.y, tau_set.u1) annotation (Line(points={{-34.5,39},{-32,39},{-32,6},{-28,6}}, color={0,0,127}));
+  connect(tau_n_set.y, tau_friction.u) annotation (Line(points={{-34.5,39},{36.8,39},{36.8,40}}, color={0,0,127}));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})), experiment(StopTime=250000,
         __Dymola_NumberOfIntervals=100000),
                 Documentation(info="<html>
@@ -141,7 +138,7 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

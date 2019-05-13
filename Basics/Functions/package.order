@@ -16,3 +16,5 @@ standardDeviation
 bool2real
 getPrimaryEnergyCarrierFromHeat
 inverseXRegularized
+getNumberOfOccurences
+findAll

@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Blocks;
 block BooleanToReal "Convert Boolean to Real signal (no event)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -58,7 +58,7 @@ equation
 <p><b><span style=\"color: #008000;\">3. Limits of validity</span></b> </p>
 <p>(Description) </p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>Modelica RealOutput y</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

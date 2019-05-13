@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model TotalFeedInStorageController "Controller to control the electrolyzer and storage system for feeding into a natural gas grid"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,21 +56,20 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
   parameter Real coolingToHeatingRatio=2 "Ratio of how much faster the electrolyzer cools down than it heats up" annotation(Dialog(group="Fundamental Definitions"));
   parameter Integer startState=1 "Initial state of the electrolyzer (1: ready to overheat, 2: working in overload, 3: cooling down)" annotation(Dialog(group="Fundamental Definitions"));
 
-  parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "|Controller|Type of controller for feed-in control";
-  parameter Real k=1 "|Controller|Gain for feed-in control";
-  parameter Real Ti=0.1 "|Controller|Integrator time constant for feed-in control";
-  parameter Real Td=0.1 "|Controller|Derivative time constant for feed-in control";
+  parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "Type of controller for feed-in control" annotation (Dialog(tab="General", group="Controller"));
+  parameter Real k=1 "Gain for feed-in control" annotation (Dialog(tab="General", group="Controller"));
+  parameter Real Ti=0.1 "Integrator time constant for feed-in control" annotation (Dialog(tab="General", group="Controller"));
+  parameter Real Td=0.1 "Derivative time constant for feed-in control" annotation (Dialog(tab="General", group="Controller"));
 
-  parameter SI.Pressure p_maxLow=29e5 "|Controller|Lower limit of the maximum pressure in storage";
-  parameter SI.Pressure p_maxHigh=30e5 "|Controller|Upper limit of the maximum pressure in storage";
+  parameter SI.Pressure p_maxLow=29e5 "Lower limit of the maximum pressure in storage" annotation (Dialog(tab="General", group="Controller"));
+  parameter SI.Pressure p_maxHigh=30e5 "Upper limit of the maximum pressure in storage" annotation (Dialog(tab="General", group="Controller"));
 
-  parameter Boolean StoreAllHydrogen=false "|Controller|All Hydrogen is stored before beeing fed in";
+  parameter Boolean StoreAllHydrogen=false "All Hydrogen is stored before beeing fed in" annotation (Dialog(tab="General", group="Controller"));
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
-
   // _____________________________________________
   //
   //                 Outer Models
@@ -83,24 +82,24 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set "Set power"    annotation (Placement(transformation(extent={{-20,-20},{20,20}},
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set "Set power"    annotation (Placement(transformation(extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-100,40}),iconTransformation(extent={{-120,20},{-80,60}})));
-  Modelica.Blocks.Interfaces.RealInput p_storage "Pressure in storage" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.PressureIn p_storage "Pressure in storage" annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=0,
         origin={100,0}), iconTransformation(extent={{120,-20},{80,20}})));
-  Modelica.Blocks.Interfaces.RealInput m_flow_ely "Hydrogen mass flow out of the electrolyser" annotation (Placement(transformation(extent={{-120,-60},{-80,-20}})));
-  Modelica.Blocks.Interfaces.RealInput m_flow_feedIn "Maximum mass flow that can be fed into the natural gas system" annotation (Placement(transformation(extent={{120,40},{80,80}})));
-  Modelica.Blocks.Interfaces.RealInput m_flow_bypass "Mass flow through bypass of storage" annotation (Placement(transformation(extent={{120,-80},{80,-40}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_ely "Controlled power of the electrolyser" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_ely "Hydrogen mass flow out of the electrolyser" annotation (Placement(transformation(extent={{-120,-60},{-80,-20}})));
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_feedIn "Maximum mass flow that can be fed into the natural gas system" annotation (Placement(transformation(extent={{120,40},{80,80}})));
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_bypass "Mass flow through bypass of storage" annotation (Placement(transformation(extent={{120,-80},{80,-40}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_ely "Controlled power of the electrolyser" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-60,-110})));
   Modelica.Blocks.Interfaces.RealOutput splitRatio "Split ratio of the three way valve" annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,-110})));
-  Modelica.Blocks.Interfaces.RealOutput m_flowDes_valve "Desired mass flow through the valve after the storage" annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flowDes_valve "Desired mass flow through the valve after the storage" annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={60,-110})));
 
@@ -127,17 +126,19 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
         rotation=270,
         origin={-60,26})));
 protected
-  TransiEnt.Producer.Gas.Electrolyzer.Controller.FeedInStorageTWVController feedInStorageTWVController(StoreAllHydrogen=StoreAllHydrogen) annotation (Placement(transformation(extent={{-10,-46},{10,-26}})));
-  Modelica.Blocks.Math.Feedback feedback annotation (Placement(transformation(extent={{-10,10},{10,-10}},
+  TransiEnt.Producer.Gas.Electrolyzer.Controller.FeedInStorageTWVController feedInStorageTWVController(StoreAllHydrogen=StoreAllHydrogen,
+    p_maxLow=p_maxLow,
+    p_maxHigh=p_maxHigh)                                                                                                                  annotation (Placement(transformation(extent={{-10,-46},{10,-26}})));
+  Modelica.Blocks.Math.Feedback feedback annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={60,-60})));
+        origin={60,-64})));
   TransiEnt.Producer.Gas.Electrolyzer.Controller.OverloadController overloadController(
     P_el_n=P_el_n,
     P_el_overload=P_el_overload,
     t_overload=t_overload,
     coolingToHeatingRatio=coolingToHeatingRatio,
-    startState=startState,
-    P_el_cooldown=P_el_cooldown)
+    P_el_cooldown=P_el_cooldown,
+    state(start=startState))
                            annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
@@ -146,12 +147,14 @@ protected
 public
   replaceable model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200        constrainedby TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerEfficiencyCharline        "Calculate the efficiency" annotation (__Dymola_choicesAllMatching=true);
 
+  Modelica.Blocks.Sources.RealExpression realExpression(y=1) annotation (Placement(transformation(extent={{2,-72},{12,-62}})));
+  Modelica.Blocks.Math.Add add(k2=-1) annotation (Placement(transformation(extent={{18,-72},{26,-64}})));
+  Modelica.Blocks.Math.Product product annotation (Placement(transformation(extent={{34,-70},{44,-60}})));
 equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
-
   // _____________________________________________
   //
   //               Connect Statements
@@ -160,15 +163,25 @@ equation
   connect(feedInStorageController.p, p_storage) annotation (Line(points={{-49,26},{-49,26},{72,26},{72,0},{100,0}}, color={0,0,127}));
   connect(feedInStorageTWVController.splitRatio, splitRatio) annotation (Line(points={{0,-47},{0,-110}}, color={0,0,127}));
   connect(feedInStorageTWVController.m_flow_ely, m_flow_ely) annotation (Line(points={{-10,-40},{-100,-40}}, color={0,0,127}));
-  connect(feedback.y, m_flowDes_valve) annotation (Line(points={{60,-69},{60,-110},{60,-110}}, color={0,0,127}));
-  connect(feedback.u2, m_flow_bypass) annotation (Line(points={{68,-60},{100,-60},{100,-60}}, color={0,0,127}));
-  connect(feedInStorageController.m_flow_bypass, m_flow_bypass) annotation (Line(points={{-49,18},{32,18},{32,-10},{76,-10},{76,-60},{100,-60}}, color={0,0,127}));
-  connect(m_flow_feedIn, feedback.u1) annotation (Line(points={{100,60},{60,60},{60,-52}}, color={0,0,127}));
+  connect(m_flow_feedIn, feedback.u1) annotation (Line(points={{100,60},{60,60},{60,-56}}, color={0,0,127}));
   connect(feedInStorageController.m_flow_feedIn, m_flow_feedIn) annotation (Line(points={{-49,34},{-49,34.4},{60,34.4},{60,60},{100,60}}, color={0,0,127}));
   connect(feedInStorageTWVController.m_flow_feedIn, m_flow_feedIn) annotation (Line(points={{-10,-32},{-14,-32},{-14,-16},{60,-16},{60,60},{100,60}}, color={0,0,127}));
   connect(P_el_set, feedInStorageController.P_el_set) annotation (Line(points={{-100,40},{-60,40},{-60,37}}, color={0,0,127}));
   connect(feedInStorageController.P_el_ely, overloadController.P_el_set) annotation (Line(points={{-60,15},{-60,15},{-60,-1}}, color={0,0,127}));
-  connect(overloadController.P_el_ely, P_el_ely) annotation (Line(points={{-60,-22.8},{-60,-110}},            color={0,0,127}));
+  connect(p_storage, feedInStorageTWVController.p) annotation (Line(points={{100,0},{0,0},{0,-25}}, color={0,0,127}));
+  connect(m_flow_ely, feedInStorageController.m_flow_bypass) annotation (Line(points={{-100,-40},{-28,-40},{-28,18},{-49,18}}, color={0,0,127}));
+  connect(P_el_ely, overloadController.P_el_ely) annotation (Line(
+      points={{-60,-110},{-60,-22.8}},
+      color={0,135,135},
+      pattern=LinePattern.Dash));
+  connect(realExpression.y, add.u1) annotation (Line(points={{12.5,-67},{14,-67},{14,-65.6},{17.2,-65.6}},
+                                                                                                     color={0,0,127}));
+  connect(add.u2, feedInStorageTWVController.splitRatio) annotation (Line(points={{17.2,-70.4},{0,-70.4},{0,-47}},
+                                                                                                             color={0,0,127}));
+  connect(add.y, product.u2) annotation (Line(points={{26.4,-68},{33,-68}},                               color={0,0,127}));
+  connect(product.u1, m_flow_ely) annotation (Line(points={{33,-62},{-28,-62},{-28,-40},{-100,-40}},                         color={0,0,127}));
+  connect(product.y, feedback.u2) annotation (Line(points={{44.5,-65},{48,-65},{48,-64},{52,-64}}, color={0,0,127}));
+  connect(feedback.y, m_flowDes_valve) annotation (Line(points={{60,-73},{60,-110}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
   Documentation(info="<html>
 <h4><span style=\"color:#008000\">1. Purpose of model</span></h4>

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Base;
 model KineticEnergyProvided
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model KineticEnergyProvided
 
   Modelica.Blocks.Continuous.Integrator limIntegrator
     annotation (Placement(transformation(extent={{62,-10},{82,12}})));
-  Modelica.Blocks.Interfaces.RealInput P_is annotation (Placement(
+ TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_is annotation (Placement(
         transformation(
         extent={{-14,-14},{14,14}},
         rotation=0,
@@ -55,17 +55,17 @@ Modelica.Blocks.Logical.Switch measure_E_kin
     annotation (Placement(transformation(extent={{-22,42},{-2,62}})));
   Modelica.Blocks.Sources.Constant const(k=0)
     annotation (Placement(transformation(extent={{-74,16},{-54,36}})));
-  Modelica.Blocks.Interfaces.RealInput v_wind annotation (Placement(
+  TransiEnt.Basics.Interfaces.Ambient.VelocityIn v_wind "Input for wind velocity" annotation (Placement(
         transformation(
         extent={{-14,-14},{14,14}},
         rotation=180,
         origin={104,-60})));
-  Modelica.Blocks.Interfaces.RealInput Rotor_cp annotation (Placement(
+  Modelica.Blocks.Interfaces.RealInput Rotor_cp "Input for power coefficient" annotation (Placement(
         transformation(
         extent={{-14,-14},{14,14}},
         rotation=0,
         origin={-108,-60})));
-  Modelica.Blocks.Interfaces.RealOutput E_kin_Inertia annotation (Placement(
+  TransiEnt.Basics.Interfaces.General.KineticEnergyOut E_kin_Inertia "Output for kinetic energy" annotation (Placement(
         transformation(
         extent={{-14,-14},{14,14}},
         rotation=0,
@@ -92,6 +92,32 @@ equation
           10,52},{10,50},{38,50},{38,1},{60,1}}, color={0,0,127}));
   connect(limIntegrator.y, E_kin_Inertia)
     annotation (Line(points={{83,1},{108,1},{108,0}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Model calculates the Kinetic Energy produced by wind turbine.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>P_is: input for electric power in W</p>
+<p>activate: BooleanInput</p>
+<p>Rotor_cp: input for power coefficient </p>
+<p>v_wind: input for the velocity of wind in m/s</p>
+<p>E_kin_Inertia: output for kinetic in energy in J</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end KineticEnergyProvided;

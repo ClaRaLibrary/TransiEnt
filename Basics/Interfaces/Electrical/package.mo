@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Interfaces;
 package Electrical
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,5 +41,12 @@ package Electrical
 
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100.0,-100.0},
-            {100.0,100.0}}), graphics));
+            {100.0,100.0}}), graphics),Documentation(info="<html>
+
+<p> This documnentation wants to give a short overview which power ports can be used for different applications. </p>
+<p> The ActivePowerPort is only usable for concentrated grids without lines.</p>
+<p> The ApparentPowerPort is only usable for radial distribution systems. </p>
+<p> The ComplexPowerPort is the most advanced power port and can be used for interconnected grids. </p>
+<p> Short description by Jan-Peter Heckel (jan.heckel@tuhh.de), Apr 2018</p>
+</html>"));
 end Electrical;

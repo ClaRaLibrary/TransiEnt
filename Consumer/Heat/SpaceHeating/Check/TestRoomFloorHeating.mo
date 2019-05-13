@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.SpaceHeating.Check;
 model TestRoomFloorHeating
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,10 +23,13 @@ model TestRoomFloorHeating
 
   RoomFloorHeating roomFloorHeating(
     redeclare Base.RoomGeometry geometry,
-    T_start=normSetpointRoomTemperature.T,
     use_T_amb_input=false,
     redeclare Characteristics.HouseType100 thermodynamics,
-    redeclare Base.FloorHeatingSystem heatingsystem(T_spreading=10)) annotation (Placement(transformation(extent={{40,-50},{-2,-10}})));
+    redeclare Base.FloorHeatingSystem heatingsystem(T_spreading=10),
+    T_room(start=normSetpointRoomTemperature.T),
+    T_floor(start=normSetpointRoomTemperature.T),
+    T_wallInside(start=normSetpointRoomTemperature.T),
+    T_wallInternal(start=(273.15 + 20 + normSetpointRoomTemperature.T)/2)) annotation (Placement(transformation(extent={{40,-50},{-2,-10}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi sink(
     T_const=273.15 + 25,
     variable_T=false,
@@ -67,16 +70,39 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(ctrl.reference, normSetpointRoomTemperature.y) annotation (Line(points={{62,48},{75,48}}, color={0,0,127}));
-  connect(ctrl.u, roomFloorHeating.T_room_act) annotation (Line(points={{62,36},{74,36},{74,-38},{40,-38}}, color={0,0,127}));
+  connect(ctrl.u, roomFloorHeating.T_Room) annotation (Line(points={{62,36},{74,36},{74,-38},{40,-38}}, color={0,0,127}));
   connect(m_flow_nom.y, m_flow.u) annotation (Line(points={{-85,24},{-76,24}}, color={0,0,127}));
   connect(m_flow.y, source.m_flow) annotation (Line(points={{-53,24},{-44,24},{-44,8}}, color={0,0,127}));
   connect(onOffRelais.u, ctrl.y) annotation (Line(points={{24.4,42},{39,42}}, color={255,0,255}));
   connect(onOffRelais.y, m_flow_nom.u) annotation (Line(points={{3,42},{-122,42},{-122,24},{-108,24}}, color={255,0,255}));
-  annotation (Diagram(coordinateSystem(extent={{-140,-80},{140,80}})), Icon(coordinateSystem(extent={{-140,-80},{140,80}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-140,-80},{140,80}})), Icon(graphics,
+                                                                            coordinateSystem(extent={{-140,-80},{140,80}})),
     experiment(
       StopTime=604800,
       Interval=900,
       __Dymola_fixedstepsize=5,
       __Dymola_Algorithm="Dassl"),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Test environment for a room floor heating model with a fluid source, a fluid sink and different technical components to make this a runnable example</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end TestRoomFloorHeating;

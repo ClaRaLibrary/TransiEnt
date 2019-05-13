@@ -1,11 +1,11 @@
 within TransiEnt.Consumer.Heat;
-partial model PartialHeatConsumer
+partial model PartialHeatConsumer "Partial model of a heat sink"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -80,17 +80,18 @@ connect(modelStatistics.heatFlowCollector[TransiEnt.Basics.Types.TypeOfResource.
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>This is a partial model of a heat sink.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">fluidPortIn - Heat carrier inlet</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">fluidPortOut - Heat carrier outlet</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Q_flow = m_flow * ( h_in - h_out )</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
@@ -99,5 +100,6 @@ connect(modelStatistics.heatFlowCollector[TransiEnt.Basics.Types.TypeOfResource.
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+<p>Modified by Anne Senkel (anne.senkel@tuhh.de), Dec 2017</p>
 </html>"));
 end PartialHeatConsumer;

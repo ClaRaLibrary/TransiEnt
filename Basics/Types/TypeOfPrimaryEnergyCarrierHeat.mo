@@ -1,5 +1,7 @@
 within TransiEnt.Basics.Types;
 type TypeOfPrimaryEnergyCarrierHeat = enumeration(
+    BrownCoal "Brown Coal",
+    BlackCoal "Black Coal",
     NaturalGas "Gas",
     DistrictHeating "District Heating",
     Oil "Oil",

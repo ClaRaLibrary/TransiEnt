@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckNonlinearThreeStatePlant_PrimaryControl "Example of the component NonlinearThreeStatePlant in primary control operation"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,7 +57,7 @@ equation
       smooth=Smooth.None));
   connect(aSlewRateLimited2StatePBPlant.epp, constantPotentialVariableBoundary1.epp)
     annotation (Line(
-      points={{15.1,-27.48},{42.55,-27.48},{42.55,-14.1},{69.9,-14.1}},
+      points={{14.2,-25.1},{42.55,-25.1},{42.55,-14},{70,-14}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -79,10 +79,12 @@ createPlot(id=1, position={809, 0, 791, 733}, y={"aSlewRateLimited2StatePBPlant.
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
     experiment(StopTime=5000),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-160},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-160},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

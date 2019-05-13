@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model StatCycSourcePipeSink
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,7 +51,8 @@ equation
   connect(source.outlet, pipe.inlet) annotation (Line(points={{-48.99,0},{-32,0.5},{-18.43,0.5}},          color={0,131,169}));
   connect(pipe.outlet, sink_mflow.inlet) annotation (Line(points={{20.42,0.5},{20.42,0},{58.42,0}},
                                                                                                  color={0,131,169}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Tester for static cycle.</p>

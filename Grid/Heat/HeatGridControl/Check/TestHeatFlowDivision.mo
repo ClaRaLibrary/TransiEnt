@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Heat.HeatGridControl.Check;
 model TestHeatFlowDivision
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,6 +46,29 @@ model TestHeatFlowDivision
 equation
   connect(Q_flow_total_2.y, heatFlowDivision_2.Q_flow_total) annotation (Line(points={{-29,0},{-22,0},{-14,0}}, color={0,0,127}));
   connect(Q_flow_total_4.y, heatFlowDivision_4.Q_flow_total) annotation (Line(points={{-29,-52},{-10,-52}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=3600));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
+    experiment(StopTime=3600),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Tester for HeatFlowDivision model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p><span style=\"color: #008000;\">(no remarks)</span></p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestHeatFlowDivision;

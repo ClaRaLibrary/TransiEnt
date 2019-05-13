@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Base;
 model LimitConditioning "Limits setpoint to loading (P_set_base>0) if battery conditioning is active"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,12 +46,12 @@ model LimitConditioning "Limits setpoint to loading (P_set_base>0) if battery co
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_set_base "Basic setpoint from maximum autarky controller" annotation (Placement(transformation(extent={{-126,-12},{-86,28}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_set_base "Basic setpoint from maximum autarky controller" annotation (Placement(transformation(extent={{-126,-12},{-86,28}})));
   Modelica.Blocks.Logical.Hysteresis isConditioningOK(uLow=param.SOC_min + Delta_SOC_Cond, uHigh=param.SOC_min + Delta_SOC_Cond + 0.01) "Turns false, if battery conditioing is needed" annotation (Placement(transformation(extent={{-34,-50},{-14,-30}})));
   Modelica.Blocks.Interfaces.RealInput SOC
     annotation (Placement(transformation(extent={{-126,-60},{-86,-20}})));
   Modelica.Blocks.Logical.Switch P_set_limit_if_conditioning annotation (Placement(transformation(extent={{48,-10},{68,10}})));
-  Modelica.Blocks.Interfaces.RealOutput P_set_limit "Base setpoint limited in case of active battery conditioning" annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_set_limit "Base setpoint limited in case of active battery conditioning" annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Nonlinear.Limiter P_set_base_positive(uMin=0, uMax=param.P_el_max_bat) "Only loading set point (>0) passing" annotation (Placement(transformation(extent={{2,-18},{22,2}})));
   Modelica.Blocks.Logical.Not notUseBatteryConditioning annotation (Placement(transformation(extent={{-34,-80},{-14,-60}})));
   Modelica.Blocks.Logical.Or noConditioningActive annotation (Placement(transformation(extent={{6,-50},{26,-30}})));
@@ -89,7 +89,8 @@ equation
   connect(useBatteryConditioning.y, notUseBatteryConditioning.u) annotation (Line(points={{-47,-70},{-36,-70}}, color={255,0,255}));
   connect(notUseBatteryConditioning.y, noConditioningActive.u2) annotation (Line(points={{-13,-70},{-8,-70},{-8,-48},{4,-48}}, color={255,0,255}));
   connect(P_set_base, P_set_base_positive.u) annotation (Line(points={{-106,8},{-14,8},{-14,-8},{0,-8}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),                Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Polygon(
@@ -118,12 +119,12 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>P_set_base: The basic setpoint of a simple controller (e.g. minimising grid power)</p>
 <p>SOC: The actual SOC of the battery</p>
-<p><br>P_set_limit: Limited setpoint</p>
+<p>P_set_limit: Limited setpoint</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p><code>Delta_SOC_Cond: </code>Change&nbsp;of&nbsp;SOC&nbsp;due&nbsp;to&nbsp;one&nbsp;conditioning&nbsp;operation</p>
+<p>Delta_SOC_Cond: Change&nbsp;of&nbsp;SOC&nbsp;due&nbsp;to&nbsp;one&nbsp;conditioning&nbsp;operation</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>No equations present</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>See Purpose of model</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No phyical validation required. For technical validation see: Check.CheckLimitConditioning</p>

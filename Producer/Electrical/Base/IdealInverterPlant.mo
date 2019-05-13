@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Base;
 model IdealInverterPlant "Ideal plant model for inverter coupled plants (i.e. no reaction to grid frequency)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model IdealInverterPlant "Ideal plant model for inverter coupled plants (i.e. no
   // _____________________________________________
   Real delta_P_star = (P_el_set+P_el_is)/P_el_n;
 
-  TransiEnt.Components.Boundaries.Electrical.Power Power annotation (Placement(transformation(extent={{76,50},{56,70}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"), Dialog(group="Physical Constraints"), Placement(transformation(extent={{76,50},{56,70}})));
 equation
   // _____________________________________________
   //
@@ -49,13 +49,15 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  connect(P_el_set, Power.P_el_set) annotation (Line(points={{-60,100},{-60,78},{72,78},{72,72}}, color={0,0,127}));
-  connect(Power.epp, epp) annotation (Line(
-      points={{76.1,59.9},{84.05,59.9},{84.05,60},{100,60}},
+  connect(P_el_set, powerBoundary.P_el_set) annotation (Line(points={{-60,100},{-60,78},{72,78},{72,72}}, color={0,0,127}));
+  connect(powerBoundary.epp, epp) annotation (Line(
+      points={{76,60},{84.05,60},{84.05,78},{100,78}},
       color={0,135,135},
       thickness=0.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                          Icon(coordinateSystem(
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                          Icon(graphics,
+                                               coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -65,18 +67,20 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Only static power setpoints make sense...</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp: electric power port can be chosen</p>
+<p>P_el_set: input for electric power in W (electric power setpoint)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">With the choice of the boundary the the model can be used as PQ or PU bus.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end IdealInverterPlant;

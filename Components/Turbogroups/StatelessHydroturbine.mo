@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups;
 model StatelessHydroturbine "Model of a hydro turbine with six states (halt / starup / running in pump / turbine mode), pyhsical constraints (Pmin,Pmax,Pgradmax) and first order dynamics"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ model StatelessHydroturbine "Model of a hydro turbine with six states (halt / st
 
   outer SimCenter simCenter;
 
-  parameter SI.Power P_nom "Nominal power of plant";
+  parameter SI.Power P_n "Nominal power of plant";
   parameter SI.Power P_turb_init=0 "Initital power of plant";
   parameter SI.Time T_plant=10 "Time constant of first order dynamic model";
 
@@ -62,13 +62,12 @@ model StatelessHydroturbine "Model of a hydro turbine with six states (halt / st
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Math.Gain normalize(k=1/P_nom)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+  Modelica.Blocks.Math.Gain normalize(k=1/P_n) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-40,12})));
 
-  Modelica.Blocks.Math.Gain deNormalize(k=P_nom)
-    annotation (Placement(transformation(extent={{56,6},{68,18}})));
+  Modelica.Blocks.Math.Gain deNormalize(k=P_n) annotation (Placement(transformation(extent={{56,6},{68,18}})));
   Boundaries.Mechanical.Power MechanicalBoundary annotation (Placement(transformation(extent={{62,-12},{80,6}})));
 
   // _____________________________________________
@@ -78,12 +77,13 @@ model StatelessHydroturbine "Model of a hydro turbine with six states (halt / st
 
   Real P_set_star = normalize.y;
   Real P_is_star = deNormalize.u;
-  Modelica.Blocks.Continuous.FirstOrder plantDynamic(                           T=T_plant,
+  Modelica.Blocks.Continuous.FirstOrder plantDynamic(
+    T=T_plant,
     initType=Modelica.Blocks.Types.Init.InitialOutput,
-    y_start=-P_turb_init/P_nom)                                                 annotation (Placement(transformation(extent={{18,2},{38,22}})));
+    y_start=-P_turb_init/P_n) annotation (Placement(transformation(extent={{18,2},{38,22}})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=true)                                                                           annotation (Placement(transformation(extent={{74,10},{94,30}})));
 
-  Modelica.Blocks.Interfaces.RealInput P_spinning_set "Setpoint for spinning reserve power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_spinning_set "Setpoint for spinning reserve power"
                                                       annotation (Placement(transformation(
         rotation=270,
         extent={{-12,-12},{12,12}},
@@ -114,7 +114,8 @@ equation
   connect(booleanExpression.y, isGeneratorRunning) annotation (Line(points={{95,20},{98,20},{110,20}}, color={255,0,255}));
   connect(normalize.y, P_max_star_limiter_total.u) annotation (Line(points={{-29,12},{-25.5,12},{-22,12}}, color={0,0,127}));
   connect(P_max_star_limiter_total.y, plantDynamic.u) annotation (Line(points={{1,12},{16,12},{16,12}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(graphics={
                                    Ellipse(
           lineColor={95,95,95},
@@ -185,14 +186,17 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Note, that no statistics are involved!</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">mpp: mechanical power port</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_target: input for electric power in W</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_spinning_set: input for electric power in W (setpoint for spinning reserve power)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">isGeneratorRunning: BooleanOutput</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The input P_spinning_set is supposed to be gradient limited by limtations of the primary balancing offer mechanism which has normally a higher gradient limit than the rest of the plant.</span></p>
-<p><br><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>

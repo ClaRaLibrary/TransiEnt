@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat;
 model HEX_ideal "Ideal static heat exchanger model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,7 +27,8 @@ model HEX_ideal "Ideal static heat exchanger model"
   // _____________________________________________
 
   outer TransiEnt.SimCenter simCenter;
-  extends ClaRa.Basics.Icons.HEX03;
+  extends TransiEnt.Basics.Icons.Heat_Exchanger;
+
 
   // _____________________________________________
   //
@@ -45,7 +46,7 @@ model HEX_ideal "Ideal static heat exchanger model"
 
   Modelica.SIunits.TemperatureDifference dT "Temperature difference of heating carrier";
   Modelica.SIunits.SpecificEnthalpy h_inflow=inStream(waterPortIn.h_outflow);
-  Modelica.SIunits.HeatFlowRate dH_flow_carrier "Enthalpy change of heat carrier";
+  Modelica.SIunits.EnthalpyFlowRate dH_flow_carrier "Enthalpy change of heat carrier";
 
   // _____________________________________________
   //
@@ -104,10 +105,17 @@ equation
   //            Connect statements
   // _____________________________________________
 
+
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,
             100}}), graphics),
-    Icon(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}})),
+    Icon(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}}), graphics={
+        Polygon(
+          points={{110,102},{110,102}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid)}),
     Documentation(info="<html>
 <p><b><span style=\"color: #008000;\">1. Purpose of model</span></b> </p>
 <p>Simple and static heat exchanger model with ideal heat transfer. </p>
@@ -126,7 +134,7 @@ equation
 <p><i>Q</i><sub>flow,in</sub> + <i>m</i><sub>flow</sub>(<i>h</i><sub>water,in</sub> - <i>h</i><sub>water,out</sub>) = 0. </p>
 <p><b><span style=\"color: #008000;\">7. Remarks for Usage</span></b> </p>
 <p><b><span style=\"color: #008000;\">8. Validation</span></b> </p>
-<p>(no validation or testing necessary) </p>
+<p>Tested in check model &quot;TestHEX_ideal&quot;</p>
 <p><b><span style=\"color: #008000;\">9. References</span></b> </p>
 <p>(no remarks) </p>
 <p><b><span style=\"color: #008000;\">10. Version History</span></b> </p>

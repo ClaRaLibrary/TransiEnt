@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl;
 model PVBatteryPool "Pool of households with PV Batteries and Poolcontroller"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,8 +61,8 @@ model PVBatteryPool "Pool of households with PV Batteries and Poolcontroller"
   Controller.PoolController poolController annotation (Placement(transformation(extent={{79,-15},{99,5}})));
 
   Base.PoolControlBusSumUp controlBusConsolidator annotation (Placement(transformation(extent={{48,-16},{67,6}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_load[nLoadProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-124,58},{-84,98}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_PV[nPVProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-124,18},{-84,58}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_load[nLoadProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-124,58},{-84,98}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_PV[nPVProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-124,18},{-84,58}})));
 equation
   // _____________________________________________
   //
@@ -148,10 +148,10 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in the check models &quot;TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Check.CheckPVBatteryPoolSingleHouse&quot; and &quot;TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Check.CheckPVBatteryPoolSingleHouse&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

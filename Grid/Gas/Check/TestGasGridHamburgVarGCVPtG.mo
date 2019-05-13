@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Gas.Check;
 model TestGasGridHamburgVarGCVPtG "High pressure gas grid of Hamburg with H2 feedin at GTS and variable gross calorific value at consumption side"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -423,22 +423,31 @@ public
         origin={177.5,-193})));
 
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 Mix_Tornesch(
-    p_start=Init.mixH2_Tornesch.p,
-    h_start=Init.mixH2_Tornesch.h_out,
-    xi_start=Init.mixH2_Tornesch.xi_out,
+    p(
+    start = Init.mixH2_Tornesch.p),
+    h(
+    start = Init.mixH2_Tornesch.h_out),
+    xi(
+    start =  Init.mixH2_Tornesch.xi_out),
     volume=V_mixNG) annotation (Placement(transformation(extent={{-188,144},{-168,164}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 Mix_Leversen(
-    p_start=Init.mixH2_Leversen.p,
-    h_start=Init.mixH2_Leversen.h_out,
-    xi_start=Init.mixH2_Leversen.xi_out,
+    p(
+    start = Init.mixH2_Leversen.p),
+    h(
+    start = Init.mixH2_Leversen.h_out),
+    xi(
+    start =  Init.mixH2_Leversen.xi_out),
     volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-120,-140})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 Mix_Reitbrook(
-    p_start=Init.mixH2_Reitbrook.p,
-    h_start=Init.mixH2_Reitbrook.h_out,
-    xi_start=Init.mixH2_Reitbrook.xi_out,
+    p(
+    start = Init.mixH2_Reitbrook.p),
+    h(
+    start = Init.mixH2_Reitbrook.h_out),
+    xi(
+    start =  Init.mixH2_Reitbrook.xi_out),
     volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
@@ -707,15 +716,15 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(FeedIn_Leversen.epp, ElectricGrid.epp) annotation (Line(
-      points={{-97.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20.2},{-255.81,20.2}},
+      points={{-97.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20},{-256,20}},
       color={0,135,135},
       thickness=0.5));
   connect(FeedIn_Reitbrook.epp, ElectricGrid.epp) annotation (Line(
-      points={{154.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20.2},{-255.81,20.2}},
+      points={{154.5,-193},{-28,-193},{-28,-234},{-236,-234},{-236,20},{-256,20}},
       color={0,135,135},
       thickness=0.5));
   connect(FeedIn_Tornesch.epp, ElectricGrid.epp) annotation (Line(
-      points={{-155.5,104},{-104,104},{-104,54},{-236,54},{-236,20},{-255.81,20.2}},
+      points={{-155.5,104},{-104,104},{-104,54},{-236,54},{-236,20},{-256,20}},
       color={0,135,135},
       thickness=0.5));
   connect(gainTor.u, P_residual_neg.P_el) annotation (Line(
@@ -766,8 +775,10 @@ equation
   connect(Bergedorf.H_flow, shareBer.y) annotation (Line(points={{61,-77},{58,-77},{54.7,-77}},                  color={0,0,127}));
   connect(Harburg.H_flow, shareHar.y) annotation (Line(points={{-9,-69},{-2.7,-69}},                           color={0,0,127}));
 
-  annotation (Diagram(coordinateSystem(extent={{-300,-240},{280,240}}, preserveAspectRatio=false)),
-                                                                         Icon(coordinateSystem(extent={{-300,-240},{280,240}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-300,-240},{280,240}}, preserveAspectRatio=false)),
+                                                                         Icon(graphics,
+                                                                              coordinateSystem(extent={{-300,-240},{280,240}})),
     experiment(
       StopTime=2.592e+006,
       Interval=900,

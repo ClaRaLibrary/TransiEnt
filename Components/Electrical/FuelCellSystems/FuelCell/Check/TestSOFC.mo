@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.Check;
-model TestSOFC "Dieser Test nhert sich nun endlich einer komplett simulierbaren Version"
+model TestSOFC "Model for testing the SOFC model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,20 +30,28 @@ model TestSOFC "Dieser Test nhert sich nun endlich einer komplett simulierbaren 
     height_2=+400,
     duration_2=20) annotation (Placement(transformation(extent={{-14,80},{6,100}})));
   SOFC FC(
-    T_nom=75 + 273,
+    T_n=75 + 273,
     no_Cells=10,
     A_cell=0.0625,
     cp=850,
     ka=0.3,
-    T_start=25 + 273)
-            annotation (Placement(transformation(extent={{-44,-48},{-2,-6}})));
+    T_stack(start=25 + 273),
+    v_n=0.733,
+    redeclare Basics.Interfaces.Electrical.ApparentPowerPort epp,
+    redeclare Boundaries.Electrical.ApparentPower.ApparentPower powerBoundary(
+      useInputConnectorP=true,
+      useInputConnectorQ=false,
+      useCosPhi=true,
+      cosphi_boundary=1) "PQ-Boundary for ApparentPowerPort") annotation (Placement(transformation(extent={{-44,-48},{-2,-6}})));
  TransiEnt.Components.Electrical.PowerTransformation.SimpleTransformer PowerConverter(
     UseRatio=false,
     U_S=0.733,
-    eta=1) annotation (Placement(transformation(
+    eta=1,
+    U_P=230)
+           annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
-        origin={-22,24})));
+        origin={16,26})));
   TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower LocalDemand(
     useInputConnectorQ=false,
     Q_el_set_const=0,
@@ -96,7 +104,8 @@ TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.Controller.LambdaContro
     Use_input_connector_f=false,
     Use_input_connector_v=false,
     v_boundary=230) annotation (Placement(transformation(extent={{80,78},{100,98}})));
-  inner SimCenter simCenter annotation (Placement(transformation(extent={{-98,80},{-78,100}})));
+  inner SimCenter simCenter(v_n=230)
+                            annotation (Placement(transformation(extent={{-98,80},{-78,100}})));
 Controller.PowerController                                                          PowerController(k=100)
                                                                                                     annotation (Placement(transformation(rotation=0, extent={{-42,22},{-62,42}})));
 equation
@@ -105,31 +114,31 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(SourceAir.gas_a, FC.feeda) annotation (Line(
-      points={{-67,-45},{-55.5,-45},{-55.5,-38.55},{-43.16,-38.55}},
+      points={{-67,-45},{-55.5,-45},{-55.5,-39.6},{-44,-39.6}},
       color={118,106,98},
       thickness=0.5,
       smooth=Smooth.None));
   connect(SinkSyngas.gas_a, FC.drainh) annotation (Line(
-      points={{10,-5},{8,-5},{8,-12.93},{-2,-12.93}},
+      points={{10,-5},{8,-5},{8,-14.4},{-2,-14.4}},
       color={118,106,98},
       thickness=0.5,
       smooth=Smooth.None));
   connect(SinkAir.gas_a, FC.draina) annotation (Line(
-      points={{16,-46},{6,-46},{6,-34.35},{-2.42,-34.35}},
+      points={{16,-46},{6,-46},{6,-39.6},{-2,-39.6}},
       color={118,106,98},
       thickness=0.5,
       smooth=Smooth.None));
   connect(LocalDemand.epp, GridMeter.epp_IN) annotation (Line(
-      points={{24.1,71.9},{26,71.9},{26,90},{42.8,90}},
+      points={{24,72},{26,72},{26,90},{42.8,90}},
       color={0,127,0},
       smooth=Smooth.None));
 
   connect(FC.lambda_H, lambdaHController.u1) annotation (Line(
-      points={{-16.28,-50.1},{2,-50.1},{2,-48},{10,-48},{10,-76},{2,-76}},
+      points={{-14.6,-48},{2,-48},{2,-48},{10,-48},{10,-76},{2,-76}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(SourceSyngas.gas_a, FC.feedh) annotation (Line(
-      points={{-62,-14},{-52,-14},{-52,-12.51},{-43.58,-12.51}},
+      points={{-62,-14},{-52,-14},{-52,-14.4},{-44,-14.4}},
       color={118,106,98},
       thickness=0.5,
       smooth=Smooth.None));
@@ -137,13 +146,12 @@ equation
       points={{-78,-9.2},{-80,-9.2},{-80,-8},{-86,-8},{-86,-82},{-18.8,-82}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(ElectricGrid.epp, GridMeter.epp_OUT) annotation (Line(points={{79.9,87.9},{70.95,87.9},{70.95,90},{61.4,90}}, color={0,127,0}));
-  connect(PowerController.V_cell, FC.V_stack) annotation (Line(points={{-43,26.6},{-43,18},{-68,18},{-68,6},{24,6},{24,-26.16},{-1.58,-26.16}},
+  connect(ElectricGrid.epp, GridMeter.epp_OUT) annotation (Line(points={{80,88},{70.95,88},{70.95,90},{61.4,90}},       color={0,127,0}));
+  connect(PowerController.V_cell,FC.v_stack)  annotation (Line(points={{-43,26.6},{-43,18},{-68,18},{-68,6},{24,6},{24,-27},{-2,-27}},
                                                                                                     color={0,0,127}));
   connect(PowerController.y, FC.I_load) annotation (Line(points={{-63,32},{-63,32},{-78,32},{-78,-28.26},{-40.22,-28.26}}, color={0,0,127}));
   connect(GridMeter.P, PowerController.deltaP) annotation (Line(points={{48.2,82.2},{48.2,64},{48,64},{48,46},{-36,46},{-36,38},{-43,38}}, color={0,0,127}));
-  connect(FC.epp, PowerConverter.epp_n) annotation (Line(points={{-23,-14.82},{-23,6},{-22,6},{-22,14}}, color={0,127,0}));
-  connect(PowerConverter.epp_p, GridMeter.epp_IN) annotation (Line(points={{-22,34},{-22,48},{36,48},{36,90},{42.8,90}}, color={0,127,0}));
+  connect(PowerConverter.epp_p, GridMeter.epp_IN) annotation (Line(points={{16,36},{16,48},{36,48},{36,90},{42.8,90}},   color={0,127,0}));
 public
 function plotResult
 
@@ -165,6 +173,11 @@ createPlot(id=1, position={809, 0, 791, 166}, y={"FC.Q_heater"}, range={0.0, 200
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
+equation
+  connect(FC.epp, PowerConverter.epp_n) annotation (Line(
+      points={{-23,-14.82},{-23,3.59},{16,3.59},{16,16}},
+      color={0,127,0},
+      thickness=0.5));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{34,36},{92,-98}},
@@ -185,5 +198,26 @@ FC.Q_heater
 
 ")}),
     experiment(StopTime=200),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the SOFC model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestSOFC;

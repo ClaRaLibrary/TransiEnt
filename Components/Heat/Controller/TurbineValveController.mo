@@ -1,10 +1,10 @@
 within TransiEnt.Components.Heat.Controller;
 model TurbineValveController "Turbine valve control depending on plant control strategy (see VDI/VDE 3508, p. 22 for more details)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ model TurbineValveController "Turbine valve control depending on plant control s
   //                  Interfaces
   // _____________________________________________4
 
-   Modelica.Blocks.Interfaces.RealInput P_T_set "Setpoint of turbine"  annotation (Placement(
+ Modelica.Blocks.Interfaces.RealInput P_T_set(  final quantity= "Power", final unit="W", displayUnit="W") "Setpoint of turbine"  annotation (Placement(
         transformation(extent={{-102,-8},{-82,12}}, rotation=0), iconTransformation(extent={{-102,-8},{-82,12}})));
 
  Modelica.Blocks.Interfaces.RealOutput y_T_set "Turbine valve opening setpoint" annotation (Placement(transformation(extent={{98,24},{118,44}}, rotation=0)));
@@ -92,5 +92,30 @@ equation
 
   connect(P_T_set, NSP_ValveAperture.u[1]) annotation (Line(points={{-92,2},{-84,2},{-84,2},{-74,2},{-74,48},{-12,48}}, color={0,0,127}));
   connect(P_T_set, MSP_ValveAperture.u[1]) annotation (Line(points={{-92,2},{-50,2},{-8,2}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>The model controls the Turbine valve aperture as a function of the control strategy. </p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>RealInput: Setpoint of Turbine</p>
+<p>RealOutput: Turbine valve aperture Setpoint</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TestTurbineValveController&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>VDI 3508, p.22</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end TurbineValveController;

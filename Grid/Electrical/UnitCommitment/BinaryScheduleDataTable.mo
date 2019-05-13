@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.UnitCommitment;
 model BinaryScheduleDataTable "Adds constants for easy allocation of outputs"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -67,8 +67,8 @@ model BinaryScheduleDataTable "Adds constants for easy allocation of outputs"
   // _____________________________________________
 
   Modelica.Blocks.Interfaces.BooleanOutput[nDispPlants] z annotation (Placement(transformation(extent={{93,21},{133,59}})));
-  Modelica.Blocks.Interfaces.RealOutput[nDispPlants] P_sec_pos annotation (Placement(transformation(extent={{93,-45},{133,-7}})));
-  Modelica.Blocks.Interfaces.RealOutput[nDispPlants] P_sec_neg annotation (Placement(transformation(extent={{93,-91},{133,-53}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut[nDispPlants] P_sec_pos annotation (Placement(transformation(extent={{93,-45},{133,-7}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut[nDispPlants] P_sec_neg annotation (Placement(transformation(extent={{93,-91},{133,-53}})));
 
   // _____________________________________________
   //
@@ -176,5 +176,29 @@ equation
           points={{90,-72},{68,-64},{68,-80},{90,-72}},
           lineColor={192,192,192},
           fillColor={192,192,192},
-          fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+          fillPattern=FillPattern.Solid)}), Diagram(graphics,
+                                                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>z[nDispPlants]: BooleanOutput</p>
+<p>P_sec_pos[nDispPlants]: output for electric power in [W]</p>
+<p>P_sec_neg[nDispPlants]: output for electric power in [W]</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TransiEnt.Grid.Electrical.UnitCommitment.Check.TestBinarySchedule&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end BinaryScheduleDataTable;

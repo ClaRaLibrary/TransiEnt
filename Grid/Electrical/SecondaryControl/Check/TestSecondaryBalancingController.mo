@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.SecondaryControl.Check;
 model TestSecondaryBalancingController "Example how to calculate the demand of primary balancing power"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -68,6 +68,24 @@ end plotResult;
           lineColor={28,108,200})}),
     experiment(StopTime=30, __Dymola_Algorithm="Dassl"),
     Documentation(info="<html>
-<p>If frequency drops and tieline power is negative the disturbance is outside of the local grid  and thus secondary balancing is not activated. If the disturbance is within the controlled grid (frequency devaition and tieline power have the same presign) control is activated.</p>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for SecondaryBalancingController</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<p><b><span style=\"color: #008000;\">3. Limits of validity</span></b> </p>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>If frequency drops and tieline power is negative the disturbance is outside of the local grid and thus secondary balancing is not activated. If the disturbance is within the controlled grid (frequency devaition and tieline power have the same presign) control is activated.</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end TestSecondaryBalancingController;

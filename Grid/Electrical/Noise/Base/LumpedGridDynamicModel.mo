@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.Noise.Base;
 model LumpedGridDynamicModel "Electric grid dynamic model considering self regulating effect, primary balancing provision and time constant of rotating masses"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,9 +33,9 @@ model LumpedGridDynamicModel "Electric grid dynamic model considering self regul
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput delta_P_Z annotation (Placement(transformation(extent={{-106,-10},{-86,10}}), iconTransformation(extent={{-106,-10},{-86,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn delta_P_Z "Input for power difference" annotation (Placement(transformation(extent={{-106,-10},{-86,10}}), iconTransformation(extent={{-106,-10},{-86,10}})));
 
-  Modelica.Blocks.Interfaces.RealOutput f annotation (Placement(transformation(extent={{94,-10},{114,10}}), iconTransformation(extent={{94,-10},{114,10}})));
+  TransiEnt.Basics.Interfaces.General.FrequencyOut f "Output for frequency" annotation (Placement(transformation(extent={{94,-10},{114,10}}), iconTransformation(extent={{94,-10},{114,10}})));
 
   // _____________________________________________
   //
@@ -97,7 +97,8 @@ equation
   connect(feedback1.y, delta_pr.u) annotation (Line(points={{37,-26},{33.5,-26},{30,-26}}, color={0,0,127}));
   connect(feedback1.u2, f_star.y) annotation (Line(points={{46,-18},{48,-18},{48,26},{48,22},{21,22}}, color={0,0,127}));
   connect(f_02.y, feedback1.u1) annotation (Line(points={{63,-26},{58.5,-26},{54,-26}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The frequency behaviour of the electric grid is modeled when a power imbalance (delta_P_Z) is introduced. Considered effects are rotating masses of generators (time constant), self regulating effects and primary balancing control. The purpose is to invert this model such that a measured frequency is the input and the underlying power imbalances can be simulated.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>

@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Heat;
 model Test_DHN_SubSystem
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -79,7 +79,9 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(dHN_SubSystem.T1, PID_hot_temperature.u_m) annotation (Line(points={{-256,-212},{-288,-212},{-288,-211.9},{-320,-211.9}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-360,-260},{360,220}})),
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-360,-260},{360,220}})),
     experiment(StopTime=86400, Interval=900),
     __Dymola_experimentSetupOutput(inputs=false, events=false),
     __Dymola_experimentFlags(

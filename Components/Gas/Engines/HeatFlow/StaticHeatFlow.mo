@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Engines.HeatFlow;
 model StaticHeatFlow
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -89,7 +89,7 @@ equation
     // total heatflow through engine divides into heat flow into coolant and oil and losses to the ambient air
     Q_flow_engine_tot = Q_flow_engine + Q_flow_loss_room;
     // standard equation for heat losses
-    Q_flow_loss = (1 - eta_h)*Q_flow_fuel; //das geht so nicht, wenn eta_h > 1 wird!
+    Q_flow_loss = max(0,(1 - eta_h)*Q_flow_fuel);
       // Q_flow_loss_room = k*A*(T_engine-T_site) with constant and instantaneously T_engine:
     Q_flow_loss_room = k*A*(300.15 - T_site);
   else
@@ -98,7 +98,6 @@ equation
     Q_flow_engine_tot = 0;
     Q_flow_loss_room = 0;
     // except for the losses to the ambient air caused by temperature difference
-      //JB: CHECK THIS! continuous losses with no time-dependent variable? see eqation for Q_flow_loss_room
     Q_flow_loss = Q_flow_loss_room;
   end if;
 
@@ -149,7 +148,8 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-200,
-            -160},{220,160}}), graphics), Icon(coordinateSystem(extent={{
+            -160},{220,160}}), graphics), Icon(graphics,
+                                               coordinateSystem(extent={{
             -200,-160},{220,160}})),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -160,7 +160,7 @@ equation
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>switch - boolean input to switch the engine on/off</p>
-<p>P_el - target electrical power input</p>
+<p>P_el - target electrical power input in W</p>
 <p>efficienciesIn[2] - Input connector for electrical [1] and overall [2] efficiency of the engine</p>
 <p>temperaturesOut[2] - Output connector for temperature levels in the engine (as the efficiencies in the more complex models are calculated based on temperature-dependent empirical equations)</p>
 <p>waterIn/waterOut - fluidports for return / supplystream of the heating system</p>

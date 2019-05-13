@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model CHPStates_heatled
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,6 +31,7 @@ model CHPStates_heatled
 
   outer SimCenter simCenter;
 
+
   // _____________________________________________
   //
   //                   Parameters
@@ -45,18 +46,25 @@ model CHPStates_heatled
 
   // _____________________________________________
   //
+  //                  Interfaces
+  // _____________________________________________
+
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set "Connector of setpoint input signal" annotation (Placement(transformation(extent={{-116,-16},{-84,16}}, rotation=0)));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_set_lim "Limited output signal" annotation (Placement(transformation(extent={{96,-16},{128,16}}, rotation=0)));
+
+  // _____________________________________________
+  //
   //            Complex Components
   // _____________________________________________
 
     inner Modelica.StateGraph.StateGraphRoot
                          stateGraphRoot
       annotation (Placement(transformation(extent={{-98,84},{-84,98}})));
-  Modelica.Blocks.Interfaces.RealInput Q_flow_set "Connector of setpoint input signal" annotation (Placement(transformation(extent={{-116,-16},{-84,16}}, rotation=0)));
   Modelica.Blocks.Nonlinear.VariableLimiter variableLimiter annotation (Placement(transformation(extent={{-6,-44},{20,-18}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_set_lim "Limited output signal" annotation (Placement(transformation(extent={{96,-16},{128,16}}, rotation=0)));
   Modelica.Blocks.Sources.RealExpression P_min_of_state(y=0)     annotation (Placement(transformation(extent={{-46,-52},{-26,-32}})));
   Modelica.Blocks.Sources.RealExpression P_max_of_state(y=Q_flow_max)
                                                                  annotation (Placement(transformation(extent={{-46,-30},{-26,-10}})));
+
 
   // _____________________________________________
   //
@@ -148,7 +156,8 @@ equation
   connect(operating.inPort[2], initOn.outPort);
   connect(startup.inPort[2], initStartup.outPort);
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
       Rectangle(
         origin={-70,0},
         fillColor={255,255,255},
@@ -186,15 +195,16 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>Q_flow_set: input for heat flow rate in [W] (connector for input signal)</p>
+<p>Q_flow_set_lim: output for heat flow rate in [W ] (limited output signal)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TransiEnt.Producer.Combined.LargeScaleCHP.Base.Check.TestCHPStates_heatled&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

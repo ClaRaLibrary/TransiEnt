@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Heat.HeatGridAnalysis;
-model ClosedLoop_PressureControlled "\"Cloed loop district heating model with pressure controlled pumps and valves, constant massflow and variable heat flows\""
+model ClosedLoop_PressureControlled "\"Closed loop district heating model with pressure controlled pumps and valves, constant massflow and variable heat flows\""
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -753,7 +753,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">This model illustrates possible applications of the library to model district heating grids. It shows a heat producing unit at the left, a heat consumer at the right and the supply and return lines for distribution. </span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">In this example, the pumps at the return line are pressure controlled and the mass flow is assumed to be constant.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The supply temperature is controlled by the heat input, which is defined by the feed forward controller.</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">The return temperature is controlled by the </span></p>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

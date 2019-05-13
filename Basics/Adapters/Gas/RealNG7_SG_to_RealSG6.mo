@@ -2,10 +2,10 @@ within TransiEnt.Basics.Adapters.Gas;
 model RealNG7_SG_to_RealSG6 "Adapter that switches from real ng7_sg to real sg6 fluid models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,8 +54,8 @@ model RealNG7_SG_to_RealSG6 "Adapter that switches from real ng7_sg to real sg6 
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_ng7_sg) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium_sg6) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
+  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_ng7_sg) "Input for NG7_SG" annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
+  TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium_sg6) "Output for SG6" annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
   // _____________________________________________
   //
@@ -111,7 +111,8 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(
           extent={{-100,80},{0,20}},
           lineColor={0,0,0},
@@ -123,26 +124,27 @@ NG7_SG"),
           textString="Real
 SG6")}),
 Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4>Adapter for switching from real gas NG7_SG to real gas SG6 fluid models</h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents an adapter to switch from real gas NG7_SG to real gas SG6 fluid models. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>Temperature, pressure and mass flow stay the same. The model only works in the design flow direction. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid for one-phase real gas NG7_SG and real gas SG6 fluid models. Also, the NG7_SG fluid can only contain SG6 components so Ethane, Propane and Butane are not allowed in the NG7_SG fluid. </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: inlet port for real gas NG7_SG </p>
 <p>gasPortOut: outlet port for real gas SG6 </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>It is important to ensure that the flow is always in the design flow direction and that Ethane, Propane and Butane are not present in the NG7_SG fluid.</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TestRealGasAdapters&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
-<p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016 </p>
 </html>"));
 end RealNG7_SG_to_RealSG6;

@@ -3,7 +3,6 @@ Sources
 DeadZoneLinear
 HoldBlock
 PD
-LimPID
 IntegratorReset
 LimPIDReset
 SmoothLimPID
@@ -18,3 +17,8 @@ DiscreteTimeSlewRateLimiter
 OnOffRelais
 Equal
 BooleanToReal
+UserDefinedFunction
+UserDefinedFunctionMISO
+FilterPosNeg
+FirstOrder
+LimPID

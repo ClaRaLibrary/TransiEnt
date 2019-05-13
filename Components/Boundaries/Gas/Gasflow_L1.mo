@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model Gasflow_L1 "Ideal gas flow boundary with constant or prescribed power and constant pressure loss"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,14 +35,14 @@ model Gasflow_L1 "Ideal gas flow boundary with constant or prescribed power and 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid  Medium=simCenter.gasModel1 "Medium model";
   parameter SI.Power H_flow_const=100e3 "Constant heating Power"                                       annotation (Dialog(enable = not use_H_flow_in));
   parameter Boolean use_H_flow_in=false "Use external Value for H_flow" annotation(choices(__Dymola_checkBox=true));
-  parameter SI.Pressure p_drop=simCenter.p_n[2]-simCenter.p_n[1] "Nominal pressure drop";
+  parameter SI.Pressure p_drop=simCenter.p_nom[2]-simCenter.p_nom[1] "Nominal pressure drop";
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput H_flow_set if        use_H_flow_in
+  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateIn H_flow_set if        use_H_flow_in "RealInput (for specification of boundary power)"
     annotation (Placement(transformation(extent={{120,-20},{80,20}}),
         iconTransformation(
         extent={{20,-20},{-20,20}},
@@ -53,7 +53,7 @@ model Gasflow_L1 "Ideal gas flow boundary with constant or prescribed power and 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasOut(Medium=Medium) annotation (Placement(transformation(extent={{40,-110},{60,-90}}), iconTransformation(extent={{40,-110},{60,-90}})));
 
 protected
-  Modelica.Blocks.Interfaces.RealInput H_flow_internal "Needed for conditional connector";
+  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateIn H_flow_internal "Needed for conditional connector";
   // _____________________________________________
   //
   //             Complex Components
@@ -108,9 +108,9 @@ equation
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics), Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
-<p>Ideal boundary model with prescribed or constant heat flow and without fluid volume. Pressure loss is constant and given via parameter.</p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Ideal boundary model with prescribed or constant enthalpy flow and without fluid volume. Pressure loss is constant and given via parameter.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>Constant pressureloss, no fluid volume </p>
 <h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
 <p>Not time dependent because lack of volume</p>
@@ -121,7 +121,7 @@ equation
 <p>(no elements)</p>
 <h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
 <p>First law of thermodynamics</p>
-<h4><span style=\"color:#008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color:#008000\">8. Validation</span></h4>
 <p>Tested in model TransiEnt.Components.Boundaries.Heat.Check.testHeatflow_L1</p>

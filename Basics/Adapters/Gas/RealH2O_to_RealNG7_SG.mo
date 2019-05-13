@@ -2,10 +2,10 @@ within TransiEnt.Basics.Adapters.Gas;
 model RealH2O_to_RealNG7_SG "Adapter that switches from real H2O to real NG7_SG fluid models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -53,8 +53,8 @@ model RealH2O_to_RealNG7_SG "Adapter that switches from real H2O to real NG7_SG 
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterPortIn(Medium=medium_water) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium_ng7_sg) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterPortIn(Medium=medium_water) "Input for H20" annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
+  TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium_ng7_sg) "Output for NG7_SG" annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
   // _____________________________________________
   //
@@ -103,37 +103,39 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(
           extent={{-100,80},{0,20}},
           lineColor={0,0,0},
-          textString="Real
+          textString="VLE
 H2O"),  Text(
           extent={{0,-20},{100,-80}},
           lineColor={0,0,0},
           textString="Real
 NG7_SG")}),
 Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4>Adapter for switching from VLE H20 to real gas NG_SG fluid models</h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents an adapter to switch from VLE H2O to real gas NG7_SG fluid models. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>Temperature, pressure and mass flow stay the same. The model only works in the design flow direction. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid for one-phase real gas H2O and real gas NG7_SG fluid models. </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>WaterPortIn: inlet port for real gas H2O </p>
 <p>gasPortOut: outlet port for real gas NG7_SG </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>It is important to ensure that the flow is always in the design flow direction.</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TestRealGasAdapters&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
-<p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016 </p>
 </html>"));
 end RealH2O_to_RealNG7_SG;

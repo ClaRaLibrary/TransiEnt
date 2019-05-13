@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Tables.GasGrid;
-model GenericGasMassFlowDataTable
+model GenericGasMassFlowDataTable "Model for generating a gas mass flow output from a data table"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,8 +32,7 @@ model GenericGasMassFlowDataTable
   //                  Interfaces
   // _____________________________________________
 
-  Interfaces.Gas.GasMassFlowOut value
-    annotation (Placement(transformation(extent={{76,-10},{96,10}})));
+  Interfaces.General.MassFlowRateOut value annotation (Placement(transformation(extent={{76,-10},{96,10}})));
 
 equation
 
@@ -53,7 +52,9 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>Modelica RealOutput: y[MSL_combiTimeTable.nout]</p>
+<p>Modelica RealOutput: y1</p>
+<p>Modelica RealOutput: heat flow rate in W</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

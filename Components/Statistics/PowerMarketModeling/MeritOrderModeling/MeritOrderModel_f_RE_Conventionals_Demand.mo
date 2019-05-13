@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.PowerMarketModeling.MeritOrderModeling;
 model MeritOrderModel_f_RE_Conventionals_Demand "Simplified electricity spot market with inputs: renewable energy generation and demand"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -131,5 +131,6 @@ equation
 <p><br>Assumptions: inelastic demand, stepwise-offers (all plants of one type have the same marginal costs).</p>
 <p><br>Notes: the marginal costs and the offered energy amounts were randomly chosen, these still have to be corrected to reflect the reality.</p>
 <p><br>This is a passive model since it only calculates a power price. For active components which define set points based in the merit order see <a href=\"modelica://TransiEnt.Producer.Electrical.Controllers.AGC_MeritOrder\">TransiEnt.Producer.Electrical.Controllers.AGC_MeritOrder</a> and simliar components</p>
-</html>"), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+</html>"), Diagram(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end MeritOrderModel_f_RE_Conventionals_Demand;

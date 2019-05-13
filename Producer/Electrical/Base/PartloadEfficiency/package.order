@@ -3,4 +3,6 @@ ConstantEfficiency
 CombinedCyclePlant
 Gasturbine
 SteamturbinePlant
+GasTurbineButtler
+CCGTButtler
 PartloadEfficiency

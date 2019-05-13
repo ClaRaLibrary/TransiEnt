@@ -2,10 +2,10 @@ within TransiEnt.Components.Mechanical.Base;
 partial model PartialMechanicalConnection "Abstract mechanical connection model used between turbine and generator (could be an Inertia element or a clutch..)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ partial model PartialMechanicalConnection "Abstract mechanical connection model 
   TransiEnt.Basics.Interfaces.General.MechanicalPowerPort mpp_a "Left flange of shaft" annotation (Placement(transformation(extent={{-110,-10},{-90,10}}, rotation=0), iconTransformation(extent={{-110,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.General.MechanicalPowerPort mpp_b "Right flange of shaft" annotation (Placement(transformation(extent={{90,-10},{110,10}}, rotation=0), iconTransformation(extent={{90,-10},{110,10}})));
 
-  SI.AngularVelocity w(stateSelect=stateSelect);
+  SI.AngularVelocity omega(stateSelect=stateSelect);
   SI.Angle phi(stateSelect=stateSelect) "Absolute rotation angle of component"
     annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.KineticEnergy E_kin;
@@ -64,7 +64,7 @@ equation
 
   phi = mpp_a.phi;
   phi = mpp_b.phi;
-  w = der(phi);
+  omega = der(phi);
 
   collectKineticEnergy.kineticEnergyCollector.E_kin=E_kin;
   connect(modelStatistics.kineticEnergyCollector[nSubgrid],collectKineticEnergy.kineticEnergyCollector);
@@ -105,12 +105,13 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">This model contains moment of inertia statistics. It sends the moment of inertia specified by parameter J to the statistics component if it is connected, i.e. if isRunning=true</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>mpp_a: mechanical power port</p>
+<p>mpp_b: mechanical power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

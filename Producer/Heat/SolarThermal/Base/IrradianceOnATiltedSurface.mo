@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.SolarThermal.Base;
 model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of solar irradiance and different models for calculating the solar irradiance on a tilted surface"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,6 +28,21 @@ model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of
   extends TransiEnt.Basics.Icons.Model;
   import Const = Modelica.Constants;
   import SI = Modelica.SIunits;
+  outer TransiEnt.SimCenter simCenter;
+
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+  parameter Boolean use_input_data=false "choose if input data is given by inputs - if not, simCenter data is used";
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_direct_measured_input(value=irradiance_direct_measured) annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_diffuse_horizontal_input(value=irradiance_diffuse_horizontal) annotation (Placement(transformation(extent={{-140,-60},{-100,-20}})));
 
   // _____________________________________________
   //
@@ -40,19 +55,25 @@ model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of
   SI.Irradiance irradiance_diffuse_tilted;  // diffuse irradiance on a tilted surface
   SI.Angle angle_ground_tilted;            // angle of ground-reflected irradiance on a tilted surface
   SI.Irradiance irradiance_ground_tilted;      // ground-reflected irradiance on a tilted surface
-
+  inner SI.Irradiance irradiance_direct_measured "Measured direct irradiance";
+  inner SI.Irradiance irradiance_diffuse_horizontal "Measured diffuse irradiance";
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
-
-  replaceable SkymodelBase skymodel annotation (choicesAllMatching=true);
+  replaceable model Skymodel=SkymodelBase constrainedby SkymodelBase annotation(choicesAllMatching=true);
+  Skymodel skymodel annotation (Placement(transformation(extent={{-22,2},{-2,22}})));
 
 equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
+
+  if (not use_input_data) then
+    irradiance_direct_measured=simCenter.i_direct;
+    irradiance_diffuse_horizontal=simCenter.i_diffuse;
+  end if;
 
   irradiance_direct_tilted=skymodel.irradiance_direct_tilted;
   angle_direct_tilted=skymodel.angle_tilted;
@@ -72,7 +93,8 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>s. 2.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>irradiance_direct_measured_input: input for irradiance in W/m2</p>
+<p>irradiance_diffuse_horizontal_input: input for irradiance in W/m2</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>Calculated output is Basics.Records.Irradiance&nbsp;direct_tilted,&nbsp;diffuse_tilted,&nbsp;ground_tilted;</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -80,15 +102,19 @@ equation
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-2n2aAkd8.png\" alt=\" ground_tilted.angle= SI.Conversions.from_deg(90 - 0.5788*slope + 0.002693*slope^2)\"/></p>
 <p>Alle other values are calculated by instances of other models.</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>Choose via parameter use_input_data which solar data input data is used for calculation:</p>
+<p>use_input_data=true: solar input data is given directly via two inputs (irradiance_direct_measured_input, irradiance_diffuse_horizontal_input)</p>
+<p>use_input_data=false: solar input data from simCenter is used for calculation</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>Duffie/Beckman&nbsp;(2006):&nbsp;Solar&nbsp;Engineering&nbsp;of&nbsp;Thermal&nbsp;Processes</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Tobias Toerber (tobias.toerber@tuhh.de), Jul 2015</p>
-<p>Edited by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
-<p>Modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
-<p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
+<p>Model modified by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
+<p>Model modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
+<p>Model modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018: added possibility to use inputs for solar irradiation</p>
 </html>"), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Line(
           points={{-86,-84},{24,-84},{94,72},{-8,72},{-86,-84}},

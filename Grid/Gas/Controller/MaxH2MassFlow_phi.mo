@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.Controller;
 model MaxH2MassFlow_phi "Model for calculation of maximum admissible mass flow rate of hydrogen from specified volumetric percentage at STP"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -62,10 +62,7 @@ public
   //                Interfaces
   // _____________________________________________
 public
-  output Modelica.Blocks.Interfaces.RealOutput m_flow_H2_max(
-    final quantity="mass flow",
-    displayUnit="kg/s",
-    final unit="kg/s") "Maximum admissible hydrogen production rate" annotation (Placement(transformation(extent={{10,-10},{-10,10}},
+  output TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_H2_max "Maximum admissible hydrogen production rate" annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=270,
         origin={0,100}), iconTransformation(
         extent={{10,-10},{-10,10}},
@@ -117,7 +114,8 @@ equation
   // no pressure loss
   gasPortIn.p = gasPortOut.p;
 
-  annotation (defaultComponentName="maxH2MassFlow",Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (defaultComponentName="maxH2MassFlow",Diagram(graphics,
+                                                           coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                       graphics={
@@ -157,6 +155,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Hydrogen has to be the last entry of medium column vector.</span></p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TransiEnt.Consumer.Gas.Check.GasDemandVarH2_varGCV_controlMFlow&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Christopher Helbig, Dec 2014</p>

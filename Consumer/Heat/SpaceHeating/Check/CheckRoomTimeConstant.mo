@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.SpaceHeating.Check;
 model CheckRoomTimeConstant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,7 +25,10 @@ model CheckRoomTimeConstant
     redeclare Base.FloorHeatingSystem heatingsystem(T_spreading=10),
     use_T_amb_input=true,
     redeclare Characteristics.HouseType70 thermodynamics,
-    T_start=293.15) annotation (Placement(transformation(extent={{40,-50},{-2,-10}})));
+    T_room(start=566.3),
+    T_floor(start=566.3),
+    T_wallInside(start=566.3),
+    T_wallInternal(start=(273.15 + 20 + 293.15)/2)) annotation (Placement(transformation(extent={{40,-50},{-2,-10}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi sink(
     T_const=273.15 + 25,
     variable_T=false,
@@ -53,12 +56,35 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(normAmbientTemperatur.y, roomFloorHeating.T_Amb) annotation (Line(points={{-7,44},{18.37,44},{18.37,-10.2}}, color={0,0,127}));
-  connect(roomFloorHeating.T_room_act, source.T) annotation (Line(points={{40,-38},{52,-38},{52,18},{-52,18},{-52,2},{-44,2}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(extent={{-140,-80},{140,80}})), Icon(coordinateSystem(extent={{-140,-80},{140,80}})),
+  connect(roomFloorHeating.T_Room, source.T) annotation (Line(points={{40,-38},{52,-38},{52,18},{-52,18},{-52,2},{-44,2}}, color={0,0,127}));
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-140,-80},{140,80}})), Icon(graphics,
+                                                                            coordinateSystem(extent={{-140,-80},{140,80}})),
     experiment(
       StopTime=604800,
       Interval=900,
       __Dymola_fixedstepsize=5,
       __Dymola_Algorithm="Dassl"),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p>Test environment for a room floor heating with a fluid source, a fluid sink and a constant ambient temperature</p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end CheckRoomTimeConstant;

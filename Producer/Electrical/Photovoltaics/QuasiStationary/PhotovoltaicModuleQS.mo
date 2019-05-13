@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Photovoltaics.QuasiStationary;
 model PhotovoltaicModuleQS "PV Module for quasi stationary boundaries with constant efficiency"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -82,8 +82,10 @@ equation
     annotation (Line(points={{100,0},{100,26},{50,26}},   color={85,170,255}));
   connect(currentP, PowerSensorPVPanel.voltageP) annotation (Line(points={{100,0},{100,16},{60,16}},
                                      color={85,170,255}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), Icon(graphics,
+                                     coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>

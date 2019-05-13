@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Adapters.Check;
-model TestRealGasAdapters
+model TestRealGasAdapters "Model for testing the real gas adapters"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -300,11 +300,32 @@ equation
       color={255,255,0},
       thickness=1.5));
   annotation (
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
+    Icon(graphics,
+         coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
     experiment(StopTime=10),
     __Dymola_experimentSetupOutput,
           Documentation(info="<html>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Mon Apr 24 2017<br> </p>
+<h4><span style=\"color: #008c48\">1. Purpose of model</span></h4>
+<p>This model was created for testing the real gas adapters. </p>
+<h4><span style=\"color: #008c48\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008c48\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008c48\">4. Interfaces</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008c48\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008c48\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008c48\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008c48\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008c48\">9. References</span></h4>
+<p>(no remarks) </p>
+<h4><span style=\"color: #008c48\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Mon Apr 24 2017</p>
 </html>"));
 end TestRealGasAdapters;

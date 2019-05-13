@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.Collectors.GlobalCollectors;
 model EconomicStatistics
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,6 +26,8 @@ model EconomicStatistics
   TransiEnt.Basics.Units.MonetaryUnit TotalOMCosts "Total operation-related costs incl. maintenance";
   TransiEnt.Basics.Units.MonetaryUnit TotalOtherCosts "Total other costs";
   TransiEnt.Basics.Units.MonetaryUnit TotalRevenues "Total revenues";
+
+  outer TransiEnt.SimCenter simCenter;
 
 //Interfaces
   Modelica.Blocks.Interfaces.RealInput costsCollector[6] annotation (HideResult=True, Placement(transformation(extent={{-10,-94},{10,-74}}), iconTransformation(extent={{-17,-16},{17,16}},

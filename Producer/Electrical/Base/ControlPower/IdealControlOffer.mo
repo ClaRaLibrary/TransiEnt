@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Base.ControlPower;
 block IdealControlOffer "Ideal control power provision without constraints other than nominal power"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,8 +20,6 @@ block IdealControlOffer "Ideal control power provision without constraints other
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-/// ***** MOST IMPORTANT RULE: BEFORE PUSHING YOUR CHANGES YOUR MODEL SHOULD "CHECK" *****
-/// (meaning if you press F8 or click the "check" Button there are no errors)
 
   // _____________________________________________
   //
@@ -36,7 +34,7 @@ equation
   //           Characteristic Equations
   // _____________________________________________
     P_pr_neg_offer = max(0,P_el_is);
-    P_pr_pos_offer = max(0,P_nom-P_el_is);
+    P_pr_pos_offer =max(0, P_n - P_el_is);
 
     P_sec_neg_offer = if isSecondaryControlActive then P_pr_neg_offer else 0;
     P_sec_pos_offer = if isSecondaryControlActive then P_pr_pos_offer else 0;
@@ -45,7 +43,7 @@ equation
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Ideal&nbsp;control&nbsp;power&nbsp;provision&nbsp;without&nbsp;constraints&nbsp;other&nbsp;than&nbsp;nominal&nbsp;power.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>LoD 1 - only active power and frequency.</p>
+<p>L1 (defined in the CodingConventions) - only active power and frequency.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>

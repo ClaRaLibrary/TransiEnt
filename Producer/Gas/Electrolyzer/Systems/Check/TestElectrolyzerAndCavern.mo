@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Systems.Check;
-model TestElectrolyzerAndCavern
+model TestElectrolyzerAndCavern "Model for testing a hydrogen cavern"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -77,7 +77,9 @@ end plotResult;
     useConstantEfficiencies=false,
     Q_flow_init=100e6)             annotation (Placement(transformation(extent={{-14,-14},{6,6}})));
 
-  ElectrolyzerAndCavern                                             electrolyzerAndCavern(P_nom_ely=18*40e6) annotation (Placement(transformation(extent={{-50,-22},{-30,-2}})));
+  ElectrolyzerAndCavern                                             electrolyzerAndCavern(P_nom_ely=18*40e6,
+    integrateMassFlowOut=false,
+    integrateMassFlowIn=false)                                                                               annotation (Placement(transformation(extent={{-50,-22},{-30,-2}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_fuel_GuD(y=CHP_Plant_two_fuels.Q_flow_input_basefuel)
                                                                                                annotation (Placement(transformation(
         extent={{9,-5},{-9,5}},
@@ -129,6 +131,29 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(electrolyzerAndCavern.h2Available, CHP_Plant_two_fuels.h2Available) annotation (Line(points={{-30.6,-3.8},{-29.3,-3.8},{-29.3,-4.90909},{-13.4,-4.90909}}, color={255,0,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=604800));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
+    experiment(StopTime=604800),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for ElectrolyzerAndCavern</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestElectrolyzerAndCavern;

@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Gas;
 model GasGridHamburg "High pressure gas grid of Hamburg"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -501,9 +501,10 @@ equation
       points={{-208,265},{-200,265},{-200,266},{-190,266},{-96,265}},
       color={255,255,0},
       thickness=1.5));
-  annotation (Diagram(coordinateSystem(extent={{-340,-340},{340,340}}, preserveAspectRatio=false,
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-340,-340},{340,340}}, preserveAspectRatio=true,
         initialScale=0.1)),                                              Icon(coordinateSystem(extent={{-340,-340},{340,340}},
-        preserveAspectRatio=false,
+        preserveAspectRatio=true,
         initialScale=0.1),                                                                                                      graphics={
         Line(
           points={{178,-110}},
@@ -518,7 +519,15 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>offTakeHarburg: inlet for real gas</p>
+<p>offTakeAltona: inlet for real gas</p>
+<p>offTakeEimsbuettel: inlet for real gas</p>
+<p>offTakeNord: inlet for real gas</p>
+<p>offTakeWandsbek: inlet for real gas</p>
+<p>offTakeMitte: inlet for real gas</p>
+<p>offTakeBergedorf: inlet for real gas</p>
+<p>GTSLev: inlet for real gas</p>
+<p>GTSTor: inlet for real gas</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

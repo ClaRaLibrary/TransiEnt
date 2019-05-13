@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.LumpedPowerGrid.Check;
 model LocalPlantInteractingWithUCTE "Example how the continental europe grid interacts with a local grid"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,7 @@ model LocalPlantInteractingWithUCTE "Example how the continental europe grid int
     isPrimaryControlActive=true,
     fixedStartValue_w=false,
     isSecondaryControlActive=true,
-    P_init=-Gen_set.k) annotation (Placement(transformation(extent={{66,8},{38,36}})));
+    P_init_set=-Gen_set.k) annotation (Placement(transformation(extent={{66,8},{38,36}})));
 
   TransiEnt.Grid.Electrical.LumpedPowerGrid.LumpedGrid UCTE(
     delta_pr=0.2/50/(3/150 - 0.2*0.01),
@@ -68,7 +68,7 @@ model LocalPlantInteractingWithUCTE "Example how the continental europe grid int
     changeSignOfTieLinePower=true) annotation (Placement(transformation(extent={{14,46},{40,70}})));
 equation
   connect(Gen.epp, P_12.epp_IN) annotation (Line(
-      points={{38.7,29.84},{24,29.84},{24,30},{15.12,30}},
+      points={{39.4,31.8},{24,31.8},{24,30},{15.12,30}},
       color={0,135,135},
       thickness=0.5));
   connect(UCTE.epp, P_12.epp_OUT) annotation (Line(
@@ -88,16 +88,39 @@ equation
   connect(Load.y, Demand.P_el_set) annotation (Line(points={{51,-16},{58,-16},{63,-16},{63,-25.6}},                color={0,0,127}));
   connect(Gen_set.y, Gen.P_el_set) annotation (Line(points={{75,46},{54.1,46},{54.1,35.86}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{100,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{100,100}})),
     experiment(
       StopTime=7200,
       Interval=60,
       __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput(events=false),
-    Icon(coordinateSystem(extent={{-100,-80},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-80},{100,100}})),
     __Dymola_experimentFlags(
       Advanced(GenerateVariableDependencies=false, OutputModelicaCode=false),
       Evaluate=true,
       OutputCPUtime=true,
-      OutputFlatModelica=false));
+      OutputFlatModelica=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end LocalPlantInteractingWithUCTE;

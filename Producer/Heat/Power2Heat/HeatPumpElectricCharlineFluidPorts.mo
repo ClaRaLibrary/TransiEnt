@@ -2,10 +2,10 @@
 model HeatPumpElectricCharlineFluidPorts "Electric heat pump model that produces a given heat flow via fluid ports with a charline"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,6 +35,8 @@ model HeatPumpElectricCharlineFluidPorts "Electric heat pump model that produces
   //             Visible Parameters
   // _____________________________________________
 
+  parameter Boolean usePowerPort=false  annotation(Dialog(group="Technical Specifications"));
+
   // _____________________________________________
   //
   //                 Outer Models
@@ -45,12 +47,10 @@ model HeatPumpElectricCharlineFluidPorts "Electric heat pump model that produces
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput P_el "Electric power consumed" annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={0,-110}), iconTransformation(
-        extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={110,0})));
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp if usePowerPort constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (Dialog(group="Replaceable Components",enable=usePowerPort),choicesAllMatching=true,Placement(transformation(extent={{100,0},{120,20}}),
+                                                                                                                               iconTransformation(extent={{80,-20},{120,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if not
+                                                                        (use_Q_flow_input) "Setpoint value of the power, should be positive" annotation (Placement(transformation(extent={{-120,-20},{-80,20}}), iconTransformation(extent={{-120,-20},{-80,20}})));
 
   // _____________________________________________
   //
@@ -60,29 +60,40 @@ model HeatPumpElectricCharlineFluidPorts "Electric heat pump model that produces
 protected
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Consumer)
                                                                                                                                       annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
-public
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{-80,-80},{-60,-60}}),
-                                                                                                                               iconTransformation(extent={{-100,-100},{-60,-60}})));
-
+  replaceable TransiEnt.Components.Boundaries.Electrical.Power powerBoundary if usePowerPort constrainedby TransiEnt.Components.Boundaries.Electrical.Power                          "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components",enable=usePowerPort), choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.Power powerBoundary "PowerBoundary for ActivePowerPort"),choice( redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower powerBoundary(useInputConnectorQ=false, cosphi_boundary=0.99) "Power Boundary for ComplexPowerPort")),Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=0,
+        origin={-84,-42})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=P_el) if usePowerPort annotation (Placement(transformation(extent={{-102,-32},{-82,-12}})));
+  Modelica.Blocks.Math.Gain P_el_set_(k=1) annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
+  Modelica.Blocks.Sources.Constant const1(k=1)
+                                          annotation (Placement(transformation(extent={{-100,46},{-80,66}})));
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 
+public
+  SI.Power P_el;
 equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
 
-  epp.P=P_el;
+  if use_Q_flow_input then
+    Q_flow=Q_flow_set_.u;
+    P_el=-Q_flow/COP;
+  else
+    Q_flow=-COP*P_el;
+    P_el=P_el_set_.u;
+  end if;
 
   //charline
   COP=COP_n*1/3.4744*(0.0005*DeltaT^2-0.0973*DeltaT+6.1408); //source: Andreas Palzer. 2016. Sektorübergreifende Modellierung Und Optimierung Eines Zukünftigen Deutschen Energiesystems Unter Berücksichtigung von Energieeffizienzmaßnahmen Im Gebäudesektor. Stuttgart: Fraunhofer Verlag. http://publica.fraunhofer.de/eprints/urn_nbn_de_0011-n-408742-11.pdf.
-  P_el=-Q_flow_set/COP;
 
   //collector
-  collectElectricPower.powerCollector.P=epp.P;
+  collectElectricPower.powerCollector.P=P_el;
 
   // _____________________________________________
   //
@@ -90,6 +101,21 @@ equation
   // _____________________________________________
 
   connect(modelStatistics.powerCollector[collectElectricPower.typeOfResource],collectElectricPower.powerCollector);
+  if usePowerPort then
+    connect(realExpression.y,powerBoundary. P_el_set) annotation (Line(points={{-81,-22},{-78,-22},{-78,-30}}, color={0,0,127}));
+    connect(powerBoundary.epp, epp) annotation (Line(
+      points={{-74,-42},{110,-42},{110,10}},
+      color={0,135,135},
+      thickness=0.5));
+  end if;
+
+  if not
+        (use_Q_flow_input) then
+    connect(P_el_set_.u, P_el_set) annotation (Line(points={{-62,30},{-68,30},{-68,16},{-84,16},{-84,0},{-100,0}},
+                                                                                               color={0,0,127}));
+  else
+    connect(const1.y, P_el_set_.u) annotation (Line(points={{-79,56},{-68,56},{-68,30},{-62,30}}, color={0,0,127}));
+  end if;
 annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Base class for simple heat pump models that produce a given heat flow via fluid ports and use a charline.</p>
@@ -114,7 +140,7 @@ annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] A. Palzer, Sektorübergreifende Modellierung und Optimierung eines zukünftigen deutschen Energiesystems unter Berücksichtigung von Energieeffizienzmaßnahmen im Gebäudesektor. Stuttgart: Fraunhofer Verlag, 2016.</p>
+<p>[1] A. Palzer, &quot;Sektor&uuml;bergreifende Modellierung und Optimierung eines zuk&uuml;nftigen deutschen Energiesystems unter Ber&uuml;cksichtigung von Energieeffizienzma&szlig;nahmen im Geb&auml;udesektor&quot;. Stuttgart: Fraunhofer Verlag, 2016.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de), Feb 2018</p>
 </html>"));

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.SolarThermal.Base;
 model IAM "Calculates the incidence angle modifier"
 
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,7 +35,7 @@ model IAM "Calculates the incidence angle modifier"
   //        Constants and Parameters
   // _____________________________________________
 
-  parameter Integer kind(min=1, max=3)=1 "IAM for direct Irradiance: 1: Constant IAM, 2: IAM as function of b0, 3: IAM by interpolation of record";
+  parameter Integer kind(min=1, max=4)=1 "IAM for direct Irradiance" annotation(choices(choice=1 "Constant IAM", choice=2 "IAM as function of b0", choice=3 "IAM by interpolation of record", choice=4 "IAM by representation of DeSoto2006"));
   parameter Real constant_iam_dir=1 "If a constant IAM is assumed";
   parameter Real constant_iam_diff=1 "If a constant IAM is assumed";
   parameter Real constant_iam_ground=1 "If a constant IAM is assumed";
@@ -90,7 +90,11 @@ equation
      iam_diff=0;
      iam_ground=0;
      b0_interpolated=0;
-
+   elseif kind ==4 then
+     iam_dir=max(0,exp(-(4*0.002/(cos(asin(1/1.526*sin(irradiance.angle_direct_tilted))))))*(1-1/2*(sin(asin(1/1.526*sin(irradiance.angle_direct_tilted))-irradiance.angle_direct_tilted)^2/sin(asin(1/1.526*sin(irradiance.angle_direct_tilted))+irradiance.angle_direct_tilted)^2+tan(asin(1/1.526*sin(irradiance.angle_direct_tilted))-irradiance.angle_direct_tilted)^2/tan(asin(1/1.526*sin(irradiance.angle_direct_tilted))+irradiance.angle_direct_tilted)^2))/(exp(-4*0.002)*(1-((1-1.526)/(1+1.526))^2)));
+     iam_diff=max(0,exp(-(4*0.002/(cos(asin(1/1.526*sin(irradiance.angle_diffuse_tilted))))))*(1-1/2*(sin(asin(1/1.526*sin(irradiance.angle_diffuse_tilted))-irradiance.angle_diffuse_tilted)^2/sin(asin(1/1.526*sin(irradiance.angle_diffuse_tilted))+irradiance.angle_diffuse_tilted)^2+tan(asin(1/1.526*sin(irradiance.angle_diffuse_tilted))-irradiance.angle_diffuse_tilted)^2/tan(asin(1/1.526*sin(irradiance.angle_diffuse_tilted))+irradiance.angle_diffuse_tilted)^2))/(exp(-4*0.002)*(1-((1-1.526)/(1+1.526))^2)));
+     iam_ground=max(0,exp(-(4*0.002/(cos(asin(1/1.526*sin(irradiance.angle_ground_tilted))))))*(1-1/2*(sin(asin(1/1.526*sin(irradiance.angle_ground_tilted))-irradiance.angle_ground_tilted)^2/sin(asin(1/1.526*sin(irradiance.angle_ground_tilted))+irradiance.angle_ground_tilted)^2+tan(asin(1/1.526*sin(irradiance.angle_ground_tilted))-irradiance.angle_ground_tilted)^2/tan(asin(1/1.526*sin(irradiance.angle_ground_tilted))+irradiance.angle_ground_tilted)^2))/(exp(-4*0.002)*(1-((1-1.526)/(1+1.526))^2)));
+     b0_interpolated=0;
    else
      iam_dir=0;
      iam_diff=0;
@@ -108,20 +112,25 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>1. value = const</p>
 <p>2. <img src=\"modelica://TransiEnt/Images/equations/equation-J3qxYr8m.png\" alt=\"value= 1-b0*(1/cos(theta)-1)\"/></p>
 <p>3. value=linear interpolation</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<p>4. representation based on [2]</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>Peter Kovacs: A guide to the standard EN 12975 (2012)</p>
+<p>[1] P. Kovacs, &quot;A guide to the standard EN 12975&quot;, 2012</p>
+<p>[2] PVPerformance Modeling Collaborative,&quot;Physical IAM Model&quot;, URL: https://pvpmc.sandia.gov/modeling-steps/1-weather-design-inputs/shading-soiling-and-reflection-losses/incident-angle-reflection-losses/physical-model-of-iam/, 2018</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Tobias Toerber (tobias.toerber@tuhh.de), Jul 2015</p>
-<p>Edited by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
-<p>Modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
-<p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
+<p>Model modified by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
+<p>Model modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
+<p>Model modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018: IAM representation based on [2] added</p>
 </html>"),
          Icon(graphics={Line(
           points={{-76,54},{4,-94},{82,92}},

@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Functions;
 function efficiency_linear "Approximizes efficiency between two defined points linearly"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,25 +32,30 @@ function efficiency_linear "Approximizes efficiency between two defined points l
   //        Constants and Hidden Parameters
   // _____________________________________________
 
+// parameter Real m=(eta_nominal[1] -eta_nominal[2]) /(P_nominal[1] - P_nominal[2]) "slope between two points";
+// parameter Real b= eta_nominal[1] - P_nominal[1]*m "konstant Coefficient";
+// parameter Real Efficiency_min=eta_nominal[1];
+// parameter Real Efficiency_max= eta_nominal[2];
 protected
-parameter Real m=(eta_P[1] -eta_P[2]) /(P[1] - P[2]) "slope between two points";
-parameter Real b= eta_P[1] - P[1]*m "konstant Coefficient";
-parameter Real Efficiency_min=eta_P[1];
-parameter Real Efficiency_max= eta_P[2];
-
+parameter Real m=(Efficiency_Mat[1,2]-Efficiency_Mat[2,2]) /(Efficiency_Mat[1,1] - Efficiency_Mat[2,2]) "slope between two points";
+parameter Real b= Efficiency_Mat[1,2] - Efficiency_Mat[1,1]*m "konstant Coefficient";
+parameter Real Efficiency_min=Efficiency_Mat[1,2];
+parameter Real Efficiency_max= Efficiency_Mat[2,2];
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 
 public
-input Real[2] P={P_max,P_min} "It is usually the power vector with min and max power of the device in [W], it can be otherwise the backflow temperature for some devices"
-                                                                                              annotation(Dialog);
-input Real[2] eta_P = {eta_P_max,eta_P_min} "Efficiency vector with min and max efficiency of the device" annotation(Dialog);
- input Real P_max=18000;
- input Real eta_P_max( min=0.01,max=1.12)=0.925;
- input Real P_min=10;
- input Real eta_P_min(min=0.01,max=1.12)=0.934;
+input Real Efficiency_Mat[:,2];
+//  input SI.Power P_nominal[:]={P_max,P_min} "Power output for three operating points";
+//  input Real eta_nominal[:] = {eta_P_max,eta_P_min} "Efficiencies for three operating points";
+//input Real[2] P={P_max,P_min} "It is usually the power vector with min and max power of the device in [W], it can be otherwise the backflow temperature for some devices"
+//input Real[2] eta_P = {eta_P_max,eta_P_min} "Efficiency vector with min and max efficiency of the device" annotation(Dialog);
+//  input Real P_max=18000;
+//  input Real eta_P_max( min=0.01,max=1.12)=0.925;
+//  input Real P_min=10;
+//  input Real eta_P_min(min=0.01,max=1.12)=0.934;
 
   // _____________________________________________
   //
@@ -60,12 +65,17 @@ input Real[2] eta_P = {eta_P_max,eta_P_min} "Efficiency vector with min and max 
 algorithm
 eta:=m*x + b;
 
-assert(eta_P[1]<=1.12,  "eta_P[1] invalid (>1.12)");
-assert(eta_P[1]>0.01, "eta_P[1] invalid (<0.01)");
-assert(eta_P[2]<=1.12,  "eta_P[2] invalid (>1.12)");
-assert(eta_P[2]>0.01, "eta_P[2] invalid (<0.01)");
+// assert(eta_P[1]<=1.12,  "eta_P[1] invalid (>1.12)");
+// assert(eta_P[1]>0.01, "eta_P[1] invalid (<0.01)");
+// assert(eta_P[2]<=1.12,  "eta_P[2] invalid (>1.12)");
+// assert(eta_P[2]>0.01, "eta_P[2] invalid (<0.01)");
+assert(Efficiency_Mat[1,2]<=1.12,  "Efficiency_Mat[1,2] invalid (>1.12)");
+assert(Efficiency_Mat[1,2]>0.01, "Efficiency_Mat[1,2] invalid (<0.01)");
+assert(Efficiency_Mat[2,2]<=1.12,  "Efficiency_Mat[2,2] invalid (>1.12)");
+assert(Efficiency_Mat[2,2]>0.01, "Efficiency_Mat[2,2] invalid (<0.01)");
 
-  annotation (Documentation(info="<html>
+                                                                                              annotation(Dialog,
+              Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Gives back linear approximation of efficiency defined by two points.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

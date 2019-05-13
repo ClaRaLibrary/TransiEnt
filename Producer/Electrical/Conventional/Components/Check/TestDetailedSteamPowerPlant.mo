@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model TestDetailedSteamPowerPlant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -77,11 +77,11 @@ end plotResult;
   Modelica.Blocks.Math.Add add2 annotation (Placement(transformation(extent={{-16,-80},{4,-60}})));
 equation
   connect(SteamPowerPlant1.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{-8.45,14.04},{-8.45,26.02},{55.9,26.02},{55.9,45.9}},
+      points={{-8.45,14.04},{-8.45,26.02},{56,26.02},{56,46}},
       color={0,135,135},
       thickness=0.5));
   connect(SteamPowerPlant2.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{49.5,-28.4},{49.5,-28.2},{55.9,-28.2},{55.9,45.9}},
+      points={{49.5,-28.4},{49.5,-28.2},{56,-28.2},{56,46}},
       color={0,135,135},
       thickness=0.5));
   connect(PTarget2.y, add.u2) annotation (Line(points={{-77,-64},{-68,-64},{-68,-50}}, color={0,0,127}));
@@ -92,7 +92,8 @@ equation
   connect(PTarget5.y, add2.u2) annotation (Line(points={{-79,-98},{-72,-98},{-72,-76},{-18,-76}}, color={0,0,127}));
   connect(add1.y, SteamPowerPlant1.P_set) annotation (Line(points={{-45,24},{-24.38,24},{-24.38,20.52}}, color={0,0,127}));
   connect(add2.y, SteamPowerPlant2.P_set) annotation (Line(points={{5,-70},{22,-70},{22,-14},{31.8,-14},{31.8,-21.2}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), experiment(StopTime=50000),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), experiment(StopTime=50000),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

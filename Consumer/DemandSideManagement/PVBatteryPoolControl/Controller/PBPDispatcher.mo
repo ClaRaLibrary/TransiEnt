@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller;
 model PBPDispatcher "Assigns bandwiths to primary balancing providers"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,9 +40,9 @@ model PBPDispatcher "Assigns bandwiths to primary balancing providers"
   //               Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_PBP_offer[nout] "PBP Offer of individual systems" annotation (Placement(transformation(extent={{-120,-30},{-80,10}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_PBP_setpoints[nout](each start=0, each fixed=true) "Individual setpoints for PBP bandwidth of units in pool" annotation (Placement(transformation(extent={{98,-10},{118,10}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_pbp_set annotation (Placement(transformation(extent={{-120,50},{-80,90}})));
+  Modelica.Blocks.Interfaces.RealInput P_el_PBP_offer[nout](each final quantity="Power", each final unit="W", each displayUnit="W") "PBP Offer of individual systems" annotation (Placement(transformation(extent={{-120,-30},{-80,10}})));
+  Modelica.Blocks.Interfaces.RealOutput P_el_PBP_setpoints[nout](each final quantity="Power", each final unit="W", each displayUnit="W", each start=0, each fixed=true) "Individual setpoints for PBP bandwidth of units in pool" annotation (Placement(transformation(extent={{98,-10},{118,10}})));
+  Modelica.Blocks.Interfaces.RealInput P_el_pbp_set(final quantity="Power", final unit="W", displayUnit="W") annotation (Placement(transformation(extent={{-120,50},{-80,90}})));
 
   Modelica.Blocks.Interfaces.IntegerInput communicationTrigger(start=0, fixed=true) "Integer value changes if communication intervall has past" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
@@ -59,7 +59,7 @@ model PBPDispatcher "Assigns bandwiths to primary balancing providers"
 
 algorithm
 
-  when initial() or change(communicationTrigger) then
+  when {initial(), change(communicationTrigger)} then
 
     (, merit_order):= Modelica.Math.Vectors.sort(P_el_PBP_offer, false);  // Pro-Rata method: Largest offer is preferred
 
@@ -84,12 +84,13 @@ algorithm
     end for;
 
     if P_missing > 0 then
-      Modelica.Utilities.Streams.print(">> Warning: PBP Dispatcher could not assign total pool setpoint. Primary balancing might be endangerd!");
+      Modelica.Utilities.Streams.print(">> Warning: PBP Dispatcher could not assign total pool setpoint. Primary balancing might be endangered!");
     end if;
   end when;
 
     annotation (
-      Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+      Diagram(graphics,
+              coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}})),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             100,100}}), graphics={
@@ -149,10 +150,10 @@ algorithm
 <p>P_el_PBP_setpoint: Vector of individual setpoints for units in the pool</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller.Check.CheckPBPDispatcher&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

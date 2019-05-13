@@ -1,11 +1,23 @@
 within TransiEnt.Producer.Heat.SolarThermal;
 model SolarCollectorField_L1 "Solar collector field model with up to 12 collector in series and chooeable number in parallel"
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
+  import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -75,12 +87,13 @@ model SolarCollectorField_L1 "Solar collector field model with up to 12 collecto
   parameter SI.Angle surfaceAzimuthAngle=0 "surface azimuth angle" annotation (Dialog(tab="Irradiance", group="Extraterrestrial Irradiance"));
 
   //Skymodel
-  replaceable model Skymodel=Base.SkymodelBase "choose between isotropic and anisotropic (HDKR) sky model" annotation (choicesAllMatching=true, Dialog(tab="Irradiance", group="Skymodel"));
+  replaceable model Skymodel=Base.Skymodel_HDKR "choose between isotropic and anisotropic (HDKR) sky model" annotation (choicesAllMatching=true, Dialog(tab="Irradiance", group="Skymodel"));
   parameter Real reflectance_ground=0.2 "reflectance of the ground" annotation (Dialog(tab="Irradiance", group="Skymodel"));
   parameter Boolean direct_normal=true "Is the direct irradiance measured on a surface normal to irradiance?" annotation (Dialog(tab="Irradiance", group="Skymodel"));
+  parameter Boolean use_input_data=false "choose if input data is given by inputs - if not, simCenter data is used" annotation (Dialog(tab="Irradiance", group="Skymodel"));
 
   //parameter for IAM
-  parameter Integer kind(min=1, max=3)=1 "different ways to determine the IAM's; 1: constant IAM (assumption) 2: IAM as a function of b0, 3: IAM by interpolation of record" annotation (Dialog(tab="IAM", group="General"));
+  parameter Integer kind(min=1, max=4)=1 "IAM for direct Irradiance" annotation(choices(choice=1 "Constant IAM", choice=2 "IAM as function of b0", choice=3 "IAM by interpolation of record", choice=4 "IAM by representation of DeSoto2006"));
   parameter Real constant_iam_dir=1 "constant IAM for direct irradiation" annotation (Dialog(tab="IAM", group="General"));
   parameter Real constant_iam_diff=1 "constant IAM for diffuse irradiation" annotation (Dialog(tab="IAM", group="General"));
   parameter Real constant_iam_ground=1 "constant IAM for ground-reflected irradiation" annotation (Dialog(tab="IAM", group="General"));
@@ -109,7 +122,7 @@ public
         extent={{-28,-28},{28,28}},
         rotation=90,
         origin={532,370})));
-  Modelica.Blocks.Interfaces.RealOutput T_out annotation (Placement(transformation(extent={{-28,-28},{28,28}},
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_out annotation (Placement(transformation(extent={{-28,-28},{28,28}},
         rotation=90,
         origin={656,102}), iconTransformation(
         extent={{-28,-28},{28,28}},
@@ -117,13 +130,24 @@ public
         origin={612,370})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterIn(Medium=medium) annotation (Placement(transformation(extent={{-760,-20},{-720,20}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortOut waterOut(Medium=medium) annotation (Placement(transformation(extent={{720,-20},{760,20}})));
-
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_direct_measured_input if use_input_data annotation (Placement(transformation(extent={{-20,-20},{20,20}},
+        rotation=90,
+        origin={-40,-160}), iconTransformation(
+        extent={{-20,-20},{20,20}},
+        rotation=90,
+        origin={-120,-420})));
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_diffuse_horizontal_input if use_input_data annotation (Placement(transformation(extent={{-20,-20},{20,20}},
+        rotation=90,
+        origin={40,-160}), iconTransformation(
+        extent={{-20,-20},{20,20}},
+        rotation=90,
+        origin={120,-420})));
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
 
-  SolarCollector_L1 solarcollector_1(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_1(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -153,11 +177,12 @@ public
     theta=theta,
     G_min=G_min,
     n_serial=n_serial,
-    Q_flow_n=Q_flow_n) annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-632,-44})));
-  SolarCollector_L1 solarcollector_2(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_2(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -186,13 +211,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-566,-40})));
 
-  SolarCollector_L1 solarcollector_3(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_3(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -221,13 +246,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-500,-44})));
 
-  SolarCollector_L1 solarcollector_4(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_4(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -256,13 +281,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-428,-44})));
 
-  SolarCollector_L1 solarcollector_5(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_5(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -291,13 +316,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-302,-44})));
 
-  SolarCollector_L1 solarcollector_6(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_6(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -326,13 +351,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-166,-44})));
 
-  SolarCollector_L1 solarcollector_7(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_7(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -361,13 +386,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-50,-44})));
 
-  SolarCollector_L1 solarcollector_8(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_8(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -396,13 +421,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={44,-44})));
 
-  SolarCollector_L1 solarcollector_9(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_9(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -431,13 +456,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={162,-44})));
 
-  SolarCollector_L1 solarcollector_10(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_10(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -466,13 +491,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={266,-44})));
 
-  SolarCollector_L1 solarcollector_11(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_11(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -501,13 +526,13 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={396,-44})));
 
-  SolarCollector_L1 solarcollector_12(
+  TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarcollector_12(
     area=area,
     kind=kind,
     redeclare model Skymodel = Skymodel,
@@ -536,8 +561,8 @@ public
     b0=b0,
     theta=theta,
     G_min=G_min,
-    Q_flow_n=Q_flow_n)
-                 annotation (Placement(transformation(
+    Q_flow_n=Q_flow_n,
+    use_input_data=use_input_data) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={534,-44})));
@@ -761,6 +786,7 @@ public
     downscale=false,
     upscale=true) annotation (Placement(transformation(extent={{648,-54},{668,-34}})));
   Base.ScaleMassFlow dwonscaling(n_parallel=n_parallel) annotation (Placement(transformation(extent={{-706,-68},{-686,-48}})));
+
 equation
   // _____________________________________________
   //
@@ -1059,6 +1085,30 @@ equation
       points={{-740,0},{-738,0},{-738,-58},{-705,-58},{-705,-57.4}},
       color={175,0,0},
       thickness=0.5));
+  if use_input_data then
+     connect(irradiance_diffuse_horizontal_input,solarcollector_1.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_1.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_2.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_2.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_3.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_3.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_4.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_4.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_5.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_5.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_6.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_6.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_7.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_7.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_8.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_8.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_9.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_9.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_10.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_10.irradiance_direct_measured_input);
+     connect(irradiance_diffuse_horizontal_input,solarcollector_11.irradiance_diffuse_horizontal_input);
+     connect(irradiance_direct_measured_input, solarcollector_11.irradiance_direct_measured_input);
+  end if;
   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -1067,27 +1117,34 @@ equation
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Combining several SolarCollector models to one collector field</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>(Purely technical component without physical modeling.)</p>
+<p>L1 (defined in the CodingConventions)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>waterIn: inlet for fluid</p>
+<p>waterOut: outlet for fluid</p>
+<p>G_total: Modelica RealOutput</p>
+<p>T_out: output for temperature in K</p>
+<p>irradiance_direct_measured_input: input for irradiance in W/m2</p>
+<p>irradiance_diffuse_horizontal_input: input for irradiance in W/m2</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no validation or testing necessary)</p>
+<p>Tested in check model &quot;TransiEnt.Producer.Heat.SolarThermal.Check.TestCollectorFluidCycle&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
 <p>Modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018: added possibility to use inputs for solar irradiation</p>
 </html>"),
-    Diagram(coordinateSystem(extent={{-760,-140},{760,140}}, preserveAspectRatio=false)),
+    Diagram(graphics,
+            coordinateSystem(extent={{-760,-140},{760,140}}, preserveAspectRatio=false)),
     Icon(coordinateSystem(extent={{-760,-400},{760,400}}, preserveAspectRatio=false), graphics={
         Rectangle(extent={{-760,400},{760,-400}}, pattern=LinePattern.None),
         Rectangle(

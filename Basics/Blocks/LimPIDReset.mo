@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Blocks;
 block LimPIDReset "P, PI, PD, and PID controller with limited output, anti-windup compensation and setpoint weighting"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -253,7 +253,10 @@ Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica BooleanInput: trigger to reset integrator value</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: connector of setpoint input signal</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: connector of measurement input signal</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealOutput: connector of actuator output signal</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

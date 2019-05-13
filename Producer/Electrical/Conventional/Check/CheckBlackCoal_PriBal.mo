@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckBlackCoal_PriBal
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ model CheckBlackCoal_PriBal
     isSecondaryControlActive=false,
     isExternalSecondaryController=false,
     P_el_n=1e9,
-    P_init=1e9,
+    P_init_set=1e9,
     P_min_star=0.2,
     isPrimaryControlActive=true,
     primaryBalancingController(k_part=1, plantType=TransiEnt.Basics.Types.ControlPlantType.PeakLoad)) annotation (Placement(transformation(extent={{-32,-20},{-12,0}})));
@@ -49,7 +49,7 @@ model CheckBlackCoal_PriBal
     isSecondaryControlActive=false,
     isExternalSecondaryController=false,
     P_el_n=1e9,
-    P_init=1e9,
+    P_init_set=1e9,
     P_min_star=0.2) annotation (Placement(transformation(extent={{-32,-58},{-12,-38}})));
   BlackCoal blackCoal1(
     isSecondaryControlActive=false,
@@ -70,17 +70,17 @@ model CheckBlackCoal_PriBal
     y_start=50) annotation (Placement(transformation(extent={{2,28},{22,48}})));
 equation
   connect(blackCoal_pribal.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{-12.5,-4.4},{23.9,-4.4},{23.9,-4.1}},
+      points={{-13,-3},{24,-3},{24,-4}},
       color={0,135,135},
       thickness=0.5));
   connect(timeTable.y, blackCoal_pribal.P_el_set) annotation (Line(points={{-41,16},{-23.5,16},{-23.5,-0.1}}, color={0,0,127}));
   connect(blackCoal.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{-12.5,-42.4},{2,-42.4},{2,-4.1},{23.9,-4.1}},
+      points={{-13,-41},{2,-41},{2,-4},{24,-4}},
       color={0,135,135},
       thickness=0.5));
   connect(timeTable.y, blackCoal.P_el_set) annotation (Line(points={{-41,16},{-40,16},{-40,18},{-40,-34},{-40,-36},{-23.5,-36},{-23.5,-38.1}}, color={0,0,127}));
   connect(blackCoal1.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{-12.5,-78.4},{2,-78.4},{2,-4.1},{23.9,-4.1}},
+      points={{-13,-77},{2,-77},{2,-4},{24,-4}},
       color={0,135,135},
       thickness=0.5));
   connect(timeTable2.y, blackCoal1.P_el_set) annotation (Line(points={{-51,-68},{-51,-68},{-48,-68},{-23.5,-68},{-23.5,-74.1}},                     color={0,0,127}));
@@ -105,11 +105,33 @@ createPlot(id=1, position={809, 0, 791, 241}, y={"blackCoal1.epp.P", "blackCoal1
 
 end plotResult;
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     experiment(
       StopTime=110000,
       Interval=450,
       __Dymola_Algorithm="Dassl"),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for a black coal power plant model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end CheckBlackCoal_PriBal;

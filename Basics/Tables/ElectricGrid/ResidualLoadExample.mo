@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Tables.ElectricGrid;
 model ResidualLoadExample "Residual load of volatile renewable powers (measured 2015) with fixed powers for Hamburg 2050"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -64,7 +64,7 @@ model ResidualLoadExample "Residual load of volatile renewable powers (measured 
   Modelica.Blocks.Math.MultiSum multiSum(                                  nu=7, k=fill(1, 7))
                                                              annotation (Placement(transformation(extent={{-12,-12},{0,0}})));
   Modelica.Blocks.Math.Add add(k1=+1) annotation (Placement(transformation(extent={{12,-10},{32,10}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el annotation (Placement(transformation(extent={{100,-10},{120,10}}), iconTransformation(extent={{100,-10},{120,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el annotation (Placement(transformation(extent={{100,-10},{120,10}}), iconTransformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Math.Gain gain(k=scaleFactor)
                                        annotation (Placement(transformation(extent={{46,-10},{66,10}})));
   TransiEnt.Producer.Electrical.Wind.WindProfiles.WindProfileLoader OnshoreTable(
@@ -136,7 +136,8 @@ equation
           lineColor={28,108,200},
           textString="set to cover
 60 percent of
-heat demand")}),                                                                                    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+heat demand")}),                                                                                    Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Example for the residual load of volatile renewable Powers with fixed powers for Hamburg in 2050.</p>
@@ -147,7 +148,7 @@ heat demand")}),                                                                
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>Modelica RealOutput: electric power in W</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

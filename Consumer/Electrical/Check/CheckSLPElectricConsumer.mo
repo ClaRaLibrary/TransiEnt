@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Check;
 model CheckSLPElectricConsumer
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ equation
   // _____________________________________________
 
   connect(ElectricGrid.epp, CommerceConsumer.epp) annotation (Line(
-      points={{-11.85,-12.16},{5.075,-12.16},{5.075,-12},{20.34,-12}},
+      points={{-12,-12},{5.075,-12},{5.075,-12},{20.34,-12}},
       color={0,135,135},
       thickness=0.5));
 public
@@ -67,12 +67,14 @@ createPlot(id=1, position={809, 0, 791, 228}, y={"CommerceConsumer.annualDemand_
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{100,80}})),
-                                        Icon(coordinateSystem(extent={{-80,-80},
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{100,80}})),
+                                        Icon(graphics,
+                                             coordinateSystem(extent={{-80,-80},
             {100,80}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Test environment for checking the standard load profile based consumer </p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Base;
 model WindturbineRotor
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ model WindturbineRotor
 
   parameter TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.BetzCoefficientApproximation turbineCharacteristics=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.MOD2() "Characteristic behaviour of betz factor" annotation (choicesAllMatching=true);
   parameter SI.Velocity v_fullLoad=12 "nominal wind speed";
-  final parameter Modelica.SIunits.Length D=(8*P_el_n/(Modelica.Constants.pi*rho*v_fullLoad^3*cp_opt))^0.5 "Rotor diameter";
+  parameter Modelica.SIunits.Length D=(8*P_el_n/(Modelica.Constants.pi*rho*v_fullLoad^3*cp_opt))^0.5 "Rotor diameter";
 
   parameter Real beta_start = 0 "Setpoint for pitch angle";
 
@@ -72,9 +72,8 @@ model WindturbineRotor
   //
   //                  Interfaces
   // _____________________________________________
-
-  Modelica.Blocks.Interfaces.RealInput v_wind(unit="m/s") "Wind velocity"   annotation (Placement(transformation(origin={-110,0}, extent={{-10,-10},{10,10}}), iconTransformation(origin={-94,-2}, extent={{-10,-10},{10,10}})));
-  Modelica.Blocks.Interfaces.RealInput beta_set(start=beta_start) "Setpoint Pitch angle"                                    annotation (Placement(transformation(origin={-110,36}, extent={{-10,-10},{10,10}}), iconTransformation(
+  TransiEnt.Basics.Interfaces.Ambient.VelocityIn v_wind  "Wind velocity"   annotation (Placement(transformation(origin={-110,0}, extent={{-10,-10},{10,10}}), iconTransformation(origin={-94,-2}, extent={{-10,-10},{10,10}})));
+  Modelica.Blocks.Interfaces.RealInput beta_set(start=beta_start, final quantity= "Angle", final unit="rad", displayUnit="deg")    "Setpoint Pitch angle"                                    annotation (Placement(transformation(origin={-110,36}, extent={{-10,-10},{10,10}}), iconTransformation(
         origin={0,96},
         extent={{-10,-10},{10,10}},
         rotation=270)));
@@ -152,7 +151,8 @@ equation
           extent={{-7,4},{-1,-2}},
           lineColor={0,0,0},
           fillColor={95,95,95},
-          fillPattern=FillPattern.Sphere)}), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+          fillPattern=FillPattern.Sphere)}), Diagram(graphics,
+                                                     coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
@@ -166,7 +166,7 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components;
 model VDI3508Plant "Transient behaviour according to VDI 3508, three operating states (halt, startup, operation) without primary control"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -67,10 +67,10 @@ model VDI3508Plant "Transient behaviour according to VDI 3508, three operating s
   // Expert Settings (Numerical)
   parameter SI.Time t_eps=10 "Set point power has to be above the minimum power for t_eps time before plant leaves halt state"
                                                                                                     annotation(Dialog(tab="Expert Settings"));
-  parameter SI.Time T_thresh=0.2 "Time constant of numerical element between saturation block and slew rate limiter block"
-                                                                                                    annotation(Dialog(tab="Expert Settings"));
+  //parameter SI.Time T_thresh=0.2 "Time constant of numerical element between saturation block and slew rate limiter block"
+  //                                                                                                  annotation(Dialog(tab="Expert Settings"));
   parameter SI.Frequency y_grad_inf=1 "Very high power gradient used for plant shut-down" annotation(Dialog(tab="Expert Settings"));
-  parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
+  parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(tab="Expert Settings"));
 
   parameter SI.Time Td=simCenter.Td "Time constant of integrator"
@@ -82,6 +82,7 @@ model VDI3508Plant "Transient behaviour according to VDI 3508, three operating s
   parameter Real thres=simCenter.thres "If abs(u-y)< thres, y becomes a simple pass through of u. Increasing thres can improve simulation speed. However to large values can make the simulation unstable. 
      A good starting point is the choice thres = tolerance/1000."
     annotation (Dialog(tab="Expert Settings"));
+  parameter Real thres_hyst=1e-10 "Threshold for hysteresis for switch from halt to startup (chattering might occur, hysteresis might help avoiding this)" annotation (Dialog(tab="Expert Settings"));
 
   // _____________________________________________
   //
@@ -95,10 +96,12 @@ model VDI3508Plant "Transient behaviour according to VDI 3508, three operating s
     P_min_operating=P_min_star,
     P_grad_operating=P_grad_max_star,
     P_grad_inf=y_grad_inf,
-    T_thresh=T_thresh,
     Td=Td,
     useThresh=useThresh,
-    thres=thres) annotation (Placement(transformation(extent={{-128,32},{-108,52}})));
+    thres=thres,
+    thres_hyst=thres_hyst)
+                 annotation (Placement(transformation(extent={{-128,32},{-108,52}})));
+    //T_thresh=T_thresh,
   Modelica.Blocks.Math.Gain normalize(k=1/P_el_n) annotation (Placement(transformation(
         extent={{6,-6},{-6,6}},
         rotation=90,
@@ -119,14 +122,18 @@ model VDI3508Plant "Transient behaviour according to VDI 3508, three operating s
     y_T_slp=y_T_slp) annotation (Placement(transformation(extent={{-84,34},{-68,50}})));
   TransiEnt.Components.Boundaries.Mechanical.Power MechanicalBoundary annotation (Placement(transformation(extent={{8,-12},{28,8}})));
   TransiEnt.Components.Mechanical.TwoStateInertiaWithIdealClutch MechanicalConnection(
-    w(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
+    omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid,
     P_n=P_el_n) annotation (choicesAllMatching=true, Placement(transformation(extent={{36,-13},{52,10}})));
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "Choice of generator model. The generator model must match the power port." annotation (Dialog(group="Replaceable Components"), choicesAllMatching=true, Placement(transformation(
         extent={{-11.5,-12},{11.5,12}},
         rotation=0,
         origin={72.5,0})));
+ replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem "Choice of excitation system model with voltage control" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={72.5,44})));
 
   Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=is_running) annotation (Placement(transformation(extent={{16,20},{36,40}})));
 
@@ -136,6 +143,7 @@ model VDI3508Plant "Transient behaviour according to VDI 3508, three operating s
   // _____________________________________________
 
   Real P_el_set_star = normalize.y;
+
 equation
   // _____________________________________________
   //
@@ -159,9 +167,9 @@ equation
   connect(deNormalize.y, MechanicalBoundary.P_mech_set) annotation (Line(points={{12.3,17},{18,17},{18,9.8}},   color={0,0,127}));
   connect(MechanicalBoundary.mpp, MechanicalConnection.mpp_a) annotation (Line(points={{28,-2},{28,-1.5},{36,-1.5}},    color={95,95,95}));
   connect(deNormalize.u, SteamTurbine_MSP.y) annotation (Line(points={{5.4,17},{0.7,17},{0.7,-6},{-5.2,-6}}, color={0,0,127}));
-  connect(MechanicalConnection.mpp_b, Generator.mpp) annotation (Line(points={{52,-1.5},{60,-1.5},{60,-0.6},{60.425,-0.6}},     color={95,95,95}));
+  connect(MechanicalConnection.mpp_b, Generator.mpp) annotation (Line(points={{52,-1.5},{60,-1.5},{60,0},{61,0}},               color={95,95,95}));
   connect(Generator.epp, epp) annotation (Line(
-      points={{84.115,-0.12},{100,-0.12},{100,60}},
+      points={{84.115,-0.12},{100,-0.12},{100,78}},
       color={0,135,135},
       thickness=0.5));
   connect(setPointLimiter.P_set_star_lim, SteamGenerator_MSP.Q_flow_set) annotation (Line(points={{-106.8,42},{-106,42},{-106,26},{-106,-6},{-96.4,-6}}, color={0,0,127}));
@@ -170,6 +178,11 @@ equation
   connect(normalize.y, setPointLimiter.P_set_star) annotation (Line(points={{-60,61.4},{-60,61.4},{-60,56},{-60,58},{-136,58},{-136,42},{-128,42}}, color={0,0,127}));
   connect(normalize.u, P_el_set) annotation (Line(points={{-60,75.2},{-60,100},
           {-60,100}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{72.5,54},{70,54},{70,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{72.5,33.4},{72.5,23.7},{72.155,23.7},{72.155,11.88}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{100,100}}),
                                graphics={
     Text( lineColor={255,255,0},
@@ -263,5 +276,6 @@ equation
 <p>Pitscheider, 2007</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Ricardo Peniche</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end VDI3508Plant;

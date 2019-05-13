@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Base;
 partial model PartialHeatPumpCharlineHeatPort_L1 "Partial heat pump model that produces a given heat flow via a heat port with a charline"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -66,6 +66,8 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
+  heatFlowBoundary.Q_flow=Q_flow;
+
   DeltaT=heat.T - T_source_internal;
 
   // _____________________________________________
@@ -73,9 +75,8 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  connect(heatFlowBoundary.port, heat) annotation (Line(points={{60,0},{30,0},{30,-100},{0,-100}},
+  connect(heatFlowBoundary.port, heat) annotation (Line(points={{60,0},{74,0},{74,-100},{0,-100}},
                                                                                  color={191,0,0}));
-  connect(Q_flow_set, heatFlowBoundary.Q_flow) annotation (Line(points={{-104,0},{40,0}}, color={0,0,127}));
 annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Base class for simple heat pump models that produce a given heat flow via a heat port and use a charline.</p>

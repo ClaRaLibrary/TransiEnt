@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model DetailedSteamPowerPlant_InitCycle
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,6 @@ model DetailedSteamPowerPlant_InitCycle
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
-  extends ClaRa.Basics.Icons.Init;
   import TILMedia.VLEFluidFunctions.*;
   import SI = ClaRa.Basics.Units;
   // _____________________________________________
@@ -44,8 +43,8 @@ model DetailedSteamPowerPlant_InitCycle
                        choice=simCenter.fluid2 "Second fluid defined in global simCenter",
                        choice=simCenter.fluid3 "Third fluid defined in global simCenter"),
                                                           Dialog(group="Fundamental Definitions"));
-  parameter Modelica.SIunits.Power  P_nom;
-  inner parameter SI.MassFlowRate   m_flow_nom=7.38e-7*P_nom - 6.37;
+  parameter Modelica.SIunits.Power P_n;
+  inner parameter SI.MassFlowRate m_flow_nom=7.38e-7*P_n - 6.37;
   inner parameter Real P_target_=1;
   // Heat Exchangers
   parameter SI.Pressure p_condenser=3800 annotation(Dialog(tab="Heat exchangers",group="Condenser"));
@@ -344,7 +343,8 @@ equation
   connect(valve_cut.outlet, boiler.coldReheat) annotation (Line(points={{-69.55,3},{-72,3},{-72,17.6}}, color={0,131,169}));
   connect(preheater_HP.cond_out, boiler.feedWater) annotation (Line(points={{-76,-9.5},{-76,17.6}}, color={0,131,169}));
   connect(boiler.liveSteam, triple2.steamSignal) annotation (Line(points={{-76,38.4},{-84,38.4},{-84,51.9286},{-92.375,51.9286}}, color={0,131,169}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
@@ -365,5 +365,38 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Ricardo Peniche (peniche@tuhh.de)</span></p>
-</html>"));
+</html>"),
+    Icon(graphics={
+        Rectangle(
+          extent={{-102,100},{98,-100}},
+          lineColor={0,134,171},
+          fillColor={5,130,175},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Rectangle(
+          extent={{-92,90},{88,-90}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-64,56},{56,-64}},
+          lineColor={0,157,255},
+          pattern=LinePattern.None,
+          fillPattern=FillPattern.Solid,
+          fillColor={7,128,172}),
+        Rectangle(
+          extent={{-34,28},{26,-32}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Text(
+          extent={{36,-70},{88,-90}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          textString="name",
+          textStyle={TextStyle.Bold})}));
 end DetailedSteamPowerPlant_InitCycle;

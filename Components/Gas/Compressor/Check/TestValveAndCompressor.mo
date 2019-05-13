@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Compressor.Check;
-model TestValveAndCompressor
+model TestValveAndCompressor "Model for testing the valve and compressor models"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -119,10 +119,36 @@ equation
       thickness=1.5));
   connect(source2.m_flow, ramp_sink_mflow1.y) annotation (Line(points={{-62,-80},{-69,-80}}, color={0,0,127}));
   annotation (
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{120,100}})),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,120}})),
+    Icon(graphics,
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{120,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,120}})),
     experiment(StopTime=7200),
           Documentation(info="<html>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Feb 10 2017<br> </p>
-</html>"));
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for valves and compressors</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Feb 10 2017</p>
+</html>"),
+    __Dymola_experimentFlags(
+      Advanced(GenerateVariableDependencies=false, OutputModelicaCode=false),
+      Evaluate=false,
+      OutputCPUtime=true,
+      OutputFlatModelica=true));
 end TestValveAndCompressor;

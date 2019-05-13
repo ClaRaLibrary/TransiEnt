@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckSimplePowerPlant "Example of the component SimplePowerPlant"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,7 +40,7 @@ model CheckSimplePowerPlant "Example of the component SimplePowerPlant"
 equation
 
   connect(Generator.epp, LinearConsumer.epp) annotation (Line(
-      points={{18.95,-67.68},{36,-67.68},{36,-68},{64.2,-68}},
+      points={{17.9,-64.6},{36,-64.6},{36,-68},{64.2,-68}},
       color={0,135,135},
       thickness=0.5));
   connect(P_el_set.y, Generator.P_el_set) annotation (Line(points={{-55,-46},{-28,-46},{-4.15,-46},{-4.15,-58.22}}, color={0,0,127}));
@@ -76,7 +76,8 @@ P_load_step.y
 LinearConsumer.epp.P")}),
     experiment(StopTime=15000),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-120},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-120},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

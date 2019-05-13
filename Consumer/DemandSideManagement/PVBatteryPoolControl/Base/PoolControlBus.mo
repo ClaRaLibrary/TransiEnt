@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Base;
 expandable connector PoolControlBus "Empty control bus that is adapted to the signals connected to it"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -55,11 +55,11 @@ expandable connector PoolControlBus "Empty control bus that is adapted to the si
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p>None</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<pre>P_potential_pbp: Vector of Primary balancing power offer / potentials of units within a pool
-P_el_set_pbp: Vector of Primary balancing power setpoints for units within a pool</pre>
+<p>P_potential_pbp: Vector of Primary balancing power offer / potentials of units within a pool</p>
+<p>P_el_set_pbp: Vector of Primary balancing power setpoints for units within a pool</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">None</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The unit is supposed to add zeros to all components in each vector apart from its own index.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p>No phyical validation required. For technical validation see: Check.CheckPoolControlBus</p>

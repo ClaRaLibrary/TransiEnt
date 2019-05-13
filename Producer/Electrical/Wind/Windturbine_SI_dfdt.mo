@@ -3,10 +3,10 @@ model Windturbine_SI_dfdt "Pitch controlled WTG with df/dt Synthetic Inertia"
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,19 +49,20 @@ model Windturbine_SI_dfdt "Pitch controlled WTG with df/dt Synthetic Inertia"
   parameter Real v_wind_start "Wind speed start value" annotation (Dialog(tab="Wind Turbine Data"));
 
   parameter Boolean use_inertia= false "activate synthetic inertia";
+  parameter Boolean integratePower=false "True if power shall be integrated";
 
   // _____________________________________________
   //
   //       Final and protected parameters
   // _____________________________________________
 
-  final parameter SI.AngularVelocity w_start = if v_wind_start>12 then w_nom else if (v_wind_start > 4 and v_wind_start<12) then (Rotor.lambda_opt/Rotor.D *2*v_wind_start) else 1e-3;
+  final parameter SI.AngularVelocity omega_start=if v_wind_start > 12 then omega_n else if (v_wind_start > 4 and v_wind_start < 12) then (Rotor.lambda_opt/Rotor.D*2*v_wind_start) else 1e-3;
 //  final parameter Real v_fullload = (8*P_el_n
 //                                            /(Rotor.rho*Modelica.Constants.pi*Rotor.D^2*Rotor.cp_opt))^(1/3);
-  final parameter SI.AngularVelocity w_nom=Rotor.lambda_opt*operationRanges.v_fullLoad*2/Rotor.D;
+  final parameter SI.AngularVelocity omega_n=Rotor.lambda_opt*operationRanges.v_fullLoad*2/Rotor.D;
 
 protected
-  Modelica.Blocks.Interfaces.RealInput f_internal "Needed to connect to conditional connector";
+ TransiEnt.Basics.Interfaces.General.FrequencyIn f_internal "Needed to connect to conditional connector";
   // _____________________________________________
   //
   //           Instances of other Classes
@@ -111,7 +112,7 @@ public
     radius=Rotor.D/2,
     cp_opt=Rotor.cp_opt,
     torqueControllerDisabled(uLow=0.98*pitchController.turbine.v_fullLoad, uHigh=1.02*pitchController.turbine.v_fullLoad),
-    T_nom=P_el_n/w_nom,
+    tau_n=P_el_n/omega_n,
     v_cutIn=operationRanges.v_cutIn,
     v_fullLoad=operationRanges.v_fullLoad) annotation (Placement(transformation(rotation=0, extent={{6,22},{26,42}})));
 
@@ -120,13 +121,12 @@ public
 
   Modelica.Blocks.Math.Add add(k2=-1)
     annotation (Placement(transformation(extent={{-62,86},{-42,106}})));
-  Modelica.Blocks.Sources.RealExpression freq_nom(y=50)
+  Modelica.Blocks.Sources.RealExpression f_n(y=50)
     annotation (Placement(transformation(extent={{-100,94},{-72,112}})));
 
   Modelica.Blocks.Sources.RealExpression Torque_pu(y=T_pu)
     annotation (Placement(transformation(extent={{-94,-84},{-66,-66}})));
-  Modelica.Blocks.Sources.RealExpression omega_pu(y=Generator.omega/w_nom)
-    annotation (Placement(transformation(extent={{-94,-100},{-66,-82}})));
+  Modelica.Blocks.Sources.RealExpression omega_pu(y=Generator.omega/omega_n) annotation (Placement(transformation(extent={{-94,-100},{-66,-82}})));
   Modelica.Blocks.Sources.RealExpression der_f(y=der_f_grid)
     annotation (Placement(transformation(extent={{-40,106},{-12,124}})));
   Modelica.Blocks.Sources.RealExpression P_el_pu(y=P_powerplant_pu)
@@ -137,8 +137,8 @@ public
     annotation (Placement(transformation(extent={{-60,44},{-32,62}})));
   TransiEnt.Producer.Electrical.Wind.Base.DeadbandFilter deadbandFilter annotation (Placement(transformation(rotation=0, extent={{-18,86},{2,106}})));
   TransiEnt.Components.Mechanical.ConstantInertia Inertia(
+    omega(start=omega_start),
     nSubgrid=1,
-    w(start=w_start),
     J=J) annotation (choicesAllMatching=true, Placement(transformation(extent={{-16,-33},{8,-4}})));
 
   // _____________________________________________
@@ -153,6 +153,11 @@ public
   Real no_inertia=50;
   Boolean is_running(start=true, fixed=true) "For continuous plants always true, for discontinous depending on state";
 
+  TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter    annotation (Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={62.5,18})));
+
 equation
   // _____________________________________________
   //
@@ -160,11 +165,16 @@ equation
   // _____________________________________________
 
   is_running=not pitchController.halt.active;
+
+  if integratePower then
   der(E_rot)=Inertia.P_rot;
+  else
+    E_rot=0;
+  end if;
 
     der_f_grid=der(epp.f);
   P_powerplant_pu=-P_el_is/P_el_n;
-  T_pu=Generator.T_set/torqueController.T_nom;
+  T_pu=Generator.tau_set/torqueController.tau_n;
 
   if not use_inertia then
     f_internal=no_inertia; //no meassurement of df_dt
@@ -191,14 +201,12 @@ end if;
           {-66,52},{-66,12.2},{-62,12.2}},
                                   color={0,0,127}));
 
-  connect(freq_nom.y,add. u1)
-    annotation (Line(points={{-70.6,103},{-64,103},{-64,102}},
-                                                            color={0,0,127}));
+  connect(f_n.y, add.u1) annotation (Line(points={{-70.6,103},{-64,103},{-64,102}}, color={0,0,127}));
   connect(freq.y, add.u2)
     annotation (Line(points={{-72.6,91},{-64,91},{-64,90}}, color={0,0,127}));
   connect(omega_is.y, torqueController.omega_is) annotation (Line(points={{-2.6,25},{6.6,25},{6.6,24.8}},
                                           color={0,0,127}));
-  connect(torqueController.y, Generator.T_set) annotation (Line(points={{26.4,32},{29.58,32},{29.58,-2.15}},
+  connect(torqueController.y, Generator.tau_set) annotation (Line(points={{26.4,32},{16.98,32},{16.98,-26.75}},
                                      color={0,0,127}));
   connect(pitchController.beta_set, Rotor.beta_set) annotation (Line(points={{-37.8154,9.6},{-32,9.6},{-32,-8.4}},
                                                color={0,0,127}));
@@ -225,11 +233,18 @@ end if;
                                                         color={0,0,127}));
   connect(Rotor.flange, Inertia.mpp_a) annotation (Line(points={{-21.8,-18},{-16,
           -18},{-16,-18.5}}, color={0,0,0}));
-  connect(Inertia.mpp_b, Generator.mpp) annotation (Line(points={{8,-18.5},{12,-18.5},
-          {12,-17.75},{15.3,-17.75}}, color={95,95,95}));
+  connect(Inertia.mpp_b, Generator.mpp) annotation (Line(points={{8,-18.5},{12,-18.5},{12,-17},{16,-17}},
+                                      color={95,95,95}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{62.5,28},{72,28},{72,60},{82,60},{82,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{62.5,7.4},{46.25,7.4},{46.25,-2.15},{29.58,-2.15}}, color={0,0,127}));
     annotation (
-              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,120}})),                                                                     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+              Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,120}})),                                                                     Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,120}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -239,7 +254,8 @@ end if;
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: choice of power port</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">v_wind: input for velocity of wind in m/s</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -249,7 +265,7 @@ end if;
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Validated according to reference stated below.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Wu, Lei: &QUOT;Towards an Assessment of Power System Frequency Support From Wind Pland - Modeling Aggregate Inertial Response&QUOT;</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">[1] Wu, Lei: &quot;Towards an Assessment of Power System Frequency Support From Wind Pland - Modeling Aggregate Inertial Response&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Rebekka Denninger (rebekka.denninger@tuhh.de) on June 21 2016</span></p>
 </html>"));

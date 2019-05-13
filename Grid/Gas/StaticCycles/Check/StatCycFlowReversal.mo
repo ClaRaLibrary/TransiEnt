@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model StatCycFlowReversal
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,7 +49,8 @@ model StatCycFlowReversal
 equation
   connect(source.outlet, pipe.inlet) annotation (Line(points={{-38.51,0},{-38.51,0},{-8.3,0}},                   color={0,0,0}));
   connect(pipe.outlet, sink.inlet) annotation (Line(points={{10.2,0},{41.66,0},{41.66,3.33067e-016}}, color={0,0,0}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Tester for static cycle.</p>

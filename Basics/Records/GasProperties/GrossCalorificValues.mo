@@ -1,11 +1,11 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
-record GrossCalorificValues "Record containing the gross calorific values for different molecules in MJ per kg for 25 °C"
+record GrossCalorificValues "Record containing the gross calorific values for different molecules in J per kg for 25 °C"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,8 +21,6 @@ record GrossCalorificValues "Record containing the gross calorific values for di
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  // Reference: DIN EN ISO 6976, „Erdgas - Berechnung von Brenn- und Heizwert, Dichte, relativer Dichte und Wobbeindex aus der Zusammensetzung“, Deutsches Institut für Normung DIN, Berlin, Sep-2005.
-
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -35,8 +33,8 @@ record GrossCalorificValues "Record containing the gross calorific values for di
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  parameter String[:] components =  {"Water", "CARBON_MONOXIDE", "CO",     "HYDROGEN",  "HYDROGEN(eos=SRK,REF=STP)",      "H2",     "Nitrogen", "Nitrogen(eos=SRK,REF=STP)",   "N2",   "CARBON_DIOXIDE", "CARBON_DIOXIDE(eos=SRK,REF=STP)",   "CO2",   "Methane",  "Methane(eos=SRK,REF=STP)",  "CH4",  "Ethane",  "Ethane(eos=SRK,REF=STP)",  "C2H6", "Propane", "Propane(eos=SRK,REF=STP)", "C3H8",  "Butane", "Butane(eos=SRK,REF=STP)", "C4H10", "Oxygen", "O2"};
-  parameter Real[:]   compValues =  {2.44, 10.10,             10.10,    141.79,       141.79,                  141.79,    0.0,        0.0,                   0.0,    0.0,             0.0,                         0.0,     55.516,      55.516,             55.516, 51.90,     51.90,              51.90,   50.33,     50.33,             50.33,   49.51,    49.51,             49.51,    0.0,      0.0};
+  parameter String[:] components =  {"Water", "Carbon_Monoxide", "CO",   "Hydrogen", "Hydrogen(eos=SRK,REF=STP)", "H2",    "Nitrogen", "Nitrogen(eos=SRK,REF=STP)", "N2", "Carbon_Dioxide", "Carbon_Dioxide(eos=SRK,REF=STP)", "CO2", "Methane", "Methane(eos=SRK,REF=STP)", "CH4",  "Ethane",  "Ethane(eos=SRK,REF=STP)", "C2H6", "Propane", "Propane(eos=SRK,REF=STP)", "C3H8",  "Butane", "Butane(eos=SRK,REF=STP)", "C4H10", "Oxygen", "O2"};
+  parameter Real[:]   compValues =  {2.442,    10.103,           10.103, 141.788,    141.788,                     141.788, 0.0,        0.0,                         0.0,  0.0,              0.0,                               0.0,   55.515,    55.515,                     55.515, 51.900,    51.902,                    51.902, 50.325,    50.325,                     50.325,  49.505,   49.505,                    49.505,  0.0,      0.0}*1e6;
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -51,15 +49,16 @@ record GrossCalorificValues "Record containing the gross calorific values for di
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The components vector contains the component names.</p>
-<p>In the params vector the mass weighted gross calorific value for each component is defined in MJ/kg at 25 &deg;C</p>
+<p>In the params vector the mass weighted gross calorific value for each component is defined in J/kg at 25 &deg;C</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>Be sure to store the mass weighted gross calorific value for each component in params in the same column in which the name is stored in the components vector.</p>
 <p>In component names with two words, these are to be separated by an underscore. Don&apos;t use spaces, as in the shortenCompName functions spaces are replaced by underscores!</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>G. Cerbe, B. Lendt, K. Br&uuml;ggemann, M. Dehli, F. Gr&ouml;schl, K. Heikrodt, T. Kleiber, J. Kuck, J. Mischner, T. Schmidt, A. Seemann, and W. Thielen, Grundlagen der Gastechnik. Gasbeschaffung - Gasverteilung - Gasverwendung, 8th ed. M&uuml;nchen: Carl Hanser Verlag, 2017.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Lisa Andresen (andresen@tuhh.de), Nov 2016</p>
+<p>Revised by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));
 end GrossCalorificValues;

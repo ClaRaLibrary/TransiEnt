@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Heat;
 model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
         extent={{20,-20},{-20,20}},
         rotation=0,
         origin={-64,30})));
-  TransiEnt.Basics.Blocks.Sources.PowerExpression powerExpression(y=-0.5e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
+  TransiEnt.Basics.Blocks.Sources.HeatExpression  heatExpression( y=-0.5e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
   ClaRa.Components.MechanicalSeparation.BalanceTank_L3 balanceTank1(
     diameter_i=10,
     s_wall=0.02,
@@ -241,19 +241,15 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn consumerInlet(Medium=medium) annotation (Placement(transformation(extent={{117,157},{123,163}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn producerInlet(Medium=medium) annotation (Placement(transformation(extent={{-303,-103},{-297,-97}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortOut producerOutlet(Medium=medium) annotation (Placement(transformation(extent={{-303,-163},{-297,-157}})));
-  Modelica.Blocks.Interfaces.RealOutput T1
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T1
                                           "Temperature in port medium" annotation (Placement(transformation(extent={{-300,-184},{-308,-176}})));
 equation
-  connect(powerExpression.y,consumer1. Q_flow_prescribed) annotation (Line(
-      points={{-81,54},{-50,54},{-50,48.4}},
-      color={0,135,135},
-      pattern=LinePattern.Dash));
   connect(pressure_reduction_valve.inlet, ambience.gas_a) annotation (Line(
-      points={{-132,-101},{-126,-101},{-124,-101}},
+      points={{-132,-102},{-126,-101},{-124,-101}},
       color={118,106,98},
       thickness=0.5));
   connect(balanceTank1.vent1, pressure_reduction_valve.outlet) annotation (Line(
-      points={{-165,-128},{-165,-100.5},{-152,-100.5},{-152,-101}},
+      points={{-165,-128},{-165,-100.5},{-152,-100.5},{-152,-102}},
       color={118,106,98},
       thickness=0.5));
   connect(make_up_ctrl_valve.outlet, balanceTank1.inlet1) annotation (Line(
@@ -276,7 +272,7 @@ equation
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(pipe1.outlet, consumer1.fluidPortIn) annotation (Line(
-      points={{-12,-20},{-12,-20},{-12,10.4},{-49.2,10.4}},
+      points={{-12,-20},{-12,-20},{-12,10},{-52,10}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
@@ -295,7 +291,7 @@ equation
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(join_hot.inlet2, consumer1.fluidPortOut) annotation (Line(
-      points={{-226,10},{-81.2,10},{-81.2,10.4}},
+      points={{-226,10},{-76,10},{-76,10}},
       color={0,131,169},
       thickness=0.5));
   connect(join_hot.inlet1, pipe4.outlet) annotation (Line(
@@ -346,6 +342,10 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(temperature.T, T1) annotation (Line(points={{-219,-180},{-304,-180}}, color={0,0,127}));
+  connect(heatExpression.y, consumer1.Q_flow_prescribed) annotation (Line(
+      points={{-81,54},{-52,54},{-52,46}},
+      color={175,0,0},
+      pattern=LinePattern.Dash));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-300,-220},{200,160}},
         initialScale=1), graphics={Rectangle(
           extent={{-300,160},{200,-220}},
@@ -381,7 +381,11 @@ Documentation(info="<html>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>consumerOutlet: FluidPortOut</p>
+<p>consumerInlet: FluidPortIn</p>
+<p>producerInlet: FluidPortIn</p>
+<p>producerOutlet: FluidPortOut</p>
+<p>T1: output for temperature in [K]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

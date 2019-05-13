@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Engines.Check;
-model Test_HeatFlow
+model Test_HeatFlow "Tester for static heat flow"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,8 +27,7 @@ model Test_HeatFlow
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={74,-24})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi waterSink(p_const=
-        simCenter.p_n[2]) annotation (Placement(transformation(
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi waterSink(p_const=simCenter.p_nom[2]) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={74,8})));
@@ -58,6 +57,7 @@ model Test_HeatFlow
   Mechanics.StaticEngineMechanics staticEngineMechanics annotation (Placement(transformation(extent={{-20,42},{18,76}})));
   Electrical.Machines.ActivePowerGenerator activePowerGenerator annotation (Placement(transformation(extent={{28,50},{48,70}})));
   Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{56,50},{76,70}})));
+  Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem dummyExcitationSystem annotation (Placement(transformation(extent={{58,80},{38,100}})));
 equation
   connect(temperatureWaterIn.port,waterSource. steam_a) annotation (Line(
       points={{52,-28},{52,-24},{64,-24}},
@@ -85,8 +85,34 @@ equation
   connect(booleanStep.y, staticEngineMechanics.switch) annotation (Line(points={{-53,-30},{-44,-30},{-40,-30},{-40,50.5},{-19.62,50.5}}, color={255,0,255}));
   connect(sine.y, staticEngineMechanics.P_el_set) annotation (Line(points={{-53,2},{-48,2},{-48,59},{-19.62,59}}, color={0,0,127}));
   connect(activePowerGenerator.epp,ElectricGrid. epp) annotation (Line(
-      points={{48.1,59.9},{55.9,59.9}},
+      points={{48.1,59.9},{52,59.9},{52,60},{56,60}},
       color={0,135,135},
       thickness=0.5));
-  connect(staticEngineMechanics.mpp, activePowerGenerator.mpp) annotation (Line(points={{18.19,58.915},{23.095,58.915},{23.095,59.5},{27.5,59.5}}, color={95,95,95}));
+  connect(staticEngineMechanics.mpp, activePowerGenerator.mpp) annotation (Line(points={{18.19,58.915},{23.095,58.915},{23.095,60},{28,60}},       color={95,95,95}));
+  connect(dummyExcitationSystem.y, activePowerGenerator.E_input) annotation (Line(points={{37.4,90},{37.7,90},{37.7,69.9}}, color={0,0,127}));
+  connect(dummyExcitationSystem.epp1, ElectricGrid.epp) annotation (Line(
+      points={{58,90},{58,60},{56,60}},
+      color={0,135,135},
+      thickness=0.5));
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the static heat flow</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Test_HeatFlow;

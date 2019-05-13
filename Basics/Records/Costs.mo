@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Records;
-model Costs
+model Costs "Model for generating a summary for costs"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,13 +41,13 @@ model Costs
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>(Description) </p>
+<p>This model can be used to generate a summary for costs</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>input for costs, invest costs, demand costs, operation-related costs, other costs and revenue</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

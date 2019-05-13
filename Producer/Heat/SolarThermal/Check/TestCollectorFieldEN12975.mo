@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.SolarThermal.Check;
-model TestCollectorFieldEN12975
+model TestCollectorFieldEN12975 "Tester for a solar collector field using fluid boundaries and controller"
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -102,7 +102,7 @@ equation
   connect(source.T, realExpression.y) annotation (Line(points={{-66,-22},{-71,-22}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Test Modell for CollectorFielEN12975</p>
+<p>Test model for CollectorFieldEN12975</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -114,14 +114,15 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(no remarks)</p>
+<p>Note that the inlet temperature should never fall below 0 &deg;C. A possible controller for this case can be looked at under TransiEnt.Producer.Heat.SolarThermal.Controller.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>Note that the inlet temperature should never fall below 0 &deg;C. A possible controller for this case can be looked at under TransiEnt.Producer.Heat.SolarThermal.Controller.</p>
-<p><br><h4><span style=\"color: #008000\">10. Version History</span></h4></p>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Max Mustermann (max.mustermann@mustermail.com) on Thu Apr 24 2014</p>
-</html>"), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+</html>"), Diagram(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(
       StopTime=3.1536e+007,
       Interval=100,

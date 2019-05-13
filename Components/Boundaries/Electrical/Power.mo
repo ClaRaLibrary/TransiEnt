@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Electrical;
 model Power "Active power boundary can be used for consumer of producer models connected to the electric grid"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,6 +27,7 @@ model Power "Active power boundary can be used for consumer of producer models c
   // _____________________________________________
 
   extends TransiEnt.Basics.Icons.ElectricSink;
+  extends TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary;
 
   // _____________________________________________
   //
@@ -46,14 +47,13 @@ model Power "Active power boundary can be used for consumer of producer models c
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set if              useInputConnectorP "active power input"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP "Active power input"
                                                                  annotation (Placement(transformation(extent={{-140,60},{-100,100}},
           rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-60,120})));
 
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{-102,-10},{-82,10}}), iconTransformation(extent={{-110,-10},{-90,10}})));
 
   // _____________________________________________
   //
@@ -61,7 +61,7 @@ model Power "Active power boundary can be used for consumer of producer models c
   // _____________________________________________
 
 protected
-  Modelica.Blocks.Interfaces.RealInput P_internal "Needed to connect to conditional connector for active power";
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal "Needed to connect to conditional connector for active power";
 
 equation
   // _____________________________________________
@@ -99,12 +99,13 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp (active power port)</p>
+<p>Modelica RealInput: active power in W</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

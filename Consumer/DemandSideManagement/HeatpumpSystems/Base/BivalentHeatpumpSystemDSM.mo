@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base;
-model BivalentHeatpumpSystemDSM "Heatpump system with bivalent control, floor heating and lumped heat storage"
+model BivalentHeatpumpSystemDSM "Model of a bivalent heat pump system for demand side management scenarios"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,15 +19,36 @@ model BivalentHeatpumpSystemDSM "Heatpump system with bivalent control, floor he
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base.PartialHeatPumpSystemDSM(final nStor=2, final E_stor={Room.C*params.DTdb_heatpump,Storage.C*(T_stor_ref_max - T_stor_ref_min)});
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
   parameter SI.Temperature T_stor_ref_max = 90+273.15 "Maximum storage temperature for SOC and Capacity calculation";
   parameter SI.Temperature T_stor_ref_min = params.T_feed_lim_degC+273.15 "Minimum storage temperature for SOC and Capacity calculation";
   parameter SI.HeatFlowRate Q_flow_demand_small = 100 "100 Watt is considered small since it would be sufficient to invite a friend to dinner";
 
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
   Real SOC_set[nStor];
   SI.Power P_el_pl_electric;
   SI.Power P_el_n_pl_electric;
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor Room(C=params.C_room, T(start=params.T_room_start, fixed=true))
                                                                                               annotation (Placement(transformation(extent={{154,-16},{174,4}})));
@@ -113,6 +134,12 @@ model BivalentHeatpumpSystemDSM "Heatpump system with bivalent control, floor he
   Modelica.Blocks.Logical.Switch Q_flow_floorheating annotation (Placement(transformation(extent={{150,30},{130,50}})));
   Modelica.Blocks.Sources.Constant zero1(
                                         k=0) annotation (Placement(transformation(extent={{170,12},{160,22}})));
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
   // Characteritic equatuions for inherited variables
   P_el_pl_electric = Heatpump.P_el_HP.y + Q_flow_peakload.y/ params.eta_peakunit;
@@ -127,6 +154,11 @@ equation
 
   Q_flow_max = params.Q_flow_n_peakunit + Heatpump.COP.y*Heatpump.P_el_n;
   Q_flow_gen = Heatpump.Q_flow.y + Q_flow_peakload.y;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
     connect(T_amb.port, wall_a.port_a) annotation (Line(points={{136,86},{136,86},{142,86}},
                                                                                           color={191,0,0}));
@@ -168,11 +200,34 @@ equation
   connect(ctrlFloorHeating.y, Q_flow_floorheating.u1) annotation (Line(points={{119,12},{119,12},{152,12},{152,48}}, color={0,0,127}));
   connect(DeltaTStorageMin.y, hysteresis.u) annotation (Line(points={{136,62},{136,62},{184,62},{184,40},{182,40}}, color={0,0,127}));
   connect(T_amb1.y, T_stor_set.u[1]) annotation (Line(points={{-133,26},{-138,26},{-138,-16},{-130,-16}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{180,100}})),
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{180,100}})),
                                                                  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{180,100}}), graphics={Text(
           extent={{40,100},{72,88}},
           lineColor={0,0,0},
           textString="1: Room
 2: Storage",
-          horizontalAlignment=TextAlignment.Left)}));
+          horizontalAlignment=TextAlignment.Left)}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Heatpump&nbsp;system&nbsp;with&nbsp;bivalent&nbsp;control,&nbsp;floor&nbsp;heating&nbsp;and&nbsp;lumped&nbsp;heat&nbsp;storage for demand side management scenarios.</span></p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>isLoadShedding - boolean signal</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end BivalentHeatpumpSystemDSM;

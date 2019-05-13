@@ -1,10 +1,10 @@
 within TransiEnt.Components.Boundaries.FluidFlow;
-model BoundaryVLE_pTxi "A boundary defining pressure, temperature and composition"
+model BoundaryVLE_pTxi "A boundary defining pressure, temperature and mass composition"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,8 +24,9 @@ model BoundaryVLE_pTxi "A boundary defining pressure, temperature and compositio
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
+  extends TransiEnt.Basics.Icons.BoundaryVLE;
 
-  extends ClaRa.Basics.Icons.FlowSink;
+
 
   // _____________________________________________
   //
@@ -55,12 +56,11 @@ model BoundaryVLE_pTxi "A boundary defining pressure, temperature and compositio
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput p(value=p_in) if (variable_p) "Variable mass flow rate"
-    annotation (Placement(transformation(extent={{-120,40},{-80,80}})));
-  Modelica.Blocks.Interfaces.RealInput T(value=T_in) if (variable_T) "Variable temperature in K"
+  TransiEnt.Basics.Interfaces.General.PressureIn p(value=p_in) if (variable_p) "Variable absolute pressure"    annotation (Placement(transformation(extent={{-120,40},{-80,80}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T(value=T_in) if (variable_T) "Variable temperature in K"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
-  Modelica.Blocks.Interfaces.RealInput xi[medium.nc-1](value=xi_in) if
-       (variable_xi) "Variable composition"
+  TransiEnt.Basics.Interfaces.General.MassFractionIn xi[medium.nc-1](value=xi_in) if
+       (variable_xi) "Variable mass composition"
     annotation (Placement(transformation(extent={{-120,-80},{-80,-40}})));
   Basics.Interfaces.Thermal.FluidPortIn fluidPortIn(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
   ClaRa.Basics.Interfaces.EyeOut eye if boundaryConditions.showData
@@ -79,7 +79,7 @@ protected
     vleFluidType=medium,
     p=fluidPortIn.p,
     xi=xi_in,
-    h=actualStream(fluidPortIn.h_outflow))
+    h=noEvent(actualStream(fluidPortIn.h_outflow)))
               annotation (Placement(transformation(extent={{30,-82},{50,-62}})));
 
 equation
@@ -102,7 +102,7 @@ equation
   eye_int[1].T = fluidIn.T-273.15;
   eye_int[1].s = fluidIn.s/1e3;
   eye_int[1].p = fluidPortIn.p/1e5;
-  eye_int[1].h = actualStream(fluidPortIn.h_outflow)/1e3;
+  eye_int[1].h = noEvent(actualStream(fluidPortIn.h_outflow)/1e3);
 
   // _____________________________________________
   //
@@ -122,10 +122,44 @@ equation
       smooth=Smooth.None));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Text(
-          extent={{-96,32},{14,-28}},
+          extent={{-100,30},{20,-30}},
           lineColor={27,36,42},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
-        textString="T
-xi")}),                                                          Diagram(coordinateSystem(preserveAspectRatio=false)));
+          textString="%T
+xi"),   Polygon(
+          points={{-54,98},{-54,98}},
+          lineColor={0,0,0},
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-12,92},{-12,92}},
+          lineColor={0,0,0},
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid)}),                      Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This model is a boundary for a vapor-liquid-equilibrium defining the pressure, the mass composition and the temperature</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>RealInput: pressure in [Pa]</p>
+<p>RealInput: temperature in [K]</p>
+<p>RealInput: mass fraction in [kg/kg]</p>
+<p>FluidPortIn</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TransiEnt.Components.Boundaries.FluidFlow.Check.TestBoundaryVLE_pTxi&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end BoundaryVLE_pTxi;

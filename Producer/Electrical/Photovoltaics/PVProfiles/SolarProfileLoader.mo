@@ -3,10 +3,10 @@ model SolarProfileLoader "Loads PV profiles from csv files for 2011, 2012, 2014 
  'Meassured Data' refers to wind power generation meassured by the TSOs"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,7 +54,8 @@ model SolarProfileLoader "Loads PV profiles from csv files for 2011, 2012, 2014 
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>y: Modelica RealOutput</p>
+<p>y1: Modelica RealOutput</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -62,7 +63,7 @@ model SolarProfileLoader "Loads PV profiles from csv files for 2011, 2012, 2014 
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in the check model &quot;Check_SolarProfileLoader&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Adjusted from SLPLoader Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
@@ -115,5 +116,6 @@ model SolarProfileLoader "Loads PV profiles from csv files for 2011, 2012, 2014 
           lineColor={255,128,0},
           fillColor={255,255,0},
           fillPattern=FillPattern.Sphere)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end SolarProfileLoader;

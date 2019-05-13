@@ -2,10 +2,10 @@ within TransiEnt.Basics.Functions.GasProperties;
 function getIdealGasGCVVector "Function to get gross calorific value vactor for ideal gases"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -71,7 +71,7 @@ algorithm
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This model is used to get the vector the mass specific net calorific values (NCV), also known as lower heating values (LHV), of a given fuel gas mixture from a record.</p>
+<p>This model is used to get the vector the mass specific gross calorific values (GCV), also known as higher heating values (HHV), of a given fuel gas mixture from a record.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

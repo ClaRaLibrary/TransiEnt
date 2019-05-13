@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model InitCycle_CHP
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,6 @@ model InitCycle_CHP
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
-  extends ClaRa.Basics.Icons.Init;
   import TILMedia.VLEFluidFunctions.*;
   import SI = ClaRa.Basics.Units;
   // _____________________________________________
@@ -164,7 +163,8 @@ equation
   connect(A4.inlet, split3_2.outlet_2) annotation (Line(points={{54,16.5},{54,16.5},{54,23.5},{55,23.5}}, color={0,131,169}));
   connect(Turbine_IP2.outlet, split3_2.inlet) annotation (Line(points={{30.5,28},{49.5,28},{49.5,29}}, color={0,131,169}));
   connect(split3_2.outlet_1, Turbine_LP.inlet) annotation (Line(points={{60.5,29},{69.25,29},{69.25,30},{77.5,30}}, color={0,131,169}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(TODO)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
@@ -185,5 +185,38 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(TODO)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Ricardo Peniche (peniche@tuhh.de)</span></p>
-</html>"));
+</html>"),
+    Icon(graphics={
+        Rectangle(
+          extent={{-100,100},{100,-100}},
+          lineColor={0,134,171},
+          fillColor={5,130,175},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Rectangle(
+          extent={{-90,90},{90,-90}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-60,60},{60,-60}},
+          lineColor={0,157,255},
+          pattern=LinePattern.None,
+          fillPattern=FillPattern.Solid,
+          fillColor={7,128,172}),
+        Rectangle(
+          extent={{-30,30},{30,-30}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Text(
+          extent={{42,-70},{94,-90}},
+          lineColor={0,134,171},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          textString="name",
+          textStyle={TextStyle.Bold})}));
 end InitCycle_CHP;

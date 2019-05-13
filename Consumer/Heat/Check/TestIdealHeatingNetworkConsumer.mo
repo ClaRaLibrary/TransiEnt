@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.Check;
 model TestIdealHeatingNetworkConsumer
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,7 +46,7 @@ model TestIdealHeatingNetworkConsumer
     offset=373.15,
     startTime=100)                                      annotation (Placement(transformation(extent={{-106,20},{-86,40}})));
 equation
-  connect(Q_th_demand.y, ConsumerStation.Q_demand) annotation (Line(points={{15,28},{2.4,28},{2.4,9.4}},
+  connect(Q_th_demand.y, ConsumerStation.Q_flow_demand) annotation (Line(points={{15,28},{2.4,28},{2.4,9.4}},
                                                                                                     color={0,0,127}));
   connect(districtHeatingSupply.T, T_feed.y) annotation (Line(points={{-65.2,29},{-72,29},{-72,30},{-85,30}}, color={0,0,127}));
 public
@@ -77,8 +77,31 @@ equation
       points={{-8,-4},{-12,-4},{-12,-2},{-12,29},{-30,29}},
       color={175,0,0},
       thickness=0.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},{100,100}})),
     experiment(StopTime=200),
     __Dymola_experimentSetupOutput(equidistant=false),
-    Icon(coordinateSystem(extent={{-160,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(extent={{-160,-100},{100,100}})),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p>Test enviroment for an ideal heating network consumer with a constant heat flow rate demand a variable temperature</p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end TestIdealHeatingNetworkConsumer;

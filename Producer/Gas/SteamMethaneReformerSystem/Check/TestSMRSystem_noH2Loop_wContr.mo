@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.SteamMethaneReformerSystem.Check;
 model TestSMRSystem_noH2Loop_wContr
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -89,7 +89,30 @@ equation
   connect(sMRSystem_sufficientH2inFeed.massflow_H2_out, controllerFeedForReformer.m_flow_H2) annotation (Line(points={{62.5,24},{74,24},{74,-44},{-86.2,-44}}, color={0,0,127}));
   connect(sine.y, controllerFeedForReformer.m_flow_set_H2) annotation (Line(points={{-72.4,-36},{-86.2,-36}}, color={0,0,127}));
   annotation (
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-40},{100,100}})),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-40},{100,100}})),
-    experiment(StopTime=10000));
+    Icon(graphics,
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-40},{100,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-40},{100,100}})),
+    experiment(StopTime=10000),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the SMRSystem_noH2Loop with a controller</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestSMRSystem_noH2Loop_wContr;

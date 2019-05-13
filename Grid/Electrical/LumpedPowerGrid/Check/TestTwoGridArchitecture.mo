@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid.Check;
 model TestTwoGridArchitecture
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -97,16 +97,36 @@ equation
   connect(LocalGrid.P_tie_set, Gen_tie_set.y) annotation (Line(points={{-24.45,-17.87},{-24.45,8},{-39,8}}, color={0,0,127}));
   connect(LocalGrid.P_tie_is, P_tie_12.P) annotation (Line(points={{-17.65,-17.87},{-17.65,26},{-18,26},{-18,72},{-7.8,72},{-7.8,63.8}}, color={0,0,127}));
   connect(Load.y, LocalDem.P_el_set) annotation (Line(points={{61,12},{52,12},{52,14},{35,14},{35,-5.52}},     color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(
       StopTime=1500,
       Interval=60,
       Tolerance=1e-006,
       __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This validation model produces results that correspond to Page A1-7 of the entso-e operational handbook appendix 1: Load-frequency control.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"),
     __Dymola_experimentFlags(
       Advanced(

@@ -3,3 +3,4 @@ TestBivalentHeatpumpSystem_L2
 TestElectricBoiler_L1
 TestPtH_limiter
 HeatPumpElectricCharlineTest
+Test_idContrMFlow_temp

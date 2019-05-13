@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization.Check;
 model Test_PQDiagram_Display
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -72,7 +72,7 @@ model Test_PQDiagram_Display
     width=50)                                                   annotation (Placement(transformation(extent={{-76,14},{-56,34}})));
 equation
   connect(largeScaleCHP_L1_TimeConstant.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{9.5,3},{9.5,51.9},{39.9,51.9}},
+      points={{9.5,3},{9.5,52},{40,52}},
       color={0,135,135},
       thickness=0.5));
   connect(pressureSink_pT2.eye, quadruple.eye) annotation (Line(
@@ -84,14 +84,14 @@ equation
   connect(P_set.y, largeScaleCHP_L1_TimeConstant.P_set) annotation (Line(points={{-58,64},{-12,64},{-12,7.66667},{-6.1,7.66667}},
                                                                                                                             color={0,0,127}));
   connect(largeScaleCHP_L1_TimeConstant.outlet, valve.inlet) annotation (Line(
-      points={{10.2,-2.16667},{22,-2.16667},{22,0},{34,0}},
+      points={{10.2,-2.16667},{22,-2.16667},{22,-1},{34,-1}},
       color={175,0,0},
       thickness=0.5));
   connect(pressureSink_pT2.steam_a, valve.outlet) annotation (Line(
-      points={{70,1.22125e-015},{62,1.22125e-015},{62,0},{54,0}},
+      points={{70,1.22125e-15},{62,1.22125e-15},{62,-1},{54,-1}},
       color={0,131,169},
       thickness=0.5));
-  connect(quadruple2.eye, valve.eye) annotation (Line(points={{32,23},{58,23},{58,-4},{54,-4}}, color={190,190,190}));
+  connect(quadruple2.eye, valve.eye) annotation (Line(points={{32,23},{58,23},{58,-5},{54,-5}}, color={190,190,190}));
   connect(boundaryVLE_Txim_flow.steam_a, largeScaleCHP_L1_TimeConstant.inlet) annotation (Line(
       points={{72,-24},{16,-24},{16,-4.5},{10.2,-4.5}},
       color={0,131,169},
@@ -107,5 +107,27 @@ equation
                                                                               fileName="modelica://TransiEnt/Images/PQ_WW1.PNG")}),
     experiment(StopTime=3.1536e+007, Interval=900),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{100,100}})),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end Test_PQDiagram_Display;

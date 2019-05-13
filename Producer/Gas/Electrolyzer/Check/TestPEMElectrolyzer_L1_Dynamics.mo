@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Check;
-model TestPEMElectrolyzer_L1_Dynamics
+model TestPEMElectrolyzer_L1_Dynamics "Tester for a PEM electrolyzer"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model TestPEMElectrolyzer_L1_Dynamics
   import TransiEnt;
   import SI = Modelica.SIunits;
 
-protected
+//protected
   function plotResult
 
   constant String resultFileName = "TestPEMElectrolyzer_L1_Dynamics.mat";
@@ -103,11 +103,11 @@ public
   inner TransiEnt.ModelStatistics                                         modelStatisticsDetailed annotation (Placement(transformation(extent={{80,80},{100,100}})));
 equation
   connect(ElectricGrid_1stOrder.epp, electrolyzer_1stOrder.epp) annotation (Line(
-      points={{-19.9,-9.9},{0,-9.9},{0,-10}},
+      points={{-20,-10},{0,-10},{0,-10}},
       color={0,135,135},
       thickness=0.5));
   connect(ElectricGrid_2ndOrder.epp, electrolyzer_2ndOrder.epp) annotation (Line(
-      points={{-19.9,-49.9},{0,-49.9},{0,-50}},
+      points={{-20,-50},{0,-50},{0,-50}},
       color={0,135,135},
       thickness=0.5));
   connect(multiSum.y, electrolyzer_1stOrder.P_el_set) annotation (Line(points={{-46.98,50},{-10,50},{-10,2},{6,2}},        color={0,0,127}));
@@ -124,7 +124,7 @@ equation
   connect(step1.y, multiSum.u[2]) annotation (Line(points={{-79,22},{-70,22},{-70,48},{-64,48},{-60,48},{-60,47.9}},
                                                                                                  color={0,0,127}));
   connect(ElectricGrid_0thOrder.epp, electrolyzer_0thOrder.epp) annotation (Line(
-      points={{-19.9,30.1},{0,30.1},{0,30}},
+      points={{-20,30},{0,30},{0,30}},
       color={0,135,135},
       thickness=0.5));
   connect(electrolyzer_2ndOrder.P_el_set, multiSum.y) annotation (Line(points={{6,-38},{-10,-38},{-10,50},{-46.98,50}},    color={0,0,127}));
@@ -134,7 +134,8 @@ equation
       points={{40,30},{30,30},{20,30}},
       color={255,255,0},
       thickness=1.5));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false), graphics={Text(
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false), graphics={Text(
           extent={{0,92},{72,62}},
           lineColor={0,140,72},
           fillColor={255,255,255},
@@ -150,5 +151,26 @@ costs for electrolyzers in 2035
 with electricity price 103.3 EUR/MWh")}),
     experiment(StopTime=50),
     __Dymola_experimentSetupOutput,
-    __Dymola_Commands(executeCall=TransiEnt.Components.Convertor.Power2Gas.Check.TestPEMElectrolyzer_L1_Dynamics.plotResult() "Plot example results"));
+    __Dymola_Commands(executeCall=TransiEnt.Components.Convertor.Power2Gas.Check.TestPEMElectrolyzer_L1_Dynamics.plotResult() "Plot example results"),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for PEMElectrolyzer_L1_Dynamics</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestPEMElectrolyzer_L1_Dynamics;

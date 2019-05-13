@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model Methanation "Methanation 2020"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,4 +26,25 @@ model Methanation "Methanation 2020"
     C_inv_size=(400e-3)*size1,
     factor_OM=0.02,
     lifeTime=20);
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>[1] J.&nbsp;Nitsch,&nbsp;T.&nbsp;Pregger,&nbsp;T.&nbsp;Naegler,&nbsp;D.&nbsp;Heide,&nbsp;D.&nbsp;L.&nbsp;de&nbsp;Tena,&nbsp;F.&nbsp;Trieb,&nbsp;Y.&nbsp;Scholz,&nbsp;&ldquo;Langfristszenarien&nbsp;Und&nbsp;Strategien&nbsp;F&uuml;r&nbsp;Den&nbsp;Ausbau&nbsp;Der&nbsp;Erneuerbaren&nbsp;Energien&nbsp;in&nbsp;Deutschland&nbsp;Bei&nbsp;Ber&uuml;cksichtigung&nbsp;Der&nbsp;Entwicklung&nbsp;in&nbsp;Europa&nbsp;Und&nbsp;Global.&nbsp;Schlussbericht.&rdquo;, et al. 2012,&nbsp;Stuttgart,&nbsp;Kassel,&nbsp;Teltow.</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Methanation;

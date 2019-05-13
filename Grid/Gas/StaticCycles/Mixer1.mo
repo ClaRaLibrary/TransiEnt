@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles;
 model Mixer1 "Split || yellow | red | yellow"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -88,7 +88,8 @@ initial equation
           lineColor={0,131,169},
           smooth=Smooth.None,
           fillColor={255,255,255},
-          fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(
+          fillPattern=FillPattern.Solid)}), Diagram(graphics,
+                                                    coordinateSystem(
           preserveAspectRatio=false,extent={{-50,-30},{50,30}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

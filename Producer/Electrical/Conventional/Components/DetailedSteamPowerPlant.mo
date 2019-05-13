@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model DetailedSteamPowerPlant "A closed steam cycle including single reheat, feedwater tank, LP and HP preheaters"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -409,7 +409,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     efficiency_Turb_IP=NOM.efficiency_Turb_IP,
     efficiency_Turb_LP1=NOM.efficiency_Turb_LP1,
     efficiency_Turb_LP2=NOM.efficiency_Turb_LP2,
-    P_nom=P_n,
+    P_n=P_n,
     m_flow_nom=NOM.m_flow_nom,
     p_FWT=NOM.p_FWT,
     T_LS_nom=NOM.T_LS_nom,
@@ -423,8 +423,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     tapping_IP_pressure=NOM.tapping_IP_pressure*0.2,
     p_condenser=NOM.p_condenser*0.2,
     preheater_HP_p_tap=NOM.preheater_HP_p_tap*0.2,
-    preheater_HP_m_flow_tap=NOM.preheater_HP_m_flow_tap*0.2)
-               annotation (Placement(transformation(extent={{-310,-238},{-290,-218}})));
+    preheater_HP_m_flow_tap=NOM.preheater_HP_m_flow_tap*0.2) annotation (Placement(transformation(extent={{-310,-238},{-290,-218}})));
   ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valve_LP2(
                                           Tau=1e-3, redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      m_flow_nom=NOM.valve_LP2.m_flow, Delta_p_nom=NOM.valve_LP2.Delta_p_nom))
@@ -504,7 +503,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     x1=condenser.shell.summary.outline.level_abs)
     annotation (Placement(transformation(extent={{188,-38},{228,-26}})));
   DetailedSteamPowerPlant_InitCycle NOM(
-    P_nom=P_n,
+    P_n=P_n,
     final P_target_=1,
     preheater_HP_p_tap=51.95e5,
     Delta_p_RS_nom=4.91e5,
@@ -516,14 +515,14 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     efficiency_Turb_IP=0.93,
     efficiency_Turb_LP1=0.94,
     efficiency_Turb_LP2=0.94) annotation (Placement(transformation(extent={{-306,-200},{-286,-180}})));
-  Modelica.Blocks.Interfaces.RealInput P_set annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_set annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-248,256}), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-82,128})));
-  TransiEnt.Components.Visualization.DynDisplay dynDisplay1(x1=(turbine_HP1.summary.outline.P_mech + Turbine_IP.summary.outline.P_mech + Turbine_LP1.summary.outline.P_mech + Turbine_LP2.summary.outline.P_mech)/1e6, unit="MW") annotation (Placement(transformation(extent={{72,106},{292,128}})));
+  TransiEnt.Components.Visualization.DynDisplay dynDisplay1(x1=(turbine_HP1.summary.outline.P_mech + Turbine_IP.summary.outline.P_mech + Turbine_LP1.summary.outline.P_mech + Turbine_LP2.summary.outline.P_mech)/1e6, unit="MW") annotation (Placement(transformation(extent={{52,154},{272,176}})));
   Modelica.Blocks.Sources.RealExpression P_out(y=P_output)
     annotation (Placement(transformation(
         extent={{-20,-11},{20,11}},
@@ -531,14 +530,22 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         origin={146,92})));
   TransiEnt.Components.Boundaries.Mechanical.Power prescribedPower(change_sign=true) annotation (Placement(transformation(extent={{176,66},{196,86}})));
   TransiEnt.Components.Mechanical.ConstantInertia constantInertia(
+    omega(fixed=false, start=2*50*Modelica.Constants.pi),
     J=10e6,
-    w(fixed=false, start=2*50*Modelica.Constants.pi),
     P_n=P_n) annotation (Placement(transformation(extent={{202,66},{222,86}})));
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=0.9856) annotation (choicesAllMatching=true, Placement(transformation(
+
+    replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(extent={{336,98},{356,118}}), iconTransformation(extent={{80,42},{110,70}})));
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=0.9856) constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "Choice of generator model. The generator model must match the power port."
+                                                                                                                                                                                          annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-12.5,-12},{12.5,12}},
         rotation=0,
         origin={257.5,76})));
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{336,98},{356,118}}), iconTransformation(extent={{80,42},{110,70}})));
+
+  replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem "Choice of excitation system model with voltage control"
+                                                                                                                                                                                                        annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{10,-10.5},{-10,10.5}},
+        rotation=0,
+        origin={288,113})));
   ClaRa.Visualisation.Quadruple quadruple15
     annotation (Placement(transformation(extent={{46,-16},{106,4}})));
   ClaRa.Visualisation.Quadruple quadruple16
@@ -891,7 +898,7 @@ equation
       points={{202,76},{196,76}},
       color={95,95,95}));
   connect(constantInertia.mpp_b,Generator. mpp) annotation (Line(
-      points={{222,76},{236,76},{236,75.4},{244.375,75.4}},
+      points={{222,76},{236,76},{236,76},{245,76}},
       color={95,95,95}));
   connect(Generator.epp,epp)  annotation (Line(
       points={{270.125,75.88},{294,75.88},{294,76},{306,76},{306,108},{346,108}},
@@ -938,6 +945,11 @@ equation
   connect(switch_SetValueMinimumLoad.u1, realExpression3.y) annotation (Line(points={{-56,222},{-65,222}}, color={0,0,127}));
   connect(switch_SetValueMinimumLoad.y, switch_limitMinimumLoad.u1) annotation (Line(points={{-33,214},{-28,214},{-24,214},{-24,192},{-14,192}}, color={0,0,127}));
   connect(block_SetValueMinimumLoad.y, switch_SetValueMinimumLoad.u2) annotation (Line(points={{-91,214},{-73.5,214},{-56,214}}, color={255,0,255}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{298,113},{298,108},{346,108}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{277.4,113},{277.4,112},{257.125,112},{257.125,87.88}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-320,-240},{340,240}}),
                       graphics={
         Rectangle(
@@ -971,7 +983,8 @@ equation
           fillPattern=FillPattern.Solid,
           textStyle={TextStyle.Bold},
           textString="Model
-Properties")}),                  Icon(coordinateSystem(preserveAspectRatio=false,
+Properties")}),                  Icon(graphics,
+                                      coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -992,7 +1005,7 @@ Properties")}),                  Icon(coordinateSystem(preserveAspectRatio=false
 <li>Control power provision is not implemented, power output independent of grid frequency</li>
 </ul>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Type of electrical power port can be chosen</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -1005,5 +1018,6 @@ Properties")}),                  Icon(coordinateSystem(preserveAspectRatio=false
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p>Model created by Ricardo Peniche (peniche@tuhh.de)</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end DetailedSteamPowerPlant;

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Utilities;
 block BoilerHeatDynamics "Block to implement a boiler's dynamics by signal means from a set value"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -76,7 +76,6 @@ block BoilerHeatDynamics "Block to implement a boiler's dynamics by signal means
     k=0.01*sqrt(damping))
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
 
-  //oder ein abs-Block?
   Modelica.Blocks.Math.Abs abs(generateEvent=false)
     annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
   FirstOrder_variableDamping firstOrder_variableDamping

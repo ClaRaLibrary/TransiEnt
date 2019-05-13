@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.Profiles;
 model TypicalHotWaterDrawProfile "Model of three typical hot water draw profiles taken from EN 15450. Output is in the thermal heat flow rate in W at a mass flow rate of the hydraulic system of 5.5 l/min (see Table E.1 in reference)."
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -63,7 +63,7 @@ table=[0,0; 25200,11550; 25233,0; 26100,11550; 26536,0; 27000,11550; 27033,0; 28
                                                                                               annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 Modelica.Blocks.Math.Sum switchProfile(k=switch, nin=3) annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
-Modelica.Blocks.Interfaces.RealOutput Q_flow_draw "Hot water draw at 60C" annotation (Placement(transformation(extent={{96,-10},{116,10}})));
+TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_draw "Hot water draw at 60C" annotation (Placement(transformation(extent={{96,-10},{116,10}})));
 Modelica.Blocks.Math.Gain sign(k=gain) annotation (Placement(transformation(extent={{72,-8},{88,8}})));
 equation
   // _____________________________________________
@@ -107,26 +107,27 @@ annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
       pattern=LinePattern.None,
       lineColor={0,0,0}),
     Line(points={{-34,-56},{-34,64},{66,64},{66,-56},{-34,-56},{-34,-26},{66,-26},{66,4},{-34,4},{-34,34},{66,34},{66,64},{16,64},{16,-57}},
-        color={0,0,0})}),                                    Diagram(coordinateSystem(preserveAspectRatio=false)),
+        color={0,0,0})}),                                    Diagram(graphics,
+                                                                     coordinateSystem(preserveAspectRatio=false)),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<p>Model of three typical hot water draw profiles taken from EN 15450. Output is in the thermal heat flow rate in W at a mass flow rate of the hydraulic system of 5.5 l/min (see Table E.1 in reference).</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>Q_flow_draw - Hot water draw at 60&deg;C</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>EN 15450</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Pascal Dubucq (dubucq@tuhh.de) <span style=\"font-family: MS Shell Dlg 2;\">on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Quality check (Code conventions) by Rebekka Denninger on 01.10.2016</span></p>

@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Hamburg;
 model SectorCouplingPtH "Example of an electric generation park coupled with a district heating grid and a power-to-heat unit"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,7 +40,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
   //Components-Visualization
   TransiEnt.Grid.Heat.HeatGridControl.SupplyAndReturnTemperatureDHG supplyandReturnTemperature annotation (Placement(transformation(extent={{-229,-167},{-219,-157}})));
 
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, p_drop=1000) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, p_drop=1000) annotation (Placement(transformation(
         extent={{-11,-11},{11,11}},
         rotation=0,
         origin={9,-201})));
@@ -139,7 +139,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     primaryBalancingController(providedDroop=0.2/50/(3/150 - 0.2*0.01)),
     isPrimaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.BCG],
+    P_init_set=UC.P_init[UC.schedule.BCG],
     isSecondaryControlActive=true) annotation (Placement(transformation(extent={{-95,71},{-55,109}})));
   TransiEnt.Producer.Electrical.Conventional.Gasturbine Gasturbine2(
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GasTurbine,
@@ -147,7 +147,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     isSecondaryControlActive=true,
     t_startup=0,
     P_el_n=simCenter.generationPark.P_el_n_GT2,
-    P_init=UC.P_init[UC.schedule.GT2]) annotation (Placement(transformation(extent={{-23,-39},{17,-1}})));
+    P_init_set=UC.P_init[UC.schedule.GT2]) annotation (Placement(transformation(extent={{-23,-39},{17,-1}})));
   TransiEnt.Grid.Electrical.LumpedPowerGrid.LumpedGrid UCTE(
     delta_pr=0.2/50/(3/150 - 0.2*0.01),
     P_pr_max_star=0.02,
@@ -167,7 +167,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     isPrimaryControlActive=true,
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.BrownCoal,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.GAR],
+    P_init_set=UC.P_init[UC.schedule.GAR],
     isSecondaryControlActive=true) "Garbage" annotation (Placement(transformation(extent={{25,71},{65,109}})));
   TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC(
     K_r=simCenter.P_n_ref_1/(simCenter.P_n_ref_1 + simCenter.P_n_ref_2)*3e9/0.2,
@@ -179,13 +179,13 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     isSecondaryControlActive=true,
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GasCCGT,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.CCP]) annotation (Placement(transformation(extent={{-169,-37},{-129,1}})));
+    P_init_set=UC.P_init[UC.schedule.CCP]) annotation (Placement(transformation(extent={{-169,-37},{-129,1}})));
   TransiEnt.Producer.Electrical.Conventional.Oil OIL(
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GasCCGT,
     primaryBalancingController(providedDroop=0.2/50/(3/150 - 0.2*0.01)),
     isPrimaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.OIL],
+    P_init_set=UC.P_init[UC.schedule.OIL],
     isSecondaryControlActive=true) "Mineral oil" annotation (Placement(transformation(extent={{-35,71},{5,109}})));
   TransiEnt.Producer.Electrical.Wind.PowerProfileWindPlant WindOnshorePlant(P_el_n=simCenter.generationPark.P_el_n_WindOn) annotation (Placement(transformation(extent={{-35,177},{5,215}})));
   TransiEnt.Producer.Electrical.Wind.PowerProfileWindPlant WindOffshorePlant(
@@ -199,13 +199,13 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     isPrimaryControlActive=false,
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.Biomass,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.BM],
+    P_init_set=UC.P_init[UC.schedule.BM],
     isSecondaryControlActive=true,
     isExternalSecondaryController=true) annotation (Placement(transformation(extent={{83,71},{123,109}})));
   TransiEnt.Producer.Electrical.Others.PumpedStoragePlant PumpedStorage(
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PumpedStorage,
     t_startup=60,
-    P_init=-(UC.P_init[UC.schedule.PS] + UC.P_init[UC.schedule.PS_Pump])) annotation (Placement(transformation(extent={{139,-39},{179,-1}})));
+    P_init_set=-(UC.P_init[UC.schedule.PS] + UC.P_init[UC.schedule.PS_Pump])) annotation (Placement(transformation(extent={{139,-39},{179,-1}})));
   TransiEnt.Producer.Electrical.Others.IdealContinuousHydropowerPlant RunOfWaterPlant(P_el_n=simCenter.generationPark.P_el_n_ROH, redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.RunOffHydro) annotation (Placement(transformation(extent={{85,177},{125,215}})));
 
   Modelica.Blocks.Sources.RealExpression P_set_BM(y=UC.schedule.y[UC.schedule.BM])
@@ -241,7 +241,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
   TransiEnt.Producer.Electrical.Conventional.BlackCoal BlackCoal(
     isSecondaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.BC]) annotation (Placement(transformation(extent={{153,73},{193,111}})));
+    P_init_set=UC.P_init[UC.schedule.BC]) annotation (Placement(transformation(extent={{153,73},{193,111}})));
   Modelica.Blocks.Sources.RealExpression P_set_BC(y=-mod.y[UC.schedule.BC])        annotation (Placement(transformation(extent={{146,118},{166,138}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_BC(y=aGC.P_sec_set[UC.schedule.BC])
                                                           annotation (Placement(transformation(extent={{128,104},{148,124}})));
@@ -251,7 +251,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     isSecondaryControlActive=true,
     t_startup=0,
     P_el_n=simCenter.generationPark.P_el_n_GT3,
-    P_init=UC.P_init[UC.schedule.GT3]) annotation (Placement(transformation(extent={{53,-37},{93,1}})));
+    P_init_set=UC.P_init[UC.schedule.GT3]) annotation (Placement(transformation(extent={{53,-37},{93,1}})));
   Modelica.Blocks.Sources.RealExpression P_set_GT3(y=-mod.y[UC.schedule.GT3])
                                                                              annotation (Placement(transformation(extent={{94,4},{74,24}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_GT1(
@@ -262,7 +262,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     isPrimaryControlActive=false,
     isSecondaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.GT1],
+    P_init_set=UC.P_init[UC.schedule.GT1],
     P_el_n=simCenter.generationPark.P_el_n_GT1) annotation (Placement(transformation(extent={{-99,-39},{-59,-1}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_GT2(
                                                      y=aGC.P_sec_set[UC.schedule.GT1])
@@ -297,13 +297,13 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
         extent={{-4,-3},{4,3}},
         rotation=90,
         origin={-60,-162})));
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler spiVo_Wedel(Q_flow_n=250e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(extent={{-18,-158},{2,-138}})));
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler spiVo_Wedel(Q_flow_n=250e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(extent={{-18,-158},{2,-138}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_set_Spivo_Wedel(y=-max(dHNControl.Q_flow_i[2] - HKW_Wedel.Q_flow_n_CHP, 0))
                                                                                                  annotation (Placement(transformation(
         extent={{-9,-5},{9,5}},
         rotation=270,
         origin={-8,-123})));
-  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler PtH(Q_flow_n=HKW_Wedel.Q_flow_n_CHP) annotation (Placement(transformation(extent={{-44,-158},{-24,-138}})));
+  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler PtH(Q_flow_n=HKW_Wedel.Q_flow_n_CHP, usePowerPort=true) annotation (Placement(transformation(extent={{-44,-156},{-24,-136}})));
   TransiEnt.Producer.Heat.Power2Heat.Controller.PtH_limiter ptH_limiter(Q_flow_PtH_max=PtH.Q_flow_n) annotation (Placement(transformation(extent={{-166,-178},{-146,-158}})));
   Modelica.Blocks.Sources.RealExpression P_set_Pth(y=min(P_set_Curt.y, PtH.Q_flow_n)) annotation (Placement(transformation(extent={{-194,-178},{-174,-158}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_set_PtH(y=-ptH_limiter.Q_flow_set_PtH)              annotation (Placement(transformation(
@@ -419,11 +419,11 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
         extent={{7.5,-6},{-7.5,6}},
         rotation=0,
         origin={226.5,-138})));
-  TransiEnt.Producer.Heat.Gas2Heat.TwoFuelBoiler twoFuelBoiler(redeclare TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler boiler2(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, Q_flow_n=160e6 + 160e6), redeclare TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler boiler1(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.TwoFuelBoiler twoFuelBoiler(redeclare TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler boiler2(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, Q_flow_n=160e6 + 160e6), redeclare TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler boiler1(
       Q_flow_n=100e6,
       redeclare model BoilerCostModel = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GarbageBoiler,
       typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.Garbage)) annotation (Placement(transformation(extent={{122,-164},{106,-150}})));
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler wuWSpaldingStr(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler wuWSpaldingStr(
     Q_flow_n=100e6,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.Garbage,
     redeclare model BoilerCostModel = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GarbageBoiler) annotation (Placement(transformation(extent={{102,-222},{82,-202}})));
@@ -609,15 +609,15 @@ equation
                                                                                                                                    color={0,0,127}));
   connect(massflow_Tm_flow4.T, T_return1.y) annotation (Line(points={{114.8,-212},{118,-212},{118,-206},{120.4,-206}},     color={0,0,127}));
   connect(massflow_Tm_flow4.m_flow, m_flow_return5.y) annotation (Line(points={{114.8,-213.8},{118,-213.8},{118,-215},{121.5,-215}},   color={0,0,127}));
-  connect(PtH.inlet, HKW_Wedel.outlet) annotation (Line(
-      points={{-43.8,-148},{-64.8,-148},{-64.8,-150.167}},
+  connect(PtH.fluidPortIn, HKW_Wedel.outlet) annotation (Line(
+      points={{-43.8,-146},{-64.8,-146},{-64.8,-150.167}},
       color={175,0,0},
       thickness=0.5));
   connect(P_set_Pth.y, ptH_limiter.P_RE_curtail) annotation (Line(points={{-173,-168},{-167,-168}}, color={0,0,127}));
-  connect(PtH.Q_flow_set, Q_flow_set_PtH.y) annotation (Line(points={{-34,-138},{-34,-133.5},{-31,-133.5},{-31,-130.9}},     color={0,0,127}));
+  connect(PtH.Q_flow_set, Q_flow_set_PtH.y) annotation (Line(points={{-34,-136},{-34,-133.5},{-31,-133.5},{-31,-130.9}},     color={0,0,127}));
   connect(P_set_Curt_after_P2H.y, P_RE_curtailement.u) annotation (Line(points={{153,216},{162,216},{162,226},{171,226},{171,211.58}}, color={0,0,127}));
   connect(PtH.epp, Demand.epp) annotation (Line(
-      points={{-34,-158},{-44,-158},{-44,-94},{-44,52},{231.4,52}},
+      points={{-34,-156},{-44,-156},{-44,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(discretizePrediction.P_predictions,mod. u) annotation (Line(points={{-181,72},{-168.4,72},{-168.4,71}},
@@ -656,8 +656,8 @@ equation
       points={{28.9,-121.9},{14.25,-121.9},{14.25,-148},{2,-148}},
       color={175,0,0},
       thickness=0.5));
-  connect(spiVo_Wedel.inlet, PtH.outlet) annotation (Line(
-      points={{-17.8,-148},{-24,-148}},
+  connect(spiVo_Wedel.inlet, PtH.fluidPortOut) annotation (Line(
+      points={{-17.8,-148},{-20,-148},{-20,-146},{-24,-146}},
       color={175,0,0},
       thickness=0.5));
   connect(Q_flow_set_Spivo_Wedel.y, spiVo_Wedel.Q_flow_set) annotation (Line(points={{-8,-132.9},{-8,-135.45},{-8,-138}}, color={0,0,127}));
@@ -834,12 +834,31 @@ Offshore
           extent={{-230,242},{-126,164}},
           lineColor={175,175,175},
           pattern=LinePattern.Dash)}),
-    Icon(coordinateSystem(
+    Icon(graphics,
+         coordinateSystem(
         preserveAspectRatio=false,
         extent={{-300,-260},{300,260}},
         initialScale=0.1)),
     Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>The district heating grid is modeled as a mass-flow sink, but can be replaced with more detailed models if required.</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"),
     __Dymola_experimentSetupOutput(inputs=false, events=false),
     __Dymola_experimentFlags(

@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas;
 model GasStorageVesselHeatTransfer_L2 "Gas storage vessel including heat transfer to the environment"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,6 +59,8 @@ model GasStorageVesselHeatTransfer_L2 "Gas storage vessel including heat transfe
   parameter String suppressChattering="True" "Enable to suppress possible chattering in wall" annotation (Dialog(group="Numerical Efficiency"), choices(choice="False" "False (faster if no chattering occurs)",
                                                                                             choice="True" "True (faster if chattering occurs)"));
 
+  parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated"  annotation (Dialog(group="Statistics"));
+
   // _____________________________________________
   //
   //              Variable Declarations
@@ -96,10 +98,7 @@ public
 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) annotation (Placement(transformation(extent={{-10,39},{10,59}}), iconTransformation(extent={{-10,39},{10,59}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium) annotation (Placement(transformation(extent={{-10,-63},{10,-43}}), iconTransformation(extent={{-10,-73},{10,-53}})));
-  Modelica.Blocks.Interfaces.RealOutput p_gas(
-    final quantity="Pressure",
-    final unit="Pa",
-    displayUnit="bar") annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.PressureOut p_gas annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={100,0}), iconTransformation(extent={{-40,-10},{-60,10}})));
@@ -110,7 +109,8 @@ public
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
+  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(calculateCost=calculateCost)
+                                                                  constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choicesAllMatching,
     Placement(transformation(
@@ -255,5 +255,9 @@ equation
 <p>Model created by Carsten Bode (c.bode@tuhh.de) in Oct 2016</p>
 <p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (changes due to ClaRa changes: exchanged wall model, added wall model for top and bottom)</p>
 </html>"),
-Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),             Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+Diagram(graphics,
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),             Icon(graphics={Text(
+          extent={{-30,12},{30,-48}},
+          lineColor={0,0,0},
+          textString="L2")},                                                                           coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end GasStorageVesselHeatTransfer_L2;

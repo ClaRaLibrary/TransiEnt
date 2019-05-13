@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Combustion.Check;
-model TestControllerBurner
+model TestControllerBurner "Model for testing a combustion with a controlled mass flow rate of the air and the fuel"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,10 +59,11 @@ model TestControllerBurner
         origin={-26,16})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 realGasJunction_L2(
     medium=vle_ng7_sg_o2,
-    p_start=1e5,
     volume=0.01,
-    xi_start={0.0487717,0,0,0,0.720911,0.0162572,0,0,0.21406},
-    h_start=583949) annotation (Placement(transformation(extent={{-36,0},{-16,-20}})));
+    xi(
+    start =  {0.0487717,0,0,0,0.720911,0.0162572,0,0,0.21406}),
+    h(start=583949),
+    p(start=1e5))   annotation (Placement(transformation(extent={{-36,0},{-16,-20}})));
   Sensors.RealGas.MassFlowSensor vleMassflowSensor(medium=vle_ng7_sg_o2) annotation (Placement(transformation(extent={{-62,-10},{-42,10}})));
   TransiEnt.Components.Gas.Combustion.Controller.ControllerAirForBurner controllerAirForBurner annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -112,8 +113,7 @@ equation
       points={{36,-10},{39,-10},{42,-10}},
       color={255,255,0},
       thickness=1.5));
-  connect(controllerAirForBurner.massComposition, massComp_BeforeJunction.fraction)
-    annotation (Line(points={{-60,36},{-67,36},{-67,0}}, color={0,0,127}));
+  connect(controllerAirForBurner.xi, massComp_BeforeJunction.fraction) annotation (Line(points={{-60,36},{-67,36},{-67,0}}, color={0,0,127}));
   connect(massComp_BeforeJunction.gasPortOut, vleMassflowSensor.gasPortIn)
     annotation (Line(
       points={{-68,-10},{-65,-10},{-62,-10}},
@@ -153,10 +153,30 @@ manually change lambda"),        Text(
           extent={{-14,66},{14,56}},
           lineColor={0,140,72},
           textString="check molar ratio")}),
-    Icon(coordinateSystem(extent={{-160,-60},{140,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-160,-60},{140,100}})),
     experiment(StopTime=10000),
     __Dymola_experimentSetupOutput,
           Documentation(info="<html>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for a burner with a controlled mass flow of fuel and air</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
 </html>"));
 end TestControllerBurner;

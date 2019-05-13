@@ -2,10 +2,10 @@
 model HeatPumpGasCharlineFluidPorts "Gas heat pump model that produces a given heat flow via fluid ports with a charline"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,19 +46,28 @@ model HeatPumpGasCharlineFluidPorts "Gas heat pump model that produces a given h
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput H_flow "Gas enthalpy consumed" annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={0,-110}), iconTransformation(extent={{100,-10},{120,10}}, rotation=0)));
+  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateIn H_flow_set if not
+                                                                      (use_Q_flow_input) "Setpoint value of the enthalpy flow rate, should be positive" annotation (Placement(transformation(extent={{-120,-20},{-80,20}}), iconTransformation(extent={{-120,-20},{-80,20}})));
 
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
 
+  Modelica.Blocks.Math.Gain H_flow_set_(k=1) annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
+  Modelica.Blocks.Sources.Constant const1(k=1)
+                                          annotation (Placement(transformation(extent={{-100,46},{-80,66}})));
+
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
+  Modelica.SIunits.MassFlowRate m_flow_cde_total;
+  SI.EnthalpyFlowRate H_flow;
+public
+  Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric           collectGwpEmissions(typeOfEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas) annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
+protected
+  Modelica.SIunits.MolarFlowRate[5] ElementCompositionFuel;
 
 equation
   // _____________________________________________
@@ -66,9 +75,20 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
+  if use_Q_flow_input then
+    Q_flow=Q_flow_set_.u;
+    H_flow = -Q_flow/COP;
+  else
+    Q_flow=-COP*H_flow;
+    H_flow = H_flow_set_.u;
+  end if;
+
   //charline
   COP=COP_n*1/1.37726*(4e-5*DeltaT^2-0.0111*DeltaT+1.7); //source: Andreas Palzer. 2016. Sektorübergreifende Modellierung Und Optimierung Eines Zukünftigen Deutschen Energiesystems Unter Berücksichtigung von Energieeffizienzmaßnahmen Im Gebäudesektor. Stuttgart: Fraunhofer Verlag. http://publica.fraunhofer.de/eprints/urn_nbn_de_0011-n-408742-11.pdf.
-  H_flow=-Q_flow_set/COP;
+  // === CO2 Emissions ===
+  collectGwpEmissions.gwpCollector.m_flow_cde=m_flow_cde_total;
+  m_flow_cde_total=-ElementCompositionFuel[1]*44.0095/1000;
+  ElementCompositionFuel=TransiEnt.Basics.Functions.GasProperties.comps2Elements_realGas(medium,vleNCVSensor.xi,gasPortIn.m_flow);
 
   m_flow_gas=H_flow/vleNCVSensor.NCV;
 
@@ -76,11 +96,20 @@ equation
   //
   //               Connect Statements
   // _____________________________________________
+  connect(modelStatistics.gwpCollectorHeat[PrimaryEnergyCarrier.NaturalGas],collectGwpEmissions.gwpCollector);
+
+  if not
+        (use_Q_flow_input) then
+    connect(H_flow_set_.u, H_flow_set) annotation (Line(points={{-62,30},{-68,30},{-68,16},{-84,16},{-84,0},{-100,0}}, color={0,0,127}));
+  else
+    connect(const1.y, H_flow_set_.u) annotation (Line(points={{-79,56},{-68,56},{-68,30},{-62,30}}, color={0,0,127}));
+  end if;
 annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Base class for simple heat pump models that produce a given heat flow via fluid ports and use a charline.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>Changing ambient temperature can be considered as well as varying COP depending on the temperature difference between waterPortOut and source. The charline is linearly scalable with COP_n and Q_flow_n is used for the cost calculation. Different heat flow boundaries, in which the heat flow is transfered to the water, can be chosen.</p>
+<p>Changing ambient temperature can be considered as well as varying COP depending on the temperature difference between waterPortOut and source. The charline is linearly scalable with COP_n and Q_flow_n is used for the cost calculation. Different heat flow boundaries, in which the heat flow is transfered to the water, can</p>
+<p>be chosen.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
@@ -100,7 +129,7 @@ annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] A. Palzer, Sektorübergreifende Modellierung und Optimierung eines zukünftigen deutschen Energiesystems unter Berücksichtigung von Energieeffizienzmaßnahmen im Gebäudesektor. Stuttgart: Fraunhofer Verlag, 2016.</p>
+<p>[1] A. Palzer, Sektor&uuml;bergreifende Modellierung und Optimierung eines zuk&uuml;nftigen deutschen Energiesystems unter Ber&uuml;cksichtigung von Energieeffizienzma&szlig;nahmen im Geb&auml;udesektor. Stuttgart: Fraunhofer Verlag, 2016.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de), Feb 2018</p>
 </html>"));

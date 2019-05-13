@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.PowerTransformation.Check;
 model CheckTransformer "Example how to use the power transformer model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,10 +51,10 @@ model CheckTransformer "Example how to use the power transformer model"
     offset=100e3,
     startTime(displayUnit="s") = 100) annotation (Placement(transformation(extent={{12,-48},{32,-28}})));
 equation
-  connect(Cable.epp_n, Load.epp) annotation (Line(points={{24,0},{37.9,0},{37.9,0.1}}, color={0,127,0}));
+  connect(Cable.epp_n, Load.epp) annotation (Line(points={{24,0},{38,0},{38,0}},       color={0,127,0}));
   connect(step.y, Load.P_el_set) annotation (Line(points={{33,-38},{42,-38},{42,-12}}, color={0,0,127}));
   connect(transformer.epp_n, Cable.epp_p) annotation (Line(points={{-6,0},{4,0}}, color={0,127,0}));
-  connect(Grid.epp, transformer.epp_p) annotation (Line(points={{-40.92,-0.08},{-26,-0.08},{-26,0}}, color={0,127,0}));
+  connect(Grid.epp, transformer.epp_p) annotation (Line(points={{-41,0},{-26,0},{-26,0}},            color={0,127,0}));
 public
 function plotResult
 
@@ -73,6 +73,27 @@ createPlot(id=1, position={809, 0, 791, 364}, y={"transformer.epp_p.v", "transfo
     resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Test environment for Transformer</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4.Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end CheckTransformer;

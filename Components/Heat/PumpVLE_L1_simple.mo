@@ -1,10 +1,10 @@
 within TransiEnt.Components.Heat;
 model PumpVLE_L1_simple "A pump for VLE mixtures with a volume flow rate depending on drive power and pressure difference only"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,10 +19,6 @@ model PumpVLE_L1_simple "A pump for VLE mixtures with a volume flow rate dependi
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
-
-//copied from ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple, version 1.3.0
-//added cost record and eta_el
-//modified summary
 
   // _____________________________________________
   //
@@ -47,7 +43,7 @@ model PumpVLE_L1_simple "A pump for VLE mixtures with a volume flow rate dependi
    annotation (Dialog(group="Fundamental Definitions"));
   parameter Real eta_el = 0.97 "Electric efficiency of the drive"
    annotation (Dialog(group="Fundamental Definitions"));
-  parameter ClaRa.Basics.Units.Pressure Delta_p_eps=100 "|Expert Settings| Numerical Robustnes|Small pressure difference for linearisation around zero";
+  parameter ClaRa.Basics.Units.Pressure Delta_p_eps=100 "Small pressure difference for linearisation around zero" annotation (Dialog(tab="Expert Settings", group="Numerical Robustnes"));
 
   parameter ClaRa.Components.TurboMachines.Compressors.Fundamentals.PresetVariableType presetVariableType="V_flow" "Specifies which variable is preset"
                                                                                             annotation (Dialog(group="General Settings"));
@@ -91,27 +87,27 @@ model PumpVLE_L1_simple "A pump for VLE mixtures with a volume flow rate dependi
     powerOut=fluidPortIn.m_flow*(fluidIn.h - fluidOut.h),
     powerAux=(P_el - fluidPortIn.m_flow*(fluidOut.h - fluidIn.h))) if contributeToCycleSummary;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L1");
-  Modelica.Blocks.Interfaces.RealInput dp_in if
+  TransiEnt.Basics.Interfaces.General.PressureDifferenceIn dp_in if
     use_Delta_p_input "Prescribed pressure increase"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
         origin={80,110}),
                 iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={80,110})));
-  Modelica.Blocks.Interfaces.RealInput P_el_in if
-     use_P_elInput "Prescribed pressure increase"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_in if
+     use_P_elInput "Electric power input"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
         origin={34,110}),
                 iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={30,110})));
-  Modelica.Blocks.Interfaces.RealInput V_flow_in if V_flowInput "Prescribed volume flow rate"
+  TransiEnt.Basics.Interfaces.General.VolumeFlowRateIn V_flow_in if V_flowInput "Prescribed volume flow rate"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},   rotation=270,
         origin={-32,110}),
                iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-30,110})));
-  Modelica.Blocks.Interfaces.RealInput m_flow_in if
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_in if
                                                   m_flowInput "Prescribed mass flow rate"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
           rotation=270,
@@ -296,31 +292,31 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   annotation (Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents a vle fluid pump. It is a modified version of the model ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple from ClaRa version 1.2.1. The model is documented there and here only the changes are described. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The model was changed to work with changing compositions and a constant electrical efficiency was added. Also, more inputs are available. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid for real gases and positive pressure differences. Variable efficiencies and time-dependent behavior are not considered.</p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>fluidPortIn: vle fluid inlet </p>
 <p>fluidPortOut: vle fluid outlet </p>
-<p>m_flow_in: input for mass flow rate </p>
-<p>V_flow_in: input for volume flow rate </p>
-<p>P_el_in: input for electrical power </p>
-<p>dp_in: input for pressure difference </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<p>m_flow_in: input for mass flow rate in kg/s</p>
+<p>V_flow_in: input for volume flow rate in m3/s</p>
+<p>P_el_in: input for electrical power in W</p>
+<p>dp_in: input for pressure difference in Pa</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The electrical power is determined using the mechanical and electrical efficiencies.</p>
-<p><br><img src=\"modelica://TransiEnt/Images/equations/equation_CompressorRealGasesIsentropicEff.png\" alt=\"\"/><br></p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<p><br><br><img src=\"modelica://TransiEnt/Images/equations/equation_CompressorRealGasesIsentropicEff.png\"/></p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) in Apr 2017<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><br>Model created by Carsten Bode (c.bode@tuhh.de) in Apr 2017</p>
 </html>"),Icon(graphics));
 end PumpVLE_L1_simple;

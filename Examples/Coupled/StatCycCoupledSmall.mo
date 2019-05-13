@@ -2,10 +2,10 @@ within TransiEnt.Examples.Coupled;
 model StatCycCoupledSmall
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -135,7 +135,8 @@ equation
   connect(valve_cutFlow.outlet, mix2.inlet2) annotation (Line(points={{56.56,-50},{60,-50},{60,-27.36}}, color={0,0,0}));
   connect(pipe2.outlet, valve_cutFlow1.inlet) annotation (Line(points={{-30.2,50},{-38.56,50},{-38.56,49.68}}, color={0,0,0}));
   connect(valve_cutFlow1.outlet, mix1.inlet2) annotation (Line(points={{-52.56,50},{-60,50},{-60,28.24}}, color={0,0,0}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Tester static cycle closed-loop gas grid.</p>

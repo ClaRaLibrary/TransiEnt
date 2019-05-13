@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.SolarThermal.Base;
 model SolarTime "Calculates the solar time"
 
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -68,8 +68,7 @@ equation
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Calculates the solar time at a given longitude in respect of zone time, difference to UTC and an optional offset</p>
-<p>calculates&nbsp;the&nbsp;true&nbsp;local&nbsp;time,&nbsp;</p>
+<p>Calculates the solar time at a given longitude in respect of zone time, difference to UTC and an optional offset.</p>
 <p>Note:&nbsp;Here&nbsp;day&nbsp;is&nbsp;provided&nbsp;as&nbsp;a&nbsp;floating&nbsp;point&nbsp;value&nbsp;which&nbsp;means&nbsp;that&nbsp;other&nbsp;models&nbsp;might&nbsp;have&nbsp;to&nbsp;use&nbsp;integer()&nbsp;if&nbsp;they&nbsp;need&nbsp;an&nbsp;integer&nbsp;value.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
@@ -93,9 +92,10 @@ equation
 be=(day_floatingpoint+0.5)*360/365\"/></p>
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-0o7nqU2o.png\" alt=\"solarTime=time-utc+offset_sec+4*60*(-longitude_local)+equationOfTime\"/></p>
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-XBRg3dnS.png\" alt=\"equationOfTime=60*(0.0066+7.3525*cos(J+SI.Conversions.from_deg(85.9))+9.9359*cos(2*J+SI.Conversions.from_deg(108.99))+0.3387*cos(3*J+SI.Conversions.from_deg(105.2)))\"/></p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
-<p>.</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>DIN 5034 as cited by Quschning: Regenerative Energiesysteme (2014)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

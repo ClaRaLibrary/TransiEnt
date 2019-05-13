@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Grid.Heat.HeatGridControl.Base.DHGMassFlowCharacteristicLines;
-record SampleMassFlowCharacteristicLines
+record SampleMassFlowCharacteristicLines "record for sample mass flow characteristic lines"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -74,12 +74,31 @@ record SampleMassFlowCharacteristicLines
 14210/3.6,6120.47/3.6,4164.51/3.6,3240/3.6,685.02/3.6]);
 //Mengenrestriktionen in t/h. u[i] = Gesamtumlaufende Menge; y[1]=Ost; y[2]=West; y[3]=Hafen; y[4]=WUW-SPS. Merge between two sources: [1]Beecken, Jens ; Ridder, Mathias ; Schaper, Hartwig ; Schöttker, Peter ; Micus, Wolfgang ; Rogalla, Bernd-Uwe ; Feuerriegel, Susanne: Verbundprojekt „KWK-Optimierung Band 5“, 2007 (Klopsch2007) / [2] Teilprojekt Hannover-Hamburg: „Analyse des Regelverhaltens von Fernwärmenetzen“ / Pilotprojekt Hannover / Pilotprojekt Hamburg. Hamburg, 2000 (Beecken2000)
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
-<pre>Mass flow characteristic lines  in t/h. u[i] = Total mass flow; y[1]=East; y[2]=West; y[3]=Center(Hafen); y[4]=Center(WUW-SPS). 
-
-Merged from two different sources: 
-[1]Beecken, Jens ; Ridder, Mathias ; Schaper, Hartwig ; Sch&ouml;ttker, Peter ; Micus, Wolfgang ; Rogalla, Bernd-Uwe ; Feuerriegel, Susanne: Verbundprojekt &bdquo;KWK-Optimierung Band 5&ldquo;, 2007 (Klopsch2007)
-[2] Teilprojekt Hannover-Hamburg: &bdquo;Analyse des Regelverhaltens von Fernw&auml;rmenetzen&ldquo; / Pilotprojekt Hannover / Pilotprojekt Hamburg. Hamburg, 2000 (Beecken2000)</pre>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>record for sample mass flow characteristic lines</p>
+<p>Mass flow characteristic lines in t/h. u[i] = Total mass flow; y[1]=East; y[2]=West; y[3]=Center(Hafen); y[4]=Center(WUW-SPS). </p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>Merged from two different sources: </p>
+<p>[1]Beecken, Jens ; Ridder, Mathias ; Schaper, Hartwig ; Sch&ouml;ttker, Peter ; Micus, Wolfgang ; Rogalla, Bernd-Uwe ; Feuerriegel, Susanne: Verbundprojekt &bdquo;KWK-Optimierung Band 5&ldquo;, 2007 (Klopsch2007)</p>
+<p>[2] Teilprojekt Hannover-Hamburg: &bdquo;Analyse des Regelverhaltens von Fernw&auml;rmenetzen&ldquo; / Pilotprojekt Hannover / Pilotprojekt Hamburg. Hamburg, 2000 (Beecken2000)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end SampleMassFlowCharacteristicLines;

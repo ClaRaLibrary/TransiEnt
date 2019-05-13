@@ -1,2 +1,5 @@
 PartialActivePowerGenerator
 PartialQuasiStationaryGenerator
+PartialQuasiStationaryGeneratorComplex
+PartialInductionMotor
+CharLineInductionMachine

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.QuasiStationary.Check;
 model TestPhotovoltaicPlantQS
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -55,8 +55,9 @@ createPlot(id=1, position={809, 0, 791, 170}, y={"pV_Module.PowerSensorPVPanel.c
 
 end plotResult;
 equation
-  connect(pV_Module.epp, Grid.epp) annotation (Line(points={{24.1,0.1},{-0.85,0.1},{-0.85,-0.1},{-19.9,-0.1}},  color={0,127,0}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  connect(pV_Module.epp, Grid.epp) annotation (Line(points={{24.1,0.1},{-0.85,0.1},{-0.85,0},{-20,0}},          color={0,127,0}));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),      Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Test environment for transmission line Pi-Modell with ohmic load and PV</span></p>

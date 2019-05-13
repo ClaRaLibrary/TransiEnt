@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors;
 model ElectricReactivePower "Measure Frequency on ElectricPowerPort"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ model ElectricReactivePower "Measure Frequency on ElectricPowerPort"
 
   TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp_IN annotation (Placement(transformation(extent={{-102,-10},{-82,10}}), iconTransformation(extent={{-102,-10},{-82,10}})));
   TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp_OUT annotation (Placement(transformation(extent={{82,-10},{102,10}}), iconTransformation(extent={{84,-10},{104,10}})));
-  Modelica.Blocks.Interfaces.RealOutput P "Active Power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P "Active Power"
                                                   annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
@@ -51,7 +51,7 @@ model ElectricReactivePower "Measure Frequency on ElectricPowerPort"
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-38,78})));
-  Modelica.Blocks.Interfaces.RealOutput Q "Reactive Power" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ReactivePowerOut Q "Reactive Power" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={34,74}), iconTransformation(
@@ -86,18 +86,21 @@ equation
             false, extent={{-100,-100},{100,100}}), graphics),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Measure active and reactive power on electric line using TransiEnt interfaces with LoD 2 (single phase, active and reactive power, voltage and frequency)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Measure active and reactive power on electric line using TransiEnt interfaces with L2E (single phase, active and reactive power, voltage and frequency)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp_in: apparent power port</p>
+<p>epp_out: apparent power port</p>
+<p>P: output for actve power in W</p>
+<p>Q: output for reactive power in var</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
+<p>Q is the reactive power</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

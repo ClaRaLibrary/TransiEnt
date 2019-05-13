@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.SpaceHeating;
 model RoomFloorHeating "Room model with floor heating system"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -50,8 +50,9 @@ model RoomFloorHeating "Room model with floor heating system"
   replaceable parameter Base.FloorHeatingSystem heatingsystem=Base.FloorHeatingSystem() constrainedby Base.FloorHeatingSystem "Floor heating system parameters" annotation (choicesAllMatching=true);
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium= simCenter.fluid1 "Medium in heating system" annotation(choicesAllMatching=true);
   parameter Boolean use_T_amb_input = false "Use external input connector to set individual ambient temperatur";
-  parameter SI.Temperature T_start = 273.15+20 "Start value of room temperature";
-  parameter SI.Temperature T_amb_start = 273.15+20 "Start value of ambient temperature";
+
+  final parameter SI.HeatFlowRate Q_flow_heating_n=70*geometry.A_floor;
+  parameter SI.TemperatureDifference Delta_T_floorHeating_n=9;
   // _____________________________________________
   //
   //                 Outer Models
@@ -67,16 +68,16 @@ model RoomFloorHeating "Room model with floor heating system"
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterIn(Medium=medium) annotation (Placement(transformation(extent={{80,80},{100,100}}), iconTransformation(extent={{80,80},{100,100}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortOut waterOut(Medium=medium) annotation (Placement(transformation(extent={{80,-100},{100,-80}}), iconTransformation(extent={{80,-100},{100,-80}})));
 
-   Modelica.Blocks.Interfaces.RealInput T_Amb if use_T_amb_input
+   TransiEnt.Basics.Interfaces.General.TemperatureIn T_Amb if use_T_amb_input "Ambient Temperature"
     annotation (Placement(transformation(extent={{-116,28},{-92,52}}), iconTransformation(
         extent={{-7,-7},{7,7}},
         rotation=270,
         origin={3,99})));
-   Modelica.Blocks.Interfaces.RealOutput T_room_act
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_Room "Room Temperature"
     annotation (Placement(transformation(extent={{-90,-50},{-110,-30}})));
 
 protected
-        Modelica.Blocks.Interfaces.RealInput T_amb_internal;
+        TransiEnt.Basics.Interfaces.General.TemperatureIn T_amb_internal;
 
   // _____________________________________________
   //
@@ -118,17 +119,20 @@ public
   Modelica.SIunits.InternalEnergy U_extWall "internal energy of the external Walls";
   Modelica.SIunits.InternalEnergy U_intWall "internal energy of the internal Walls";
 
-  Modelica.SIunits.Energy Q_needed(stateSelect=StateSelect.prefer, start=0, fixed=true);
+  Modelica.SIunits.Heat Q_needed(stateSelect=StateSelect.prefer, start=0, fixed=true);
   Modelica.SIunits.HeatFlowRate Q_flow_needed;
-  Real need_of_thermal_heat;
+  Real need_of_thermal_heat(unit="J/(m2)",displayUnit="kWh/(m2)") "Area specific need for heat";
+
+  Modelica.SIunits.HeatFlowRate Q_flow_heating;
 
   // Temperatures
-  Modelica.SIunits.Temperature T_room( stateSelect=StateSelect.prefer, start = T_start, fixed = true);
-  Modelica.SIunits.Temperature T_floor(stateSelect=StateSelect.prefer,  start = T_start, fixed= true);
+  Modelica.SIunits.Temperature T_room( stateSelect=StateSelect.prefer, start = 273.15+20, fixed = true) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.SIunits.Temperature T_floor(stateSelect=StateSelect.prefer,  start = 273.15+20, fixed= true) annotation (Dialog(group="Initialization", showStartAttribute=true));
   Modelica.SIunits.Temperature T_waterOut;
-  Modelica.SIunits.Temperature T_wallInside(stateSelect=StateSelect.prefer, start=T_start, fixed=true);
+  Modelica.SIunits.Temperature T_wallInside(stateSelect=StateSelect.prefer, start=273.15+20, fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
   Modelica.SIunits.Temperature T_wallOutside;
-  Modelica.SIunits.Temperature T_wallInternal(stateSelect=StateSelect.prefer, start=(T_amb_start+T_start)/2, fixed=true);
+  Modelica.SIunits.Temperature T_wallInternal(stateSelect=StateSelect.prefer, start=(273.15+20+273.15+20)/2, fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.SIunits.TemperatureDifference Delta_T_floorHeating;
 
 equation
   // _____________________________________________
@@ -140,7 +144,7 @@ equation
   // *******  Temperatures *******
   //
 
-   T_room_act=T_room;
+   T_Room=T_room;
 
    connect(T_amb_internal, T_Amb);
    if not use_T_amb_input then
@@ -186,7 +190,7 @@ equation
      Q_flow_WaterOut=waterOut.m_flow*waterOut.h_outflow;
 
   // Calcualation of temperature of outgoinig waterflow
-    T_waterOut= max(waterInState.T-heatingsystem.T_spreading, T_amb_internal+heatingsystem.T_spreading);
+    T_waterOut= max(waterInState.T-Delta_T_floorHeating, T_amb_internal);
 
   //
   // *******  energy balance of the external walls *******--
@@ -239,12 +243,14 @@ equation
    //
    // *******  Diagnostic variables *******
    //
-
+   Q_flow_heating=(Q_flow_WaterIn+Q_flow_WaterOut);
    Q_flow_needed=(Q_flow_WaterIn+Q_flow_WaterOut);
+   Delta_T_floorHeating=Delta_T_floorHeating_n * Q_flow_heating / Q_flow_heating_n;
+
    der( Q_needed)=Q_flow_needed;
-   need_of_thermal_heat = Q_needed/3600/1000/geometry.A_eff;
-  annotation (defaultComponentName="RoomFloorHeating", Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})),
+   need_of_thermal_heat = Q_needed/geometry.A_eff;
+  annotation (defaultComponentName="RoomFloorHeating", Diagram(graphics,
+                                                               coordinateSystem(preserveAspectRatio=false, extent={{-100,            -100},{100,100}})),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                     graphics={
         Rectangle(
@@ -277,18 +283,21 @@ equation
           thickness=0.5)}),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<p>Room model with floor heating system.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>waterIn: FluidPort&Igrave;n</p>
+<p>waterOut: FluidPortOut</p>
+<p>T_Amb if use_T_amb_input: input for temperature in [K]</p>
+<p>T_room_act: output for temperature in [K]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

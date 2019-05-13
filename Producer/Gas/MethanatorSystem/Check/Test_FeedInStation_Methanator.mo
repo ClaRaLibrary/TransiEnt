@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.MethanatorSystem.Check;
-model Test_FeedInStation_Methanator
+model Test_FeedInStation_Methanator "Model for testing the Methanator FeedInStation"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,8 +20,8 @@ model Test_FeedInStation_Methanator
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-  FeedInSystem_Methanation feedInSystem_Methanation(
-    ScalingOfReactor=1,
+  FeedInStation_Methanation feedInSystem_Methanation(
+    scalingOfReactor=1,
     redeclare Electrolyzer.Systems.FeedInStation_CavernComp feedInStation_Hydrogen(
       StoreAllHydrogen=true,
       P_el_n=0.7e9,
@@ -30,37 +30,197 @@ model Test_FeedInStation_Methanator
       p_minHigh=9000000,
       p_start=6000000),
     m_flow_n_Methane=10,
-    HydrogenContentOutput=0.05) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    hydrogenFraction_fixed=0.05) annotation (Placement(transformation(extent={{-54,24},{-34,44}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi boundaryRealGas_pTxi annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=270,
-        origin={0,-38})));
+        origin={-44,-4})));
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={-42,0})));
+        origin={-86,34})));
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel3, redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_SRK_var gasModel1)
                                                                                                   annotation (Placement(transformation(extent={{60,80},{80,100}})));
   inner TransiEnt.ModelStatistics                                         modelStatistics annotation (Placement(transformation(extent={{80,80},{100,100}})));
-  Modelica.Blocks.Sources.RealExpression realExpression(y=0.7e9) annotation (Placement(transformation(extent={{-40,24},{-20,44}})));
-  Modelica.Blocks.Sources.RealExpression realExpression1(y=10) annotation (Placement(transformation(extent={{62,14},{42,34}})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=0.7e9) annotation (Placement(transformation(extent={{-84,58},{-64,78}})));
+  Modelica.Blocks.Sources.RealExpression realExpression1(y=10) annotation (Placement(transformation(extent={{18,48},{-2,68}})));
+  FeedInStation_Methanation feedInSystem_Methanation2(
+    scalingOfReactor=1,
+    m_flow_n_Methane=10,
+    hydrogenFraction_fixed=0.05,
+    redeclare Electrolyzer.Systems.FeedInStation_CavernComp feedInStation_Hydrogen(P_el_n=0.7e9))
+                                     annotation (Placement(transformation(extent={{0,-114},{20,-94}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi           boundaryRealGas_pTxi3
+                                                                                annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=270,
+        origin={10,-142})));
+  Components.Boundaries.Electrical.Frequency           ElectricGrid2
+                                                                    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-32,-104})));
+  Modelica.Blocks.Sources.RealExpression realExpression5(y=0.7e9)
+                                                                 annotation (Placement(transformation(extent={{-30,-80},{-10,-60}})));
+  Modelica.Blocks.Sources.RealExpression realExpression6(y=0.1)
+                                                               annotation (Placement(transformation(extent={{72,-90},{52,-70}})));
+  FeedInStation_Methanation feedInSystem_Methanation1(
+    useSeperateHydrogenOutput=true,
+    scalingOfReactor=1,
+    m_flow_n_Methane=10,
+    hydrogenFraction_fixed=0.05,
+    redeclare Electrolyzer.Systems.FeedInStation_CavernComp feedInStation_Hydrogen(P_el_n=1.7e9)) annotation (Placement(transformation(extent={{-126,-116},{-106,-96}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi           boundaryRealGas_pTxi1
+                                                                                annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=270,
+        origin={-116,-144})));
+  Components.Boundaries.Electrical.Frequency           ElectricGrid1
+                                                                    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-158,-106})));
+  Modelica.Blocks.Sources.RealExpression realExpression2(y=1.7e9)
+                                                                 annotation (Placement(transformation(extent={{-156,-82},{-136,-62}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi           boundaryRealGas_pTxi2
+                                                                                annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=270,
+        origin={-58,-134})));
+  Modelica.Blocks.Sources.RealExpression realExpression4(y=0.1)
+                                                               annotation (Placement(transformation(extent={{-54,-74},{-74,-54}})));
+  FeedInStation_Methanation feedInSystem_Methanation3(
+    useSeperateHydrogenOutput=true,
+    useVariableHydrogenFraction=true,
+    scalingOfReactor=1,
+    m_flow_n_Methane=10,
+    hydrogenFraction_fixed=0.05,
+    redeclare Electrolyzer.Systems.FeedInStation_CavernComp feedInStation_Hydrogen(P_el_n=0.7e9))
+                                      annotation (Placement(transformation(extent={{-138,-244},{-118,-224}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi           boundaryRealGas_pTxi4
+                                                                                annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=270,
+        origin={-128,-272})));
+  Components.Boundaries.Electrical.Frequency           ElectricGrid3
+                                                                    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-170,-234})));
+  Modelica.Blocks.Sources.RealExpression realExpression7(y=0.7e9)
+                                                                 annotation (Placement(transformation(extent={{-168,-210},{-148,-190}})));
+  Modelica.Blocks.Sources.RealExpression realExpression8(y=0.1)
+                                                               annotation (Placement(transformation(extent={{-66,-220},{-86,-200}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi           boundaryRealGas_pTxi5
+                                                                                annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=270,
+        origin={-70,-262})));
+  Modelica.Blocks.Sources.RealExpression realExpression9(y=0.1)
+                                                               annotation (Placement(transformation(extent={{-66,-202},{-86,-182}})));
+  Modelica.Blocks.Sources.Ramp ramp(duration=36000) annotation (Placement(transformation(extent={{-174,-280},{-154,-260}})));
+  Modelica.Blocks.Sources.Ramp ramp1(duration=36000, height=1)
+                                                    annotation (Placement(transformation(extent={{-188,-94},{-168,-74}})));
 equation
   connect(boundaryRealGas_pTxi.gasPort, feedInSystem_Methanation.gasPortOut) annotation (Line(
-      points={{0,-28},{0,-10.1},{-0.5,-10.1}},
+      points={{-44,6},{-44,23.9},{-44.5,23.9}},
       color={255,255,0},
       thickness=1.5));
   connect(ElectricGrid.epp, feedInSystem_Methanation.epp) annotation (Line(
-      points={{-31.9,0.1},{-20,0.1},{-20,0},{-10,0}},
+      points={{-76,34},{-64,34},{-64,34},{-54,34}},
       color={0,135,135},
       thickness=0.5));
-  connect(realExpression.y, feedInSystem_Methanation.P_el_set) annotation (Line(points={{-19,34},{0,34},{0,10.4}}, color={0,0,127}));
-  connect(feedInSystem_Methanation.m_flow_feedIn, realExpression1.y) annotation (Line(points={{10,8},{20,8},{20,24},{41,24}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false), graphics={Text(
-          extent={{-64,78},{48,52}},
+  connect(realExpression.y, feedInSystem_Methanation.P_el_set) annotation (Line(points={{-63,68},{-44,68},{-44,44.4}},
+                                                                                                                   color={0,0,127}));
+  connect(feedInSystem_Methanation.m_flow_feedIn, realExpression1.y) annotation (Line(points={{-34,42},{-24,42},{-24,58},{-3,58}},
+                                                                                                                              color={0,0,127}));
+  connect(boundaryRealGas_pTxi3.gasPort, feedInSystem_Methanation2.gasPortOut) annotation (Line(
+      points={{10,-132},{10,-114.1},{9.5,-114.1}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(ElectricGrid2.epp, feedInSystem_Methanation2.epp) annotation (Line(
+      points={{-22,-104},{-10,-104},{-10,-104},{0,-104}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(realExpression5.y, feedInSystem_Methanation2.P_el_set) annotation (Line(points={{-9,-70},{10,-70},{10,-93.6}}, color={0,0,127}));
+  connect(feedInSystem_Methanation2.m_flow_feedIn, realExpression6.y) annotation (Line(points={{20,-96},{30,-96},{30,-80},{51,-80}}, color={0,0,127}));
+  connect(boundaryRealGas_pTxi1.gasPort, feedInSystem_Methanation1.gasPortOut) annotation (Line(
+      points={{-116,-134},{-116,-116.1},{-116.5,-116.1}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(ElectricGrid1.epp, feedInSystem_Methanation1.epp) annotation (Line(
+      points={{-148,-106},{-136,-106},{-136,-106},{-126,-106}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(realExpression2.y, feedInSystem_Methanation1.P_el_set) annotation (Line(points={{-135,-72},{-116,-72},{-116,-95.6}}, color={0,0,127}));
+  connect(feedInSystem_Methanation1.gasPortOut_H2, boundaryRealGas_pTxi2.gasPort) annotation (Line(
+      points={{-106.3,-106.5},{-58,-106.5},{-58,-124}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(boundaryRealGas_pTxi4.gasPort,feedInSystem_Methanation3. gasPortOut) annotation (Line(
+      points={{-128,-262},{-128,-244.1},{-128.5,-244.1}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(ElectricGrid3.epp,feedInSystem_Methanation3. epp) annotation (Line(
+      points={{-160,-234},{-148,-234},{-148,-234},{-138,-234}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(realExpression7.y,feedInSystem_Methanation3. P_el_set) annotation (Line(points={{-147,-200},{-128,-200},{-128,-223.6}},
+                                                                                                                               color={0,0,127}));
+  connect(feedInSystem_Methanation3.m_flow_feedIn,realExpression8. y) annotation (Line(points={{-118,-226},{-108,-226},{-108,-210},{-87,-210}},
+                                                                                                                                          color={0,0,127}));
+  connect(feedInSystem_Methanation3.gasPortOut_H2,boundaryRealGas_pTxi5. gasPort) annotation (Line(
+      points={{-118.3,-234.5},{-70,-234.5},{-70,-252}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(realExpression9.y,feedInSystem_Methanation3. m_flow_feedIn_H2) annotation (Line(points={{-87,-192},{-138,-192},{-138,-226},{-137.8,-226}},
+                                                                                                                                                 color={0,0,127}));
+  connect(ramp.y,feedInSystem_Methanation3.hydrogenFraction_input)  annotation (Line(points={{-153,-270},{-146,-270},{-146,-242},{-137.8,-242}},     color={0,0,127}));
+  connect(feedInSystem_Methanation1.m_flow_feedIn, realExpression4.y) annotation (Line(points={{-106,-98},{-106,-64},{-75,-64}}, color={0,0,127}));
+  connect(ramp1.y, feedInSystem_Methanation1.m_flow_feedIn_H2) annotation (Line(points={{-167,-84},{-130,-84},{-130,-98},{-125.8,-98}}, color={0,0,127}));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-220,-300},{100,100}})),
+                                                                 Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-220,-300},{100,100}}),
+                                                                                                                      graphics={Text(
+          extent={{-124,102},{-12,76}},
           lineColor={28,108,200},
           textString="The storage of the FeedInSystem is calibrated such that the methanation only takes place under full load condition and only if enough hydrogen is stored
- such that switching operations of the methanation reactor are reduced.
+ such that switching operations of the methanation reactor are reduced (Therefor parameter StoreAllHydrogen is set to true).
 The bypass of the FeedInStation is calibrated such that the molar hydrogen content at the output is always 5%
+"),                                                                                                                             Text(
+          extent={{-106,-32},{6,-58}},
+          lineColor={28,108,200},
+          textString="Difference of the two following feedInStations: Left one with additional seperate Hydrogen output.
+"),                                                                                                                             Text(
+          extent={{-118,-160},{-6,-186}},
+          lineColor={28,108,200},
+          textString="Difference of the two following feedInStations: Left one with additional seperate Hydrogen output.
 ")}),
-    experiment(StopTime=36000, Interval=600));
+    experiment(StopTime=36000, Interval=599.999616),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the Methanator FeedInStation</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"),
+    __Dymola_experimentFlags(
+      Advanced(GenerateVariableDependencies=false, OutputModelicaCode=false),
+      Evaluate=false,
+      OutputCPUtime=true,
+      OutputFlatModelica=true));
 end Test_FeedInStation_Methanator;

@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model StatCycSplit
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -72,9 +72,10 @@ equation
   connect(pipe1.outlet, split.inlet) annotation (Line(points={{-27.8,0},{-11.04,0},{-11.04,0.333333}}, color={0,131,169}));
   connect(split.outlet1, pipe3.inlet) annotation (Line(points={{12.96,0.333333},{12.96,0},{29.7,0}}, color={0,131,169}));
   connect(pipe3.outlet, sink1.inlet) annotation (Line(points={{48.2,0},{48.2,4.44089e-016},{64.12,4.44089e-016}}, color={0,131,169}));
-  connect(split.outlet2, pipe2.inlet) annotation (Line(points={{0,-14.0667},{0,-28},{1.33227e-015,-28},{1.33227e-015,-27.7}}, color={0,131,169}));
+  connect(split.outlet2, pipe2.inlet) annotation (Line(points={{0,-14.0667},{0,-28},{1.33227e-15,-28},{1.33227e-15,-27.7}},   color={0,131,169}));
   connect(pipe2.outlet, sink2.inlet) annotation (Line(points={{-1.77636e-015,-46.2},{-1.77636e-015,-61.58},{2.66454e-015,-61.58}}, color={0,131,169}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Tester for static cycle split.</p>

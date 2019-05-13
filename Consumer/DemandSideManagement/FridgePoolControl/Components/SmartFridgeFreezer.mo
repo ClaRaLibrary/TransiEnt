@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components;
-model SmartFridgeFreezer "Modell mit festem Verhltnis einiger Parameter"
+model SmartFridgeFreezer "Model with fixed relation for some parameters"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -135,7 +135,8 @@ equation
   connect(ambient.port, heatconductionAmbientFridge.port_a) annotation (Line(points={{-62,12.5},{-58,12.5},{-58,28},{-56,28},{-56,28},{-54,28},{-54,27},{-50,27}},
                                                                                                                                                  color={191,0,0}));
   connect(Tu.y, ambient.T) annotation (Line(points={{-83.5,13},{-80.75,13},{-80.75,12.5},{-77.4,12.5}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                         Icon(coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=false), graphics={
         Rectangle(
@@ -158,21 +159,21 @@ equation
     __Dymola_experimentSetupOutput(events=false),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<p>Model&nbsp;of a smart controlled fridge and freezer with&nbsp;fixed&nbsp;relation&nbsp;for&nbsp;some&nbsp;parameters. Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>epp - Electric Power Port</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Check.TestSmartFridgeFreezer&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckBlackCoal_Init "Example of the component PowerPlant_PoutGrad_L1"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,15 +32,15 @@ Modelica.Blocks.Sources.Step P_step(
   height=-WT.P_el_n*0.5,
   offset=-WT.P_el_n*0.5,
   startTime=900) annotation (Placement(transformation(extent={{-89,14},{-69,34}})));
-BlackCoal WT(
-  t_startup=0,
-  P_init=0.5*WT.P_el_n,
-  isSecondaryControlActive=false,
+  BlackCoal WT(
+    t_startup=0,
+    P_init_set=0.5*WT.P_el_n,
+    isSecondaryControlActive=false,
     P_el_n=1e6) "Tiefstack" annotation (Placement(transformation(extent={{-35,-37},{5,1}})));
 equation
 
   connect(WT.epp, constantPotentialVariableBoundary.epp) annotation (Line(
-      points={{4,-7.36},{10,-7.36},{10,-6},{47.9,-6},{47.9,-2.1}},
+      points={{3,-4.7},{10,-4.7},{10,-6},{48,-6},{48,-2}},
       color={0,135,135},
       thickness=0.5));
   connect(P_step.y, WT.P_el_set) annotation (Line(points={{-68,24},{-18,24},{-18,0.81}}, color={0,0,127}));
@@ -60,10 +60,12 @@ createPlot(id=1, position={809, 0, 791, 733}, y={"P_step.y", "WT.epp.P"}, range=
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
     experiment(StopTime=3600),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-160},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-160},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Electrical.ApparentPower;
 model FrequencyVoltage "Sets frequency and voltage without definition of flow variables"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,9 @@ model FrequencyVoltage "Sets frequency and voltage without definition of flow va
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Basics.Icons.ElectricSink;
+
+  extends TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary(redeclare TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp);
+  extends TransiEnt.Basics.Icons.ElectricSource;
 
    // _____________________________________________
   //
@@ -48,7 +50,7 @@ model FrequencyVoltage "Sets frequency and voltage without definition of flow va
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput f_set if                 Use_input_connector_f "frequency input"
+  TransiEnt.Basics.Interfaces.General.FrequencyIn f_set if                 Use_input_connector_f "Frequency input"
                            annotation (Placement(transformation(extent={{-20,-20},
             {20,20}},
           rotation=270,
@@ -58,7 +60,7 @@ model FrequencyVoltage "Sets frequency and voltage without definition of flow va
         rotation=270,
         origin={-54,120})));
 
-  Modelica.Blocks.Interfaces.RealInput v_set if                 Use_input_connector_v "voltage input"
+  TransiEnt.Basics.Interfaces.Electrical.VoltageIn v_set if                 Use_input_connector_v "Voltage input"
                               annotation (Placement(transformation(extent={{-20,-20},
             {20,20}},
           rotation=270,
@@ -67,7 +69,6 @@ model FrequencyVoltage "Sets frequency and voltage without definition of flow va
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={60,120})));
-  TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp annotation (Placement(transformation(extent={{-102,-10},{-82,10}}), iconTransformation(extent={{-118,-16},{-84,14}})));
 
     // _____________________________________________
   //
@@ -82,8 +83,8 @@ model FrequencyVoltage "Sets frequency and voltage without definition of flow va
   //                Complex Components
   // _____________________________________________
 protected
-  Modelica.Blocks.Interfaces.RealInput f_internal "Needed to connect to conditional connector for frequency";
-  Modelica.Blocks.Interfaces.RealInput v_internal "Needed to connect to conditional connector for voltage";
+  TransiEnt.Basics.Interfaces.General.FrequencyIn f_internal "Needed to connect to conditional connector for frequency";
+  TransiEnt.Basics.Interfaces.Electrical.VoltageIn v_internal "Needed to connect to conditional connector for voltage";
 
  // Modelica.Blocks.Interfaces.RealInput f_set
  //   "active power input"                                         annotation (Placement(transformation(extent={{-140,60},{-100,100}},
@@ -122,8 +123,10 @@ equation
   connect(f_internal, f_set);
   connect(v_internal, v_set);
 
-  annotation (defaultComponentName="ElectricGrid", Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})),           Icon(coordinateSystem(
+  annotation (defaultComponentName="ElectricGrid", Diagram(graphics,
+                                                           coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),           Icon(graphics,
+                                               coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -133,12 +136,14 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Modelica RealInput: frequency in Hz</p>
+<p>Modelica RealInput: voltage in V</p>
+<p>Apparent power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

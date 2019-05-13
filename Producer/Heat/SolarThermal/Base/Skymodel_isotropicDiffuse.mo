@@ -2,10 +2,10 @@
 model Skymodel_isotropicDiffuse "Isotropic calculation of the irradiance on a tilted surface"
 
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,12 +56,12 @@ equation
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-SulDhPxL.png\" alt=\"direct_tilted = direct_horizontal*ratio_beam\"/></p>
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-2oro7BQ3.png\" alt=\"diffuse_tilted= diffuse_horizontal*(1 + cos(slope))/2\"/></p>
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-k3G0JHF6.png\"/></p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>None.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>Purely theoretical model</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>Duffie &AMP; Beckman&nbsp;(2006):&nbsp;Solar&nbsp;Engineering&nbsp;of&nbsp;Thermal&nbsp;Processes</p>
+<p>Duffie &amp; Beckman&nbsp;(2006):&nbsp;Solar&nbsp;Engineering&nbsp;of&nbsp;Thermal&nbsp;Processes</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Tobias Toerber (tobias.toerber@tuhh.de), Jul 2015</p>
 <p>Edited by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model MinMaxController "Control minimum and maximum electric power of electrolyzer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -60,12 +60,8 @@ model MinMaxController "Control minimum and maximum electric power of electrolyz
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set(
-    final quantity="ActivePower",
-    final unit="W")  annotation (Placement(transformation(extent={{-130,-20},{-90,20}}), iconTransformation(extent={{-130,-20},{-90,20}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_ely(
-    final quantity="ActivePower",
-    final unit="W") annotation (Placement(transformation(extent={{98,-10},{118,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set  annotation (Placement(transformation(extent={{-130,-20},{-90,20}}), iconTransformation(extent={{-130,-20},{-90,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_ely annotation (Placement(transformation(extent={{98,-10},{118,10}})));
 
   // _____________________________________________
   //
@@ -104,7 +100,8 @@ equation
     annotation (Line(points={{11,22},{18,22},{18,4},{28,4}}, color={0,0,127}));
   connect(P_el_ely, min.y)
     annotation (Line(points={{108,0},{51,0},{51,-2}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
   Documentation(info="<html>
 <h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
@@ -128,5 +125,6 @@ equation
 <p>(no remarks) </p>
 <h4><span style=\"color:#008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) in April 2016<br> </p>
-</html>"),                                                                     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+</html>"),                                                                     Icon(graphics,
+                                                                                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end MinMaxController;

@@ -1,11 +1,11 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
-record MolarNetCalorificValues "Record containing the net calorific values for different molecules in kJ per mol for 25 °C"
+record MolarNetCalorificValues "Record containing the net calorific values for different molecules in J per mol for 25 °C"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,8 +21,6 @@ record MolarNetCalorificValues "Record containing the net calorific values for d
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  // Reference: DIN EN ISO 6976, „Erdgas - Berechnung von Brenn- und Heizwert, Dichte, relativer Dichte und Wobbeindex aus der Zusammensetzung“, Deutsches Institut für Normung DIN, Berlin, Sep-2005.
-
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -35,8 +33,8 @@ record MolarNetCalorificValues "Record containing the net calorific values for d
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  parameter String[:] components =  {"Water", "CARBON_MONOXIDE", "CO",     "HYDROGEN",   "H2",     "Nitrogen",   "N2",   "CARBON_DIOXIDE",   "CO2",   "Methane",  "CH4",  "Ethane",  "C2H6",  "ETHENE", "C2H4",  "Propane", "C3H8",  "PROPENE",  "C3H6",   "Butane", "C4H10"};
-  parameter Real[:]   compValues =  {0,        282.98,            282.98,   241.81,       241.81,   0,            0,      0,                  0,       802.60,     802.60, 1428.64,  1428.64,  1323.15,  1323.15, 2043.11,   2043.11, 1925.97,    1925.97,  2657.32,  2657.32};
+  parameter String[:] components =  {"Water", "Carbon_Monoxide", "CO",     "Hydrogen",   "H2",     "Nitrogen",   "N2",   "Carbon_Dioxide",   "CO2",   "Methane",  "CH4",  "Ethane",  "C2H6",  "Ethene", "C2H4",  "Propane", "C3H8",  "Propene",  "C3H6",   "Butane", "C4H10",  "Oxygen", "O2"};
+  parameter Real[:]   compValues =  {0,        282.98,            282.98,   241.81,       241.81,   0,            0,      0,                  0,       802.60,     802.60, 1428.64,  1428.64,  1323.15,  1323.15, 2043.11,   2043.11, 1925.97,    1925.97,  2657.32,  2657.32, 0.0,      0.0}*1e3;
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -52,7 +50,7 @@ record MolarNetCalorificValues "Record containing the net calorific values for d
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The components vector contains the component names</p>
 <p><img src=\"modelica://TransiEnt/Images/LHVparams1.png\"/>.</p>
-<p>In the params vector the molar net calorific value for each component is defined in <img src=\"modelica://TransiEnt/Images/equations/equation-kylJVrhZ.png\" alt=\"kJ/mol\"/></p>
+<p>In the params vector the molar net calorific value for each component is defined in J/mol</p>
 <p><img src=\"modelica://TransiEnt/Images/LHVparams2.png\"/>.</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>Be sure to store the molar net calorific value for each component in params in the same column in which the name is stored in the components vector.</p>
@@ -60,9 +58,10 @@ record MolarNetCalorificValues "Record containing the net calorific values for d
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>G. Cerbe, B. Lendt, K. Br&uuml;ggemann, M. Dehli, F. Gr&ouml;schl, K. Heikrodt, T. Kleiber, J. Kuck, J. Mischner, T. Schmidt, A. Seemann, and W. Thielen, Grundlagen der Gastechnik. Gasbeschaffung - Gasverteilung - Gasverwendung, 8th ed. M&uuml;nchen: Carl Hanser Verlag, 2017.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Jan Braune (jan.braune@tuhh.de), Mar 2015</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Apr 2015</p>
+<p>Revised by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));
 end MolarNetCalorificValues;

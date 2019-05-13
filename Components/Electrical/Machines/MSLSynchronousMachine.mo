@@ -1,11 +1,11 @@
 within TransiEnt.Components.Electrical.Machines;
-model MSLSynchronousMachine "Adaption of transient MSL synchronous machine model to TransiEnt interfaces"
+model MSLSynchronousMachine "ApparentPowerPort: Transient MSL synchronous machine model to TransiEnt interfaces"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -75,11 +75,11 @@ model MSLSynchronousMachine "Adaption of transient MSL synchronous machine model
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput i_e "Excitation current"  annotation (Placement(transformation(extent={{-126,-60},{-86,-20}},
+  TransiEnt.Basics.Interfaces.Electrical.ElectricCurrentIn i_e "Excitation current"  annotation (Placement(transformation(extent={{-126,-60},{-86,-20}},
           rotation=0), iconTransformation(
         extent={{-15,-15},{15,15}},
-        rotation=270,
-        origin={1,93})));
+        rotation=0,
+        origin={-81,-65})));
 
   // _____________________________________________
   //
@@ -218,17 +218,22 @@ equation
       smooth=Smooth.None));
   connect(i_e, rampCurrent.i) annotation (Line(points={{-106,-40},{-78,-40},{-57,-40}},           color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,
             100}})),
     experiment(StopTime=30, Interval=0.005),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">MSL Synchronous Machine model adapted to TransiEnt LoD2 interfaces.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">MSL Synchronous Machine model adapted to TransiEnt L2E interfaces.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">LoD 2</span></p><p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">L2E (defined in the CodingConventions)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Mechanical power port mpp</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: electric current in [A]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: electric potential in [V]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Apparent power port epp</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -236,12 +241,13 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Do not use!</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in the check model &quot;TransiEnt.Components.Electrical.Machines.Check.CheckMSLSynchronousMachine&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 </html>"),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+    Icon(graphics,
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
             100}})));
 end MSLSynchronousMachine;

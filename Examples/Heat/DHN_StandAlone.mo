@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Heat;
 model DHN_StandAlone
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,7 +29,7 @@ model DHN_StandAlone
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-280,120},{-260,140}})));
   Modelica.Blocks.Sources.IntegerConstant pipe_N_cv(k=3) annotation (Placement(transformation(extent={{-280,80},{-260,100}})));
 
-  TransiEnt.Basics.Blocks.Sources.PowerExpression powerExpression1(y=-1e6) annotation (Placement(transformation(
+  TransiEnt.Basics.Blocks.Sources.HeatExpression  heatExpression1( y=-1e6) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={102,132})));
@@ -41,7 +41,7 @@ model DHN_StandAlone
         extent={{20,-20},{-20,20}},
         rotation=0,
         origin={-64,30})));
-  TransiEnt.Basics.Blocks.Sources.PowerExpression powerExpression(y=-1e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
+  TransiEnt.Basics.Blocks.Sources.HeatExpression  heatExpression( y=-1e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
   TransiEnt.Components.Boundaries.Heat.Heatflow_L1 producer1(use_Q_flow_in=true) annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=90,
@@ -251,24 +251,16 @@ model DHN_StandAlone
         origin={-160,-178})));
   ClaRa.Visualisation.Quadruple quadruple8  annotation (Placement(transformation(extent={{-120,-151},{-78,-136}})));
 equation
-  connect(powerExpression1.y,consumer2. Q_flow_prescribed) annotation (Line(
-      points={{102,121},{102,121},{102,104.4},{100,104.4}},
-      color={0,135,135},
-      pattern=LinePattern.Dash));
-  connect(powerExpression.y,consumer1. Q_flow_prescribed) annotation (Line(
-      points={{-81,54},{-50,54},{-50,48.4}},
-      color={0,135,135},
-      pattern=LinePattern.Dash));
   connect(producer1.fluidPortOut, balanceTank1.inlet3) annotation (Line(
-      points={{-236.4,-127.2},{-206.2,-127.2},{-206.2,-128},{-178,-128}},
+      points={{-236,-122},{-206.2,-122},{-206.2,-128},{-178,-128}},
       color={175,0,0},
       thickness=0.5));
   connect(pressure_reduction_valve.inlet, ambience.gas_a) annotation (Line(
-      points={{-132,-101},{-126,-101},{-124,-101}},
+      points={{-132,-102},{-126,-101},{-124,-101}},
       color={118,106,98},
       thickness=0.5));
   connect(balanceTank1.vent1, pressure_reduction_valve.outlet) annotation (Line(
-      points={{-165,-128},{-165,-100.5},{-152,-100.5},{-152,-101}},
+      points={{-165,-128},{-165,-100.5},{-152,-100.5},{-152,-102}},
       color={118,106,98},
       thickness=0.5));
   connect(make_up_ctrl_valve.outlet, balanceTank1.inlet1) annotation (Line(
@@ -291,7 +283,7 @@ equation
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(pipe1.outlet, consumer1.fluidPortIn) annotation (Line(
-      points={{-12,-20},{-12,-20},{-12,10.4},{-49.2,10.4}},
+      points={{-12,-20},{-12,-20},{-12,10},{-52,10}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
@@ -300,7 +292,7 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(pipe2.outlet, consumer2.fluidPortIn) annotation (Line(
-      points={{120,-20},{120,-20},{120,66.4},{100.8,66.4}},
+      points={{120,-20},{120,-20},{120,66},{98,66}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
@@ -315,16 +307,16 @@ equation
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(pipe3.outlet, producer1.fluidPortIn) annotation (Line(
-      points={{-236,-54},{-236.4,-54},{-236.4,-95.2}},
+      points={{-236,-54},{-236,-54},{-236,-98}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(join_hot.inlet2, consumer1.fluidPortOut) annotation (Line(
-      points={{-226,10},{-81.2,10},{-81.2,10.4}},
+      points={{-226,10},{-76,10},{-76,10}},
       color={0,131,169},
       thickness=0.5));
   connect(consumer2.fluidPortOut, pipe4.inlet) annotation (Line(
-      points={{68.8,66.4},{37.4,66.4},{37.4,67},{37,67}},
+      points={{74,66},{37.4,66},{37.4,67},{37,67}},
       color={175,0,0},
       thickness=0.5));
   connect(join_hot.inlet1, pipe4.outlet) annotation (Line(
@@ -350,7 +342,7 @@ equation
       points={{-178,-128},{-206,-128},{-206,-140}},
       color={0,131,169},
       thickness=0.5));
-  connect(PID_hot_temperature.y, producer1.Q_flow_prescribed) annotation (Line(points={{-286,-139},{-286,-139},{-286,-96},{-274,-96},{-274.4,-96}},                       color={0,0,127}));
+  connect(PID_hot_temperature.y, producer1.Q_flow_prescribed) annotation (Line(points={{-286,-139},{-286,-139},{-286,-96},{-272,-96},{-272,-98}},                         color={0,0,127}));
   connect(p_sollWedel4.y, PID_hot_temperature.u_s) annotation (Line(points={{-272.6,-174},{-272,-174},{-284,-174},{-286,-174},{-286,-162}},                         color={0,0,127}));
   connect(PID_hot_temperature.u_m, temperature.T) annotation (Line(points={{-274,-149.9},{-274,-150},{-217,-150}}, color={0,0,127}));
   connect(join_hot.inlet2, statePoint_phTs.port) annotation (Line(
@@ -360,7 +352,17 @@ equation
   connect(P_feedPump.y, pump.P_drive) annotation (Line(points={{-153.4,-178},{-136,-178},{-136,-166}}, color={0,0,127}));
   connect(balanceTank1.level, PID_level.u_m) annotation (Line(points={{-176,-159},{-176,-180},{-184,-180},{-184,-70},{-155.9,-70}}, color={0,0,127}));
   connect(pump.eye, quadruple8.eye) annotation (Line(points={{-125,-148},{-122,-148},{-122,-143.5},{-120,-143.5}}, color={190,190,190}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, initialScale=0.1)),               Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-300,-220},{200,160}})),
+  connect(heatExpression.y, consumer1.Q_flow_prescribed) annotation (Line(
+      points={{-81,54},{-52,54},{-52,46}},
+      color={175,0,0},
+      pattern=LinePattern.Dash));
+  connect(consumer2.Q_flow_prescribed, heatExpression1.y) annotation (Line(
+      points={{98,102},{98,105},{102,105},{102,121}},
+      color={175,0,0},
+      pattern=LinePattern.Dash));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, initialScale=0.1)),               Diagram(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-300,-220},{200,160}})),
   experiment(
     StopTime=259200,
     Interval=900,

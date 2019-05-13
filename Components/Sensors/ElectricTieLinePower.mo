@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors;
 model ElectricTieLinePower "Measure power on tie line and send to global statistics"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,7 +43,7 @@ model ElectricTieLinePower "Measure power on tie line and send to global statist
 
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp_IN annotation (Placement(transformation(extent={{-110,-10},{-90,10}}), iconTransformation(extent={{-110,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp_OUT annotation (Placement(transformation(extent={{92,-10},{112,10}}), iconTransformation(extent={{92,-10},{112,10}})));
-  Modelica.Blocks.Interfaces.RealOutput P(start=0) "Active Power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P(start=0) "Active Power"
                                                   annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
@@ -73,22 +73,25 @@ equation
             lineColor={0,0,0},
             fillColor={255,255,255},
             fillPattern=FillPattern.Solid,
-            textString="P")}), Diagram(coordinateSystem(preserveAspectRatio=false,
+            textString="P")}), Diagram(graphics,
+                                       coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Measure active power flow on electric line using TransiEnt interfaces with LoD 1 (single phase active power and frequency lines)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Measure active power flow on electric line using TransiEnt interfaces with L1E (single phase active power and frequency lines)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp_in: active power port</p>
+<p>epp_out: active power port</p>
+<p>P: output for electric power in W</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

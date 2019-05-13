@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Gas.Check;
 model TestGasGridHamburg "High pressure gas grid of Hamburg with constant gross calorific value at consumption side"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -533,8 +533,10 @@ equation
   connect(rho_NG_stp.y, switchDem.u1) annotation (Line(points={{77.3,-198},{68,-198},{64,-198},{64,-178},{56,-178}},           color={0,0,127}));
 
   connect(HHMitte.m_flow, shareMit.y) annotation (Line(points={{51,-31},{48,-31},{46.7,-31}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(extent={{-300,-240},{280,240}}, preserveAspectRatio=false)),
-                                                                         Icon(coordinateSystem(extent={{-300,-240},{280,240}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-300,-240},{280,240}}, preserveAspectRatio=false)),
+                                                                         Icon(graphics,
+                                                                              coordinateSystem(extent={{-300,-240},{280,240}})),
     experiment(
       StopTime=2.592e+006,
       Interval=900,

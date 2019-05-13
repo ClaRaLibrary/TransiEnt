@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.SolarThermal.Check;
-model TestCollectorFieldFluidCycle
+model TestCollectorFieldFluidCycle "Tester for a solar collector field using a fluid cycle"
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -73,7 +73,7 @@ model TestCollectorFieldFluidCycle
     b=8329,
     n_serial=12,
     n_parallel=10,
-    Q_flow_n=2e3)  annotation (Placement(transformation(
+    Q_flow_n=2e3) annotation (Placement(transformation(
         extent={{-44,-19},{44,19}},
         rotation=270,
         origin={137,-22})));
@@ -110,7 +110,7 @@ model TestCollectorFieldFluidCycle
         rotation=180,
         origin={18,-79})));
 
-   Controller controller(
+  Control.ControllerPumpSolarCollectorTandG controller(
     G_min=150,
     T=1,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
@@ -122,8 +122,7 @@ model TestCollectorFieldFluidCycle
     k_PID=10,
     T_set=358.15,
     Delta_p=50000,
-    T_stor=273.15 + 75)
-                   annotation (Placement(transformation(extent={{156,40},{186,64}})));
+    T_stor=273.15 + 75) annotation (Placement(transformation(extent={{156,40},{186,64}})));
 
   ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pumpVLE_L1_simple annotation (Placement(transformation(extent={{-34,24},{-14,44}})));
 
@@ -181,16 +180,18 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(temperatureSensor.T, controller.T_in) annotation (Line(points={{123,50},{126,50},{126,52},{134,52},{134,54.4},{158,54.4}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{200,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{200,100}})),
     experiment(
       StopTime=3.1536e+007,
       Interval=100,
       Tolerance=0.001),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Test model for CollectorFieldCycle Modell</p>
+<p>Test model for CollectorFieldCycle model</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -198,7 +199,7 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<h4><span style=\"color: #008000\">(no elements)</span></h4>
+<p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

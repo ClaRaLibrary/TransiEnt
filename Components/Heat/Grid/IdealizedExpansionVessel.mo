@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat.Grid;
 model IdealizedExpansionVessel "Expansion vessel with constant pressure and variable temperature"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,7 +36,7 @@ model IdealizedExpansionVessel "Expansion vessel with constant pressure and vari
   // _____________________________________________
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid  Medium = simCenter.fluid1 "Medium model" annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
   constant Modelica.SIunits.Temperature T_const=323.15 "Temperature of medium";
-  parameter Modelica.SIunits.Pressure p=simCenter.p_n[1] "Pressure to hold";
+  parameter Modelica.SIunits.Pressure p=simCenter.p_nom[1] "Pressure to hold";
 
   // _____________________________________________
   //
@@ -79,7 +79,8 @@ equation
       points={{-1.83187e-15,-10},{-1.83187e-15,-50.9},{0,-50.9},{0,-100}},
       color={175,0,0},
       thickness=0.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
         graphics),

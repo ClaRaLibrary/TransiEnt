@@ -1,10 +1,10 @@
 within TransiEnt;
 model ModelStatistics
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,15 +35,28 @@ model ModelStatistics
   final parameter Integer nTypes=TransiEnt.Basics.Types.nTypeOfPrimaryEnergyCarrier annotation (HideResult=true);
 
   final parameter Integer nTypesHeat=TransiEnt.Basics.Types.nTypeOfPrimaryEnergyCarrierHeat annotation (HideResult=true);
+
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+  parameter Boolean integrateElPower=simCenter.integrateElPower "true if electric powers shall be integrated" annotation(Dialog(group="Statistics"));
+  parameter Boolean integrateHeatFlow=simCenter.integrateHeatFlow "true if heat flows shall be integrated" annotation(Dialog(group="Statistics"));
+  parameter Boolean integrateCDE=simCenter.integrateCDE "true if CDE should be integrated" annotation(Dialog(group="Statistics"));
+
   // _____________________________________________
   //
   //                  Variables
   // _____________________________________________
 
 
-  Components.Statistics.Collectors.GlobalCollectors.GwpEmissionsStatistics gwpEmissions(final nTypesHeat=nTypesHeat, final nTypes=nTypes) annotation (Placement(transformation(extent={{28,-78},{80,-28}})));
-  Components.Statistics.Collectors.GlobalCollectors.ElectricPowerStatistics electricPower(final nSubgrids=nSubgrids, final nTypes=nTypesOfResource) annotation (Placement(transformation(extent={{-76,18},{-24,66}})));
-  Components.Statistics.Collectors.GlobalCollectors.HeatingPowerStatistics heatingPower(final nTypes=nTypesOfResource) annotation (Placement(transformation(extent={{30,18},{82,66}})));
+  Components.Statistics.Collectors.GlobalCollectors.GwpEmissionsStatistics gwpEmissions(final nTypesHeat=nTypesHeat, final nTypes=nTypes,
+    integrateCDE=integrateCDE)                                                                                                            annotation (Placement(transformation(extent={{28,-78},{80,-28}})));
+  Components.Statistics.Collectors.GlobalCollectors.ElectricPowerStatistics electricPower(final nSubgrids=nSubgrids, final nTypes=nTypesOfResource,
+    integrateElPower=integrateElPower)                                                                                                              annotation (Placement(transformation(extent={{-76,18},{-24,66}})));
+  Components.Statistics.Collectors.GlobalCollectors.HeatingPowerStatistics heatingPower(final nTypes=nTypesOfResource, integrateHeatFlow=integrateHeatFlow)
+                                                                                                                       annotation (Placement(transformation(extent={{30,18},{82,66}})));
 
   Components.Statistics.Collectors.GlobalCollectors.EconomicStatistics totalIncurredCosts annotation (Placement(transformation(extent={{-74,-78},{-22,-28}})));
 
@@ -124,13 +137,114 @@ equation
     defaultComponentPrefixes="inner",
         missingInnerMessage=
         "Your model is using an outer \"modelStatistics\" but it does not contain an inner \"modelStatistics\" component. Drag model TransiEnt.ModelStatistics into your model to make it work.",
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Bitmap(extent={{-96,-96},{96,96}}, fileName="modelica://TransiEnt/Images/ModelStatistics.png"),
-                                                                             Text(
-          extent={{-96,-98},{104,-64}},
-          lineColor={62,62,62},
-          fillColor={0,134,134},
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+        Rectangle(
+          extent={{-82,-40},{84,-42}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-82,10},{84,8}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-82,60},{84,58}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-86,86},{-82,-86}},
+          lineColor={0,0,0},
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Ellipse(
+          extent={{-78,74},{-48,44}},
+          lineColor={0,0,0},
+          fillColor={0,127,127},
           fillPattern=FillPattern.Solid,
-          textString="%name")}),
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{-46,74},{-16,44}},
+          lineColor={0,0,0},
+          fillColor={0,127,127},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{-12,74},{18,44}},
+          lineColor={0,0,0},
+          fillColor={0,127,127},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{50,74},{80,44}},
+          lineColor={0,0,0},
+          fillColor={0,127,127},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{-134,92},{-134,92}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,127,127},
+          fillPattern=FillPattern.Solid),
+        Ellipse(
+          extent={{-78,24},{-48,-6}},
+          lineColor={0,0,0},
+          fillColor={162,29,33},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{-16,24},{14,-6}},
+          lineColor={0,0,0},
+          fillColor={162,29,33},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{16,24},{46,-6}},
+          lineColor={0,0,0},
+          fillColor={162,29,33},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{50,24},{80,-6}},
+          lineColor={0,0,0},
+          fillColor={162,29,33},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{-78,-26},{-48,-56}},
+          lineColor={0,0,0},
+          fillColor={255,255,0},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{50,-26},{80,-56}},
+          lineColor={0,0,0},
+          fillColor={255,255,0},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{16,-26},{46,-56}},
+          lineColor={0,0,0},
+          fillColor={255,255,0},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{-46,-26},{-16,-56}},
+          lineColor={0,0,0},
+          fillColor={255,255,0},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Rectangle(
+          extent={{82,86},{86,-86}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid)}),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
             graphics={
         Rectangle(
@@ -147,25 +261,25 @@ equation
           color={95,95,95},
           smooth=Smooth.None)}),
     Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Global parameters for all models depending only on TransiEnt core library.</p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color:#008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Pascal Dubucq (dubucq@tuhh.de) on Mon Aug 18 2014</p>
 </html>"));
 end ModelStatistics;

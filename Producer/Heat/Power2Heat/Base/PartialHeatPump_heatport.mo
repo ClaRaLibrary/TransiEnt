@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Power2Heat.Base;
-partial model PartialHeatPump_heatport
+partial model PartialHeatPump_heatport "Partial model of a heat pump with a heat port"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,9 +20,59 @@ partial model PartialHeatPump_heatport
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends PartialHeatPump;
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow heatFlowBoundary annotation (Placement(transformation(extent={{72,-10},{92,10}})));
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b heatPort annotation (Placement(transformation(extent={{90,-10},{110,10}}, rotation=0)));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow heatFlowBoundary annotation (Placement(transformation(extent={{72,-10},{92,10}})));
+
 equation
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
   connect(heatFlowBoundary.port,heatPort)  annotation (Line(points={{92,0},{92,0},{100,0}},
                                                                                      color={191,0,0}));
+
+
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Partial model of a controlled heat pump model with heatport useable in demand side management scenarios</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>Modelica.Blocks.Interfaces.RealInput: u_set (setpoint value)</p>
+<p>Modelica.Blocks.Interfaces.RealInput: u_meas (measurement value)</p>
+<p>Modelica.Blocks.Interfaces.RealInput: T_source_input_K (input ambient temperature in Kelvin)</p>
+<p>Modelica.Blocks.Interfaces.RealInput: T_source_internal (ambient temperature from SimCenter)</p>
+<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b:&nbsp;heatPort</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>eta_HP&nbsp;=&nbsp;COP_n/((273.15+40)/(40-2))</p>
+<p>P_el_n&nbsp;=&nbsp;Q_flow_n&nbsp;/&nbsp;COP_n</p>
+<p>COP(y=COP_Carnot*eta_HP)</p>
+<p>COP_Carnot=(u_set&nbsp;+&nbsp;Delta_T_internal)/max(2*Delta_T_internal,&nbsp;u_set&nbsp;+&nbsp;2*Delta_T_internal&nbsp;-&nbsp;T_source_internal)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end PartialHeatPump_heatport;

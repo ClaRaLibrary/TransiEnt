@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
 model LinearStationaryLoss "Linear stationary loss (= a * E + b)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,7 +25,11 @@ model LinearStationaryLoss "Linear stationary loss (= a * E + b)"
   parameter Real b=0 "constant parameter (P_loss = a * E + b)";
 
 equation
-  P_statloss = a * max(E_is,0) + 1.0*b;
+ if noEvent(E_is<=params.E_min*1.01) then
+    P_statloss=0;
+  else
+    P_statloss = a * max(E_is,0) + 1.0*b;
+  end if;
 
   annotation (Icon(graphics={
   Line(origin={-26.667,8.667},
@@ -59,7 +63,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;TransiEnt.Storage.Base.Check.TestLinearStationaryLoss&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

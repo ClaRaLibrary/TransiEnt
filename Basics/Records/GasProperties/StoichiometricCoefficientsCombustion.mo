@@ -2,10 +2,10 @@ within TransiEnt.Basics.Records.GasProperties;
 record StoichiometricCoefficientsCombustion "Record containing the elementary composition of different molecules"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,7 +38,7 @@ record StoichiometricCoefficientsCombustion "Record containing the elementary co
   //define two vectors containing the elementary composition [C, H, O, N, S] as atoms (NOT MOLECULES) named sComponent-Name and sChemicalFormula
   //add those two vectors to the stoich-matrix { ... , sComponent-Name, sChemicalFormula}
 
-  parameter String[:] names = {"Methane", "CH4", "Ethane", "C2H6", "Propane", "C3H8", "Butane", "C4H10", "HYDROGEN", "H2", "Oxygen", "O2", "Nitrogen", "N2", "NITROUS_OXIDE", "NO", "NITROUS_DIOXIDE", "NO2", "CARBON_DIOXIDE", "CO2", "CARBON_MONOXIDE", "CO", "Water", "H2O", "SULFUR_DIOXIDE", "SO2", "AMMONIA", "NH3"};
+  parameter String[:] names = {"Methane", "CH4", "Ethane", "C2H6", "Propane", "C3H8", "Butane", "C4H10", "Hydrogen", "H2", "Oxygen", "O2", "Nitrogen", "N2", "Nitrous_Oxide", "NO", "Nitrous_Dioxide", "NO2", "Carbon_Dioxide", "CO2", "Carbon_Monoxide", "CO", "Water", "H2O", "Sulfur_Dioxide", "SO2", "Ammonia", "NH3"};
   parameter Real[:,5] stoich = {sMethane, sCH4, sEthane, sC2H6, sPropane, sC3H8, sButane, sC4H10, sHydrogen, sH2, sOxygen, sO2, sNitrogen, sN2, sNitrousOxide, sNO, sNitrousDioxide, sNO2, sCarbonDioxide, sCO2, sCarbonMonoxide, sCO, sWater, sH2O, sSulfurDioxide, sSO2, sAmmonia, sNH3};
   //                                  C H O N S
   parameter Real[5] sMethane =       {1,4,0,0,0};

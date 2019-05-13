@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Others.Check;
 model TestBiomass
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ model TestBiomass
     isExternalSecondaryController=false,
     t_startup=200,
     P_el_n=80e6,
-    P_init=0) annotation (Placement(transformation(extent={{-10,-39},{10,-19}})));
+    P_init_set=0) annotation (Placement(transformation(extent={{-10,-39},{10,-19}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{40,-33},{60,-13}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},
             {-70,100}})));
@@ -37,7 +37,7 @@ model TestBiomass
 equation
 
   connect(Biomass_Plant.epp, Grid.epp) annotation (Line(
-      points={{9.5,-23.4},{20,-23.4},{20,-23.1},{39.9,-23.1}},
+      points={{9,-22},{20,-22},{20,-23},{40,-23}},
       color={0,135,135},
       thickness=0.5));
   connect(sched.y, P_set_plant_1.u) annotation (Line(points={{-79,30},{-52,30}},          color={0,0,127}));
@@ -69,5 +69,26 @@ Biomass_Plant.epp.P
 ")}),
     experiment(StopTime=12000, Interval=60),
     __Dymola_experimentSetupOutput,
-              __Dymola_Commands(executeCall = TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant.plotResult() "Plot example results"));
+              __Dymola_Commands(executeCall = TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant.plotResult() "Plot example results"),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for biomass power plants</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestBiomass;

@@ -2,10 +2,10 @@ within TransiEnt.Basics.Media;
 model RealGasGCV_xi "Model for gross calorific value calculation for real gases, input xi"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,7 +61,7 @@ equation
     GCV= GCVIn;
   else
     //Search for component in GCVComponentValues and add it to total GCV = sum(xi_i * GCV_i) and from (MJ/kg) to (J/kg) GCV
-    GCV=sum(xi*GCV_vec)*1e6;
+    GCV=sum(xi*GCV_vec);
   end if;
 
   annotation (Documentation(info="<html>
@@ -74,7 +74,8 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
+<p>xi_in is the mass fraction</p>
+<p>GCV is the gross calorific value</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

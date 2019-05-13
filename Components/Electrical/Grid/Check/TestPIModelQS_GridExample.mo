@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.Grid.Check;
-model TestPIModelQS_GridExample
+model TestPIModelQS_GridExample "Model for testing a quasi stationary PiModel with an example grid"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,8 @@ model TestPIModelQS_GridExample
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable1(l=41, param=Characteristics.LV_K4()) annotation (Placement(transformation(rotation=0, extent={{-48,40},{-28,60}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable1(l=41,
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4) annotation (Placement(transformation(rotation=0, extent={{-48,40},{-28,60}})));
 
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load1(R_ref=1e3)
     annotation (Placement(transformation(
@@ -42,11 +43,13 @@ model TestPIModelQS_GridExample
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground1
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
 
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable16(param=Characteristics.LV_K4(), l=24) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable16(
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4, l=24) annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-14,34})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable17(l=86, param=Characteristics.LV_K13()) annotation (Placement(transformation(rotation=0, extent={{12,8},{32,28}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable17(l=86,
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K13) annotation (Placement(transformation(rotation=0, extent={{12,8},{32,28}})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load2(R_ref=1e3)
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -54,7 +57,8 @@ model TestPIModelQS_GridExample
         origin={52,18})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground2
     annotation (Placement(transformation(extent={{64,-2},{84,18}})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable23(param=Characteristics.LV_K4(), l=191) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable23(
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4, l=191) annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-14,-6})));
@@ -65,7 +69,8 @@ model TestPIModelQS_GridExample
         origin={26,-6})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground3
     annotation (Placement(transformation(extent={{38,-26},{58,-6}})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable29(l=66, param=Characteristics.LV_K13()) annotation (Placement(transformation(rotation=0, extent={{18,-40},{38,-20}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable29(l=66,
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K13) annotation (Placement(transformation(rotation=0, extent={{18,-40},{38,-20}})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load4(R_ref=1e3)
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -73,15 +78,18 @@ model TestPIModelQS_GridExample
         origin={66,-30})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground4
     annotation (Placement(transformation(extent={{78,-50},{98,-30}})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable30(param=Characteristics.LV_K4(), l=65) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable30(
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4,l=65) annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-14,-38})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable43(param=Characteristics.LV_K4(), l=287) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable43(
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4, l=287) annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-14,-74})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable32(l=89, param=Characteristics.LV_K14()) annotation (Placement(transformation(rotation=0, extent={{12,-66},{32,-46}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable32(l=89,
+    CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K14) annotation (Placement(transformation(rotation=0, extent={{12,-66},{32,-46}})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load5(R_ref=1e3)
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -99,7 +107,7 @@ model TestPIModelQS_GridExample
 equation
   connect(Adapter.voltageP, Cable1.pin_p1)
     annotation (Line(points={{-56,50},{-56,50},{-48,50}}, color={85,170,255}));
-  connect(Grid.epp, Adapter.epp) annotation (Line(points={{-79.9,49.9},{-76,49.9},{-76,50}},
+  connect(Grid.epp, Adapter.epp) annotation (Line(points={{-80,50},{-76,50},{-76,50}},
                                     color={0,127,0}));
   connect(Cable1.pin_p2, Load1.pin_p)
     annotation (Line(points={{-27.8,50},{-27.8,50},{14,50}},

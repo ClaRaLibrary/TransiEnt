@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller;
 model BatteryConditioningController
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ model BatteryConditioningController
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput P_el_cond_set "Setpoint of conditioing controller" annotation (Placement(transformation(extent={{96,-10},{116,10}}), iconTransformation(extent={{96,-10},{116,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_cond_set "Setpoint of conditioing controller" annotation (Placement(transformation(extent={{96,-10},{116,10}}), iconTransformation(extent={{96,-10},{116,10}})));
 
   Modelica.Blocks.Interfaces.RealInput SOC_is[param.nSystems] annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
@@ -112,8 +112,10 @@ equation
   connect(isConditioiningActiveAndNeeded.y, switch1.u2) annotation (Line(points={{55,82},{72,82},{72,38},{-46,38},{-46,4},{-46,0},{18,0}}, color={255,0,255}));
   connect(switch1.y, P_el_cond_set) annotation (Line(points={{41,0},{106,0},{106,0}}, color={0,0,127}));
   connect(extractSOC.u, SOC_is) annotation (Line(points={{-70,84},{-108,84},{-108,84}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                           Diagram(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                           Diagram(graphics,
+                                                   coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -123,12 +125,12 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>The controller does not check if the the battery can actually follow the setpoint. For example if the capacity of the battery is smaller than the trading period times the conditionning setpoint, the battery would be full and the setpoint would not be possilbe any more.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p><br>P_el_cond_set: Setpoint for the battery system. Is supposed to be added to the normal battery controller.</p>
+<p>P_el_cond_set: Setpoint for the battery system. Is supposed to be added to the normal battery controller.</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>No local states or variables.</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>None</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>The control output is supposed to be added to a more general battery controller</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>See TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller.Check.CheckBatteryConditioiningController</p>

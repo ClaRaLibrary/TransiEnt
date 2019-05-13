@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
 record GenericStorageParameters
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,6 +34,15 @@ extends TransiEnt.Basics.Icons.Record;
   parameter Real eta_unload=1 "Conversion efficiency while unloading" annotation(Dialog(group="Efficiency"));
   parameter Real eta_load=1 "Conversion efficiency while loading" annotation(Dialog(group="Efficiency"));
   parameter SI.Frequency selfDischargeRate=0 "E.g. 0.5/3600 = 50% discharge per hour, used if no detailed staionary loss model is available" annotation(Dialog(group="Efficiency"));
+
+  parameter Real P_max_load_over_SOC[:,:]=[0,1;1,1] "maximum possible relative load power over SOC";
+  parameter Real P_max_unload_over_SOC[:,:]=[0,1;1,1] "maximum possible relative un+load power over SOC";
+  parameter Real a=0 "Approximation parameter for part load efficiency calculation";
+  parameter Real b=1 "Approximation parameter for part load efficiency calculation";
+  parameter Real c=1 "Approximation parameter for part load efficiency calculation";
+  parameter Real d=1 "Approximation parameter for part load efficiency calculation";
+  parameter SI.Time T_plant=0 "first order plant dynamic";
+
 
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>

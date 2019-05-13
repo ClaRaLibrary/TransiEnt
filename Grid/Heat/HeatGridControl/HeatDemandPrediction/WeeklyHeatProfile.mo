@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction;
 model WeeklyHeatProfile "Normalized typical daily load profile is applied to input heat demand"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,8 +59,8 @@ model WeeklyHeatProfile "Normalized typical daily load profile is applied to inp
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput Q_flow_raw annotation (Placement(transformation(extent={{-140,-20},{-100,20}}), iconTransformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow annotation (Placement(transformation(extent={{100,-20},{140,20}}), iconTransformation(extent={{100,-20},{140,20}})));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_raw "Heat flow rate input" annotation (Placement(transformation(extent={{-140,-20},{-100,20}}), iconTransformation(extent={{-140,-20},{-100,20}})));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow "Heat flow rate output" annotation (Placement(transformation(extent={{100,-20},{140,20}}), iconTransformation(extent={{100,-20},{140,20}})));
 //  parameter SI.Time Ts_in=2*24*3600 "Sample period of input signal (2*24*3600 = 2-days average)";
   Basics.Tables.GenericCombiTable1Ds weeklyProfile_Summer(
     datasource=TransiEnt.Basics.Tables.DataPrivacy.isPublic,
@@ -86,7 +86,8 @@ equation
   connect(switch1.y, product.u2) annotation (Line(points={{39,-20},{40,-20},{40,-6},{44,-6}}, color={0,0,127}));
   connect(product.y, Q_flow) annotation (Line(points={{67,0},{120,0},{120,0}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Line(points={{-78,78},{-74.2,77.8},{-68.6,74.6},{-62.9,67.7},{-57.3,57.4},{-50.9,42.1},{-42.83,19.2},{-25.9,-32.8},{-18.7,-52.2},{-12.3,-66.2},{-6.7,-75.1},{-1,-80.4},{4.6,-82},{10.2,-79.6},{15.9,-73.5},{21.5,-63.9},{27.9,-49.2},{36,-26.8},{44,-2}},
                                                             color={255,0,0},
                                                                            smooth=Smooth.Bezier),

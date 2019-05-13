@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.Grid.Check;
-model TestPiModelQS
+model TestPiModelQS "Model for testing a quasi stationary PiModel"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,7 @@ model TestPiModelQS
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 
-  TransiEnt.Components.Electrical.Grid.PIModelQS PiModel(param=Characteristics.LV_K1()) annotation (Placement(transformation(rotation=0, extent={{-6,-10},{14,10}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS PiModel(CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K1) annotation (Placement(transformation(rotation=0, extent={{-6,-10},{14,10}})));
 
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load1(R_ref=1e3)
     annotation (Placement(transformation(
@@ -43,7 +43,7 @@ model TestPiModelQS
     annotation (Placement(transformation(extent={{58,-54},{78,-34}})));
 
 equation
-  connect(Adapter.epp, Grid.epp) annotation (Line(points={{-50,0},{-60,0},{-60,-0.1},{-71.9,-0.1}},
+  connect(Adapter.epp, Grid.epp) annotation (Line(points={{-50,0},{-60,0},{-60,0},{-72,0}},
                                color={0,127,0}));
   connect(Adapter.voltageP, PiModel.pin_p1)
     annotation (Line(points={{-30,0},{-30,0},{-6,0}}, color={85,170,255}));

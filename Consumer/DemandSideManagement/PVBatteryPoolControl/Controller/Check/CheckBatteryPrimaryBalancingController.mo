@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller.Check;
-model CheckBatteryPrimaryBalancingController
+model CheckBatteryPrimaryBalancingController "Tester for BatteryPrimaryBalancingController"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,6 +28,8 @@ model Unit "Unit model just for this tester"
 
 equation
   connect(bus.SOC[1], value);
+    annotation (Documentation(info="<html>
+</html>"));
 end Unit;
 
   inner Base.PoolParameter param(nSystems=1, SOC_min=0.2) annotation (Placement(transformation(extent={{52,68},{82,98}})));
@@ -52,8 +54,7 @@ algorithm
 
     annotation (experiment(StopTime=7200, __Dymola_Algorithm="Dassl"), __Dymola_experimentSetupOutput(events=false));
 end plotResult;
-  BatteryPrimaryBalancingController batteryPrimaryBalancingController(k_loading=2.5, P_nom=param.P_el_pbp_total)
-                                                                      annotation (Placement(transformation(extent={{2,2},{52,46}})));
+  BatteryPrimaryBalancingController batteryPrimaryBalancingController(k_loading=2.5, P_n=param.P_el_pbp_total) annotation (Placement(transformation(extent={{2,2},{52,46}})));
   Modelica.Blocks.Sources.Cosine f_grid_is(
     amplitude=0.1,
     phase=1.5707963267949,
@@ -72,8 +73,31 @@ equation
   connect(f_grid_is.y, delta_f_grid.u1) annotation (Line(points={{-59,42},{-52,42}}, color={0,0,127}));
   connect(f_grid_nom.y, delta_f_grid.u2) annotation (Line(points={{-59,12},{-44,12},{-44,34}}, color={0,0,127}));
   connect(batteryPrimaryBalancingController.delta_f, delta_f_grid.y) annotation (Line(points={{2,41.6},{-35,41.6},{-35,42}}, color={0,0,127}));
-annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                       Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+annotation (Diagram(graphics,
+                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                       Icon(graphics,
+                                            coordinateSystem(extent={{-100,-100},{100,100}})),
   experiment(StopTime=3600, __Dymola_Algorithm="Dassl"),
-  __Dymola_experimentSetupOutput(derivatives=false, events=false));
+  __Dymola_experimentSetupOutput(derivatives=false, events=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for BatteryPrimaryBalancingController</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end CheckBatteryPrimaryBalancingController;

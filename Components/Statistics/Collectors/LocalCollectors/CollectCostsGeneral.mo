@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CollectCostsGeneral "Cost collector for general components"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -71,20 +71,30 @@ model CollectCostsGeneral "Cost collector for general components"
   // _____________________________________________
 
   SI.Power P_el=0 "Consumed or produced electric power (target value of plant)" annotation(Dialog(group="Demand-related Cost"));
-  SI.Energy W_el_demand(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Consumed electric energy";
-  SI.Energy W_el_revenue(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Produced electric energy";
+  SI.Energy W_el_demand(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Consumed electric energy"
+                                                                                                                        annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Energy W_el_revenue(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Produced electric energy"
+                                                                                                                         annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.HeatFlowRate Q_flow=0 "Consumed heat flow" annotation(Dialog(group="Demand-related Cost"));
-  SI.Heat Q_demand(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Consumed heat";
-  SI.Heat Q_revenue(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Produced heat";
+  SI.Heat Q_demand(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Consumed heat"
+                                                                                                        annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Heat Q_revenue(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Produced heat"
+                                                                                                         annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.EnthalpyFlowRate H_flow=0 "Consumed gas enthalpy flow" annotation(Dialog(group="Demand-related Cost"));
-  SI.Enthalpy H_demand(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Consumed gas enthalpy";
-  SI.Enthalpy H_revenue(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Produced gas enthalpy";
+  SI.Enthalpy H_demand(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Consumed gas enthalpy"
+                                                                                                                    annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Enthalpy H_revenue(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Produced gas enthalpy"
+                                                                                                                     annotation (Dialog(group="Initialization", showStartAttribute=true));
   Real other_flow=0 "Consumed other resource flow" annotation(Dialog(group="Demand-related Cost"));
-  Real other_demand(fixed=true, start=0, stateSelect=StateSelect.never) "Consumed other resource";
-  Real other_revenue(fixed=true, start=0, stateSelect=StateSelect.never) "Produced other resource";
+  Real other_demand(fixed=true, start=0, stateSelect=StateSelect.never) "Consumed other resource"
+                                                                                                 annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Real other_revenue(fixed=true, start=0, stateSelect=StateSelect.never) "Produced other resource"
+                                                                                                  annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.MassFlowRate m_flow_CDE=0 "Produced CDE mass flow" annotation(Dialog(group="CO2 Certificates"));
-  SI.Mass m_CDE_produced(fixed=true, start=0, stateSelect=StateSelect.never) "Produced CDE";
-  SI.Mass m_CDE_consumed(fixed=true, start=0, stateSelect=StateSelect.never) "Consumed CDE";
+  SI.Mass m_CDE_produced(fixed=true, start=0, stateSelect=StateSelect.never) "Produced CDE"
+                                                                                           annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Mass m_CDE_consumed(fixed=true, start=0, stateSelect=StateSelect.never) "Consumed CDE"
+                                                                                           annotation (Dialog(group="Initialization", showStartAttribute=true));
 
 equation
   // _____________________________________________
@@ -93,7 +103,7 @@ equation
   // _____________________________________________
 
   //Calculation of consumed/produced electric energy
-  if produces_P_el then
+  if produces_P_el and calculateCost then
     if noEvent(P_el<eps) then
       der(W_el_revenue)=P_el;
     else
@@ -102,7 +112,7 @@ equation
   else
     W_el_revenue=0;
   end if;
-  if consumes_P_el then
+  if consumes_P_el and calculateCost then
     if noEvent(P_el<eps) then
       der(W_el_demand)=0;
     else
@@ -113,7 +123,7 @@ equation
   end if;
 
   //Calculation of consumed/produced heat
-  if produces_Q_flow then
+  if produces_Q_flow and calculateCost then
     if noEvent(Q_flow<eps) then
       der(Q_revenue)=Q_flow;
     else
@@ -122,7 +132,7 @@ equation
   else
     Q_revenue=0;
   end if;
-  if consumes_Q_flow then
+  if consumes_Q_flow and calculateCost then
     if noEvent(Q_flow<eps) then
       der(Q_demand)=0;
     else
@@ -133,7 +143,7 @@ equation
   end if;
 
   //Calculation of consumed/produced gas enthalpy
-  if produces_H_flow then
+  if produces_H_flow and calculateCost then
     if noEvent(H_flow<eps) then
       der(H_revenue)=H_flow;
     else
@@ -142,7 +152,7 @@ equation
   else
     H_revenue=0;
   end if;
-  if consumes_H_flow then
+  if consumes_H_flow and calculateCost then
     if noEvent(H_flow<eps) then
       der(H_demand)=0;
     else
@@ -153,7 +163,7 @@ equation
   end if;
 
   //Calculation of consumed/produced other resource
-  if produces_other_flow then
+  if produces_other_flow and calculateCost then
     if noEvent(other_flow<eps) then
       der(other_revenue)=other_flow;
     else
@@ -162,7 +172,7 @@ equation
   else
     other_revenue=0;
   end if;
-  if consumes_other_flow then
+  if consumes_other_flow and calculateCost then
     if noEvent(other_flow<eps) then
       der(other_demand)=0;
     else
@@ -173,7 +183,7 @@ equation
   end if;
 
   //Calculation of CDE
-  if produces_m_flow_CDE then
+  if produces_m_flow_CDE and calculateCost then
     if noEvent(m_flow_CDE<eps) then
       der(m_CDE_produced)=0;
     else
@@ -182,7 +192,7 @@ equation
   else
     m_CDE_produced=0;
   end if;
-  if consumes_m_flow_CDE then
+  if consumes_m_flow_CDE and calculateCost then
     if noEvent(m_flow_CDE<eps) then
       der(m_CDE_consumed)=m_flow_CDE;
     else
@@ -193,10 +203,10 @@ equation
   end if;
 
   //Calculation of investment costs
-  C_inv=Cspec_inv_der_E*der_E_n+Cspec_inv_E*E_n+C_inv_size;
+  C_inv=if calculateCost then Cspec_inv_der_E*der_E_n+Cspec_inv_E*E_n+C_inv_size else 0;
 
   //Calculation of O&M costs
-  dynamic_C_OM=(C_OM_fix + C_inv*factor_OM/timeYear*time+Cspec_OM_W_el*(W_el_demand-W_el_revenue)+Cspec_OM_Q*(Q_demand-Q_revenue)+Cspec_OM_H*(H_demand-H_revenue)+Cspec_OM_other*(other_demand-other_revenue))*annuityFactor*dynamicPriceFactorOM; //revenue values are <=0
+  dynamic_C_OM=if calculateCost then (C_OM_fix + C_inv*factor_OM/timeYear*time+Cspec_OM_W_el*(W_el_demand-W_el_revenue)+Cspec_OM_Q*(Q_demand-Q_revenue)+Cspec_OM_H*(H_demand-H_revenue)+Cspec_OM_other*(other_demand-other_revenue))*annuityFactor*dynamicPriceFactorOM else 0; //revenue values are <=0
 
   //Calculation of demand-related Costs
   dynamic_C_demand=(Cspec_demAndRev_el*W_el_demand+Cspec_demAndRev_heat*Q_demand+Cspec_demAndRev_gas_fuel*H_demand+Cspec_demAndRev_other*other_demand)*annuityFactor*dynamicPriceFactorDemand;
@@ -205,12 +215,14 @@ equation
   dynamic_C_revenue=(Cspec_demAndRev_el*W_el_revenue+Cspec_demAndRev_heat*Q_revenue+Cspec_demAndRev_gas_fuel*H_revenue+Cspec_demAndRev_other*other_revenue)*annuityFactor*dynamicPriceFactorRevenue;
 
   //Calculation of other costs
-  dynamic_C_other=(C_other_fix/timeYear*time+Cspec_CO2*(m_CDE_consumed+m_CDE_produced))*annuityFactor*dynamicPriceFactorOther;
+  dynamic_C_other=if calculateCost then (C_other_fix/timeYear*time+Cspec_CO2*(m_CDE_consumed+m_CDE_produced))*annuityFactor*dynamicPriceFactorOther else 0;
 
   annotation (
     defaultConnectionStructurallyInconsistent=true,
-  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                 Diagram(coordinateSystem(preserveAspectRatio=
+  Icon(graphics,
+       coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                 Diagram(graphics,
+                                         coordinateSystem(preserveAspectRatio=
             false, extent={{-100,-100},{100,100}})),
           defaultComponentName="collectCosts",
             Documentation(info="<html>

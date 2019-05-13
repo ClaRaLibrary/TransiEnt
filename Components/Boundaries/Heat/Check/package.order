@@ -1,3 +1,5 @@
 Test_Heatflow_L1
 Test_Heatflow_L2
 Test_HeatflowExternal_L2
+Test_Heatflow_L1_idContrMFlow
+Test_Heatflow_L1_idContrQFlow

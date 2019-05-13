@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.IdealGas;
 model GasMassflowSensor "Ideal gas mass flow sensor"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,25 +21,45 @@ model GasMassflowSensor "Ideal gas mass flow sensor"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Components.Sensors.IdealGas.Base.GasSensorBase;
-  outer TransiEnt.SimCenter simCenter;
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
   parameter Integer xiNumber=1 "xi vector entry for auxiliary mass flow";
 
-  Modelica.Blocks.Interfaces.RealOutput m_flow(
-    final quantity="mass flow",
-    displayUnit = "kg/s",
-    final unit="kg/s") "mass flow in port" annotation (Placement(transformation(extent={{100,-10},{120,10}},
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow "mass flow in port" annotation (Placement(transformation(extent={{100,-10},{120,10}},
                                                                     rotation=
             0), iconTransformation(extent={{100,-10},{120,10}})));
 
-  Modelica.Blocks.Interfaces.RealOutput m_flow_aux(
-    final quantity="mass flow",
-    displayUnit="kg/s",
-    final unit="kg/s") "mass flow in port" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_aux "mass flow in port" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-110,0}),  iconTransformation(extent={{-100,-10},{-120,10}})));
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
 
 equation
   m_flow = inlet.m_flow;
@@ -52,7 +72,8 @@ equation
     m_flow_aux= m_flow * actualStream(inlet.xi_outflow[xiNumber]);
   end if;
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                       graphics={
         Text(
@@ -99,7 +120,10 @@ Documentation(info="<html>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>IdealGasEnthPortIn: ideal gas enthalpy inlet</p>
+<p>IdealGasEnthPortOut: ideal gas enthalpy outlet</p>
+<p>RealOut: m_flow</p>
+<p>RealOut: m_flow_aux</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

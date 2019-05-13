@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Systems.Check;
-model Test_FeedInStation_Storage
+model Test_FeedInStation_Storage "Model for testing a feed in station for hydrogen with a storage"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,9 +35,11 @@ model Test_FeedInStation_Storage
     m_flow_start=1e-4,
     P_el_min=1e5,
     k=1e11,
-    p_out=5000000,
     V_geo=1,
-    p_start=5000000) annotation (Placement(transformation(extent={{-38,-64},{-18,-44}})));
+    p_out=5000000,
+    p_start=5000000,
+    integrateMassFlow=false)
+                     annotation (Placement(transformation(extent={{-38,-64},{-18,-44}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -74,12 +76,13 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(feedInStation.epp, ElectricGrid.epp) annotation (Line(
-      points={{-38,-54},{-42,-54},{-42,-53.9},{-61.9,-53.9}},
+      points={{-38,-54},{-42,-54},{-42,-54},{-62,-54}},
       color={0,135,135},
       thickness=0.5));
   connect(rampM.y, feedInStation.m_flow_feedIn) annotation (Line(points={{19,-26},{4,-26},{-14,-26},{-14,-46},{-18,-46}}, color={0,0,127}));
   connect(rampP.y, feedInStation.P_el_set) annotation (Line(points={{-59,40},{-28,40},{-28,-43.6}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false), graphics={Text(
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false), graphics={Text(
           extent={{-96,98},{100,58}},
           lineColor={28,108,200},
           horizontalAlignment=TextAlignment.Left,
@@ -92,5 +95,26 @@ and shuts down when P(m_flow_set)<P_min & storage is full; when max. time in ove
 - look at produced hydrogen mass flow compared to set mass flow, at charge and discharge mass flows
 - look at storage power")}),
     experiment(StopTime=3600, __Dymola_NumberOfIntervals=10000),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for FeedInStation_Storage</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Test_FeedInStation_Storage;

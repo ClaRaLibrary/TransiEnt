@@ -1,10 +1,10 @@
 within TransiEnt.Basics;
 package Types "containing type definitions"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,7 +39,7 @@ package Types "containing type definitions"
 
   constant Integer nTypeOfResource=5;
   constant Integer nTypeOfPrimaryEnergyCarrier=14;
-  constant Integer nTypeOfPrimaryEnergyCarrierHeat=8;
+  constant Integer nTypeOfPrimaryEnergyCarrierHeat=10;
 
   constant Integer on_ready=1;
   constant Integer off_ready=2;

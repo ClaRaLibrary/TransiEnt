@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Records;
-model PipeParameter
+model PipeParameter "Model containing parameters of a pipe"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,10 +40,12 @@ model PipeParameter
   parameter Integer N_ducts[N_pipes]=fill(1,N_pipes) "Number of pipe ducts (in parallel)";
   parameter Real f_mFlow[N_pipes]=fill(1,N_pipes) "Mass flow share (for sinks)";
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>(Description) </p>
+<p>This model contains parameters of a pipe </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

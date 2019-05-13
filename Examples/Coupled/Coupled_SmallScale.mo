@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Coupled;
 model Coupled_SmallScale "Coupled small-scale example"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -88,21 +88,33 @@ model Coupled_SmallScale "Coupled small-scale example"
         rotation=90,
         origin={86,59})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction(
-    p_start=Init.split1.p,
-    xi_start=Init.split1.xi_in,
-    h_start=Init.split1.h_in)                                                annotation (Placement(transformation(extent={{-4,28},{16,8}})));
+    p(
+    start = Init.split1.p),
+    xi(
+    start =  Init.split1.xi_in),
+    h(
+    start = Init.split1.h_in))                                               annotation (Placement(transformation(extent={{-4,28},{16,8}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
-    p_start=Init.mix1.p,
-    xi_start=Init.mix1.xi_out,
-    h_start=Init.mix1.h_out)                                                  annotation (Placement(transformation(extent={{16,88},{-4,108}})));
+    p(
+    start = Init.mix1.p),
+    xi(
+    start =  Init.mix1.xi_out),
+    h(
+    start = Init.mix1.h_out))                                                 annotation (Placement(transformation(extent={{16,88},{-4,108}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
-    p_start=Init.split2.p,
-    xi_start=Init.split2.xi_in,
-    h_start=Init.split2.h_in)                                                 annotation (Placement(transformation(extent={{96,88},{76,108}})));
+    p(
+    start = Init.split2.p),
+    xi(
+    start =  Init.split2.xi_in),
+    h(
+    start = Init.split2.h_in))                                                annotation (Placement(transformation(extent={{96,88},{76,108}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
-    p_start=Init.mix2.p,
-    xi_start=Init.mix2.xi_out,
-    h_start=Init.mix2.h_out)                                                  annotation (Placement(transformation(extent={{76,26},{96,6}})));
+    p(
+    start = Init.mix2.p),
+    xi(
+    start =  Init.mix2.xi_out),
+    h(
+    start = Init.mix2.h_out))                                                 annotation (Placement(transformation(extent={{76,26},{96,6}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source annotation (Placement(transformation(extent={{-116,8},{-96,28}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source1 annotation (Placement(transformation(extent={{124,88},{104,108}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink(m_flow_const=1, variable_m_flow=true) annotation (Placement(transformation(extent={{-36,88},{-16,108}})));
@@ -115,12 +127,13 @@ model Coupled_SmallScale "Coupled small-scale example"
     useHomotopy=true)                                                                                        annotation (Placement(transformation(extent={{-130,120},{-110,140}})));
   TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_Storage feedInStation(
     V_geo=50,
-    t_overload=86300,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics1stOrder,
     P_el_n=3000000,
     startState=1,
-    redeclare model CostSpecsElectrolyzer = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Electrolyzer_2035) annotation (Placement(transformation(extent={{-44,32},{-74,60}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(h_start=-3275)
+    redeclare model CostSpecsElectrolyzer = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Electrolyzer_2035,
+    t_overload=900)                                                                                                               annotation (Placement(transformation(extent={{-44,32},{-74,60}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(h(
+                                                                              start = -3275))
                                                                               annotation (Placement(transformation(extent={{-68,28},{-48,8}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{-78,-26},{-98,-6}})));
   Modelica.Blocks.Sources.RealExpression P_ptg(y=max(0, -(consumer.epp.P + windTurbine.epp.P + CHP.epp.P)))
@@ -135,7 +148,7 @@ model Coupled_SmallScale "Coupled small-scale example"
     m_flow_nom=13,
     Delta_p_nom=200000,
     T_init=356.15,
-    p_init=800000)      annotation (Placement(transformation(extent={{38,-120},{-28,-58}})));
+    p_init=800000)      annotation (Placement(transformation(extent={{40,-120},{-26,-58}})));
   TransiEnt.Basics.Adapters.Gas.Real_to_Ideal real_to_Ideal(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var real, redeclare TransiEnt.Basics.Media.Gases.Gas_VDIWA_NG7_H2_var ideal) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
@@ -159,7 +172,7 @@ model Coupled_SmallScale "Coupled small-scale example"
   Modelica.Blocks.Sources.Sine Q_flow_consumer(
     freqHz=2/86400,
     offset=1500e3,
-    amplitude=700e3) annotation (Placement(transformation(extent={{-46,-44},{-60,-30}})));
+    amplitude=500e3) annotation (Placement(transformation(extent={{-46,-44},{-60,-30}})));
   TransiEnt.Producer.Combined.SmallScaleCHP.Controller.ControllerHeatLed controllerHeatLed(Specification=TransiEnt.Producer.Combined.SmallScaleCHP.Specifications.CHP_2MW()) annotation (Placement(transformation(extent={{78,-108},{58,-88}})));
   TransiEnt.Consumer.Electrical.LinearElectricConsumer consumer annotation (Placement(transformation(extent={{-34,-10},{-14,10}})));
   Modelica.Blocks.Sources.Sine P_consumer(
@@ -239,7 +252,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(feedInStation.epp, ElectricGrid.epp) annotation (Line(
-      points={{-44,46},{-40,46},{-40,-16.1},{-77.9,-16.1}},
+      points={{-44,46},{-40,46},{-40,-16},{-78,-16}},
       color={0,135,135},
       thickness=0.5));
   connect(junction4.gasPort1, maxH2MassFlow.gasPortOut) annotation (Line(
@@ -265,7 +278,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(CHP.gasPortOut, gasMassflowSensor.inlet) annotation (Line(
-      points={{38,-64.2},{38,-52},{52,-52}},
+      points={{40,-64.2},{40,-52},{52,-52}},
       color={255,213,170},
       thickness=1.25));
   connect(gasMassflowSensor.outlet, boundaryIdealGas_p.gasPort) annotation (Line(
@@ -273,22 +286,22 @@ equation
       color={255,213,170},
       thickness=1.25));
   connect(CHP.epp, ElectricGrid.epp) annotation (Line(
-      points={{-28,-101.4},{-40,-101.4},{-40,-16.1},{-77.9,-16.1}},
+      points={{-26,-101.4},{-40,-101.4},{-40,-16},{-78,-16}},
       color={0,135,135},
       thickness=0.5));
   connect(boundaryVLE_Txim_flow.steam_a, CHP.waterPortIn) annotation (Line(
-      points={{-50,-82},{-50,-82},{-46,-82},{-46,-67.61},{-28,-67.61}},
+      points={{-50,-82},{-46,-82},{-46,-67.61},{-26,-67.61}},
       color={175,0,0},
       thickness=0.5));
-  connect(Q_flow_consumer.y, heatFlow.Q_flow_prescribed) annotation (Line(points={{-60.7,-37},{-67.6,-37},{-67.6,-42}}, color={0,0,127}));
-  connect(CHP.controlBus, controllerHeatLed.controlBus) annotation (Line(points={{38,-82.8},{48,-82.8},{48,-94},{58,-94}},     color={255,0,0}));
+  connect(Q_flow_consumer.y, heatFlow.Q_flow_prescribed) annotation (Line(points={{-60.7,-37},{-68,-37},{-68,-42}},     color={0,0,127}));
+  connect(CHP.controlBus, controllerHeatLed.controlBus) annotation (Line(points={{40,-82.8},{48,-82.8},{48,-94},{58,-94}},     color={255,0,0}));
   connect(consumer.epp, ElectricGrid.epp) annotation (Line(
-      points={{-33.8,0},{-40,0},{-40,-16.1},{-77.9,-16.1}},
+      points={{-33.8,0},{-40,0},{-40,-16},{-78,-16}},
       color={0,135,135},
       thickness=0.5));
   connect(consumer.P_el_set, P_consumer.y) annotation (Line(points={{-24,11.6},{-8,11.6},{-8,1},{-2.7,1}},        color={0,0,127}));
   connect(CHP.gasPortIn, gasMassflowSensor1.outlet) annotation (Line(
-      points={{38.33,-75.67},{45.165,-75.67},{45.165,-76},{52,-76}},
+      points={{40.33,-75.67},{45.165,-75.67},{45.165,-76},{52,-76}},
       color={255,213,170},
       thickness=1.25));
   connect(gasMassflowSensor1.inlet, real_to_Ideal.gasPortOut) annotation (Line(
@@ -296,31 +309,33 @@ equation
       color={255,213,170},
       thickness=1.25));
   connect(CHP.waterPortOut, heatFlow.fluidPortIn) annotation (Line(
-      points={{-28,-59.55},{-45,-59.55},{-45,-59.8},{-66.6,-59.8}},
+      points={{-26,-59.55},{-45,-59.55},{-45,-60},{-68,-60}},
       color={175,0,0},
       thickness=0.5));
   connect(boundaryVLE_phxi.steam_a, heatFlow.fluidPortOut) annotation (Line(
-      points={{-118,-60},{-82.6,-60},{-82.6,-59.8}},
+      points={{-118,-60},{-80,-60},{-80,-60}},
       color={175,0,0},
       thickness=0.5));
   connect(temperatureSensor.port, heatFlow.fluidPortOut) annotation (Line(
-      points={{-114,-71},{-114,-59.8},{-82.6,-59.8}},
+      points={{-114,-71},{-114,-60},{-80,-60}},
       color={175,0,0},
       thickness=0.5));
   connect(windTurbine.epp, ElectricGrid.epp) annotation (Line(
-      points={{-33.5,-26.4},{-40,-26.4},{-40,-16.1},{-77.9,-16.1}},
+      points={{-33,-25},{-40,-25},{-40,-16},{-78,-16}},
       color={0,135,135},
       thickness=0.5));
   connect(v_wind.y, windTurbine.v_wind) annotation (Line(points={{-4.8,-26},{-8,-26},{-8,-25.9},{-15.1,-25.9}},    color={0,0,127}));
   connect(P_ptg.y, feedInStation.P_el_set) annotation (Line(points={{-93,64},{-78,64},{-59,64},{-59,60.56}}, color={0,0,127}));
   connect(temperatureSensor.T, firstOrder.u) annotation (Line(points={{-103,-81},{-95,-81},{-95,-81.5}}, color={0,0,127}));
   connect(firstOrder.y, boundaryVLE_Txim_flow.T) annotation (Line(points={{-83.5,-81.5},{-77.75,-81.5},{-77.75,-82},{-72,-82}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(
         preserveAspectRatio=false,
-        extent={{-140,-140},{140,140}},
-        initialScale=0.1)), Diagram(coordinateSystem(
+        extent={{-140,-140},{140,160}},
+        initialScale=0.1)), Diagram(graphics,
+                                    coordinateSystem(
         preserveAspectRatio=false,
-        extent={{-140,-140},{140,140}},
+        extent={{-140,-140},{140,160}},
         initialScale=0.1)),
     experiment(
       StopTime=43200,

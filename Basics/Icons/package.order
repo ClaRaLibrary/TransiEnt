@@ -9,6 +9,7 @@ CHP
 CheckPackage
 Checkmodel
 CombinedCycleCHP
+Combustion
 ComponentsPackage
 Consumer
 ConsumerPackage
@@ -17,6 +18,7 @@ Controller
 DataPackage
 DiscreteBlock
 ElectricSink
+ElectricalConsumer
 ElectricSource
 ElectricSubModel
 ElectricalPackage
@@ -111,3 +113,11 @@ RecordModel
 FluidToRealAdapter
 HPGasGridHamburg
 HeatPump
+Heat_Exchanger
+PipeFlow_L4_Simple
+Valve
+Fluid_Volume
+BoundaryVLE_flow
+BoundaryVLE
+Pump
+ComponentsPackage2

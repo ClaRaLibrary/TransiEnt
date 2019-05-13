@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP;
 model TwoBlockCHP "Example model of plants consisting of several units"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,8 +48,8 @@ model TwoBlockCHP "Example model of plants consisting of several units"
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium=simCenter.fluid1 "Medium to be used" annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
-  parameter Boolean UseGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if UseGasPort==true "Gas Medium to be used - only if UseGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if UseGasPort==true then true else false));
+  parameter Boolean useGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if useGasPort==true "Gas Medium to be used - only if useGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if useGasPort==true then true else false));
 
   // _____________________________________________
   //
@@ -63,13 +63,13 @@ model TwoBlockCHP "Example model of plants consisting of several units"
   replaceable ContinuousCHP Block_1(
     PQCharacteristics=Base.Characteristics.PQ_Characteristics_WW1(),
     P_el_n = 150.369e6,
-    UseGasPort=UseGasPort)
+    useGasPort=useGasPort)
                         constrainedby Base.PartialCHP annotation (choicesAllMatching=true, Placement(transformation(extent={{-46,16},{-26,36}})));
 
   replaceable ContinuousCHP Block_2(
     PQCharacteristics=Base.Characteristics.PQ_Characteristics_WW2(),
     P_el_n = 137.106e6,
-    UseGasPort=UseGasPort)
+    useGasPort=useGasPort)
                          constrainedby Base.PartialCHP annotation (choicesAllMatching=true, Placement(transformation(extent={{-4,14},{16,34}})));
 
   //Boundaries
@@ -89,49 +89,49 @@ model TwoBlockCHP "Example model of plants consisting of several units"
   Components.Visualization.InfoBoxLargeCHP infoBoxLargeCHP3 annotation (Placement(transformation(extent={{-58,-78},{-104,-18}})));
 
   // Interfaces
-  Basics.Interfaces.Electrical.ElectricPowerIn P_set_B1 annotation (Placement(transformation(
+  Basics.Interfaces.Electrical.ElectricPowerIn P_set_B1 "Set power B1" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-82,110}), iconTransformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-182,170})));
-  Basics.Interfaces.Electrical.ElectricPowerIn P_set_B2 annotation (Placement(transformation(
+  Basics.Interfaces.Electrical.ElectricPowerIn P_set_B2 "Set power B2" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={28,110}), iconTransformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={78,170})));
-  Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set_B1 annotation (Placement(transformation(
+  Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set_B1 "Set heat flow rate B1" annotation (Placement(transformation(
         extent={{-11,-11},{11,11}},
         rotation=270,
         origin={-41,111}), iconTransformation(
         extent={{-11,-11},{11,11}},
         rotation=270,
         origin={-74,170})));
-  Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set_B2 annotation (Placement(transformation(
+  Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set_B2 "Set heat flow rate B2" annotation (Placement(transformation(
         extent={{-11,-11},{11,11}},
         rotation=270,
         origin={71,111}), iconTransformation(
         extent={{-11,-11},{11,11}},
         rotation=270,
         origin={164,172})));
-  Basics.Interfaces.Thermal.MassFlowRateIn m_flow_set_B1 annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_set_B1 "Set mass flow rate B1" annotation (Placement(transformation(
         extent={{-13,-13},{13,13}},
         rotation=90,
         origin={-57,-100}), iconTransformation(
         extent={{-13,-13},{13,13}},
         rotation=90,
         origin={-174,-146})));
-  Basics.Interfaces.Thermal.MassFlowRateIn m_flow_set_B2 annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_set_B2 "Set mass flow rate B2" annotation (Placement(transformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
         origin={48,-100}), iconTransformation(
         extent={{-12,-12},{12,12}},
         rotation=90,
         origin={112,-148})));
-  Basics.Interfaces.Thermal.TemperatureIn T_return_B2 annotation (Placement(transformation(
+  Basics.Interfaces.General.TemperatureIn T_return_B2 "Set return temperature B2" annotation (Placement(transformation(
         extent={{-14,-14},{14,14}},
         rotation=90,
         origin={84,-100}), iconTransformation(
@@ -139,7 +139,7 @@ model TwoBlockCHP "Example model of plants consisting of several units"
         rotation=90,
         origin={184,-146})));
   Basics.Interfaces.Thermal.FluidPortOut outlet(Medium=medium) annotation (Placement(transformation(extent={{240,-28},{260,-8}}), iconTransformation(extent={{240,-28},{260,-8}})));
-  Basics.Interfaces.Thermal.TemperatureIn T_return_B1 annotation (Placement(transformation(
+  Basics.Interfaces.General.TemperatureIn T_return_B1 "Set return temperature B1" annotation (Placement(transformation(
         extent={{-14,-14},{14,14}},
         rotation=90,
         origin={-30,-100}), iconTransformation(
@@ -148,7 +148,7 @@ model TwoBlockCHP "Example model of plants consisting of several units"
         origin={-98,-146})));
   Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{238,122},{258,142}}), iconTransformation(extent={{238,122},{258,142}})));
 
-  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{240,72},{260,92}})));
+  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{240,72},{260,92}})));
 
 
   //Sensors
@@ -252,7 +252,7 @@ equation
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
-  if UseGasPort then
+  if useGasPort then
     connect(Block_2.gasPortIn, gasPortIn) annotation (Line(
       points={{16,30.8333},{56,30.8333},{56,82},{250,82}},
       color={255,255,0},
@@ -262,7 +262,9 @@ equation
       color={255,255,0},
       thickness=1.5));
   end if;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-220,-160},{240,160}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-220,-160},{240,160}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">This model illustrates the use of several units located at a single feed-in site.</span></p>
@@ -271,7 +273,20 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">eye: Eyeout</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_set_B1: input for electric power in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_set_B2: input for electric power in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_set_B1: input for heatflow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_set_B2: input for heatflow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">m_flow_set_B1: input for heatflow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">m_flow_set_B2: input for heatflow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">T_return_B2: input for return temperature in [K]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">outlet: FluidPortOut</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">T_return_B1: input for for return temperatrue in [K]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port (choice of power port)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">gasPortIn: real gas inlet</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">eye_Block1: Eyeout</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">eye_Block2: Eyeout</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -283,5 +298,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Nov 2018: added gasPort</span></p>
 </html>"));
 end TwoBlockCHP;

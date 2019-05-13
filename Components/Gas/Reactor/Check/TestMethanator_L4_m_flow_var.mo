@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Reactor.Check;
 model TestMethanator_L4_m_flow_var
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,15 +30,10 @@ extends TransiEnt.Basics.Icons.Checkmodel;
   parameter Integer N_cv=10;
 
   TransiEnt.Components.Gas.Reactor.Methanator_L4 methanator_L4(
-    cp_cat=789.52,
-    eps_bed=0.4,
     N_cv=N_cv,
-    lambda_p=50,
-    H_flow_n_Methane=1e6,
-    dia_tube_i=0.02,
-    l=6.94,
-    dia_part=0.003,
-    ScalingOfReactor=3) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    ScalingOfReactor=4,
+    H_flow_n_Hydrogen=1*(1 - 0.844884)*119.95e6)
+                        annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi boundaryRealGas_pTxi(medium=vle_sg4, p_const=2000000)
                                                                                                            annotation (Placement(transformation(extent={{100,-10},{80,10}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor moleCompIn(medium=vle_sg4, compositionDefinedBy=2) annotation (Placement(transformation(extent={{-70,0},{-50,20}})));
@@ -88,8 +83,31 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(ramp.y, boundaryRealGas_Teps_nV_flow_n.m_flow) annotation (Line(points={{-119,0},{-110,0},{-110,6},{-100,6}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{100,100}})),
     experiment(StopTime=1e+006, Tolerance=1e-006),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-140,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(extent={{-140,-100},{100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the Methanator_L4 model with a variable mass flow</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestMethanator_L4_m_flow_var;

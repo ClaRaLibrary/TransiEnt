@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Mechanical;
 model Frequency "Fixed mechanical frequency boundary"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,7 +43,7 @@ model Frequency "Fixed mechanical frequency boundary"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput f_set if          useInputConnector "active power input"     annotation (Placement(transformation(extent={{-140,60},{-100,100}},
+  TransiEnt.Basics.Interfaces.General.FrequencyIn f_set if          useInputConnector "Frequency input"     annotation (Placement(transformation(extent={{-140,60},{-100,100}},
           rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
@@ -59,7 +59,7 @@ model Frequency "Fixed mechanical frequency boundary"
   Modelica.SIunits.Power P_el_set_const = der(mpp.phi)*mpp.tau;
 
 protected
-  Modelica.Blocks.Interfaces.RealInput f_internal "Needed to connect to conditional connector for active power";
+  TransiEnt.Basics.Interfaces.General.FrequencyIn f_internal "Needed to connect to conditional connector for active power";
 
 equation
   // _____________________________________________
@@ -118,12 +118,14 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>RealInput: frequency in [Hz]</p>
+<p>Mechanical power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">f is the frequency</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set_const is the constant electric power</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

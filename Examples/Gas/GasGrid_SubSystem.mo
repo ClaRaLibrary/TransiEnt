@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Gas;
 model GasGrid_SubSystem "Very simple gas grid featuring the main components"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,10 +57,14 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
 
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
     initOption=0,
-    xi_start=init.junction1.xi_in,
-    h_start=init.junction1.h_in,
+    xi(
+    start =  init.junction1.xi_in),
+    h(
+    start = init.junction1.h_in),
     volume=1,
-    p_start=init.junction1.p) annotation (Placement(transformation(
+    p(
+    start = init.junction1.p))
+                              annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={-60,-98})));
@@ -70,13 +74,13 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
     initOption=0,
     length=1000,
     N_cv=5,
-    h_start=ones(pipe1.N_cv)*init.pipe1.h_in,
-    p_start=linspace(
+    h_start = ones(pipe1.N_cv)*init.pipe1.h_in,
+    p_start = linspace(
         init.pipe1.p_in,
         init.pipe1.p_out,
         pipe1.N_cv),
     m_flow_start=ones(pipe1.N_cv + 1)*init.pipe1.m_flow,
-    xi_start=init.pipe1.xi_in,
+    xi_start =  init.pipe1.xi_in,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
         extent={{-20,-10},{20,10}},
         rotation=90,
@@ -109,13 +113,13 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
     frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0,
-    h_start=ones(pipe2.N_cv)*init.pipe2.h_in,
-    p_start=linspace(
+    h_start = ones(pipe2.N_cv)*init.pipe2.h_in,
+    p_start = linspace(
         init.pipe2.p_in,
         init.pipe2.p_out,
         pipe2.N_cv),
     m_flow_start=ones(pipe2.N_cv + 1)*init.pipe2.m_flow,
-    xi_start=init.pipe2.xi_in,
+    xi_start =  init.pipe2.xi_in,
     length=1000,
     N_cv=5,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
@@ -126,13 +130,13 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
     frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0,
-    h_start=ones(pipe3.N_cv)*init.pipe3.h_in,
-    p_start=linspace(
+    h_start = ones(pipe3.N_cv)*init.pipe3.h_in,
+    p_start = linspace(
         init.pipe3.p_in,
         init.pipe3.p_out,
         pipe3.N_cv),
     m_flow_start=ones(pipe3.N_cv + 1)*init.pipe3.m_flow,
-    xi_start=init.pipe3.xi_in,
+    xi_start =  init.pipe3.xi_in,
     length=1000,
     N_cv=5,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
@@ -143,13 +147,13 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
     frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0,
-    h_start=ones(pipe4.N_cv)*init.pipe4.h_in,
-    p_start=linspace(
+    h_start = ones(pipe4.N_cv)*init.pipe4.h_in,
+    p_start = linspace(
         init.pipe4.p_in,
         init.pipe4.p_out,
         pipe4.N_cv),
     m_flow_start=ones(pipe4.N_cv + 1)*init.pipe4.m_flow,
-    xi_start=init.pipe4.xi_in,
+    xi_start =  init.pipe4.xi_in,
     length=1000,
     N_cv=5,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
@@ -158,33 +162,43 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
         origin={0,-98})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
     initOption=0,
-    p_start=init.junction2.p,
-    xi_start=init.junction2.xi_out,
-    h_start=init.junction2.h_out,
+    p(
+    start = init.junction2.p),
+    xi(
+    start =  init.junction2.xi_out),
+    h(
+    start = init.junction2.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-60,12})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
     initOption=0,
-    xi_start=init.junction3.xi_in,
-    h_start=init.junction3.h_in,
+    xi(
+    start =  init.junction3.xi_in),
+    h(
+    start = init.junction3.h_in),
     volume=1,
-    p_start=init.junction3.p) annotation (Placement(transformation(
+    p(
+    start = init.junction3.p))
+                              annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={60,62})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(
     initOption=0,
-    p_start=init.junction4.p,
-    xi_start=init.junction4.xi_out,
-    h_start=init.junction4.h_out,
+    p(
+    start = init.junction4.p),
+    xi(
+    start =  init.junction4.xi_out),
+    h(
+    start = init.junction4.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={60,-48})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{-220,20},{-180,60}}), iconTransformation(extent={{-220,20},{-180,60}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_set annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-208,138}),
@@ -204,10 +218,14 @@ protected
 public
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn1(
     initOption=0,
-    xi_start=init.junction1.xi_in,
-    h_start=init.junction1.h_in,
+    xi(
+    start =  init.junction1.xi_in),
+    h(
+    start = init.junction1.h_in),
     volume=0.1,
-    p_start=init.junction1.p) annotation (Placement(transformation(
+    p(
+    start = init.junction1.p))
+                              annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-110,-98})));
@@ -220,10 +238,14 @@ protected
 public
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn2(
     initOption=0,
-    xi_start=init.junction1.xi_in,
-    h_start=init.junction1.h_in,
+    xi(
+    start =  init.junction1.xi_in),
+    h(
+    start = init.junction1.h_in),
     volume=0.1,
-    p_start=init.junction1.p) annotation (Placement(transformation(
+    p(
+    start = init.junction1.p))
+                              annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={116,62})));
@@ -395,13 +417,13 @@ equation
           lineColor={135,135,135},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
-          textString="Gas Grid",
-          origin={4,-172},
-          rotation=360),
+          origin={4,-170},
+          rotation=360,
+          textString="Gas Grid"),
         Ellipse(
           extent={{-118,110},{110,-108}},
           lineColor={255,255,0},
-          lineThickness=1)}),
+          lineThickness=0.5)}),
                             Diagram(coordinateSystem(
         preserveAspectRatio=false,
         extent={{-200,-200},{200,200}},
@@ -427,7 +449,9 @@ Documentation(info="<html>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>epp: active power port</p>
+<p>P_el_set: setpoint for electric power in  [W]</p>
+<p>gasIn: inlet for real gas</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

@@ -2,10 +2,10 @@ within TransiEnt.Storage.Electrical;
 model FlywheelStorage_L2 "Physical model of a flywheel storage where configurations can be chosen"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -62,8 +62,10 @@ model FlywheelStorage_L2 "Physical model of a flywheel storage where configurati
   Modelica.SIunits.Energy E_rot(start=E_rot_min + Modelica.SIunits.Conversions.from_kWh(E_start)) "Rotational energy";
 
   // diagnostic variables
-  SI.Frequency f(start=simCenter.f_n) "actual grid frequency";
-  SI.ActivePower P(start=0) "Power on epp";
+  SI.Frequency f(start=simCenter.f_n) "actual grid frequency"
+                                                             annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.ActivePower P(start=0) "Power on epp"
+                                          annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.Energy E_stor "Available energy in Storage";
   SI.AngularFrequency omega "Angular velocity of flywheel";
   SI.Power P_omega_max "Maximum power output at current omega";
@@ -72,8 +74,10 @@ model FlywheelStorage_L2 "Physical model of a flywheel storage where configurati
   SI.Power P_loss_aero "Aerodynamic losses";
   SI.Power P_loss "Summed losses";
   SI.Power P_demand;
-  SI.Energy E_pos(start=0,stateSelect=StateSelect.never) "Positive (delivered) energy";
-  SI.Energy E_neg(start=0,stateSelect=StateSelect.never) "Negative (stored) energy";
+  SI.Energy E_pos(start=0,stateSelect=StateSelect.never) "Positive (delivered) energy"
+                                                                                      annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Energy E_neg(start=0,stateSelect=StateSelect.never) "Negative (stored) energy"
+                                                                                   annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.Energy eta_is=E_pos/max(E_stor_max,E_neg) "Actual efficiency";
 
   // _____________________________________________
@@ -171,7 +175,7 @@ equation
 <p>E=1/2*J*w^2</p>
 <p>P_max = w*M_max</p>
 <p>P=(f-f_n)*k</p>
-<p>w_min&LT;w&LT;w_max</p>
+<p>w_min&lt;w&lt;w_max</p>
 <p>Losses:</p>
 <p>Bearing losses proportional to w:</p>
 <p>P_loss_bearing=a*w</p>
@@ -184,7 +188,7 @@ equation
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>Values for eta_max and self discharge rate compared to specification sheets. Thus, the loss factors a and b can be assumed to be in the right order of magnitude for the referenced system.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>http://beaconpower.com/</p>
+<p>[1]Beacon power, LLS, URL: http://beaconpower.com/ </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Arne Koeppen (arne.koeppen@tuhh.de), Jul 2013</p>
 <p>Edited by Lisa Andresen (andresen@tuhh.de) Aug 2013</p>

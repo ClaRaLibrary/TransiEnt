@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Base;
 partial model PartialHeatPumpCharlineFluidPorts "Partial heat pump model that produces a given heat flow via fluid ports with a charline"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,10 +35,10 @@ partial model PartialHeatPumpCharlineFluidPorts "Partial heat pump model that pr
   //             Visible Parameters
   // _____________________________________________
 
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid   mediumWater= simCenter.fluid1 "Medium to be used"
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid mediumWater=simCenter.fluid1 "Medium to be used"
                          annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
-  parameter SI.Pressure p_drop=heatFlowBoundary.simCenter.p_n[2] -
-      heatFlowBoundary.simCenter.p_n[1] annotation (Dialog(group="Fundamental Definitions"));
+  parameter SI.Pressure p_drop=heatFlowBoundary.simCenter.p_nom[2] -
+      heatFlowBoundary.simCenter.p_nom[1] annotation (Dialog(group="Fundamental Definitions"));
 
   // _____________________________________________
   //
@@ -50,18 +50,12 @@ partial model PartialHeatPumpCharlineFluidPorts "Partial heat pump model that pr
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterPortIn(Medium=mediumWater) annotation (Placement(transformation(extent={{32,-110},{52,-90}}), iconTransformation(extent={{32,-110},{52,-90}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut waterPortOut(Medium=mediumWater) annotation (Placement(transformation(extent={{-50,-110},{-30,-90}}),
-                                                                                                                                                     iconTransformation(extent={{-50,-110},{-30,-90}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterPortIn(Medium=mediumWater) annotation (Placement(transformation(extent={{-50,-110},{-30,-90}}), iconTransformation(extent={{-50,-110},{-30,-90}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut waterPortOut(Medium=mediumWater) annotation (Placement(transformation(extent={{30,-110},{50,-90}}), iconTransformation(extent={{30,-110},{50,-90}})));
 
   // _____________________________________________
   //
   //           Instances of other Classes
-  // _____________________________________________
-
-  // _____________________________________________
-  //
-  //             Variable Declarations
   // _____________________________________________
 
 public
@@ -69,26 +63,36 @@ public
     p_drop=p_drop,
     use_Q_flow_in=true,
     Medium=mediumWater,
-    change_sign=false)  constrainedby TransiEnt.Components.Boundaries.Heat.Heatflow_L1 annotation (choicesAllMatching=true, Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
+    change_sign=false) constrainedby TransiEnt.Components.Boundaries.Heat.Base.PartialHeatBoundary annotation (
+    Dialog(group="Replaceable Components"),
+    choicesAllMatching=true,
+    Placement(transformation(
+        extent={{10,10},{-10,-10}},
+        rotation=180,
         origin={0,0})));
   TransiEnt.Components.Sensors.TemperatureSensor
                                        T_in_sensor annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={70,-40})));
+        origin={-50,-40})));
   TransiEnt.Components.Sensors.TemperatureSensor
                                        T_out_sensor annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={70,40})));
+        origin={20,-40})));
+
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
 
 equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
+
+  heatFlowBoundary.Q_flow_prescribed=Q_flow;
 
   DeltaT=T_out_sensor.T-T_source_internal;
 
@@ -98,21 +102,20 @@ equation
   // _____________________________________________
 
   connect(waterPortIn, heatFlowBoundary.fluidPortIn) annotation (Line(
-      points={{42,-100},{42,-6},{10,-6}},
+      points={{-40,-100},{-40,-10},{-6,-10}},
       color={175,0,0},
       smooth=Smooth.None));
   connect(heatFlowBoundary.fluidPortOut, waterPortOut) annotation (Line(
-      points={{10,6},{-40,6},{-40,-100}},
+      points={{6,-10},{40,-10},{40,-100}},
       color={175,0,0},
       smooth=Smooth.None));
   connect(waterPortOut, T_out_sensor.port) annotation (Line(
-      points={{-40,-100},{30,-100},{30,40},{80,40}},
+      points={{40,-100},{40,-40},{30,-40}},
       color={175,0,0},
       thickness=0.5,
       smooth=Smooth.None));
-  connect(heatFlowBoundary.Q_flow_prescribed, Q_flow_set) annotation (Line(points={{-8,-6},{-40,-6},{-40,0},{-104,0}}, color={0,0,127}));
   connect(waterPortIn, T_in_sensor.port) annotation (Line(
-      points={{42,-100},{62,-100},{62,-40},{80,-40}},
+      points={{-40,-100},{-40,-40}},
       color={175,0,0},
       thickness=0.5));
 annotation (Documentation(info="<html>

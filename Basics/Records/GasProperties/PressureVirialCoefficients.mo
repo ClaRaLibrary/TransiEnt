@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Records.GasProperties;
 record PressureVirialCoefficients "Record containing the pressure virial coefficients B'0 and B'30 for 0 and 30 degC"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -60,7 +60,7 @@ record PressureVirialCoefficients "Record containing the pressure virial coeffic
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>[1] DIN&nbsp;EN&nbsp;ISO&nbsp;14912<span style=\"font-family: Courier New;\">, </span>&quot;Gasanalyse&nbsp;- Umrechnung von Zusammensetzungsangaben f&uuml;r Gasgemische&quot;, Deutsches Institut f&uuml;r Normung DIN, Berlin, 2006</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Lisa Andresen (andresen@tuhh.de), Apr 2016</p>
 </html>"));

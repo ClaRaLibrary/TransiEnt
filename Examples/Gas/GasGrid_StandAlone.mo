@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Gas;
 model GasGrid_StandAlone "Very simple gas grid featuring the main components"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,10 +57,14 @@ model GasGrid_StandAlone "Very simple gas grid featuring the main components"
 
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
     initOption=0,
-    xi_start=init.junction1.xi_in,
-    h_start=init.junction1.h_in,
+    xi(
+    start =  init.junction1.xi_in),
+    h(
+    start = init.junction1.h_in),
     volume=1,
-    p_start=init.junction1.p) annotation (Placement(transformation(
+    p(
+    start = init.junction1.p))
+                              annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={-24,-156})));
@@ -164,27 +168,37 @@ model GasGrid_StandAlone "Very simple gas grid featuring the main components"
         origin={36,-156})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
     initOption=0,
-    p_start=init.junction2.p,
-    xi_start=init.junction2.xi_out,
-    h_start=init.junction2.h_out,
+    p(
+    start = init.junction2.p),
+    xi(
+    start =  init.junction2.xi_out),
+    h(
+    start = init.junction2.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-24,-46})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
     initOption=0,
-    xi_start=init.junction3.xi_in,
-    h_start=init.junction3.h_in,
+    xi(
+    start =  init.junction3.xi_in),
+    h(
+    start = init.junction3.h_in),
     volume=1,
-    p_start=init.junction3.p) annotation (Placement(transformation(
+    p(
+    start = init.junction3.p))
+                              annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={96,4})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(
     initOption=0,
-    p_start=init.junction4.p,
-    xi_start=init.junction4.xi_out,
-    h_start=init.junction4.h_out,
+    p(
+    start = init.junction4.p),
+    xi(
+    start =  init.junction4.xi_out),
+    h(
+    start = init.junction4.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
@@ -201,10 +215,14 @@ protected
 public
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn1(
     initOption=0,
-    xi_start=init.junction1.xi_in,
-    h_start=init.junction1.h_in,
+    xi(
+    start =  init.junction1.xi_in),
+    h(
+    start = init.junction1.h_in),
     volume=0.1,
-    p_start=init.junction1.p) annotation (Placement(transformation(
+    p(
+    start = init.junction1.p))
+                              annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-74,-156})));
@@ -217,10 +235,14 @@ protected
 public
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn2(
     initOption=0,
-    xi_start=init.junction1.xi_in,
-    h_start=init.junction1.h_in,
+    xi(
+    start =  init.junction1.xi_in),
+    h(
+    start = init.junction1.h_in),
     volume=0.1,
-    p_start=init.junction1.p) annotation (Placement(transformation(
+    p(
+    start = init.junction1.p))
+                              annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={152,4})));
@@ -277,7 +299,7 @@ public
     P_el_max=P_el_max*f_2,
     P_el_min=P_el_min*f_2,
     P_el_overload=P_el_overload*f_2) annotation (Placement(transformation(extent={{136,48},{170,80}})));
-  Grid.Gas.GasDemandProfiler gasDemandProfiler(
+  Consumer.Gas.GasDemandProfiler gasDemandProfiler(
     mFlowOut=true,
     f_gasDemand=1/45,
     gasDemand_base_a=0) annotation (Placement(transformation(extent={{46,-50},{26,-30}})));
@@ -366,7 +388,7 @@ connect(junction_feedIn2.gasPort3, maxH2MassFlow2.gasPortOut) annotation (Line(
       color={255,255,0},
       thickness=1.5));
   connect(feedInStation1.epp, ElectricGrid.epp) annotation (Line(
-      points={{-58,-96},{-58,-96},{-52,-96},{-52,64},{-52,63.21},{-211.8,63.21}},
+      points={{-58,-96},{-58,-96},{-52,-96},{-52,64},{-52,63},{-212,63}},
       color={0,135,135},
       thickness=0.5));
   connect(gainFeedIn1.y, feedInStation1.P_el_set) annotation (Line(points={{-75,-15.5},{-75,-15.5},{-75,-79.36}}, color={0,0,127}));
@@ -378,16 +400,18 @@ connect(maxH2MassFlow1.m_flow_H2_max, feedInStation1.m_flow_feedIn) annotation (
 connect(feedInStation2.m_flow_feedIn, maxH2MassFlow2.m_flow_H2_max) annotation (Line(points={{170,76.8},{180,76.8},{180,13}}, color={0,0,127}));
   connect(gainFeedIn2.y, feedInStation2.P_el_set) annotation (Line(points={{117,104},{153,104},{153,80.64}}, color={0,0,127}));
   connect(feedInStation2.epp, ElectricGrid.epp) annotation (Line(
-      points={{136,64},{136,64},{-52,64},{-52,63.21},{-211.8,63.21}},
+      points={{136,64},{136,64},{-52,64},{-52,63},{-212,63}},
       color={0,135,135},
       thickness=0.5));
   connect(gasDemandProfiler.T_amb, T_amb.y) annotation (Line(points={{46.4,-40},{46.4,-40},{48.9,-40}}, color={0,0,127}));
   connect(sink1.m_flow, gasDemandProfiler.gasDemandFlow) annotation (Line(points={{16,-40},{25.4,-40}},            color={0,0,127}));
   connect(residualLoad.P_el, replicator.u) annotation (Line(points={{-210,-14},{-188,-14},{-164,-14}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(
         preserveAspectRatio=false,
         extent={{-100,-100},{100,100}},
-        initialScale=0.1)), Diagram(coordinateSystem(
+        initialScale=0.1)), Diagram(graphics,
+                                    coordinateSystem(
         preserveAspectRatio=false,
         extent={{-260,-200},{260,200}},
         initialScale=0.1)),

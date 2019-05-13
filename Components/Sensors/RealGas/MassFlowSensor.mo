@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model MassFlowSensor "Two port real gas mass flow sensor"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,7 +38,7 @@ model MassFlowSensor "Two port real gas mass flow sensor"
   //             Visible Parameters
   // _____________________________________________
 
-  parameter Integer xiNumber=1 "xi vector entry for auxiliary mass flow";
+  parameter Integer xiNumber=1 "xi vector entry for auxiliary mass flow, use xiNumber=0 if not needed";
 
   // _____________________________________________
   //
@@ -52,18 +52,12 @@ model MassFlowSensor "Two port real gas mass flow sensor"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput m_flow(
-    final quantity="MassFlowRate",
-    displayUnit="kg/s",
-    final unit="kg/s") "Mass flow rate"          annotation (Placement(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow "Mass flow rate"          annotation (Placement(
         transformation(extent={{100,-10},{120,10}},
                                                  rotation=0),
         iconTransformation(extent={{100,-10},{120,10}})));
 
-  Modelica.Blocks.Interfaces.RealOutput m_flow_aux(
-    displayUnit="kg/s",
-    final unit="kg/s",
-    final quantity="MassFlowRate") "Auxiliary mass flow rate" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_aux "Auxiliary mass flow rate" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-110,0})));
@@ -87,8 +81,9 @@ equation
   assert(xiNumber<=medium.nc, "xiNumber is out of range!");
 
   m_flow = gasPortIn.m_flow;
-
-  if xiNumber==medium.nc then
+  if xiNumber==0 then
+    m_flow_aux=0;
+  elseif xiNumber==medium.nc then
     m_flow_aux = m_flow*(1.0 - sum(actualStream(gasPortIn.xi_outflow)));
   else
     m_flow_aux = m_flow*actualStream(gasPortIn.xi_outflow[xiNumber]);
@@ -99,7 +94,8 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                       graphics={
         Text(
@@ -152,19 +148,19 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Mass flow sensor for VLEFluidTypes.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p>-</p>
+<p>(no remarks)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Can only be used for VLEFluidTypes.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p>GasPortIn, GasPortOut and RealOutput for temperature.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Tested in check model &quot;TransiEnt.Components.Sensors.RealGas.Check.TestRealGasSensors&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Copied and changed from ClaRa.Components.Sensors.vleMassflowSensor.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Adapted to be used with RealGasPorts and real gas media.</span></p>

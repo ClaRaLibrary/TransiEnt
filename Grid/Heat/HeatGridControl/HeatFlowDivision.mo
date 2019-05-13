@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridControl;
 model HeatFlowDivision "Model for the specification of the heat output  of each unit located at a single feed-in point"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,8 +46,8 @@ model HeatFlowDivision "Model for the specification of the heat output  of each 
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_i[size(combiTable1Ds.columns, 1)](final quantity="Heat", final unit="W")        annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  Modelica.Blocks.Interfaces.RealInput Q_flow_total(final quantity="HeatFlow", final unit="W")     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_i[size(combiTable1Ds.columns, 1)] "Output for heat flow rate"      annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_total    "Input for total heat flow rate" annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
 
   // _____________________________________________
   //
@@ -137,7 +137,7 @@ equation
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>This component was created using the combiTable 1Ds of the MSL. For further information regarding its usage refer to that component.</p>
 <p>Create a text file with the following structure:</p>
 <p><br>#1</p>
@@ -145,7 +145,7 @@ equation
 <p>xx xx xx</p>
 <p>xx xx xx</p>
 <p>xx xx xx</p>
-<p><br><br>In the parameter &QUOT;columns&QUOT; write for instance {2, 3} (meaning that the 2nd and third columns will be used and assigned to the outputs y[1] and y[2]).</p>
+<p><br><br>In the parameter &quot;columns&quot; write for instance {2, 3} (meaning that the 2nd and third columns will be used and assigned to the outputs y[1] and y[2]).</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

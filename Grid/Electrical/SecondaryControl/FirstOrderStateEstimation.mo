@@ -1,11 +1,11 @@
 within TransiEnt.Grid.Electrical.SecondaryControl;
-model FirstOrderStateEstimation "State estimation model with first order dynamics to improve secondary control activation (decoupling of economic dispatch and frequency control)"
+model FirstOrderStateEstimation "State estimation model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,7 +59,8 @@ equation
     connect(u[i], G_i_star[i].u) annotation (Line(points={{-120,0},{-60,0},{-60,-40},{-12,-40}}, color={0,0,127}));
     connect(G_i_star[i].y, sum1.u[i]) annotation (Line(points={{11,-40},{32.8,-40}}, color={0,0,127}));
   end for;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
         Text(
           extent={{-8,34},{132,-38}},
           lineColor={0,0,0},
@@ -71,5 +72,30 @@ equation
         Text(
           extent={{-122,40},{18,-32}},
           lineColor={0,0,0},
-          textString="(s)")}));
+          textString="(s)")}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>State estimation model with first order dynamics to improve secondary control activation (decoupling of economic dispatch and frequency control)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p><p>L2E: Models are based on (dynamic) transfer functions or differential equations.</p>
+<p>nonlinear behavior</p></p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>u[nout]: Input signals from power plants base loads</p>
+<p>y: Output signal for secondary balancing control</p>
+<p>nout: Number of considered power plants</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) in 10/2014</span></p>
+</html>"));
 end FirstOrderStateEstimation;

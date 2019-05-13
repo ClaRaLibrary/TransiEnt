@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind.Base;
 partial model PartialWindTurbine "Base class for wind turbine models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -70,10 +70,10 @@ partial model PartialWindTurbine "Base class for wind turbine models"
   // _____________________________________________
 
 protected
-  Modelica.Blocks.Interfaces.RealInput v_wind_internal;
+ TransiEnt.Basics.Interfaces.Ambient.VelocityIn v_wind_internal "Velocity of wind for internal usage";
 
 public
-  Modelica.Blocks.Interfaces.RealInput v_wind if use_v_wind_input "current wind velocity" annotation (Placement(
+  TransiEnt.Basics.Interfaces.Ambient.VelocityIn v_wind if  use_v_wind_input "current wind velocity" annotation (Placement(
         transformation(extent={{-120,-20},{-80,20}}),
                                                     iconTransformation(extent={{-100,50},
             {-78,72}})));
@@ -161,12 +161,13 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>v_wind: input for current wind velocity in [m/s]</p>
+<p>epp: electric power port (choice of power port)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

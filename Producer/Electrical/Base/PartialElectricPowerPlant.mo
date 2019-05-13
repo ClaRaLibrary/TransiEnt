@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Base;
 partial model PartialElectricPowerPlant "Abstract model of an electric power plant with L1 on electric side"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,6 +54,9 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
   parameter PrimaryEnergyCarrier typeOfPrimaryEnergyCarrier=PrimaryEnergyCarrier.BlackCoal "Type of primary energy carrier for co2 emissions global statistics"
     annotation (Dialog(group="Statistics"), HideResult = not simCenter.isExpertMode);
 
+  parameter Boolean integrateElPower=simCenter.integrateElPower "true if electric powers shall be integrated" annotation(Dialog(group="Statistics"));
+  parameter Boolean integrateCDE=simCenter.integrateCDE "true if CDE shall be integrated" annotation(Dialog(group="Statistics"));
+  parameter Boolean calculateCost=simCenter.calculateCost "true if costs shall be calculated" annotation(Dialog(group="Statistics"));
   final parameter Integer nSubgrids=simCenter.iDetailedGrid "For calculation of statistics in subgrids (=1 local grid, e.g. hamburg, =2 surrounding grid, e.g. UCTE grid";
 
    replaceable model ProducerCosts =
@@ -66,15 +69,17 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{90,68},{110,88}}), iconTransformation(extent={{80,60},{100,80}})));
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"), Placement(transformation(extent={{90,68},{110,88}}), iconTransformation(extent={{80,60},{100,80}})));
 
   // _____________________________________________
   //
   //                Complex Components
   // _____________________________________________
 
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=typeOfPrimaryEnergyCarrier) annotation (Placement(transformation(extent={{56,-100},{76,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(integrateElPower=integrateElPower)
+                                                                                                       annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=typeOfPrimaryEnergyCarrier, integrateCDE=integrateCDE)
+                                                                                                                                                             annotation (Placement(transformation(extent={{56,-100},{76,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts(
     P_n=P_el_n,
     redeclare model PowerPlantCostModel = ProducerCosts,
@@ -85,7 +90,7 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
                      annotation (HideResult=false, Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={90,-90})));
+        origin={90,-90})));//if calculateCost
 //  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectInertiaConstant collectInertiaConstant;
 
   // _____________________________________________
@@ -102,8 +107,8 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
   Boolean is_running(start=true, fixed=true) "For continuous plants always true, for discontinous depending on state";
 
   SI.EnthalpyFlowRate Q_flow_fuel_is = P_el_is/eta;
-  SI.MassFlowRate m_flow_CDE = fuelSpecificCO2Emissions.m_flow_CDE_per_Energy*abs(P_el_is)/eta;
-
+  SI.MassFlowRate m_flow_CDE = fuelSpecificCO2Emissions.m_flow_CDE_per_Energy*abs(P_el_is)/eta-m_flow_gas_CDE_deposited;
+  SI.MassFlowRate m_flow_gas_CDE_deposited=0*time;
 protected
   TransiEnt.Components.Statistics.Functions.GetFuelSpecificCO2Emissions fuelSpecificCO2Emissions(typeOfPrimaryEnergyCarrier=typeOfPrimaryEnergyCarrier);
 
@@ -123,7 +128,11 @@ equation
      connect(modelStatistics.gwpCollector[typeOfPrimaryEnergyCarrier],collectGwpEmissions.gwpCollector);
   end if;
 
-  der(E_total_generation) = max(0,-epp.P);
+  if integrateElPower then
+    der(E_total_generation) = max(0,-epp.P);
+  else
+    E_total_generation=0;
+  end if;
 
   // _____________________________________________
   //
@@ -131,8 +140,11 @@ equation
   // _____________________________________________
 
   connect(modelStatistics.powerCollector[typeOfResource],collectElectricPower.powerCollector);
+  //if calculateCost then
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  //end if;
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                     Diagram(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Line(
           points={{90,-40},{90,-40},{90,-74}},
@@ -152,13 +164,13 @@ equation
           arrow={Arrow.None,Arrow.Filled})}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Prototype model for electric power plants models containting all relevant statistics blocks.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Prototype model for electric power plant models containing all relevant statistic blocks.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2; background-color: #ffffff;\">L1E (defined in the CodingConventions)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp: active power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
-block EquivalentStorageCycles "Equivalent cycles calculator"
+model EquivalentStorageCycles "Equivalent cycles calculator"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,12 +39,13 @@ block EquivalentStorageCycles "Equivalent cycles calculator"
   //                 Outer Models
   // _____________________________________________
 
-  outer Consumer.DemandSideManagement.PVBatteryPoolControl.Base.PoolParameter param;
+  //outer Consumer.DemandSideManagement.PVBatteryPoolControl.Base.PoolParameter param;
 
   Modelica.Blocks.Interfaces.RealOutput cycles "Equivalent cycles"
     annotation (Placement(transformation(extent={{100,-10},{120,10}},
           rotation=0)));
-  Modelica.Blocks.Interfaces.RealInput P_stor_is "Storage power (in W)" annotation (Placement(transformation(extent={{-116,-10},{-96,10}}, rotation=0)));
+  Basics.Interfaces.Electrical.ElectricPowerIn
+                                       P_stor_is "Storage power (in W)" annotation (Placement(transformation(extent={{-116,-10},{-96,10}}, rotation=0)));
   Modelica.Blocks.Math.Gain gain(k=0.5/E_max)
     annotation (Placement(transformation(extent={{-28,-10},{-6,10}},
           rotation=0)));
@@ -76,7 +77,8 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(gain.y, integrator.u) annotation (Line(points={{-4.9,0},{26,0}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
                        Icon(coordinateSystem(preserveAspectRatio=false, extent={
             {-100,-100},{100,100}}),
@@ -87,13 +89,14 @@ equation
           textString="cycles")}),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<pre><span style=\"color: #006400;\">Equivalent&nbsp;cycles&nbsp;calculator</span></pre>
+<p>Equivalent&nbsp;cycles&nbsp;calculator</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>cycles: RealOutput</p>
+<p>P_stor_is: input for electric storage power in [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Ambient;
 model UndergroundTemperature "Gives the underground temperature at specified depth and time as a cosinal characteristic"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,10 +57,7 @@ protected
   //                  Interfaces
   // _____________________________________________
 public
-  Modelica.Blocks.Interfaces.RealOutput T_underground(
-    final quantity="Temperature",
-    final unit="K",
-    displayUnit="degC") "Temperature in the ground at given depth and simulated time" annotation (Placement(transformation(extent={{84,-10},{104,10}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_underground "Temperature in the ground at given depth and simulated time" annotation (Placement(transformation(extent={{84,-10},{104,10}})));
 
   // _____________________________________________
   //
@@ -80,7 +77,7 @@ equation
         Ellipse(
           extent={{-20,-98},{20,-60}},
           lineColor={0,0,0},
-          lineThickness=0.5,
+          lineThickness=0.2,
           fillColor={191,0,0},
           fillPattern=FillPattern.Solid),
         Rectangle(
@@ -91,24 +88,26 @@ equation
         Polygon(
           points={{-12,40},{-12,80},{-10,86},{-6,88},{0,90},{6,88},{10,86},{12,80},{12,40},{-12,40}},
           lineColor={0,0,0},
-          lineThickness=0.5),
+          lineThickness=0.2),
         Line(points={{-40,60},{-12,60}}, color={0,0,0}),
         Line(points={{-40,20},{-12,20}}, color={0,0,0}),
         Line(points={{-40,-20},{-12,-20}}, color={0,0,0}),
-        Line(points={{12,-10},{60,-10}},
-                                     color={0,0,127}),
         Line(
-          points={{-100,100},{100,100}},
-          color={95,95,95},
-          thickness=0.5),
-        Line(
-          points={{-70,100},{-70,60}},
-          color={0,0,0},
-          arrow={Arrow.None,Arrow.Filled}),
+          points={{12,-10},{60,-10}},
+          color={0,0,127},
+          thickness=0.1),
         Text(
-          extent={{-52,58},{-70,72}},
+          extent={{-62,42},{-82,58}},
           lineColor={0,0,0},
-          textString="z")}),                                     Diagram(coordinateSystem(preserveAspectRatio=false)),
+          textString="z"),
+        Line(
+          points={{-140,74},{-140,74}},
+          pattern=LinePattern.None,
+          arrow={Arrow.None,Arrow.Filled}),
+        Line(points={{-58,70},{-58,36}}, color={95,95,95}),
+        Line(points={{-58,36},{-62,40}}, color={95,95,95}),
+        Line(points={{-58,36},{-54,40}}, color={95,95,95})}),    Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Gives the underground temperature at the specified depth and simulated time as a sinusoidally oscillation with an oscillating period of one year.</span></p>
@@ -140,7 +139,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p>The oscillation period of the temperature is normally one year. Be sure to change the soil transport characteritica according to the depth.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p>Tested in check model &quot;TestUndergroundTemperature&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p>[1] Ramming, Klaus: <i>Bewertung und Optimierung oberfl&auml;chennaher Erdw&auml;rmekollektoren f&uuml;r verschiedene Lastf&auml;lle</i>, Technical University Dresden, 2007</p>
 <p>[2] Grigull, Ulrich ; Sandner, Heinrich: <i>W&auml;rmeleitung</i>, <i>W&auml;rme- und Stoff&uuml;bertragung</i>. Berlin, Heidelberg&nbsp;: Springer Berlin Heidelberg, 1990 &mdash;&nbsp;ISBN&nbsp;978-3-540-52315-4</p>

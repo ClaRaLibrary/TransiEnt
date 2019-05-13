@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Icons;
 model RadiationModel
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,7 +20,7 @@ model RadiationModel
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  annotation (Icon(graphics={
+  annotation (Icon(graphics={      Ellipse(lineColor={0,125,125}, extent={{-100,-100},{100,100}}),
         Ellipse(
           extent={{-38,68},{-84,22}},
           lineColor={255,128,0},
@@ -33,10 +33,7 @@ model RadiationModel
           fillColor={28,108,200}),
         Line(points={{2,-50},{36,-22}}, color={28,108,200}),
         Line(points={{-44,28},{-6,6}},   color={255,0,0}),
-        Line(
-          points={{2,-50},{64,-32}},
-          color={0,0,0},
-          arrow={Arrow.None,Arrow.Filled}),
+        Line(points={{2,-50},{64,-32}}, color={0,0,0}),
         Text(
           extent={{66,-12},{94,-50}},
           lineColor={0,0,0},
@@ -50,5 +47,29 @@ model RadiationModel
           color={28,108,200},
           smooth=Smooth.Bezier),
         Line(points={{32,-20},{32,-20},{32,-20},{32,-18},{32,-20}}, color={28,108,200}),
-                                   Ellipse(lineColor={0,125,125}, extent={{-100,-100},{100,100}})}));
+        Polygon(
+          points={{60,-30},{62,-36},{68,-30},{60,-30}},
+          lineColor={0,0,0},
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid)}), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Model created for using the icon</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end RadiationModel;

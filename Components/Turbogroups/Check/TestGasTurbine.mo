@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups.Check;
 model TestGasTurbine
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,12 +20,11 @@ model TestGasTurbine
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Turbogroups.Gasturbine Gasturbine(P_nom=100e6) annotation (Placement(transformation(extent={{-26,16},{18,61}})));
+  TransiEnt.Components.Turbogroups.Gasturbine Gasturbine(P_n=100e6) annotation (Placement(transformation(extent={{-26,16},{18,61}})));
   TransiEnt.Components.Boundaries.Mechanical.Frequency NominalSpeed(f_set_const=150/60, useInputConnector=false) annotation (Placement(transformation(extent={{72,26},{46,52}})));
   Modelica.Blocks.Sources.TimeTable TestSchedule(table=[0,0; 120,0; 120,1; 720,1; 720,1; 3e3,1; 3000,0.5; 3001,0.5; 3002,0.5; 4e3,0.5; 4e3,0.2; 4500,0.2; 4500,0.2; 6000,0.2; 6000,0.7; 10e3,0.7; 10e3,0; 1.2e4,0; 1.2e4,0.8; 2e4,0.8; 2e4,0.2; 2.5e4,0.2])
                                                                                                     annotation (Placement(transformation(extent={{-80,68},{-60,88}})));
-  Modelica.Blocks.Math.Gain from_pu(k=-Gasturbine.P_nom)
-                                                       annotation (Placement(transformation(extent={{-36,68},{-16,88}})));
+  Modelica.Blocks.Math.Gain from_pu(k=-Gasturbine.P_n) annotation (Placement(transformation(extent={{-36,68},{-16,88}})));
   Modelica.Blocks.Sources.Constant const(k=0) annotation (Placement(transformation(extent={{30,72},{10,92}})));
 equation
   connect(Gasturbine.mpp, NominalSpeed.mpp) annotation (Line(points={{18.22,38.275},{43.09,38.275},{43.09,39},{46,39}}, color={95,95,95}));

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization;
 model PQDiagram_Display
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,8 @@ model PQDiagram_Display
 
   TransiEnt.Basics.Interfaces.General.EyeIn eyeIn annotation (Placement(transformation(extent={{-138,-10},{-118,10}}), iconTransformation(extent={{-138,-10},{-118,10}})));
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
               Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                    graphics={      Ellipse(
           lineColor={0,125,125},
@@ -101,7 +102,7 @@ model PQDiagram_Display
           lineThickness=0.5,
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
-          textString="P 
+          textString="%P 
 [MW]"), Text(
           extent={{72,-26},{92,-60}},
           lineColor={135,135,135},
@@ -109,7 +110,7 @@ model PQDiagram_Display
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="Q 
-[MW]"), Ellipse(
+[MW]%"),Ellipse(
           extent=DynamicSelect({{0,0},{0,0}},{{coordinate_Q-3,coordinate_P+3},{coordinate_Q+3,coordinate_P-3}}),
           lineColor={255,0,0},
           fillColor={255,0,0},

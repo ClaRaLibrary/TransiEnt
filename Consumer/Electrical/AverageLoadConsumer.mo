@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical;
 model AverageLoadConsumer "Constant current for active power and constant impedance for reactive power"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ model AverageLoadConsumer "Constant current for active power and constant impeda
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Basics.Icons.Consumer;
+  extends TransiEnt.Basics.Icons.ElectricalConsumer;
   import Modelica.Fluid.Utilities.regPow;
 
   // _____________________________________________
@@ -57,12 +57,12 @@ model AverageLoadConsumer "Constant current for active power and constant impeda
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set if              useInputConnectorP "active power input at nominal frequency" annotation (Placement(transformation(extent={{-140,60},{-100,100}}, rotation=0), iconTransformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP "active power input at nominal frequency" annotation (Placement(transformation(extent={{-140,60},{-100,100}}, rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,116})));
 protected
-  Modelica.Blocks.Interfaces.RealInput P_internal "Needed to connect to conditional connector for active power";
+ TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal "Needed to connect to conditional connector for active power";
 
   // _____________________________________________
   //
@@ -100,17 +100,11 @@ public
         extent={{-6,-6},{6,6}},
         rotation=270,
         origin={46,-28})));
-  Modelica.Blocks.Sources.RealExpression
-                                   P_el_nom(y=P_internal)
-                                                     annotation (Placement(
-        transformation(
+  Modelica.Blocks.Sources.RealExpression P_el_n(y=P_internal) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={24,-16})));
-  Modelica.Blocks.Sources.RealExpression
-                                   Q_el_nom(y=if not useCosPhi then Q_el_set else P_internal/cosphi_set*sin(acos(cosphi_set)))
-                                                     annotation (Placement(
-        transformation(
+  Modelica.Blocks.Sources.RealExpression Q_el_n(y=if not useCosPhi then Q_el_set else P_internal/cosphi_set*sin(acos(cosphi_set))) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={86,8})));
@@ -153,23 +147,23 @@ equation
 
     connect(modelStatistics.powerCollector[EnergyResource.Consumer],collectElectricPower.powerCollector);
 
-  connect(P_el_nom.y, ActiveSum.u2) annotation (Line(points={{35,-16},{42.4,-16},{42.4,-20.8}},
-                                                                                           color={0,0,127}));
+  connect(P_el_n.y, ActiveSum.u2) annotation (Line(points={{35,-16},{42.4,-16},{42.4,-20.8}}, color={0,0,127}));
   connect(ActiveSum.y, boundary.P_el_set) annotation (Line(points={{46,-34.6},{46,-42}},                   color={0,0,127}));
-  connect(Q_el_nom.y, ReactiveSum.u1) annotation (Line(points={{75,8},{71.6,8},{71.6,-2.8}},   color={0,0,127}));
+  connect(Q_el_n.y, ReactiveSum.u1) annotation (Line(points={{75,8},{71.6,8},{71.6,-2.8}}, color={0,0,127}));
   connect(ReactiveSum.y, boundary.Q_el_set) annotation (Line(points={{68,-16.6},{70,-16.6},{70,-26},{70,-32},{58,-32},{58,-42}}, color={0,0,127}));
   connect(epp, electricFrequency_L1_1.epp) annotation (Line(
       points={{-96,0},{-80,0},{-80,-0.2}},
       color={0,127,0},
       thickness=0.5));
   connect(boundary.epp, epp) annotation (Line(
-      points={{41.9,-54.1},{41.9,-54.1},{-96,-54.1},{-96,0}},
+      points={{42,-54},{42,-54},{-96,-54},{-96,0}},
       color={0,127,0},
       thickness=0.5));
   connect(electricFrequency_L1_1.v, v_star.u) annotation (Line(points={{-60,-6},{-47.4,-6},{-47.4,-5}}, color={0,0,127}));
   connect(v_star.y, ActiveSum.u1) annotation (Line(points={{-31.3,-5},{49.6,-5},{49.6,-20.8}}, color={0,0,127}));
   connect(v_star_square.y, ReactiveSum.u2) annotation (Line(points={{53.6,10},{58,10},{64.4,10},{64.4,-2.8}}, color={0,0,127}));
-  annotation (defaultComponentName="load", Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (defaultComponentName="load", Diagram(graphics,
+                                                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}),                       graphics={
     Line(points={{-44,-30},{38,-30}},
@@ -200,7 +194,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for active power in [W] (active power input at nominal frequency)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: apparent power port</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -208,7 +203,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;TransiEnt.Consumer.Electrical.Check.CheckAverageLoadConsumer&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p>IEEE Task Force on Load Representation for Dynamic Performance: Load representation for dynamic performance analysis (of power systems). In: <i>IEEE Transactions on Power Systems</i> Bd. 8 (1993), Nr.&nbsp;2, S.&nbsp;472&ndash;482</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

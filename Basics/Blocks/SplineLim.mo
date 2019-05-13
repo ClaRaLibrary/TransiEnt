@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Blocks;
 model SplineLim "Spline smoothed limiter"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -146,9 +146,9 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">The parameter thres gives the transition zone as share of (uMax-uMin) and should be &LT;=0.5, else regions would overlap.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The parameter thres gives the transition zone as share of (uMax-uMin) and should be &lt;=0.5, else regions would overlap.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p>Tested in check model &quot;TestSplineLim&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

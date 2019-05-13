@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
 model DHG_Topology_HH_1port_3sites_SimpleGrid
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -305,16 +305,16 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
     length=4,
     N_tubes=25,
     m_flow_nom=m_flow_nom,
-    p_nom(displayUnit="bar") = simCenter.p_n[2],
+    p_nom(displayUnit="bar") = simCenter.p_nom[2],
     h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
-        simCenter.p_n[1],
+        simCenter.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumerWest.p_nom,
     h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
-        simCenter.p_n[2],
+        simCenter.p_nom[2],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (Delta_p_nom=0.1e5),
@@ -343,16 +343,16 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
     length=4,
     N_tubes=25,
     m_flow_nom=m_flow_nom,
-    p_nom(displayUnit="bar") = simCenter.p_n[2],
+    p_nom(displayUnit="bar") = simCenter.p_nom[2],
     h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
-        simCenter.p_n[1],
+        simCenter.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumerWest.p_nom,
     h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
-        simCenter.p_n[2],
+        simCenter.p_nom[2],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (Delta_p_nom=0.1e5),
@@ -382,16 +382,16 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
     length=4,
     N_tubes=25,
     m_flow_nom=m_flow_nom,
-    p_nom(displayUnit="bar") = simCenter.p_n[2],
+    p_nom(displayUnit="bar") = simCenter.p_nom[2],
     h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
-        simCenter.p_n[1],
+        simCenter.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumerWest.p_nom,
     h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
-        simCenter.p_n[2],
+        simCenter.p_nom[2],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (Delta_p_nom=0.1e5),
@@ -586,13 +586,15 @@ equation
       smooth=Smooth.Bezier));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-440,-320},{500,420}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Models the heat demand of the district heating grid in Hamburg as open loop grid with 3 heat ports to the outside (heat producers)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">fluidPortWest: inlet </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">fluidPortEast: inlet</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">fluidPortCenter: inlet</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model BoundaryRealGas_TxV_flow_stp "A real gas boundary defining temperature, molar composition and volume at STP (1.013 bar, 273.15 K)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,6 +35,7 @@ model BoundaryRealGas_TxV_flow_stp "A real gas boundary defining temperature, mo
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium=simCenter.gasModel1 "Medium to be used"                         annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
+  parameter Boolean calculateMass=false "true if mass in boundary shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
 
   parameter Boolean variable_V_flow_n=false "True, if volume flow under normal conditions defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
   parameter Boolean variable_T=false "True, if temperature defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
@@ -52,7 +53,8 @@ model BoundaryRealGas_TxV_flow_stp "A real gas boundary defining temperature, mo
   //          Variables
   // _____________________________________________
 
-  SI.Mass m(start=0, stateSelect=StateSelect.never);
+  SI.Mass m(start=0, stateSelect=StateSelect.never)
+                                                   annotation (Dialog(group="Initialization", showStartAttribute=true));
 
 protected
   SI.MassFlowRate m_flow_in;
@@ -60,6 +62,7 @@ protected
   SI.VolumeFlowRate V_flow_n_in;
   SI.Temperature T_in;
   SI.MoleFraction x_in[medium.nc - 1];
+
 public
   SI.MolarMass[medium.nc] M_i;
   SI.MolarMass M;
@@ -77,13 +80,13 @@ public
 public
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPort(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Modelica.Blocks.Interfaces.RealInput V_flow_n(value=V_flow_n_in) if (variable_V_flow_n) "Variable volume flow rate under normal conditions"
+  TransiEnt.Basics.Interfaces.General.VolumeFlowRateIn V_flow_n(value=V_flow_n_in) if (variable_V_flow_n) "Variable volume flow rate under normal conditions"
     annotation (Placement(transformation(extent={{-120,40},{-80,80}}),
         iconTransformation(extent={{-140,40},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealInput T(value=T_in) if (variable_T) "Variable temperature"
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T(value=T_in) if (variable_T) "Variable temperature"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealInput x[medium.nc-1](value=x_in) if (variable_x) "Variable molar composition"
+  TransiEnt.Basics.Interfaces.General.MoleFractionIn x[medium.nc-1](value=x_in) if (variable_x) "Variable molar composition"
     annotation (Placement(transformation(extent={{-120,-80},{-80,-40}}),
         iconTransformation(extent={{-140,-80},{-100,-40}})));
 
@@ -145,7 +148,11 @@ equation
   m_flow_in = V_flow_n_in*normGas_pT.d;
 
   //change of mass in boundary
-  der(m) = gasPort.m_flow;
+  if calculateMass then
+    der(m) = gasPort.m_flow;
+  else
+    m=0;
+  end if;
 
   gasPort.h_outflow=gas_pT.h;
   if m_flow_nom>0 then
@@ -174,14 +181,18 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Gas</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">IdealGasEnthPortIn</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: volume flow rate in m3/s</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: mole fraction in mol/mol</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: temperature in K</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas.Base;
 partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume for real gases"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,11 +26,8 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import TransiEnt;
-  import SI = Modelica.SIunits;
+  extends TransiEnt.Storage.Gas.Base.PartialGasStorage;
   import Modelica.Constants.pi;
-
-  extends TransiEnt.Basics.Icons.StorageGenericGas;
 
   // _____________________________________________
   //
@@ -45,16 +42,11 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   //             Visible Parameters
   // _____________________________________________
 
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium in the gas storage" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
-
-  parameter SI.Volume V_geo=1 "geometric inner volume of the storage cylinder" annotation(Dialog(group="Geometry"));
   parameter SI.Height height=3.779*V_geo^(1/3) "Height of storage" annotation(Dialog(group="Geometry")); //based on height to diameter ratio 6.51:1
 
-  parameter Boolean includeHeatTransfer=true "false for neglecting heat transfer" annotation(Dialog(group="Heat Transfer"));
   parameter SI.CoefficientOfHeatTransfer alpha_nom=4 "heat transfer coefficient inside the storage cylinder" annotation(Dialog(group="Heat Transfer"));
 
   parameter Boolean start_pressure=true "true if a start pressure is defined, false if a start mass is defined" annotation(Dialog(group="Initialization"));
-  parameter SI.Mass m_gas_start=1 "stored gas mass at t=0" annotation(Dialog(group="Initialization"));
   parameter SI.Pressure p_gas_start=1e5 "pressure in storage at t=0" annotation(Dialog(group="Initialization"));
   parameter SI.ThermodynamicTemperature T_gas_start=283.15 "Temperature of gas in storage at t=0" annotation(Dialog(group="Initialization"));
 
@@ -63,33 +55,20 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   //                 Outer Models
   // _____________________________________________
 
-  outer TransiEnt.SimCenter simCenter;
-  outer TransiEnt.ModelStatistics modelStatistics;
-  replaceable model HeatTransfer =
-    TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2
-    constrainedby TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 "Heat transfer model for inside the storage" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
-  replaceable model CostSpecsStorage = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty
-                                                                                                     constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs
-                                                                                                                                                                                            "General Storage Cost Record" annotation(Dialog(group="Statistics"),choicesAllMatching);
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) annotation (Placement(transformation(extent={{-10,39},{10,59}}), iconTransformation(extent={{-10,39},{10,59}})));
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium) annotation (Placement(transformation(extent={{-10,-63},{10,-43}}), iconTransformation(extent={{-10,-73},{10,-53}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat if
-                                                         includeHeatTransfer annotation (Placement(transformation(extent={{30,-10},{50,10}})));
-  Modelica.Blocks.Interfaces.RealOutput p_gas(
-    final quantity="Pressure",
-    final unit="Pa",
-    displayUnit="bar") = gasBulk.p annotation (Placement(transformation(extent={{-40,-10},{-60,10}})));
 
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
+  replaceable model HeatTransfer =
+    TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2
+    constrainedby TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 "Heat transfer model for inside the storage" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
 
 protected
   TILMedia.VLEFluid_ph gasBulk(
@@ -117,11 +96,8 @@ protected
   //             Variable Declarations
   // _____________________________________________
 
-  SI.Temperature T_gas=gasBulk.T "Gas temperature";
-  SI.Mass m_gas "Stored gas mass";
 
 protected
-  SI.MassFraction xi_gas[medium.nc-1] "Mass composition of the gas";
   SI.SpecificEnthalpy h_gas "Specific enthalpy of gas in storage";
   SI.HeatFlowRate Q_flow_ht "Heat flow from the gas to the wall";
   Real drhodt "Time derivative of the density (unit kg/(m3s))";
@@ -148,13 +124,19 @@ initial equation
     xi=gasBulk.xi);
 
 equation
+  p_gas = gasBulk.p;
   //der(m_gas)=gasPortIn.m_flow+gasPortOut.m_flow "Conservation of Mass";
   V_geo*drhodt=gasPortIn.m_flow+gasPortOut.m_flow "Conservation of Mass";
 
-  //der(m_gas)*(h_gas-gas.p/gas.d) + m_gas*der(h_gas-gas.p/gas.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy";
+  //der(m_gas*(h_gas-p_gas/gasBulk.d)) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy";
+  //der(m_gas)*(h_gas-p_gas/gasBulk.d) + m_gas*der(h_gas-p_gas/gasBulk.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy";
   //V_geo*drhodt*(h_gas - gasBulk.p/gasBulk.d) + m_gas*der(h_gas - gasBulk.p/gasBulk.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //creates the same results like the next but one equation for constant composition but different results for variable composition
-  //V_geo*drhodt*h_gas - p_gas*V_geo/gasBulk.d*drhodt + m_gas*der(h_gas) - V_geo*der(p_gas) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //definitely wrong, produces wrong p and T curves
+  //V_geo*drhodt*h_gas - p_gas*V_geo*drhodt/gasBulk.d + m_gas*der(h_gas) - m_gas*der(p_gas/gasBulk.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //definitely wrong, produces wrong p and T curves
+  //der(m_gas)*h_gas - p_gas*der(m_gas)/gasBulk.d + m_gas*der(h_gas) - m_gas*der(p_gas/gasBulk.d) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //definitely wrong, produces wrong p and T curves
+  //der(m_gas)*h_gas - p_gas*der(m_gas)/(m_gas/V_geo) + m_gas*der(h_gas) - m_gas*der(p_gas/(m_gas/V_geo)) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //definitely wrong, produces wrong p and T curves
   V_geo*drhodt*h_gas - der(p_gas)*V_geo + m_gas*der(h_gas) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //formulation used in ClaRa pipe models
+  //der(m_gas)*h_gas - der(p_gas)*V_geo + m_gas*der(h_gas) = gasPortIn.m_flow*actualStream(gasPortIn.h_outflow) + gasPortOut.m_flow*actualStream(gasPortOut.h_outflow) + Q_flow_ht "Conservation of Energy"; //formulation used in ClaRa pipe models
+  //der(h_gas)=0;
 
   Q_flow_ht=if includeHeatTransfer then heatTransfer.heat.Q_flow else 0;
   gasBulk.d = m_gas/V_geo;
@@ -166,6 +148,14 @@ equation
   gasPortIn.h_outflow=h_gas;
 
   heatTransfer.T_outer=gasBulk.T;
+
+  H_flow_in_NCV=gasPortIn.m_flow*sum(NCV*cat(1,gasIn.xi,{1-sum(gasIn.xi)}));
+  H_flow_out_NCV=gasPortOut.m_flow*sum(NCV*cat(1,gasOut.xi,{1-sum(gasOut.xi)}));
+  H_gas_NCV=m_gas*sum(NCV*cat(1,gasBulk.xi,{1-sum(gasBulk.xi)}));
+
+  H_flow_in_GCV=gasPortIn.m_flow*sum(GCV*cat(1,gasIn.xi,{1-sum(gasIn.xi)}));
+  H_flow_out_GCV=gasPortOut.m_flow*sum(GCV*cat(1,gasOut.xi,{1-sum(gasOut.xi)}));
+  H_gas_GCV=m_gas*sum(GCV*cat(1,gasBulk.xi,{1-sum(gasBulk.xi)}));
 
   // _____________________________________________
   //
@@ -201,6 +191,11 @@ equation
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Wed Oct 07 2015</p>
 <p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (changes due to ClaRa changes: changed parameters)</p>
 </html>"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Icon(graphics={                                                       Text(
+          extent={{-30,12},{30,-48}},
+          lineColor={0,0,0},
+          textString="L2")},
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end PartialGasStorage_L2;

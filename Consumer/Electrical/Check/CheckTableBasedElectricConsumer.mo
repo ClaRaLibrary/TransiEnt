@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Check;
 model CheckTableBasedElectricConsumer
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ equation
   // _____________________________________________
 
   connect(ElectricGrid.epp, Consumer.epp) annotation (Line(
-      points={{-9.85,-0.16},{17.075,-0.16},{17.075,0},{16.34,0}},
+      points={{-10,0},{17.075,0},{17.075,0},{16.34,0}},
       color={0,0,0},
       smooth=Smooth.None));
 
@@ -67,12 +67,14 @@ createPlot(id=1, position={809, 0, 791, 345}, y={"modelStatistics.electricPower.
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{100,80}})),
-                                        Icon(coordinateSystem(extent={{-80,-80},
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{100,80}})),
+                                        Icon(graphics,
+                                             coordinateSystem(extent={{-80,-80},
             {100,80}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Test environment for checking a table based electric cosumer</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

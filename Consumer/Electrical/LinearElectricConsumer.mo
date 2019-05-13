@@ -3,10 +3,10 @@ model LinearElectricConsumer "Linearized frequency dependency"
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,13 +51,13 @@ model LinearElectricConsumer "Linearized frequency dependency"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set if              useInputConnectorP "active power input at nominal frequency" annotation (Placement(transformation(extent={{-140,60},{-100,100}}, rotation=0), iconTransformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP "active power input at nominal frequency" annotation (Placement(transformation(extent={{-140,60},{-100,100}}, rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,116})));
 
 protected
-  Modelica.Blocks.Interfaces.RealInput P_internal "Needed to connect to conditional connector for active power";
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal "Needed to connect to conditional connector for active power";
 
   // _____________________________________________
   //
@@ -65,10 +65,7 @@ protected
   // _____________________________________________
 
 public
-  Modelica.Blocks.Sources.RealExpression
-                                   P_nominal(y=P_internal)
-                                                     annotation (Placement(
-        transformation(
+  Modelica.Blocks.Sources.RealExpression P_n(y=P_internal) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={82,-28})));
@@ -87,7 +84,7 @@ public
 
   TransiEnt.Components.Sensors.ElectricFrequency electricFrequency_L1_1(isDeltaMeasurement=true) annotation (Placement(transformation(extent={{-54,-80},{-34,-60}})));
 
-  Modelica.SIunits.ActivePower P_el_nom = P_internal "Power demand at nominal frequency";
+  SI.ActivePower P_el_n=P_internal "Power demand at nominal frequency";
 
   Modelica.SIunits.ActivePower delta_P_el = epp.P - P_internal "Power demand at nominal frequency";
   Modelica.SIunits.ActivePower P_el_is = epp.P "Actual load";
@@ -131,7 +128,7 @@ equation
                                                                                                     color={0,0,127}));
   connect(linearStaticConsumerModel.y, sum1.u[1]) annotation (Line(points={{23.2,40},{59,40},{59,14}}, color={0,0,127}));
   connect(const.y, sum1.u[2]) annotation (Line(points={{23,72},{38,72},{61,72},{61,14}}, color={0,0,127}));
-  connect(P_nominal.y, ActiveSum.u1) annotation (Line(points={{71,-28},{68,-28},{63.6,-28},{63.6,-34.8}}, color={0,0,127}));
+  connect(P_n.y, ActiveSum.u1) annotation (Line(points={{71,-28},{68,-28},{63.6,-28},{63.6,-34.8}}, color={0,0,127}));
   connect(ActiveSum.u2, sum1.y) annotation (Line(points={{56.4,-34.8},{56.4,-18},{60,-18},{60,-9}}, color={0,0,127}));
   annotation (defaultComponentName="load", Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
@@ -160,7 +157,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for active power in [W] (active power input at nominal frequency)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -168,7 +166,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in  check model &quot;TransiEnt.Consumer.Electrical.Check.CheckLinearElectricConsumer&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

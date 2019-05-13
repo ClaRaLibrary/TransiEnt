@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.Check;
 model Test_Advanced_PV_WeatherHamburg
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,47 +29,62 @@ model Test_Advanced_PV_WeatherHamburg
   TransiEnt.Basics.Tables.Ambient.GHI_Hamburg_3600s_2012_TMY GHI_Hamburg_3600s_IWEC annotation (Placement(transformation(extent={{-214,-124},{-194,-106}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{84,-10},{104,10}})));
   TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.GHI_Input.PVModule GHI_Input_0(
-    phi=53.63,
-    Tilt=0,
     P_inst=200000,
     Area=1.18,
     Strings=83,
-    GroundCoverageRatio=2) annotation (Placement(transformation(extent={{-16,192},{4,212}})));
+    GroundCoverageRatio=2,
+    latitude=SI.Conversions.from_deg(53.63),
+    slope=SI.Conversions.from_deg(0),
+    redeclare model Skymodel = TransiEnt.Producer.Heat.SolarThermal.Base.Skymodel_HDKR)
+                           annotation (Placement(transformation(extent={{-16,192},{4,212}})));
   TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.DNIDHI_Input.PVModule DNIDHI_Input_0(
-    phi=53.63,
-    Tilt=0,
     P_inst=200000,
     Area=1.18,
     Strings=83,
-    GroundCoverageRatio=2) annotation (Placement(transformation(extent={{-16,152},{4,172}})));
+    GroundCoverageRatio=2,
+    latitude=SI.Conversions.from_deg(53.63),
+    slope=SI.Conversions.from_deg(0),
+    use_input_data=true,
+    redeclare model Skymodel = TransiEnt.Producer.Heat.SolarThermal.Base.Skymodel_HDKR)
+                           annotation (Placement(transformation(extent={{-16,152},{4,172}})));
   TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.DNIDHI_Input.PVModule DNIDHI_Input_30(
-    phi=53.63,
-    Tilt=30,
     Area=1.18,
     Strings=83,
     P_inst=200000,
-    GroundCoverageRatio=2) annotation (Placement(transformation(extent={{-12,-26},{8,-6}})));
+    GroundCoverageRatio=2,
+    latitude=SI.Conversions.from_deg(53.63),
+    slope=SI.Conversions.from_deg(30),
+    use_input_data=true,
+    redeclare model Skymodel = TransiEnt.Producer.Heat.SolarThermal.Base.Skymodel_HDKR)
+                           annotation (Placement(transformation(extent={{-12,-26},{8,-6}})));
   TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.GHI_Input.PVModule GHI_Input_30(
-    phi=53.63,
-    Tilt=30,
     P_inst=200000,
     Area=1.18,
     Strings=83,
-    GroundCoverageRatio=2) annotation (Placement(transformation(extent={{-12,14},{8,34}})));
+    GroundCoverageRatio=2,
+    latitude=SI.Conversions.from_deg(53.63),
+    slope=SI.Conversions.from_deg(30),
+    redeclare model Skymodel = TransiEnt.Producer.Heat.SolarThermal.Base.Skymodel_HDKR)
+                           annotation (Placement(transformation(extent={{-12,14},{8,34}})));
   TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.DNIDHI_Input.PVModule DNIDHI_Input_60(
-    phi=53.63,
-    Tilt=60,
     P_inst=200000,
     Area=1.18,
     Strings=83,
-    GroundCoverageRatio=2) annotation (Placement(transformation(extent={{-12,-170},{8,-150}})));
+    GroundCoverageRatio=2,
+    latitude=SI.Conversions.from_deg(53.63),
+    slope=SI.Conversions.from_deg(60),
+    use_input_data=true,
+    redeclare model Skymodel = TransiEnt.Producer.Heat.SolarThermal.Base.Skymodel_HDKR)
+                           annotation (Placement(transformation(extent={{-12,-170},{8,-150}})));
   TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.GHI_Input.PVModule GHI_Input_60(
-    phi=53.63,
-    Tilt=60,
     P_inst=200000,
     Area=1.18,
     Strings=83,
-    GroundCoverageRatio=2) annotation (Placement(transformation(extent={{-12,-130},{8,-110}})));
+    GroundCoverageRatio=2,
+    latitude=SI.Conversions.from_deg(53.63),
+    slope=SI.Conversions.from_deg(60),
+    redeclare model Skymodel = TransiEnt.Producer.Heat.SolarThermal.Base.Skymodel_HDKR)
+                           annotation (Placement(transformation(extent={{-12,-130},{8,-110}})));
 
   // _____________________________________________
   //
@@ -103,11 +118,11 @@ equation
   connect(Temperature_Hamburg_3600s_IWEC.value, DNIDHI_Input_0.T_in) annotation (Line(points={{-195.2,-36},{-136,-36},{-136,170},{-18,170}}, color={0,0,127}));
   connect(Temperature_Hamburg_3600s_IWEC.value, GHI_Input_0.T_in) annotation (Line(points={{-195.2,-36},{-136,-36},{-136,210},{-18,210}}, color={0,0,127}));
   connect(GHI_Input_0.epp, ElectricGrid.epp) annotation (Line(
-      points={{3.3,201.4},{83.65,201.4},{83.65,-0.1},{83.9,-0.1}},
+      points={{3.3,201.4},{83.65,201.4},{83.65,0},{84,0}},
       color={0,135,135},
       thickness=0.5));
   connect(DNIDHI_Input_0.epp, ElectricGrid.epp) annotation (Line(
-      points={{3.3,161.4},{3.3,161.7},{83.9,161.7},{83.9,-0.1}},
+      points={{3.3,161.4},{3.3,161.7},{84,161.7},{84,0}},
       color={0,135,135},
       thickness=0.5));
   connect(GHI_Hamburg_3600s_IWEC.value, GHI_Input_0.GHI_in) annotation (Line(points={{-195.2,-115},{-136,-115},{-126,-115},{-126,202},{-18,202}}, color={0,0,127}));
@@ -124,19 +139,19 @@ equation
   connect(DHI_Hamburg_3600s_IWEC.value, DNIDHI_Input_30.DHI_in) annotation (Line(points={{-195.2,14},{-104,14},{-104,-18.6},{-14,-18.6}}, color={0,0,127}));
   connect(DHI_Hamburg_3600s_IWEC.value, DNIDHI_Input_60.DHI_in) annotation (Line(points={{-195.2,14},{-104,14},{-104,-162.6},{-14,-162.6}}, color={0,0,127}));
   connect(GHI_Input_30.epp, ElectricGrid.epp) annotation (Line(
-      points={{7.3,23.4},{8.65,23.4},{8.65,-0.1},{83.9,-0.1}},
+      points={{7.3,23.4},{8.65,23.4},{8.65,0},{84,0}},
       color={0,135,135},
       thickness=0.5));
   connect(DNIDHI_Input_30.epp, ElectricGrid.epp) annotation (Line(
-      points={{7.3,-16.6},{7.3,-16},{8,-16},{8,0},{9.3,0},{84,0},{83.9,0},{83.9,-0.1}},
+      points={{7.3,-16.6},{7.3,-16},{8,-16},{8,0},{9.3,0},{84,0},{84,0},{84,0}},
       color={0,135,135},
       thickness=0.5));
   connect(GHI_Input_60.epp, ElectricGrid.epp) annotation (Line(
-      points={{7.3,-120.6},{7.3,-120.3},{83.9,-120.3},{83.9,-0.1}},
+      points={{7.3,-120.6},{7.3,-120.3},{84,-120.3},{84,0}},
       color={0,135,135},
       thickness=0.5));
   connect(DNIDHI_Input_60.epp, ElectricGrid.epp) annotation (Line(
-      points={{7.3,-160.6},{7.3,-159.3},{83.9,-159.3},{83.9,-0.1}},
+      points={{7.3,-160.6},{7.3,-159.3},{84,-159.3},{84,0}},
       color={0,135,135},
       thickness=0.5));
   connect(Wind_Hamburg_3600s_IWEC.value, GHI_Input_60.WindSpeed_in) annotation (Line(points={{-195.2,-80},{-102,-80},{-102,-128},{-14,-128}}, color={0,0,127}));
@@ -162,7 +177,8 @@ equation
           extent={{122,-120},{220,-152}},
           lineColor={28,108,200},
           textString="Module inclination: 60")}),
-                            Icon(coordinateSystem(
+                            Icon(graphics,
+                                 coordinateSystem(
         extent={{-260,-240},{260,240}},
         preserveAspectRatio=false,
         initialScale=0.1)),
@@ -170,5 +186,26 @@ equation
       StopTime=3.1536e+007,
       Interval=3600,
       Tolerance=1e-008),
-    __Dymola_experimentSetupOutput(events=false));
+    __Dymola_experimentSetupOutput(events=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for testing the irradiation results in Hamburg</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Test_Advanced_PV_WeatherHamburg;

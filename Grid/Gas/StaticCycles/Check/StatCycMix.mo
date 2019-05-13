@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model StatCycMix
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -90,7 +90,8 @@ equation
   connect(mix.inlet2, adapter_H2toNG.outlet) annotation (Line(points={{0,28.0667},{0,28.0667},{0,19},{6.66134e-16,19}},      color={0,0,0}));
   connect(adapter_H2toNG.inlet, pipeH2.outlet) annotation (Line(points={{-5.55112e-016,-0.5},{0,-0.5},{0,-19.8},{-0.1,-19.8}}, color={0,0,0}));
   connect(source_H2.outlet, pipeH2.inlet) annotation (Line(points={{3.10862e-015,-56.82},{0,-56.82},{0,-38.3},{-0.1,-38.3}}, color={0,0,0}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Tester for static cycle mixer.</p>

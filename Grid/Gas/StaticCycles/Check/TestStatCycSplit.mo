@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycSplit
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -109,7 +109,9 @@ model TestStatCycSplit
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-72,0})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(volume=0.01, p_start=Init.split.p) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(volume=0.01, p(
+                                                                                                                       start = Init.split.p))
+                                                                                                                                             annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={4,0})));
@@ -157,7 +159,8 @@ equation
       points={{4,-49},{4,-49},{4,-64}},
       color={255,255,0},
       thickness=1.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=200),
     __Dymola_experimentSetupOutput,
     __Dymola_experimentFlags(

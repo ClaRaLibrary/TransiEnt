@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
-model SelfDischargeRate "Stationary Loss approximated by self discharge rate e.g. 50%/h"
+model SelfDischargeRate "Constant Stationary Loss approximated by self discharge rate e.g. 50%/h"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,7 +22,11 @@ model SelfDischargeRate "Stationary Loss approximated by self discharge rate e.g
   extends TransiEnt.Storage.Base.PartialStationaryLoss;
 
 equation
-  P_statloss = params.selfDischargeRate * params.E_max;
+ if noEvent(E_is<=params.E_min*1.01) then
+    P_statloss=0;
+  else
+    P_statloss = params.selfDischargeRate * params.E_max;
+ end if;
 
   annotation (Icon(graphics={
   Polygon(lineColor={192,192,192},
@@ -45,7 +49,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">E_is: input for energy level of the storage in [J]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_statloss: output for electric power in [W]- stationary loss energy rate</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

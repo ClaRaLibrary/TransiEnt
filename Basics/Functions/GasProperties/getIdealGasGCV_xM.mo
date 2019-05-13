@@ -3,10 +3,10 @@ function getIdealGasGCV_xM "Adaptive function for gross calorific value calculat
   // LA: has to be adapted according to the realGas function, but adaptions in models where the function is used are also necessary!
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,7 +51,6 @@ public
 
 protected
   SI.MoleFraction[idealGasType.nc] x=cat(1,x_in,{1-sum(x_in)}) "Molar composition of component";
-  Real GCVm(unit="kJ/mol") "Molar gross calorific value";
 
 algorithm
   // _____________________________________________
@@ -64,9 +63,7 @@ algorithm
     GCVOut:=GCVIn;
   else
     //Search for component in GCVComponentValues and add it to total GCV weighted by molefraction
-    GCVm:=sum(x*GCVm_vec);
-    //Convert molar (kJ/mol) to specific (J/kg) GCV
-    GCVOut :=GCVm/M_in*1000;
+    GCVOut:=sum(x*GCVm_vec);
   end if;
 
 protected
@@ -110,7 +107,7 @@ protected
 <p>If there are components in the gas which don&apos;t have a corresponding entry in the GCVm values record, they will just be ignored, giving a faulty calorific value. The function will throw a warning.</p>
 <p>GCVIn was added to give the possibility to define a constant calorific value. If this value is set to 0, the GCV will be calculated by the composition of the defined medium.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no validation or testing necessary)</p>
+<p>Tested in check model &quot;TransiEnt.Basics.Functions.GasProperties.Check.TestGCVCalculation&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

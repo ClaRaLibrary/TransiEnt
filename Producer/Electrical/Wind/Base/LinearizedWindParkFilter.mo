@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind.Base;
 model LinearizedWindParkFilter
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -62,8 +62,8 @@ model LinearizedWindParkFilter
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_WindTurbine annotation (Placement(transformation(extent={{-126,-20},{-86,20}}), iconTransformation(extent={{-126,-20},{-86,20}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_WindPark annotation (Placement(transformation(extent={{92,-20},{132,20}}), iconTransformation(extent={{90,-20},{130,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_WindTurbine annotation (Placement(transformation(extent={{-126,-20},{-86,20}}), iconTransformation(extent={{-126,-20},{-86,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_WindPark annotation (Placement(transformation(extent={{92,-20},{132,20}}), iconTransformation(extent={{90,-20},{130,20}})));
 
   // _____________________________________________
   //
@@ -209,7 +209,8 @@ equation
       Text(
         lineColor={192,192,192},
         extent={{-72,34},{82,72}},
-          textString="3rd order")}),                                                             Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+          textString="3rd order")}),                                                             Diagram(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><span style=\"font-family: MS Shell Dlg 2;\">1<b><span style=\"color: #008000;\">. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Applies a third order linear filter to the input. Can be used to filter the power output of a single turbine such that the output is as smooth at it were in a windpark of n turbines. </span></p>
@@ -217,17 +218,18 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">The amplitude spectrum is approximated by a third order transfer function. See matlab scripts in</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">\\\\transientee-sources\\matlab\\pd\\Wind\\WindParkFilter\\</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">for more details how this is done.</span></p>
-<p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>P_el_WindTurbine: input for electric power in W</p>
+<p>P_el_WindPark: output for electric power in W</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

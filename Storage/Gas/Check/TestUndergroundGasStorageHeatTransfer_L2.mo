@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Gas.Check;
 model TestUndergroundGasStorageHeatTransfer_L2
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,7 @@ model TestUndergroundGasStorageHeatTransfer_L2
   Modelica.Blocks.Sources.TimeTable timeTable_source(table=[0,-3; 691200,-3; 691201,0; 1e8,0]) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={0,62})));
+        origin={-2,82})));
   Modelica.Blocks.Sources.TimeTable timeTable_sink(table=[0,0; 2764800,0; 2764801,3; 3456000,3; 3456001,0; 1e8,0]) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -83,6 +83,16 @@ model TestUndergroundGasStorageHeatTransfer_L2
         origin={30,-30})));
   Modelica.Blocks.Math.Gain gain(k=25/3) annotation (Placement(transformation(extent={{18,44},{26,52}})));
   Modelica.Blocks.Math.Gain gain1(k=25/3) annotation (Placement(transformation(extent={{12,-52},{20,-44}})));
+  Modelica.Blocks.Sources.Pulse pulse(
+    amplitude=-3,
+    startTime=60000,
+    width=5,
+    period=600000) annotation (Placement(transformation(extent={{-92,46},{-72,66}})));
+  Modelica.Blocks.Sources.Pulse pulse1(
+    amplitude=3,
+    width=5,
+    period=600000,
+    startTime=180000) annotation (Placement(transformation(extent={{-96,-34},{-76,-14}})));
 equation
   connect(source_H2.gasPort, compressedGasStorage_H2.gasPortIn) annotation (Line(
       points={{-30,20},{-30,4.9}},
@@ -92,8 +102,6 @@ equation
       points={{-30,-6.3},{-30,-20}},
       color={255,255,0},
       thickness=1.5));
-  connect(timeTable_source.y, source_H2.m_flow) annotation (Line(points={{0,51},{0,48},{-24,48},{-24,42}}, color={0,0,127}));
-  connect(sink_H2.m_flow, timeTable_sink.y) annotation (Line(points={{-36,-42},{-36,-48},{0,-48},{0,-51}}, color={0,0,127}));
   connect(source_CH4.gasPort,compressedGasStorage_CH4. gasPortIn) annotation (Line(
       points={{30,20},{30,4.9}},
       color={255,255,0},
@@ -103,9 +111,11 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(source_CH4.m_flow, gain.y) annotation (Line(points={{36,42},{36,48},{26.4,48}}, color={0,0,127}));
-  connect(gain.u, timeTable_source.y) annotation (Line(points={{17.2,48},{0,48},{0,51}}, color={0,0,127}));
   connect(sink_CH4.m_flow, gain1.y) annotation (Line(points={{24,-42},{24,-48},{20.4,-48}}, color={0,0,127}));
-  connect(gain1.u, timeTable_sink.y) annotation (Line(points={{11.2,-48},{0,-48},{0,-51}}, color={0,0,127}));
+  connect(sink_H2.m_flow, pulse1.y) annotation (Line(points={{-36,-42},{-36,-46},{-75,-46},{-75,-24}}, color={0,0,127}));
+  connect(pulse1.y, gain1.u) annotation (Line(points={{-75,-24},{-66,-24},{-66,-48},{11.2,-48}}, color={0,0,127}));
+  connect(pulse.y, gain.u) annotation (Line(points={{-71,56},{-2,56},{-2,48},{17.2,48}}, color={0,0,127}));
+  connect(source_H2.m_flow, pulse.y) annotation (Line(points={{-24,42},{-26,42},{-26,56},{-71,56}}, color={0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-84,92},{-32,60}},
@@ -117,6 +127,24 @@ equation
     experiment(StopTime=5.5296e+006, __Dymola_NumberOfIntervals=6144),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #4b8a49\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) in Sep 2016</p>
 </html>"));

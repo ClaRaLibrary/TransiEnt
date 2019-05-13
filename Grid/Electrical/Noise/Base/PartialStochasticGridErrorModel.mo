@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.Noise.Base;
 partial model PartialStochasticGridErrorModel "Base model for prediction errors based on stochastic distributions"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -73,5 +73,6 @@ annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100}
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
     Line(points={{4,44},{4,62}},  color={192,192,192})}),
-                              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+                              Diagram(graphics,
+                                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end PartialStochasticGridErrorModel;

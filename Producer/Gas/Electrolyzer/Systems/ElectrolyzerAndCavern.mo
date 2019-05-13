@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydrogen cavern (use with: TransiEnt.Producer.Combined.LargeScaleCHP.H2CofiringCHP)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -69,6 +69,8 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
 
     //Co-firing ratio
    parameter Real k_H2_fraction=simCenter.k_H2_fraction;
+   parameter Boolean integrateMassFlowOut=false "true if mass flow output shall be integrated";
+   parameter Boolean integrateMassFlowIn=false "true if mass flow input shall be integrated";
 
  // _____________________________________________
   //
@@ -123,7 +125,7 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
 
     //Cost Collectors
   Components.Statistics.Collectors.LocalCollectors.CollectCostsGeneral collectCosts_PtG_Ely(
-    redeclare model CostRecordGeneral = Components.Statistics.ConfigurationData.StorageCostSpecs.Hydrogen,
+    redeclare model CostRecordGeneral = Components.Statistics.ConfigurationData.StorageCostSpecs.PtG_Ely,
     der_E_n=P_nom_ely,
     C_OM_fix=L*simCenter.Cinv_H2_pipe,
     P_el=P_in_ely,
@@ -149,11 +151,11 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={94,82})));
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_set_ely annotation (Placement(transformation(extent={{-72,100},{-52,120}}), iconTransformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_set_ely "Input for electric power" annotation (Placement(transformation(extent={{-72,100},{-52,120}}), iconTransformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-62,110})));
-  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_fuel_GuD annotation (Placement(transformation(extent={{30,104},{70,144}}), iconTransformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_fuel_GuD "Heat flow rate of the fuel" annotation (Placement(transformation(extent={{30,104},{70,144}}), iconTransformation(
         extent={{-12,-12},{12,12}},
         rotation=270,
         origin={54,112})));
@@ -162,6 +164,7 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
   //
   //               Equations
   // _____________________________________________
+
 
 equation
   eta_ely_nom=(m_flow_nom_ely*LHV)/P_nom_ely; //calculates the electrolyzer's nominal mass flow
@@ -177,8 +180,18 @@ equation
 
  der(dm_storage)=m_flow_in-m_flow_out;
  m_storage=m_initial+dm_storage;
+
+ if integrateMassFlowOut then
  der(m_out)=m_flow_out;
+ else
+   m_out=0;
+ end if;
+
+ if integrateMassFlowIn then
  der(m_in)=m_flow_in;
+ else
+   m_in=0;
+ end if;
 
  Q_flow_GuD_H2=k_H2_fraction*Q_flow_fuel_GuD;
 
@@ -267,16 +280,17 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           fillColor={135,135,135},
           textString="GuD fuel mixer")}),
-    Diagram(coordinateSystem(preserveAspectRatio=false)),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: Arial,sans-serif;\">This simple model simulates the behaviour of a hydrogen cavern. It should be used together with the component <a href=\"TransiEnt.Producer.Combined.LargeScaleCHP.H2CofiringCHP\">TransiEnt.Producer.Combined.LargeScaleCHP.H2CofiringCHP</a>.</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">The default parameters are based on the sample cavern of one of the NOW studies [1].</span></p>
-<p><br><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: Arial,sans-serif;\">This simple model simulates the behavior of a hydrogen cavern. It should be used together with the component <a href=\"TransiEnt.Producer.Combined.LargeScaleCHP.H2CofiringCHP\">TransiEnt.Producer.Combined.LargeScaleCHP.H2CofiringCHP</a>.</span></p><p><span style=\"font-family: MS Shell Dlg 2;\">The default parameters are based on the sample cavern of one of the NOW studies [1].</span></p>
+<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Loading: </span></p>
 <ul>
 <li><span style=\"font-family: MS Shell Dlg 2;\">This component takes into consideration the amount of power being sent to the electrolyzer to calculate the produced amount of hydrogen.</span></li>
 <li><span style=\"font-family: MS Shell Dlg 2;\">The cavern ist loaded as long as there is enough unused capacitiy in the cavern.</span></li>
+<li><span style=\"font-family: MS Shell Dlg 2;\">The efficiency of the electrolyzer is constant and in regard to the lower heating value (NCV).</span></li>
 </ul>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Unloading:</span></p>
 <ul>
@@ -284,7 +298,7 @@ equation
 <li><span style=\"font-family: MS Shell Dlg 2;\">The amount of hydrogen to be unloaded depends on the co-firing ration as defined in <span style=\"color: #0000ff;\">SimCenter.k_H2_fraction</span>.</li>
 </ul>
 <p><br><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">3. Limits of validity </span></b></p>
-<p><span style=\"font-family: Arial,sans-serif;\">Due to its simplifcation level, this model should not be used for detailed dimanesioning of underground hydrogen caverns.</span></p>
+<p><span style=\"font-family: Arial,sans-serif;\">Due to its simplifcation level, this model should not be used for detailed dimensioning of underground hydrogen caverns.</span></p>
 <p><span style=\"font-family: Arial,sans-serif;\">Its usage is rather recommended for large system models.</span></p>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">4. Interfaces</span></b></p>
 <p>Inputs:</p>
@@ -297,14 +311,10 @@ equation
 <li><span style=\"font-family: Arial,sans-serif;\">h2Available (boolean)</span></li>
 </ul>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: Arial,sans-serif;\">(no elements)</span></p>
-<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">6. Governing Equations</span></b></p>
-<p><span style=\"font-family: Arial,sans-serif;\">(no equations)</span></p>
-<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">7. Remarsk for Usage</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">Electrolyzer Parameters:</span></p>
 <ul>
-<li><span style=\"font-family: Arial,sans-serif;\">P_nom_ely:</span></li>
-<li><span style=\"font-family: Arial,sans-serif;\">eta_nom_ely:</span></li>
+<li><span style=\"font-family: Arial,sans-serif;\">P_nom_ely: nominal electric power of electrolyzer</span></li>
+<li><span style=\"font-family: Arial,sans-serif;\">eta_nom_ely: nominal efficiency of electrolyzer</span></li>
 </ul>
 <p><br>Cavern Parameters:</p>
 <ul>
@@ -313,8 +323,12 @@ equation
 <li>V_cushion: cushion gas volume <span style=\"font-family: MS Shell Dlg 2;\">(converted into mass via calculated density)</span></li>
 <li>k_H2_fraction: co-firing ratio (Q_flow_fuel_H2/Q_flow_fuel_CH4)</li>
 </ul>
-<p><br><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">See Check-Model XXXX.XXX.XXXX</span></p>
+<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: Arial,sans-serif;\">(no equations)</span></p>
+<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><br>(none)</p>
+<p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">See Check-Model &quot;TransiEnt.Producer.Gas.Electrolyzer.Systems.Check.TestElectrolyzerAndCavern&quot;</span></p>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">[1] Stolzenburg, Klaus ; Hamelmann, Roland ; Wietschel, Martin ; Genoese, Fabio ; Michaelis, Julia ; Lehmann, Jochen ; Miege, Andreas ; Krause, Stephan ; Sponholz, Christian ; u.&nbsp;a.: <i>Integration von Wind-Wasserstoff-Systemen in das Energiesystem Abschlussbericht</i>, 2014</span></p>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">10. Version History</span></b></p>

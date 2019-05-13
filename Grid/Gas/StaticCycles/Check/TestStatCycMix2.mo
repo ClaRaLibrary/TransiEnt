@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycMix2
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -119,7 +119,8 @@ model TestStatCycMix2
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-72,0})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(p_start=Init.split.p, volume=0.1) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(p(
+                                                                                                          start = Init.split.p),volume=0.1) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={4,0})));

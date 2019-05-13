@@ -2,10 +2,10 @@ within TransiEnt.Basics.Media.Gases;
 record VLE_VDIWA_CH4_SRK "{CH4} VDIWA SRK"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,11 +21,31 @@ record VLE_VDIWA_CH4_SRK "{CH4} VDIWA SRK"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  //this model works with TILMedia 1.2.1
   extends TILMedia.VLEFluidTypes.BaseVLEFluid(
     final fixedMixingRatio=true,
     final nc_propertyCalculation=1,
     final vleFluidNames={"VDIWA2006.Methane(EOS=SRK,REF=STP)"},
     final mixingRatio_propertyCalculation={1},
     final concatVLEFluidName="VDIWA2006.Methane(EOS=SRK,REF=STP)");
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This record contains the mixing ratio of the Vapor-Liquid Equilibrium CH4_SRK</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end VLE_VDIWA_CH4_SRK;

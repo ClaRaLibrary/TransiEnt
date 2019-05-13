@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Records.GasProperties;
 record MolarMasses "Record containing the molar masses for components of natural gas in kg/mol"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,8 +31,8 @@ record MolarMasses "Record containing the molar masses for components of natural
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  parameter String[:]                 names = {"Methane", "CH4",    "Ethane", "C2H6",   "Propane", "C3H8",   "Butane",  "C4H10",   "Nitrogen", "N2",      "carbon_dioxide", "CO2",     "Hydrogen", "H2",      "Oxygen", "O2", "CARBON_MONOXIDE", "CO",    "Water", "H2O"};
-  parameter Modelica.SIunits.MolarMass[:] M = {0.016042,  0.016042, 0.030069, 0.030069, 0.044096,  0.044096, 0.0581222, 0.0581222, 0.0280135,  0.0280135, 0.0440095,        0.0440095, 0.0020159,  0.0020159, 0.32,     0.32, 0.02801,           0.02801, 0.01802, 0.01802};
+  parameter String[:]                 names = {"Methane", "CH4",    "Ethane", "C2H6",   "Propane", "C3H8",   "Butane",  "C4H10",   "Nitrogen", "N2",      "Carbon_Dioxide", "CO2",     "Hydrogen", "H2",      "Oxygen", "O2",     "Carbon_Monoxide", "CO",     "Water",   "H2O"};
+  parameter Modelica.SIunits.MolarMass[:] M = {0.016043,  0.016043, 0.030070, 0.030070, 0.044097,  0.044097, 0.058123,  0.058123,  0.0280135,  0.0280135, 0.044010,         0.044010,  0.0020159,  0.0020159, 0.319988, 0.319988, 0.028010,          0.028010, 0.0180153, 0.0180153};
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -55,9 +55,10 @@ record MolarMasses "Record containing the molar masses for components of natural
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>G. Cerbe, B. Lendt, K. Br&uuml;ggemann, M. Dehli, F. Gr&ouml;schl, K. Heikrodt, T. Kleiber, J. Kuck, J. Mischner, T. Schmidt, A. Seemann, and W. Thielen, Grundlagen der Gastechnik. Gasbeschaffung - Gasverteilung - Gasverwendung, 8th ed. M&uuml;nchen: Carl Hanser Verlag, 2017.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Jan Braune (jan.braune@tuhh.de), Mar 2015</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Apr 2015</p>
+<p>Revised by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));
 end MolarMasses;

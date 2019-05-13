@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Base.ControlPower;
 partial block PartialBalancingPowerPotential
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,9 +20,6 @@ partial block PartialBalancingPowerPotential
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
-
-/// ***** MOST IMPORTANT RULE: BEFORE PUSHING YOUR CHANGES YOUR MODEL SHOULD "CHECK" *****
-/// (meaning if you press F8 or click the "check" Button there are no errors)
 
   // _____________________________________________
   //
@@ -40,7 +37,7 @@ partial block PartialBalancingPowerPotential
   //
   //             Visible Parameters
   // _____________________________________________
-  parameter SI.Power P_nom = 120e6 "Nominal power of plant";
+  parameter SI.Power P_n=120e6 "Nominal power of plant";
 
   parameter Real P_min_star=0.2 "Fraction of nominal power (=20% of nominal power)" annotation(Dialog(group="Physical Constraints"));
 
@@ -89,7 +86,7 @@ equation
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Potential balancing power provision.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>LoD 1 - only active power and frequency.</p>
+<p>L1 (defined in the CodingConventions) - only active power and frequency.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>

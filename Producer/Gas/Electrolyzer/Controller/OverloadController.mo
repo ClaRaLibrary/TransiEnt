@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model OverloadController "Control overload operation of electrolyzer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,7 +46,6 @@ model OverloadController "Control overload operation of electrolyzer"
   parameter SI.ActivePower P_el_cooldown=P_el_n "Power below which cooldown starts";
   parameter SI.Time t_overload=8*3600 "Seconds the electrolyzer can operate in overload region";
   parameter Real coolingToHeatingRatio=2 "Ratio of how much faster the electrolyser cools down than it heats up";
-  parameter Integer startState=1 "Initial state of the electrolyzer (1: ready to overheat, 2: working in overload, 3: cooling down)";
 
   // _____________________________________________
   //
@@ -58,7 +57,7 @@ model OverloadController "Control overload operation of electrolyzer"
   //             Variable Declarations
   // _____________________________________________
 
-  Integer state(start=startState) "Defines the state the electrolyser is in (1: ready to overheat, 2: working in overload, 3: cooling down)";
+  Integer state(start=1) "Defines the state the electrolyser is in (1: ready to overheat, 2: working in overload, 3: cooling down)" annotation (Dialog(group="Initialization", showStartAttribute=true));
   Real overloadLevel(start=0) "Level of overheating";
 
   // _____________________________________________
@@ -66,8 +65,8 @@ model OverloadController "Control overload operation of electrolyzer"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set annotation (Placement(transformation(extent={{-130,-20},{-90,20}}), iconTransformation(extent={{-130,-20},{-90,20}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_ely annotation (Placement(transformation(extent={{98,-10},{118,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set annotation (Placement(transformation(extent={{-130,-20},{-90,20}}), iconTransformation(extent={{-130,-20},{-90,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_ely annotation (Placement(transformation(extent={{98,-10},{118,10}})));
 
   // _____________________________________________
   //
@@ -128,12 +127,15 @@ equation
   end if;
 
   connect(Input_overload_hysteresis.y,hysteresis_coolingDown. u) annotation (Line(points={{-15,0},{-15,0},{8,0}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
   Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This is a controller to control the electric power of the electrolyzer. It has to be combined with another controller to control minimum and maximum power. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>The electrolyzer can be operated at higher electric power than nominal power. If the power rises over a defined P_el_overload, the electrolyzer will be heated up so this operation is time limited. If the maximum overload time is reached, the electrolyzer has to be operated below or at P_el_cooldown to cool down again. In general the electrolyzer heats up at P_el&gt;P_el_overload and cools down at P_el_cooldown&gt;=P_el. </p>
+<p>The electrolyzer can be operated at higher electric power than nominal power. If the power rises over a defined P_el_overload, the electrolyzer will be heated up so this operation is time limited. If the maximum overload time is reached, the electrolyzer has to be operated below or at P_el_cooldown to cool down again. In</p>
+<p>general the electrolyzer heats up at P_el&gt;P_el_overload and cools down at P_el_cooldown&gt;=P_el. </p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>This model is only valid for constant overheating and cooling down. </p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>

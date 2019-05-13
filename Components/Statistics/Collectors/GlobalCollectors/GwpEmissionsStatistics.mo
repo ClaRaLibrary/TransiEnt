@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.GlobalCollectors;
 model GwpEmissionsStatistics
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,8 +32,16 @@ model GwpEmissionsStatistics
   //             Visible Parameters
   // _____________________________________________
 
+  parameter Boolean integrateCDE=simCenter.integrateCDE "true if CDE should be integrated";
   parameter Integer nTypes = Types.nTypeOfPrimaryEnergyCarrier annotation(HideResult=true);
   parameter Integer nTypesHeat = Types.nTypeOfPrimaryEnergyCarrierHeat annotation(HideResult=true);
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
 
   // _____________________________________________
   //
@@ -93,8 +101,13 @@ model GwpEmissionsStatistics
   TransiEnt.Basics.Units.MassOfCDE m_CDE_Others_heat=m_CDE_heat[PrimaryEnergyCarrierHeat.Others];
 
 equation
+  if integrateCDE then
    der(m_CDE)=gwpCollector;
    der(m_CDE_heat)=gwpCollectorHeat;
+  else
+    m_CDE=zeros(nTypes);
+    m_CDE_heat=zeros(nTypesHeat);
+  end if;
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},

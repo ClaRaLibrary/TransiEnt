@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Check;
-model CheckPVBatteryPoolSingleHouse
+model CheckPVBatteryPoolSingleHouse "Model for testing the photovoltaic battery pool with an example profile of a single house"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,7 +56,7 @@ equation
   connect(PBBatteryPool.P_el_PV[1], P_PV.y) annotation (Line(points={{33.16,-45.78},{14,-45.78},{14,-2},{10.6,-2}},
                                                                                                               color={0,0,127}));
   connect(lumpedGrid.epp, PBBatteryPool.epp) annotation (Line(
-      points={{2.1,-52.1},{34.21,-52.1},{34.21,-52.905}},
+      points={{2,-52},{34.21,-52},{34.21,-52.905}},
       color={0,135,135},
       thickness=0.5));
   connect(loadProfiles.y1, P_Load.u) annotation (Line(points={{-13,36},{-5.2,36},{-5.2,36}}, color={0,0,127}));
@@ -80,8 +80,10 @@ createPlot(id=1, position={809, 0, 791, 345}, y={"P_Load.y"}, range={0.0, 90000.
 
     annotation (experiment(StopTime=7200, __Dymola_Algorithm="Dassl"), __Dymola_experimentSetupOutput(events=false));
 end plotResult;
-annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                       Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+annotation (Diagram(graphics,
+                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                       Icon(graphics,
+                                            coordinateSystem(extent={{-100,-100},{100,100}})),
   experiment(
       StopTime=86400,
       Interval=900,
@@ -89,5 +91,26 @@ annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-1
   __Dymola_experimentSetupOutput(
     textual=false,
     derivatives=false,
-    events=false));
+    events=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test for photovoltaic battery pool regarding a typical profile of a single house</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end CheckPVBatteryPoolSingleHouse;

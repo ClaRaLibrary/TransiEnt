@@ -2,10 +2,10 @@ within TransiEnt.Examples.Electric;
 model ElectricGrid_SecondaryBalancing "Example for secondary balancing simulation of a two area grid"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,10 +43,9 @@ extends TransiEnt.Basics.Icons.Example;
     isSecondaryControlActive=true,
     fixedStartValue_w=true,
     P_el_n=200e9,
-    P_init=Load_1_set.k,
+    P_init_set=Load_1_set.k,
     nSubgrid=1,
-    P_grad_max_star=0.06/60)
-                annotation (Placement(transformation(extent={{-142,-36},{-94,12}})));
+    P_grad_max_star=0.06/60) annotation (Placement(transformation(extent={{-142,-36},{-94,12}})));
 
   Modelica.Blocks.Sources.Constant Gen_1_set(k=-Load_1_set.k) annotation (Placement(transformation(extent={{-78,16},{-98,36}})));
   Modelica.Blocks.Sources.Constant Load_1_set(k=100e9)        annotation (Placement(transformation(
@@ -63,10 +62,9 @@ extends TransiEnt.Basics.Icons.Example;
     isSecondaryControlActive=true,
     fixedStartValue_w=false,
     P_el_n=100e9,
-    P_init=-Gen_2_set.k,
+    P_init_set=-Gen_2_set.k,
     nSubgrid=2,
-    P_grad_max_star=0.06/60)
-                annotation (Placement(transformation(extent={{28,-60},{76,-12}})));
+    P_grad_max_star=0.06/60) annotation (Placement(transformation(extent={{28,-60},{76,-12}})));
 
   Modelica.Blocks.Sources.Constant
                                Gen_2_set(k=-Load_2_set.k - P_Z.k)
@@ -122,7 +120,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(Gen_2.epp, Dem_2.epp) annotation (Line(
-      points={{74.8,-22.56},{91.4,-22.56},{91.4,-22},{106.32,-22}},
+      points={{73.6,-19.2},{91.4,-19.2},{91.4,-22},{106.32,-22}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -133,7 +131,7 @@ equation
   connect(Load_1_set.y, Dem_1.P_el_set) annotation (Line(points={{-31,34},{-31,34},{-42,34},{-42,21.72}},                     color={0,0,127}));
   connect(Load_2_set.y, Dem_2.P_el_set) annotation (Line(points={{130.8,22},{130.8,22},{122,22},{122,-2.28}},                 color={0,0,127}));
   connect(Gen_1.epp,tielinePower12. epp_IN) annotation (Line(
-      points={{-95.2,1.44},{-66,1.44},{-66,2},{-64,2},{-64,76},{-17.2,76}},
+      points={{-96.4,4.8},{-66,4.8},{-66,2},{-64,2},{-64,76},{-17.2,76}},
       color={0,135,135},
       thickness=0.5));
   connect(tielinePower12.epp_IN,gridFrequency1. epp) annotation (Line(
@@ -141,7 +139,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(tielinePower12.epp_OUT, Gen_2.epp) annotation (Line(
-      points={{1.4,76},{1.4,76},{100,76},{100,-22},{88,-22},{74.8,-22},{74.8,-22.56}},
+      points={{1.4,76},{1.4,76},{100,76},{100,-22},{88,-22},{73.6,-22},{73.6,-19.2}},
       color={0,135,135},
       thickness=0.5));
   connect(aGC1.P_tie_is, tielinePower12.P) annotation (Line(points={{-107.86,72.65},{-107.86,104},{-11.8,104},{-11.8,83.8}}, color={0,0,127}));
@@ -156,16 +154,16 @@ equation
                                                                                                 color={0,0,127}));
   connect(P_tie_set_1.y, aGC1.P_tie_set) annotation (Line(points={{-87,86},{-99.7,86},{-99.7,72.65}},    color={0,0,127}));
   connect(Gen_1.epp, Dem_1.epp) annotation (Line(
-      points={{-95.2,1.44},{-57.68,1.44},{-57.68,2}},
+      points={{-96.4,4.8},{-57.68,4.8},{-57.68,2}},
       color={0,135,135},
       thickness=0.5));
   connect(gridFrequency2.f, aGC.u) annotation (Line(points={{69.6,34},{55.4,34},{55.4,35}},    color={0,0,127}));
   connect(Gen_2.epp, gridFrequency2.epp) annotation (Line(
-      points={{74.8,-22.56},{100,-22.56},{100,34},{90,34}},
+      points={{73.6,-19.2},{100,-19.2},{100,34},{90,34}},
       color={0,135,135},
       thickness=0.5));
   connect(Gen_A.epp, separableLine_L1_1.epp_1) annotation (Line(
-      points={{65.2,-97.04},{70.6,-97.04},{70.6,-97.1},{76.1,-97.1}},
+      points={{64.4,-94.8},{70.6,-94.8},{70.6,-97.1},{76.1,-97.1}},
       color={0,135,135},
       thickness=0.5));
   connect(separableLine_L1_1.epp_2, Dem_2.epp) annotation (Line(
@@ -198,13 +196,15 @@ algorithm
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-140},{160,140}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-160,-140},{160,140}})),
     experiment(
       StopTime=3600,
       Tolerance=1e-009,
       __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-160,-140},{160,140}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-160,-140},{160,140}})),
     __Dymola_experimentFlags(
       Advanced(GenerateVariableDependencies=false, OutputModelicaCode=false),
       Evaluate=false,

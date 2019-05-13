@@ -11,3 +11,7 @@ MechanicalFrequency
 MechanicalPower
 PartialFrequency
 TemperatureSensor
+ElectricVoltageComplex
+ElectricFrequencyComplex
+EmptyFrequency
+ElectricPowerComplex

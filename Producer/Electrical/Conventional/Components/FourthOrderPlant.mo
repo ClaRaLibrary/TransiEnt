@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model FourthOrderPlant "Transient behaviour by multiple first order systems according to VDI 3508, no states, no balancing controller"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,7 +61,7 @@ model FourthOrderPlant "Transient behaviour by multiple first order systems acco
   parameter Integer nSubgrid=1 "Index of subgrid for moment of inertia statistics" annotation(Dialog(group="Statistics"));
 
   // ** Inititialization **
-  parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
+  parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true), Dialog(group="Initialization"));
 
   // _____________________________________________
@@ -71,7 +71,7 @@ model FourthOrderPlant "Transient behaviour by multiple first order systems acco
 
      Real delta_P_star = (P_el_set+P_el_is)/P_el_n;
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set "Electric power setpoint" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set "Electric power setpoint" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-60,100}), iconTransformation(
@@ -111,14 +111,18 @@ model FourthOrderPlant "Transient behaviour by multiple first order systems acco
         origin={-74,60})));
   TransiEnt.Components.Boundaries.Mechanical.Power MechanicalBoundary(change_sign=true) annotation (Placement(transformation(extent={{8,-23},{28,-5}})));
   TransiEnt.Components.Mechanical.ConstantInertia MechanicalConnection(
-    w(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
+    omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid,
     P_n=P_el_n) annotation (choicesAllMatching=true, Placement(transformation(extent={{36,-24},{54,-3}})));
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=eta_gen) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=eta_gen)  constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "Choice of generator model. The generator model must match the power port." annotation (Dialog(group="Replaceable Components"), choicesAllMatching=true, Placement(transformation(
         extent={{-9.5,-9},{9.5,9}},
         rotation=0,
         origin={74.5,-13})));
+  replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem "Choice of excitation system model with voltage control" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={86.5,18})));
 equation
 
   // _____________________________________________
@@ -189,17 +193,23 @@ equation
   connect(relativeToNominal.u, sum.y) annotation (Line(points={{57.4,38},{57.4,38},{54.4,38}},
                                                                                              color={0,0,127}));
   connect(Generator.epp, epp) annotation (Line(
-      points={{84.095,-13.09},{100.093,-13.09},{100.093,60},{100,60}},
+      points={{84.095,-13.09},{100.093,-13.09},{100.093,78},{100,78}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(MechanicalConnection.mpp_b, Generator.mpp) annotation (Line(points={{54,-13.5},{60,-13.5},{60,-13.45},{64.525,-13.45}}, color={95,95,95}));
+  connect(MechanicalConnection.mpp_b, Generator.mpp) annotation (Line(points={{54,-13.5},{60,-13.5},{60,-13},{65,-13}},           color={95,95,95}));
   connect(MechanicalBoundary.mpp, MechanicalConnection.mpp_a) annotation (Line(points={{28,-14},{36,-14},{36,-13.5}}, color={95,95,95}));
-  connect(relativeToNominal.y, MechanicalBoundary.P_mech_set) annotation (Line(points={{64.3,38},{72,38},{72,8},{18,8},{18,-3.38}}, color={0,0,127}));
+  connect(relativeToNominal.y, MechanicalBoundary.P_mech_set) annotation (Line(points={{64.3,38},{68,38},{68,8},{18,8},{18,-3.38}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{86.5,28},{86,28},{86,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{86.5,7.4},{86,7.4},{86,2},{74.215,2},{74.215,-4.09}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics={
     Text( lineColor={255,255,0},
         extent={{-40,-84},{20,-24}},
-          textString="PT4")}),            Diagram(coordinateSystem(
+          textString="PT4")}),            Diagram(graphics,
+                                                  coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -212,7 +222,7 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">- Control power provision is not implemented</span> (dynamics are then different)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>P_Target: receives the target value of the electric power in W</p>
-<p>epp: Mainly delivers the real output of the power plant. </p>
+<p>epp: type of electrical power port can be chosen </p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -252,5 +262,6 @@ equation
 <p>Pitscheider, 2007</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Ricardo Peniche</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end FourthOrderPlant;

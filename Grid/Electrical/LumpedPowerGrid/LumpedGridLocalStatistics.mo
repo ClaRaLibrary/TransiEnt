@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid;
 model LumpedGridLocalStatistics "Model of generation and load in a lumped grid including load forecast errors (providing realistic frequency series)"
 
  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -69,7 +69,7 @@ model LumpedGridLocalStatistics "Model of generation and load in a lumped grid i
   //                Complex Components
   // _____________________________________________
 
-  TransiEnt.Producer.Electrical.Conventional.LumpedGridGenerators PowerPlants(
+  replaceable TransiEnt.Producer.Electrical.Conventional.LumpedGridGenerators PowerPlants(
     P_el_n=P_el_n,
     delta_pr=delta_pr,
     final J=T_tc*P_el_n/(100*3.14)^2,
@@ -83,29 +83,29 @@ model LumpedGridLocalStatistics "Model of generation and load in a lumped grid i
     T_r=T_r,
     beta=if isSecondaryControlActive then beta else 0,
     fixedStartValue_w=false) annotation (Placement(transformation(extent={{-82,-76},{-18,-18}})));
-  TransiEnt.Consumer.Electrical.LinearElectricConsumer Demand(kpf=kpf) annotation (Placement(transformation(
+  replaceable TransiEnt.Consumer.Electrical.LinearElectricConsumer Demand(kpf=kpf) constrainedby TransiEnt.Basics.Icons.ElectricalConsumer "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true,Placement(transformation(
         extent={{-19,-19},{19,19}},
         rotation=0,
         origin={59,-46})));
   Modelica.Blocks.Sources.Constant Load(k=P_L) annotation (Placement(transformation(extent={{92,8},{72,28}})));
 
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp  constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"),Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
 
-  Modelica.Blocks.Interfaces.RealOutput E_kin annotation (
+ TransiEnt.Basics.Interfaces.General.KineticEnergyOut E_kin                                                     "Output for kinetic Energy" annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={62,98}), iconTransformation(extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-90,90})));
-  Modelica.Blocks.Interfaces.RealInput P_tie_set annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_set "Input for power" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-58,100}), iconTransformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={40,90})));
-  Modelica.Blocks.Interfaces.RealInput P_tie_is annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_is "Input for actual power" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-38,100}), iconTransformation(
@@ -117,7 +117,7 @@ model LumpedGridLocalStatistics "Model of generation and load in a lumped grid i
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={-14,18})));
-  Modelica.Blocks.Interfaces.RealInput P_Z "Grid error" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_Z "Grid error" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-100,40}), iconTransformation(
@@ -126,7 +126,7 @@ model LumpedGridLocalStatistics "Model of generation and load in a lumped grid i
         origin={0,90})));
 
   parameter Real kpf=0.5 "Frequency dependence of load";
-  Modelica.Blocks.Interfaces.RealOutput P_load
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_load "Output for loading Power"
                                               annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -162,7 +162,8 @@ equation
   connect(P_tie_is, PowerPlants.P_tie_is) annotation (Line(points={{-38,100},{-38,2},{-32.4,2},{-32.4,-21.19}}, color={0,0,127}));
   connect(Load.y, Demand.P_el_set) annotation (Line(points={{71,18},{59,18},{59,-23.96}},       color={0,0,127}));
   connect(PowerPlants.P_el_set, PowerPlantsGen.y) annotation (Line(points={{-54.8,-18.29},{-54.8,18},{-25,18}}, color={0,0,127}));
-    annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    annotation (Diagram(graphics,
+                        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Rectangle(
@@ -207,13 +208,18 @@ equation
           pattern=LinePattern.None)}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Non-detailled grid model electric grid model (including primary and secondary control models) witch a lumped generator model and more statistics</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Level of detail depends on the used submodels</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">E_kin: input for kinetic enegery in [J]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_set: input for electric power in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_is: input for actual  electric power in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_Z: input for electric power in [W] (grid error)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_load: output for electric power in [W] (loading power)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -221,7 +227,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">checked in TransiEnt.Grid.Electrical.LumpedPowerGrid.Check.TestTwoSubgridStatistics</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

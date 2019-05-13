@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings;
 model PipeFlow_L4_Simple_varXi "A 1D tube-shaped control volume considering one-phase heat transfer in a straight pipe with static momentum balance, simple energy balance, and variable composition."
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,6 +25,7 @@ model PipeFlow_L4_Simple_varXi "A 1D tube-shaped control volume considering one-
 // Modifications: minimum number of finite volumes adjusted to 1             //
 // added modelStatistics and cost collector
 
+
   extends TransiEnt.Components.Gas.VolumesValvesFittings.Base.VolumeRealGas_L4_varXi(
     redeclare model Geometry =
         ClaRa.Basics.ControlVolumes.Fundamentals.Geometry.PipeGeometry_N_cv (
@@ -36,8 +37,8 @@ model PipeFlow_L4_Simple_varXi "A 1D tube-shaped control volume considering one-
         length=length,
         Delta_x=Delta_x,
         N_passes=N_passes));
-  extends ClaRa.Basics.Icons.Pipe_L4;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L4");
+  extends TransiEnt.Basics.Icons.PipeFlow_L4_Simple;
   ClaRa.Basics.Interfaces.Connected2SimCenter connected2SimCenter(
     powerIn=noEvent(if sum(heat.Q_flow) > 0 then sum(heat.Q_flow) else 0),
     powerOut=if not heatFlowIsLoss then -sum(heat.Q_flow) else 0,
@@ -131,26 +132,27 @@ equation
       smooth=Smooth.None,
       thickness=0.5));
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
-annotation (defaultComponentName="pipe",Icon(coordinateSystem(preserveAspectRatio=false,
-                                                           extent={{-140,-50},{
-            140,50}}),
-                   graphics={
+annotation (defaultComponentName="pipe",Icon(graphics={
         Polygon(
           points={{-132,42},{-122,42},{-114,34},{-114,-36},{-122,-42},{-132,-42},
               {-132,42}},
-          lineColor=none,
+          pattern=LinePattern.None,
           smooth=Smooth.None,
-          fillColor=DynamicSelect({221,222,223}, if frictionAtInlet then {0,131,
-              169} else {221,222,223}),
-          fillPattern=FillPattern.Solid),
+          fillColor= {0,131,169},
+          fillPattern=FillPattern.Solid,
+          visible=frictionAtInlet),
         Polygon(
           points={{132,42},{122,42},{114,34},{114,-36},{122,-42},{132,-42},
               {132,42}},
-          lineColor=none,
+          pattern=LinePattern.None,
           smooth=Smooth.None,
-          fillColor=DynamicSelect({221,222,223},if frictionAtOutlet then {0,131,169} else {221,222,223}),
-          fillPattern=FillPattern.Solid)}),
-        Diagram(coordinateSystem(preserveAspectRatio=false,
+          fillColor= {0,131,169},
+          fillPattern=FillPattern.Solid,
+          visible=frictionAtOutlet)},        coordinateSystem(preserveAspectRatio=false,
+                                                           extent={{-140,-50},{
+            140,50}})),
+        Diagram(graphics,
+                coordinateSystem(preserveAspectRatio=false,
           extent={{-140,-50},{140,50}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -162,13 +164,16 @@ annotation (defaultComponentName="pipe",Icon(coordinateSystem(preserveAspectRati
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">RealGas</span></p>
+<p>gasportIn: inlet for real gas</p>
+<p>gasportOut: outet for real gas</p>
+<p>heat: heat port</p>
+<p>eye: outlet</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #006400;\">//Components&nbsp;Mass&nbsp;Balance</span></p>
 <p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #ff0000;\">der</span>(xi[i,:])&nbsp;=&nbsp;1/mass[i]*(Xi_flow[i,:]&nbsp;-&nbsp;Xi_flow[i+1,:]);</p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">when using compositions, the number of finite volume elemts (N_cv) should be chosen in a way that one element ist about 1-2 km long. Otherwise the simulation is very slow. </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>

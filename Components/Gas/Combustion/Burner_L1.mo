@@ -1,11 +1,11 @@
 within TransiEnt.Components.Gas.Combustion;
-model Burner_L1 "Simple model of a burner with vle_ng7_sg gas"
+model Burner_L1 "Simple model of a burner with vle_ng7_sg_o2 gas"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,6 +27,7 @@ model Burner_L1 "Simple model of a burner with vle_ng7_sg gas"
   // _____________________________________________
 
   import SI = Modelica.SIunits;
+  import TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi;
   extends TransiEnt.Basics.Icons.Model;
 
   // _____________________________________________
@@ -39,6 +40,9 @@ model Burner_L1 "Simple model of a burner with vle_ng7_sg gas"
 
   final parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_SG_O2_var medium "Medium in the burner";
 
+  final parameter SI.SpecificEnthalpy h_out_min=specificEnthalpy_pTxi(medium,p_out_minmax,T_out_min,xi_out_minmax) "Minimum specific enthalpy (for medium calculation)";
+  final parameter SI.SpecificEnthalpy h_out_max=specificEnthalpy_pTxi(medium,p_out_minmax,T_out_max,xi_out_minmax) "Maximum specific enthalpy (for medium calculation)";
+
   // _____________________________________________
   //
   //             Visible Parameters
@@ -46,6 +50,11 @@ model Burner_L1 "Simple model of a burner with vle_ng7_sg gas"
 
   parameter SI.PressureDifference Delta_p=0 "Constant pressure loss" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.Temperature T_heat=1625 "Temperature of heat flow out of heat" annotation(Dialog(group="Heat Transfer"));
+
+  parameter SI.Temperature T_out_min=0+273.15 "Minimum temperature (for medium calculation)" annotation(Dialog(group="Numerics"));
+  parameter SI.Temperature T_out_max=1487+273.15 "Maximum temperature (for medium calculation)" annotation(Dialog(group="Numerics"));
+  parameter SI.Pressure p_out_minmax=1e5 "Pressure for minimum and maximum specific enthalpy calculation" annotation(Dialog(group="Numerics"));
+  parameter SI.MassFraction xi_out_minmax[medium.nc-1]={0,0,0,0,0.727119,0.144291,0.108613,0,0.0200132} "Composition for minimum and maximum specific enthalpy calculation" annotation(Dialog(group="Numerics"));
 
   // _____________________________________________
   //
@@ -61,7 +70,7 @@ model Burner_L1 "Simple model of a burner with vle_ng7_sg gas"
 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  TransiEnt.Basics.Interfaces.Thermal.HeatPort_b heat annotation (Placement(transformation(extent={{-10,88},{10,108}}), iconTransformation(extent={{-10,88},{10,108}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b heat annotation (Placement(transformation(extent={{-10,88},{10,108}}), iconTransformation(extent={{-10,88},{10,108}})));
 
   // _____________________________________________
   //
@@ -143,7 +152,7 @@ equation
   gasPortOut.xi_outflow[8] = 0; //CO
   gasPortOut.xi_outflow[9] = max(0,inStream(gasPortIn.xi_outflow[9]) - M_comp[9]*(2*inStream(gasPortIn.xi_outflow[1])/M_comp[1] + 7/2*inStream(gasPortIn.xi_outflow[2])/M_comp[2] + 5*inStream(gasPortIn.xi_outflow[3])/M_comp[3] + 13/2*inStream(gasPortIn.xi_outflow[4])/M_comp[4] + 1/2*inStream(gasPortIn.xi_outflow[8])/M_comp[8] + 1/2*gasPortIn_xi_in10/M_comp[10])); //O2
 
-  gasPortOut.h_outflow = LHV_total + inStream(gasPortIn.h_outflow) + heat.Q_flow/gasPortIn.m_flow; //Q_flow<0
+  gasPortOut.h_outflow = if noEvent(heat.Q_flow<0) then min(max(LHV_total + inStream(gasPortIn.h_outflow) + heat.Q_flow/gasPortIn.m_flow,h_out_min),h_out_max) else min(max(LHV_total + inStream(gasPortIn.h_outflow),h_out_min),h_out_max); //Q_flow<0 //still leads to divisions by zero
   heat.T=T_heat;
 
   gasPortIn.p=gasPortOut.p+Delta_p;
@@ -157,7 +166,8 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Ellipse(
           extent={{-66,-4},{-36,-64}},
           lineThickness=0.5,
@@ -354,31 +364,30 @@ equation
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None)}),
           Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This is a simple model of a combustion chamber. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>The combustion is assumed to be ideal so all the combustable components of the entering gas mixture are combusted 100%. Also a heat transfer is considered, a desired heat flow can be taken out of the system. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>The combustion is assumed to be ideal so all the combustable components of the entering gas mixture are combusted 100&percnt;. Also a heat transfer is considered, a desired heat flow can be taken out of the system.</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>This model is only valid if the share of uncombusted components is negligible. Also, it has to be ensured that there is enough oxygen for a complete combustion and the model only works with the real gas medium NG7_SG_O2. </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: inlet of the mixture of fuel and air/oxygen </p>
 <p>gasPortOut: outlet of the exhaust gas </p>
 <p>heat: heat port </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
-<p><img src=\"modelica://TransiEnt/Images/equations/equation_Burner1.png\" alt=\"\"/>: Mass fraction, molar mass, lower heating value, heat flow out of the combustion chamber, specific enthalpy, mass flow </p>
-
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p><img src=\"modelica://TransiEnt/Images/equations/equation_Burner1.png\"/>: Mass fraction, molar mass, lower heating value, heat flow out of the combustion chamber, specific enthalpy, mass flow </p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The outflowing mass fractions are determined using the stochiometry of the combustion reactions:</p>
-<p><img src=\"modelica://TransiEnt/Images/equations/equation_Burner2.png\" alt=\"\"/></p>
-The lower heating value of the mixture is calculated using the LHV of the components and with this and the outflowing heat flow, the outflowing specific enthalpy is calculated:
-<p><img src=\"modelica://TransiEnt/Images/equations/equation_Burner3.png\" alt=\"\"/></p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<p><img src=\"modelica://TransiEnt/Images/equations/equation_Burner2.png\"/></p>
+<p>The lower heating value of the mixture is calculated using the LHV of the components and with this and the outflowing heat flow, the outflowing specific enthalpy is calculated: </p>
+<p><img src=\"modelica://TransiEnt/Images/equations/equation_Burner3.png\"/></p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>It has to be ensured that there is enough oxygen for a complete combustion. Also, the outlet temperature has to be below the limit of the TILMedia fluid models. </p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in the check model &quot;TestBurner_L1&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
-<p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
 </html>"));
 end Burner_L1;

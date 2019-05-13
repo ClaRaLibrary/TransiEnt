@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Base.Check;
 model TestGenericElectricStorage
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -50,8 +50,9 @@ model TestGenericElectricStorage
                                      annotation (Placement(transformation(extent={{-15,-68},{15,-38}})));
 
   GenericElectricStorage
-                 lossyStorage(redeclare model StationaryLossModel = TransiEnt.Storage.Base.LinearStationaryLoss (
-                                                                                          a=1e-4), StorageModelParams(
+                 lossyStorage(
+    redeclare model CostModel=TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery,
+    StorageModelParams(
       E_start=baseparams.E_start,
       E_max=baseparams.E_max,
       E_min=baseparams.E_min,
@@ -59,8 +60,9 @@ model TestGenericElectricStorage
       P_max_load=baseparams.P_max_load,
       P_grad_max=baseparams.P_grad_max,
       eta_unload=baseparams.eta_unload,
-      eta_load=baseparams.eta_load),
-    redeclare model CostModel=TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery)
+      eta_load=baseparams.eta_load,
+      selfDischargeRate=1/36000),
+    redeclare model StationaryLossModel = TransiEnt.Storage.Base.SelfDischargeRate)
                                      annotation (Placement(transformation(extent={{-15,-23},{15,7}})));
   TransiEnt.Storage.Base.GenericStorageParameters baseparams(
     E_start=baseparams.E_min,
@@ -73,9 +75,8 @@ model TestGenericElectricStorage
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
   Modelica.Blocks.Sources.TimeTable P_set_pu(
     offset=0,
-    timeScale=3600,
-    table=[0,1; 1,1; 1,-1; 2,-1; 2,1; 3,1; 3,0; 4,0])
-                                          "Test schedule" annotation (Placement(transformation(extent={{-86,4},{-66,24}})));
+    table=[0,1; 1,1; 1,-1; 2,-1; 2,1; 3,1; 3,0; 4,0],
+    timeScale=3600)                       "Test schedule" annotation (Placement(transformation(extent={{-86,4},{-66,24}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{48,-18},{68,2}})));
 equation
   connect(P_set.y, lossyStorage.P_set) annotation (Line(points={{-35,14},{-30,14},{0,14},{0,6.1}},
@@ -109,18 +110,19 @@ createPlot(id=2, position={15, 10, 865, 421}, y={"idealStorage.terminal.epp.P", 
 end plotResult;
 equation
   connect(idealStorage.epp, ElectricGrid.epp) annotation (Line(
-      points={{15,39},{32,39},{32,-8.1},{47.9,-8.1}},
+      points={{15,39},{32,39},{32,-8},{48,-8}},
       color={0,135,135},
       thickness=0.5));
   connect(lossyStorage.epp, ElectricGrid.epp) annotation (Line(
-      points={{15,-8},{47.9,-8},{47.9,-8.1}},
+      points={{15,-8},{48,-8},{48,-8}},
       color={0,135,135},
       thickness=0.5));
   connect(inefficientStorage.epp, ElectricGrid.epp) annotation (Line(
-      points={{15,-53},{32,-53},{32,-8.1},{47.9,-8.1}},
+      points={{15,-53},{32,-53},{32,-8},{48,-8}},
       color={0,135,135},
       thickness=0.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>

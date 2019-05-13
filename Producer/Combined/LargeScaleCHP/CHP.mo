@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP;
 model CHP "Recommended model for large scale, combined heat and power plants with second order dynamics, three operating states and optional control power "
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,13 +25,12 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends Base.PartialCHP;
+  extends Base.PartialCHP(m_flow_cde_total=m_flow_cde_total_set);
   extends TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider(
-    P_nom=P_el_n,
-    primaryBalancingController(P_nom=P_el_n),
+    P_n=P_el_n,
+    primaryBalancingController(P_n=P_el_n),
     P_el_grad_max_SB=P_grad_max_star,
     redeclare Electrical.Base.ControlPower.CombinedHeatAndPower controlPowerModel(
-      P_nom=P_el_n,
       P_min_t=pQDiagram.P_min,
       P_max_t=pQDiagram.P_max,
       P_pr_max=primaryBalancingController.P_pr_max,
@@ -39,7 +38,8 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
       is_running=isRunning.y,
       P_PB_set=primaryBalancingController.P_PBP_set,
       P_SB_set=P_SB_set_internal,
-      P_el_is=P_el_is),
+      P_el_is=P_el_is,
+      P_n=P_el_n),
     isExternalSecondaryController=true,
     isSecondaryControlActive=false,
     final typeOfBalancingPowerResource=typeOfResource);
@@ -50,7 +50,7 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
   // _____________________________________________
 
   parameter Real P_grad_max_star=0.03/60 "Fraction of nominal power per second (12% per minute)" annotation(Dialog(group="Physical Constraints"));
-  parameter SI.Power P_el_min_operating=min(PQCharacteristics.PQboundaries[:,3]) "Minimum operating thermal power used to determine plant state" annotation(Dialog(group="Physical Constraints"));
+  parameter SI.Power P_el_min_operating=min(PQCharacteristics.PQboundaries[:,3])*P_el_n/max(PQCharacteristics.PQboundaries[:,2]) "Minimum operating thermal power used to determine plant state" annotation(Dialog(group="Physical Constraints"));
   parameter SI.Time T_steamGenerator = 0.5*(0.632/P_grad_max_star) "Time constant of steam generator (overrides value of P_grad_max_star)" annotation(Dialog(group="Physical Constraints"));
   parameter SI.Time T_turboGenerator = 60 "Time constant of turbo generator" annotation(Dialog(group="Physical Constraints"));
   parameter SI.Time T_heatingCondenser = 40 "Time constant of heating condenser" annotation(Dialog(group="Physical Constraints"));
@@ -73,10 +73,16 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
 
   parameter Integer nSubgrid=1 "Index of subgrid for moment of inertia statistics" annotation (Dialog(group="Statistics"));
 
-  parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
+  parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true), Dialog(tab="Advanced", group="Initialization"));
-  parameter Boolean UseGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if UseGasPort==true "Gas Medium to be used - only if UseGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if UseGasPort==true then true else false));
+  parameter Boolean useGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 "Gas Medium to be used - only if useGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if useGasPort==true then true else false));
+ // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
+
   // _____________________________________________
   //
   //               Components
@@ -119,13 +125,14 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
   Modelica.Blocks.Sources.BooleanExpression isRunning(y=plantState.operating.active) annotation (Placement(transformation(extent={{8,20},{28,40}})));
   Components.Boundaries.Mechanical.Power prescribedPower(change_sign=true) annotation (Placement(transformation(extent={{8,2},{22,16}})));
   Components.Mechanical.TwoStateInertiaWithIdealClutch Shaft(
-    w(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
+    omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid) annotation (choicesAllMatching=true, Placement(transformation(extent={{30,0},{48,19}})));
-  Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "Choice of generator model. The generator model must match the power port."
+                                                                                                                                                                           annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-11.5,-12},{11.5,12}},
         rotation=0,
-        origin={68.5,42})));
+        origin={68.5,36})));
   Modelica.Blocks.Nonlinear.VariableLimiter P_limit_on annotation (Placement(transformation(extent={{-52,98},{-38,112}})));
   replaceable Base.CHPStates_electricityled plantState(
     t_startup=t_startup,
@@ -139,9 +146,31 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
         rotation=0,
         origin={-90,105})));
   Modelica.Blocks.Math.Sum P_limit(nin=2) annotation (Placement(transformation(extent={{-30,98},{-18,110}})));
-  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{80,74},{60,94}})));
-  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
+  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{34,70},{14,90}})));
+    replaceable Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem   Exciter constrainedby Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem "Choice of excitation system model with voltage control"
+                                                                                                                                                                                                        annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-4,-4.5},{4,4.5}},
+        rotation=-90,
+        origin={68.5,60})));
+
+protected
+  Modelica.Blocks.Sources.RealExpression Zero(y=0);
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+public
+  Modelica.SIunits.MassFlowRate m_flow_cde_total_set;
+
+  Components.Sensors.RealGas.CO2EmissionSensor cO2EmissionOfIdealCombustion if useGasPort                                                 ==true annotation (Placement(transformation(extent={{70,70},{50,90}})));
+  Modelica.Blocks.Math.Gain m_flow_cde_gain(k=1) annotation (Placement(transformation(extent={{44,84},{36,92}})));
 equation
+
+  if useGasPort==false then
+    m_flow_cde_total_set=Q_flow_input*fuelSpecificEmissions.m_flow_CDE_per_Energy;
+  else
+    m_flow_cde_total_set=m_flow_cde_gain.y;
+  end if;
 
   Q_flow_input=steamGenerator.u;
 
@@ -169,12 +198,12 @@ equation
       color={162,29,33},
       pattern=LinePattern.Dash));
   connect(prescribedPower.mpp, Shaft.mpp_a) annotation (Line(points={{22,9},{26,9},{26,9.5},{30,9.5}}, color={95,95,95}));
-  connect(Shaft.mpp_b, Generator.mpp) annotation (Line(points={{48,9.5},{54,9.5},{54,41.4},{56.425,41.4}}, color={95,95,95}));
+  connect(Shaft.mpp_b, Generator.mpp) annotation (Line(points={{48,9.5},{54,9.5},{54,36},{57,36}},         color={95,95,95}));
   connect(Generator.epp, epp) annotation (Line(
-      points={{80.115,41.88},{88.0575,41.88},{88.0575,60},{100,60}},
+      points={{80.115,35.88},{88.0575,35.88},{88.0575,60},{100,60}},
       color={0,135,135},
       thickness=0.5));
-  connect(Generator.mpp, gridFrequencySensor.mpp) annotation (Line(points={{56.425,41.4},{46.2125,41.4},{46.2125,54},{33.2,54}}, color={95,95,95}));
+  connect(Generator.mpp, gridFrequencySensor.mpp) annotation (Line(points={{57,36},{46.2125,36},{46.2125,54},{33.2,54}},         color={95,95,95}));
   connect(P_SB_set_internal,P_set_total. u[2]) annotation (Line(points={{-156,60},{-98,60},{-98,105.5},{-96,105.5}}, color={0,0,127}));
   connect(P_limit_on.y,P_limit. u[1]) annotation (Line(points={{-37.3,105},{-31.2,105},{-31.2,103.4}},
                                                                                                      color={0,0,127}));
@@ -196,23 +225,47 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(Q_flow.y, HX.Q_flow_prescribed) annotation (Line(points={{20.5,-42},{32,-42},{32,-24},{46,-24}},   color={0,0,127}));
-  if UseGasPort==true then
-    connect(gasConsumer_HFlow_NCV.fluidPortIn, gasPortIn) annotation (Line(
-      points={{80,84},{88,84},{88,102},{100,102}},
+  if useGasPort==true then
+   connect(steamGenerator.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{-61,-14},{-58,-14},{-58,-28},{-92,-28},{-92,70},{12,70},{12,80},{13,80}}, color={0,0,127}));
+   connect(cO2EmissionOfIdealCombustion.gasPortOut, gasConsumer_HFlow_NCV.fluidPortIn) annotation (Line(
+      points={{50,70},{42,70},{42,80},{34,80}},
       color={255,255,0},
       thickness=1.5));
-    connect(steamGenerator.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{-61,-14},{-58,-14},{-58,-28},{-92,-28},{-92,70},{50,70},{50,84},{59,84}}, color={0,0,127}));
+   connect(cO2EmissionOfIdealCombustion.gasPortIn, gasPortIn) annotation (Line(
+      points={{70,70},{86,70},{86,102},{100,102}},
+      color={255,255,0},
+      thickness=1.5));
+   connect(cO2EmissionOfIdealCombustion.m_flow_cde, m_flow_cde_gain.u) annotation (Line(points={{49,86.8},{48,86.8},{48,88},{44.8,88}},
+                                                                                                                                    color={0,0,127}));
+  else
+    connect(Zero.y,m_flow_cde_gain.u);
   end if;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})), Icon(coordinateSystem(extent={{-100,-100},{100,140}}, preserveAspectRatio=false)),
+
+
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{68.5,55.76},{68.5,51.88},{68.155,51.88},{68.155,47.88}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{68.5,64},{88,64},{88,60},{100,60}},
+      color={0,135,135},
+      thickness=0.5));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})), Icon(graphics,
+                                                                                                         coordinateSystem(extent={{-100,-100},{100,140}}, preserveAspectRatio=false)),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model of a combined heat and power plant</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>P_set: input for Power in [W]</p>
+<p>Q_flow_set: input for heat flow rate in [W]</p>
+<p>outlet: FluidPortOut</p>
+<p>inlet: FluidPortIn</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">eye: EyeOut</span></p>
+<p>P_SB_set: input for electric power in [W]</p>
+<p>gasPortIn: RealGasPortIn</p>
+<p>epp: choice of power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -220,9 +273,11 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;TransiEnt.Producer.Combined.LargeScaleCHP.Check.TestCHP_startup&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Nov 2018: added gasPort</span></p>
 </html>"));
 end CHP;

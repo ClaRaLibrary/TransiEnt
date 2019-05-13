@@ -2,10 +2,10 @@ within TransiEnt.Producer.Combined.SmallScaleCHP.Base;
 partial model PartialCHPController "Partial CHP controller model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,7 +43,7 @@ partial model PartialCHPController "Partial CHP controller model"
   Real sigma "Heat fraction";
   SI.Time runningTime(start=0) "Total time running";
   SI.Time startTime(start=0) "Time since last start";
-  SI.Time stopTime(start=-2*t_OnOff) "Time since last stop";
+  SI.Time stopTime(start=-2*t_OnOff) "Time since last stop" annotation (Dialog(group="Initialization", showStartAttribute=true));
   Integer startCounter(start=0) "Counter to start on/off cycles";
   SI.TemperatureDifference dT "Target temperature difference";
   SI.Pressure dp "Measured pressure difference in CHP";
@@ -59,14 +59,14 @@ partial model PartialCHPController "Partial CHP controller model"
 
 protected
   Modelica.Blocks.Interfaces.BooleanInput switch(start=false) annotation (Placement(transformation(extent={{70,-20},{90,0}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_set(start=(Specification.P_el_max + Specification.P_el_min)/2) annotation (Placement(transformation(extent={{70,0},{90,20}})));
-  Modelica.Blocks.Interfaces.RealOutput T_return annotation (Placement(transformation(extent={{90,40},{70,60}})));
-  Modelica.Blocks.Interfaces.RealOutput T_supply  annotation (Placement(transformation(extent={{90,20},{70,40}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set(start=(Specification.P_el_max + Specification.P_el_min)/2) "Electric power input set value" annotation (Placement(transformation(extent={{70,0},{90,20}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_return "Return temperature output" annotation (Placement(transformation(extent={{90,40},{70,60}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_supply "Supply temperature output" annotation (Placement(transformation(extent={{90,20},{70,40}})));
 
-  Modelica.Blocks.Interfaces.RealOutput P_el_meas  annotation (Placement(transformation(extent={{90,-50},{70,-30}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_meas annotation (Placement(transformation(extent={{90,-70},{70,-50}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_meas  annotation (Placement(transformation(extent={{90,-50},{70,-30}})));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_meas annotation (Placement(transformation(extent={{90,-70},{70,-50}})));
 
-  Modelica.Blocks.Interfaces.RealInput P_el_pump_set(start=0.01*Specification.P_el_min) annotation (Placement(transformation(extent={{70,75},{90,95}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_pump_set(start=0.01*Specification.P_el_min) annotation (Placement(transformation(extent={{70,75},{90,95}})));
 public
   Modelica.Blocks.Logical.Timer timer annotation (Placement(transformation(extent={{54,-20},{34,0}})));
 
@@ -131,5 +131,32 @@ equation
       color={255,0,255},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}), graphics));
+            -100},{100,100}}), graphics), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This is a partial model for a CHP Controller. It can be used for any CHP model.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p><span style=\"font-family: MS Shell Dlg 2;\">switch</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set - Electric Power setpoint</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">T_return - Heating Water Return Temperature</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">T_supply - Heating Water Supply Temperature</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_meas - Measured Electric Power</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_meas - Measured Heat Flow</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_pump_set - Electric Pump Power setpoint</span></p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Max Mustermann (mustermann@mustermail.de), Apr 2014</p>
+</html>"));
 end PartialCHPController;

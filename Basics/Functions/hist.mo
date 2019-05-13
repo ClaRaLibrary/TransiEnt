@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Functions;
 function hist "Smooth Cubic function to that can be used to implement two point control without state events"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,7 @@ algorithm
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>(Description) </p>
+<p>Smooth Cubic function  used to implement two point control without state events</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

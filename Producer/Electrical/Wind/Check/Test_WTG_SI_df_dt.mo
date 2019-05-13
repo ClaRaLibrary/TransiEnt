@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind.Check;
 model Test_WTG_SI_df_dt "Validation of WTG with df/dt SI control"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,9 @@ model Test_WTG_SI_df_dt "Validation of WTG with df/dt SI control"
     beta_start=0,
     v_wind_start=9,
     use_inertia=true,
-    P_el_n=3300000) annotation (Placement(transformation(extent={{-2,6},{18,28}})));
+    P_el_n=3300000,
+    integratePower=false)
+                    annotation (Placement(transformation(extent={{-2,6},{18,28}})));
 
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{58,12},{78,32}})));
   Modelica.Blocks.Sources.Constant Wind_konst(k=9)
@@ -54,7 +56,7 @@ model Test_WTG_SI_df_dt "Validation of WTG with df/dt SI control"
   inner TransiEnt.Components.Boundaries.Ambient.AmbientConditions ambientConditions annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
 equation
   connect(WTG_1.epp, ElectricGrid.epp) annotation (Line(
-      points={{17.5,21.6},{30,21.6},{30,21.9},{57.9,21.9}},
+      points={{17,23},{30,23},{30,22},{58,22}},
       color={0,135,135},
       thickness=0.5));
   connect(frequenz.y, ElectricGrid.f_set) annotation (
@@ -81,6 +83,28 @@ end plotResult;
   annotation (
     experiment(StopTime=100, __Dymola_NumberOfIntervals=1000),
     __Dymola_experimentSetupOutput,
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {100,100}})));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+            {100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for wind turbines with  df/dt SI control</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Test_WTG_SI_df_dt;

@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Controller.Check;
 model TestLoadSmoothingController "Example to evaluate self discharge time"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,15 +45,15 @@ equation
   connect(P_residual.y, loadSmoothingController.P_load) annotation (Line(points={{-19,-12},{-7.4,-12},{-7.4,-12.2}},
                                                                                                                color={0,0,127}));
   connect(Storage.epp, ElectricGrid.epp) annotation (Line(
-      points={{51,-30},{65.9,-30},{65.9,-30.1}},
+      points={{51,-30},{66,-30},{66,-30}},
       color={0,135,135},
       thickness=0.5));
   connect(WindGenerator.epp, ElectricGrid.epp) annotation (Line(
-      points={{48.1,7.9},{58,7.9},{58,-30.1},{65.9,-30.1}},
+      points={{48,8},{58,8},{58,-30},{66,-30}},
       color={0,135,135},
       thickness=0.5));
   connect(Consumer.epp, ElectricGrid.epp) annotation (Line(
-      points={{48.1,-74.1},{58,-74.1},{58,-30.1},{65.9,-30.1}},
+      points={{48,-74},{58,-74},{58,-30},{66,-30}},
       color={0,135,135},
       thickness=0.5));
   connect(P_wind.y1, P_residual.u1) annotation (Line(points={{-59,8},{-46,8},{-46,-6},{-42,-6}}, color={0,0,127}));
@@ -82,12 +82,34 @@ createPlot(id=1, position={809, 0, 791, 269}, y={"P_residual.y", "P_residual_smo
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     experiment(
       StopTime=4e+006,
       Interval=900,
       Tolerance=1e-006,
       __Dymola_Algorithm="Sdirk34hw"),
-    __Dymola_experimentSetupOutput(events=false));
+    __Dymola_experimentSetupOutput(events=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestLoadSmoothingController;

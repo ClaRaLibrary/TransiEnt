@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Functions;
 function efficiency_constant "Gives back constant efficiency"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,11 @@ function efficiency_constant "Gives back constant efficiency"
   //                  Interfaces
   // _____________________________________________
 
-  input Real eta_const(min=0.01,max=1.12) "Constant efficiency" annotation(Dialog);
+//   input SI.Power P_nominal[:] "Power output for three operating points";
+//   input Real eta_nominal[:] "Efficiencies for three operating points";
+//  input Real eta_const(min=0.01,max=1.12) "Constant efficiency" annotation(Dialog);
+input Real Efficiency_Mat[:,2];
+
 
   // _____________________________________________
   //
@@ -40,8 +44,8 @@ function efficiency_constant "Gives back constant efficiency"
   // _____________________________________________
 
 algorithm
-  eta:=eta_const;
-
+  //eta:=eta_const;
+eta:=Efficiency_Mat[1,2];
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Gives back constant efficiency.</p>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler;
 model Gasboiler_dynamic_L2 "Full modulating or staged gasboiler with fluid volume"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,18 +33,18 @@ model Gasboiler_dynamic_L2 "Full modulating or staged gasboiler with fluid volum
   //                   Parameters
   // _____________________________________________
   replaceable model PressureLoss=ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2(Delta_p_nom=Delta_p_nom)
-    constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.PressureLoss_L2 "|Fundamental definitions|Pressure loss model" annotation (choicesAllMatching=true);
-  parameter SI.MassFlowRate m_flow_nom=55 "|Specification|Nominal mass flow rates at inlet";
-  parameter SI.Volume volume=10.5 "|Specification|Volume of water inside the boiler";
+    constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.PressureLoss_L2 "Pressure loss model" annotation (Dialog(tab="General", group="Fundamental definitions"), choices(choicesAllMatching=true));
+  parameter SI.MassFlowRate m_flow_nom=55 "Nominal mass flow rates at inlet" annotation (Dialog(tab="General", group="Specification"));
+  parameter SI.Volume volume=10.5 "Volume of water inside the boiler" annotation (Dialog(tab="General", group="Specification"));
 
-  parameter Modelica.SIunits.Conversions.NonSIunits.Temperature_degC T_init=65 "|Initialization|Initial temperature of boiler water";
-  parameter SI.AbsolutePressure p_init=6e5 "|Initialization|Initial pressure of boiler water";
+  parameter Modelica.SIunits.Conversions.NonSIunits.Temperature_degC T_init=65 "Initial temperature of boiler water" annotation (Dialog(tab="General", group="Initialization"));
+  parameter SI.AbsolutePressure p_init=6e5 "Initial pressure of boiler water" annotation (Dialog(tab="General", group="Initialization"));
 
-  parameter Boolean modulating = true "|Specification|Modulating operation, staged power production if false (select stages then!)" annotation (Dialog(enable = holdTemperature));
-  parameter Integer stages = 1 "|Specification|Number of burner stages for non-modulating operation" annotation (Dialog(enable = (not modulating) and holdTemperature),choices(choice=1 "1: Two-position controlled",
+  parameter Boolean modulating = true "Modulating operation, staged power production if false (select stages then!)" annotation (Dialog(tab="General", group="Specification", enable = holdTemperature));
+  parameter Integer stages = 1 "Number of burner stages for non-modulating operation" annotation (Dialog(tab="General", group="Specification", enable = (not modulating) and holdTemperature),choices(choice=1 "1: Two-position controlled",
                                                                                                   choice=2 "2: Three-position controlled"));
-  parameter Real stagePercentage = 0.3 "|Specification|Power percentage at burner stage 2" annotation (Dialog(enable = stages==2));
-  parameter SI.TemperatureDifference T_supply_tol = 3 "|Specification|Acceptable absolute tolerance of supply temperature for controlling (consider dynamics of boiler!)" annotation (Dialog(enable = (not modulating) and holdTemperature));
+  parameter Real stagePercentage = 0.3 "Power percentage at burner stage 2" annotation (Dialog(tab="General", group="Specification", enable = stages==2));
+  parameter SI.TemperatureDifference T_supply_tol = 3 "Acceptable absolute tolerance of supply temperature for controlling (consider dynamics of boiler!)" annotation (Dialog(tab="General", group="Specification", enable = (not modulating) and holdTemperature));
 
   // _____________________________________________
   //
@@ -164,5 +164,6 @@ equation
 <p>Modified by Verena Harling (verena.harling@tuhh.de), Feb 2016</p>
 <p>Modified by Lisa Andresen (andresen@tuhh.de), May 2016</p>
 </html>"),
-Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})));
+Diagram(graphics,
+        coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})));
 end Gasboiler_dynamic_L2;

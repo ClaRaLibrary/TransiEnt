@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Base;
 partial model PartialDispatchablePowerPlant "Abstract model of an electric power plant with a power setpoint input connector"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,7 +35,7 @@ partial model PartialDispatchablePowerPlant "Abstract model of an electric power
 
 //  parameter SI.Time H "Inertia Constant";
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set "Electric power setpoint" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set "Electric power setpoint" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-60,100}), iconTransformation(
@@ -43,18 +43,21 @@ partial model PartialDispatchablePowerPlant "Abstract model of an electric power
         rotation=270,
         origin={-15,99})));
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                    Diagram(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                    Diagram(graphics,
+                                            coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Prototype model for electric power plants models containting all relevant statistics blocks.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Prototype model for dispatchable power plant models containing all relevant statistic blocks.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Type of electrical power port can be chosen</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for electric power in W (electric power setpoint)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -67,5 +70,6 @@ partial model PartialDispatchablePowerPlant "Abstract model of an electric power
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end PartialDispatchablePowerPlant;

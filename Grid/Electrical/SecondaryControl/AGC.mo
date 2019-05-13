@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.SecondaryControl;
-model AGC "Automatic generation control model including secondary controller and replaceable model for control unit activation"
+model AGC "Automatic generation control model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -52,7 +52,7 @@ model AGC "Automatic generation control model including secondary controller and
   // _____________________________________________
 
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(rotation=0, extent={{-10,-110},{10,-90}}), iconTransformation(extent={{-10,-110},{10,-90}})));
-  Modelica.Blocks.Interfaces.RealInput P_tie_is annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_is annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-40,100}),
@@ -60,15 +60,15 @@ model AGC "Automatic generation control model including secondary controller and
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-40,100})));
-  Modelica.Blocks.Interfaces.RealOutput P_sec_set[nout] annotation (Placement(transformation(rotation=0, extent={{96,-10},{116,10}}), iconTransformation(extent={{96,-10},{116,10}})));
-  Modelica.Blocks.Interfaces.RealInput P_SB_max_pos[nout] "Reserved positive control power (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_sec_set[nout] annotation (Placement(transformation(rotation=0, extent={{96,-10},{116,10}}), iconTransformation(extent={{96,-10},{116,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_SB_max_pos[nout] "Reserved positive control power (values are supposed to be positive)" annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={46,100}), iconTransformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-96,-40})));
-  Modelica.Blocks.Interfaces.RealInput P_SB_max_neg[nout] "Reserved negative control power (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_SB_max_neg[nout] "Reserved negative control power (values are supposed to be positive)" annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={72,100}), iconTransformation(
@@ -77,7 +77,7 @@ model AGC "Automatic generation control model including secondary controller and
         origin={-96,40})));
 
 protected
-  Modelica.Blocks.Interfaces.RealInput P_tie_set_internal annotation (Placement(transformation(extent={{-86,10},{-66,30}}),  iconTransformation(extent={{-86,10},{-66,30}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_set_internal annotation (Placement(transformation(extent={{-86,10},{-66,30}}),  iconTransformation(extent={{-86,10},{-66,30}})));
   // _____________________________________________
   //
   //                Complex Components
@@ -91,7 +91,7 @@ public
         rotation=0,
         origin={-74,66})));
 
-  Modelica.Blocks.Interfaces.RealInput P_tie_set if isExternalTielineSetpoint
+ TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_set if isExternalTielineSetpoint
                                                 annotation (Placement(transformation(
         rotation=0,
         extent={{-10,-10},{10,10}},
@@ -164,7 +164,37 @@ equation
   connect(e_meas.y, G.u[1]) annotation (Line(points={{-9.3,0},{-8,0},{-8,71.3},{0.6,71.3}}, color={0,0,127}));
   connect(e_set.y, H_lfr.u_s) annotation (Line(points={{-11.3,-28},{0,-28},{0,0},{4,0}}, color={0,0,127}));
   connect(e_meas.y, H_lfr.u_m) annotation (Line(points={{-9.3,0},{-8,0},{-8,-20},{16,-20},{16,-12}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-100,-100},{100,100}},
                                                                      preserveAspectRatio=false)),
-                                                                       Icon(coordinateSystem(extent={{-100,-100},{100,100}}, preserveAspectRatio=false)));
+                                                                       Icon(graphics,
+                                                                            coordinateSystem(extent={{-100,-100},{100,100}}, preserveAspectRatio=false)),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Automatic generation control model including secondary controller and replaceable model for control unit activation)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>L2E: Models are based on (dynamic) transfer functions or differential equations.</p>
+<p>nonlinear behavior</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>epp: electrical connector</p>
+<p>P_tie_is: Input for Tie Line Power</p>
+<p>P_sec_set[nout]: Outputs for secondary balancing power</p>
+<p>P_SB_max_pos[nout]: Inputs for reserved positive control power (values are supposed to be positive)</p>
+<p>P_SB_max_neg[nout]: Inputs for reserved negative control power (values are supposed to be positive)</p>
+<p>nout: Number of considered power plants</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TransiEnt.Grid.Electrical.SecondaryControl.Check.TestAGC_compareActivation&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) in 10/2014</span></p>
+</html>"));
 end AGC;

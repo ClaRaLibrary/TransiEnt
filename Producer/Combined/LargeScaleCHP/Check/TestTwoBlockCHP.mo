@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestTwoBlockCHP "Example how the two block CHP model works"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -88,7 +88,7 @@ model TestTwoBlockCHP "Example how the two block CHP model works"
   Components.Visualization.PQDiagram_Display PQDiagram2(PQCharacteristics=Base.Characteristics.PQ_Characteristics_WW2()) annotation (Placement(transformation(extent={{56,-70},{86,-42}})));
 equation
   connect(Plant.epp,Grid. epp) annotation (Line(
-      points={{11.2174,18.15},{10,18.15},{10,55.94},{19.94,55.94}},
+      points={{11.2174,18.15},{10,18.15},{10,56},{20,56}},
       color={0,135,135},
       thickness=0.5));
   connect(Plant.outlet, sink.steam_a) annotation (Line(
@@ -132,8 +132,31 @@ equation
   connect(Q_flow_set1.y, Plant.Q_flow_set_B1) annotation (Line(points={{-64.9,57.5},{-37.7826,57.5},{-37.7826,23.375}}, color={0,0,127}));
   connect(Plant.eye_Block2, PQDiagram2.eyeIn) annotation (Line(points={{11.5217,-22},{44,-22},{44,-56},{51.8,-56}}, color={28,108,200}));
   connect(Plant.eye_Block1, PQDiagram1.eyeIn) annotation (Line(points={{11.5217,-18.975},{51.8,-18.975},{51.8,-18}}, color={28,108,200}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=86400, __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput(equidistant=false),
-    Icon(coordinateSystem(extent={{-120,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(extent={{-120,-100},{100,100}})),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the two block chp model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestTwoBlockCHP;

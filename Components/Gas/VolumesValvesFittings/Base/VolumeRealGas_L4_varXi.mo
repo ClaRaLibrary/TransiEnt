@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings.Base;
 model VolumeRealGas_L4_varXi "A 1D tube-shaped control volume considering one-phase heat transfer in a straight pipe with static momentum balance, simple energy balance, and variable composition"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,6 +27,7 @@ model VolumeRealGas_L4_varXi "A 1D tube-shaped control volume considering one-ph
 // added different mass balances (choosable with massBalance)
 // added xi_nom, m_flow_start
 // added w_inlet, w_outlet, medium, xi, x in summary
+// added possibility to give temperature start value instead of specific enthalpy
 
   extends ClaRa.Basics.Icons.Volume_L4;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L4");
@@ -144,13 +145,14 @@ public
 //____Initialisation_____________________________________________________________________________________
   inner parameter Integer  initOption=0 "Type of initialisation" annotation(Dialog(tab="Initialisation"), choices(choice = 0 "Use guess values", choice = 208 "Steady pressure and enthalpy", choice=201 "Steady pressure", choice = 202 "Steady enthalpy"));
   inner parameter Boolean useHomotopy=simCenter.useHomotopy "true, if homotopy method is used during initialisation" annotation(Dialog(tab="Initialisation",group="Model Settings"));
-  parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_start[geo.N_cv]=h_nom "Initial specific enthalpy for single tube"
-                                                                                                                       annotation(Dialog(tab="Initialisation"));
+  parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_start[geo.N_cv]=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_start) "Initial specific enthalpy for single tube"
+                                                                                                                                                                                                   annotation(Dialog(tab="Initialisation"));
   parameter ClaRa.Basics.Units.Pressure p_start[geo.N_cv]=p_nom "Initial pressure"
                                                                                   annotation(Dialog(tab="Initialisation"));
   parameter ClaRa.Basics.Units.MassFraction xi_start[medium.nc - 1]=xi_nom "Initial composition for single tube"
                                                                                                                 annotation(Dialog(tab="Initialisation"));
   parameter ClaRa.Basics.Units.MassFlowRate m_flow_start[geo.N_cv+1]=m_flow_nom*ones(geo.N_cv+1) "Initial mass flow rate" annotation(Dialog(tab="Initialisation"));
+  parameter Modelica.SIunits.Temperature T_start[geo.N_cv]=ones(geo.N_cv)*simCenter.T_ground "Initial temperature for single tube (used in calculation of h_start)" annotation(Dialog(tab="Initialisation"));
 protected
   parameter ClaRa.Basics.Units.Pressure p_start_internal[geo.N_cv]=if size(p_start, 1) == 2 then linspace(
       p_start[1],
@@ -237,7 +239,7 @@ public
 
 //____Energy / Enthalpy_________________________________________________________________________________________
 protected
-  ClaRa.Basics.Units.EnthalpyMassSpecific h[geo.N_cv](start=h_start,each stateSelect=StateSelect.prefer) "Cell enthalpy";
+  ClaRa.Basics.Units.EnthalpyMassSpecific h[geo.N_cv](start=h_start, each stateSelect=StateSelect.prefer) "Cell enthalpy";
 
 
   //____Pressure__________________________________________________________________________________________________
@@ -564,7 +566,8 @@ equation
   annotation (defaultComponentName="volume",Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-50},
             {140,50}}),
                    graphics),
-        Diagram(coordinateSystem(preserveAspectRatio=false,
+        Diagram(graphics,
+                coordinateSystem(preserveAspectRatio=false,
           extent={{-140,-50},{140,50}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -580,17 +583,17 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
-<p><span style=\"font-family: Courier New; color: #0000ff;\">if&nbsp;</span><span style=\"font-family: Courier New;\">massBalance==1</span><span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"font-family: Courier New;color: #006400;\">//-------ClaRa formulation</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"font-family: Courier New;color: #ff0000;\">der</span>(xi[i,&nbsp;:])&nbsp;=&nbsp;1/mass[i]*((Xi_flow[i,&nbsp;:]&nbsp;-&nbsp;&nbsp;m_flow[i]*xi[i,&nbsp;:])&nbsp;-&nbsp;(Xi_flow[i&nbsp;+&nbsp;1,&nbsp;:]&nbsp;-&nbsp;m_flow[i+1]*xi[i,&nbsp;:]));</span></p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">if&nbsp;</span>massBalance==1<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
+<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #006400;\">//-------ClaRa formulation</span></p>
+<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #ff0000;\">der</span>(xi[i,&nbsp;:])&nbsp;=&nbsp;1/mass[i]*((Xi_flow[i,&nbsp;:]&nbsp;-&nbsp;&nbsp;m_flow[i]*xi[i,&nbsp;:])&nbsp;-&nbsp;(Xi_flow[i&nbsp;+&nbsp;1,&nbsp;:]&nbsp;-&nbsp;m_flow[i+1]*xi[i,&nbsp;:]));</p>
 <p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drhodt[i]*geo.volume[i]&nbsp;=&nbsp;m_flow[i]&nbsp;-&nbsp;m_flow[i&nbsp;+&nbsp;1];</span></p>
-<p><br><span style=\"font-family: Courier New; color: #0000ff;\">elseif&nbsp;</span></span><span style=\"font-family: Courier New;\">massBalance==2</span><span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
-<p><br><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"font-family: Courier New;color: #006400;\">//-------TransiEnt formulation Version&nbsp;1a&nbsp;-&gt;&nbsp;slower&nbsp;version,&nbsp;jumps&nbsp;in&nbsp;veleocity&nbsp;and&nbsp;mass&nbsp;flow&nbsp;rate,&nbsp;but&nbsp;more&nbsp;stable&nbsp;(which&nbsp;is&nbsp;bizarre)</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font-family: Courier New;span style=\"color: #ff0000;\">der</span></span><span style=\"font-family: Courier New;\">(xi[i,:]*mass[i])&nbsp;=&nbsp;Xi_flow[i,:]&nbsp;-&nbsp;Xi_flow[i+1,:];</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font-family: Courier New;span style=\"color: #ff0000;\">der</span></span><span style=\"font-family: Courier New;\">(mass[i])=m_flow[i]-m_flow[i+1];</span></p>
+<p><br><span style=\"font-family: Courier New; color: #0000ff;\">elseif&nbsp;</span>massBalance==2<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
+<p><br><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #006400;\">//-------TransiEnt formulation Version&nbsp;1a&nbsp;-&gt;&nbsp;slower&nbsp;version,&nbsp;jumps&nbsp;in&nbsp;veleocity&nbsp;and&nbsp;mass&nbsp;flow&nbsp;rate,&nbsp;but&nbsp;more&nbsp;stable&nbsp;(which&nbsp;is&nbsp;bizarre)</span></p>
+<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #ff0000;\">der</span>(xi[i,:]*mass[i])&nbsp;=&nbsp;Xi_flow[i,:]&nbsp;-&nbsp;Xi_flow[i+1,:];</p>
+<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #ff0000;\">der</span>(mass[i])=m_flow[i]-m_flow[i+1];</p>
 <p><br><span style=\"font-family: Courier New; color: #0000ff;\">else</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"font-family: Courier New;color: #006400;\">//-------TransiEnt formulation Version&nbsp;1b&nbsp;-&gt;&nbsp;is&nbsp;generally&nbsp;faster&nbsp;but&nbsp;might&nbsp;cause&nbsp;simulation&nbsp;failure</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #ff0000;\">der</span>(xi[i,:])&nbsp;=&nbsp;(Xi_flow[i,:]&nbsp;-&nbsp;Xi_flow[i+1,:]&nbsp;-&nbsp;xi[i,:]*geo.volume[i]*drhodt[i])/mass[i];</span></p>
+<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #006400;\">//-------TransiEnt formulation Version&nbsp;1b&nbsp;-&gt;&nbsp;is&nbsp;generally&nbsp;faster&nbsp;but&nbsp;might&nbsp;cause&nbsp;simulation&nbsp;failure</span></p>
+<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #ff0000;\">der</span>(xi[i,:])&nbsp;=&nbsp;(Xi_flow[i,:]&nbsp;-&nbsp;Xi_flow[i+1,:]&nbsp;-&nbsp;xi[i,:]*geo.volume[i]*drhodt[i])/mass[i];</p>
 <p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drhodt[i]*geo.volume[i]=m_flow[i]-m_flow[i+1];</span></p>
 <p><br><span style=\"font-family: Courier New; color: #0000ff;\">end&nbsp;if</span>;</p>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
@@ -604,5 +607,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Carsten Bode (c.bode@tuhh.de), Okt 2015</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Lisa Andresen (andresen@tuhh.de), May 2016</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Revised by Carsten Bode (c.bode@tuhh.de), Apr 2018 (updated to ClaRa 1.3.0)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Carsten Bode (c.bode@tuhh.de), Feb 2019 (added temperature start value)</span></p>
 </html>"));
 end VolumeRealGas_L4_varXi;

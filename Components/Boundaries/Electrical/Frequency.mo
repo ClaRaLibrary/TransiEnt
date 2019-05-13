@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Electrical;
 model Frequency "Sets frequency can be used for simple electric grid model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,6 +27,7 @@ model Frequency "Sets frequency can be used for simple electric grid model"
   // _____________________________________________
 
   extends TransiEnt.Basics.Icons.ElectricSource;
+  extends TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary;
 
    // _____________________________________________
   //
@@ -44,13 +45,13 @@ model Frequency "Sets frequency can be used for simple electric grid model"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput f_set if                 useInputConnector "frequency input"
+  TransiEnt.Basics.Interfaces.General.FrequencyIn f_set if                  useInputConnector  "Frequency input"
                                                               annotation (Placement(transformation(extent={{-140,60},{-100,100}},
           rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-54,120})));
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{-102,-10},{-82,10}}), iconTransformation(extent={{-118,-16},{-84,14}})));
+
 
   // _____________________________________________
   //
@@ -77,7 +78,8 @@ equation
   // _____________________________________________
   connect(f_internal, f_set);
 
-  annotation (defaultComponentName="ElectricGrid",Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (defaultComponentName="ElectricGrid",Diagram(graphics,
+                                                          coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
@@ -88,12 +90,13 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp (active power port)</p>
+<p>Modelica RealInput: frequency in Hz</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

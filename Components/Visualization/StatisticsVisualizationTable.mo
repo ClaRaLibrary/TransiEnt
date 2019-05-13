@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization;
 model StatisticsVisualizationTable
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,99 +38,7 @@ equation
   Q_cons=  modelStatistics.heatingPower.E_consumed;
   Q_prod=modelStatistics.heatingPower.E_total;
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-300},{700,100}}), graphics={
-        Rectangle(
-          extent={{-100,100},{100,0}},
-          lineColor={209,211,212},
-          fillColor={209,211,212},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{-100,0},{100,-100}},
-          lineColor={221,222,223},
-          fillColor={221,222,223},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-78,92},{76,8}},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid,
-          lineColor={73,80,85},
-          textString="E_cons [TWh]"),
-        Text(
-          extent={{-98,0},{102,-100}},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          lineColor=DynamicSelect({118,124,127}, if E_cons > 0 then {0,131,169} else {167,25,48}),
-          textString=DynamicSelect(" E_cons ", String(E_cons,format = "1."+String(decimalSpaces)+"f"))),
-        Rectangle(extent={{-100,100},{100,-100}}, lineColor={135,135,135}),
-        Rectangle(
-          extent={{100,100},{300,0}},
-          lineColor={209,211,212},
-          fillColor={209,211,212},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{100,0},{300,-100}},
-          lineColor={221,222,223},
-          fillColor={221,222,223},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{122,92},{276,8}},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid,
-          lineColor={73,80,85},
-          textString="E_prod [TWh]"),
-        Text(
-          extent={{102,0},{302,-100}},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          lineColor=DynamicSelect({118,124,127}, if E_prod > 0 then {0,131,169} else {167,25,48}),
-          textString=DynamicSelect(" E_prod ", String(E_prod/3.6e15, format = "1."+String(decimalSpaces)+"f"))),
-        Rectangle(extent={{100,100},{300,-100}}, lineColor={135,135,135}),
-        Rectangle(
-          extent={{300,100},{500,0}},
-          lineColor={209,211,212},
-          fillColor={209,211,212},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{300,0},{500,-100}},
-          lineColor={221,222,223},
-          fillColor={221,222,223},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{322,92},{476,8}},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid,
-          lineColor={73,80,85},
-          textString="Q_cons [TWh]"),
-        Text(
-          extent={{302,0},{502,-100}},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          lineColor=DynamicSelect({118,124,127}, if x1 > 0 then {0,131,169} else {167,25,48}),
-          textString=DynamicSelect(" Q_cons ", String(Q_cons/3.6e15,format = "1."+String(decimalSpaces)+"f"))),
-        Rectangle(extent={{300,100},{500,-100}}, lineColor={135,135,135}),
-        Rectangle(
-          extent={{500,100},{700,0}},
-          lineColor={209,211,212},
-          fillColor={209,211,212},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{500,0},{700,-100}},
-          lineColor={221,222,223},
-          fillColor={221,222,223},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{522,92},{676,8}},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid,
-          lineColor={73,80,85},
-          textString="Q_prod [TWh]"),
-        Text(
-          extent={{502,0},{702,-100}},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          lineColor=DynamicSelect({118,124,127}, if x1 > 0 then {0,131,169} else {167,25,48}),
-          textString=DynamicSelect(" Q_prod ", String(Q_prod/3.6e15,format = "1."+String(decimalSpaces)+"f"))),
-        Rectangle(extent={{500,100},{700,-100}}, lineColor={135,135,135}),
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-300},{500,100}}), graphics={
         Rectangle(
           extent={{-100,-100},{100,-200}},
           lineColor={209,211,212},
@@ -146,14 +54,37 @@ equation
           fillColor={135,135,135},
           fillPattern=FillPattern.Solid,
           lineColor={73,80,85},
-          textString="RE_share "+"[%%]"),
+          textString="E_cons [TWh]"),
         Text(
           extent={{-98,-200},{102,-300}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
-          lineColor=DynamicSelect({118,124,127}, if x1 > 0 then {0,131,169} else {167,25,48}),
-          textString=DynamicSelect(" x ", String(x1,format = "1."+String(decimalSpaces)+"f") + " %unit")),
-        Rectangle(extent={{-100,-100},{100,-300}}, lineColor={135,135,135}),
+          lineColor=DynamicSelect({118,124,127}, if E_cons > 0 then {0,131,169} else {167,25,48}),
+          textString=DynamicSelect(" E_cons ", String(E_cons,format = "1."+String(decimalSpaces)+"f"))),
+        Rectangle(extent={{-100,-100},{100,-300}},lineColor={135,135,135}),
+        Rectangle(
+          extent={{-100,100},{100,0}},
+          lineColor={209,211,212},
+          fillColor={209,211,212},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-100,0},{100,-100}},
+          lineColor={221,222,223},
+          fillColor={221,222,223},
+          fillPattern=FillPattern.Solid),
+        Text(
+          extent={{-78,92},{76,8}},
+          fillColor={135,135,135},
+          fillPattern=FillPattern.Solid,
+          lineColor={73,80,85},
+          textString="E_prod [TWh]"),
+        Text(
+          extent={{-98,0},{102,-100}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          lineColor=DynamicSelect({118,124,127}, if E_prod > 0 then {0,131,169} else {167,25,48}),
+          textString=DynamicSelect(" E_prod ", String(E_prod/3.6e15, format = "1."+String(decimalSpaces)+"f"))),
+        Rectangle(extent={{-100,100},{100,-100}},lineColor={135,135,135}),
         Rectangle(
           extent={{100,-100},{300,-200}},
           lineColor={209,211,212},
@@ -169,14 +100,37 @@ equation
           fillColor={135,135,135},
           fillPattern=FillPattern.Solid,
           lineColor={73,80,85},
-          textString="CHP_share "+"[%%]"),
+          textString="Q_cons [TWh]"),
         Text(
           extent={{102,-200},{302,-300}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           lineColor=DynamicSelect({118,124,127}, if x1 > 0 then {0,131,169} else {167,25,48}),
-          textString=DynamicSelect(" x ", String(x1,format = "1."+String(decimalSpaces)+"f") + " %unit")),
-        Rectangle(extent={{100,-100},{300,-300}}, lineColor={135,135,135}),
+          textString=DynamicSelect(" Q_cons ", String(Q_cons/3.6e15,format = "1."+String(decimalSpaces)+"f"))),
+        Rectangle(extent={{100,-100},{300,-300}},lineColor={135,135,135}),
+        Rectangle(
+          extent={{100,100},{300,0}},
+          lineColor={209,211,212},
+          fillColor={209,211,212},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{100,0},{300,-100}},
+          lineColor={221,222,223},
+          fillColor={221,222,223},
+          fillPattern=FillPattern.Solid),
+        Text(
+          extent={{122,92},{276,8}},
+          fillColor={135,135,135},
+          fillPattern=FillPattern.Solid,
+          lineColor={73,80,85},
+          textString="Q_prod [TWh]"),
+        Text(
+          extent={{102,0},{302,-100}},
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid,
+          lineColor=DynamicSelect({118,124,127}, if x1 > 0 then {0,131,169} else {167,25,48}),
+          textString=DynamicSelect(" Q_prod ", String(Q_prod/3.6e15,format = "1."+String(decimalSpaces)+"f"))),
+        Rectangle(extent={{100,100},{300,-100}}, lineColor={135,135,135}),
         Rectangle(
           extent={{300,-100},{500,-200}},
           lineColor={209,211,212},
@@ -201,26 +155,31 @@ equation
           textString=DynamicSelect(" Costs ", String(Costs/1e6,format = "1."+String(decimalSpaces)+"f"))),
         Rectangle(extent={{300,-100},{500,-300}}, lineColor={135,135,135}),
         Rectangle(
-          extent={{500,-100},{700,-200}},
+          extent={{300,100},{500,0}},
           lineColor={209,211,212},
           fillColor={209,211,212},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{500,-200},{700,-300}},
+          extent={{300,0},{500,-100}},
           lineColor={221,222,223},
           fillColor={221,222,223},
           fillPattern=FillPattern.Solid),
         Text(
-          extent={{522,-108},{676,-192}},
+          extent={{322,92},{476,8}},
           fillColor={135,135,135},
           fillPattern=FillPattern.Solid,
           lineColor={73,80,85},
           textString="CO2 Emissions [Mton]"),
         Text(
-          extent={{502,-200},{702,-300}},
+          extent={{302,0},{502,-100}},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
           lineColor=DynamicSelect({118,124,127}, if x1 > 0 then {0,131,169} else {167,25,48}),
           textString=DynamicSelect(" x ", String(m_CO2/1e9,format = "1."+String(decimalSpaces)+"f"))),
-        Rectangle(extent={{500,-100},{700,-300}}, lineColor={135,135,135})}),                                Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-300},{700,100}})));
+        Rectangle(extent={{300,100},{500,-100}},  lineColor={135,135,135})}),                                Diagram(graphics,
+                                                                                                                     coordinateSystem(preserveAspectRatio=false, extent={{-100,-300},{500,100}})),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model for visulization of consumed energy/heat, produced electric energy/heat</span></p>
+</html>"));
 end StatisticsVisualizationTable;

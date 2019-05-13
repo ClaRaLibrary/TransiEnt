@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Controller;
 model TemperatureController
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model TemperatureController
 
   parameter Modelica.SIunits.Temperature T_target = 510;
 
-  parameter Modelica.SIunits.HeatFlowRate Q_nom= 1e3;
+  parameter SI.HeatFlowRate Q_flow_nom=1e3;
 
   parameter Real T_small = 0.01;
 
@@ -48,7 +48,7 @@ model TemperatureController
                                       rotation=0), iconTransformation(extent={{-14,-70},
             {8,-48}})));
 
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_is = heatport.Q_flow  annotation (
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_is = heatport.Q_flow  annotation (
       Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
@@ -70,9 +70,10 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  heatport.Q_flow = -Q_nom * regstepval;
+  heatport.Q_flow =-Q_flow_nom*regstepval;
 
-         annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+         annotation (Diagram(graphics,
+                             coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
                 Documentation(info="<html>
@@ -83,7 +84,8 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>Modelica RealOutput: heat flow rate in W</p>
+<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a&nbsp;heatport</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

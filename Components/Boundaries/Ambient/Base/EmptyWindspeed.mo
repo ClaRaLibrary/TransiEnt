@@ -1,11 +1,11 @@
 within TransiEnt.Components.Boundaries.Ambient.Base;
-model EmptyWindspeed
+model EmptyWindspeed "Model for outputting an empty windspeed value"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -107,21 +107,8 @@ equation
           extent={{-83,68},{-69,60}},
           lineColor={0,0,0},
           fillPattern=FillPattern.Sphere,
-          fillColor={255,255,255}),
-        Line(
-          points={{-72,60},{-46,52}},
-          color={0,0,0},
-          smooth=Smooth.None,
-          arrow={Arrow.Filled,Arrow.None}),
-        Line(
-          points={{-72,14},{-52,6}},
-          color={0,0,0},
-          smooth=Smooth.None,
-          arrow={Arrow.Filled,Arrow.None}),
-        Ellipse(
-          extent={{-68,52},{-30,6}},
-          lineColor={0,0,0},
-          lineThickness=0.5)}),  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
+          fillColor={255,255,255})}),
+                                 Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Empty Windspeed value.</p>
@@ -130,7 +117,7 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>Modelica RealOutput: velocity in m/s</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

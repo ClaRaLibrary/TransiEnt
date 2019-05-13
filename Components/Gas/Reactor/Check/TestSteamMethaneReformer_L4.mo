@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Reactor.Check;
 model TestSteamMethaneReformer_L4
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -58,9 +58,13 @@ model TestSteamMethaneReformer_L4
   Modelica.Blocks.Sources.CombiTimeTable combiTimeTable(table=[0,0.16,0.03,0.70,0.01,0.08; 5000,0.16,0.03,0.70,0.01,0.08; 6000,0.10,0.10,0.65,0.05,0.00; 11000,0.10,0.10,0.65,0.05,0.00; 12000,0.5,0.2,0,0.05,0.2; 14000,0.5,0.2,0,0.05,0.2])     annotation (Placement(transformation(extent={{-146,-16},{-126,4}})));
   TransiEnt.Components.Gas.Reactor.SteamMethaneReformer_L4 sMR(
     N_cv=N_cv,
-    T_start={680.662,809.68,965.931} + 273.15*ones(N_cv),
-    p_start={31.9167,31.15,30.3833}*1e5,
-    xi_start=[0.107837,0.220377,0.563447,0.0384457,0.0499259; 0.0417769,0.231705,0.484595,0.0639233,0.158074; 0.00696886,0.182197,0.465761,0.0748017,0.250367]) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    T(
+    start = {680.662,809.68,965.931} + 273.15*ones(N_cv)),
+    p(
+    start = {31.9167,31.15,30.3833}*1e5),
+    xi(
+    start =  [0.107837,0.220377,0.563447,0.0384457,0.0499259; 0.0417769,0.231705,0.484595,0.0639233,0.158074; 0.00696886,0.182197,0.465761,0.0748017,0.250367]))
+                                                                                                                                                                annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature[N_cv](each T(displayUnit="K") = 1625) annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor moleCompOut(medium=vle_sg6, compositionDefinedBy=2) annotation (Placement(transformation(extent={{68,0},{88,20}})));
   TransiEnt.Basics.Adapters.Gas.Real_to_Ideal real_to_Ideal(real=vle_sg6, ideal=gas_sg6) annotation (Placement(transformation(extent={{-36,-10},{-16,10}})));
@@ -160,7 +164,29 @@ check that temperature rises
 check mass flows
 check pressure loss in right direction
 check that for insufficient steam supply everything works")}),
-    Icon(coordinateSystem(extent={{-160,-20},{160,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-160,-20},{160,100}})),
     experiment(StopTime=14000, __Dymola_NumberOfIntervals=700),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the SteamMethaneReformer_L4 model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestSteamMethaneReformer_L4;

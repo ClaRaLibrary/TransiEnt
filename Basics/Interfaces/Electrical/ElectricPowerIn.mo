@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Interfaces.Electrical;
-connector ElectricPowerIn
+connector ElectricPowerIn "Input for power in W"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,12 +26,13 @@ connector ElectricPowerIn
   // _____________________________________________
 
   extends Modelica.Blocks.Interfaces.RealInput( final quantity= "Power", final unit="W", displayUnit="W");
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
     Polygon(
-      fillColor={0,127,127},
-      lineColor={0,127,127},
-      fillPattern=FillPattern.Solid,
-      points={{-100.0,100.0},{100.0,0.0},{-100.0,-100.0}})}),
+          fillColor={0,127,127},
+          lineColor={0,127,127},
+          fillPattern=FillPattern.Solid,
+          points={{-104.0,104.0},{104.0,0.0},{-104.0,-104.0}})}),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Interface for Electrical Power Input.</p>
@@ -40,13 +41,13 @@ connector ElectricPowerIn
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no physical modeling)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>Modelica RealInput: electric power in [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(none)</p>
+<p>This connector should only be used for electric powers (type consistency).</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

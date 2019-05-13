@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Ambient.Base;
 model ConstantTemperature "Constant Temperature"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,6 +31,7 @@ model ConstantTemperature "Constant Temperature"
   parameter Modelica.SIunits.Temp_C T_const=9.33 "Temperature in degC";
 
 equation
+
   // _____________________________________________
   //
   //           Characteristic equations
@@ -45,7 +46,7 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>Modelica RealOutput: temperature in degree Celsius</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -58,5 +59,5 @@ equation
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>(no remarks)</p>
-</html>"));
+</html>"), Icon(graphics={Line(points={{-194,58}}, color={28,108,200})}));
 end ConstantTemperature;

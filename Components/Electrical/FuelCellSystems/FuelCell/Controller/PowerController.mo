@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.Controller;
 model PowerController "Controller for power output in Fuel Cell applications"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ model PowerController "Controller for power output in Fuel Cell applications"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput deltaP annotation (Placement(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn deltaP "Input for power difference" annotation (Placement(
         transformation(
         rotation=180,
         extent={{10,-10},{-10,10}},
@@ -55,7 +55,7 @@ model PowerController "Controller for power output in Fuel Cell applications"
                       extent={{10,-10},{-10,10}},
         origin={118,-28}),
                          iconTransformation(extent={{100,-10},{120,10}})));
-  Modelica.Blocks.Interfaces.RealInput V_cell annotation (Placement(
+  TransiEnt.Basics.Interfaces.Electrical.VoltageIn V_cell "Input for voltage of a cell" annotation (Placement(
         transformation(
         rotation=0,
         extent={{-10,-10},{10,10}},
@@ -186,7 +186,9 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>Modelica RealInput: electric voltage in V</p>
+<p>Modelica RealInput: electric power difference in W</p>
+<p>Modelica RealOutput: y</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

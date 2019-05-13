@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.Controller;
 model SimpleStorageController
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,7 +61,8 @@ equation
   connect(const.y, feedback1.u2) annotation (Line(points={{7,-26},{-6,-26},{-6,-8}}, color={0,0,127}));
   connect(feedback1.u1, u) annotation (Line(points={{2,0},{52,0},{52,0},{100,0}}, color={0,0,127}));
   connect(feedback1.y, gain.u) annotation (Line(points={{-15,0},{-30.6,0},{-30.6,0}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model FeedInStation_Storage
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,33 +33,34 @@ model FeedInStation_Storage
   //           Constants and Parameters
   // _____________________________________________
 
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel3 "|General|Hydrogen model to be used";
-  parameter SI.ActivePower P_el_n=1e6 "|Electrolyzer|nominal power of electrolyser";
-  parameter SI.ActivePower P_el_max=1.68*P_el_n "|Electrolyzer|Maximum power of electrolyzer";
-  parameter SI.ActivePower P_el_min=0.05*P_el_n "|Electrolyzer|Minimal power of electrolyzer";
-  parameter SI.ActivePower P_el_overload=1.0*P_el_n "|Electrolyzer|Power at which overload region begins";
+parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel3 "Hydrogen model to be used" annotation (Dialog(tab="General", group="General"));
+  parameter SI.ActivePower P_el_n=1e6 "nominal power of electrolyser" annotation (Dialog(tab="General", group="Electrolyzer"));
+  parameter SI.ActivePower P_el_max=1.68*P_el_n "Maximum power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
+  parameter SI.ActivePower P_el_min=0.05*P_el_n "Minimal power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
+  parameter SI.ActivePower P_el_overload=1.0*P_el_n "Power at which overload region begins" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.ActivePower P_el_cooldown=P_el_n "Power below which cooldown of electrolyzer starts" annotation(Dialog(group="Electrolyzer"));
-  parameter SI.MassFlowRate m_flow_start=0.0 "|Initialization|Sets initial value for m_flow from a buffer";
-  //parameter SI.Temperature T_Init=283.15 "|Initialization|Sets initial value for T";
+  parameter SI.MassFlowRate m_flow_start=0.0 "Sets initial value for m_flow from a buffer" annotation (Dialog(tab="General", group="Initialization"));
+  //parameter SI.Temperature T_Init=283.15 "Sets initial value for T" annotation (Dialog(tab="General", group="Initialization"));
   parameter SI.Efficiency eta_n(
     min=0,
-    max=1)=0.75 "|Electrolyzer|Nominal efficency coefficient (min = 0, max = 1)";
+    max=1)=0.75 "Nominal efficency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.Efficiency eta_scale(
     min=0,
-    max=1)=0 "|Electrolyzer|Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)";
+    max=1)=0 "Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
 
-  parameter Real t_overload=0.5*3600 "|Electrolyzer|Maximum admissible time the electrolyzer can work in overload region in seconds";
-  parameter Real coolingToHeatingRatio=1 "|Electrolyzer|Defines how much faster electrolyzer cools down than heats up";
-  parameter Integer startState=1 "|Electrolyzer|Initial state of the electrolyzer (1: ready to overheat, 2: working in overload, 3: cooling down)";
+  parameter Real t_overload=0.5*3600 "Maximum admissible time the electrolyzer can work in overload region in seconds" annotation (Dialog(tab="General", group="Electrolyzer"));
+  parameter Real coolingToHeatingRatio=1 "Defines how much faster electrolyzer cools down than heats up" annotation (Dialog(tab="General", group="Electrolyzer"));
+  parameter Integer startState=1 "Initial state of the electrolyzer (1: ready to overheat, 2: working in overload, 3: cooling down)" annotation (Dialog(tab="General", group="Electrolyzer"));
 
-  parameter SI.AbsolutePressure p_out=35e5 "|Electrolyzer|Hydrogen output pressure from electrolyser";
-  parameter SI.Temperature T_out=283.15 "|Electrolyzer|Hydrogen output temperature from electrolyser";
-  parameter Real specificWaterConsumption=10 "|Electrolyzer|Mass of water per mass of hydrogen";
+  parameter SI.AbsolutePressure p_out=35e5 "Hydrogen output pressure from electrolyser" annotation (Dialog(tab="General", group="Electrolyzer"));
+  parameter SI.Temperature T_out=283.15 "Hydrogen output temperature from electrolyser" annotation (Dialog(tab="General", group="Electrolyzer"));
+  parameter Real specificWaterConsumption=10 "Mass of water per mass of hydrogen" annotation (Dialog(tab="General", group="Electrolyzer"));
 
-  parameter SI.SpecificEnthalpy h_start_junction=139565 "|Junction|Initial specific enthalpy (can be calculated by StaticCycle)";
-  parameter SI.AbsolutePressure p_start_junction=simCenter.p_amb_const+simCenter.p_eff_2 "|Junction|Initial pressure in the junction";
-  parameter ClaRa.Basics.Units.Volume volume_junction=0.01 "|Junction|Volume in the junction";
-  parameter Integer initOption=0 "|Junction|Type of initialisation" annotation(choices(
+  parameter SI.SpecificEnthalpy h_start_junction=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start_junction,T_start_junction,medium.xi_default) "Initial specific enthalpy (can be calculated by StaticCycle)" annotation (Dialog(tab="General", group="Junction"));
+  parameter SI.AbsolutePressure p_start_junction=simCenter.p_amb_const+simCenter.p_eff_2 "Initial pressure in the junction" annotation (Dialog(tab="General", group="Junction"));
+  parameter SI.Temperature T_start_junction=simCenter.T_ground "Initial temperature" annotation (Dialog(tab="General", group="Junction"));
+  parameter ClaRa.Basics.Units.Volume volume_junction=0.01 "Volume in the junction" annotation (Dialog(tab="General", group="Junction"));
+  parameter Integer initOption=0 "Type of initialisation" annotation(Dialog(tab="General", group="Junction"),  choices(
       choice=0 "Use guess values",
       choice=1 "Steady state",
       choice=201 "Steady pressure",
@@ -67,36 +68,39 @@ model FeedInStation_Storage
       choice=208 "Steady pressure and enthalpy",
       choice=210 "Steady density"));
 
-  parameter Boolean start_pressure=true "|Storage||true if a start pressure is defined, false if a start mass is defined";
-  parameter Boolean includeHeatTransfer=true "|Storage||false for neglecting heat transfer";
-  parameter SI.Volume V_geo=1e5 "|Storage||Geometric volume of storage";
-  parameter SI.Height height=3.779*V_geo^(1/3) "|Storage||Height of storage";
-  parameter SI.CoefficientOfHeatTransfer alpha_nom=4 "|Storage||Heat transfer coefficient inside the storage cylinder";
-  parameter SI.Mass m_start=1 "|Storage||Stored gas mass at t=0";
-  parameter SI.Pressure p_start=simCenter.p_amb_const+simCenter.p_eff_2 "|Storage||Pressure in storage at t=0";
-  parameter SI.ThermodynamicTemperature T_start=283.15 "|Storage||Temperature of gas in storage at t=0";
-  parameter SI.Pressure p_maxLow=p_maxHigh-1e5 "|Storage|Control|Lower limit of the maximum pressure in storage";
-  parameter SI.Pressure p_maxHigh=p_out "|Storage|Control|Upper limit of the maximum pressure in storage";
+  parameter Boolean start_pressure=true "true if a start pressure is defined, false if a start mass is defined" annotation (Dialog(tab="Storage"));
+  parameter Boolean includeHeatTransfer=true "false for neglecting heat transfer" annotation (Dialog(tab="Storage"));
+  parameter SI.Volume V_geo=1e5 "Geometric volume of storage" annotation (Dialog(tab="Storage"));
+  parameter SI.Height height=3.779*V_geo^(1/3) "Height of storage" annotation (Dialog(tab="Storage"));
+  parameter SI.CoefficientOfHeatTransfer alpha_nom=4 "Heat transfer coefficient inside the storage cylinder" annotation (Dialog(tab="Storage"));
+  parameter SI.Mass m_start=1 "Stored gas mass at t=0" annotation (Dialog(tab="Storage"));
+  parameter SI.Pressure p_start=simCenter.p_amb_const+simCenter.p_eff_2 "Pressure in storage at t=0" annotation (Dialog(tab="Storage"));
+  parameter SI.ThermodynamicTemperature T_start=283.15 "Temperature of gas in storage at t=0" annotation (Dialog(tab="Storage"));
+  parameter SI.Pressure p_maxLow=p_maxHigh-1e5 "Lower limit of the maximum pressure in storage" annotation (Dialog(tab="Storage", group="Control"));
+  parameter SI.Pressure p_maxHigh=p_out "Upper limit of the maximum pressure in storage" annotation (Dialog(tab="Storage", group="Control"));
 
-  parameter SI.Pressure dp_Low=1e3 "|Storage|Control|if valve open and (p_in-p_out) <= dp_Low, close valve";
-  parameter SI.Pressure dp_High=1e5 "|Storage|Control|if valve closed and (p_in-p_out) >= dp_High, open valve";
+  parameter SI.Pressure dp_Low=1e3 "if valve open and (p_in-p_out) <= dp_Low, close valve" annotation (Dialog(tab="Storage", group="Control"));
+  parameter SI.Pressure dp_High=1e5 "if valve closed and (p_in-p_out) >= dp_High, open valve" annotation (Dialog(tab="Storage", group="Control"));
 
-  parameter Boolean StoreAllHydrogen=false "|Storage|Control|All Hydrogen is stored before beeing fed in";
+  parameter Boolean StoreAllHydrogen=false "|Storage|Control|All Hydrogen is stored before beeing fed in" annotation (Dialog(tab="Storage", group="Control"));
 
-  parameter Real k=1e8 "|Controller|Gain for feed-in control";
+  parameter Real k=1e8 "Gain for feed-in control" annotation (Dialog(tab="General", group="Controller"));
+  parameter Real Ti=0.1 "Ti for feed-in control";
+  parameter Real Td=0.1 "Td for feed-in control";
 
   replaceable model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200        constrainedby TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerEfficiencyCharline        "Calculate the efficiency" annotation (Dialog(group="Electrolyzer"),__Dymola_choicesAllMatching=true);
   replaceable model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder        constrainedby TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerDynamics        "Dynamic behavior of electrolyser" annotation (Dialog(group="Electrolyzer"),__Dymola_choicesAllMatching=true);
+  replaceable model PressureLossAtOutlet = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.NoFriction constrainedby ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.BaseDp "Pressure loss at outlet (can help reducing the system of equations)" annotation(choicesAllMatching=true);
 
   //Statistics
   replaceable model CostSpecsElectrolyzer = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty
-    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "|Statistics||Cost configuration electrolyzer" annotation (choicesAllMatching=true);
+    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost configuration electrolyzer" annotation (Dialog(tab="Statistics"), choices(choicesAllMatching=true));
   replaceable model CostSpecsStorage = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty
-    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "|Statistics||Cost configuration storage" annotation (choicesAllMatching=true);
-  parameter Real Cspec_demAndRev_other_water=simCenter.Cspec_demAndRev_other_water "|Statistics||Specific demand-related cost per cubic meter water of electrolyzer";
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el_electrolyzer=simCenter.Cspec_demAndRev_free "|Statistics||Specific demand-related cost per electric energy for electrolyzer";
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el_other=simCenter.Cspec_demAndRev_el_70_150_GWh "|Statistics||Specific demand-related cost per electric energy for compressor and start gas generation";
-
+    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost configuration storage" annotation (Dialog(tab="Statistics"), choices(choicesAllMatching=true));
+  parameter Real Cspec_demAndRev_other_water=simCenter.Cspec_demAndRev_other_water "Specific demand-related cost per cubic meter water of electrolyzer" annotation (Dialog(tab="Statistics"));
+  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el_electrolyzer=simCenter.Cspec_demAndRev_free "Specific demand-related cost per electric energy for electrolyzer" annotation (Dialog(tab="Statistics"));
+  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el_other=simCenter.Cspec_demAndRev_el_70_150_GWh "Specific demand-related cost per electric energy for compressor and start gas generation" annotation (Dialog(tab="Statistics"));
+  parameter Boolean integrateMassFlow=false "True if mass flow shall be integrated";
   // _____________________________________________
   //
   //                  Variables
@@ -114,7 +118,8 @@ protected
     input SI.Power P_el "Consumed electric power";
     input SI.Energy W_el "Consumed electric energy";
     input SI.Mass mass_H2 "Produced hydrogen mass";
-    input SI.Efficiency eta "Efficiency of the electrolyzer";
+    input SI.Efficiency eta_NCV "Electroyzer efficiency based on NCV";
+    input SI.Efficiency eta_GCV "Electroyzer efficiency based on GCV";
   end ElectrolyzerRecord;
 
   model Summary
@@ -167,7 +172,7 @@ protected
         extent={{8,-4},{-8,4}},
         rotation=90,
         origin={8,-18})));
-  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor_bypass(final medium=medium, xiNumber=medium.nc) annotation (Placement(transformation(
+  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor_bypass(final medium=medium, xiNumber=0)         annotation (Placement(transformation(
         extent={{7,6},{-7,-6}},
         rotation=90,
         origin={14,-37})));
@@ -195,10 +200,13 @@ public
         origin={40,-17})));
 
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 mix_H2(
+    redeclare model PressureLoss1 = PressureLossAtOutlet,
+    h(
+    start = h_start_junction),
+    p(
+    start = p_start_junction),
     medium=medium,
     volume=volume_junction,
-    p_start=p_start_junction,
-    h_start=h_start_junction,
     initOption=initOption)
                          annotation (Placement(transformation(
         extent={{-8,8},{8,-8}},
@@ -210,7 +218,7 @@ protected
     medium=medium,
     showExpertSummary=false,
     showData=false) annotation (Placement(transformation(extent={{0,-8},{16,6}})));
-  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor_ely(final medium=medium, xiNumber=medium.nc) annotation (Placement(transformation(
+  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor_ely(final medium=medium, xiNumber=0)         annotation (Placement(transformation(
         extent={{7,6},{-7,-6}},
         rotation=180,
         origin={-30,6})));
@@ -231,7 +239,9 @@ public
     redeclare model Charline = Charline,
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     StoreAllHydrogen=StoreAllHydrogen,
-    P_el_cooldown=P_el_cooldown)                             annotation (Placement(transformation(extent={{-2,55},{18,75}})));
+    P_el_cooldown=P_el_cooldown,
+    Ti=Ti,
+    Td=Td)                                                   annotation (Placement(transformation(extent={{-2,55},{18,75}})));
 protected
   TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredMassFlow valve_mFlowDes(
     medium=medium,
@@ -247,7 +257,8 @@ public
       P_el=electrolyzer.summary.outline.P_el,
       W_el=electrolyzer.summary.outline.W_el,
       mass_H2=electrolyzer.summary.outline.mass_H2,
-      eta=electrolyzer.summary.outline.eta),
+      eta_NCV=electrolyzer.summary.outline.eta_NCV,
+      eta_GCV=electrolyzer.summary.outline.eta_GCV),
     storage(
       mediumModel=storage.summary.gasBulk.mediumModel,
       xi=storage.summary.gasBulk.xi,
@@ -318,20 +329,25 @@ public
       otherCosts=storage.summary.costs.otherCosts,
       revenues=storage.summary.costs.revenues)) annotation (Placement(transformation(extent={{-58,-100},{-38,-80}})));
 
+
 protected
   TILMedia.VLEFluid_ph gasOut(
     vleFluidType=simCenter.gasModel1,
     deactivateTwoPhaseRegion=true,
-    h=actualStream(gasPortOut.h_outflow),
+    h=gasPortOut.h_outflow,
     p=gasPortOut.p,
-    xi=actualStream(gasPortOut.xi_outflow)) annotation (Placement(transformation(extent={{12,-98},{32,-78}})));
+    xi=gasPortOut.xi_outflow) annotation (Placement(transformation(extent={{12,-98},{32,-78}})));
 equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
 
+if integrateMassFlow then
   der(mass_H2_fedIn)=-gasPortOut.m_flow;
+else
+  mass_H2_fedIn=0;
+end if;
 
   connect(ramp.y,sourceH2.m_flow) annotation (Line(points={{-83.4,-30},{-83.4,-30.2},{-77.6,-30.2}},color={0,0,127}));
   connect(electrolyzer.epp, epp) annotation (Line(
@@ -343,7 +359,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(threeWayValve.gasPortOut2, valve_pBeforeValveDes.gasPortIn) annotation (Line(
-      points={{8,-8},{8,-8},{8,-10}},
+      points={{8,-8},{8,-10},{8.57143,-10}},
       color={255,255,0},
       thickness=1.5));
   connect(massflowSensor_bypass.m_flow, controlTotalElyStorage.m_flow_bypass) annotation (Line(points={{14,-44.7},{18,-44.7},{18,-45},{24,-45},{24,59},{18,59}}, color={0,0,127},
@@ -374,11 +390,11 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(storage.gasPortOut,valve_mFlowDes. gasPortIn) annotation (Line(
-      points={{40,-26.45},{40,-36},{40,-38}},
+      points={{40,-26.45},{40,-38},{39.4286,-38}},
       color={255,255,0},
       thickness=1.5));
   connect(valve_mFlowDes.gasPortOut, mix_H2.gasPort3) annotation (Line(
-      points={{40,-54},{40,-56},{16,-56}},
+      points={{39.4286,-54},{39.4286,-56},{16,-56}},
       color={255,255,0},
       thickness=1.5));
   connect(electrolyzer.gasPortOut, massflowSensor_ely.gasPortIn) annotation (Line(
@@ -390,7 +406,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(valve_pBeforeValveDes.gasPortOut, massflowSensor_bypass.gasPortIn) annotation (Line(
-      points={{8,-26},{8,-28},{8,-30}},
+      points={{8.57143,-26},{8,-28},{8,-30}},
       color={255,255,0},
       thickness=1.5));
   connect(massflowSensor_bypass.gasPortOut, mix_H2.gasPort2) annotation (Line(
@@ -402,10 +418,11 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(controlTotalElyStorage.m_flowDes_valve, valve_mFlowDes.m_flowDes) annotation (Line(
-      points={{14,54},{14,40},{58,40},{58,-38},{44,-38}},
+      points={{14,54},{14,40},{58,40},{58,-38},{42.8571,-38}},
       color={0,0,127},
       pattern=LinePattern.Dash));
-  annotation (defaultComponentName="feedInStation",Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+  annotation (defaultComponentName="feedInStation",Diagram(graphics,
+                                                           coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(
           extent={{-150,20},{150,-20}},
           lineColor={0,134,134},
@@ -431,7 +448,7 @@ equation
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>For start up, a small hydrogen mass flow for the electrolyzer can be set to allow for simpler initialisation. </p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks) </p>
+<p>Tested in check model &quot;TransiEnt.Producer.Gas.Electrolyzer.Systems.Check.Test_FeedInStation_Storage&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

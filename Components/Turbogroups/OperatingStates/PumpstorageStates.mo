@@ -2,10 +2,10 @@ within TransiEnt.Components.Turbogroups.OperatingStates;
 model PumpstorageStates "Limits input signal by value and gradient depending on active state out of three possible operating states (halt, startup, operating)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,7 +35,6 @@ model PumpstorageStates "Limits input signal by value and gradient depending on 
   parameter Real P_max_operating_pump = 1 "Maximum power pump operation (p.u.)";
   parameter Real P_max_operating_turb = 1 "Maximum power turbine operation (p.u.)";
   parameter SI.Frequency P_grad_startup = 1/max(t_startup,1) "Maximum Gradient during startup";
-  parameter SI.Frequency P_grad_operating = 1/60 "Maximum Gradient during operation";
 
   // _____________________________________________
   //
@@ -161,5 +160,30 @@ equation
   connect(initHalt.outPort, halt.inPort[5]);
   connect(initOperatingPump.outPort, operatingPump.inPort[2]);
   connect(initOperatingTurb.outPort, operatingTurb.inPort[2]);
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{140,180}})), Icon(coordinateSystem(extent={{-140,-100},{140,180}}, preserveAspectRatio=false)));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{140,180}})), Icon(graphics,
+                                                                                                         coordinateSystem(extent={{-140,-100},{140,180}}, preserveAspectRatio=false)),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>P_set_star: input for electric power in W</p>
+<p>P_set_star_lim: output for electric power in W</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>slewRateLimiter: set P_grad_operating =-1, if slewRateLimiter is not needed.</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TestPumpstorageStates&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on April 2019: added option to deactivate slewRateLimiter</p>
+</html>"));
 end PumpstorageStates;

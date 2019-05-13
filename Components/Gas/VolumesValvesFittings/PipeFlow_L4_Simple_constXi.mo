@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings;
 model PipeFlow_L4_Simple_constXi "A 1D tube-shaped control volume considering one-phase and two-phase heat transfer in a straight pipe with static momentum balance and simple energy balance."
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,6 @@ model PipeFlow_L4_Simple_constXi "A 1D tube-shaped control volume considering on
   // changed path to parent                                                    //
   // deleted minimum value for N_cv                                            //
   // added modelStatistics and cost collector
-
   extends TransiEnt.Components.Gas.VolumesValvesFittings.Base.VolumeRealGas_L4_constXi(
      redeclare model Geometry = ClaRa.Basics.ControlVolumes.Fundamentals.Geometry.PipeGeometry_N_cv (
         z_in=z_in,
@@ -37,8 +36,8 @@ model PipeFlow_L4_Simple_constXi "A 1D tube-shaped control volume considering on
         length=length,
         Delta_x=Delta_x,
         N_passes=N_passes));
-  extends ClaRa.Basics.Icons.Pipe_L4;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L4");
+  extends TransiEnt.Basics.Icons.PipeFlow_L4_Simple;
   ClaRa.Basics.Interfaces.Connected2SimCenter connected2SimCenter(
     powerIn=noEvent(if sum(heat.Q_flow) > 0 then sum(heat.Q_flow) else 0),
     powerOut=if not heatFlowIsLoss then -sum(heat.Q_flow) else 0,
@@ -132,25 +131,25 @@ equation
       smooth=Smooth.None,
       thickness=0.5));
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
-annotation (defaultComponentName="pipe",Icon(coordinateSystem(preserveAspectRatio=false,
-                                                           extent={{-140,-50},{
-            140,50}}),
-                   graphics={
+annotation (defaultComponentName="pipe",Icon(graphics={
         Polygon(
           points={{-132,42},{-122,42},{-114,34},{-114,-36},{-122,-42},{-132,-42},
               {-132,42}},
-          lineColor=none,
+          pattern=LinePattern.None,
           smooth=Smooth.None,
-          fillColor=DynamicSelect({221,222,223}, if frictionAtInlet then {0,131,
-              169} else {221,222,223}),
-          fillPattern=FillPattern.Solid),
+          fillColor= {0,131,169},
+          fillPattern=FillPattern.Solid,
+          visible=frictionAtInlet),
         Polygon(
           points={{132,42},{122,42},{114,34},{114,-36},{122,-42},{132,-42},
               {132,42}},
-          lineColor=none,
+          pattern=LinePattern.None,
           smooth=Smooth.None,
-          fillColor=DynamicSelect({221,222,223},if frictionAtOutlet then {0,131,169} else {221,222,223}),
-          fillPattern=FillPattern.Solid)}),
+          fillColor= {0,131,169},
+          fillPattern=FillPattern.Solid,
+          visible=frictionAtOutlet)},        coordinateSystem(preserveAspectRatio=false,
+                                                           extent={{-140,-50},{
+            140,50}})),
         Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-140,-50},{140,50}}),
                                       graphics),

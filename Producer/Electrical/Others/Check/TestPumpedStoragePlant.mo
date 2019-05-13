@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Others.Check;
 model TestPumpedStoragePlant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ model TestPumpedStoragePlant
     isExternalSecondaryController=false,
     t_startup=200,
     P_el_n=80e6,
-    P_init=40e6) annotation (Placement(transformation(extent={{-14,15},{6,35}})));
+    P_init_set=40e6) annotation (Placement(transformation(extent={{-14,15},{6,35}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{40,-33},{60,-13}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},
             {-70,100}})));
@@ -38,18 +38,18 @@ model TestPumpedStoragePlant
     isSecondaryControlActive=false,
     isExternalSecondaryController=false,
     P_el_n=120e6,
-    P_init=-60e6,
+    P_init_set=-60e6,
     t_startup=900) annotation (Placement(transformation(extent={{-12,-39},{8,-19}})));
   Modelica.Blocks.Math.Gain P_set_plant_1(k=PS_1.P_el_n) annotation (Placement(transformation(extent={{-50,20},{-30,40}})));
 equation
 
   connect(PS_1.epp, Grid.epp) annotation (Line(
-      points={{5.5,30.6},{20,30.6},{20,-23.1},{39.9,-23.1}},
+      points={{5,32},{20,32},{20,-23},{40,-23}},
       color={0,135,135},
       thickness=0.5));
   connect(sched.y, P_set_plant_2.u) annotation (Line(points={{-79,30},{-58,30},{-58,-50},{-54,-50}}, color={0,0,127}));
   connect(PS_2.epp, Grid.epp) annotation (Line(
-      points={{7.5,-23.4},{39.9,-23.4},{39.9,-23.1}},
+      points={{7,-22},{40,-22},{40,-23}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set_plant_2.y, PS_2.P_el_set) annotation (Line(points={{-31,-50},{-28,-50},{-28,-14},{-3.5,-14},{-3.5,-19.1}}, color={0,0,127}));
@@ -85,5 +85,26 @@ P_set_plant_2.y
 PS_2.epp.P")}),
     experiment(StopTime=30000, Interval=60),
     __Dymola_experimentSetupOutput,
-              __Dymola_Commands(executeCall = TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant.plotResult() "Plot example results"));
+              __Dymola_Commands(executeCall = TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant.plotResult() "Plot example results"),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for PumpedStoragePlant</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestPumpedStoragePlant;

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Heat;
-model PipeFlowVLE_L4_Simple
+model PipeFlowVLE_L4_Simple "Model for simulating a pipe flow with a VLE-fluid"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,4 +20,30 @@ model PipeFlowVLE_L4_Simple
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends ClaRa.Components.VolumesValvesFittings.Pipes.PipeFlowVLE_L4_Simple;
+  extends TransiEnt.Basics.Icons.PipeFlow_L4_Simple;
+
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>A simple model of a pipe flow with a VLE-fluid</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>L4 (defined in the CodingConventions)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>inlet: FluidPortIn</p>
+<p>outlet: FluidPortOut</p>
+<p>heat: heat port</p>
+<p>eye</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end PipeFlowVLE_L4_Simple;

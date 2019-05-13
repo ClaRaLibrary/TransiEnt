@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Base;
 partial model PartialGasboiler "Full modulating gasboiler, partial model with splitted combustion and heat-transfer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,34 +35,34 @@ partial model PartialGasboiler "Full modulating gasboiler, partial model with sp
   //
   //          Constants and Parameters
   // _____________________________________________
-  parameter TILMedia.GasTypes.BaseGas FuelMedium=simCenter.gasModel2 "|Fundamental definitions|Fuel gas medium";
-  parameter TILMedia.GasTypes.BaseGas ExhaustMedium=simCenter.exhaustGasModel "|Fundamental definitions|Exhaust gas medium";
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid WaterMedium=simCenter.fluid1 "|Fundamental definitions|Heat carrier medium";
+  parameter TILMedia.GasTypes.BaseGas FuelMedium=simCenter.gasModel2 "Fuel gas medium" annotation (Dialog(tab="General", group="Fundamental definitions"));
+  parameter TILMedia.GasTypes.BaseGas ExhaustMedium=simCenter.exhaustGasModel "Exhaust gas medium" annotation (Dialog(tab="General", group="Fundamental definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid WaterMedium=simCenter.fluid1 "Heat carrier medium" annotation (Dialog(tab="General", group="Fundamental definitions"));
 
-  parameter Boolean holdTemperature=false "|Operation mode|Boiler produces heat duty given by input. Set to true to only hold supply temperature.";
-  parameter Boolean fixedSupplyTemperature=true "|Operation mode|Boiler produces a supply temperature given by input. Set to false to leave it variable" annotation (Dialog(enable = not holdTemperature));
+  parameter Boolean holdTemperature=false "Boiler produces heat duty given by input. Set to true to only hold supply temperature." annotation (Dialog(tab="General", group="Operation mode"));
+  parameter Boolean fixedSupplyTemperature=true "Boiler produces a supply temperature given by input. Set to false to leave it variable" annotation (Dialog(tab="General", group="Operation mode", enable = not holdTemperature));
 
-  parameter SI.HeatFlowRate Q_flow_n=5e5 "|Specification|Nominal heating power";
-  parameter SI.HeatFlowRate Q_flow_min=0.1*Q_flow_n "|Specification|Minimum heat duty for min. efficiency";
-  parameter SI.Temperature T_supply_max(displayUnit="K")=273.15+120 "|Specification|Maximum supply temperature";
+  parameter SI.HeatFlowRate Q_flow_n=5e5 "Nominal heating power" annotation (Dialog(tab="General", group="Specification"));
+  parameter SI.HeatFlowRate Q_flow_min=0.1*Q_flow_n "Minimum heat duty for min. efficiency" annotation (Dialog(tab="General", group="Specification"));
+  parameter SI.Temperature T_supply_max(displayUnit="K")=273.15+120 "Maximum supply temperature" annotation (Dialog(tab="General", group="Specification"));
   parameter SI.TemperatureDifference dT_max_DH=
     if simCenter.heatingCurve.T_supply_const == 0
     then 41
-    else simCenter.heatingCurve.T_supply_const - simCenter.heatingCurve.T_return_const "|Specification|Maximum heat carrier temperature spread";
-  parameter SI.MassFlowRate m_flow_min= 0.15 "|Specification|Mass flow rate to switch off. Non-zero mass flow leads to higher numerical stability";
-  parameter SI.Pressure Delta_p_nom=2000 "|Specification|Nominal pressure loss";
+    else simCenter.heatingCurve.T_supply_const - simCenter.heatingCurve.T_return_const "Maximum heat carrier temperature spread" annotation (Dialog(tab="General", group="Specification"));
+  parameter SI.MassFlowRate m_flow_min= 0.15 "Mass flow rate to switch off. Non-zero mass flow leads to higher numerical stability" annotation (Dialog(tab="General", group="Specification"));
+  parameter SI.Pressure Delta_p_nom=2000 "Nominal pressure loss" annotation (Dialog(tab="General", group="Specification"));
   final parameter SI.SpecificHeatCapacity cp_water=TILMedia.VLEFluidFunctions.specificIsobaricHeatCapacity_pTxi(WaterMedium, 6*1e5, 273.15+60, {1});
 
-  parameter Boolean condensing=true "|Combustion|Condensing operation, influence on emission calculation only.";
-  parameter Real lambda=1.2 "|Combustion|Combustion air ratio";
-  parameter Boolean referenceNCV = true "|Combustion|true, if heat calculations shall be in respect to NCV, false will give GCV";
+  parameter Boolean condensing=true "Condensing operation, influence on emission calculation only." annotation (Dialog(tab="General", group="Combustion"));
+  parameter Real lambda=1.2 "Combustion air ratio" annotation (Dialog(tab="General", group="Combustion"));
+  parameter Boolean referenceNCV = true "true, if heat calculations shall be in respect to NCV, false will give GCV" annotation (Dialog(tab="General", group="Combustion"));
 
   //Statistics
-  parameter TransiEnt.Basics.Types.TypeOfResource TypeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional "|Statistics|Type of resource";
-  parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat TypeOfEnergyCarrierHeat=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas "|Statistics|Type of energy carrier";
+  parameter TransiEnt.Basics.Types.TypeOfResource TypeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional "Type of resource" annotation (Dialog(tab="General", group="Statistics"));
+  parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat TypeOfEnergyCarrierHeat=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas "Type of energy carrier" annotation (Dialog(tab="General", group="Statistics"));
   replaceable model CostRecordBoiler = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PeakLoadBoiler
-    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "|Statistics|Cost specification" annotation (choicesAllMatching=true);
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_gas_fuel=simCenter.Cfue_GasBoiler "|Statistics|Specific demand-related cost per gas energy";
+    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost specification" annotation (Dialog(tab="General", group="Statistics"), choicesAllMatching=true);
+  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_gas_fuel=simCenter.Cfue_GasBoiler "Specific demand-related cost per gas energy" annotation (Dialog(tab="General", group="Statistics"));
 
   // _____________________________________________
   //
@@ -97,13 +97,12 @@ partial model PartialGasboiler "Full modulating gasboiler, partial model with sp
   //
   //                   Interfaces
   // _____________________________________________
-  Modelica.Blocks.Interfaces.RealInput Q_flow_set(unit="W", value=Q_flow_set_internal) if (not holdTemperature) "Heat duty" annotation (Placement(transformation(extent={{-136,76},{-112,100}}),
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set(value=Q_flow_set_internal) if (not holdTemperature) "Heat duty" annotation (Placement(transformation(extent={{-136,76},{-112,100}}),
         iconTransformation(extent={{-106,76},{-82,100}})));
-  Modelica.Blocks.Interfaces.RealInput T_supply_set(
-    unit="K",
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_supply_set(
     value=T_supply_set_internal,
     min=273.15) if fixedSupplyTemperature "Supply temperature set value" annotation (Placement(transformation(extent={{-136,38},{-112,62}}), iconTransformation(extent={{-106,38},{-82,62}})));
-  Modelica.Blocks.Interfaces.RealOutput m_flow_HC_req(unit="kg/s", value=
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_HC_req(value=
        m_flow_HC_req_internal) if fixedSupplyTemperature and (not holdTemperature) "Required heat carrier mass flow -> Usage not recommended, may lead to numerical instability!"  annotation (Placement(transformation(
         extent={{12,-12},{-12,12}},
         rotation=90,
@@ -298,7 +297,13 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>waterPortIn: fluidPortIn</p>
+<p>waterPorOut: fluidPortOut</p>
+<p>Q_flow_set: heat flow rate in [W]</p>
+<p>gasPortIn: inlet for ideal gas</p>
+<p>gasPortOut: outlet for ideal gas</p>
+<p>T_supply_set: input for supply temperature in [K]</p>
+<p>m_flow_HC_rec: output for mass flow rate in [kg/s] (Required heat carrier mass flow -&gt; Usage not recommended, may lead to numerical instability!)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

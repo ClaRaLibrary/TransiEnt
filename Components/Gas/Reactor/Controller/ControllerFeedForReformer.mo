@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Reactor.Controller;
 model ControllerFeedForReformer "Controller to control the feed mass flow rate for the steam methane reformer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -72,14 +72,12 @@ model ControllerFeedForReformer "Controller to control the feed mass flow rate f
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput m_flow_set_H2(final quantity="MassFlowRate", final unit="kg/s") "Desired hydrogen mass flow rate" annotation (Placement(transformation(extent={{128,-70},{88,-30}}), iconTransformation(extent={{108,-50},{88,-30}})));
-  Modelica.Blocks.Interfaces.RealInput m_flow_H2(
-    final quantity="MassFlowRate",
-    final unit="kg/s") "Actual hydrogen mass flow rate" annotation (Placement(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_set_H2 "Desired hydrogen mass flow rate" annotation (Placement(transformation(extent={{128,-70},{88,-30}}), iconTransformation(extent={{108,-50},{88,-30}})));
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_H2 "Actual hydrogen mass flow rate" annotation (Placement(
         transformation(extent={{128,10},{88,50}}), iconTransformation(extent={{108,
             30},{88,50}})));
 
-  Modelica.Blocks.Interfaces.RealOutput m_flow_feed(final quantity="MassFlowRate", final unit="kg/s") "Feed mass flow rate" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_feed "Feed mass flow rate" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,-100})));
@@ -89,7 +87,7 @@ model ControllerFeedForReformer "Controller to control the feed mass flow rate f
   //           Instances of other Classes
   // _____________________________________________
 
-  ClaRa.Components.Utilities.Blocks.LimPID limPID(
+  TransiEnt.Basics.Blocks.LimPID limPID(
     k=k,
     controllerType=controllerType,
     y_start=y_start,
@@ -125,30 +123,32 @@ equation
   connect(limPID.u_m, m_flow_H2) annotation (Line(points={{39.9,-38},{40,-38},{40,-26},{40,30},{108,30}},
                                                                                                         color={0,0,127}));
   connect(limPID.y, m_flow_feed) annotation (Line(points={{29,-50},{0,-50},{0,-100}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})),                                                                     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),                                                                     Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This is a controller to control the feed mass flow rate for the steam methane reformer to produce a given hydrogen mass flow rate. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The mass flow rate of the hydrogen at the system outlet is compared to the target value. The feed is controlled using a P, PI, PD or PID controller. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
-<p>m_flow_H2: Measured hydrogen mass flow rate </p>
-<p>m_flow_set_H2: Targeted hydrogen mass flow rate </p>
-<p>m_flow_feed: output for the feed mass flow rate (positive sign) </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>m_flow_H2: Measured hydrogen mass flow rate in [kg/s]</p>
+<p>m_flow_set_H2: Targeted hydrogen mass flow rate in [kg/s]</p>
+<p>m_flow_feed: output for the feed mass flow rate (positive sign) in [kg/s]</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
-<p>Model modified by Carsten Bode (c.bode@tuhh.de) on Mon Apr 03 2017 (exchanged P controller for ClaRa LimPID controller)<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
+<p>Model modified by Carsten Bode (c.bode@tuhh.de) on Mon Apr 03 2017 (exchanged P controller for ClaRa LimPID controller)</p>
 </html>"));
 end ControllerFeedForReformer;

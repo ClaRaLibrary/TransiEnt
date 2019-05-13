@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as inputs"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,6 +37,7 @@ model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as input
   parameter TILMedia.GasTypes.BaseGas gasModel "Medium in the component" annotation (choices(choice=simCenter.gasModel2 "gasModel 2 (simCenter_TransiEnt)",
                                                   choice=simCenter.exhaustGasModel "exhaustGasModel (simCenter_TransiEnt)"),
                                                      Dialog(group="Fundamental Definitions"));
+  parameter Boolean calculateMass=false "true if mass in boundary shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
 
   parameter Boolean variable_p=false "True, if mass flow defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
   parameter Boolean variable_T=false "True, if temperature defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
@@ -56,7 +57,8 @@ model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as input
   //          Variables
   // _____________________________________________
 
-  Modelica.SIunits.Mass m(start=0, stateSelect=StateSelect.never);
+  Modelica.SIunits.Mass m(start=0, stateSelect=StateSelect.never)
+                                                                 annotation (Dialog(group="Initialization", showStartAttribute=true));
 protected
   SI.AbsolutePressure p_in;
   SI.Temperature T_in;
@@ -70,14 +72,14 @@ protected
 public
   TransiEnt.Basics.Interfaces.Gas.IdealGasEnthPortIn gasPort(Medium=gasModel) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Modelica.Blocks.Interfaces.RealInput p(value=p_in) if (variable_p) "Variable absolute pressure"
+  TransiEnt.Basics.Interfaces.General.PressureIn p(value=p_in) if (variable_p) "Variable absolute pressure"
     annotation (Placement(transformation(extent={{-120,40},{-80,80}}),
         iconTransformation(extent={{-140,40},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealInput T(value=T_in) if (variable_T) "Variable temperature"
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T(value=T_in) if (variable_T) "Variable temperature"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealInput xi[gasModel.nc - 1](value=xi_in) if
-       (variable_xi) "Variable composition"
+  TransiEnt.Basics.Interfaces.General.MassFractionIn xi[gasModel.nc - 1](value=xi_in) if
+       (variable_xi) "Variable mass composition"
     annotation (Placement(transformation(extent={{-120,-80},{-80,-40}}),
         iconTransformation(extent={{-140,-80},{-100,-40}})));
 
@@ -129,7 +131,11 @@ equation
   end if;
 
   //change of mass in boundary
-  der(m) = gasPort.m_flow;
+  if calculateMass then
+    der(m) = gasPort.m_flow;
+  else
+    m=0;
+  end if;
 
   //give values to gasPort
   gasPort.h_outflow=gas_pT.h;
@@ -140,7 +146,8 @@ equation
   end if;
   gasPort.xi_outflow=xi_in;
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -151,6 +158,10 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Gas</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">IdealGasEnthPortIn</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: pressure in Pa</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: mass fraction in kg/kg</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: temperature in K</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -158,7 +169,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

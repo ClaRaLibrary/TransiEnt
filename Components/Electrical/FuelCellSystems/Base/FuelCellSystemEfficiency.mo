@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.FuelCellSystems.Base;
 model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effiency of fuel cell system including steam reformer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,35 +36,34 @@ model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effie
 
   // ingoing energy streams
 
-  Modelica.Blocks.Interfaces.RealInput Q_flow_in_CH4 annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_in_CH4 "Input for CH4 heat flow rate" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-100,36})));
-  Modelica.Blocks.Interfaces.RealInput Q_flow_in_evaporator annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_in_evaporator "Input for heat flow rate of the evaporator" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-100,-4})));
-  Modelica.Blocks.Interfaces.RealInput Q_flow_in_preheater annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_in_preheater "Input for the heat flow rate of the preheater" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-100,-46})));
 
   // outgoing energy streams
 
-  Modelica.Blocks.Interfaces.RealInput Q_flow_out_exhaustGasChemical annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_out_exhaustGasChemical "Input for heat flow rate of the exhaust (GasChemical)"   annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={68,100})));
-
-  Modelica.Blocks.Interfaces.RealInput Q_flow_out_exhaustGasLatent annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_out_exhaustGasLatent "Input for heat flow rate of the exhaust (GasLatent)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={20,100})));
-  Modelica.Blocks.Interfaces.RealInput Q_flow_out_cooling annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_out_cooling "Input for heat flow rate of the cooling" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-22,100})));
-  Modelica.Blocks.Interfaces.RealInput P_el annotation (Placement(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el "Input for electric power" annotation (Placement(
         transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
@@ -79,9 +78,10 @@ model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effie
   Modelica.SIunits.Efficiency eta_el = if Q_flow_in_CH4 <= 0 then 0 else P_el/(Q_flow_in_CH4+Q_flow_in_evaporator+Q_flow_in_preheater);
   Modelica.SIunits.Efficiency eta_total = eta_th + eta_el;
   Modelica.SIunits.HeatFlowRate Q_gen_total = Q_flow_out_cooling+Q_flow_out_exhaustGasLatent+Q_flow_out_exhaustGasChemical;
-  Modelica.SIunits.HeatFlowRate P_gen_total = P_el;
+  Modelica.SIunits.Power P_gen_total = P_el;
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
                 Documentation(info="<html>
@@ -92,15 +92,25 @@ model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effie
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_in_CH4&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;CH4&nbsp;heat&nbsp;flow&nbsp;rate&quot;</span>&nbsp;;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_in_evaporator&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;evaporator&quot;</span>&nbsp;;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_in_preheater&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;the&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheater&quot;</span>&nbsp;;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_out_exhaustGasChemical&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasChemical)&quot;</span>&nbsp;&nbsp;;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_out_exhaustGasLatent&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasLatent)&quot;</span>;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_out_cooling&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;cooling&quot;</span>&nbsp;;</p>
+<p>TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn&nbsp;P_el&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;electric&nbsp;power&quot;</span>&nbsp;;</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no remarks)</p>
+<p>eta_th is the thermal efficiency</p>
+<p>eta_el is the electric efficiency</p>
+<p>eta_total is the total efficiency</p>
+<p>Q_gen_total is the total generated heat flow rate</p>
+<p>P_gen_total is the total generated power</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TransiEnt.Components.Electrical.FuelCellSystems.Check.TestFuelCellSystem_SOFC&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">[1] </span>Modellierung und Simulation von erdgasbetriebenen Brennstoffzellen-Blockheizkraftwerken zur Heimenergieversorgung</p>
 <p>Master thesis, Simon Weilbach (2014) </p>

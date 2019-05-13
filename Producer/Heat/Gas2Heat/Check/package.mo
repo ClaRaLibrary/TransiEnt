@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat;
 package Check
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,6 +19,6 @@ package Check
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
-  extends Basics.Icons.CheckPackage;
+  extends TransiEnt.Basics.Icons.CheckPackage;
 
 end Check;

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.SolarThermal.Base;
 model ExtraTerrestrialIrradiance "Calculates the extraterrestrial irradiance of the sun"
 
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,7 +38,7 @@ model ExtraTerrestrialIrradiance "Calculates the extraterrestrial irradiance of 
   constant SI.Irradiance solarConstant=1367;
 
   parameter SI.Angle latitude=SI.Conversions.from_deg(53.55) "latitude of the position, north posiive, 53,55 N for Hamburg";
-  parameter SI.Angle slope=SI.Conversions.from_deg(53.55) "slope of the tilted surface, Assumption";
+  parameter SI.Angle slope=SI.Conversions.from_deg(30) "slope of the tilted surface, Assumption";
   parameter SI.Angle surfaceAzimuthAngle=0 "Angle between the local meridian and the projection of the normal of the surface on a horizontal surface, west positive";
 
   // _____________________________________________
@@ -89,8 +89,10 @@ equation
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-LGhyLfIh.png\" alt=\"
   irradiance_extraterrestrial = cos(angle)*solarConstant*(1+0.033*cos(360*(day)/365.25))\"/></p>
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-j0cypZU6.png\" alt=\"  angle= angleOfSunIncidence.horizontal\"/></p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>Duffie/Beckman (2006): Solar Engineering of Thermal Processes</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

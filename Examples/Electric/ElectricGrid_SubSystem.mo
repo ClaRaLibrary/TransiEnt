@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Electric;
 model ElectricGrid_SubSystem "Example for sector coupling in TransiEnt library"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,13 +29,13 @@ model ElectricGrid_SubSystem "Example for sector coupling in TransiEnt library"
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp_scheduledProducers annotation (Placement(transformation(extent={{70,110},{90,130}}), iconTransformation(extent={{70,110},{90,130}})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp_electricityDemand annotation (Placement(transformation(extent={{-70,110},{-50,130}}), iconTransformation(extent={{-70,110},{-50,130}})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp_UCTE annotation (Placement(transformation(extent={{110,-11},{130,9}}), iconTransformation(extent={{110,-10},{130,10}})));
-  Modelica.Blocks.Interfaces.RealInput solarRadiation "Electric power setpoint" annotation (Placement(transformation(extent={{-134,30},{-114,50}}),  iconTransformation(extent={{-124,36},{-114,46}})));
-  Modelica.Blocks.Interfaces.RealInput windPower "Electric power setpoint" annotation (Placement(transformation(extent={{-134,-50},{-114,-30}}),  iconTransformation(extent={{-124,-44},{-114,-34}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn solarRadiation "Electric power setpoint" annotation (Placement(transformation(extent={{-134,30},{-114,50}}),  iconTransformation(extent={{-124,36},{-114,46}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn windPower "Electric power setpoint" annotation (Placement(transformation(extent={{-134,-50},{-114,-30}}),  iconTransformation(extent={{-124,-44},{-114,-34}})));
   parameter Modelica.SIunits.Power P_el_n_PV=simCenter.generationPark.P_el_n_PV "Installed nominal power of PV plants";
   parameter Modelica.SIunits.Power P_el_n_WindOn=simCenter.generationPark.P_el_n_WindOn "Installed nominal power of wind plants";
 equation
   connect(windProduction.epp, line.epp_1) annotation (Line(
-      points={{-39,-59.24},{0,-59.24},{0,0.8},{38.2,0.8}},
+      points={{-40,-56.3},{0,-56.3},{0,0.8},{38.2,0.8}},
       color={0,135,135},
       thickness=0.5));
   connect(line.epp_1, epp_electricityDemand) annotation (Line(
@@ -51,7 +51,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(pVPlant.epp, line.epp_1) annotation (Line(
-      points={{-39,22.76},{0,22.76},{0,0.8},{38.2,0.8}},
+      points={{-40,25.7},{0,25.7},{0,0.8},{38.2,0.8}},
       color={0,135,135},
       thickness=0.5));
   connect(solarRadiation, pVPlant.P_el_set) annotation (Line(points={{-124,40},{-124,40},{-61,40},{-61,31.79}},
@@ -99,7 +99,11 @@ Documentation(info="<html>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>epp_scheduledProducers: active power port</p>
+<p>epp_electricityDemand: active power port</p>
+<p>epp_UCTE: active power port</p>
+<p>solarRadiation: input for electric power setpoint in [W]</p>
+<p>windPower: input for electric power setpoint in [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Heat.HeatGridAnalysis;
 model OpenLoop_MassFlow_and_Pressure_Controlled
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -573,14 +573,15 @@ Control"),
           points={{-16,-8},{-16,0},{-120,0},{-120,-64}},
           color={255,128,0},
           pattern=LinePattern.Dash,
-          arrow={Arrow.Filled,Arrow.None})}),    Icon(coordinateSystem(extent={{-260,
+          arrow={Arrow.Filled,Arrow.None})}),    Icon(graphics,
+                                                      coordinateSystem(extent={{-260,
             -160},{180,180}}, preserveAspectRatio=false)),
     experiment(StopTime=3.1536e+007, Interval=900),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">This model illustrates possible applications of the library to model district heating grids. It shows a heat producing unit and the supply and return lines for distribution. The pump located at the heat production site is controlled based on pressure values as well as on mass-flow values. The pumps at the return line are pressure controlled. </span></p>
-<p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The model uses mainly components with level of detail of L2 and L4.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(does not apply)</span></p>
@@ -595,8 +596,8 @@ Control"),
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(does not apply)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p>BEECKEN, J., RIDDER, M., SCHAPER, H., SCH&Ouml;TTKER, P., MICUS, W., ROGALLA, B.-U. and FEUERRIEGEL, S. <i>Bessere Ausnutzung von Fernw&auml;rmeanlagen, Teilprojekt Hannover-Hamburg: Analyse des Regelverhaltens von Fernw&auml;rmenetzen</i> [online]. Hamburg&nbsp;: Hamburgische Electricit&auml;ts-Werke AG, 2000 [viewed&nbsp;20&nbsp;March&nbsp;2017]. Available from: https://www.tib.eu/de/suchen/download///?tx_tibsearch_search&percnt;5Bdocid&percnt;5D=TIBKAT&percnt;3A32977557X</p>
-<p>G&Auml;TH, J. <i>Dynamische Modellierung eines Fernw&auml;rmestranges unter Ber&uuml;cksichtigung der hydraulischen Betriebssicherheit</i>. TUHH, 2015.</p>
+<p>[1] BEECKEN, J., RIDDER, M., SCHAPER, H., SCH&Ouml;TTKER, P., MICUS, W., ROGALLA, B.-U. and FEUERRIEGEL, S. <i>Bessere Ausnutzung von Fernw&auml;rmeanlagen, Teilprojekt Hannover-Hamburg: Analyse des Regelverhaltens von Fernw&auml;rmenetzen</i> [online]. Hamburg&nbsp;: Hamburgische Electricit&auml;ts-Werke AG, 2000    [viewed&nbsp;20&nbsp;March&nbsp;2017]. Available from: https://www.tib.eu/de/suchen/download///?tx_tibsearch_search&percnt;5Bdocid&percnt;5D=TIBKAT&percnt;3A32977557X</p>
+<p>[2] G&Auml;TH, J. <i>Dynamische Modellierung eines Fernw&auml;rmestranges unter Ber&uuml;cksichtigung der hydraulischen Betriebssicherheit</i>. TUHH, 2015.</p>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p>Ricardo Peniche, 2017</p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Jakobus Gaeth, 2015</span></p>

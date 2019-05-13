@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups.Check;
 model TestSlewRateLimitedTurbineStep
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,8 @@ equation
   connect(slewRateLimited2StateTurbine.mpp, Grid.mpp) annotation (Line(points={{-11.78,-57.725},{13.09,-57.725},{13.09,-53},{34,-53}}, color={95,95,95}));
   connect(slewRateLimited2StateTurbine.P_target, ramp.y) annotation (Line(points={{-34.22,-38.375},{-74.6,-38.375},{-74.6,18}}, color={0,0,127}));
   connect(slewRateLimited2StateTurbine.P_spinning_set, ramp1.y) annotation (Line(points={{-26.08,-35.45},{-26.08,10},{12,10},{12,50},{-19,50}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           experiment(StopTime=7200),
     __Dymola_experimentSetupOutput);
 end TestSlewRateLimitedTurbineStep;

@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Check;
 model TestPowerPlantStatistics "Example of statistics of electric power plants"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,20 +40,22 @@ equation
       smooth=Smooth.None));
 
   connect(constantFrequency_L1_1.epp, conventional.epp) annotation (Line(
-      points={{89.9,-40.1},{64.95,-40.1},{64.95,11.24},{42.5,11.24}},
+      points={{90,-40},{64.95,-40},{64.95,15.3},{41,15.3}},
       color={0,0,0},
       smooth=Smooth.None));
 
   connect(constantFrequency_L1_1.epp, cogen.epp) annotation (Line(
-      points={{89.9,-40.1},{89.9,-79.05},{36.5,-79.05},{36.5,-88.76}},
+      points={{90,-40},{90,-79.05},{35,-79.05},{35,-84.7}},
       color={0,0,0},
       smooth=Smooth.None));
 
   connect(cogenTarget.y, cogen.P_el_set) annotation (Line(points={{-59,-94},{-52,-94},{-52,-86},{-50,-86},{-50,-62},{3.5,-62},{3.5,-76.29}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
     experiment(StopTime=7200),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-160},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-160},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

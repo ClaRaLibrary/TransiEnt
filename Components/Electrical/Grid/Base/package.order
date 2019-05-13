@@ -1,2 +1,4 @@
 PartialLine
 getLVCableData
+getMVCableData
+getHVCableData

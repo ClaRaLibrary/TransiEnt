@@ -1,7 +1,9 @@
 Check
 ControlPower
 PartloadEfficiency
+CCS
 PartialElectricPowerPlant
 PartialDispatchablePowerPlant
 PartialNaturalGasUnit
 IdealInverterPlant
+PartialCDEUnit

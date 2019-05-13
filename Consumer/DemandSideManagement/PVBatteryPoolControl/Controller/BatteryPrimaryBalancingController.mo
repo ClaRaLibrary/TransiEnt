@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller;
 model BatteryPrimaryBalancingController
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,14 +45,14 @@ model BatteryPrimaryBalancingController
   Producer.Electrical.Controllers.PrimaryBalancingControllerDeadband P_PBP_set(
     delta_pr=delta_pr,
     delta_f_db=delta_f_db,
-    P_nom=P_nom) annotation (Placement(transformation(extent={{-88,44},{-68,64}})));
+    P_n=P_n) annotation (Placement(transformation(extent={{-88,44},{-68,64}})));
   Modelica.Blocks.Math.Product P_el_PBP_set_star annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={44,12})));
-  Modelica.Blocks.Interfaces.RealInput P_el_pbp_band_set "Assigned primary balancing power bandwidth of unit (dtermined by pool controller)" annotation (Placement(transformation(extent={{-120,-100},{-80,-60}})));
-  Modelica.Blocks.Interfaces.RealInput delta_f "Connector of Real input signal" annotation (Placement(transformation(extent={{-120,60},{-80,100}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_pbp_set "Actual setpoint of frequency control" annotation (Placement(transformation(extent={{96,-38},{116,-18}}), iconTransformation(extent={{96,-38},{116,-18}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_pbp_band_set "Assigned primary balancing power bandwidth of unit (dtermined by pool controller)" annotation (Placement(transformation(extent={{-120,-100},{-80,-60}})));
+  TransiEnt.Basics.Interfaces.General.FrequencyIn delta_f "Connector of Real input signal" annotation (Placement(transformation(extent={{-120,60},{-80,100}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_pbp_set "Actual setpoint of frequency control" annotation (Placement(transformation(extent={{96,-38},{116,-18}}), iconTransformation(extent={{96,-38},{116,-18}})));
   Modelica.Blocks.Interfaces.RealInput SOC "Connector of Real input signal 2"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
   Modelica.Blocks.Logical.And loadRequestAndLowSOC annotation (Placement(transformation(extent={{-32,-1},{-18,13}})));
@@ -73,7 +73,7 @@ model BatteryPrimaryBalancingController
     strict=true) annotation (Placement(transformation(extent={{72,-38},{92,-18}})));
   Modelica.Blocks.Math.Gain gain(k=-1)
     annotation (Placement(transformation(extent={{44,-42},{56,-30}})));
-  parameter Real P_nom "Nominal power of primary control";
+  parameter Real P_n "Nominal power of primary control";
 equation
   // _____________________________________________
   //
@@ -122,8 +122,10 @@ equation
   connect(gain.y, P_PBP_limit_star.limit2) annotation (Line(points={{56.6,-36},{62,-36},{70,-36}}, color={0,0,127}));
   connect(P_el_pbp_band_set, gain.u) annotation (Line(points={{-100,-80},{-82,-80},{28,-80},{28,-36},{42.8,-36}}, color={0,0,127}));
   connect(P_PBP_limit_star.limit1, P_el_pbp_band_set) annotation (Line(points={{70,-20},{28,-20},{28,-80},{-100,-80}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                          Icon(coordinateSystem(extent={{-100,-100},{100,100}},
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                          Icon(graphics,
+                                               coordinateSystem(extent={{-100,-100},{100,100}},
                               preserveAspectRatio=false)),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -141,17 +143,17 @@ equation
 <p>see above</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>delta_f: Is the deviation of frequency of its nominal value in Hz</p>
-<p>P_el_pbp_band_set: <code><span style=\"color: #006400;\">A</span>ssigned primary balancing power bandwidth of unit (dtermined by pool controller) eqals maximum control power of unti</code></p>
+<p>P_el_pbp_band_set: <span style=\"font-family: Courier New; color: #006400;\">A</span>ssigned primary balancing power bandwidth of unit (dtermined by pool controller) eqals maximum control power of unti</p>
 <p>SOC: is the state of charge of the unit</p>
 <p>P_el_pbp_set: Is the resulting setpoint for the controlled unit (zero if frequency equals nominal frequency)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>See interfaces.</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
-<p>P_pbp = (f - f_nom) / f_nom / droop * P_pbp_max</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<p>P_pbp = (f - f_n) / f_n / droop * P_pbp_max</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller.Check.CheckBatteryPrimaryBalancingController&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

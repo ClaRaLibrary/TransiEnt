@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.Noise.Check;
 model TestUCTE_typicalGridErrors "Example of the component PowerPlant_PoutGrad_L1"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,10 +44,12 @@ equation
       points={{42,31},{19.95,31},{19.95,31},{0,31}},
       color={0,135,135},
       thickness=0.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=604800, Interval=60),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

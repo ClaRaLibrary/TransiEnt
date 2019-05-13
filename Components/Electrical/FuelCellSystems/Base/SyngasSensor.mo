@@ -1,11 +1,11 @@
-within TransiEnt.Components.Electrical.FuelCellSystems.Base;
+﻿within TransiEnt.Components.Electrical.FuelCellSystems.Base;
 model SyngasSensor "Sensor measuring fuel cell performance (including a simple gas burner model for burning of remainding H2 in flue gas)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -66,7 +66,7 @@ model SyngasSensor "Sensor measuring fuel cell performance (including a simple g
     T=T_ambient,
     xi={0.001,0.7},
     gasType = Air,
-    p=100000)      "Hier wird feuchte Luft verwendet, die aus N H2O und O besteht, deshalb kann die Komponente O hieraus verwendet werden!"
+    p=100000)      "Moist air is used which consists of N2, H2O and O2. This is why the component O2 can be used from it!"
     annotation (Placement(transformation(extent={{-32,62},{-8,92}})));
 
     TILMedia.Gas_pT Syngas_InputCondition(
@@ -87,13 +87,13 @@ model SyngasSensor "Sensor measuring fuel cell performance (including a simple g
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.HeatFlowRate Q_flow_in_CH4;
-  Modelica.SIunits.HeatFlowRate Q_flow_exhaustGasChemical;
-  Modelica.SIunits.HeatFlowRate Q_flow_in_evaporator;
-  Modelica.SIunits.HeatFlowRate Q_flow_exhaustGasLatent;
-  Modelica.SIunits.HeatFlowRate Q_flow_in_preheater;
-  Modelica.SIunits.HeatFlowRate Q_flow_in_CH4_preheat;
-  Modelica.SIunits.HeatFlowRate Q_flow_in_air_preheat;
+  Modelica.SIunits.HeatFlowRate Q_flow_in_CH4  "CH4 heat flow rate";
+  Modelica.SIunits.HeatFlowRate Q_flow_exhaustGasChemical "Heat flow rate of the exhaust (GasChemical)";
+  Modelica.SIunits.HeatFlowRate Q_flow_in_evaporator "Heat flow rate of the evaporator";
+  Modelica.SIunits.HeatFlowRate Q_flow_exhaustGasLatent "Heat flow rate of the exhaust (GasLatent)";
+  Modelica.SIunits.HeatFlowRate Q_flow_in_preheater "Heat flow rate of the preheater";
+  Modelica.SIunits.HeatFlowRate Q_flow_in_CH4_preheat "Heat flow rate of the preheated CH4";
+  Modelica.SIunits.HeatFlowRate Q_flow_in_air_preheat "Heat flow rate of the preheated air";
 equation
   // _____________________________________________
   //
@@ -101,12 +101,12 @@ equation
   // _____________________________________________
 
     -Q_flow_in_CH4 = -gasPortIn.m_flow*Syngas_InputCondition.xi[1]*H_UCH4;
-    -Q_flow_exhaustGasLatent = gasPortIn.m_flow*Syngas_InputCondition.cp*(T_ambient+55 - Syngas_InputCondition.T) "Wrmeleistung gegenber Referenzbedingung";
-    -Q_flow_in_evaporator = gasPortIn.m_flow*Syngas_InputCondition.xi[4] *( 104.93 - 3488.7)   * 1000 "Verdampfungswrmeleistung um das Wasser zu Verdampfen und auf 500C zu bringen, Werte gasPortOut dem VDI-Wrmeatlas";
-    -Q_flow_in_air_preheat = gasPortIn.m_flow*Syngas_InputCondition.xi[2]*Air_AmbientCondition.cp*( Air_AmbientCondition.T - inStream(gasPortIn.T_outflow))  /eta_preheater "Wrmeleistung um die Luft vorzuwrmen";
-    -Q_flow_in_CH4_preheat = gasPortIn.m_flow*Syngas_InputCondition.xi[1]*2210*( Air_AmbientCondition.T - inStream(gasPortIn.T_outflow))  /eta_preheater "Wrmeleistung um CH4 vorzuwrmen";
+    -Q_flow_exhaustGasLatent = gasPortIn.m_flow*Syngas_InputCondition.cp*(T_ambient+55 - Syngas_InputCondition.T) "Heating power relative to the reference condition";
+    -Q_flow_in_evaporator = gasPortIn.m_flow*Syngas_InputCondition.xi[4] *( 104.93 - 3488.7)   * 1000 "Heating power to evaporate the water and heat it to 500 °C, values from the VDI-Waermeatlas";
+    -Q_flow_in_air_preheat = gasPortIn.m_flow*Syngas_InputCondition.xi[2]*Air_AmbientCondition.cp*( Air_AmbientCondition.T - inStream(gasPortIn.T_outflow))  /eta_preheater "Heating power for preheating the air";
+    -Q_flow_in_CH4_preheat = gasPortIn.m_flow*Syngas_InputCondition.xi[1]*2210*( Air_AmbientCondition.T - inStream(gasPortIn.T_outflow))  /eta_preheater "Heating power for preheating the CH4";
     Q_flow_in_preheater = Q_flow_in_air_preheat+ Q_flow_in_CH4_preheat;
-    -Q_flow_exhaustGasChemical = -gasPortIn.m_flow*Syngas_InputCondition.xi[5]*H_UH2 "Wrmeleistung um die Luft vorzuwrmen";
+    -Q_flow_exhaustGasChemical = -gasPortIn.m_flow*Syngas_InputCondition.xi[5]*H_UH2 "Heating power for preheating the air";
 
       // impulse equation
       gasPortIn.p = gasPortOut.p;
@@ -114,7 +114,7 @@ equation
       // mass balance (total mass)
       gasPortIn.m_flow + gasPortOut.m_flow = 0;
 
-      // enthalpy (kgasPortIne Wrmebergange (dynamisch) zwischen Reformer und Gas betrachtet"
+      // enthalpy (considered no dynamic heat transfers between reformer and gas"
      gasPortOut.T_outflow = inStream(gasPortIn.T_outflow);
      gasPortIn.T_outflow = Syngas_InputCondition.T;
 
@@ -123,7 +123,8 @@ equation
       gasPortOut.xi_outflow = Syngas_InputCondition.xi;
 
     annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}), graphics), Icon(coordinateSystem(
+            -100},{100,100}}), graphics), Icon(graphics,
+                                               coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -133,9 +134,16 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortIn&nbsp;gasPortIn(Medium=Syngas)</p>
+<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortOut&nbsp;gasPortOut(Medium=Syngas)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no remarks)</p>
+<p>Q_flow_in_CH4&nbsp;<span style=\"color: #006400;\">&nbsp;&quot;CH4&nbsp;heat&nbsp;flow&nbsp;rate&quot;</span></p>
+<p>Q_flow_exhaustGasChemical&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasChemical)&quot;</span></p>
+<p>Q_flow_in_evaporator&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;evaporator&quot;</span></p>
+<p>Q_flow_exhaustGasLatent&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasLatent)&quot;</span></p>
+<p>Q_flow_in_preheater&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheater&quot;</span>;</p>
+<p>Q_flow_in_CH4_preheat&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheated&nbsp;CH4&quot;</span></p>
+<p>Q_flow_in_air_preheat&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheated&nbsp;air&quot;</span></p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Combined.SmallScaleCHP.Base;
 partial model PartialCHP "Model consisting of replaceable engine and generator and control interface"
 
-//________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+  //________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,38 +36,55 @@ partial model PartialCHP "Model consisting of replaceable engine and generator a
   // _____________________________________________
 
   //Media models
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid WaterMedium=simCenter.fluid1 "|Fundamental|Medium in coolant and heating grid cycles" annotation(choicesAllMatching);
-  parameter TILMedia.GasTypes.BaseGas FuelMedium=simCenter.gasModel2 "|Fundamental|Fuel medium" annotation(choicesAllMatching);
-  parameter TILMedia.GasTypes.BaseGas ExhaustMedium=simCenter.exhaustGasModel "|Fundamental|Exhaust medium" annotation(choicesAllMatching);
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid WaterMedium=simCenter.fluid1 "Medium in coolant and heating grid cycles" annotation (Dialog(tab="General", group="Fundamental"), choices(choicesAllMatching));
+  parameter TILMedia.GasTypes.BaseGas FuelMedium=simCenter.gasModel2 "Fuel medium" annotation (Dialog(tab="General", group="Fundamental"), choices(choicesAllMatching));
+  parameter TILMedia.GasTypes.BaseGas ExhaustMedium=simCenter.exhaustGasModel "Exhaust medium" annotation (Dialog(tab="General", group="Fundamental"), choices(choicesAllMatching));
 
   //Specification
-  replaceable TransiEnt.Producer.Combined.SmallScaleCHP.Specifications.Dachs_HKA_G_5_5kW Specification constrainedby TransiEnt.Producer.Combined.SmallScaleCHP.Base.BaseCHPSpecification "|Specification|Record containing technical data of CHP" annotation (choicesAllMatching=true);
-  replaceable model Motorblock = TransiEnt.Components.Gas.Engines.Engine_idealGas constrainedby TransiEnt.Components.Gas.Engines.Base.PartialEngine_idealGas "|Specification|Engine model containing mechanic, thermal, and combustion model" annotation(choicesAllMatching=true);
-  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator generator constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "|Specification|Electric generator model" annotation (choicesAllMatching, Placement(transformation(extent={{50,-18},{76,7}})));
-  replaceable function EfficiencyFunction = TransiEnt.Basics.Functions.efficiency_linear constrainedby TransiEnt.Basics.Functions.efficiency_base "|Specification|Efficiency function" annotation (choicesAllMatching=true);
 
-  parameter SI.Temperature T_site=290 "|Specification|Average ambient temperature at plant site";
-  parameter SI.PressureDifference Delta_p_nom=1e5 "|Specification|Nominal pressure drop in heat flow model";
-  parameter SI.MassFlowRate m_flow_nom=motorblock.heatFlowModel.simCenter.m_flow_nom "|Specification|Nominal mass flow rate in heat flow model";
+  replaceable TransiEnt.Producer.Combined.SmallScaleCHP.Specifications.Dachs_HKA_G_5_5kW Specification constrainedby TransiEnt.Producer.Combined.SmallScaleCHP.Base.BaseCHPSpecification "Record containing technical data of CHP" annotation (Dialog(tab="General", group="Specification"), choices(choicesAllMatching=true));
+
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (
+    Dialog(tab="General", group="Replaceable Components"),
+    choicesAllMatching=true,
+    Placement(transformation(extent={{87,-19},{113,7}}), iconTransformation(extent={{90,-50},{110,-30}})));
+
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator generator constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "Choice of generator model. The generator model must match the power port." annotation (
+    Dialog(tab="General", group="Replaceable Components"),
+    choicesAllMatching=true,
+    Placement(transformation(extent={{50,-18},{76,7}})));
+  replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem "Choice of excitation system model with voltage control" annotation (
+    Dialog(tab="General", group="Replaceable Components"),
+    choicesAllMatching=true,
+    Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={62.5,30})));
+
+  replaceable model Motorblock = TransiEnt.Components.Gas.Engines.Engine_idealGas constrainedby TransiEnt.Components.Gas.Engines.Base.PartialEngine_idealGas "Engine model containing mechanic, thermal, and combustion model" annotation (Dialog(tab="General", group="Replaceable Components"), choicesAllMatching=true);
+  //replaceable function EfficiencyFunction = TransiEnt.Basics.Functions.efficiency_linear constrainedby TransiEnt.Basics.Functions.efficiency_base "Efficiency function" annotation (Dialog(tab="General", group="Fundamental"), choices(choicesAllMatching=true));
+
+  parameter SI.Temperature T_site=290 "Average ambient temperature at plant site" annotation (Dialog(tab="General", group="Specification"));
+  parameter SI.PressureDifference Delta_p_nom=1e5 "Nominal pressure drop in heat flow model" annotation (Dialog(tab="General", group="Specification"));
+  parameter SI.MassFlowRate m_flow_nom=motorblock.heatFlowModel.simCenter.m_flow_nom "Nominal mass flow rate in heat flow model" annotation (Dialog(tab="General", group="Specification"));
 
   //Combustion
-  parameter SI.SpecificEnthalpy NCV_const=40e6 "|Combustion|Constant value for net calorific value (set to 0 for medium dependent NCV calculation)";
-  parameter Real lambda=1 "|Combustion|Constant combustion air ratio";
+  parameter SI.SpecificEnthalpy NCV_const=40e6 "Constant value for net calorific value (set to 0 for medium dependent NCV calculation)" annotation (Dialog(tab="General", group="Combustion"));
+  parameter Real lambda=Specification.lambda "Constant combustion air ratio" annotation (Dialog(tab="General", group="Combustion"));
 
   //Statistics
-  final parameter TransiEnt.Basics.Types.TypeOfResource TypeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration "|Statistics|Type of resource";
-  parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier TypeOfEnergyCarrierElectricity=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas "|Statistics|Type of energy carrier";
-  parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat TypeOfEnergyCarrierHeat=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas "|Statistics|Type of energy carrier";
-  replaceable function AllocationMethod =
-       TransiEnt.Components.Statistics.Functions.CO2Allocation.AllocationMethod_Efficiencies
-    constrainedby TransiEnt.Components.Statistics.Functions.CO2Allocation.Basics.BasicAllocationMethod "|Statistics|Allocation method for CO2 emissions" annotation(Dialog(group="Statistics"),choicesAllMatching=true);
-  replaceable model CostRecordCHP = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.CHP_532kW
-    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "|Statistics|Cost specification" annotation (choicesAllMatching=true);
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_gas_fuel=simCenter.Cfue_GasBoiler "|Statistics|Specific demand-related cost per gas energy";
+  final parameter TransiEnt.Basics.Types.TypeOfResource TypeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration "Type of resource" annotation (Dialog(tab="General", group="Statistics"));
+  parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier TypeOfEnergyCarrierElectricity=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas "Type of energy carrier" annotation (Dialog(tab="General", group="Statistics"));
+  parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat TypeOfEnergyCarrierHeat=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas "Type of energy carrier" annotation (Dialog(tab="General", group="Statistics"));
+  replaceable function AllocationMethod = TransiEnt.Components.Statistics.Functions.CO2Allocation.AllocationMethod_Efficiencies constrainedby TransiEnt.Components.Statistics.Functions.CO2Allocation.Basics.BasicAllocationMethod "Allocation method for CO2 emissions" annotation (Dialog(tab="General", group="Statistics"), choicesAllMatching=true);
+  replaceable model CostRecordCHP = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.CHP_532kW constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost specification" annotation (Dialog(tab="General", group="Statistics"), choicesAllMatching=true);
+  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_gas_fuel=simCenter.Cfue_GasBoiler "Specific demand-related cost per gas energy" annotation (Dialog(tab="General", group="Statistics"));
 
-   //Initialization
-  parameter Modelica.SIunits.Temperature T_init=293.15 "|Initialization||Initial temperature of medium in heat exchangers";
-  parameter Modelica.SIunits.Pressure p_init=6e5 "|Initialization||Initial pressure of medium in heat exchangers";
+  //Initialization
+  parameter Modelica.SIunits.Temperature T_init=293.15 "Initial temperature of medium in heat exchangers" annotation (Dialog(tab="Initialization"));
+  parameter Modelica.SIunits.Pressure p_init=6e5 "Initial pressure of medium in heat exchangers" annotation (Dialog(tab="Initialization"));
+
+//parameter TransiEnt.Producer.Combined.SmallScaleCHP.Base.PartloadEfficiency.PartloadEfficiencyCharacteristic EfficiencyCharLine=TransiEnt.Producer.Combined.SmallScaleCHP.Base.PartloadEfficiency.ConstantEfficiency() "choose characteristic efficiency line" annotation(Dialog(tab="General", group="Specification"), choicesAllMatching=true);
 
   // _____________________________________________
   //
@@ -77,8 +94,8 @@ protected
   Modelica.SIunits.Frequency f=epp.f "Actual grid frequency";
 
 public
-  SI.Efficiency eta_el = motorblock.mechanicModel.eta_el "Electric efficiency";
-  SI.Efficiency eta_th = motorblock.mechanicModel.eta_h - motorblock.mechanicModel.eta_el "Thermal efficiency";
+  SI.Efficiency eta_el=motorblock.mechanicModel.eta_el "Electric efficiency";
+  SI.Efficiency eta_th=motorblock.mechanicModel.eta_h - motorblock.mechanicModel.eta_el "Thermal efficiency";
 
   SI.Power P_el_out=epp.P "Total generated electric power";
   SI.Power P_el_set_intern=-P_el_set_intern "Set electric power";
@@ -91,8 +108,8 @@ public
   TransiEnt.Basics.Units.MassOfCDEperEnergy[2] m_CDE "Mass of CO2 equivalents per J fuel input [electrical, thermal]";
   TransiEnt.Basics.Units.MassOfCDEperEnergy m_spec_CDE "Total mass of CO2 equivalents per J fuel input";
 
-  SI.Temperature T_supply_intern = supplyTemperatureSensor.T "Supply temperature";
-  SI.Temperature T_return_intern = returnTemperatureSensor.T "Supply temperature";
+  SI.Temperature T_supply_intern=supplyTemperatureSensor.T "Supply temperature";
+  SI.Temperature T_return_intern=returnTemperatureSensor.T "Supply temperature";
 
   // _____________________________________________
   //
@@ -100,15 +117,15 @@ public
   // _____________________________________________
   //For controlBus
 protected
-  Modelica.Blocks.Interfaces.RealInput P_el_set(final quantity="Power",displayUnit="W", final unit="W") "Set electric power" annotation (Placement(transformation(extent={{-84,17},{-64,37}})));
-  Modelica.Blocks.Interfaces.RealOutput T_return(final quantity="Temperature",displayUnit="degC",final unit="K") "Return temperature" annotation (Placement(transformation(extent={{-64,-58},{-84,-38}})));
-  Modelica.Blocks.Interfaces.RealOutput T_supply(final quantity="Temperature",displayUnit="degC",final unit="K") "Supply temperature" annotation (Placement(transformation(extent={{-64,-43},{-84,-23}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set "Set electric power" annotation (Placement(transformation(extent={{-84,17},{-64,37}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_return "Return temperature" annotation (Placement(transformation(extent={{-64,-58},{-84,-38}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_supply "Supply temperature" annotation (Placement(transformation(extent={{-64,-43},{-84,-23}})));
   Modelica.Blocks.Interfaces.BooleanInput switch annotation (Placement(transformation(extent={{-84,-5},{-64,16}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_pump_set annotation (Placement(transformation(extent={{-84,-74},{-64,-54}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_pump_set annotation (Placement(transformation(extent={{-84,-74},{-64,-54}})));
 
 public
   TransiEnt.Producer.Combined.SmallScaleCHP.Base.ControlBus controlBus annotation (Placement(transformation(extent={{-110,-10},{-90,10}}), iconTransformation(extent={{-112,8},{-88,32}})));
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{87,-19},{113,7}}), iconTransformation(extent={{90,-50},{110,-30}})));
+
   TransiEnt.Basics.Interfaces.Gas.IdealGasEnthPortIn gasPortIn(Medium=FuelMedium) annotation (Placement(transformation(extent={{-109,36},{-91,53}}), iconTransformation(extent={{-111,33},{-91,53}})));
   TransiEnt.Basics.Interfaces.Gas.IdealGasEnthPortOut gasPortOut(Medium=ExhaustMedium) annotation (Placement(transformation(extent={{-109,75},{-91,93}}), iconTransformation(extent={{-110,70},{-90,90}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortOut waterPortOut(Medium=WaterMedium) annotation (Placement(transformation(extent={{90,-60},{110,-40}}), iconTransformation(extent={{90,85},{110,105}})));
@@ -133,7 +150,7 @@ public
     produces_H_flow=false,
     produces_other_flow=false,
     consumes_other_flow=false,
-    consumes_m_flow_CDE=false)                         annotation (Placement(transformation(extent={{-20,-100},{0,-80}})));
+    consumes_m_flow_CDE=false) annotation (Placement(transformation(extent={{-20,-100},{0,-80}})));
 
   // _____________________________________________
   //
@@ -147,7 +164,8 @@ public
     Delta_p_nom=Delta_p_nom,
     m_flow_nom=m_flow_nom,
     T_init=T_init,
-    p_init=p_init)       annotation (Placement(transformation(extent={{-46,-16},{38,70}})));
+    p_init=p_init)                         annotation (Placement(transformation(extent={{-46,-16},{38,70}})));
+
 protected
   ClaRa.Components.Sensors.SensorVLE_L1_T returnTemperatureSensor(medium=WaterMedium) annotation (Placement(transformation(extent={{-6,-55},{-21,-40}})));
   ClaRa.Components.Sensors.SensorVLE_L1_T supplyTemperatureSensor(medium=WaterMedium) annotation (Placement(transformation(extent={{29,-40},{15,-26}})));
@@ -158,20 +176,23 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  Q_flow_out =waterPortOut.m_flow*(actualStream(waterPortOut.h_outflow) - actualStream(waterPortIn.h_outflow));
+  Q_flow_out = waterPortOut.m_flow*(actualStream(waterPortOut.h_outflow) - actualStream(waterPortIn.h_outflow));
 
-   // Statistics
-   // Allocation of CO2-Emissions
-   m_spec_CDE =m_flow_CDE/(max((gasPortIn.m_flow), 0.0000001)*motorblock.NCV)*1e6;
-   m_CDE = AllocationMethod(m_flow_spec= m_spec_CDE, eta_el= eta_el, eta_th= eta_th);
+  // Statistics
+  // Allocation of CO2-Emissions
+  m_spec_CDE = m_flow_CDE/(max((gasPortIn.m_flow), 0.0000001)*motorblock.NCV)*1e6;
+  m_CDE = AllocationMethod(
+    m_flow_spec=m_spec_CDE,
+    eta_el=eta_el,
+    eta_th=eta_th);
 
-   //write CDE emissions to collectors
-   collectGwpEmissionsElectrical.gwpCollector.m_flow_cde =m_CDE[1]*gasPortIn.m_flow*motorblock.NCV/1e6;
-   collectGwpEmissionsHeat.gwpCollector.m_flow_cde =m_CDE[2]*gasPortIn.m_flow*motorblock.NCV/1e6;
+  //write CDE emissions to collectors
+  collectGwpEmissionsElectrical.gwpCollector.m_flow_cde = m_CDE[1]*gasPortIn.m_flow*motorblock.NCV/1e6;
+  collectGwpEmissionsHeat.gwpCollector.m_flow_cde = m_CDE[2]*gasPortIn.m_flow*motorblock.NCV/1e6;
 
-   //write energy flow rates
-   collectHeatingPower.heatFlowCollector.Q_flow = Q_flow_out;
-   collectElectricPower.powerCollector.P = P_el_out;
+  //write energy flow rates
+  collectHeatingPower.heatFlowCollector.Q_flow = Q_flow_out;
+  collectElectricPower.powerCollector.P = P_el_out;
 
   // _____________________________________________
   //
@@ -193,10 +214,10 @@ equation
   // _____________________________________________
 
   // Model statistics
-  connect(modelStatistics.heatFlowCollector[TypeOfResource],collectHeatingPower.heatFlowCollector);
-  connect(modelStatistics.powerCollector[TypeOfResource],collectElectricPower.powerCollector);
-  connect(modelStatistics.gwpCollector[TypeOfEnergyCarrierElectricity],collectGwpEmissionsElectrical.gwpCollector);
-  connect(modelStatistics.gwpCollectorHeat[TypeOfEnergyCarrierHeat],collectGwpEmissionsHeat.gwpCollector);
+  connect(modelStatistics.heatFlowCollector[TypeOfResource], collectHeatingPower.heatFlowCollector);
+  connect(modelStatistics.powerCollector[TypeOfResource], collectElectricPower.powerCollector);
+  connect(modelStatistics.gwpCollector[TypeOfEnergyCarrierElectricity], collectGwpEmissionsElectrical.gwpCollector);
+  connect(modelStatistics.gwpCollectorHeat[TypeOfEnergyCarrierHeat], collectGwpEmissionsHeat.gwpCollector);
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
 
   // Physical connections
@@ -205,8 +226,8 @@ equation
       color={255,255,0},
       thickness=0.75,
       smooth=Smooth.None));
-  connect(P_el_set, motorblock.P_el_set) annotation (Line(points={{-74,27},{-61,27},{-45.16,27}},          color={0,0,127}));
-  connect(switch, motorblock.switch) annotation (Line(points={{-74,5.5},{-60,5.5},{-45.16,5.5}},           color={255,0,255}));
+  connect(P_el_set, motorblock.P_el_set) annotation (Line(points={{-74,27},{-61,27},{-45.16,27}}, color={0,0,127}));
+  connect(switch, motorblock.switch) annotation (Line(points={{-74,5.5},{-60,5.5},{-45.16,5.5}}, color={255,0,255}));
   connect(gasPortIn, motorblock.gasPortIn) annotation (Line(
       points={{-100,44.5},{-74,44.5},{-74,44.2},{-46,44.2}},
       color={255,213,170},
@@ -215,7 +236,7 @@ equation
       points={{-100,84},{-74,84},{-46,84},{-46,65.7}},
       color={255,213,170},
       thickness=1.25));
-  connect(motorblock.mpp, generator.mpp) annotation (Line(points={{38,-6.11},{44,-6.11},{44,-6.125},{49.35,-6.125}}, color={95,95,95}));
+  connect(motorblock.mpp, generator.mpp) annotation (Line(points={{38,-6.11},{44,-6.11},{44,-5.5},{50,-5.5}}, color={95,95,95}));
   connect(generator.epp, epp) annotation (Line(
       points={{76.13,-5.625},{83.065,-5.625},{83.065,-6},{100,-6}},
       color={0,135,135},
@@ -238,13 +259,16 @@ equation
       color={0,131,169},
       thickness=0.5,
       smooth=Smooth.None));
+  connect(Exciter.y, generator.E_input) annotation (Line(points={{62.5,19.4},{62.5,17.7},{62.61,17.7},{62.61,6.875}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{62.5,40},{62,40},{62,52},{100,52},{100,-6}},
+      color={0,135,135},
+      thickness=0.5));
   annotation (
     Dialog(group="Characteristics"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
-            100,100}}),
-        graphics),
-          Documentation(info="<html>
+    Diagram(graphics, coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Partial model of a configureable CHP with internal combustion engine.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
@@ -252,7 +276,16 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set - Electric Power setpoint</span></p>
+<p>T_return - Heating Water Return&nbsp;temperature </p>
+<p>T_supply - Heating Water Supply&nbsp;temperature</p>
+<p>switch</p>
+<p>P_el_pump_set&nbsp;- Electric Pump Power setpoint</p>
+<p>epp - Electric Power Port, type can be chosen</p>
+<p>gasPortIn - Fuel Gas Input Port</p>
+<p>gasPortOut - Fuel Gas Output Port</p>
+<p>waterPortOut - Heating Water Output</p>
+<p>waterPortIn - Heating Water Input</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -266,5 +299,7 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Arne Koeppen (arne.koeppen@tuhh.de), Jun 2013</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Aug 2013</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Edited by Anne Senkel (anne.senkel@tuhh.de), Feb 2019</span></p>
 </html>"));
 end PartialCHP;

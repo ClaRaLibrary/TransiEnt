@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Hamburg;
 model ElectricGrid "Example of an electric grid with several generators, frequency control and economic dispatch models"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,14 +36,14 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
     P_max_star=1,
     isPrimaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.BCG],
+    P_init_set=UC.P_init[UC.schedule.BCG],
     isSecondaryControlActive=true) annotation (Placement(transformation(extent={{-99,-17},{-59,21}})));
   TransiEnt.Producer.Electrical.Conventional.Gasturbine Gasturbine2(
     isPrimaryControlActive=false,
     isSecondaryControlActive=true,
     t_startup=0,
     P_el_n=simCenter.generationPark.P_el_n_GT2,
-    P_init=UC.P_init[UC.schedule.GT2]) annotation (Placement(transformation(extent={{-27,-127},{13,-89}})));
+    P_init_set=UC.P_init[UC.schedule.GT2]) annotation (Placement(transformation(extent={{-27,-127},{13,-89}})));
   TransiEnt.Grid.Electrical.LumpedPowerGrid.LumpedGrid UCTE(
     T_r=150,
     lambda_sec=simCenter.P_n_ref_2/(simCenter.P_n_ref_1 + simCenter.P_n_ref_2)*3e9/0.2,
@@ -57,7 +57,7 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
   TransiEnt.Producer.Electrical.Conventional.Garbage GAR(
     isPrimaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.GAR],
+    P_init_set=UC.P_init[UC.schedule.GAR],
     isSecondaryControlActive=true) "Garbage" annotation (Placement(transformation(extent={{21,-17},{61,21}})));
 
   TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC(
@@ -73,11 +73,11 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
   TransiEnt.Producer.Electrical.Conventional.CCP CCP(
     isSecondaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.CCP]) annotation (Placement(transformation(extent={{-173,-125},{-133,-87}})));
+    P_init_set=UC.P_init[UC.schedule.CCP]) annotation (Placement(transformation(extent={{-173,-125},{-133,-87}})));
   TransiEnt.Producer.Electrical.Conventional.Oil OIL(
     isPrimaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.OIL],
+    P_init_set=UC.P_init[UC.schedule.OIL],
     isSecondaryControlActive=true) "Mineral oil" annotation (Placement(transformation(extent={{-39,-17},{1,21}})));
 
   TransiEnt.Producer.Electrical.Wind.PowerProfileWindPlant WindOnshorePlant(P_el_n=simCenter.generationPark.P_el_n_WindOn) annotation (Placement(transformation(extent={{-39,89},{1,127}})));
@@ -87,11 +87,11 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
     P_max_star=1,
     isPrimaryControlActive=false,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.BM],
+    P_init_set=UC.P_init[UC.schedule.BM],
     isSecondaryControlActive=true,
     isExternalSecondaryController=true) annotation (Placement(transformation(extent={{79,-17},{119,21}})));
 
-  TransiEnt.Producer.Electrical.Others.PumpedStoragePlant PumpedStorage(t_startup=60, P_init=-(UC.P_init[UC.schedule.PS] + UC.P_init[UC.schedule.PS_Pump])) annotation (Placement(transformation(extent={{135,-127},{175,-89}})));
+  TransiEnt.Producer.Electrical.Others.PumpedStoragePlant PumpedStorage(t_startup=60, P_init_set=-(UC.P_init[UC.schedule.PS] + UC.P_init[UC.schedule.PS_Pump])) annotation (Placement(transformation(extent={{135,-127},{175,-89}})));
   TransiEnt.Producer.Electrical.Others.IdealContinuousHydropowerPlant RunOfWaterPlant(P_el_n=simCenter.generationPark.P_el_n_ROH) annotation (Placement(transformation(extent={{81,89},{121,127}})));
 
   Modelica.Blocks.Sources.RealExpression P_set_BM(y=UC.schedule.y[UC.schedule.BM])
@@ -102,20 +102,20 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
   Modelica.Blocks.Sources.RealExpression P_set_PV(y=P_PV_is.y1 + e_pv_prediction.y)
                                                                                    annotation (Placement(transformation(extent={{10,122},{30,142}})));
   Modelica.Blocks.Sources.RealExpression P_set_ROH(y=UC.schedule.y[UC.schedule.ROH])  annotation (Placement(transformation(extent={{70,122},{90,142}})));
-  Modelica.Blocks.Sources.RealExpression P_set_BCG(y=-mod.y[UC.schedule.BCG])   annotation (Placement(transformation(extent={{-112,28},{-92,48}})));
-  Modelica.Blocks.Sources.RealExpression P_set_OIL(y=-mod.y[UC.schedule.OIL])         annotation (Placement(transformation(extent={{-54,28},{-34,48}})));
-  Modelica.Blocks.Sources.RealExpression P_set_GAR(y=-mod.y[UC.schedule.GAR])        annotation (Placement(transformation(extent={{6,28},{26,48}})));
+  Modelica.Blocks.Sources.RealExpression P_set_BCG(y=mod.y[UC.schedule.BCG])    annotation (Placement(transformation(extent={{-112,28},{-92,48}})));
+  Modelica.Blocks.Sources.RealExpression P_set_OIL(y=mod.y[UC.schedule.OIL])          annotation (Placement(transformation(extent={{-54,28},{-34,48}})));
+  Modelica.Blocks.Sources.RealExpression P_set_GAR(y=mod.y[UC.schedule.GAR])         annotation (Placement(transformation(extent={{6,28},{26,48}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_CCP(y=aGC.P_sec_set[UC.schedule.CCP])
                                                            annotation (Placement(transformation(extent={{-202,-92},{-182,-72}})));
-  Modelica.Blocks.Sources.RealExpression P_set_CCP(y=-mod.y[UC.schedule.CCP])        annotation (Placement(transformation(extent={{-180,-80},{-160,-60}})));
+  Modelica.Blocks.Sources.RealExpression P_set_CCP(y=mod.y[UC.schedule.CCP])         annotation (Placement(transformation(extent={{-180,-80},{-160,-60}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_GT(y=aGC.P_sec_set[UC.schedule.GT2])
                                                           annotation (Placement(transformation(extent={{-44,-88},{-24,-68}})));
-  Modelica.Blocks.Sources.RealExpression P_set_GT2(y=-mod.y[UC.schedule.GT2]) annotation (Placement(transformation(extent={{14,-86},{-6,-66}})));
+  Modelica.Blocks.Sources.RealExpression P_set_GT2(y=mod.y[UC.schedule.GT2])  annotation (Placement(transformation(extent={{14,-86},{-6,-66}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_PS(y=aGC.P_sec_set[UC.schedule.PS])
                                                           annotation (Placement(transformation(extent={{108,-96},{128,-76}})));
   Modelica.Blocks.Sources.RealExpression P_set_PS(y=UC.schedule.y[UC.schedule.PS] + UC.schedule.y[UC.schedule.PS_Pump])     annotation (Placement(transformation(extent={{130,-82},{150,-62}})));
-  Modelica.Blocks.Sources.RealExpression P_set_CHP_West(y=-mod.y[UC.schedule.WW1])        annotation (Placement(transformation(extent={{-108,-182},{-88,-162}})));
-  Modelica.Blocks.Sources.RealExpression P_set_CHP_East(y=-mod.y[UC.schedule.WT])        annotation (Placement(transformation(extent={{-30,-178},{-10,-158}})));
+  Modelica.Blocks.Sources.RealExpression P_set_CHP_West(y=mod.y[UC.schedule.WW1])         annotation (Placement(transformation(extent={{-108,-182},{-88,-162}})));
+  Modelica.Blocks.Sources.RealExpression P_set_CHP_East(y=mod.y[UC.schedule.WT])         annotation (Placement(transformation(extent={{-30,-178},{-10,-158}})));
   Modelica.Blocks.Sources.RealExpression P_set_Curt(y=UC.schedule.y[UC.schedule.Curt])             annotation (Placement(transformation(extent={{134,122},{154,142}})));
   Modelica.Blocks.Sources.RealExpression P_tieline_set(y=-UC.schedule.y[UC.schedule.Import])
                                                                           annotation (Placement(transformation(extent={{-170,-234},{-190,-214}})));
@@ -135,14 +135,14 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
   Modelica.Blocks.Sources.RealExpression P_set_SB_GAR(y=aGC.P_sec_set[UC.schedule.GAR]) annotation (Placement(transformation(extent={{-4,14},{16,34}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_BM(y=aGC.P_sec_set[UC.schedule.BM]) annotation (Placement(transformation(extent={{54,14},{74,34}})));
   TransiEnt.Basics.Blocks.Sources.RealVectorExpression P_sec_neg(nout=simCenter.generationPark.nDispPlants, y_set=UC.P_sec_neg) annotation (Placement(transformation(extent={{-254,-214},{-234,-194}})));
-  Modelica.Blocks.Sources.RealExpression P_set_WT(y=-mod.y[UC.schedule.GUDTS]) annotation (Placement(transformation(extent={{44,-176},{64,-156}})));
+  Modelica.Blocks.Sources.RealExpression P_set_WT(y=mod.y[UC.schedule.GUDTS])  annotation (Placement(transformation(extent={{44,-176},{64,-156}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_CHP_East1(y=aGC.P_sec_set[UC.schedule.GUDTS])
                                                                                             annotation (Placement(transformation(extent={{34,-190},{54,-170}})));
   TransiEnt.Producer.Electrical.Conventional.BlackCoal BlackCoal(
     isSecondaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.BC]) annotation (Placement(transformation(extent={{149,-15},{189,23}})));
-  Modelica.Blocks.Sources.RealExpression P_set_BC(y=-mod.y[UC.schedule.BC])        annotation (Placement(transformation(extent={{142,30},{162,50}})));
+    P_init_set=UC.P_init[UC.schedule.BC]) annotation (Placement(transformation(extent={{149,-15},{189,23}})));
+  Modelica.Blocks.Sources.RealExpression P_set_BC(y=mod.y[UC.schedule.BC])         annotation (Placement(transformation(extent={{142,30},{162,50}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_BC(y=aGC.P_sec_set[UC.schedule.BC])
                                                           annotation (Placement(transformation(extent={{124,16},{144,36}})));
   TransiEnt.Producer.Electrical.Conventional.Gasturbine Gasturbine3(
@@ -150,22 +150,20 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
     isSecondaryControlActive=true,
     t_startup=0,
     P_el_n=simCenter.generationPark.P_el_n_GT3,
-    P_init=UC.P_init[UC.schedule.GT3]) annotation (Placement(transformation(extent={{49,-125},{89,-87}})));
-  Modelica.Blocks.Sources.RealExpression P_set_GT3(y=-mod.y[UC.schedule.GT3])
-                                                                             annotation (Placement(transformation(extent={{90,-84},{70,-64}})));
+    P_init_set=UC.P_init[UC.schedule.GT3]) annotation (Placement(transformation(extent={{49,-125},{89,-87}})));
+  Modelica.Blocks.Sources.RealExpression P_set_GT3(y=mod.y[UC.schedule.GT3]) annotation (Placement(transformation(extent={{90,-84},{70,-64}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_GT1(y=aGC.P_sec_set[UC.schedule.GT3])
                                                           annotation (Placement(transformation(extent={{32,-86},{52,-66}})));
   TransiEnt.Producer.Electrical.Conventional.Gasturbine Gasturbine1(
     isPrimaryControlActive=false,
     isSecondaryControlActive=true,
     t_startup=0,
-    P_init=UC.P_init[UC.schedule.GT1],
+    P_init_set=UC.P_init[UC.schedule.GT1],
     P_el_n=simCenter.generationPark.P_el_n_GT1) annotation (Placement(transformation(extent={{-103,-127},{-63,-89}})));
   Modelica.Blocks.Sources.RealExpression P_set_SB_GT2(
                                                      y=aGC.P_sec_set[UC.schedule.GT1])
                                                           annotation (Placement(transformation(extent={{-120,-88},{-100,-68}})));
-  Modelica.Blocks.Sources.RealExpression P_set_GT1(y=-mod.y[UC.schedule.GT1])
-                                                                             annotation (Placement(transformation(extent={{-62,-86},{-82,-66}})));
+  Modelica.Blocks.Sources.RealExpression P_set_GT1(y=mod.y[UC.schedule.GT1]) annotation (Placement(transformation(extent={{-62,-86},{-82,-66}})));
   Modelica.Blocks.Sources.RealExpression P_residual_pred(y=-sum(UC.schedule.y[simCenter.generationPark.isMOD])) "All disponible plants (Conventional apart from Pumped Storage and CHP)"
                                                                                      annotation (Placement(transformation(extent={{-266,-2},{-246,18}})));
 
@@ -173,7 +171,7 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
 
 function plotResult
 
-  constant String resultFileName = "REF35.mat";
+  constant String resultFileName = "ElectricGrid.mat";
 
   output String resultFile;
 
@@ -341,19 +339,19 @@ equation
   connect(P_set_Curt.y,P_RE_curtailement. u) annotation (Line(points={{155,132},{160,132},{167,132},{167,123.58}},
                                                                                                   color={0,0,127}));
   connect(WindOffshorePlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{-60,118.64},{-48,118.64},{-48,118},{-48,72},{136,72},{136,108},{147,108}},
+      points={{-61,121.3},{-48,121.3},{-48,118},{-48,72},{136,72},{136,108},{147,108}},
       color={0,135,135},
       thickness=0.5));
   connect(WindOnshorePlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{0,118.64},{2,118.64},{2,118},{14,118},{14,72},{136,72},{136,108},{147,108}},
+      points={{-1,121.3},{2,121.3},{2,118},{14,118},{14,72},{136,72},{136,108},{147,108}},
       color={0,135,135},
       thickness=0.5));
   connect(PVPlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{60,118.64},{70,118.64},{70,118},{70,72},{136,72},{136,108},{147,108}},
+      points={{59,121.3},{70,121.3},{70,118},{70,72},{136,72},{136,108},{147,108}},
       color={0,135,135},
       thickness=0.5));
   connect(RunOfWaterPlant.epp,P_RE_curtailement. epp_in) annotation (Line(
-      points={{120,118.64},{136,118.64},{136,116},{136,108},{147,108}},
+      points={{119,121.3},{136,121.3},{136,116},{136,108},{147,108}},
       color={0,135,135},
       thickness=0.5));
   connect(P_RE_curtailement.epp_out,Demand. epp) annotation (Line(
@@ -361,31 +359,31 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(BrownCoal.epp,Demand. epp) annotation (Line(
-      points={{-60,12.64},{-50,12.64},{-50,-36},{227.4,-36}},
+      points={{-61,15.3},{-50,15.3},{-50,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(OIL.epp,Demand. epp) annotation (Line(
-      points={{0,12.64},{8,12.64},{8,-36},{227.4,-36}},
+      points={{-1,15.3},{8,15.3},{8,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(GAR.epp,Demand. epp) annotation (Line(
-      points={{60,12.64},{70,12.64},{70,-36},{227.4,-36}},
+      points={{59,15.3},{70,15.3},{70,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(Biomass.epp,Demand. epp) annotation (Line(
-      points={{118,12.64},{124,12.64},{124,-36},{227.4,-36}},
+      points={{117,15.3},{124,15.3},{124,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(Gasturbine2.epp, Demand.epp) annotation (Line(
-      points={{12,-97.36},{28,-97.36},{28,-36},{227.4,-36}},
+      points={{11,-94.7},{28,-94.7},{28,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(PumpedStorage.epp,Demand. epp) annotation (Line(
-      points={{174,-97.36},{174,-98},{208,-98},{208,-36},{227.4,-36}},
+      points={{173,-94.7},{173,-98},{208,-98},{208,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(P_12.epp_IN,PumpedStorage. epp) annotation (Line(
-      points={{224.16,-131.5},{214,-131.5},{214,-98},{174,-98},{174,-97.36}},
+      points={{224.16,-131.5},{214,-131.5},{214,-98},{173,-98},{173,-94.7}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set_SB_PS.y,PumpedStorage. P_SB_set) annotation (Line(points={{129,-86},{132,-86},{137.2,-86},{137.2,-91.09}},
@@ -403,24 +401,24 @@ equation
   connect(P_set_BC.y,BlackCoal. P_el_set) annotation (Line(points={{163,40},{166,40},{166,22.81}}, color={0,0,127}));
   connect(P_set_SB_BC.y,BlackCoal. P_SB_set) annotation (Line(points={{145,26},{145,26},{151.2,26},{151.2,20.91}},     color={0,0,127}));
   connect(BlackCoal.epp, Demand.epp) annotation (Line(
-      points={{188,14.64},{198,14.64},{198,-36},{227.4,-36}},
+      points={{187,17.3},{198,17.3},{198,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set_SB_GT.y, Gasturbine2.P_SB_set) annotation (Line(points={{-23,-78},{-16,-78},{-16,-86},{-24,-86},{-24,-91.09},{-24.8,-91.09}}, color={0,0,127}));
   connect(P_set_GT3.y, Gasturbine3.P_el_set) annotation (Line(points={{69,-74},{66,-74},{66,-87.19}}, color={0,0,127}));
   connect(P_set_SB_GT1.y, Gasturbine3.P_SB_set) annotation (Line(points={{53,-76},{60,-76},{60,-84},{52,-84},{52,-89.09},{51.2,-89.09}}, color={0,0,127}));
   connect(Gasturbine3.epp, Demand.epp) annotation (Line(
-      points={{88,-95.36},{92,-95.36},{92,-96},{104,-96},{104,-36},{227.4,-36}},
+      points={{87,-92.7},{92,-92.7},{92,-96},{104,-96},{104,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(CCP.epp, Demand.epp) annotation (Line(
-      points={{-134,-95.36},{-132,-95.36},{-132,-94},{-126,-94},{-126,-36},{227.4,-36}},
+      points={{-135,-92.7},{-132,-92.7},{-132,-94},{-126,-94},{-126,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(P_set_GT1.y, Gasturbine1.P_el_set) annotation (Line(points={{-83,-76},{-86,-76},{-86,-89.19}}, color={0,0,127}));
   connect(P_set_SB_GT2.y, Gasturbine1.P_SB_set) annotation (Line(points={{-99,-78},{-92,-78},{-92,-86},{-100,-86},{-100,-91.09},{-100.8,-91.09}}, color={0,0,127}));
   connect(Gasturbine1.epp, Demand.epp) annotation (Line(
-      points={{-64,-97.36},{-50,-97.36},{-50,-36},{227.4,-36}},
+      points={{-65,-94.7},{-50,-94.7},{-50,-36},{227.4,-36}},
       color={0,135,135},
       thickness=0.5));
   connect(aGC.epp, Demand.epp) annotation (Line(
@@ -442,19 +440,19 @@ equation
   connect(P_residual_is.y, H_lpa.P_load_is) annotation (Line(points={{-251,-14},{-244,-14}}, color={0,0,127}));
   connect(P_Load.y1, Demand.P_el_set) annotation (Line(points={{259,2},{247,2},{247,-13.96}},     color={0,0,127}));
   connect(WW1.outlet,massflow_Tm_flow1. fluidPortIn) annotation (Line(
-      points={{-54.6,-210.117},{-50,-210.117},{-50,-205.94},{-45.92,-205.94}},
+      points={{-54.6,-210.117},{-50,-210.117},{-50,-206},{-46,-206}},
       color={175,0,0},
       thickness=0.5));
   connect(massflow_Tm_flow3.fluidPortOut,WW1. inlet) annotation (Line(
-      points={{-45.94,-216.08},{-48,-216.08},{-48,-214.55},{-54.6,-214.55}},
+      points={{-46,-216},{-48,-216},{-48,-214.55},{-54.6,-214.55}},
       color={0,131,169},
       thickness=0.5));
   connect(WT.inlet,massflow_Tm_flow2. fluidPortOut) annotation (Line(
-      points={{23.4,-212.55},{36.06,-212.55},{36.06,-214.08}},
+      points={{23.4,-212.55},{36,-212.55},{36,-214}},
       color={175,0,0},
       thickness=0.5));
   connect(WT.outlet,massflow_Tm_flow4. fluidPortIn) annotation (Line(
-      points={{23.4,-208.117},{30,-208.117},{30,-203.94},{41.92,-203.94}},
+      points={{23.4,-208.117},{30,-208.117},{30,-204},{42,-204}},
       color={175,0,0},
       thickness=0.5));
   connect(WW1.epp, Demand.epp) annotation (Line(
@@ -480,11 +478,11 @@ equation
   connect(P_set_WT.y, GUDTS.P_set) annotation (Line(points={{65,-166},{68.8,-166},{68.8,-185.433}}, color={0,0,127}));
   connect(P_set_WT1.y, GUDTS.Q_flow_set) annotation (Line(points={{95,-166},{96,-166},{96,-176},{88.4,-176},{88.4,-185.433}}, color={0,0,127}));
   connect(GUDTS.inlet, massflow_Tm_flow5.fluidPortOut) annotation (Line(
-      points={{101.4,-208.55},{110,-208.55},{110,-208.08},{114.06,-208.08}},
+      points={{101.4,-208.55},{110,-208.55},{110,-208},{114,-208}},
       color={175,0,0},
       thickness=0.5));
   connect(GUDTS.outlet, massflow_Tm_flow6.fluidPortIn) annotation (Line(
-      points={{101.4,-204.117},{108,-204.117},{108,-197.94},{114.08,-197.94}},
+      points={{101.4,-204.117},{108,-204.117},{108,-198},{114,-198}},
       color={175,0,0},
       thickness=0.5));
   annotation (
@@ -575,7 +573,8 @@ equation
       Interval=900,
       __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput(events=false),
-    Icon(coordinateSystem(extent={{-300,-240},{300,160}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-300,-240},{300,160}})),
     __Dymola_Commands(executeCall=TransiEnt.Examples.Hamburg.ElectricGenerationPark.plotResult() "Plot example results"),
     __Dymola_experimentFlags(
       Advanced(
@@ -584,5 +583,26 @@ equation
         OutputModelicaCode=false),
       Evaluate=true,
       OutputCPUtime=true,
-      OutputFlatModelica=false));
+      OutputFlatModelica=false),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end ElectricGrid;

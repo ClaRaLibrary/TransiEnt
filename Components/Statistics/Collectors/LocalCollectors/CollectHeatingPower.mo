@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CollectHeatingPower "collect heating power and energy, choose type of resource"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,6 +36,7 @@ model CollectHeatingPower "collect heating power and energy, choose type of reso
   constant Boolean is_setter=true "just for change of icon.." annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
   //parameter Boolean is_setter=true "just for change of icon.." annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
 
+  parameter Boolean integrateHeatFlow=simCenter.integrateHeatFlow "true if heat flows shall be integrated";
   parameter TransiEnt.Basics.Types.TypeOfResource typeOfResource=EnergyResource.Generic "Select the kind of resource" annotation (choices(
       choice=TransiEnt.Basics.Types.TypeOfResource.Consumer "Consumer",
       choice=TransiEnt.Basics.Types.TypeOfResource.Conventional "Conventional",
@@ -43,6 +44,12 @@ model CollectHeatingPower "collect heating power and energy, choose type of reso
       choice=TransiEnt.Basics.Types.TypeOfResource.Renewable "Renewable",
       choice=TransiEnt.Basics.Types.TypeOfResource.Generic "Generic"), Dialog(enable=is_setter));
   //One could add "Losses"!?
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+  outer TransiEnt.SimCenter simCenter;
 
   // _____________________________________________
   //
@@ -56,7 +63,8 @@ model CollectHeatingPower "collect heating power and energy, choose type of reso
   //             Variable Declarations
   // _____________________________________________
 
-  SI.Energy E(start=0,fixed=true, stateSelect=StateSelect.never);
+  SI.Energy E(start=0,fixed=true, stateSelect=StateSelect.never)
+                                                                annotation (Dialog(group="Initialization", showStartAttribute=true));
 
 equation
   // _____________________________________________
@@ -64,7 +72,11 @@ equation
   //           Characteristic equations
   // _____________________________________________
 
-  der(E)=heatFlowCollector.Q_flow;
+  if integrateHeatFlow then
+    der(E)=heatFlowCollector.Q_flow;
+  else
+    E=0;
+  end if;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
@@ -138,7 +150,7 @@ equation
           fillPattern=FillPattern.Solid)}),
                                  Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>model for collecting heating power and energy</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

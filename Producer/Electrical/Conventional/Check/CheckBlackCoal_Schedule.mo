@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckBlackCoal_Schedule
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,16 +20,16 @@ model CheckBlackCoal_Schedule
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-BlackCoal blackCoal(
-  isPrimaryControlActive=false,
-  P_el_n=506e6,
-  eta_total=0.432,
-  P_init=0,
-  isSecondaryControlActive=false,
-  isExternalSecondaryController=false,
-  t_startup=2700,
-  Turbine(T_plant=500, redeclare TransiEnt.Components.Turbogroups.OperatingStates.ThreeStateDynamic operationStatus),
-  P_grad_max_star=0.04/60) annotation (Placement(transformation(extent={{-14,-38},{6,-18}})));
+  BlackCoal blackCoal(
+    isPrimaryControlActive=false,
+    P_el_n=506e6,
+    eta_total=0.432,
+    P_init_set=0,
+    isSecondaryControlActive=false,
+    isExternalSecondaryController=false,
+    t_startup=2700,
+    Turbine(T_plant=500, redeclare TransiEnt.Components.Turbogroups.OperatingStates.ThreeStateDynamic operationStatus),
+    P_grad_max_star=0.04/60) annotation (Placement(transformation(extent={{-14,-38},{6,-18}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{40,-32},{60,-12}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},
             {-70,100}})));
@@ -43,7 +43,7 @@ BlackCoal blackCoal(
     annotation (Placement(transformation(extent={{-58,18},{-38,38}})));
 equation
   connect(blackCoal.epp, constantFrequency_L1_1.epp) annotation (Line(
-      points={{5.5,-22.4},{39.9,-22.4},{39.9,-22.1}},
+      points={{5,-21},{40,-21},{40,-22}},
       color={0,135,135},
       thickness=0.5));
   connect(timeTable.y, blackCoal.P_el_set) annotation (Line(points={{-37,28},{-22,
@@ -68,12 +68,34 @@ end plotResult;
             -100},{100,100}}), graphics={Text(
           extent={{-30,94},{80,32}},
           lineColor={28,108,200},
-          textString="Vergleich mit:
+          textString="compare with:
 https://www.vgb.org/vgbmultimedia/333_Abschlussbericht-p-5968.pdf
-Seite 220, Abbildung 19.3
+(reference [1] in documentation of this model)
+page 220, figure 19.3
 
 
 Look at:
 P_el_set
-blackCoal.epp.P")}), experiment(StopTime=55000));
+blackCoal.epp.P")}), experiment(StopTime=55000),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for black coal power plants</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>[1] C. Ziems, S. Meinke, J. Nocke, H. Weber, E. Hassel, &quot;<span style=\"font-family: sans-serif;\">Kraftwerksbetrieb bei Einspeisung von Windparks und Photovoltaikanlagen&quot;, Rostock, 2012</span></p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end CheckBlackCoal_Schedule;

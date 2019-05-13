@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model TemperatureSensor "Ideal one port pressure sensor"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,6 +38,8 @@ model TemperatureSensor "Ideal one port pressure sensor"
   //             Visible Parameters
   // _____________________________________________
 
+  parameter Integer flowDefinition=1 "Defines which flow direction is considered" annotation(Dialog(group="Fundamental Definitions"),choices(choice = 1 "both", choice = 2 "both, noEvent", choice = 3 "in -> out", choice = 4 "out -> in"));
+
   // _____________________________________________
   //
   //                 Outer Models
@@ -50,16 +52,16 @@ model TemperatureSensor "Ideal one port pressure sensor"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput T(
-    final quantity="Temperature",
-    displayUnit="degC",
-    final unit="K") "Temperature in port medium" annotation (Placement(
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T "Temperature in port medium" annotation (Placement(
         transformation(extent={{100,-10},{120,10}},
                                                  rotation=0),
         iconTransformation(extent={{100,-10},{120,10}})));
 protected
-  TILMedia.VLEFluid_ph fluid(p = gasPortIn.p, h = actualStream(gasPortIn.h_outflow), xi = actualStream(gasPortIn.xi_outflow),
-   vleFluidType=medium,
+  TILMedia.VLEFluid_ph fluid(
+    p = gasPortIn.p,
+    h = if flowDefinition==1 then actualStream(gasPortIn.h_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.h_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.h_outflow) else inStream(gasPortOut.h_outflow),
+    xi = if flowDefinition==1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow),
+    vleFluidType=medium,
     computeSurfaceTension=false,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 
@@ -124,21 +126,21 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Temperature sensor for VLEFluidTypes.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p>-</p>
+<p>(no remarks)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Can only be used for VLEFluidTypes.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p>GasPortIn, GasPortOut and RealOutput for temperature.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Tested in check model &quot;TransiEnt.Components.Sensors.RealGas.Check.TestRealGasSensors&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">-</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Lisa Andresen (andresen@tuhh.de) in Jun 2015</span></p>
 </html>"));

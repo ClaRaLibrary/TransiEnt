@@ -2,10 +2,10 @@ within TransiEnt.Producer.Combined.LargeScaleCHP;
 model ContinuousCHP "Simple large CHP model with plant limits, time constants and fuel input matrix but without distinc operating states (always running)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,7 +25,7 @@ model ContinuousCHP "Simple large CHP model with plant limits, time constants an
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
-  extends Base.PartialCHP;
+  extends Base.PartialCHP(m_flow_cde_total=m_flow_cde_total_set);
 
   // _____________________________________________
   //
@@ -51,8 +51,8 @@ model ContinuousCHP "Simple large CHP model with plant limits, time constants an
       medium,
       p_nom,
       T_feed_init) "Start value of sytsem specific enthalpy" annotation(Dialog(group="Heating condenser parameters"));
-  parameter Boolean UseGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if UseGasPort==true "Gas Medium to be used - only if UseGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if UseGasPort==true then true else false));
+  parameter Boolean useGasPort=false "Choose if gas port is used or not" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_gas=simCenter.gasModel1 if useGasPort==true "Gas Medium to be used - only if useGasPort==true" annotation(Dialog(group="Fundamental Definitions",enable=if useGasPort==true then true else false));
 
   // _____________________________________________
   //
@@ -117,14 +117,30 @@ model ContinuousCHP "Simple large CHP model with plant limits, time constants an
         extent={{-6,-6},{6,6}},
         rotation=0,
         origin={-69,102})));
-  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{80,82},{60,102}})));
-  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if UseGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
+  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{64,82},{44,102}})));
+  Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
+  Components.Sensors.RealGas.CO2EmissionSensor cO2EmissionOfIdealCombustion if useGasPort                                                 ==true annotation (Placement(transformation(extent={{86,92},{74,104}})));
+  Modelica.Blocks.Math.Gain m_flow_cde_gain(k=1) annotation (Placement(transformation(extent={{68,96},{64,100}})));
+protected
+  Modelica.Blocks.Sources.RealExpression Zero(y=0);
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+public
+  Modelica.SIunits.MassFlowRate m_flow_cde_total_set;
+
 equation
 
   // _____________________________________________
   //
   //         Characteristic Equations
   // _____________________________________________
+  if useGasPort==false then
+    m_flow_cde_total_set=Q_flow_input*fuelSpecificEmissions.m_flow_CDE_per_Energy;
+  else
+    m_flow_cde_total_set=m_flow_cde_gain.y;
+  end if;
 
   Q_flow_input = steamGenerator.u;
 
@@ -156,7 +172,7 @@ equation
 
   connect(eta_th_source.y, product1.u2) annotation (Line(points={{-51,-26},{-42,-26},{-42,-14.4},{-36.8,-14.4}}, color={0,0,127}));
 
-  connect(turboGenerator.y, terminal.P_el_set) annotation (Line(points={{4.14541,33.7058},{26,33.7058},{26,34},{46,34},{46,78},{76,78},{76,72}},
+  connect(turboGenerator.y, terminal.P_el_set) annotation (Line(points={{4.14541,33.7058},{24,33.7058},{24,30},{44,30},{44,74},{76,74},{76,72}},
                                                                                                                                       color={0,0,127}));
 
   connect(terminal.epp, epp) annotation (Line(
@@ -176,14 +192,24 @@ equation
   connect(pQDiagram.P_min, P_limit_on.limit2) annotation (Line(points={{-11,121},{-60,121},{-60,94},{-44,94}}, color={0,0,127}));
   connect(P_el_set_pos.y, P_limit_on.u) annotation (Line(points={{-62.4,102},{-62.4,102},{-44,102}},         color={0,0,127}));
   connect(P_set,P_el_set_pos. u) annotation (Line(points={{-84,144},{-84,144},{-84,102},{-76.2,102}}, color={0,0,127}));
-  if UseGasPort==true then
-    connect(gasConsumer_HFlow_NCV.fluidPortIn,gasPortIn)  annotation (Line(
-      points={{80,92},{88,92},{88,102},{100,102}},
+  if useGasPort==true then
+    connect(steamGenerator.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{-53,12},{-52,12},{-52,-16},{-92,-16},{-92,70},{40,70},{40,92},{43,92}},   color={0,0,127}));
+
+    connect(cO2EmissionOfIdealCombustion.m_flow_cde,m_flow_cde_gain. u) annotation (Line(points={{73.4,102.08},{70,102.08},{70,98},{68.4,98}},
+                                                                                                                                    color={0,0,127}));
+    connect(gasConsumer_HFlow_NCV.fluidPortIn, cO2EmissionOfIdealCombustion.gasPortOut) annotation (Line(
+      points={{64,92},{74,92}},
       color={255,255,0},
       thickness=1.5));
-    connect(steamGenerator.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{-53,12},{-52,12},{-52,-16},{-92,-16},{-92,70},{40,70},{40,92},{59,92}},   color={0,0,127}));
+    connect(cO2EmissionOfIdealCombustion.gasPortIn, gasPortIn) annotation (Line(
+      points={{86,92},{92,92},{92,102},{100,102}},
+      color={255,255,0},
+      thickness=1.5));
+  else
+     connect(Zero.y,m_flow_cde_gain.u);
   end if;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})), Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p>This model represents the simplest of all large scale CHP models in the library. It allows a quick representation of a CHP plant with three main characteristics:</p>
 <ul>
@@ -197,7 +223,13 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_set: input for Power in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_set: input for heat flow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">outlet: FluidPortOut</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">inlet: FluidPortIn</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">gasPortIn: RealGasPortIn</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">eye: Eyeout</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: choice of power port</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -218,6 +250,8 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Ricardo Peniche, 2016</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Nov 2018: added gasPort</span></p>
 </html>"),
-    Icon(coordinateSystem(extent={{-100,-100},{100,140}})));
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{100,140}})));
 end ContinuousCHP;

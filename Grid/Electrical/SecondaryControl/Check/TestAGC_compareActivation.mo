@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.SecondaryControl.Check;
 model TestAGC_compareActivation "Compares three variants of secondary balancing control activation"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,7 +59,7 @@ TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC_MeritOrder_var2(
   inner ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-70,80},{-50,100}})));
 equation
   connect(ElectricGrid.epp, aGC_ProRata.epp) annotation (Line(
-      points={{65.9,-4.1},{16,-4.1},{16,10}},
+      points={{66,-4},{16,-4},{16,10}},
       color={0,135,135},
       thickness=0.5));
   connect(aGC_ProRata.P_tie_set, P_tie_set.y) annotation (Line(points={{20.2,30},{20,30},{20,62},{-37,62}},          color={0,0,127}));
@@ -71,11 +71,11 @@ equation
   connect(P_res_const.y, aGC_MeritOrder_var1.P_SB_max_neg) annotation (Line(points={{-37,0},{-32,0},{-32,-32},{6.4,-32}}, color={0,0,127}));
   connect(P_res_const.y, aGC_MeritOrder_var1.P_SB_max_pos) annotation (Line(points={{-37,0},{-32,0},{-32,-40},{6.4,-40}}, color={0,0,127}));
   connect(aGC_MeritOrder_var1.epp, ElectricGrid.epp) annotation (Line(
-      points={{16,-46},{16,-60},{48,-60},{48,-4.1},{65.9,-4.1}},
+      points={{16,-46},{16,-60},{48,-60},{48,-4},{66,-4}},
       color={0,135,135},
       thickness=0.5));
   connect(aGC_MeritOrder_var2.epp, ElectricGrid.epp) annotation (Line(
-      points={{18,-88},{18,-96},{48,-96},{48,-4.1},{65.9,-4.1}},
+      points={{18,-88},{18,-96},{48,-96},{48,-4},{66,-4}},
       color={0,135,135},
       thickness=0.5));
   connect(P_tie_set.y, aGC_MeritOrder_var2.P_tie_set) annotation (Line(points={{-37,62},{-24,62},{-24,-64},{22.2,-64},{22.2,-68}}, color={0,0,127}));
@@ -108,5 +108,28 @@ createPlot(id=2, position={809, 0, 791, 269}, y={"aGC_MeritOrder_var2.P_sec_set[
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestAGC_compareActivation;

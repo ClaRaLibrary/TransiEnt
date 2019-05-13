@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 partial model PartialCollectCosts "Partial cost collector"
 
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,22 +41,24 @@ partial model PartialCollectCosts "Partial cost collector"
  //              Visible Parameters
  // _____________________________________________
 
+  parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
+
   parameter TransiEnt.Basics.Units.Time_year observationPeriod=simCenter.Duration "Observation period" annotation (Dialog(group="Fundamental Definitions"));
- parameter Real interestRate = simCenter.InterestRate "Interest rate" annotation (Dialog(group="Fundamental Definitions"));
- parameter Real priceChangeRateInv=simCenter.priceChangeRateInv "Price change rate of the invest cost" annotation (Dialog(group="Fundamental Definitions"));
- parameter Real priceChangeRateDemand=simCenter.priceChangeRateDemand "Price change rate of the demand-related cost" annotation (Dialog(group="Fundamental Definitions"));
- parameter Real priceChangeRateOM=simCenter.priceChangeRateOM "Price change rate of the operation-related cost" annotation (Dialog(group="Fundamental Definitions"));
- parameter Real priceChangeRateOther=simCenter.priceChangeRateOther "Price change rate of other cost" annotation (Dialog(group="Fundamental Definitions"));
- parameter Real priceChangeRateRevenue=simCenter.priceChangeRateRevenue "Price change rate of the revenue" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Real interestRate = simCenter.InterestRate "Interest rate" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Real priceChangeRateInv=simCenter.priceChangeRateInv "Price change rate of the invest cost" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Real priceChangeRateDemand=simCenter.priceChangeRateDemand "Price change rate of the demand-related cost" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Real priceChangeRateOM=simCenter.priceChangeRateOM "Price change rate of the operation-related cost" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Real priceChangeRateOther=simCenter.priceChangeRateOther "Price change rate of other cost" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Real priceChangeRateRevenue=simCenter.priceChangeRateRevenue "Price change rate of the revenue" annotation (Dialog(group="Fundamental Definitions"));
 
   parameter TransiEnt.Basics.Units.Time_year lifeTime=costRecordGeneral.lifeTime "Life time of the component" annotation (Dialog(group="Fundamental Definitions"));
 
   parameter TransiEnt.Basics.Units.MonetaryUnitPerPower Cspec_inv_der_E=costRecordGeneral.Cspec_inv_der_E "Specific invest cost per nominal power" annotation (Dialog(group="Invest Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_inv_E=costRecordGeneral.Cspec_inv_E "Specific invest cost per nominal energy capacity" annotation (Dialog(group="Invest Cost"));
- parameter Real size1=costRecordGeneral.size1 "Size 1 of the component" annotation (Dialog(group="Invest Cost"));
- parameter Real size2=costRecordGeneral.size2 "Size 2 of the component" annotation (Dialog(group="Invest Cost"));
+  parameter Real size1=costRecordGeneral.size1 "Size 1 of the component" annotation (Dialog(group="Invest Cost"));
+  parameter Real size2=costRecordGeneral.size2 "Size 2 of the component" annotation (Dialog(group="Invest Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnit C_inv_size=costRecordGeneral.C_inv_size "Invest cost depending on the size" annotation (Dialog(group="Invest Cost"));
- parameter Real factor_OM=costRecordGeneral.factor_OM "Percentage of the invest cost that represents the annual O&M cost" annotation (Dialog(group="O&M Cost"));
+  parameter Real factor_OM=costRecordGeneral.factor_OM "Percentage of the invest cost that represents the annual O&M cost" annotation (Dialog(group="O&M Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_OM_W_el=costRecordGeneral.Cspec_OM_W_el "Specific O&M cost per electric energy" annotation (Dialog(group="O&M Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_OM_Q=costRecordGeneral.Cspec_OM_Q "Specific O&M cost per heating energy" annotation (Dialog(group="O&M Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_OM_H=costRecordGeneral.Cspec_OM_H "Specific O&M cost per gas energy" annotation (Dialog(group="O&M Cost"));
@@ -69,19 +71,19 @@ partial model PartialCollectCosts "Partial cost collector"
  // _____________________________________________
 
   //protected
- Real annuityFactor "Annuity factor";
- Real dynamicPriceFactorDemand "Price dynamic cash value factor for the demand-related cost";
- Real dynamicPriceFactorOM "Price dynamic cash value factor for the operation-related cost";
- Real dynamicPriceFactorOther "Price dynamic cash value factor for other cost";
- Real dynamicPriceFactorRevenue "Price dynamic cash value factor for the revenue";
+  Real annuityFactor "Annuity factor";
+  Real dynamicPriceFactorDemand "Price dynamic cash value factor for the demand-related cost";
+  Real dynamicPriceFactorOM "Price dynamic cash value factor for the operation-related cost";
+  Real dynamicPriceFactorOther "Price dynamic cash value factor for other cost";
+  Real dynamicPriceFactorRevenue "Price dynamic cash value factor for the revenue";
   TransiEnt.Basics.Units.MonetaryUnit C_inv(displayUnit="EUR") "Investment costs";
   TransiEnt.Basics.Units.MonetaryUnit C_rep(displayUnit="EUR") "Replacement costs";
   TransiEnt.Basics.Units.MonetaryUnit C_res(displayUnit="EUR") "Residual value";
   TransiEnt.Basics.Units.MonetaryUnit dynamic_C_inv(displayUnit="EUR") "Annuity of the investment costs";
- //TransiEnt.Basics.Units.MonetaryUnit C_OM(displayUnit="EUR") "O&M costs";
+  //TransiEnt.Basics.Units.MonetaryUnit C_OM(displayUnit="EUR") "O&M costs";
   TransiEnt.Basics.Units.MonetaryUnit dynamic_C_OM(displayUnit="EUR") "Annuity of the operation-related costs";
   TransiEnt.Basics.Units.MonetaryUnit dynamic_C_demand(displayUnit="EUR") "Annuity of the demand-related costs";
- //TransiEnt.Basics.Units.MonetaryUnit C_other(displayUnit="EUR") "Other costs";
+  //TransiEnt.Basics.Units.MonetaryUnit C_other(displayUnit="EUR") "Other costs";
   TransiEnt.Basics.Units.MonetaryUnit dynamic_C_other(displayUnit="EUR") "Annuity of other costs";
   TransiEnt.Basics.Units.MonetaryUnit dynamic_C_revenue(displayUnit="EUR") "Annuity of the revenue";
   TransiEnt.Basics.Units.MonetaryUnit C(displayUnit="EUR") "Costs";
@@ -146,7 +148,7 @@ equation
     lifeTime=lifeTime);
 
  //Calculation of investment costs
- dynamic_C_inv=(C_inv+C_rep-C_res)*annuityFactor/timeYear*time;
+ dynamic_C_inv=if calculateCost then (C_inv+C_rep-C_res)*annuityFactor/timeYear*time else 0;
 
  //Calculation of total costs
  C=dynamic_C_inv+dynamic_C_OM+dynamic_C_demand+dynamic_C_other+dynamic_C_revenue; //dynamic_C_revenue<=0
@@ -179,12 +181,13 @@ equation
          lineColor={0,0,0},
          fillColor={255,128,0},
          fillPattern=FillPattern.Solid)}),
-                                Diagram(coordinateSystem(preserveAspectRatio=
+                                Diagram(graphics,
+                                        coordinateSystem(preserveAspectRatio=
            false, extent={{-100,-100},{100,100}})),
          defaultComponentName="collectCosts",
            Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>partial model for a cost collector</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -200,8 +203,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks) Equations from Verein Deutscher Ingenieure e.V.: VDI 2067-1: Wirtschaftlichkeit gebaeudetechnischer
-Anlagen. Grundlagen und Kostenberechnung. Berlin, September 2012</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks) Equations from Verein Deutscher Ingenieure e.V.: VDI 2067-1: Wirtschaftlichkeit gebaeudetechnischer Anlagen. Grundlagen und Kostenberechnung. Berlin, September 2012</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Carsten Bode (c.bode@tuhh.de) on 13.02.2017</span></p>
 </html>"));

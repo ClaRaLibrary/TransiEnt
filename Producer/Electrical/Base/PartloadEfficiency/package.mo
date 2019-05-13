@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Base;
 package PartloadEfficiency
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ annotation (Documentation(info="<html>
 <p><br><span style=\"font-family: MS Shell Dlg 2;\">The relative efficiency is defined as follows:</span></p>
 <p align=\"center\"><span style=\"font-family: MS Shell Dlg 2;\"><img src=\"modelica://TransiEnt/Images/equations/equation-HH6jSgFa.png\" alt=\"eta_rel=eta_partload/eta_nominal\"/></span></p>
 <p><br><br><span style=\"font-family: MS Shell Dlg 2;\">The result of multiplying the relative efficiency and the nominal efficiency results in part load efficiency characteristic lines such as these:</span></p>
-<p align=\"center\"><img src=\"modelica://TransiEnt/Images/PartloadEfficiency.tiff\"  heigth=\"700\" width=\"800\"/></p>
+<p align=\"center\"><img src=\"modelica://TransiEnt/Images/PartloadEfficiency.tiff\"/></p>
 <p><br><br><br><br><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">Purely technical component without physical modeling.</span></p>
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">3. Limits of validity </span></b></p>
@@ -53,7 +53,7 @@ annotation (Documentation(info="<html>
 <p><span style=\"font-family: Arial,sans-serif;\">no elements</span></p>
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">no equations</span></p>
-<p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p>none</p>
 <p><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">no validation or testing necessary, automatically set to state 3</span></p>

@@ -2,10 +2,10 @@ within TransiEnt.Basics.Media;
 model RealGasNCV_xi "Model for net calorific value calculation for real gases, input xi"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,7 +46,7 @@ model RealGasNCV_xi "Model for net calorific value calculation for real gases, i
 
 public
   input SI.MassFraction[realGasType.nc-1] xi_in "Mass fractions" annotation(Dialog);
-  SI.SpecificEnthalpy NCV "Gross calorific value";
+  SI.SpecificEnthalpy NCV "Net calorific value";
 
 protected
   SI.MassFraction[realGasType.nc] xi=cat(1,xi_in,{1-sum(xi_in)}) "Mass weighted composition of components per kg fuel";
@@ -62,7 +62,7 @@ equation
     NCV= NCVIn;
   else
     //Search for component in NCVComponentValues and add it to total NCV = sum(xi_i * NCV_i) and from (MJ/kg) to (J/kg) NCV
-    NCV=sum(xi*NCV_vec)*1e6;
+    NCV=sum(xi*NCV_vec);
   end if;
 
   annotation (Documentation(info="<html>
@@ -75,7 +75,8 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
+<p>xi_in is the mass fraction</p>
+<p>NCV is the net calorific value</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

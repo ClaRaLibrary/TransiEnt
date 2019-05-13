@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base.Check;
 model TestGenericStorage
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,9 +39,9 @@ model TestGenericStorage
       P_max_load=baseparams.P_max_load,
       P_grad_max=baseparams.P_grad_max,
       eta_unload=0.8,
-      eta_load=0.7)) annotation (Placement(transformation(extent={{-14,-60},{16,-30}})));
+      eta_load=0.7)) annotation (Placement(transformation(extent={{-16,-62},{14,-32}})));
 
-  TransiEnt.Storage.Base.GenericStorage lossyStorage(params(
+  TransiEnt.Storage.Base.GenericStorage lossyStorage(redeclare model StationaryLossModel = SelfDischargeRate, params(
       E_start=baseparams.E_start,
       E_max=baseparams.E_max,
       E_min=baseparams.E_min,
@@ -49,7 +49,8 @@ model TestGenericStorage
       P_max_load=baseparams.P_max_load,
       P_grad_max=baseparams.P_grad_max,
       eta_unload=baseparams.eta_unload,
-      eta_load=baseparams.eta_load), redeclare model StationaryLossModel = LinearStationaryLoss (a=1e-4)) annotation (Placement(transformation(extent={{-16,-12},{14,18}})));
+      eta_load=baseparams.eta_load,
+      selfDischargeRate=1/36000))                                                                          annotation (Placement(transformation(extent={{-16,-14},{14,16}})));
   GenericStorageParameters baseparams(
     E_start=baseparams.E_min,
     E_max=3600*baseparams.P_max_unload,
@@ -65,9 +66,9 @@ model TestGenericStorage
     table=[0,1; 1,1; 1,-1; 2,-1; 2,1; 3,1; 3,0; 4,0])
                                           "Test schedule" annotation (Placement(transformation(extent={{-86,-10},{-66,10}})));
 equation
-  connect(P_set.y, lossyStorage.P_set) annotation (Line(points={{-31,0},{-15.4,0},{-15.4,2.4}}, color={0,0,127}));
-  connect(P_set.y, idealStorage.P_set) annotation (Line(points={{-31,0},{-32,0},{-32,20},{-32,48.4},{-15.4,48.4}}, color={0,0,127}));
-  connect(P_set.y, inefficientStorage.P_set) annotation (Line(points={{-31,0},{-30,0},{-30,-45.6},{-13.4,-45.6}}, color={0,0,127}));
+  connect(P_set.y, lossyStorage.P_set) annotation (Line(points={{-31,0},{-15.4,0},{-15.4,0.4}}, color={0,0,127}));
+  connect(P_set.y, idealStorage.P_set) annotation (Line(points={{-31,0},{-30,0},{-30,48.4},{-15.4,48.4}},          color={0,0,127}));
+  connect(P_set.y, inefficientStorage.P_set) annotation (Line(points={{-31,0},{-30,0},{-30,-47.6},{-15.4,-47.6}}, color={0,0,127}));
   connect(P_set_pu.y, P_set.u) annotation (Line(points={{-65,0},{-54,0}}, color={0,0,127}));
 public
 function plotResult
@@ -87,9 +88,10 @@ createPlot(id=1, position={809, 0, 791, 406}, y={"idealStorage.SOC", "inefficien
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Test environment for GenericStorage</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

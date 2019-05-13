@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors;
 model ElectricFrequencyVoltage "Frequency and voltage on electric power port "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ model ElectricFrequencyVoltage "Frequency and voltage on electric power port "
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput v "Voltage" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.VoltageOut v "Voltage" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={26,100}), iconTransformation(
@@ -83,22 +83,25 @@ equation
             lineColor={0,0,0},
             fillColor={255,255,255},
             fillPattern=FillPattern.Solid,
-          textString="v")}),   Diagram(coordinateSystem(preserveAspectRatio=false,
+          textString="v")}),   Diagram(graphics,
+                                       coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Measure freuqency and voltage on electric line using TransiEnt interfaces with LoD 2 (single phase, active and reactive power, voltage and frequency)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Measure freuqency and voltage on electric line using TransiEnt interfaces with L2E (single phase, active and reactive power, voltage and frequency)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">f: output for frequency in Hz</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">v: output for voltage in V</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: apparent power port</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

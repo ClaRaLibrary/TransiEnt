@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups;
 model FirstOrderThreeStateTurbine "Generic model of a turbine with three states (halt / startup / running), pyhsical constraints (Pmin,Pmax,Pgradmax) and first order dynamic"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,7 +33,7 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
   //             Visible Parameters
   // _____________________________________________
 
-  parameter SI.Power P_nom=2e9 "Nominal power";
+  parameter SI.Power P_n=2e9 "Nominal power";
 
   parameter Real P_min_star=0.2 "Dimensionless minimum power (=20% of nominal power)";
 
@@ -54,7 +54,17 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
 
   parameter SI.Time t_startup=0 "Startup time (no output during startup)";
 
-  parameter SI.Time t_shutdown=60 "Time it takes to disconnect from grid (P=P_set during shutdown)";
+  parameter SI.Time t_min_operating = 0 "Minimum operation time";
+
+  //parameter SI.Time t_shutdown=60 "Time it takes to disconnect from grid (P=P_set during shutdown)";
+
+  parameter Real thres_hyst=1e-10 "Threshold for hysteresis for switch from halt to startup (chattering might occur, hysteresis might help avoiding this)" annotation(Dialog(group="Numerical"));
+
+  parameter SI.Time t_eps=10 "Threshold time for transitions" annotation(Dialog(group="Numerical"));
+
+  parameter SI.Time MinimumDownTime=0 "Minimum time the plant needs to be shut down before starting again";
+
+  parameter Boolean useSlewRateLimiter=true "choose if slewRateLimiter is activated";
 
   outer SimCenter simCenter;
 
@@ -65,7 +75,7 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
 
   Modelica.Blocks.Interfaces.BooleanOutput isGeneratorRunning annotation (
       Placement(transformation(rotation=0, extent={{100,10},{120,30}})));
-  Modelica.Blocks.Interfaces.RealInput P_spinning_set "Setpoint for spinning reserve power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_spinning_set "Setpoint for spinning reserve power"
                                                       annotation (Placement(transformation(
         rotation=270,
         extent={{-12,-12},{12,12}},
@@ -76,16 +86,15 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Math.Gain normalize(k=1/P_nom)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+  Modelica.Blocks.Math.Gain normalize(k=1/P_n) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
         rotation=270,
         origin={0,54})));
   Basics.Blocks.SwitchNoEvent switchOnOff annotation (Placement(transformation(extent={{-32,-70},{-12,-50}})));
 
   Modelica.Blocks.Sources.Constant shutdown(k=0)
     annotation (Placement(transformation(extent={{-64,-94},{-44,-74}})));
-  Modelica.Blocks.Math.Gain normalizePbal(k=1/P_nom)  annotation (Placement(
-        transformation(
+  Modelica.Blocks.Math.Gain normalizePbal(k=1/P_n) annotation (Placement(transformation(
         extent={{-7,-7},{7,7}},
         rotation=270,
         origin={36,52})));
@@ -94,8 +103,7 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
         extent={{-6.5,-6},{6.5,6}},
         rotation=0,
         origin={53.5,-38})));
-  Modelica.Blocks.Math.Gain deNormalize(k=P_nom)
-    annotation (Placement(transformation(extent={{66,-44},{78,-32}})));
+  Modelica.Blocks.Math.Gain deNormalize(k=P_n) annotation (Placement(transformation(extent={{66,-44},{78,-32}})));
   Boundaries.Mechanical.Power MechanicalBoundary annotation (Placement(transformation(extent={{70,-84},{88,-66}})));
   Modelica.Blocks.Nonlinear.Limiter P_max_star_limiter_total(uMax=0, uMin=-
         P_max_star) "Upper limit is nominal power"
@@ -109,16 +117,26 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
   Real P_set_star = normalize.y;
   Real P_is_star = deNormalize.u;
   replaceable OperatingStates.ThreeStateDynamic operationStatus(
-    t_startup=360,
-    P_star_init=P_turb_init/P_nom,
+    useSlewRateLimiter=useSlewRateLimiter,
+    t_startup=t_startup,
+    P_star_init=P_turb_init/P_n,
+    t_min_operating=t_min_operating,
     P_min_operating=P_min_star,
     P_max_operating=P_max_star,
-    P_grad_operating=P_grad_max_star) constrainedby TransiEnt.Components.Turbogroups.OperatingStates.PartialStateDynamic "Operating State Model" annotation (choicesAllMatching=true, Placement(transformation(extent={{-52,-22},{-32,-2}})));
+    P_grad_operating=P_grad_max_star,
+    thres_hyst=thres_hyst,
+    thres=thres,
+    useThresh=useThresh,
+    P_grad_inf=P_grad_max_star,
+    Td=Td,
+    t_eps=t_eps,
+    MinimumDownTime=MinimumDownTime) constrainedby TransiEnt.Components.Turbogroups.OperatingStates.PartialStateDynamic "Operating State Model" annotation (choicesAllMatching=true, Placement(transformation(extent={{-52,-22},{-32,-2}})));
 
-  Modelica.Blocks.Continuous.FirstOrder plantDynamic(                           T=T_plant,
+  Modelica.Blocks.Continuous.FirstOrder plantDynamic(
+    T=T_plant,
     initType=Modelica.Blocks.Types.Init.InitialOutput,
-    y_start=-P_turb_init/P_nom)                                                 annotation (Placement(transformation(extent={{24,-70},{44,-50}})));
-  Modelica.Blocks.Sources.BooleanExpression isOperating(y=operationStatus.isOperating)     annotation (Placement(transformation(extent={{-90,-70},{-70,-50}})));
+    y_start=-P_turb_init/P_n) annotation (Placement(transformation(extent={{24,-70},{44,-50}})));
+  Modelica.Blocks.Sources.BooleanExpression isOperating(y=operationStatus.isOperating)     annotation (Placement(transformation(extent={{-88,-70},{-68,-50}})));
   Modelica.Blocks.Continuous.FirstOrder plantPrimaryCtrlDynamic(
     initType=Modelica.Blocks.Types.Init.SteadyState,
     y_start=0,
@@ -150,8 +168,6 @@ equation
   connect(normalize.y,operationStatus. P_set_star) annotation (Line(points={{-2.22045e-015,43},{-40,43},{-80,43},{-80,-12},{-52,-12}},
                                                                                                 color={0,0,127}));
   connect(P_max_star_limiter_total.y, plantDynamic.u) annotation (Line(points={{17,-60},{17,-60},{22,-60}}, color={0,0,127}));
-  connect(isOperating.y, switchOnOff.u2) annotation (Line(points={{-69,-60},{-34,-60}}, color={255,0,255}));
-  connect(isOperating.y, isGeneratorRunning) annotation (Line(points={{-69,-60},{-62,-60},{-62,20},{110,20}}, color={255,0,255}));
   connect(shutdown.y, switchOnOff.u3) annotation (Line(points={{-43,-84},{-40,-84},{-40,-82},{-40,-70},{-40,-68},{-34,-68}}, color={0,0,127}));
   connect(operationStatus.P_set_star_lim, switchOnOff.u1) annotation (Line(points={{-30.8,-12},{-24,-12},{-24,-36},{-48,-36},{-48,-52},{-34,-52}}, color={0,0,127}));
   connect(plantDynamic.y, P_total.u[1]) annotation (Line(points={{45,-60},{52,-60},{52,-48},{46,-48},{46,-44},{28,-44},{28,-35.9},{47,-35.9}},
@@ -159,6 +175,8 @@ equation
   connect(P_total.y, deNormalize.u) annotation (Line(points={{61.105,-38},{64.8,-38}}, color={0,0,127}));
   connect(plantPrimaryCtrlDynamic.y, P_total.u[2]) annotation (Line(points={{43,-10},{50,-10},{50,-26},{40,-26},{40,-40.1},{47,-40.1}}, color={0,0,127}));
   connect(plantPrimaryCtrlDynamic.u, normalizePbal.y) annotation (Line(points={{20,-10},{12,-10},{12,-8},{8,-8},{8,28},{38,28},{38,44.3},{36,44.3}}, color={0,0,127}));
+  connect(switchOnOff.u2, isOperating.y) annotation (Line(points={{-34,-60},{-67,-60}},                     color={255,0,255}));
+  connect(isGeneratorRunning, isOperating.y) annotation (Line(points={{110,20},{14,20},{14,14},{-67,14},{-67,-60}}, color={255,0,255}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(graphics={
     Polygon(visible=true,
@@ -209,19 +227,23 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Note, that no statistics are involved!</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>mpp: mechanical power port</p>
+<p>P_target: input for electric power in W</p>
+<p>P_spinning_set: input for electric power in W (setpoint for spinning reserve power)</p>
+<p>isGeneratorRunning: BooleanOutput</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The input P_spinning_set is supposed to be gradient limited by limtations of the primary balancing offer mechanism which has normally a higher gradient limit than the rest of the plant.</span></p>
-<p><br><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on April 2019: added minimum operation time</span></p>
 </html>"));
 end FirstOrderThreeStateTurbine;

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization;
 model DHG_PressureDiagram "Pressure diagram of district heating grids (pressure as a function of grid length) "
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -166,31 +166,32 @@ annotation (    Icon(coordinateSystem(preserveAspectRatio=true, extent={{0,0},{
         Text(
           extent={{0,100},{12,94}},
           pattern=LinePattern.Dash,
-          color=colorh,
+          lineColor=colorh,
           textString=DynamicSelect("p_supply_start",String(p_supply[1],format = "1."+String(1)+"f"))),
         Text(
           extent={{0,6},{12,0}},
-          color=colorc,
+          lineColor=colorc,
           pattern=LinePattern.Dash,
           textString=DynamicSelect("p_return_start", String(p_return[1],format = "1."+String(1)+"f"))),
         Text(
           extent={{88,100},{100,94}},
-           color=colorh,
+           lineColor=colorh,
           pattern=LinePattern.Dash,
           textString=DynamicSelect("p_supply_end",String(p_supply[n],format = "1."+String(1)+"f"))),
         Text(
           extent={{88,6},{100,0}},
-          color=colorc,
+          lineColor=colorc,
           pattern=LinePattern.Dash,
           textString=DynamicSelect("p_return_end",String(p_return[m],format = "1."+String(1)+"f"))),
         Text(
           extent={{0,-10},{100,-30}},
           lineColor={0,134,134},
-          textString="%name")}), Diagram(coordinateSystem(extent={{0,0},{
+          textString="%name")}), Diagram(graphics,
+                                         coordinateSystem(extent={{0,0},{
             100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Pressure diagram of district heating grids (pressure as a function of grid length) </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

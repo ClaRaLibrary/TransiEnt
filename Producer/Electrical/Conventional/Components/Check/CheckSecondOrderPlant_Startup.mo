@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckSecondOrderPlant_Startup "Example of the component SecondOrderPlant startup process (variable efficiency)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,20 +57,20 @@ equation
       smooth=Smooth.Bezier));
   connect(SteamPowerPlant_L0.epp, grid.epp)
     annotation (Line(
-      points={{11.5,-0.4},{30.75,-0.4},{30.75,-50.1},{55.9,-50.1}},
+      points={{11,1},{30.75,1},{30.75,-50},{56,-50}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.Bezier));
   connect(CombinedCyclePlant_L0.epp, grid.epp)
     annotation (Line(
-      points={{11.5,-110.4},{30,-110.4},{30,-50.1},{55.9,-50.1}},
+      points={{11,-109},{30,-109},{30,-50},{56,-50}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.Bezier));
 
   connect(GTPowerPlant_L0.epp, grid.epp)
     annotation (Line(
-      points={{11.5,-50.4},{11.5,-50},{30,-50},{30,-50.1},{55.9,-50.1}},
+      points={{11,-49},{11,-50},{30,-50},{30,-50},{56,-50}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.Bezier));
@@ -99,10 +99,12 @@ createPlot(id=1, position={809, 0, 791, 695}, y={"P_el_set.y", "SteamPowerPlant_
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
     experiment(StopTime=20000),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-160},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-160},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

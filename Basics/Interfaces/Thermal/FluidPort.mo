@@ -2,10 +2,10 @@ within TransiEnt.Basics.Interfaces.Thermal;
 connector FluidPort "Basic fluid port in TransiEnt library consisting of massflow, pressure, enthalpy and composition"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,12 +40,7 @@ connector FluidPort "Basic fluid port in TransiEnt library consisting of massflo
 
   annotation (Icon(graphics), Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This connector is used for fluid flow between components. The variables in the connector are:</p>
-<pre>
-	m_flow 	Mass flow rate in [kg/s]
-	p 	Absolute pressure in the connection point in [Pa]
-	h_outflow	Specific thermodynamic enthalpy close to the connection point if m_flow &lt; 0 [J/kg]
-	xi_outflow	Independent mixture mass fractions m_i/m close to the connection point if m_flow &lt; 0 [1]
+<p>This connector is used for fluid flow between components. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -53,7 +48,10 @@ connector FluidPort "Basic fluid port in TransiEnt library consisting of massflo
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
+<p>m_flow Mass flow rate in [kg/s]</p>
+<p>p Absolute pressure in the connection point in [Pa]</p>
+<p>h_outflow Specific thermodynamic enthalpy close to the connection point if m_flow &lt; 0 [J/kg]</p>
+<p>xi_outflow Independent mixture mass fractions m_i/m close to the connection point if m_flow &lt; 0 [1]</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

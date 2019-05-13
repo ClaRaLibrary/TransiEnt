@@ -2,10 +2,10 @@ within TransiEnt.Basics.Functions.GasProperties;
 function getRealGasNCV_xi "Adaptive function for net calorific value calculation for real gases, input xi"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,6 @@ public
 
 protected
   SI.MassFraction[realGasType.nc] xi=cat(1,xi_in,{1-sum(xi_in)}) "Mass weighted composition of components per kg fuel";
-  SI.SpecificEnthalpy NCV "Net calorific value";
 
 algorithm
   // _____________________________________________
@@ -60,9 +59,7 @@ algorithm
     NCVOut:=NCVIn;
   else
     //Search for component in NCVComponentValues and add it to total NCV = sum(xi_i * NCV_i) -> ideal gas?
-    NCV:=sum(xi*NCV_vec);
-    //from (MJ/kg) to (J/kg) NCV
-    NCVOut :=NCV*1e6;
+    NCVOut:=sum(xi*NCV_vec);
   end if;
 
   annotation (Documentation(info="<html>
@@ -82,7 +79,7 @@ algorithm
 <p>If there are components in the gas which don&apos;t have a corresponding entry in the NCV values record, they will just be ignored, giving a faulty calorific value. The function will throw a warning.</p>
 <p>NCVIn was added to give the possibility to define a constant calorific value. If this value is set to 0, the NCV will be calculated by the composition of the medium.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no validation or testing necessary)</p>
+<p>Tested in check model &quot;TransiEnt.Basics.Functions.GasProperties.Check.TestNCVCalculation&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

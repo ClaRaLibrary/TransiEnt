@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.LumpedPowerGrid.Components;
 model AGC "Automatic generation control model for just one secondary balancing provider (used in lumped grid models)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,14 +51,14 @@ model AGC "Automatic generation control model for just one secondary balancing p
   //                Complex Components
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_tie_is annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_is annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={0,100}), iconTransformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={0,100})));
-  Modelica.Blocks.Interfaces.RealOutput P_sec_set annotation (Placement(transformation(rotation=0, extent={{96,-10},{116,10}}), iconTransformation(extent={{96,-10},{116,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_sec_set annotation (Placement(transformation(rotation=0, extent={{96,-10},{116,10}}), iconTransformation(extent={{96,-10},{116,10}})));
   TransiEnt.Grid.Electrical.SecondaryControl.SecondaryBalancingController SecondaryController(
     is_singleton=false,
     K_r=K_r,
@@ -82,24 +82,28 @@ equation
       thickness=0.5));
   connect(P_tie_is, changeSign.u) annotation (Line(points={{0,100},{0,74},{0,74}}, color={0,0,127}));
   connect(changeSign.y, SecondaryController.P_tie_is) annotation (Line(points={{0,51},{0.38,51},{0.38,10.01}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-100,-100},{100,100}},
                                                                      preserveAspectRatio=false)),
-                                                                       Icon(coordinateSystem(extent={{-100,-100},{100,100}}, preserveAspectRatio=false)),
+                                                                       Icon(graphics,
+                                                                            coordinateSystem(extent={{-100,-100},{100,100}}, preserveAspectRatio=false)),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<p>Automatic generation control model for just one secondary balancing provider (used in lumped grid models), no power dispatch</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>(no remarks)</p>
+<p>technical component for use with physical models</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
-<p>(no remarks)</p>
+<p>only for one secondary balancing provider</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>epp: electric power port</p>
+<p>P_tie_is: input for electric power in [W]</p>
+<p>P_sec_set: output for electric power in [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
-<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>model without usage yet</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

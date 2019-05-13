@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups.Check;
 model TestHydroTurbine
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,10 +20,10 @@ model TestHydroTurbine
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Turbogroups.Hydroturbine Hydrounit(P_nom=250e6) annotation (Placement(transformation(extent={{-34,10},{10,55}})));
+  TransiEnt.Components.Turbogroups.Hydroturbine Hydrounit(P_n=250e6) annotation (Placement(transformation(extent={{-34,10},{10,55}})));
   TransiEnt.Components.Boundaries.Mechanical.Frequency NominalSpeed(f_set_const=150/60, useInputConnector=false) annotation (Placement(transformation(extent={{64,20},{38,46}})));
   Modelica.Blocks.Sources.TimeTable TestSchedule(table=[0,0; 120,0; 120,1; 720,1; 720,0; 840,0; 840,-1; 1440,-1; 1440,0; 1500,0; 1500,1; 2100,1; 2100,0; 2160,0; 2160,-1; 2760,-1; 2760,0; 2800,0; 2800,0.2; 3500,0.2; 3500,-0.2; 5000,-0.2]) annotation (Placement(transformation(extent={{-88,62},{-68,82}})));
-  Modelica.Blocks.Math.Gain from_pu(k=Hydrounit.P_nom) annotation (Placement(transformation(extent={{-44,62},{-24,82}})));
+  Modelica.Blocks.Math.Gain from_pu(k=Hydrounit.P_n) annotation (Placement(transformation(extent={{-44,62},{-24,82}})));
   Modelica.Blocks.Sources.Constant const(k=0) annotation (Placement(transformation(extent={{24,66},{4,86}})));
 equation
   connect(Hydrounit.mpp, NominalSpeed.mpp) annotation (Line(points={{10.22,32.275},{35.09,32.275},{35.09,33},{38,33}}, color={95,95,95}));

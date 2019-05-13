@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components.Controller;
 partial model PartialThermostat "Blueprint for thermostat models"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ partial model PartialThermostat "Blueprint for thermostat models"
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput T_is "Measured value of controlled temperature" annotation (Placement(transformation(extent={{-108,-12},{-84,12}}), iconTransformation(extent={{-108,-12},{-84,12}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_is "Measured value of controlled temperature" annotation (Placement(transformation(extent={{-108,-12},{-84,12}}), iconTransformation(extent={{-108,-12},{-84,12}})));
 
   Modelica.Blocks.Interfaces.BooleanOutput q "Boolean, true=Compressor on" annotation (Placement(transformation(extent={{92,-10},{112,10}}), iconTransformation(extent={{92,-10},{112,10}})));
                                                                                                                 //Signal an Wrmepumpe
@@ -76,23 +76,26 @@ equation
 //     q=false;
 //   end when;
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {100,100}})),              Diagram(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+            {100,100}})),              Diagram(graphics,
+                                               coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<p>This model is a partial model of a simple thermostat. Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>T_is - measured value of controlled Temperature</p>
+<p>q - boolean (on/off) signal</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

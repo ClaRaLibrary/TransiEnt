@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.PVBatteryConsumer;
 model PVBatteryHousehold "Household with pv, household and battery management systeem"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -82,13 +82,13 @@ model PVBatteryHousehold "Household with pv, household and battery management sy
 
   Modelica.Blocks.Routing.Extractor extractLoadProfile(nin=nLoadProfiles, index(start=iLoadProfile, fixed=true)) annotation (Placement(transformation(extent={{-48,70},{-28,90}})));
   Modelica.Blocks.Routing.Extractor extractPVProfile(nin=nPVProfiles,index(start=iPVProfile, fixed=true)) annotation (Placement(transformation(extent={{-48,30},{-28,50}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_load[nLoadProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-122,60},{-82,100}})));
-  Modelica.Blocks.Interfaces.RealInput P_el_PV[nPVProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-122,20},{-82,60}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_load[nLoadProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-122,60},{-82,100}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_PV[nPVProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-122,20},{-82,60}})));
   Components.Boundaries.Electrical.Power load(change_sign=false) annotation (Placement(transformation(
         extent={{-13,-12},{13,12}},
         rotation=0,
         origin={28,-40})));
-  Producer.Electrical.Photovoltaics.PhotovoltaicProfilePlant photovoltaicSystem(Power(change_sign=true), P_el_n=param.P_el_PV_peak) annotation (Placement(transformation(extent={{18,-24},{-4,-2}})));
+  Producer.Electrical.Photovoltaics.PhotovoltaicProfilePlant photovoltaicSystem(powerBoundary(change_sign=true), P_el_n=param.P_el_PV_peak) annotation (Placement(transformation(extent={{18,-24},{-4,-2}})));
   Components.Sensors.ElectricFrequency electricFrequency(isDeltaMeasurement=true) annotation (Placement(transformation(extent={{-22,7},{-2,27}})));
   Modelica.Blocks.Math.Feedback P_el_surplus "Suplus power (> 0 means more PV than load)" annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -130,11 +130,11 @@ equation
       smooth=Smooth.None));
 
   connect(load.epp, epp) annotation (Line(
-      points={{14.87,-40.12},{-26,-40},{-100,-40}},
+      points={{15,-40},{15,-40},{-100,-40}},
       color={0,135,135},
       thickness=0.5));
   connect(photovoltaicSystem.epp, epp) annotation (Line(
-      points={{-3.45,-6.84},{-26,-6.84},{-26,-40},{-100,-40}},
+      points={{-2.9,-5.3},{-26,-5.3},{-26,-40},{-100,-40}},
       color={0,135,135},
       thickness=0.5));
   connect(battery.epp, epp) annotation (Line(
@@ -282,7 +282,8 @@ equation
           color={0,0,255},
           smooth=Smooth.Bezier,
           thickness=1)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
@@ -291,12 +292,15 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>epp: electric power port</p>
+<p>poolControlBus</p>
+<p>P_el_load[nLoadProfiles]: input for electric power in [W] ( connector for input signals)</p>
+<p>P_el_PV[nPVProfiles]: input for electric power in [W] ( connector for input signals)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

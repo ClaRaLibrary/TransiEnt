@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Functions;
 function efficiency_quadratic "Approximizes efficiency between three defined points quadratically"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,9 +31,9 @@ function efficiency_quadratic "Approximizes efficiency between three defined poi
   //
   //                  Interfaces
   // _____________________________________________
-
-  input SI.Power P_nominal[3] "Power output for three operating points" annotation(Dialog);
-  input Real eta_nominal[3] "Efficiencies for three operating points" annotation(Dialog);
+input Real Efficiency_Mat[:,2];
+//   input SI.Power P_nominal[:] "Power output for three operating points" annotation(Dialog);
+//   input Real eta_nominal[:] "Efficiencies for three operating points" annotation(Dialog);
 
   // _____________________________________________
   //
@@ -41,8 +41,8 @@ function efficiency_quadratic "Approximizes efficiency between three defined poi
   // _____________________________________________
 
 protected
-  Real P_nominal2[3] = {P_nominal[1]^2,P_nominal[2]^2, P_nominal[3]^2};
-  Real c[3] = Modelica.Math.Matrices.solve([ones(3), P_nominal, P_nominal2],eta_nominal) "Coefficients of quadratic power curve";
+  Real P_n2[3]={Efficiency_Mat[1, 1]^2,Efficiency_Mat[2, 1]^2,Efficiency_Mat[3, 1]^2};
+  Real c[3]=Modelica.Math.Matrices.solve([ones(3),Efficiency_Mat[:, 1],P_n2], Efficiency_Mat[:, 2]) "Coefficients of quadratic power curve";
 
   // _____________________________________________
   //

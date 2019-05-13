@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Reactor.Check;
 model TestControllerH2AndH2OForReformer
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -75,9 +75,9 @@ model TestControllerH2AndH2OForReformer
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feed_hydrogen(
     volume=0.01,
     medium=vle_ng7_sg,
-    p_start=32e5,
-    xi_start={0.234539,0.00852871,0.00852871,0.00426435,0.0852871,0.0852871,0.573565,0},
-    h_start=726e3) annotation (Placement(transformation(extent={{-24,0},{-4,-20}})));
+    xi(start={0.234539,0.00852871,0.00852871,0.00426435,0.0852871,0.0852871,0.573565,0}),
+    h(start=726e3),
+    p(start=32e5)) annotation (Placement(transformation(extent={{-24,0},{-4,-20}})));
   Controller.ControllerH2OForReformer_StoCbeforeSMR controllerH2OForReformer(desiredMolarRatio=2) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
@@ -95,9 +95,9 @@ model TestControllerH2AndH2OForReformer
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feed_water(
     volume=0.01,
     medium=vle_ng7_sg,
-    p_start=32e5,
-    xi_start={0.234539,0.00852871,0.00852871,0.00426435,0.0852871,0.0852871,0.573565,0},
-    h_start=726e3) annotation (Placement(transformation(extent={{2,-20},{22,0}})));
+    xi(start={0.234539,0.00852871,0.00852871,0.00426435,0.0852871,0.0852871,0.573565,0}),
+    h(start=726e3),
+    p(start=32e5)) annotation (Placement(transformation(extent={{2,-20},{22,0}})));
 equation
   connect(ramp.y,boundaryRealGas_Txim_flow1. m_flow) annotation (Line(points={{-113,32},{-113,32},{-110,32},{-110,-4},{-104,-4}},
                                                                                                     color={0,0,127}));
@@ -140,8 +140,8 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(controllerH2OForReformer.m_flow_steam, gain1.u) annotation (Line(points={{-24,-50},{-16.8,-50}}, color={0,0,127}));
-  connect(massComp_In.fraction, controllerH2ForReformer.massComposition) annotation (Line(points={{-55,0},{-54,0},{-54,22}}, color={0,0,127}));
-  connect(massComp_In.fraction, controllerH2OForReformer.massComposition) annotation (Line(points={{-55,0},{-54,0},{-54,-18},{-38,-18},{-38,-40}}, color={0,0,127}));
+  connect(massComp_In.fraction, controllerH2ForReformer.xi) annotation (Line(points={{-55,0},{-54,0},{-54,22}}, color={0,0,127}));
+  connect(massComp_In.fraction, controllerH2OForReformer.xi) annotation (Line(points={{-55,0},{-54,0},{-54,-18},{-38,-18},{-38,-40}}, color={0,0,127}));
   connect(controllerH2ForReformer.m_flow_hydrogen_recycle, gain.u) annotation (Line(points={{-50,42},{-50,46},{-38,46},{-32.8,46}}, color={0,0,127}));
   connect(massComp_In.gasPortOut, vleMassflowSensor.gasPortIn) annotation (Line(
       points={{-56,-10},{-50,-10}},
@@ -164,7 +164,29 @@ manually change desired molar ratio"),
           extent={{-16,56},{12,46}},
           lineColor={0,140,72},
           textString="check molar ratio")}),
-    Icon(coordinateSystem(extent={{-140,-60},{140,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-140,-60},{140,100}})),
     experiment(StopTime=10000),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the ControllerH2forReformer and the ControllerH2OforReformer</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestControllerH2AndH2OForReformer;

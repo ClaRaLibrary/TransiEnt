@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridControl;
 model SupplyAndReturnTemperatureDHG "Table with supply and return temperatures according to technical connection conditions"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,12 +36,12 @@ model SupplyAndReturnTemperatureDHG "Table with supply and return temperatures a
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput T_supply_K annotation (Placement(transformation(extent={{100,-52},{120,-32}})));
-  Modelica.Blocks.Interfaces.RealOutput T_return_K annotation (Placement(transformation(extent={{100,-78},{120,-58}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_supply_K annotation (Placement(transformation(extent={{100,-52},{120,-32}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T_return_K annotation (Placement(transformation(extent={{100,-78},{120,-58}})));
 
   Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table=T_set_DHG.T_set_DHG, columns={2,3}) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  Modelica.Blocks.Interfaces.RealInput T_amb annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealOutput T_set[size(combiTable1Ds.columns, 1)] annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn T_amb annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureCelsiusOut T_set[size(combiTable1Ds.columns, 1)] annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 equation
   // _____________________________________________
   //
@@ -88,7 +88,7 @@ equation
           fillColor={192,192,192},
           fillPattern=FillPattern.Solid)}), Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Provides a practical interface to input the expected supply and return temperatures as a funciton of the ambient temperature.</p>
+<p>Provides a practical interface to input the expected supply and return temperatures as a function of the ambient temperature.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely tabular component without physical modeling)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -107,7 +107,7 @@ equation
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>This component was created using the combiTable 1Ds of the MSL. For further information regarding its usage refer to that component.</p>
 <p>Create a record with the following structure:</p>
 <p><br>T_amb[1] T_set[1] T_set[2]</p>
@@ -115,7 +115,7 @@ equation
 <p>xx</p>
 <p>xx</p>
 <p>xx</p>
-<p><br>In the parameter &QUOT;columns&QUOT; write {2, 3} (meaning that the 2nd and third columns will be used and assigned to the outputs y[1] and y[2]</p>
+<p><br>In the parameter &quot;columns&quot; write {2, 3} (meaning that the 2nd and third columns will be used and assigned to the outputs y[1] and y[2]</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
@@ -123,5 +123,6 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>(no remarks)</p>
 </html>"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end SupplyAndReturnTemperatureDHG;

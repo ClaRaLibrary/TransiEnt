@@ -22,3 +22,4 @@ getMolarMasses_realGas
 molarFlowRateElements
 shortenCompName
 verboseXi
+convertMoleToMassFraction

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind.Check;
 model TestWindturbine_SI_DF "Validation WTG with delta f SI control"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,9 @@ model TestWindturbine_SI_DF "Validation WTG with delta f SI control"
     operationRanges=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.WindSpeedOperationRanges(),
     deadbandFilter(greaterThreshold1(threshold=0)),
     beta_start=0,
-    v_wind_start=9) annotation (Placement(transformation(extent={{-28,8},{-8,32}})));
+    v_wind_start=9,
+    integratePower=false)
+                    annotation (Placement(transformation(extent={{-28,8},{-8,32}})));
 
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{66,14},{86,34}})));
 
@@ -51,7 +53,7 @@ model TestWindturbine_SI_DF "Validation WTG with delta f SI control"
   inner TransiEnt.Components.Boundaries.Ambient.AmbientConditions ambientConditions annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
 equation
   connect(WTG_1.epp, ElectricGrid.epp) annotation (Line(
-      points={{-8.5,23.6},{0,23.6},{0,23.9},{65.9,23.9}},
+      points={{-9,25},{0,25},{0,24},{66,24}},
       color={0,135,135},
       thickness=0.5));
   connect(Wind_konst.y, WTG_1.v_wind) annotation (Line(points={{-49,24},{-26.9,24},{-26.9,24.1}}, color={0,0,127}));
@@ -85,5 +87,26 @@ end plotResult;
 
 Powershaping:
 K=12
-T_L=T_W=1")}));
+T_L=T_W=1")}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for wind turbines with delta f control</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestWindturbine_SI_DF;

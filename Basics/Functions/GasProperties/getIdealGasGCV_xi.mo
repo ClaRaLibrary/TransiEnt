@@ -2,10 +2,10 @@ within TransiEnt.Basics.Functions.GasProperties;
 function getIdealGasGCV_xi "Adaptive function for gross calorific value calculation for ideal gases, input xi"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,6 @@ public
 
 protected
   SI.MassFraction[idealGasType.nc] xi=cat(1,xi_in,{1-sum(xi_in)}) "Mass weighted composition of components per kg fuel";
-  SI.SpecificEnthalpy GCV "Gross calorific value";
 
 algorithm
   // _____________________________________________
@@ -60,9 +59,7 @@ algorithm
     GCVOut:=GCVIn;
   else
     //Search for component in GCVComponentValues and add it to total GCV = sum(xi_i * GCV_i)
-    GCV:=sum(xi*GCV_vec);
-    //from (MJ/kg) to (J/kg) GCV
-    GCVOut :=GCV*1e6;
+    GCVOut:=sum(xi*GCV_vec);
   end if;
 
 protected
@@ -107,7 +104,7 @@ protected
 <p>If there are components in the gas which don&apos;t have a corresponding entry in the GCV values record, they will just be ignored, giving a faulty calorific value. The function will throw a warning.</p>
 <p>GCVIn was added to give the possibility to define a constant calorific value. If this value is set to 0, the GCV will be calculated by the composition of the defined medium.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no validation or testing necessary)</p>
+<p>Tested in check model &quot;TransiEnt.Basics.Functions.GasProperties.Check.TestGCVCalculation&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

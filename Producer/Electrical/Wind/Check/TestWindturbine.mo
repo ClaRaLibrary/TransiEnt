@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Check;
 model TestWindturbine
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,7 +29,8 @@ model TestWindturbine
     operationRanges=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.WindSpeedOperationRanges(),
     beta_start=85,
     v_wind_start=0,
-    torqueController(T_friction(k=-0.05))) annotation (Placement(transformation(extent={{2,-16},{22,4}})));
+    torqueController(tau_friction(k=-0.05)))
+                                           annotation (Placement(transformation(extent={{2,-16},{22,4}})));
 
   Modelica.Blocks.Sources.Ramp Wind(
     height=25,
@@ -40,7 +41,7 @@ model TestWindturbine
   inner TransiEnt.Components.Boundaries.Ambient.AmbientConditions ambientConditions annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
 equation
   connect(windTurbinePitchControlled.epp, Grid.epp) annotation (Line(
-      points={{21.5,-0.4},{44,-0.4},{44,-0.1},{61.9,-0.1}},
+      points={{21,1},{44,1},{44,0},{62,0}},
       color={0,135,135},
       thickness=0.5));
   connect(Wind.y, windTurbinePitchControlled.v_wind) annotation (Line(points={{-31,0},{-22,0},{-22,0.1},{3.1,0.1}},
@@ -65,8 +66,30 @@ createPlot(id=1, position={955, -10, 584, 216}, x="windTurbinePitchControlled.v_
 
 end plotResult;
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             100,100}})),
     experiment(StopTime=1200),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for wind turbines</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestWindturbine;

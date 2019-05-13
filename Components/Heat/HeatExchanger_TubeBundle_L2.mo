@@ -1,10 +1,10 @@
 within TransiEnt.Components.Heat;
 model HeatExchanger_TubeBundle_L2 "Simple heat exchanger model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,4 +20,36 @@ model HeatExchanger_TubeBundle_L2 "Simple heat exchanger model"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends ClaRa.Components.HeatExchangers.TubeBundle_L2;
+  extends TransiEnt.Basics.Icons.Heat_Exchanger;
+  annotation (Icon(graphics={
+        Text(
+          extent={{-40,-58},{40,-100}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          textString="L2")}), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>A simple model of a heat exchanger</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>L2 (defined in the CodingConventions)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>inlet: fluidPortIn</p>
+<p>outlet: fluidPortOut</p>
+<p>heat: heat port a</p>
+<p>eye</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end HeatExchanger_TubeBundle_L2;

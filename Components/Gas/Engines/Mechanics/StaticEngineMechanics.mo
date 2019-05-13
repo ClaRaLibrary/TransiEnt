@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Engines.Mechanics;
 model StaticEngineMechanics "Static mechanical behavior of an engine"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,17 +43,12 @@ model StaticEngineMechanics "Static mechanical behavior of an engine"
   //
   //          Characteristic Equations
   // _____________________________________________
+
 equation
-  if switch then
-  eta_el = efficiencyFunction(
-      P_el_set,
-      {Specification.P_el_max,Specification.P_el_min},
-      {Specification.eta_el_max,Specification.eta_el_min});
-  eta_h = efficiencyFunction(
-      P_el_set,
-      {Specification.P_el_max,Specification.P_el_min},
-      {Specification.eta_h_min,Specification.eta_h_max});
-  else
+if switch then
+   eta_el=partloadEfficiency.eta_is[1];
+  eta_h = partloadEfficiency.eta_is[2];
+else
     eta_el = 1e-10;
     eta_h = 1e-10;
   end if;
@@ -112,5 +107,6 @@ equation
 <p>Created by Arne Koeppen (arne.koeppen@tuhh.de), Apr 2014</p>
 <p>Edited by Jan Braune (jan.braune@tuhh.de), Mar 2015</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Aug 2015</p>
+<p>Edited by Anne Senkel (anne.senkel@tuhh.de), Feb 2019</p>
 </html>"));
 end StaticEngineMechanics;

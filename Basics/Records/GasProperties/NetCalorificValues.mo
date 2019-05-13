@@ -1,11 +1,11 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
-record NetCalorificValues "Record containing the net calorific values for different molecules in MJ per kg for 25 °C"
+record NetCalorificValues "Record containing the net calorific values for different molecules in J per kg for 25 °C"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,8 +35,8 @@ record NetCalorificValues "Record containing the net calorific values for differ
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  parameter String[:] components =  {"Water", "CARBON_MONOXIDE", "CO",     "HYDROGEN",   "H2",     "Nitrogen",   "N2",   "CARBON_DIOXIDE",   "CO2",   "Methane",  "CH4",  "Ethane",  "C2H6", "Propane", "C3H8",  "Butane", "C4H10", "Oxygen", "O2"};
-  parameter Real[:]   compValues =  {0,       10.10,             10.10,    119.95,       119.95,   0.0,          0.0,    0.0,                0.0,     50.029,     50.029, 47.51,     47.51,  46.33,     46.33,   45.72,    45.72,   0.0,      0.0};
+  parameter String[:] components =  {"Water", "Carbon_Monoxide", "CO",   "Hydrogen", "H2",    "Nitrogen", "N2", "Carbon_Dioxide", "CO2", "Methane", "CH4",  "Ethane",  "C2H6", "Propane", "C3H8", "Butane", "C4H10", "Oxygen", "O2"};
+  parameter Real[:]   compValues =  {0,       10.103,            10.103, 119.951,    119.951, 0.0,        0.0,  0.0,              0.0,   50.028,    50.028, 47.510,    47.510, 46.332,    46.332, 45.719,   45.719,  0.0,      0.0}*1e6;
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -51,15 +51,16 @@ record NetCalorificValues "Record containing the net calorific values for differ
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The components vector contains the component names.</p>
-<p>In the params vector the mass weighted net calorific value for each component is defined in MJ/kg at 25 &deg;C</p>
+<p>In the params vector the mass weighted net calorific value for each component is defined in J/kg at 25 &deg;C</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>Be sure to store the mass weighted net calorific value for each component in params in the same column in which the name is stored in the components vector.</p>
 <p>In component names with two words, these are to be separated by an underscore. Don&apos;t use spaces, as in the shortenCompName functions spaces are replaced by underscores!</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>G. Cerbe, B. Lendt, K. Br&uuml;ggemann, M. Dehli, F. Gr&ouml;schl, K. Heikrodt, T. Kleiber, J. Kuck, J. Mischner, T. Schmidt, A. Seemann, and W. Thielen, Grundlagen der Gastechnik. Gasbeschaffung - Gasverteilung - Gasverwendung, 8th ed. M&uuml;nchen: Carl Hanser Verlag, 2017.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Lisa Andresen (andresen@tuhh.de), Nov 2016</p>
+<p>Revised by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));
 end NetCalorificValues;

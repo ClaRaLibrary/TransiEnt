@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics;
 record PQ_Characteristics_WT "Black coal steam unit based on 'CHP Tiefstack (TS)', Source: Cerbe2002"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,25 @@ record PQ_Characteristics_WT "Black coal steam unit based on 'CHP Tiefstack (TS)
      205.7e6,       540.7e6,       539.2e6,       540.2e6,       543.3e6,       548.6e6,       555.8e6,       564.6e6,       574.9e6,       586.4e6]);
 
   annotation (Documentation(info="<html>
-<p><span style=\"font-size: 8pt;\">All records (PQ diagrams and Heat input matrixes) included in this package are included with the intention of illustrating the modelling concept.</span></p>
-<p><span style=\"font-size: 8pt;\">However, users are encouraged to create their own records based on the plants and scenarios that they want to simulate.</span></p>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>record for generic PQ characteristics of a black coal steam unit based on &apos;CHP Tiefstack (TS)&apos;</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>All records (PQ diagrams and Heat input matrixes) included in this package are included with the intention of illustrating the modelling concept.</p>
+<p>However, users are encouraged to create their own records based on the plants and scenarios that they want to simulate.</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p><span style=\"font-family: sans-serif;\">[1] CERBE, A. &quot;Prozessnahe Einsatzoptimierung mit BoFiT unter Ber&uuml;cksichtigung der Netzrestriktionen.&quot; Hamburg: Hamburgische Electricit&auml;ts-Werke AG, 2002 </span></p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end PQ_Characteristics_WT;

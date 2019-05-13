@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems;
 model simulatePoolLoadShedding
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,7 +30,7 @@ model simulatePoolLoadShedding
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-50,100},{-70,80}})));
 equation
   connect(heatpumpSystemPool.epp, ElectricGrid.epp) annotation (Line(
-      points={{16,-1},{51.9,-1},{51.9,-2.1}},
+      points={{16,-1},{52,-1},{52,-2}},
       color={0,135,135},
       thickness=0.5));
   connect(booleanStep.y, heatpumpSystemPool.isLoadShedding) annotation (Line(points={{-37,0},{-14.3,0},{-14.3,-1}}, color={255,0,255}));
@@ -57,5 +57,25 @@ algorithm
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (experiment(StopTime=172800));
+  annotation (experiment(StopTime=172800), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end simulatePoolLoadShedding;

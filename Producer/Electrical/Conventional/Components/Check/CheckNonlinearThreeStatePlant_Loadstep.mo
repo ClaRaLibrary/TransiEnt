@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckNonlinearThreeStatePlant_Loadstep "Example of the component NonlinearThreeStatePlant"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -58,12 +58,12 @@ model CheckNonlinearThreeStatePlant_Loadstep "Example of the component Nonlinear
 equation
 
   connect(Gen_1.epp, constantPotentialVariableBoundary.epp) annotation (Line(
-      points={{-16.9,0.52},{47.9,0.52},{47.9,-2.1}},
+      points={{-17.8,2.9},{48,2.9},{48,-2}},
       color={0,135,135},
       thickness=0.5));
   connect(P_step.y, Gen_1.P_el_set) annotation (Line(points={{-68,24},{-52,24},{-36.7,24},{-36.7,7.83}},                   color={0,0,127}));
   connect(Gen_2.epp, constantPotentialVariableBoundary1.epp) annotation (Line(
-      points={{-18.9,-85.48},{47.9,-85.48},{47.9,-88.1}},
+      points={{-19.8,-83.1},{48,-83.1},{48,-88}},
       color={0,135,135},
       thickness=0.5));
   connect(P_step1.y, Gen_2.P_el_set) annotation (Line(points={{-69,-62},{-52,-62},{-38.7,-62},{-38.7,-78.17}}, color={0,0,127}));
@@ -84,10 +84,12 @@ createPlot(id=2, position={809, 0, 791, 364}, y={"P_step1.y", "Gen_2.epp.P"}, ra
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},{100,100}})),
     experiment(StopTime=7200),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-160},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-160},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

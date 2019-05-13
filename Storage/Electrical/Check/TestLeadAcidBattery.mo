@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Check;
 model TestLeadAcidBattery
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,15 +43,15 @@ model TestLeadAcidBattery
 equation
 
   connect(Storage.epp, ElectricGrid.epp) annotation (Line(
-      points={{47,-30},{65.9,-30},{65.9,-30.1}},
+      points={{47,-30},{66,-30},{66,-30}},
       color={0,135,135},
       thickness=0.5));
   connect(WindGenerator.epp, ElectricGrid.epp) annotation (Line(
-      points={{48,8},{58,8},{58,-30.1},{65.9,-30.1}},
+      points={{48,8},{58,8},{58,-30},{66,-30}},
       color={0,135,135},
       thickness=0.5));
   connect(Consumer.epp, ElectricGrid.epp) annotation (Line(
-      points={{48,-74},{58,-74},{58,-30.1},{65.9,-30.1}},
+      points={{48,-74},{58,-74},{58,-30},{66,-30}},
       color={0,135,135},
       thickness=0.5));
   connect(P_wind.y1, P_residual.u1) annotation (Line(points={{-59,8},{-46,8},{-46,-6},{-42,-6}}, color={0,0,127}));
@@ -81,12 +81,34 @@ createPlot(id=1, position={809, 0, 791, 269}, y={"P_residual.y", "P_residual_smo
 end plotResult;
 equation
   connect(P_residual.y, Storage.P_set) annotation (Line(points={{-19,-12},{36,-12},{36,-19.66}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     experiment(
       StopTime=4e+006,
       Interval=900,
       Tolerance=1e-006,
       __Dymola_Algorithm="Sdirk34hw"),
-    __Dymola_experimentSetupOutput(events=false));
+    __Dymola_experimentSetupOutput(events=false),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end TestLeadAcidBattery;

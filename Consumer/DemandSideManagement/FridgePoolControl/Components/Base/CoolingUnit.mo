@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components.Base;
 model CoolingUnit "Simple cooling unit model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -103,22 +103,25 @@ equation
         Line(
           points={{-24,-22},{-20,-14},{-8,4},{-6,6},{2,12},{12,16},{20,16}},
           color={0,0,255},
-          smooth=Smooth.None)}),    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+          smooth=Smooth.None)}),    Diagram(graphics,
+                                            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
             100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<p>This model is a simple cooling unit with a single heat port (e.g. fridge). Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">port_a - Heat Port</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">q - turn on/off signal</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp - Electric Power Port</span></p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

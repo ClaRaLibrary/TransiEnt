@@ -2,10 +2,10 @@ within TransiEnt.Producer.Combined.SmallScaleCHP.Controller;
 model ControllerExtP_el "CHP Controller that sets plant to a given electric power"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,21 +56,21 @@ model ControllerExtP_el "CHP Controller that sets plant to a given electric powe
   //
   //                    Interfaces
   // _____________________________________________
-  Modelica.Blocks.Interfaces.RealInput P_el_set_external if use_P_in annotation (Placement(transformation(extent={{-112,-3},
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set_external if use_P_in "Input for electric power" annotation (Placement(transformation(extent={{-112,-3},
             {-86,23}})));
 
-  Modelica.Blocks.Interfaces.RealOutput t_running "total hours of operation of CHP"
+  Modelica.Blocks.Interfaces.RealOutput t_running( final quantity="Time", final unit="s", displayUnit="h") "total time of operation of CHP"
     annotation (Placement(transformation(extent={{13,-13},{-13,13}},
         rotation=90,
         origin={-39,-99})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_meas_out "Produced heatflow rate"
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_meas_out "Produced heatflow rate"
     annotation (Placement(transformation(extent={{13,-13},{-13,13}},
         rotation=90,
         origin={-13,-99}), iconTransformation(
         extent={{13,-13},{-13,13}},
         rotation=90,
         origin={-10,-99})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_meas_out "Produced electric power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_meas_out "Produced electric power"
     annotation (Placement(transformation(extent={{13,-13},{-13,13}},
         rotation=90,
         origin={19,-99})));
@@ -120,7 +120,11 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>controlBus</p>
+<p>P_el_set_external: input for electric power in [W]</p>
+<p>t_running: RealOutput for total hours of CHP operating</p>
+<p>Q_flow_meas_out: output for produced heat flow rate in [W]</p>
+<p>P_el_meas_out: output for produced power in [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

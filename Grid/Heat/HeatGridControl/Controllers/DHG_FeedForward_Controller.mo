@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridControl.Controllers;
 model DHG_FeedForward_Controller "Assigns output targets to the heat generating plants based on the total expected heat demand"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,7 +40,7 @@ model DHG_FeedForward_Controller "Assigns output targets to the heat generating 
   // _____________________________________________
 
     Modelica.SIunits.MassFlowRate m_flow_set;
-   Modelica.SIunits.HeatFlowRate Q_flow_set;
+    Modelica.SIunits.HeatFlowRate Q_flow_set;
 
   // _____________________________________________
   //
@@ -63,8 +63,8 @@ model DHG_FeedForward_Controller "Assigns output targets to the heat generating 
   //             Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput T_ambient annotation (Placement(transformation(extent={{-166,-6},{-154,6}}),  iconTransformation(extent={{-120,-10},{-100,10}})));
-  Modelica.Blocks.Interfaces.RealInput Q_dot_DH_Targ annotation (Placement(
+  TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn T_ambient "Ambient temperature input in Celsius" annotation (Placement(transformation(extent={{-166,-6},{-154,6}}),  iconTransformation(extent={{-120,-10},{-100,10}})));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_dot_DH_Targ "Heat flow rate input" annotation (Placement(
         transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
@@ -82,8 +82,8 @@ model DHG_FeedForward_Controller "Assigns output targets to the heat generating 
 
   Modelica.Blocks.Sources.RealExpression m_flow_set_source(y=m_flow_set) "in kg/s"
                                                                          annotation (Placement(transformation(extent={{-26,-57},{4,-39}})));
-  Modelica.Blocks.Interfaces.RealOutput m_flow_i[size(massFlowRestrictions.combiTable1Ds.columns, 1)](final quantity="MassFlowRate", final unit="kg/s") annotation (Placement(transformation(extent={{140,-58},{160,-38}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_i[size(massFlowRestrictions.combiTable1Ds.columns, 1)](final quantity="HeatFlowRate", final unit="W") annotation (Placement(transformation(extent={{140,48},{160,68}})));
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_i[size(massFlowRestrictions.combiTable1Ds.columns, 1)] annotation (Placement(transformation(extent={{140,-58},{160,-38}})));
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_i[size(massFlowRestrictions.combiTable1Ds.columns, 1)] annotation (Placement(transformation(extent={{140,48},{160,68}})));
   Basics.Blocks.Sources.RealVectorExpression Q_flow_calc(nout=size(massFlowRestrictions.combiTable1Ds.columns, 1), y_set=vector(m_flow.y .* delta_h.y)) annotation (Placement(transformation(extent={{24,48},{44,68}})));
 
   Modelica.Blocks.Sources.RealExpression delta_h(y=h_supply.h - h_return.h) annotation (Placement(transformation(extent={{-18,34},{12,56}})));
@@ -121,7 +121,8 @@ equation
   //General annotations
   connect(T_ambient, supplyandReturnTemperature.T_amb) annotation (Line(points={{-160,0},{-142,0},{-142,0}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},{140,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},{140,100}})),
     experiment(StopTime=3.1536e+007),
     __Dymola_experimentSetupOutput,
     Icon(coordinateSystem(extent={{-160,-100},{140,100}}, preserveAspectRatio=false),
@@ -157,11 +158,11 @@ equation
           origin={85.5,-38.5},
           rotation=90)}),
     Documentation(info="<html>
-<h4><span style=\"color:#008000\">District Heating Network Control</span></h4>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">District Heating Network Control</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This component takes the predicted heat load in a given district heating network and determines the output target for the heating condensers or heat exchangers heat demand of the city (in this case three units). </p>
 <p>In other words, this components takes care of the formation of output targets for the district heating units.</p>
-<p><br><br><h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4></p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The model considers </p>
 <ul>
 <li>The supply temperature according to the contract of the company (SupplyTemperature)</li>
@@ -169,9 +170,9 @@ equation
 <li>The mass flow restrictions of each branch (massFlowRestrictions_EWC)</li>
 </ul>
 <p><br>It is assumed that these values are known by the network operator. The values should be added to the tables.</p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>Inputs: </p>
 <ul>
 <li>Ambient Temperature in &deg;C</li>
@@ -183,15 +184,15 @@ equation
 <li>Target heatflow output at west branch</li>
 <li>Target heatflow output at center </li>
 </ul>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color:#008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
-<h4><span style=\"color:#008000\">9. Validation</span></h4>
+<h4><span style=\"color: #008000\">9. Validation</span></h4>
 <p>(no remarks)</p>
 </html>"));
 end DHG_FeedForward_Controller;

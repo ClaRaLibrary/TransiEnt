@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings.Base;
 model VolumeRealGas_L4_constXi "A 1D tube-shaped control volume considering one-phase and two-phase heat transfer in a straight pipe with static momentum balance and simple energy balance."
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,9 @@ model VolumeRealGas_L4_constXi "A 1D tube-shaped control volume considering one-
 // two-phase region deactivated
 // added xi_nom, m_flow_start
 // added w_inlet, w_outlet, medium, xi, x in summary
+// added xi_nom in iCom
 // no species balances
+// added possibility to give temperature start value instead of specific enthalpy
 
   extends ClaRa.Basics.Icons.Volume_L4;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L4");
@@ -144,11 +146,12 @@ public
 //____Initialisation_____________________________________________________________________________________
   inner parameter Integer  initOption=0 "Type of initialisation" annotation(Dialog(tab="Initialisation"), choices(choice = 0 "Use guess values", choice = 208 "Steady pressure and enthalpy", choice=201 "Steady pressure", choice = 202 "Steady enthalpy"));
   inner parameter Boolean useHomotopy=simCenter.useHomotopy "true, if homotopy method is used during initialisation" annotation(Dialog(tab="Initialisation",group="Model Settings"));
-  parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_start[geo.N_cv]=ones(geo.N_cv)*800e3 "Initial specific enthalpy for single tube"
-                                                                                                                                      annotation(Dialog(tab="Initialisation"));
+  parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_start[geo.N_cv]=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_nom) "Initial specific enthalpy for single tube"
+                                                                                                                                                                                                 annotation(Dialog(tab="Initialisation"));
   parameter ClaRa.Basics.Units.Pressure p_start[geo.N_cv]=ones(geo.N_cv)*1e5 "Initial pressure"
                                                                                                annotation(Dialog(tab="Initialisation"));
   parameter ClaRa.Basics.Units.MassFlowRate m_flow_start[geo.N_cv+1]=m_flow_nom*ones(geo.N_cv+1) "Initial mass flow rate" annotation(Dialog(tab="Initialisation"));
+  parameter Modelica.SIunits.Temperature T_start[geo.N_cv]=ones(geo.N_cv)*simCenter.T_ground "Initial temperature for single tube (used in calculation of h_start)" annotation(Dialog(tab="Initialisation"));
 protected
   parameter ClaRa.Basics.Units.Pressure p_start_internal[geo.N_cv]=if size(p_start, 1) == 2 then linspace(
       p_start[1],
@@ -236,7 +239,7 @@ public
 
 //____Energy / Enthalpy_________________________________________________________________________________________
 protected
-  ClaRa.Basics.Units.EnthalpyMassSpecific h[geo.N_cv](start=h_start,each stateSelect=StateSelect.prefer) "Cell enthalpy";
+  ClaRa.Basics.Units.EnthalpyMassSpecific h[geo.N_cv](start=h_start, each stateSelect=StateSelect.prefer) "Cell enthalpy";
 
 
   //____Pressure__________________________________________________________________________________________________
@@ -261,7 +264,7 @@ protected
 
   //____Flows and Velocities______________________________________________________________________________________
   ClaRa.Basics.Units.Power H_flow[geo.N_cv + 1] "Enthalpy flow rate at cell borders";
-  ClaRa.Basics.Units.MassFlowRate m_flow[geo.N_cv + 1](start=m_flow_start, nominal=ones(geo.N_cv + 1)*m_flow_nom); //JB: removed this from variable definition: "nominal=ones(geo.N_cv + 1)*m_flow_nom, "
+  ClaRa.Basics.Units.MassFlowRate m_flow[geo.N_cv + 1](start=m_flow_start); //JB: removed this from variable definition: "nominal=ones(geo.N_cv + 1)*m_flow_nom, "
   ClaRa.Basics.Units.Velocity w[geo.N_cv] "flow velocities within cells of energy model == flow velocities across cell borders of flow model ";
   ClaRa.Basics.Units.Velocity w_inlet "flow velocity at inlet";
   ClaRa.Basics.Units.Velocity w_outlet "flow velocity at outlet";
@@ -326,6 +329,7 @@ protected
     Delta_p_nom=Delta_p_nom,
     m_flow_nom=m_flow_nom,
     h_nom=h_nom[1],
+    xi_nom=xi_nom,
     T=gasBulk.T,
     p=p,
     h=h,
@@ -505,7 +509,8 @@ equation
               defaultComponentName="volume",Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-50},
             {140,50}}),
                    graphics),
-        Diagram(coordinateSystem(preserveAspectRatio=false,
+        Diagram(graphics,
+                coordinateSystem(preserveAspectRatio=false,
           extent={{-140,-50},{140,50}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -527,7 +532,8 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Revised by Carsten Bode (c.bode@tuhh.de), Apr 2018 (updated to ClaRa 1.3.0)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Carsten Bode (c.bode@tuhh.de), Feb 2019 (added temperature start value)</span></p>
 </html>"));
 end VolumeRealGas_L4_constXi;

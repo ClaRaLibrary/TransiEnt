@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups;
 model StatelessTurbine "Generic model of a turbine without distinct states (no state events)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,7 +33,7 @@ model StatelessTurbine "Generic model of a turbine without distinct states (no s
   //             Visible Parameters
   // _____________________________________________
 
-  parameter SI.Power P_nom=2e9 "Nominal power";
+  parameter SI.Power P_n=2e9 "Nominal power";
 
   parameter Real P_min_star=0.2 "Dimensionless minimum power (=20% of nominal power)";
 
@@ -54,7 +54,7 @@ model StatelessTurbine "Generic model of a turbine without distinct states (no s
 
   parameter SI.Time t_startup=0 "Startup time (no output during startup)";
 
-  parameter SI.Time t_shutdown=60 "Time it takes to disconnect from grid (P=P_set during shutdown)";
+  //parameter SI.Time t_shutdown=60 "Time it takes to disconnect from grid (P=P_set during shutdown)";
 
   outer SimCenter simCenter;
 
@@ -65,7 +65,7 @@ model StatelessTurbine "Generic model of a turbine without distinct states (no s
 
   Modelica.Blocks.Interfaces.BooleanOutput isGeneratorRunning annotation (
       Placement(transformation(rotation=0, extent={{100,10},{120,30}})));
-  Modelica.Blocks.Interfaces.RealInput P_spinning_set "Setpoint for spinning reserve power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_spinning_set "Setpoint for spinning reserve power"
                                                       annotation (Placement(transformation(
         rotation=270,
         extent={{-12,-12},{12,12}},
@@ -76,13 +76,12 @@ model StatelessTurbine "Generic model of a turbine without distinct states (no s
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Math.Gain normalize(k=1/P_nom)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+  Modelica.Blocks.Math.Gain normalize(k=1/P_n) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
         rotation=270,
         origin={0,54})));
 
-  Modelica.Blocks.Math.Gain normalizePbal(k=1/P_nom)  annotation (Placement(
-        transformation(
+  Modelica.Blocks.Math.Gain normalizePbal(k=1/P_n) annotation (Placement(transformation(
         extent={{-7,-7},{7,7}},
         rotation=270,
         origin={36,52})));
@@ -91,8 +90,7 @@ model StatelessTurbine "Generic model of a turbine without distinct states (no s
         extent={{-6.5,-6},{6.5,6}},
         rotation=0,
         origin={53.5,-38})));
-  Modelica.Blocks.Math.Gain deNormalize(k=P_nom)
-    annotation (Placement(transformation(extent={{66,-44},{78,-32}})));
+  Modelica.Blocks.Math.Gain deNormalize(k=P_n) annotation (Placement(transformation(extent={{66,-44},{78,-32}})));
   Boundaries.Mechanical.Power MechanicalBoundary annotation (Placement(transformation(extent={{70,-84},{88,-66}})));
   Modelica.Blocks.Nonlinear.Limiter P_max_star_limiter_total(uMax=0, uMin=-
         P_max_star) "Upper limit is nominal power"
@@ -106,9 +104,10 @@ model StatelessTurbine "Generic model of a turbine without distinct states (no s
   Real P_set_star = normalize.y;
   Real P_is_star = deNormalize.u;
 
-  Modelica.Blocks.Continuous.FirstOrder plantDynamic(                           T=T_plant,
+  Modelica.Blocks.Continuous.FirstOrder plantDynamic(
+    T=T_plant,
     initType=Modelica.Blocks.Types.Init.InitialOutput,
-    y_start=-P_turb_init/P_nom)                                                 annotation (Placement(transformation(extent={{24,-70},{44,-50}})));
+    y_start=-P_turb_init/P_n) annotation (Placement(transformation(extent={{24,-70},{44,-50}})));
   Modelica.Blocks.Sources.BooleanExpression isOperating(y=true)                            annotation (Placement(transformation(extent={{64,10},{84,30}})));
   Modelica.Blocks.Continuous.FirstOrder plantPrimaryCtrlDynamic(
     initType=Modelica.Blocks.Types.Init.SteadyState,
@@ -145,7 +144,8 @@ equation
   connect(plantPrimaryCtrlDynamic.u, normalizePbal.y) annotation (Line(points={{20,-10},{12,-10},{12,-8},{8,-8},{8,28},{38,28},{38,44.3},{36,44.3}}, color={0,0,127}));
   connect(isOperating.y, isGeneratorRunning) annotation (Line(points={{85,20},{110,20},{110,20}}, color={255,0,255}));
   connect(normalize.y, P_max_star_limiter_total.u) annotation (Line(points={{-2.22045e-015,43},{-2.22045e-015,-6},{-22,-6},{-22,-60},{-6,-60}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(graphics={
     Polygon(visible=true,
           lineColor={192,192,192},
@@ -192,14 +192,17 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Note, that no statistics are involved!</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">mpp: mechanical power port</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_target: input for electric power in W</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_spinning_set: input for electric power in W (setpoint for spinning reserve power)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">isGeneratorRunning: BooleanOutput</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The input P_spinning_set is supposed to be gradient limited by limtations of the primary balancing offer mechanism which has normally a higher gradient limit than the rest of the plant.</span></p>
-<p><br><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>

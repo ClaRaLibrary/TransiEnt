@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components;
 model SimplePowerPlant "No transient behaviuor, no operating states, constant efficiency (with optional primary balancing controller)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,15 +28,16 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
 
   extends TransiEnt.Producer.Electrical.Base.PartialDispatchablePowerPlant;
   extends TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider(
-      final typeOfBalancingPowerResource=typeOfResource,
-      primaryBalancingController(P_nom=P_el_n),
-      controlPowerModel(
-        P_nom=P_el_n,
-        P_pr_max=primaryBalancingController.P_pr_max,
-        isSecondaryControlActive=false,
-        P_el_is = P_el_is,
-        is_running=is_running,
-        P_PB_set=primaryBalancingController.P_PBP_set),
+    final typeOfBalancingPowerResource=typeOfResource,
+    final P_n=P_el_n,
+    primaryBalancingController(P_n=P_el_n),
+    controlPowerModel(
+      P_pr_max=primaryBalancingController.P_pr_max,
+      isSecondaryControlActive=false,
+      P_el_is=P_el_is,
+      is_running=is_running,
+      P_PB_set=primaryBalancingController.P_PBP_set,
+      final P_n=P_el_n),
     redeclare final TransiEnt.Components.Sensors.MechanicalFrequency gridFrequencySensor(final isDeltaMeasurement=true));
 
   // _____________________________________________
@@ -51,7 +52,7 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
   parameter Integer nSubgrid=1 "Index of subgrid for moment of inertia statistics" annotation(Dialog(group="Statistics"));
 
   // ** Inititialization **
-  parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
+  parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true), Dialog(group="Initialization"));
 
   parameter SI.Efficiency eta_gen=1 "Generator efficiency" annotation(Dialog(group="Physical constraints"));
@@ -63,12 +64,17 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
 
   Real delta_P_star = (P_el_set+P_el_is)/P_el_n;
 
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=eta_gen) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=eta_gen) constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "Choice of generator model. The generator model must match the power port." annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-18.5,-18},{18.5,18}},
         rotation=0,
         origin={39.5,-40})));
+
+  replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem "Choice of excitation system model with voltage control" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={62.5,16})));
   TransiEnt.Components.Mechanical.ConstantInertia MechanicalConnection(
-    w(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
+    omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid,
     P_n=P_el_n) annotation (choicesAllMatching=true, Placement(transformation(extent={{-28,-57},{4,-23}})));
@@ -96,7 +102,7 @@ equation
   // _____________________________________________
 
   connect(MechanicalConnection.mpp_b, Generator.mpp) annotation (Line(
-      points={{4,-40},{12,-40},{12,-40.9},{20.075,-40.9}},
+      points={{4,-40},{12,-40},{12,-40},{21,-40}},
       color={95,95,95},
       smooth=Smooth.None));
   connect(gridFrequencySensor.mpp, MechanicalConnection.mpp_b) annotation (Line(
@@ -104,7 +110,7 @@ equation
       color={95,95,95},
       smooth=Smooth.None));
   connect(Generator.epp, epp) annotation (Line(
-      points={{58.185,-40.18},{100.093,-40.18},{100.093,60},{100,60}},
+      points={{58.185,-40.18},{100.093,-40.18},{100.093,78},{100,78}},
       color={0,0,0},
       smooth=Smooth.None));
 
@@ -118,9 +124,15 @@ equation
       smooth=Smooth.None));
   connect(Turbine.mpp, MechanicalConnection.mpp_a) annotation (Line(points={{-42,-41},{-34,-41},{-34,-40},{-28,-40}}, color={95,95,95}));
   connect(targetSum.y, Turbine.P_mech_set) annotation (Line(points={{-60,0.98},{-58,0.98},{-58,-23.3}},             color={0,0,127}));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{62.5,5.4},{62.5,-8.3},{38.945,-8.3},{38.945,-22.18}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{62.5,26},{80,26},{80,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics),
-                                 Diagram(coordinateSystem(preserveAspectRatio=false,
+                                 Diagram(graphics,
+                                         coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -128,10 +140,12 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
-<p>- Power plant model is &QUOT;always on&QUOT;</p>
+<p>- Power plant model is &quot;always on&quot;</p>
 <p>- Output is not constrained by gradient or capacity limits</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Type of electrical power port can be chosen</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for electric power in [W] (setpoint for electric power)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_SB_set: input for electric power in [W] (secondary balancing setpoint)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -139,10 +153,11 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;TransiEnt.Producer.Electrical.Conventional.Components.Check.CheckSimplePowerPlant&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end SimplePowerPlant;

@@ -1,13 +1,12 @@
 within TransiEnt.Components.Heat.Grid;
 model PressureControl "ClaRa pump regulated by pressure in heat grid"
   extends TransiEnt.Basics.Icons.Model;
-  extends ClaRa.Basics.Icons.Pump;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,13 +27,14 @@ model PressureControl "ClaRa pump regulated by pressure in heat grid"
   //          Imports and Class Hierarchy
   // _____________________________________________
   import TransiEnt;
+  extends TransiEnt.Basics.Icons.Pump;
 
   // _____________________________________________
   //
   //             Visible Parameters
   // _____________________________________________
 
-  parameter SI.Pressure dp_target=simCenter.p_n[2]-simCenter.p_n[1] "Target pressure drop for consumers";
+  parameter SI.Pressure dp_target=simCenter.p_nom[2]-simCenter.p_nom[1] "Target pressure drop for consumers";
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid Medium = simCenter.fluid1 "Medium in the component";
 
   // _____________________________________________
@@ -125,8 +125,14 @@ equation
       color={0,131,169},
       thickness=0.5,
       smooth=Smooth.None));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})),           Icon(coordinateSystem(
+  connect(waterPortOut, waterPortOut) annotation (Line(
+      points={{100,0},{100,6},{100,6},{100,0}},
+      color={175,0,0},
+      thickness=0.5));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),           Icon(graphics,
+                                               coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -141,7 +147,8 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>

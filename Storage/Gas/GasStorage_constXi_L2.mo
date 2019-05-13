@@ -1,11 +1,11 @@
 within TransiEnt.Storage.Gas;
-model GasStorage_constXi_L2 "Model of a simple gas storage volume for constant composition"
+model GasStorage_constXi_L2 "L2: Model of a simple gas storage volume for constant composition"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,6 +38,7 @@ model GasStorage_constXi_L2 "Model of a simple gas storage volume for constant c
   //             Visible Parameters
   // _____________________________________________
 
+  parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated"  annotation (Dialog(group="Statistics"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el=simCenter.Cspec_demAndRev_free "Specific cost per electric energy for start gas generation" annotation (Dialog(group="Statistics"));
   parameter SI.Efficiency eta_ely=0.75 "Electrolyzer efficiency with which the start gas is produced" annotation(Dialog(group="Statistics"));
   parameter SI.Pressure p_max=200e5 "Maximum pressure in storage" annotation(Dialog(group="Statistics"));
@@ -71,13 +72,23 @@ protected
     produces_other_flow=false,
     consumes_other_flow=false,
     produces_m_flow_CDE=false,
-    consumes_m_flow_CDE=false)                                                       annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+    consumes_m_flow_CDE=false,
+    calculateCost=calculateCost)                                                     annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectCosts_HydrogenStorageStartGas collectCosts_StartGas(
     Cspec_demAndRev_el=Cspec_demAndRev_el,
     eta_ely=eta_ely,
-    mass_H2=m_gas) annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
+    mass_H2=m_gas,
+    calculateCost=calculateCost)
+                   annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
 public
   inner Summary summary(
+    outline(
+      H_flow_in_NCV=H_flow_in_NCV,
+      H_flow_out_NCV=H_flow_out_NCV,
+      H_gas_NCV=H_gas_NCV,
+      H_flow_in_GCV=H_flow_in_GCV,
+      H_flow_out_GCV=H_flow_out_GCV,
+      H_gas_GCV=H_gas_GCV),
     gasPortIn(
       mediumModel=medium,
       xi=gasIn.xi,
@@ -121,8 +132,18 @@ public
   // _____________________________________________
 
 protected
+  model Outline
+    input SI.EnergyFlowRate H_flow_in_NCV "Inflowing enthalpy flow based on NCV";
+    input SI.EnergyFlowRate H_flow_out_NCV "Inflowing enthalpy flow based on NCV";
+    input SI.Enthalpy H_gas_NCV "Enthalpy of the gas bulk based on NCV";
+    input SI.EnergyFlowRate H_flow_in_GCV "Inflowing enthalpy flow based on GCV";
+    input SI.EnergyFlowRate H_flow_out_GCV "Inflowing enthalpy flow based on GCV";
+    input SI.Enthalpy H_gas_GCV "Enthalpy of the gas bulk based on GCV";
+  end Outline;
+
   model Summary
     extends TransiEnt.Basics.Icons.Record;
+    Outline outline;
     TransiEnt.Basics.Records.RealGasBulk gasBulk;
     TransiEnt.Basics.Records.FlangeRealGas gasPortIn;
     TransiEnt.Basics.Records.FlangeRealGas gasPortOut;
@@ -172,6 +193,11 @@ equation
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Wed Oct 07 2015</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de) May 2016</p>
 </html>"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Icon(graphics={Text(
+          extent={{-30,12},{30,-48}},
+          lineColor={0,0,0},
+          textString="L2")},
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end GasStorage_constXi_L2;

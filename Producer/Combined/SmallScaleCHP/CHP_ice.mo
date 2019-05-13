@@ -2,10 +2,10 @@ within TransiEnt.Producer.Combined.SmallScaleCHP;
 model CHP_ice "Model of a small CHP with configureable internal combustion engine"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,7 +25,7 @@ model CHP_ice "Model of a small CHP with configureable internal combustion engin
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
-  extends TransiEnt.Producer.Combined.SmallScaleCHP.Base.PartialCHP(p_init=simCenter.p_n[1], redeclare TransiEnt.Components.Electrical.Machines.ActivePowerGenerator generator);
+  extends TransiEnt.Producer.Combined.SmallScaleCHP.Base.PartialCHP(p_init=simCenter.p_nom[1]);
 
   // _____________________________________________
   //
@@ -44,7 +44,7 @@ model CHP_ice "Model of a small CHP with configureable internal combustion engin
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_out_is=Q_flow_out annotation (Placement(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_out_is=Q_flow_out "Heat flow rate Output" annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -89,7 +89,13 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>controlBus</p>
+<p>gasPortIn: inlet for ideal gas</p>
+<p>gasPortOut: outlet for ideal gas</p>
+<p>waterPortOut: FluidPortOut</p>
+<p>waterPortIn: FluidPortIn</p>
+<p>Q_flow_out_is: output for heat flow rate in [W]</p>
+<p>epp: type of power port can be chosen</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -97,12 +103,14 @@ equation
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no validation or testing necessary)</p>
+<p>Tested in check model &quot;TransiEnt.Producer.Combined.SmallScaleCHP.Check.Test_CHP_ice&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Arne Koeppen (arne.koeppen@tuhh.de), Jun 2013</p>
 <p>Edited by Jan Braune (jan.braune@tuhh.de), Mar 2015</p>
 <p>Edited by Lisa Andresen (andresen@tuhh.de), Apr 2015</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Edited by Anne Senkel (anne.senkel@tuhh.de), Feb 2019</span></p>
 </html>"));
 end CHP_ice;

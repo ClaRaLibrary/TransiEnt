@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Utilities;
-block Duty2EfficiencyCharline "Characteristic line of a boiler's efficiency in function of the boiler's duty"
+model Duty2EfficiencyCharline "Characteristic line of a boiler's efficiency in function of the boiler's duty"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,10 +51,9 @@ protected
   // _____________________________________________
 
 public
-  Modelica.Blocks.Interfaces.RealInput Q_flow_set(unit="W") "Heat duty"
-    annotation (Placement(transformation(extent={{-116,-12},{-92,12}}),
+  Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set "Heat duty"    annotation (Placement(transformation(extent={{-116,-12},{-92,12}}),
         iconTransformation(extent={{-116,-12},{-92,12}})));
-  Modelica.Blocks.Interfaces.RealOutput eta "Boiler's efficiency"
+ TransiEnt.Basics.Interfaces.General.EfficiencyOut eta "Boiler's efficiency"
     annotation (Placement(transformation(extent={{94,-12},{118,12}}),
         iconTransformation(extent={{94,-12},{118,12}})));
 

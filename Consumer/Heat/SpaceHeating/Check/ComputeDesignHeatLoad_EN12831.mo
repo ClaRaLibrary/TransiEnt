@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.SpaceHeating.Check;
 model ComputeDesignHeatLoad_EN12831
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,10 +22,13 @@ model ComputeDesignHeatLoad_EN12831
   extends TransiEnt.Basics.Icons.Example;
   RoomFloorHeating roomFloorHeating(
     redeclare Base.RoomGeometry geometry,
-    T_start=normSetpointRoomTemperature.T,
     use_T_amb_input=true,
     redeclare Characteristics.HouseType100 thermodynamics,
-    redeclare Base.FloorHeatingSystem heatingsystem(T_spreading=10)) annotation (Placement(transformation(extent={{40,-50},{-2,-10}})));
+    redeclare Base.FloorHeatingSystem heatingsystem(T_spreading=10),
+    T_room(start=normSetpointRoomTemperature.T),
+    T_floor(start=normSetpointRoomTemperature.T),
+    T_wallInside(start=normSetpointRoomTemperature.T),
+    T_wallInternal(start=(273.15 + 20 + normSetpointRoomTemperature.T)/2)) annotation (Placement(transformation(extent={{40,-50},{-2,-10}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi sink(
     T_const=273.15 + 25,
     variable_T=false,
@@ -59,7 +62,7 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(ctrl.u_s, normSetpointRoomTemperature.y) annotation (Line(points={{40,50},{89,50},{89,56}}, color={0,0,127}));
-  connect(ctrl.u_m, roomFloorHeating.T_room_act) annotation (Line(points={{28,38},{30,38},{30,24},{64,24},{64,-38},{40,-38}}, color={0,0,127}));
+  connect(ctrl.u_m, roomFloorHeating.T_Room) annotation (Line(points={{28,38},{30,38},{30,24},{64,24},{64,-38},{40,-38}}, color={0,0,127}));
   connect(normAmbientTemperatur.y, roomFloorHeating.T_Amb) annotation (Line(points={{35,4},{18.37,4},{18.37,-10.2}}, color={0,0,127}));
   connect(roomFloorHeating.waterIn, temperatureSensor1.port) annotation (Line(
       points={{0.1,-12},{-6,-12},{-6,-28},{-18,-28}},
@@ -71,12 +74,35 @@ equation
       thickness=0.5));
   connect(ctrl.y, source.m_flow) annotation (Line(points={{17,50},{-58,50},{-58,8},{-44,8}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(extent={{-140,-80},{140,80}})),
-    Icon(coordinateSystem(extent={{-140,-80},{140,80}})),
+    Diagram(graphics,
+            coordinateSystem(extent={{-140,-80},{140,80}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-140,-80},{140,80}})),
     experiment(
       StopTime=604800,
       Interval=900,
       __Dymola_fixedstepsize=5,
       __Dymola_Algorithm="Dassl"),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end ComputeDesignHeatLoad_EN12831;

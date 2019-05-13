@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.GlobalCollectors;
 model ElectricPowerStatistics "Total electric power statistics (different types of resources and balancing types)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,6 +32,7 @@ model ElectricPowerStatistics "Total electric power statistics (different types 
   //
   //             Visible Parameters
   // _____________________________________________
+  parameter Boolean integrateElPower=simCenter.integrateElPower "true if electric powers shall be integrated";
 
   final parameter Boolean is_setter=false "just for change of icon.." annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
 
@@ -107,6 +108,7 @@ model ElectricPowerStatistics "Total electric power statistics (different types 
   SI.ActivePower P_sec_bal_pos_offer_total = -secBalPowerOfferCollector[1];
   SI.ActivePower P_sec_bal_neg_offer_total = -secBalPowerOfferCollector[2];
 
+
   // primary balancing
   SI.ActivePower posPBP[nTypes] annotation(HideResult=true);
   SI.ActivePower negPBP[nTypes] annotation(HideResult=true);
@@ -122,10 +124,10 @@ model ElectricPowerStatistics "Total electric power statistics (different types 
   // inertia time constant
   SI.Energy E_kin_1=-kineticEnergyCollector[simCenter.iDetailedGrid];
   SI.Energy E_kin_2=-kineticEnergyCollector[simCenter.iSurroundingGrid];
-
   SI.Time T_tc_total=(E_kin_1+E_kin_2)/max(P_demand+surroundingGridLoad,simCenter.P_el_small);
   SI.Time T_tc_1=(E_kin_1)/max(P_demand,simCenter.P_el_small);
   SI.Time T_tc_2=(E_kin_2)/max(surroundingGridLoad,simCenter.P_el_small);
+
 
   SI.ActivePower P_tieline = tielinePowerCollector "Total tieline power (including scheduled imports)";
   SI.ActivePower P_import = tielineSetPowerCollector "Scheduled imports to subsystem";
@@ -137,7 +139,11 @@ equation
   //           Characteristic equations
   // _____________________________________________
 
-  der(E)=powerCollector;
+  if integrateElPower then
+    der(E)=powerCollector;
+  else
+    E=zeros(nTypes);
+  end if;
 
   // negative and positive residual powers and energies
   if noEvent(P_residual <0) then
@@ -147,15 +153,27 @@ equation
     P_residual_neg=0;
     P_residual_pos=P_residual;
   end if;
-  der(E_residual_neg)=P_residual_neg;
-  der(E_residual_pos)=P_residual_pos;
+  if integrateElPower then
+    der(E_residual_neg)=P_residual_neg;
+    der(E_residual_pos)=P_residual_pos;
+  else
+    E_residual_neg=0;
+    E_residual_pos=0;
+  end if;
 
   // balancing power
 
-  der(posPBE) = posPBP;
-  der(negPBE) = -negPBP;
-  der(posSBE) = posPBP;
-  der(negSBE) = -negSBP;
+  if integrateElPower then
+    der(posPBE) = posPBP;
+    der(negPBE) = -negPBP;
+    der(posSBE) = posPBP;
+    der(negSBE) = -negSBP;
+  else
+    posPBE = zeros(nTypes);
+    negPBE = zeros(nTypes);
+    posSBE = zeros(nTypes);
+    negSBE = zeros(nTypes);
+  end if;
 
   for i in 1:nTypes loop
     posPBP[i] = max(0, primBalPowerCollector[i]);

@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.EconomicDispatch;
 model LoadPredictionAdaption "Adaption of power point setpoints in case of load prediction errors according to Albrecht1997"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,8 +49,8 @@ model LoadPredictionAdaption "Adaption of power point setpoints in case of load 
     a={T_lpa,0})
                annotation (Placement(transformation(extent={{-38,-10},{-18,10}})));
   Modelica.Blocks.Math.Feedback feedback1 annotation (Placement(transformation(extent={{-72,-10},{-52,10}})));
-  Modelica.Blocks.Interfaces.RealInput P_load_is annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealInput P_load_pred annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_load_is annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_load_pred annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={0,120})));
@@ -63,7 +63,8 @@ equation
   connect(P_load_is, feedback1.u1) annotation (Line(points={{-120,0},{-96,0},{-70,0}}, color={0,0,127}));
   connect(P_load_pred, multiSum1.u[2]) annotation (Line(points={{0,120},{0,120},{0,8},{0,-2.1},{28,-2.1}}, color={0,0,127}));
   connect(multiSum1.y, y) annotation (Line(points={{41.02,0},{110,0},{110,0}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}}, preserveAspectRatio=false)),
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-100,-100},{100,100}}, preserveAspectRatio=false)),
                                                                          Icon(coordinateSystem(extent={{-100,-100},{100,100}}), graphics={
       Polygon(lineColor={192,192,192},
         fillColor={192,192,192},
@@ -81,5 +82,28 @@ equation
       Polygon(lineColor={192,192,192},
         fillColor={192,192,192},
         fillPattern=FillPattern.Solid,
-        points={{90,-82},{68,-74},{68,-90},{90,-82}})}));
+        points={{90,-82},{68,-74},{68,-90},{90,-82}})}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This model adapts to power setpoints in case of load prediction errors</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>P_load_is: input for electric power in [W]</p>
+<p>P_load_pred: input for electric power in [W]</p>
+<p>y: Modelica RealOutput</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TransiEnt.Grid.Electrical.EconomicDispatch.Check.TestLoadPredictionAdaption&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>Vorrausschauende optimale Steuer-und Regelstrategien zur Verbesserung der Kraftwerksf&uuml;hrung [ISBN: 3-18-361608-4 ] Albrecht, Jens; 1997 </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end LoadPredictionAdaption;

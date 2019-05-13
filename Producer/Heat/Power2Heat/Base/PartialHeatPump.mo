@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat.Base;
 partial model PartialHeatPump "Partial model of a controlled heat pump model useable for large pool simulations in demand side management scenarios"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,7 +27,7 @@ partial model PartialHeatPump "Partial model of a controlled heat pump model use
   // _____________________________________________
 
   extends TransiEnt.Basics.Icons.Model;
-
+  outer TransiEnt.ModelStatistics modelStatistics;
   // _____________________________________________
   //
   //             Visible Parameters
@@ -41,7 +41,9 @@ partial model PartialHeatPump "Partial model of a controlled heat pump model use
 
   final parameter Real eta_HP = COP_n/((273.15+40)/(40-2));
   final parameter SI.Power P_el_n = Q_flow_n / COP_n;
-
+    replaceable model ProducerCosts =
+      TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.Empty
+    constrainedby TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PartialPowerPlantCostSpecs annotation (Dialog(group="Statistics"), __Dymola_choicesAllMatching=true);
   // _____________________________________________
   //
   //                 Outer Models
@@ -59,14 +61,14 @@ partial model PartialHeatPump "Partial model of a controlled heat pump model use
         extent={{-20,-20},{20,20}},
         rotation=90,
         origin={0,-112})));
-  Modelica.Blocks.Interfaces.RealInput T_source_input_K if
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_source_input_K if
                                                         use_T_source_input_K "Input ambient temperature in Kelvin" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,106})));
 
 protected
-  Modelica.Blocks.Interfaces.RealInput T_source_internal;
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_source_internal;
 
   // _____________________________________________
   //
@@ -84,6 +86,15 @@ public
 
   Real COP_Carnot=(u_set + Delta_T_internal)/max(2*Delta_T_internal, u_set + 2*Delta_T_internal - T_source_internal);
 
+   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Consumer) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Generic) annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
+    TransiEnt.Components.Statistics.Collectors.LocalCollectors.HeatingPlantCost heatingPlantCost(
+    redeclare model HeatingPlantCostModel = ProducerCosts,
+    consumes_H_flow=false,
+    Q_flow_n=Q_flow_n,
+    Q_flow_is=Q_flow.y,
+    produces_m_flow_CDE=false,
+    m_flow_CDE_is=0)                                                                             annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
 equation
   // _____________________________________________
   //
@@ -95,13 +106,17 @@ equation
     T_source_internal = SI.Conversions.from_degC(simCenter.T_amb_var);
   end if;
 
+
+     collectHeatingPower.heatFlowCollector.Q_flow=Q_flow.y;
   // _____________________________________________
   //
   //               Connect Statements
   // _____________________________________________
 
   connect(T_source_internal, T_source_input_K);
-
+    connect(modelStatistics.powerCollector[collectElectricPower.typeOfResource],collectElectricPower.powerCollector);
+    connect(modelStatistics.heatFlowCollector[collectHeatingPower.typeOfResource],collectHeatingPower.heatFlowCollector);
+  connect(modelStatistics.costsCollector, heatingPlantCost.costsCollector);
   connect(COP.y,Q_flow. u1) annotation (Line(points={{31,28},{32,28},{32,6},{36,6}}, color={0,0,127}));
   connect(u_set, feedback.u1) annotation (Line(points={{-104,0},{-80,0}}, color={0,0,127}));
   connect(u_meas, feedback.u2) annotation (Line(points={{0,-112},{0,-76},{-72,-76},{-72,-8}}, color={0,0,127}));
@@ -143,5 +158,33 @@ equation
         Line(
           points={{-20,-22},{-16,-14},{-4,4},{-2,6},{6,12},{16,16},{24,16}},
           color={0,0,255},
-          smooth=Smooth.None)}));
+          smooth=Smooth.None)}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Partial model of a controlled heat pump model useable for large pool simulations in demand side management scenarios</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>Modelica.Blocks.Interfaces.RealInput: u_set (setpoint value)</p>
+<p>Modelica.Blocks.Interfaces.RealInput: u_meas (measurement value)</p>
+<p>Modelica.Blocks.Interfaces.RealInput: T_source_input_K (input ambient temperature in Kelvin)</p>
+<p>Modelica.Blocks.Interfaces.RealInput:&nbsp;T_source_internal (ambient temperature from SimCenter)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>eta_HP&nbsp;=&nbsp;COP_n/((273.15+40)/(40-2))</p>
+<p>P_el_n&nbsp;=&nbsp;Q_flow_n&nbsp;/&nbsp;COP_n</p>
+<p>COP(y=COP_Carnot*eta_HP)</p>
+<p>COP_Carnot=(u_set&nbsp;+&nbsp;Delta_T_internal)/max(2*Delta_T_internal,&nbsp;u_set&nbsp;+&nbsp;2*Delta_T_internal&nbsp;-&nbsp;T_source_internal)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end PartialHeatPump;

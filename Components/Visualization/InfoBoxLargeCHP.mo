@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization;
 model InfoBoxLargeCHP
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -62,9 +62,21 @@ model InfoBoxLargeCHP
           fillPattern=FillPattern.Solid,
           textString=DynamicSelect(" T_r ", realString(eye.T_return,1,1) +" C"),
           textStyle={TextStyle.Bold})}),
-        Diagram(coordinateSystem(
+        Diagram(graphics,
+                coordinateSystem(
         preserveAspectRatio=false,
         extent={{-200,-220},{0,0}},
-        initialScale=0.5)));
+        initialScale=0.5)),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p>InfoBox for dynamic display of:</p>
+<ul>
+<li>P ...    P_el_is of CHP</li>
+<li>Q ...   Q_el_is of CHP</li>
+<li>m ...    m_flow of hot water through CHP</li>
+<li>T_s ... T_supply of CHP</li>
+<li>T_r ... T_return of CHP</li>
+</ul>
+</html>"));
 
 end InfoBoxLargeCHP;

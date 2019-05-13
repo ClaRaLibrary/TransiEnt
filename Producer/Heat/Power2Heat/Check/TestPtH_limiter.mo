@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat.Check;
 model TestPtH_limiter "\"Test model for the component: PtH_limiter\""
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,7 +22,7 @@ model TestPtH_limiter "\"Test model for the component: PtH_limiter\""
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   TransiEnt.Producer.Heat.Power2Heat.Controller.PtH_limiter ptH_limiter(Q_flow_PtH_max=PtH.Q_flow_n) annotation (Placement(transformation(extent={{-10,16},{10,36}})));
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler PtH annotation (Placement(transformation(extent={{-13,-44},{7,-24}})));
+  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler PtH(Q_flow_n=5e6, usePowerPort=true) annotation (Placement(transformation(extent={{-13,-44},{7,-24}})));
   Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(
         extent={{3.5,-3.5},{-3.5,3.5}},
         rotation=90,
@@ -34,6 +34,7 @@ model TestPtH_limiter "\"Test model for the component: PtH_limiter\""
   Modelica.Blocks.Sources.RealExpression heatDemand(y=180e6) annotation (Placement(transformation(extent={{-60,55},{-34,69}})));
   Modelica.Blocks.Sources.RealExpression Temperature(y=45 + 273.15) annotation (Placement(transformation(extent={{-94,-45},{-68,-31}})));
   Modelica.Blocks.Sources.RealExpression massFlow(y=1000) annotation (Placement(transformation(extent={{-94,-31},{-68,-17}})));
+  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{2,-70},{22,-50}})));
 equation
   connect(ptH_limiter.Q_flow_set_PtH, gain.u) annotation (Line(
       points={{0,15},{0,-2.3},{0.5,-2.3}},
@@ -50,13 +51,38 @@ equation
   connect(massFlow.y, massflow_Tm_flow.m_flow) annotation (Line(points={{-66.7,-24},{-66,-24},{-66,-28},{-54,-28}}, color={0,0,127}));
   connect(Temperature.y, massflow_Tm_flow.T) annotation (Line(points={{-66.7,-38},{-66,-38},{-66,-34},{-54,-34}}, color={0,0,127}));
   connect(massflowSink.eye, quadruple1.eye) annotation (Line(points={{30,-42},{26,-42},{22,-42},{22,-65},{26,-65}}, color={190,190,190}));
-  connect(massflow_Tm_flow.fluidPortOut, PtH.inlet) annotation (Line(
-      points={{-32.2,-34.2},{-12.8,-34.2},{-12.8,-34}},
+  connect(massflow_Tm_flow.fluidPortOut, PtH.fluidPortIn) annotation (Line(
+      points={{-32,-34},{-12.8,-34},{-12.8,-34}},
       color={175,0,0},
       thickness=0.5));
-  connect(PtH.outlet, massflowSink.fluidPortIn) annotation (Line(
-      points={{7,-34},{30.2,-34},{30.2,-34.2}},
+  connect(PtH.fluidPortOut, massflowSink.fluidPortIn) annotation (Line(
+      points={{7,-34},{30,-34},{30,-34}},
       color={175,0,0},
       thickness=0.5));
   connect(PtH.Q_flow_set, gain.y) annotation (Line(points={{-3,-24},{-3,-16},{0.5,-16},{0.5,-10.35}}, color={0,0,127}));
+  connect(ElectricGrid.epp, PtH.epp) annotation (Line(
+      points={{2,-60},{-3,-60},{-3,-44}},
+      color={0,135,135},
+      thickness=0.5));
+  annotation (experiment(StopTime=864000, Interval=60), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for PtH_limiter</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestPtH_limiter;

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.SolarThermal;
 model SolarThermal_L0 "Table-based solar thermal module with collecting statistics"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -115,18 +115,19 @@ equation
   connect(modelStatistics.gwpCollectorHeat[TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.Solar],collectGwpEmissions.gwpCollector);
 
   connect(solarThermalData.y1, heatFlowRateOut) annotation (Line(points={{-59,50},{-30,50},{0,50},{0,78},{68,78}},  color={0,0,127}));
-  connect(changeSign.y, prescribedHeatflow_L1.Q_flow_prescribed) annotation (Line(points={{-20,13},{-20,-6.24},{-20.3,-6.24}}, color={0,0,127}));
+  connect(changeSign.y, prescribedHeatflow_L1.Q_flow_prescribed) annotation (Line(points={{-20,13},{-20,-9.6},{-17.4,-9.6}},   color={0,0,127}));
   connect(changeSign.u,solarThermalData. y1) annotation (Line(points={{-20,36},{-20,50},{-59,50}}, color={0,0,127}));
   connect(prescribedHeatflow_L1.fluidPortOut, waterPortOut) annotation (Line(
-      points={{24.94,-59.44},{104,-59.44},{104,-60}},
+      points={{17.4,-60},{104,-60},{104,-60}},
       color={175,0,0},
       smooth=Smooth.None));
   connect(prescribedHeatflow_L1.fluidPortIn, waterPortIn) annotation (Line(
-      points={{-21.46,-59.44},{-62,-59.44},{-62,-60},{-100,-60}},
+      points={{-17.4,-60},{-62,-60},{-62,-60},{-100,-60}},
       color={175,0,0},
       smooth=Smooth.None));
 
-  annotation (defaultComponentName="solarThermal",Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),Documentation(info="<html>
+  annotation (defaultComponentName="solarThermal",Diagram(graphics,
+                                                          coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Ideal table based solar thermal model. Heat is directly given on medlium. No heat transfer or dynamic behaviour considered. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
@@ -139,9 +140,10 @@ equation
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no validation or testing necessary)</p>
+<p>Tested in check model &quot;TransiEnt.Producer.Heat.SolarThermal.Check.TestSolarThermal_L0&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
@@ -149,5 +151,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Tobias Ramm (tobias.ramm@tuhh.de) November 2015</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Lisa Andresen (andresen@tuhh.de) December 2015</span></p>
 </html>"),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end SolarThermal_L0;

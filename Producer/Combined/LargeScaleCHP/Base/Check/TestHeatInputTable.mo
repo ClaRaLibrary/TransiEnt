@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base.Check;
 model TestHeatInputTable
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -53,13 +53,34 @@ end plotResult;
                                                                                     annotation (Placement(transformation(extent={{8,20},{28,40}})));
 equation
   connect(pQBoundaries.Q_flow, Q_flow_set.y) annotation (Line(points={{-30.4,32},{-49,32}}, color={0,0,127}));
-  connect(Q_flow_set.y, heatInputTable.Q) annotation (Line(points={{-49,32},{-38,32},{-38,10},{23.4545,10},{23.4545,-6}},
-                                                                                                                color={0,0,127}));
+  connect(Q_flow_set.y, heatInputTable.Q_flow) annotation (Line(points={{-49,32},{-38,32},{-38,10},{23.4545,10},{23.4545,-6}}, color={0,0,127}));
   connect(switchToElectricFullLoad.y, P_el_set.u2) annotation (Line(points={{29,30},{32,30},{36,30}}, color={255,0,255}));
   connect(P_el_set.y, heatInputTable.P) annotation (Line(points={{59,30},{59,30},{70,30},{70,4},{10.7273,4},{10.7273,-6}},
                                                                                                                  color={0,0,127}));
   connect(pQBoundaries.P_max, P_el_set.u1) annotation (Line(points={{-2.8,37.28},{2,37.28},{2,50},{32,50},{32,38},{36,38}}, color={0,0,127}));
   connect(pQBoundaries.P_min, P_el_set.u3) annotation (Line(points={{-2.8,28.4},{0,28.4},{0,16},{32,16},{32,22},{36,22}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), experiment(StopTime=21600));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), experiment(StopTime=21600),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for HeatInputTable</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestHeatInputTable;

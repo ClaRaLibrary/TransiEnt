@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Compressor;
 model ValveAndCompressor_dp
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -84,10 +84,7 @@ model ValveAndCompressor_dp
 public
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium) annotation (Placement(transformation(rotation=0, extent={{90,-10},{110,10}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) annotation (Placement(transformation(rotation=0, extent={{-110,-10},{-90,10}})));
-  Modelica.Blocks.Interfaces.RealInput dp_desired(
-    final quantity="PressureDifference",
-    final unit="Pa",
-    displayUnit="bar") "Desired pressure difference" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.PressureDifferenceIn dp_desired "Desired pressure difference" annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={0,100})));
@@ -195,17 +192,17 @@ protected
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction(
     medium=medium,
     volume=volumeJunction,
-    p_start=p_startJunction,
-    xi_start=xi_startJunction,
-    h_start=h_startJunction,
-    initOption=initOptionJunction) annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+    initOption=initOptionJunction,
+    xi(start=xi_startJunction),
+    h(start=h_startJunction),
+    p(start=p_startJunction))      annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split(
     medium=medium,
     volume=volumeSplit,
-    p_start=p_startSplit,
-    xi_start=xi_startSplit,
-    h_start=h_startSplit,
-    initOption=initOptionSplit) annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+    initOption=initOptionSplit,
+    xi(start=xi_startSplit),
+    h(start=h_startSplit),
+    p(start=p_startSplit))      annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Controller.ControllerValveAndCompressor_dp                                     controllerValveOrCompressor annotation (Placement(transformation(extent={{-10,32},{10,52}})));
 
   Compressor compressor(
@@ -229,11 +226,11 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(junction.gasPort2, valve.gasPortOut) annotation (Line(
-      points={{30,-10},{30,-30},{10,-30}},
+      points={{30,-10},{30,-30.8571},{10,-30.8571}},
       color={255,255,0},
       thickness=1.5));
   connect(valve.gasPortIn, split.gasPort2) annotation (Line(
-      points={{-10,-30},{-30,-30},{-30,-10}},
+      points={{-10,-30.8571},{-30,-30.8571},{-30,-10}},
       color={255,255,0},
       thickness=1.5));
   connect(split.gasPort3, compressor.gasPortIn) annotation (Line(
@@ -255,8 +252,10 @@ equation
       points={{-100,0},{-86,0},{-70,0}},
       color={255,255,0},
       thickness=1.5));
-  connect(controllerValveOrCompressor.m_flow_valve, valve.m_flowDes) annotation (Line(points={{-4,31},{-4,24},{-16,24},{-16,-24},{-10,-24}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}})), Icon(coordinateSystem(extent={{-100,-100},{100,100}}), graphics={
+  connect(controllerValveOrCompressor.m_flow_valve, valve.m_flowDes) annotation (Line(points={{-4,31},{-4,24},{-16,24},{-16,-25.7143},{-10,-25.7143}},
+                                                                                                                                             color={0,0,127}));
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-100,-100},{100,100}})), Icon(coordinateSystem(extent={{-100,-100},{100,100}}), graphics={
         Ellipse(extent={{-40,80},{40,0}}, lineColor={0,0,0}),
         Line(points={{-40,-20},{-40,-60},{40,-20},{40,-60},{-40,-20}}, color={0,0,0}),
         Line(points={{-30,66},{40,46}}, color={0,0,0}),
@@ -279,7 +278,7 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: real gas inlet </p>
 <p>gasPortOut: real gas outlet </p>
-<p>dp_desired: input for desired pressure difference </p>
+<p>dp_desired: input for desired pressure difference in [Pa]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

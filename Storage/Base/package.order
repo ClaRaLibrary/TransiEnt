@@ -1,5 +1,7 @@
 Check
+GenericStorage_base
 GenericStorage
+GenericStorageHyst
 PartialStationaryLoss
 LinearStationaryLoss
 ThermalConductance
@@ -7,3 +9,4 @@ SelfDischargeRate
 NoStationaryLoss
 EquivalentStorageCycles
 GenericStorageParameters
+SelfDischargeRateRelative

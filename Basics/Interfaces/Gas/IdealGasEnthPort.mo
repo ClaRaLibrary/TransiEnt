@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Interfaces.Gas;
 connector IdealGasEnthPort "A connector for ideal gas featuring h,p,xi,m_flow"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ connector IdealGasEnthPort "A connector for ideal gas featuring h,p,xi,m_flow"
 
   flow Modelica.SIunits.MassFlowRate m_flow "Mass flow rate from the connection point into the component";
   Modelica.SIunits.AbsolutePressure p "Thermodynamic pressure in the connection point";
-  stream Modelica.SIunits.SpecificEnthalpy  h_outflow "Temperature close to the connection point if m_flow < 0";
+  stream Modelica.SIunits.SpecificEnthalpy  h_outflow "Specific enthalpy flow rate close to the connection point if m_flow < 0";
   stream Modelica.SIunits.MassFraction xi_outflow[Medium.nc-1] "Independent mixture mass fractions m_i/m close to the connection point if m_flow < 0";
 
   annotation (Documentation(info="<html>
@@ -47,11 +47,14 @@ connector IdealGasEnthPort "A connector for ideal gas featuring h,p,xi,m_flow"
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
+<p>p is the pressure</p>
+<p>m_flow is the mass flow rate</p>
+<p>xi is the mass fraction</p>
+<p>h_outflow is the specific enthalpy</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(no remarks)</p>
+<p>This connector should only be used for ideal gases (type consistency).</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Base;
 model ElectrolyzerEfficiencyCharlineSilyzer100 "Efficiency charline for Silyzer 100"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,17 @@ model ElectrolyzerEfficiencyCharlineSilyzer100 "Efficiency charline for Silyzer 
 
   //charline approximated from data from Siemens for P_el_n = 1e5 W and eta_nom = 0.746699; P_el_max = 3*P_el_n;
 
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerEfficiencyCharline(eta_n_cl=0.746699);
+
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
 
 equation
   // Calculating the efficency coefficient in %

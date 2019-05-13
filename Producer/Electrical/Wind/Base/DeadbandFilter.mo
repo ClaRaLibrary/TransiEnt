@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Base;
 model DeadbandFilter
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,11 +40,10 @@ model DeadbandFilter
     annotation (Placement(transformation(extent={{-32,-14},{-12,6}})));
   Modelica.Blocks.Logical.And and1
     annotation (Placement(transformation(extent={{6,-6},{26,14}})));
-  Modelica.Blocks.Interfaces.RealInput delta_f annotation (Placement(
-        transformation(rotation=0, extent={{-114,58},{-94,78}}), iconTransformation(extent={{-114,58},{-94,78}})));
+  TransiEnt.Basics.Interfaces.General.FrequencyIn delta_f;
   Modelica.Blocks.Interfaces.RealOutput y annotation (Placement(transformation(
           rotation=0, extent={{92,-12},{112,8}}), iconTransformation(extent={{92,-12},{112,8}})));
-  Modelica.Blocks.Interfaces.RealInput P_pu annotation (Placement(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_pu annotation (Placement(
         transformation(
         rotation=90,
         extent={{-10,-10},{10,10}},
@@ -88,8 +87,12 @@ equation
   connect(P_pu, greaterThreshold2.u) annotation (Line(points={{-74,-102},{-74,-102},{-74,-38},{-74,-20},{-74,-20},{-74,-4},{-62,-4}},
                                                                                                                             color={0,0,127}));
   connect(greaterThreshold2.y, greaterThreshold1.u) annotation (Line(points={{-39,-4},{-34,-4}},          color={0,0,127}));
-  annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
-          preserveAspectRatio=false)), Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+                                                                                                                              annotation (Placement(
+        transformation(rotation=0, extent={{-114,58},{-94,78}}), iconTransformation(extent={{-114,58},{-94,78}})),
+              Diagram(graphics,
+                      coordinateSystem(extent={{-100,-100},{100,100}},
+          preserveAspectRatio=false)), Icon(graphics,
+                                            coordinateSystem(extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Deadband filter for synthetic inertia control</p>
@@ -98,12 +101,15 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>delta_F: input for frequency in Hz</p>
+<p>y: Modelica RealOutput</p>
+<p>u: Modelica RealInput</p>
+<p>P_pu: input for electric power in W</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

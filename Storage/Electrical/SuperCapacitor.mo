@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical;
-model SuperCapacitor
+model SuperCapacitor "Model of a super capacitor for storage"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,8 +28,16 @@ model SuperCapacitor
   extends Base.GenericElectricStorage(
     StorageModelParams=Specifications.SuperCap(),
     redeclare model StationaryLossModel = TransiEnt.Storage.Base.SelfDischargeRate,
-    redeclare model CostModel=TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery);
+    redeclare model CostModel=TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.RedoxFlowBattery,
+    storageModel(use_PowerRateLimiter=use_PowerRateLimiter));
   extends TransiEnt.Basics.Icons.Model;
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+
+   parameter Boolean use_PowerRateLimiter=true "Use Power Rate Limitation";
   annotation (Icon(graphics={
         Line(points={{-82,-2},{-14,-2}}),
         Line(
@@ -44,7 +52,8 @@ model SuperCapacitor
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>P_set: input for electric power in [W]</p>
+<p>epp: choice of power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -52,7 +61,7 @@ model SuperCapacitor
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;TransiEnt.Storage.Electrical.Check.TestSuperCapacitor&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

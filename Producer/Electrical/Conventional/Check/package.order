@@ -6,3 +6,5 @@ CheckCCP
 CheckBlackCoal
 CheckBlackCoal_Schedule
 CheckBlackCoal_twoVariants
+CheckCCP_with_GasPort_MinimumDownTime
+CheckCCP_with_GasPort_CCS

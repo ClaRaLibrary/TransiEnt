@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.VolumesValvesFittings.Check;
 model TestValves
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -69,48 +69,71 @@ model TestValves
     duration=0.8,
     offset=0)      annotation (Placement(transformation(extent={{-100,-66},{-80,-46}})));
 equation
-  connect(ramp.y, valveDesiredMassFlow.m_flowDes) annotation (Line(points={{-79,66},{-34,66},{-34,36},{-10,36}},
+  connect(ramp.y, valveDesiredMassFlow.m_flowDes) annotation (Line(points={{-79,66},{-34,66},{-34,34.2857},{-10,34.2857}},
                                                   color={0,0,127}));
   connect(timeTable.y, source2.p) annotation (Line(points={{-79,36},{-62,36}},
                            color={0,0,127}));
   connect(valveDesiredMassFlow.gasPortOut, sink2.gasPort) annotation (Line(
-      points={{10,30},{40,30}},
+      points={{10,29.1429},{26,29.1429},{26,30},{40,30}},
       color={255,255,0},
       thickness=1.5));
   connect(valveDesiredMassFlow.gasPortIn, source2.gasPort) annotation (Line(
-      points={{-10,30},{-25,30},{-40,30}},
+      points={{-10,29.1429},{-25,30},{-40,30}},
       color={255,255,0},
       thickness=1.5));
   connect(source1.gasPort, simpleValveDesiredPressureBefore.gasPortIn)
     annotation (Line(
-      points={{-40,80},{-26,80},{-10,80}},
+      points={{-40,80},{-10,80},{-10,79.1429}},
       color={255,255,0},
       thickness=1.5));
   connect(simpleValveDesiredPressureBefore.gasPortOut, sink1.gasPort)
     annotation (Line(
-      points={{10,80},{25,80},{40,80}},
+      points={{10,79.1429},{25,80},{40,80}},
       color={255,255,0},
       thickness=1.5));
   connect(sink1.p, ramp1.y) annotation (Line(points={{62,86},{69,86}}, color={0,0,127}));
   connect(source3.gasPort, valve_p.gasPortIn) annotation (Line(
-      points={{-40,-20},{-34,-20},{-10,-20}},
+      points={{-40,-20},{-10,-20},{-10,-20.8571}},
       color={255,255,0},
       thickness=1.5));
   connect(valve_p.gasPortOut, sink3.gasPort) annotation (Line(
-      points={{10,-20},{18,-20},{38,-20}},
+      points={{10,-20.8571},{18,-20},{38,-20}},
       color={255,255,0},
       thickness=1.5));
-  connect(ramp3.y, valve_p.dp_desired) annotation (Line(points={{-79,4},{-26,4},{-26,-13.5},{-10,-13.5}}, color={0,0,127}));
+  connect(ramp3.y, valve_p.dp_desired) annotation (Line(points={{-79,4},{-26,4},{-26,-15.2857},{-10,-15.2857}},
+                                                                                                          color={0,0,127}));
   connect(ramp2.y, source3.m_flow) annotation (Line(points={{-79,-26},{-70,-26},{-70,-14},{-62,-14}}, color={0,0,127}));
   connect(source4.gasPort, valve.gasPortIn) annotation (Line(
-      points={{-40,-70},{-25,-70},{-10,-70}},
+      points={{-40,-70},{-10,-70},{-10,-70.8571}},
       color={255,255,0},
       thickness=1.5));
   connect(valve.gasPortOut, sink4.gasPort) annotation (Line(
-      points={{10,-70},{18,-70},{38,-70}},
+      points={{10,-70.8571},{18,-70},{38,-70}},
       color={255,255,0},
       thickness=1.5));
-  connect(ramp4.y, valve.opening_in) annotation (Line(points={{-79,-56},{0,-56},{0,-61}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})));
+  connect(ramp4.y, valve.opening_in) annotation (Line(points={{-79,-56},{0,-56},{0,-63.1429}},
+                                                                                          color={0,0,127}));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for different valves</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestValves;

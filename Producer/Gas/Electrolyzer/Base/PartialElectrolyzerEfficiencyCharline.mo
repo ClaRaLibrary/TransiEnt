@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Base;
 partial model PartialElectrolyzerEfficiencyCharline "Partial class for electrolyzer efficiency charlines"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,16 +21,29 @@ partial model PartialElectrolyzerEfficiencyCharline "Partial class for electroly
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.Model;
 
-  //parameters
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+
   parameter Modelica.SIunits.ActivePower P_el_n(min=0) "Nominal power input of the electrolyzer (min = 0)" annotation (Dialog(enable=false));
   parameter Modelica.SIunits.Efficiency eta_n(min=0, max=1) "Nominal efficiency coefficient (min = 0, max = 1)" annotation (Dialog(enable=false));
   parameter Modelica.SIunits.Efficiency eta_scale(min=0, max=1) "Sets an linear degrading efficency coefficient with increasing input power (min = 0, max = 1)" annotation (Dialog(enable=false));
 protected
   parameter Modelica.SIunits.Efficiency eta_n_cl "Nominal efficency coefficient of the charline";
 
-  //variables
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+
 public
   Modelica.SIunits.ActivePower P_el "Input power";
   Modelica.SIunits.Efficiency eta "Output efficency";
@@ -41,7 +54,8 @@ protected
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={Line(
           points={{-50,44},{-44,54},{-30,62},{-18,56},{-14,44},{-16,36},{-30,-16},{-16,36},{-4,48},{12,52},{28,48},{34,36},{36,22},{30,6},{14,-48},{14,-68},{22,-76},{34,-72},{40,-64}},
           color={0,0,0},
-          smooth=Smooth.Bezier)}),                               Diagram(coordinateSystem(preserveAspectRatio=false)),Documentation(info="<html>
+          smooth=Smooth.Bezier)}),                               Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),Documentation(info="<html>
 <h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
 <p>This is a partial model for electrolyzer efficiency curves. </p>
 <h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

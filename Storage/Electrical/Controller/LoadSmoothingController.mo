@@ -2,10 +2,10 @@ within TransiEnt.Storage.Electrical.Controller;
 model LoadSmoothingController "Input is a (residual-)load signal and output is the set point power for a storage model that does everything to smooth the load "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,8 +41,8 @@ model LoadSmoothingController "Input is a (residual-)load signal and output is t
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_load "Load signal that is to be smoothed by the storage (may be negative for e.g. residual load cases)" annotation (Placement(transformation(extent={{-114,-22},{-74,18}}), iconTransformation(extent={{-114,-22},{-74,18}})));
-  Modelica.Blocks.Interfaces.RealOutput P_set_storage "Storage setpoint (P_set > 0: Loading) " annotation (Placement(transformation(extent={{92,-12},{112,8}}), iconTransformation(extent={{92,-12},{112,8}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_load "Load signal that is to be smoothed by the storage (may be negative for e.g. residual load cases)" annotation (Placement(transformation(extent={{-114,-22},{-74,18}}), iconTransformation(extent={{-114,-22},{-74,18}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_set_storage "Storage setpoint (P_set > 0: Loading) " annotation (Placement(transformation(extent={{92,-12},{112,8}}), iconTransformation(extent={{92,-12},{112,8}})));
 
 equation
 
@@ -57,7 +57,9 @@ equation
     P_set_storage= -min(P_max_unload, P_load);
   end if;
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p>Controller to calculate power set point to smooth load.</p>

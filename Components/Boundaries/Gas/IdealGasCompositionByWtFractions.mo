@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model IdealGasCompositionByWtFractions "Boundary for ideal gas composition by mass fractions for variable number of elements"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,7 +49,7 @@ model IdealGasCompositionByWtFractions "Boundary for ideal gas composition by ma
   //
   //               Interfaces
   // _____________________________________________
-  Modelica.Blocks.Interfaces.RealOutput xi[medium.nc - 1] = xi_in "composition of gas to be set"
+  TransiEnt.Basics.Interfaces.General.MassFractionOut xi[medium.nc - 1] = xi_in "composition of gas to be set"
                                    annotation (Placement(transformation(extent=
             {{100,0},{120,20}}), iconTransformation(extent={{80,-20},{120,20}})));
 
@@ -71,9 +71,9 @@ algorithm
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>xi: RealOutput of mass fractions</p>
+<p>xi: RealOutput of mass fractions in [kg/kg]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
+<p>sumXi is the sum of the set mass fractions</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

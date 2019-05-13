@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.SecondaryControl.Activation;
 partial model PartialActivationType "Partial Model for different types of Secondary Control Activation"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -50,11 +50,11 @@ partial model PartialActivationType "Partial Model for different types of Second
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_R_pos[nout] "Reserved positive control power (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_R_pos[nout] "Reserved positive control power (values are supposed to be positive)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={-40,120})));
-  Modelica.Blocks.Interfaces.RealInput P_R_neg[nout] "Reserved negative control power (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_R_neg[nout] "Reserved negative control power (values are supposed to be positive)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={40,120})));
@@ -65,7 +65,8 @@ partial model PartialActivationType "Partial Model for different types of Second
         rotation=-90,
         origin={0,-110})));
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
         Text(
           extent={{48,154},{106,94}},
           lineColor={0,0,127},
@@ -73,5 +74,32 @@ partial model PartialActivationType "Partial Model for different types of Second
         Text(
           extent={{-106,148},{-48,88}},
           lineColor={0,0,127},
-          textString="+")}));
+          textString="+")}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Partial Model/BaseClass for different types of Secondary Control Activation without technical or physical insight. Only input and outputs are defined.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>P_R_pos[nout]: Inputs for reserved positive control power (values are supposed to be positive)</p>
+<p>P_R_neg[nout]: Inputs for reserved negative control power (values are supposed to be positive)</p>
+<p>u: Control input from controller</p>
+<p>y[nout]: Outputs for power plant models</p>
+<p>c[nout]: Outputs for participation factors</p>
+<p>nout: Number of considered power plants</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) in 10/2014</span></p>
+</html>"));
 end PartialActivationType;

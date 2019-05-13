@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Base;
 connector FluidSignal_blue "Signal-based fuid connector"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,8 @@ connector FluidSignal_blue "Signal-based fuid connector"
           points={{-100,60},{100,60},{0,-40},{-100,60}},
           lineColor={0,0,0},
           fillColor={170,213,255},
-          fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(extent={{-40,-100},{40,100}})),
+          fillPattern=FillPattern.Solid)}), Diagram(graphics,
+                                                    coordinateSystem(extent={{-40,-100},{40,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Blue signal-based fluid connector.</p>

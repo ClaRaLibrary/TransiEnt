@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Base;
-block DrydenTurbulence "Block for statistical turbulence data based on Modelica"
+model DrydenTurbulence "Block for statistical turbulence data based on Modelica"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,10 +23,20 @@ block DrydenTurbulence "Block for statistical turbulence data based on Modelica"
   import SI = Modelica.SIunits;
   import Modelica.Constants.pi;
 
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+
   parameter SI.Time t = 0.4 "=V/L in dryden turbulence model";
 
   parameter SI.Velocity sigma = 0.1 *   30 * 0.5144
     "Turbulence intensity (try 0.1 * wind_speed)";
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
 
   Modelica.Blocks.Continuous.TransferFunction Hw(b=sigma*sqrt(1/pi/t)*{sqrt(3)*
         1/t,1}, a={1/t^2,2*1/t,1},
@@ -36,8 +46,14 @@ block DrydenTurbulence "Block for statistical turbulence data based on Modelica"
   Modelica.Blocks.Noise.BandLimitedWhiteNoise whiteNoise(samplePeriod=
        0.005)
     annotation (Placement(transformation(extent={{-36,-10},{-16,10}})));
-  Modelica.Blocks.Interfaces.RealOutput delta_v_turb annotation (Placement(transformation(extent={{94,-10},{114,10}})));
+  Basics.Interfaces.Ambient.VelocityOut delta_v_turb  annotation (Placement(transformation(extent={{94,-10},{114,10}})));
 equation
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
   connect(whiteNoise.y,Hw. u) annotation (Line(
       points={{-15,0},{12,0}},
       color={0,0,127}));
@@ -57,5 +73,26 @@ equation
           lineColor={192,192,192},
           fillColor={192,192,192},
           fillPattern=FillPattern.Solid),
-        Line(points={{-76,56},{-76,-52}}, color={215,215,215})}));
+        Line(points={{-76,56},{-76,-52}}, color={215,215,215})}), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Model for statistical Turbulence.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>delta_v_turb: output for velocity in m/s</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end DrydenTurbulence;

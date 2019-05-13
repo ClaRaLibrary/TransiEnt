@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Blocks;
-block LimPID "P, PI, PD, and PID controller with limited output, anti-windup compensation"
+block LimPID "P, PI, PD, and PID controller with limited output, anti-windup compensation and delayed, smooth activation (if wanted)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,33 +20,13 @@ block LimPID "P, PI, PD, and PID controller with limited output, anti-windup com
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  // _____________________________________________
-  //
-  //          Imports and Class Hierarchy
-  // _____________________________________________
-
   import Modelica.Blocks.Types.InitPID;
   import Modelica.Blocks.Types.SimpleController;
 
-  // _____________________________________________
-  //
-  //        Constants and Hidden Parameters
-  // _____________________________________________
+  output Real controlError = u_s - u_m "Control error (set point - measurement)";
 
-protected
-  parameter Boolean with_I = controllerType==Modelica.Blocks.Types.SimpleController.PI or
-                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation(Evaluate=true, HideResult=true);
-  parameter Boolean with_D = controllerType==Modelica.Blocks.Types.SimpleController.PD or
-                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation(Evaluate=true, HideResult=true);
-
-  // _____________________________________________
-  //
-  //               Visible Parameters
-  // _____________________________________________
-
-  //General Design of the Controller ------
-
-public
+//---------------------------------------
+//General Design of the Controller ------
   parameter Modelica.Blocks.Types.SimpleController controllerType=
          Modelica.Blocks.Types.SimpleController.PID "Type of controller" annotation(Dialog(group="General Design of Controller"));
   parameter Real sign= 1 "set to 1 if a positive control error leads to a positive control output, else -1"
@@ -57,21 +37,17 @@ public
                                                                     annotation(Dialog(enable=perUnitConversion, group="Normalisation of I/O Signals"));
   parameter Real y_ref = 1 "Reference value for actuated variable"
                                                                   annotation(Dialog(enable=perUnitConversion, group="Normalisation of I/O Signals"));
-  parameter Real yMax=1 "Upper limit of output"
-                                               annotation(Dialog(group="Limiter for Controller Output"));
-  parameter Real yMin=-yMax "Lower limit of output"
-                                                   annotation(Dialog(group="Limiter for Controller Output"));
+  parameter Real y_max=1 "Upper limit of output" annotation(Dialog(group="Limiter for Controller Output"));
+  parameter Real y_min=-y_max "Lower limit of output" annotation(Dialog(group="Limiter for Controller Output"));
 
-
-
-  //Time Resononse of the Controller -------
-
+//----------------------------------------
+//Time Resononse of the Controller -------
   parameter Real k = 1 "Gain of Proportional block"
                                                    annotation(Dialog(group="Time Response of the Controller"));
-  parameter Modelica.SIunits.Time Ti(min=Modelica.Constants.small)=0.5 "1/Ti is gain of integrator block"
+  parameter Modelica.SIunits.Time Tau_i(min=Modelica.Constants.small)=0.5 "1/Ti is gain of integrator block"
                                       annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Time Response of the Controller"));
-  parameter Modelica.SIunits.Time Td(min=0)=0.1 "Gain of derivative block"
+ parameter Modelica.SIunits.Time Tau_d(min=0)=0.1 "Gain of derivative block"
                               annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Time Response of the Controller"));
 
@@ -81,405 +57,395 @@ public
        annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Derivative Filtering"));
 
-  //------------------- Controller activation --------------------
+//------------------- Controller activation --------------------
 
 parameter Boolean use_activateInput = false "Provide Boolean input to switch controller on/off."
                                                     annotation(Dialog(tab="Controller activation"));
-parameter ClaRa.Basics.Units.Time activationTime=0.0 "Time when controller is switched on. For use_activateInput==true the controller is switched on if (time>activationTime AND activateController=true)."
+parameter ClaRa.Basics.Units.Time t_activation=0.0 "Time when controller is switched on. For use_activateInput==true the controller is switched on if (time>t_activation AND activateController=true)."
     annotation (Dialog(tab="Controller activation"));
 parameter ClaRa.Basics.Units.Time Tau_lag_I=0.0 "Time lag for activation of integral part AFTER controller is being switched on "
     annotation (Dialog(tab="Controller activation"));
 
-parameter Real output_inactive = 1 "Controller output if controller is not active" annotation(Dialog(tab="Controller activation"));
+parameter Real y_inactive = 1 "Controller output if controller is not active" annotation(Dialog(tab="Controller activation"));
+parameter Boolean use_reset = use_activateInput "Use reset ability" annotation(Dialog(tab="Controller activation",enable=use_activateInput));
 
-  //Signal Smoothening---------------------------
+//Signal Smoothening---------------------------
 
 public
   parameter Real Tau_in(min=0)=0 "Time constant for input smoothening, Tau_in=0 refers to signal no smoothening"
-      annotation(Evaluate=true,Dialog(tab="I/O Filters"));
+      annotation(Dialog(tab="I/O Filters"));
   parameter Real Tau_out(min=0)=0 "time constant for output smoothening, Tau_out=0 refers to signal no smoothening"
-           annotation(Evaluate=true, Dialog(tab="I/O Filters"));
+           annotation(Dialog(tab="I/O Filters"));
 
-  //Initialisation--------------------------
+//Initialisation--------------------------
 public
-  parameter InitPID initType=Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState "Type of initialization"
-                                     annotation(Evaluate=true,
-      Dialog(tab="Initialization"));
+  parameter Integer initOption = 501 "Initialisation option" annotation(choicesAllMatching, Dialog(tab="Initialisation"), choices(choice = 501 "No init (y_start and x_start as guess values)",
+                                                                                                    choice=502 "Steady state",
+                                                                                                    choice=503 "Force y_start/y_inactive at output"));
   parameter Boolean limitsAtInit = true "= false, if limits are ignored during initializiation"
-    annotation(Evaluate=true, Dialog(tab="Initialization",
+    annotation(Dialog(tab="Initialisation",
                        enable=controllerType==SimpleController.PI or
                               controllerType==SimpleController.PID));
-  parameter Real xi_start=0 "Initial or guess value value for integrator output (= integrator state)"
-    annotation (Dialog(tab="Initialization",
-                enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
-                       controllerType==Modelica.Blocks.Types.SimpleController.PID));
-  parameter Real xd_start=0 "Initial or guess value for state of derivative block"
-    annotation (Dialog(tab="Initialization",
-                         enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
-                                controllerType==Modelica.Blocks.Types.SimpleController.PID));
-  parameter Real y_start=0 "Initial value of output"
-    annotation(Dialog(enable=initType == Modelica.Blocks.Types.InitPID.InitialOutput, tab=
-          "Initialization"));
 
-  //Expert Settings---------------------------------------------------------------
+  parameter Real xi_start=0 "Initial or guess value value for integrator output (= integrator state)"
+    annotation (Dialog(enable= initOption == 501,  tab="Initialisation"));
+
+  parameter Real y_start=0 "Initial value of output"
+    annotation(Dialog(enable=(initOption == 503 or initOption == 502), tab=
+          "Initialisation"));
+
+//Expert Settings---------------------------------------------------------------
   parameter Real Tau_add(min=0)=0 "Set to >0 for additional state after add block in controller, if DAE-index reduction fails."
     annotation(Dialog(tab="Expert Settings", group="DAE Index Reduction"));
+  parameter Real xd_start=0 "Initial or guess value for state of derivative block"
+    annotation (Dialog(tab="Expert Settings", group= "Obsolete Settings",
+                         enable=((controllerType==Modelica.Blocks.Types.SimpleController.PD or
+                                controllerType==Modelica.Blocks.Types.SimpleController.PID) and initOption == 501)));
+protected
+  parameter Boolean with_I = controllerType==Modelica.Blocks.Types.SimpleController.PI or
+                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation (HideResult=true);
+  parameter Boolean with_D = controllerType==Modelica.Blocks.Types.SimpleController.PD or
+                             controllerType==Modelica.Blocks.Types.SimpleController.PID annotation (HideResult=true);
+  Real resetValueP(start=0, fixed=true) "Input to P part before controller activation";
+  Real resetValueID(start=0, fixed=true) "Output of controller before activation";
 
-  // _____________________________________________
-  //
-  //                  Interfaces
-  // _____________________________________________
+  Real resetValueI "";
 
+//  parameter Real y_in_start(fixed=false) "Start value of inlet pseudo state";
+//   parameter Real y_out_start(fixed=false) "Start value of outlet pseudo state";
+//   parameter Real y_aux_start(fixed=false) "Start value of auxilliary pseudo state";
+public
   Modelica.Blocks.Interfaces.RealInput u_s "Connector of setpoint input signal"
-    annotation (Placement(transformation(extent={{-200.5,-20},{-160.5,20}},
+    annotation (Placement(transformation(extent={{-240.5,-20},{-200.5,20}},
           rotation=0), iconTransformation(extent={{-140,-20},{-100,20}})));
+  Modelica.Blocks.Interfaces.RealInput u_m "Connector of measurement input signal"
+    annotation (Placement(transformation(
+        origin={0,-216},
+        extent={{20,-20},{-20,20}},
+        rotation=270), iconTransformation(
+        extent={{20,-20},{-20,20}},
+        rotation=270,
+        origin={1,-120})));
 
-  Modelica.Blocks.Interfaces.BooleanInput activateInput if use_activateInput "true, if controller is on"
-                                annotation (Placement(transformation(extent={{-200.5,
-            -100},{-160.5,-60}}), iconTransformation(extent={{-140,-100},{-100,-60}})));
+    Modelica.Blocks.Interfaces.BooleanInput activateInput if use_activateInput "true, if controller is on"
+                                annotation (Placement(transformation(extent={{-239.5,140},{-199.5,180}}),
+                                  iconTransformation(extent={{-140,-100},{-100,-60}})));
 
   Modelica.Blocks.Interfaces.RealOutput y "Connector of actuator output signal"
-    annotation (Placement(transformation(extent={{130,-10},{150,10}}, rotation=0),
-        iconTransformation(extent={{99,-10},{119,10}})));
-
-  // _____________________________________________
-  //
-  //           Instances of other Classes
-  // _____________________________________________
-
+    annotation (Placement(transformation(extent={{260,-10},{280,10}}, rotation=0),
+        iconTransformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Math.Gain P(k=k)
-                     annotation (Placement(transformation(extent={{-30,90},{-11,
-            109}},rotation=0)));
-  Modelica.Blocks.Continuous.Integrator I(
-    k=1/Ti,
-    initType =    if initType == InitPID.SteadyState then
-Modelica.Blocks.Types.Init.SteadyState
- else
-     if initType == InitPID.InitialOutput then
-Modelica.Blocks.Types.Init.InitialOutput
- else
-     if initType == InitPID.InitialState then
-Modelica.Blocks.Types.Init.InitialState
- else
-Modelica.Blocks.Types.Init.NoInit,
-    y_start=y_start/y_ref) if  with_I
-    annotation (Placement(transformation(extent={{-30,10},{-10,30}},   rotation=
-           0)));
-  ClaRa.Components.Utilities.Blocks.DerivativeClaRa D_approx(
-    k=Td,
-    x_start=xd_start,
-    Tau=Nd,
-    initOption=if ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit) == Modelica.Blocks.Types.Init.SteadyState) then 502 elseif ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit) == Modelica.Blocks.Types.Init.InitialState) then 799 elseif ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit)
-         == Modelica.Blocks.Types.Init.InitialOutput) then 504 elseif ((if initType == InitPID.SteadyState then Modelica.Blocks.Types.Init.SteadyState else if initType == InitPID.InitialOutput then Modelica.Blocks.Types.Init.InitialOutput else if initType == InitPID.InitialState then Modelica.Blocks.Types.Init.InitialState else Modelica.Blocks.Types.Init.NoInit) == Modelica.Blocks.Types.Init.NoInit) then 501 else 0) if with_D annotation (Placement(transformation(extent={{-30,50},{-10,69.5}}, rotation=0)));
+                     annotation (Placement(transformation(extent={{-18,60},{2,80}},   rotation=0)));
+  ClaRa.Components.Utilities.Blocks.Integrator I(
+    y_startInputIsActive=true,
+    Tau_i_const=Tau_i,
+    initOption= if initOption == 798    then 504
+              else if initOption == 796 then 504
+              else if initOption == 797  then 504
+              else if initOption == 795 or initOption == 501 then 501
+              else if initOption == 502 then 502
+              else if initOption == 503 then 504 else 0) if  with_I annotation (Placement(transformation(extent={{-30,-92},{-10,-72}}, rotation=0)));
 
+  ClaRa.Components.Utilities.Blocks.DerivativeClaRa D_approx(
+    k=Tau_d,
+    x_start=xd_start,
+    initOption=if initOption == 798 or initOption == 796 or initOption == 502 or initOption == 503 then 502
+               else if initOption == 797 then 799
+               else if initOption == 795 or initOption == 501 then 501
+               else 0,
+    Tau=Nd) if with_D annotation (Placement(transformation(extent={{-26,-10},{-6,10}},rotation=0)));
   Modelica.Blocks.Math.Add3 addPID(
     k1=1,
     k2=1,
-    k3=1)                 annotation (Evaluate=true, Placement(transformation(
-          extent={{10.5,54.5},{20.5,64.5}},
-                                    rotation=0)));
-  Modelica.Blocks.Math.Add addI if with_I annotation (Evaluate=true, Placement(
-        transformation(extent={{-5,-5},{5,5}},       rotation=0,
-        origin={-60,-3.5})));
+    k3=1)                 annotation (Placement(transformation(extent={{42,-5},{52,5}},  rotation=0)));
+  Modelica.Blocks.Math.Add addI if with_I annotation (Placement(transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=0,
+        origin={-60,-105})));
   Modelica.Blocks.Math.Gain gainTrack(k=1/Ni) if   with_I
-    annotation (Placement(transformation(extent={{3,-17},{-10,-30}}, rotation=0)));
+    annotation (Placement(transformation(extent={{3,-119},{-10,-132}},
+                                                                     rotation=0)));
   Modelica.Blocks.Nonlinear.Limiter limiter(
     limitsAtInit=limitsAtInit,
-    uMax=if perUnitConversion then yMax/y_ref else yMax,
-    uMin=if perUnitConversion then yMin/y_ref else yMin)
-    annotation (Placement(transformation(extent={{69,57},{82,70}},  rotation=0)));
+    uMax=if perUnitConversion then y_max/y_ref else y_max,
+    uMin=if perUnitConversion then y_min/y_ref else y_min)
+    annotation (Placement(transformation(extent={{154,-2},{174,18}},rotation=0)));
 
 public
   Modelica.Blocks.Sources.Constant Dzero(k=0) if not with_D
-    annotation (Placement(transformation(extent={{-17,36.5},{-10,43.5}},
+    annotation (Placement(transformation(extent={{-13,-25.5},{-6,-18.5}},
                                                                      rotation=0)));
-  Modelica.Blocks.Sources.Constant Izero(k=0) if not with_I
-    annotation (Placement(transformation(extent={{-3.5,-3.75},{3.5,3.75}},
-                                                                    rotation=0,
-        origin={-12.5,0.25})));
+  Modelica.Blocks.Sources.RealExpression
+                                   Izero(y=resetValueI) if      not with_I
+    annotation (Placement(transformation(
+        extent={{-6,-4},{4,6}},
+        rotation=0,
+        origin={-15.5,-104.75})));
   Modelica.Blocks.Math.Gain toPU(k=if perUnitConversion then sign/u_ref else
         sign) "convert input values to \"per unit\""
                                            annotation (Placement(transformation(
-          extent={{-95,-5.5},{-85,5}},
+          extent={{-106,-10},{-86,10}},
                                      rotation=0)));
+  Modelica.Blocks.Math.Feedback feedback
+    annotation (Placement(transformation(extent={{-190.5,-10},{-170.5,10}},
+                                                                      rotation=0)));
   Modelica.Blocks.Math.Gain fromPU(k=if perUnitConversion then y_ref else 1) "convert output values to \"Real\""
                                            annotation (Placement(transformation(
-          extent={{-5,-5},{5,5}},  rotation=0,
-        origin={104,0})));
+          extent={{-10,-10},{10,10}},
+                                   rotation=0,
+        origin={210,0})));
 
   Modelica.Blocks.Logical.Switch switch_OnOff_I if  with_I
-    annotation (Placement(transformation(extent={{-49,25.5},{-38,15}})));
+    annotation (Placement(transformation(extent={{-49,-76},{-38,-87}})));
 public
   Modelica.Blocks.Sources.Constant I_off_zero(k=0) if
                                                   with_I
     annotation (Placement(transformation(extent={{4.25,-4.5},{-4.25,4.5}},
                                                                      rotation=180,
-        origin={-64.75,35})));
+        origin={-64.75,-67})));
 
   Modelica.Blocks.Logical.Switch switch_OnOff
-    annotation (Placement(transformation(extent={{36,72},{50,58.5}})));
+    annotation (Placement(transformation(extent={{94,18},{114,-2}})));
   Modelica.Blocks.Sources.RealExpression y_unlocked(y=if perUnitConversion
-         then output_inactive/y_ref else output_inactive)
-    annotation (Placement(transformation(extent={{-10,10},{10,-10}},
-                                                                   rotation=180,
-        origin={41,87})));
-  Modelica.Blocks.Sources.BooleanExpression activation2(y=activate.y) annotation (
-      Placement(transformation(
+         then y_inactive/y_ref else y_inactive)
+    annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
-        origin={41,100})));
-  Modelica.Blocks.Sources.BooleanExpression I_activation(y=time_lag_I_activation.y
-         > Tau_lag_I)                                                   annotation (
-      Placement(transformation(
-        extent={{-9,7.75},{9,-7.75}},
-        rotation=0,
-        origin={-67.5,20.25})));
-  ClaRa.Components.Utilities.Blocks.FirstOrderClaRa smoothPIDInput(Tau=Tau_in) annotation (Placement(transformation(extent={{-110,-3.5},{-104,3}})));
-  ClaRa.Components.Utilities.Blocks.FirstOrderClaRa smoothPIDOutput(Tau=Tau_out) annotation (Placement(transformation(extent={{115,-3.5},{122,3.5}})));
+        origin={112,30})));
+  TransiEnt.Basics.Blocks.FirstOrder smoothPIDInput(Tau=Tau_in, initOption=if Tau_in > 0 then 1 else 4) annotation (Placement(transformation(extent={{-132,-10},{-112,10}})));
+  TransiEnt.Basics.Blocks.FirstOrder smoothPIDOutput(Tau=Tau_out, initOption=if Tau_out > 0 then 1 else 4) annotation (Placement(transformation(extent={{230,-10},{250,10}})));
   Modelica.Blocks.Math.Feedback addSat
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=180,
-        origin={57.5,0})));
-  Modelica.Blocks.Logical.Timer time_lag_I_activation
-    annotation (Placement(transformation(extent={{-85,-63},{-72,-50}})));
-  Modelica.Blocks.Routing.BooleanPassThrough activate
-    annotation (Placement(transformation(extent={{-50,-78.5},{-30,-58.5}})));
-  Modelica.Blocks.Sources.BooleanExpression activate_(y=time >= activationTime)
-    annotation (Placement(transformation(extent={{-159,-105},{-139,-85}})));
-  Modelica.Blocks.Logical.And controllerActive if
-                                                 use_activateInput
-    annotation (Placement(transformation(extent={{-128,-76},{-113,-61}})));
-  Modelica.Blocks.Routing.BooleanPassThrough activateIfNoSwitch if not use_activateInput
-    annotation (Placement(transformation(extent={{-109,-98.5},{-102,-91.5}})));
-  ClaRa.Components.Utilities.Blocks.FirstOrderClaRa smoothPIDOutput1(Tau=Tau_add) annotation (Placement(transformation(extent={{56,61.5},{63,68.5}})));
+        origin={145,-125.5})));
+  TransiEnt.Basics.Blocks.FirstOrder smoothPIDOutput1(Tau=Tau_add, initOption=if Tau_add > 0 then 1 else 4) annotation (Placement(transformation(extent={{122,-2.5},{142,18}})));
 
-  // _____________________________________________
-  //
-  //           Characteristic Equations
-  // _____________________________________________
-
-equation
-  assert(yMax >= yMin, "LimPID: Limits must be consistent. However, yMax (=" + String(yMax) +
-                       ") < yMin (=" + String(yMin) + ")");
-  if initType == InitPID.InitialOutput and (y_start < yMin or y_start > yMax) then
-      Modelica.Utilities.Streams.error("LimPID: Start value y_start (=" + String(y_start) +
-         ") is outside of the limits of yMin (=" + String(yMin) +") and yMax (=" + String(yMax) + ")");
+  Modelica.Blocks.Sources.RealExpression y_start_I(y = if initOption == 798 or initOption == 797 or initOption == 796 then y_start/y_ref else if perUnitConversion then y_start/y_ref - addPID.u1 - addPID.u2 else y_start - addPID.u1 - addPID.u2)
+    annotation (Placement(transformation(extent={{10,-64},{-8,-52}})));
+  // The following alternative will truely allow to initialise the PID block at y_start if InitialOutput is chosen:
+  // Modelica.Blocks.Sources.RealExpression y_start_I(y=if initType == InitPID.InitialOutput then y_start/y_ref - addPID.u1 - addPID.u2 elseif initType == InitPID.SteadyState then y_start/y_ref else xi_start)
+  //   annotation (Placement(transformation(extent={{10,-64},{-8,-52}})));
+  Modelica.Blocks.Math.Feedback resetP annotation (Placement(transformation(
+        extent={{-10,10},{10,-10}},
+        rotation=90,
+        origin={-78,50.5})));
+  Modelica.Blocks.Sources.RealExpression y_unlocked1(y=resetValueP)
+    annotation (Placement(transformation(extent={{10,10},{-10,-10}},
+                                                                   rotation=180,
+        origin={-113,51})));
+  Modelica.Blocks.Math.Add resetPD annotation (Placement(transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=0,
+        origin={69,-3})));
+  Modelica.Blocks.Sources.RealExpression y_unlocked2(y=resetValueID) annotation (Placement(transformation(extent={{10,10},{-10,-10}},
+                                                                   rotation=270,
+        origin={56,-30})));
+Modelica.Blocks.Sources.BooleanExpression activate_(y=time >= t_activation) annotation (Placement(transformation(extent={{-194,180},{-174,200}})));
+Modelica.Blocks.Logical.Timer time_lag_I_activation annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=0, origin={18,142})));
+Modelica.Blocks.Logical.And controllerActive if use_activateInput annotation (Placement(transformation(extent={{-134,170},{-114,150}})));
+Modelica.Blocks.Routing.BooleanPassThrough booleanPassThrough if not use_activateInput annotation (Placement(transformation(extent={{-60,180},{-40,200}})));
+Modelica.Blocks.Logical.GreaterThreshold I_activation(threshold=Tau_lag_I) annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=270, origin={-152,-66})));
+initial equation
+  if use_reset then
+    resetValueI =   if with_D then if perUnitConversion then y_start/y_ref - addPID.u1 else y_start-addPID.u1 else 0;
   end if;
-  assert(limitsAtInit or not limitsAtInit and y >= yMin and y <= yMax,
-         "LimPID: During initialization the limits have been switched off.\n" +
-         "After initialization, the output y (=" + String(y) +
-         ") is outside of the limits of yMin (=" + String(yMin) +") and yMax (=" + String(yMax) + ")");
+equation
 
+  assert(y_max >= y_min, "LimPID: Limits must be consistent. However, y_max (=" + String(y_max) +
+                       ") < y_min (=" + String(y_min) + ")");
 
-  // _____________________________________________
-  //
-  //               Connect Statements
-  // _____________________________________________
+ if initOption==503 and limitsAtInit and (y_start < y_min or y_start > y_max) then
+     Modelica.Utilities.Streams.error("LimPID: Start value y_start (=" + String(y_start) + ") is beyond allowed limits of y_min (=" + String(y_min) +") and y_max (=" + String(y_max) + ") in instance " + getInstanceName());
+ end if;
 
-  connect(P.y, addPID.u1) annotation (Line(points={{-10.05,99.5},{5,99.5},{5,63.5},
-          {9.5,63.5}},
+  if use_reset then
+    when change(switch_OnOff.u2) then
+      reinit(resetValueP, pre(toPU.y));
+      reinit(resetValueID, y_unlocked.y - addPID.u2 - addPID.u3);
+    end when;
+
+    der(resetValueP)=0;
+    der(resetValueID)=0;
+
+    if with_I then
+      der(resetValueI)=0;
+    else
+      resetValueI=0;
+    end if;
+
+  else
+    resetValueP=0;
+    resetValueID=0;
+    resetValueI=0;
+  end if;
+
+  connect(P.y, addPID.u1) annotation (Line(points={{3,70},{32,70},{32,4},{41,4}},
                color={0,0,127}));
   connect(D_approx.y, addPID.u2)
-    annotation (Line(points={{-9,59.75},{-4.5,59.75},{-4.5,59.5},{9.5,59.5}},
-                                              color={0,0,127}));
+    annotation (Line(points={{-5,0},{41,0}},  color={0,0,127}));
   connect(toPU.y, D_approx.u)
-                       annotation (Line(points={{-84.5,-0.25},{-79.5,-0.25},{-79.5,
-          59.75},{-32,59.75}},                                      color={0,0,127}));
-  connect(toPU.y, P.u) annotation (Line(points={{-84.5,-0.25},{-79.5,-0.25},{-79.5,
-          99.5},{-31.9,99.5}},
-                color={0,0,127}));
-  connect(gainTrack.y, addI.u2) annotation (Line(points={{-10.65,-23.5},{-10.65,
-          -23.5},{-71,-23.5},{-71,-6.5},{-66,-6.5}},
+                       annotation (Line(points={{-85,0},{-28,0}},   color={0,0,127}));
+  connect(gainTrack.y, addI.u2) annotation (Line(points={{-10.65,-125.5},{-10.65,-126},{-80,-126},{-80,-108},{-66,-108}},
                            color={0,0,127}));
+  connect(u_s, feedback.u1) annotation (Line(points={{-220.5,0},{-188.5,0}},
+                                                                        color={0,
+          0,127}));
+  connect(u_m, feedback.u2) annotation (Line(points={{0,-216},{0,-160},{-180.5,-160},{-180.5,-8}},
+                     color={0,0,127}));
 
   connect(switch_OnOff_I.y, I.u) annotation (Line(
-      points={{-37.45,20.25},{-37.45,20},{-32,20}},
+      points={{-37.45,-81.5},{-37.45,-82},{-32,-82}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(I_off_zero.y, switch_OnOff_I.u3) annotation (Line(
-      points={{-60.075,35},{-55,35},{-55,24.45},{-50.1,24.45}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(I.y, addPID.u3) annotation (Line(
-      points={{-9,20},{5,20},{5,55.5},{9.5,55.5}},
+      points={{-60.075,-67},{-55,-67},{-55,-77.1},{-50.1,-77.1}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(toPU.y, addI.u1) annotation (Line(
-      points={{-84.5,-0.25},{-84.5,-0.5},{-66,-0.5}},
+      points={{-85,0},{-80,0},{-80,-102},{-66,-102}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(addI.y, switch_OnOff_I.u1) annotation (Line(
-      points={{-54.5,-3.5},{-54.5,16.05},{-50.1,16.05}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(y, y) annotation (Line(
-      points={{140,0},{140,0}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(limiter.y, fromPU.u) annotation (Line(
-      points={{82.65,63.5},{90,63.5},{90,0},{98,0}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(activation2.y, switch_OnOff.u2)       annotation (Line(
-      points={{30,100},{23,100},{23,65.25},{34.6,65.25}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(I_activation.y, switch_OnOff_I.u2) annotation (Line(
-      points={{-57.6,20.25},{-50.1,20.25}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(switch_OnOff.u1, addPID.y) annotation (Line(
-      points={{34.6,59.85},{21,59.85},{21,59.5}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(switch_OnOff.u3, y_unlocked.y) annotation (Line(
-      points={{34.6,70.65},{27,70.65},{27,87},{30,87}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(smoothPIDInput.y, toPU.u) annotation (Line(
-      points={{-103.7,-0.25},{-96,-0.25}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(fromPU.y, smoothPIDOutput.u) annotation (Line(
-      points={{109.5,0},{112,4.44089e-016},{114.3,4.44089e-016}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(smoothPIDOutput.y, y) annotation (Line(
-      points={{122.35,4.44089e-016},{129,4.44089e-016},{129,0},{140,0}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(fromPU.u, addSat.u1) annotation (Line(
-      points={{98,0},{79,0},{79,-9.79717e-016},{65.5,-9.79717e-016}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(addSat.y, gainTrack.u) annotation (Line(
-      points={{48.5,1.10218e-015},{27,1.10218e-015},{27,-23.5},{4.3,-23.5}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(controllerActive.y, activate.u) annotation (Line(
-      points={{-112.25,-68.5},{-52,-68.5}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(activateInput, controllerActive.u1) annotation (Line(
-      points={{-180.5,-80},{-154,-80},{-154,-68.5},{-129.5,-68.5}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(activate_.y, controllerActive.u2) annotation (Line(
-      points={{-138,-95},{-134,-95},{-134,-74.5},{-129.5,-74.5}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(controllerActive.y, time_lag_I_activation.u) annotation (Line(
-      points={{-112.25,-68.5},{-103,-68.5},{-103,-56.5},{-86.3,-56.5}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(activate_.y, activateIfNoSwitch.u) annotation (Line(
-      points={{-138,-95},{-109.7,-95}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(activateIfNoSwitch.y, time_lag_I_activation.u) annotation (Line(
-      points={{-101.65,-95},{-92,-95},{-92,-56.5},{-86.3,-56.5}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(activateIfNoSwitch.y, activate.u) annotation (Line(
-      points={{-101.65,-95},{-52,-95},{-52,-68.5}},
-      color={255,0,255},
-      smooth=Smooth.None));
-  connect(addPID.u2, Dzero.y) annotation (Line(
-      points={{9.5,59.5},{-4,59.5},{-4,40},{-9.65,40}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(Izero.y, addPID.u3) annotation (Line(
-      points={{-8.65,0.25},{5,0.25},{5,55.5},{9.5,55.5}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(switch_OnOff.y, smoothPIDOutput1.u) annotation (Line(
-      points={{50.7,65.25},{52.85,65.25},{52.85,65},{55.3,65}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(smoothPIDOutput1.y, limiter.u) annotation (Line(
-      points={{63.35,65},{65,65},{65,63.5},{67.7,63.5}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(smoothPIDOutput1.y, addSat.u2) annotation (Line(
-      points={{63.35,65},{64,65},{64,8},{57.5,8}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(smoothPIDInput.u, u_s) annotation (Line(
-      points={{-110.6,-0.25},{-135.8,-0.25},{-135.8,0},{-180.5,0}},
+      points={{-54.5,-105},{-54.5,-85.9},{-50.1,-85.9}},
       color={0,0,127},
       smooth=Smooth.None));
 
+  connect(limiter.y, fromPU.u) annotation (Line(
+      points={{175,8},{178,8},{178,0},{198,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(switch_OnOff.u3, y_unlocked.y) annotation (Line(
+      points={{92,16},{92,30},{101,30}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(smoothPIDInput.y, toPU.u) annotation (Line(
+      points={{-111,0},{-108,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(fromPU.y, smoothPIDOutput.u) annotation (Line(
+      points={{221,0},{228,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(smoothPIDOutput.y, y) annotation (Line(
+      points={{251,0},{270,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(addSat.y, gainTrack.u) annotation (Line(
+      points={{136,-125.5},{4.3,-125.5}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(addPID.u2, Dzero.y) annotation (Line(
+      points={{41,0},{0,0},{0,-22},{-5.65,-22}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(Izero.y, addPID.u3) annotation (Line(
+      points={{-11,-103.75},{12,-103.75},{12,-104},{34,-104},{34,-82},{34,-82},{34,-4},{41,-4}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(switch_OnOff.y, smoothPIDOutput1.u) annotation (Line(
+      points={{115,8},{116.85,8},{116.85,7.75},{120,7.75}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(smoothPIDOutput1.y, limiter.u) annotation (Line(
+      points={{143,7.75},{152,7.75},{152,8}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(y_unlocked1.y,resetP. u2) annotation (Line(points={{-102,51},{-86,51},{-86,50.5}},color={0,0,127}));
+  connect(resetP.y, P.u) annotation (Line(points={{-78,59.5},{-78,70},{-20,70}},       color={0,0,127}));
+  connect(toPU.y, resetP.u1) annotation (Line(points={{-85,0},{-78,0},{-78,42.5}},           color={0,0,127}));
+  connect(limiter.y, addSat.u1) annotation (Line(points={{175,8},{178,8},{178,-125.5},{153,-125.5}},
+                                                                                            color={0,0,127}));
+  connect(y_unlocked2.y, resetPD.u2) annotation (Line(points={{56,-19},{56,-6},{63,-6}},color={0,0,127}));
+  connect(y_start_I.y, I.y_start) annotation (Line(points={{-8.9,-58},{-20,-58},{-20,-70}}, color={0,0,127}));
+  connect(smoothPIDOutput1.y, addSat.u2) annotation (Line(points={{143,7.75},{145,7.75},{145,-117.5}},   color={0,0,127}));
+  connect(feedback.y, smoothPIDInput.u) annotation (Line(points={{-171.5,0},{-172,0},{-134,0}}, color={0,0,127}));
+  connect(I.y, addPID.u3) annotation (Line(points={{-9,-82},{34,-82},{34,-4},{41,-4}},          color={0,0,127}));
+  connect(addPID.y, resetPD.u1) annotation (Line(points={{52.5,0},{63,0}},           color={0,0,127}));
+  connect(resetPD.y, switch_OnOff.u1) annotation (Line(points={{74.5,-3},{74.25,-3},{74.25,0},{92,0}},   color={0,0,127}));
+connect(activateInput, controllerActive.u1) annotation (Line(points={{-219.5,160},{-136,160}}, color={255,0,255}, smooth=Smooth.None));
+connect(activate_.y, controllerActive.u2) annotation (Line(points={{-173,190},{-156,190},{-156,168},{-136,168}}, color={255,0,255}, smooth=Smooth.None));
+connect(controllerActive.y, time_lag_I_activation.u) annotation (Line(points={{-113,160},{-54,160},{-54,142},{6,142}}, color={255,0,255}, smooth=Smooth.None));
+connect(controllerActive.y, switch_OnOff.u2) annotation (Line(points={{-113,160},{86,160},{86,8},{92,8}}, color={255,0,255}));
+connect(time_lag_I_activation.y, I_activation.u) annotation (Line(points={{29,142},{34,142},{34,124},{-152,124},{-152,-54}}, color={0,0,127}));
+connect(activate_.y, booleanPassThrough.u) annotation (Line(points={{-173,190},{-62,190}}, color={255,0,255}));
+connect(booleanPassThrough.y, switch_OnOff.u2) annotation (Line(points={{-39,190},{86,190},{86,8},{92,8}}, color={255,0,255}));
+connect(booleanPassThrough.y, time_lag_I_activation.u) annotation (Line(points={{-39,190},{-22,190},{-22,142},{6,142}}, color={255,0,255}));
+connect(I_activation.y, switch_OnOff_I.u2) annotation (Line(points={{-152,-77},{-152,-81.5},{-50.1,-81.5}}, color={255,0,255}));
   annotation (defaultComponentName="PID",
-  Documentation(info="<html>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>This component was created automatically from a previous version of the model <b>ClaRa.Components.Utilities.Blocks.LimPID</b></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p>Model revised by Boris Michaelsen (XRG Simulation GmbH), Apr 2009</p>
-<p>Model modified by Friedrich Gottelt (XRG Simulation GmbH), Nov 2009 : Update to independently set the gain and time constants of the PID, added a new parameter \\&quot;sign\\&quot; for case dependent control error evaluation</p>
-<p>Model modified by Pascal Dubucq (dubucq@tuhh.de), Apr 2017 : Added Transient license header</p>
-</html>"),
     Icon(coordinateSystem(
         preserveAspectRatio=true,
         extent={{-100,-100},{100,100}},
         grid={1,1}), graphics={
-        Line(points={{-80,-80},{-80,50},{-80,-20},{30,60},{80,60}}, color={0,
-              0,127}),
-        Polygon(
-          points={{-80,90},{-88,68},{-72,68},{-80,90}},
-          lineColor={192,192,192},
-          fillColor={192,192,192},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-20,-20},{80,-60}},
-          lineColor={192,192,192},
-          textString="PID"),
-        Line(points={{-90,-80},{82,-80}}, color={192,192,192}),
-                                Rectangle(
-          extent={{-100,-100},{100,100}},
-          lineColor={27,36,42},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid),
-        Line(points={{-80,78},{-80,-90}}, color={0,131,169}),
-        Polygon(
-          points={{-80,90},{-88,68},{-72,68},{-80,90}},
-          lineColor={0,131,169},
-          fillColor={0,131,169},
-          fillPattern=FillPattern.Solid),
-        Line(points={{-90,-80},{82,-80}}, color={0,131,169}),
-        Polygon(
-          points={{90,-80},{68,-72},{68,-88},{90,-80}},
-          lineColor={0,131,169},
-          fillColor={0,131,169},
-          fillPattern=FillPattern.Solid),
-        Line(points={{-80,-80},{-80,50},{-80,-20},{30,60},{80,60}}, color={27,36,
-              42}),
-        Text(
-          extent={{-20,-20},{80,-60}},
-          lineColor={0,131,169},
-          fillColor={0,131,169},
-          fillPattern=FillPattern.Solid,
-          textString="PID"),
         Text(
           extent={{-100,130},{100,100}},
           lineColor={27,36,42},
-          textString="%name")}),
+          textString="%name"),            Rectangle(
+          extent={{-100,-100},{100,100}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Line(
+          points={{-80,-90},{-80,80}},
+          color={221,222,223},
+          smooth=Smooth.Bezier),
+        Polygon(
+          points={{-80,90},{-88,68},{-72,68},{-80,90}},
+          lineColor={221,222,223},
+          fillColor={221,222,223},
+          fillPattern=FillPattern.Solid),
+        Line(
+          points={{-80,-80},{-80,40},{-80,6},{-60,-20},{30,60},{30,60},{80,60}},
+          color={27,36,42},
+          smooth=Smooth.Bezier),
+        Text(
+          extent={{-20,-20},{80,-60}},
+          lineColor={221,222,223},
+          fillColor={221,222,223},
+          fillPattern=FillPattern.Solid,
+          textString="%controllerType"),
+        Line(points={{-90,-80},{80,-80}}, color={221,222,223}),
+        Polygon(
+          points={{90,-80},{68,-72},{68,-88},{90,-80}},
+          lineColor={221,222,223},
+          fillColor={221,222,223},
+          fillPattern=FillPattern.Solid),
+        Line(points={{30,60},{80,60}}, color={167,25,48}, visible = limitsAtInit)}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This model is a LimPID controller which was copied from ClaRa.Components.Utilities.Blocks.LimPID and the following was changed:</p>
+<ul>
+<li>The reset ability can be turned off. In some situations, the reset of the controller at activation prohibits the controller from reacting correctly: If the control error decreases directly after activation, the controller will not do anything even if there is still a control error &gt; 0.</li>
+<li>The amount of states was reduced by exchanging the first order blocks by TransiEnt.Basics.Blocks.FirstOrderTransiEnt and exchanging the equations for the reset values. This improves the speed.</li>
+</ul>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>u_s: input for set value</p>
+<p>u_m: input for measured value</p>
+<p>activateInput: input to turn on the controller</p>
+<p>y: output</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
+</html>",
+   revisions="<html>
+<ul>
+  <li> 15.04.09 First revision, Boris Michaelsen, XRG Simulation GmbH</li>
+  <li> 25.11.09 Update to independently set the gain and time constants of the PID, added a new parameter \"sign\" for case dependent control error evaluation, Friedrich Gottelt, XRG Simulation GmbH</li>
+</ul>
+</html>"),
     Diagram(coordinateSystem(
         preserveAspectRatio=false,
-        extent={{-160,-100},{130,120}},
-        grid={1,1}), graphics));
+        extent={{-200,-200},{260,200}},
+        initialScale=0.1)));
 end LimPID;

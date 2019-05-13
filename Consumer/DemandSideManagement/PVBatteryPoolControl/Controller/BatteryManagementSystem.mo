@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller;
 model BatteryManagementSystem
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,7 @@ model BatteryManagementSystem
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_surplus "Surplus power (=-P_residual)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_surplus "Surplus power (=-P_residual)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={-98,100})));
@@ -71,8 +71,7 @@ model BatteryManagementSystem
         rotation=90,
         origin={-120,10})));
   Modelica.Blocks.Sources.Constant P_el_max_bat(k=param.P_el_max_bat) annotation (Placement(transformation(extent={{-96,-22},{-108,-10}})));
-  BatteryPrimaryBalancingController            PBPController(P_nom=param.P_el_pbp_total)
-                                                             "Primary balancing power controller" annotation (Placement(transformation(
+  BatteryPrimaryBalancingController PBPController(P_n=param.P_el_pbp_total) "Primary balancing power controller" annotation (Placement(transformation(
         extent={{-15.5,-16},{15.5,16}},
         rotation=90,
         origin={-36,-13.5})));
@@ -89,7 +88,7 @@ model BatteryManagementSystem
 
   Base.LimitConditioning P_set_limit_cond annotation (Placement(transformation(extent={{-58,46},{-38,66}})));
   Modelica.Blocks.Sources.IntegerConstant thisIndex(k=index) annotation (Placement(transformation(extent={{52,-72},{64,-60}})));
-  Modelica.Blocks.Interfaces.RealInput delta_f "Input signal connector"
+ TransiEnt.Basics.Interfaces.General.FrequencyIn delta_f  "Input signal connector"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-146,-78}), iconTransformation(extent={{-112,-88},{-72,-48}})));
@@ -227,10 +226,10 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller.Check.CheckBatteryManagementSystem&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

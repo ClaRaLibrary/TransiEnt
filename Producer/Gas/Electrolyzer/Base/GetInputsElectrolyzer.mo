@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Base;
 model GetInputsElectrolyzer "Get enabled inputs and parameters of disabled inputs"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,12 +20,22 @@ model GetInputsElectrolyzer "Get enabled inputs and parameters of disabled input
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends Modelica.Blocks.Interfaces.BlockIcon;
 
-  Modelica.Blocks.Interfaces.RealInput m_flow_H2_set "Prescribed hydrogen mass flow rate"
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_H2_set "Prescribed hydrogen mass flow rate"
     annotation (Placement(transformation(extent={{-140,-60},{-100,-20}},
           rotation=0)));
-  Modelica.Blocks.Interfaces.RealInput P_el_set "Prescribed electric power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set "Prescribed electric power"
     annotation (Placement(transformation(extent={{-140,20},{-100,60}},
           rotation=0)));
 

@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat.Grid;
 model PressureDifferenceControl "ClaRa pump regulated by pressure differnce in heat grid "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -60,7 +60,7 @@ model PressureDifferenceControl "ClaRa pump regulated by pressure differnce in h
   // _____________________________________________
   TransiEnt.Basics.Interfaces.Thermal.FluidPortOut waterPortOut(Medium=Medium) "fluidport supply on consumer side" annotation (Placement(transformation(extent={{90,-10},{110,10}})));
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn waterPortIn(Medium=Medium) "fluidport return on consumer side" annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Blocks.Interfaces.RealInput Delta_p_measured "at worst hydraulic point" annotation (Placement(transformation(extent={{-128,30},{-88,70}}), iconTransformation(extent={{-108,50},{-88,70}})));
+  TransiEnt.Basics.Interfaces.General.PressureDifferenceIn Delta_p_measured "at worst hydraulic point" annotation (Placement(transformation(extent={{-128,30},{-88,70}}), iconTransformation(extent={{-108,50},{-88,70}})));
   // _____________________________________________
   //
   //           Instances of other Classes
@@ -100,15 +100,15 @@ model PressureDifferenceControl "ClaRa pump regulated by pressure differnce in h
         origin={32,-32})));
   TransiEnt.Basics.Blocks.LimPID PID(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
-    yMax=P_max,
-    yMin=P_min,
     use_activateInput=false,
-    activationTime=300,
     Tau_lag_I=60,
-    output_inactive=1000,
     k=k,
-    Ti=Tc) annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
+    y_max=P_max,
+    y_min=P_min,
+    Tau_i=Tc,
+    t_activation=300,
+    y_inactive=1000) annotation (Placement(transformation(
+        extent={{-10,10},{10,-10}},
         rotation=90,
         origin={32,-64})));
 
@@ -121,6 +121,10 @@ model PressureDifferenceControl "ClaRa pump regulated by pressure differnce in h
   //
   //           Characteristic Equations
   // _____________________________________________
+  Modelica.Blocks.Sources.Constant zero(k=0) annotation (Placement(transformation(
+        extent={{6,-6},{-6,6}},
+        rotation=270,
+        origin={32,-86})));
 equation
 
   // _____________________________________________
@@ -158,9 +162,10 @@ equation
   connect(pascal2Bar.y, deadZone.u) annotation (Line(points={{-8,11.2},{-8,11.2},{-8,-28}}, color={0,0,127}));
   connect(limiter.y, pump_L1_simple.P_drive) annotation (Line(points={{32,-21},{32,-12}}, color={0,0,127}));
 
-  connect(deadZone.y, PID.u_s) annotation (Line(points={{-8,-51},{-8,-51},{-8,-76},{32,-76}}, color={0,0,127}));
-  connect(PID.y, limiter.u) annotation (Line(points={{32,-53.1},{32,-44}}, color={0,0,127}));
+  connect(PID.y, limiter.u) annotation (Line(points={{32,-53},{32,-44}},   color={0,0,127}));
 
+  connect(PID.u_m, deadZone.y) annotation (Line(points={{20,-63.9},{16,-63.9},{16,-64},{-8,-64},{-8,-51}}, color={0,0,127}));
+  connect(zero.y, PID.u_s) annotation (Line(points={{32,-79.4},{32,-76}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
@@ -179,12 +184,13 @@ equation
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>fPReturnConsumer, fPSupplyConsumer - fluid ports</p>
-<p>Delta_p_measured - Real imput for measured pressure difference </p>
+<p>Delta_p_measured - RealInput for measured pressure difference </p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

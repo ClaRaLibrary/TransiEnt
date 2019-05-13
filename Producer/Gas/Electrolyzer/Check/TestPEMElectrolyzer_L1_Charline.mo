@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Check;
-model TestPEMElectrolyzer_L1_Charline
+model TestPEMElectrolyzer_L1_Charline "Tester for an PEM electrolyzer"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model TestPEMElectrolyzer_L1_Charline
   import TransiEnt;
   import SI = Modelica.SIunits;
 
-protected
+//protected
   function plotResult
 
   constant String resultFileName = "TestPEMElectrolyzer_L1_Charline.mat";
@@ -122,21 +122,21 @@ public
   TransiEnt.Components.Sensors.RealGas.EnthalpyFlowSensor enthalpyFlowSensor200MFlowIn annotation (Placement(transformation(extent={{-10,-100},{10,-80}})));
 equation
   connect(ElectricGrid100PowerIn.epp, electrolyzer100PowerIn.epp) annotation (Line(
-      points={{-59.9,60.1},{-40,60.1},{-40,60}},
+      points={{-60,60},{-40,60},{-40,60}},
       color={0,135,135},
       thickness=0.5));
   connect(ElectricGrid200PowerIn.epp, electrolyzer200PowerIn.epp) annotation (Line(
-      points={{-59.9,20.1},{-40,20.1},{-40,20}},
+      points={{-60,20},{-40,20},{-40,20}},
       color={0,135,135},
       thickness=0.5));
   connect(rampPower.y, electrolyzer100PowerIn.P_el_set) annotation (Line(points={{-59,90},{-50,90},{-50,72},{-34,72}},    color={0,0,127}));
   connect(rampPower.y, electrolyzer200PowerIn.P_el_set) annotation (Line(points={{-59,90},{-50,90},{-50,32},{-34,32}},    color={0,0,127}));
   connect(ElectricGrid100MFlowIn.epp,electrolyzer100MFlowIn. epp) annotation (Line(
-      points={{-59.9,-39.9},{-40,-39.9},{-40,-40}},
+      points={{-60,-40},{-40,-40},{-40,-40}},
       color={0,135,135},
       thickness=0.5));
   connect(ElectricGrid200MFlowIn.epp, electrolyzer200MFlowIn.epp) annotation (Line(
-      points={{-59.9,-99.9},{-40,-99.9},{-40,-100}},
+      points={{-60,-100},{-40,-100},{-40,-100}},
       color={0,135,135},
       thickness=0.5));
   connect(ramp100MFlow.y, electrolyzer100MFlowIn.m_flow_H2_set) annotation (Line(points={{-59,-10},{-50,-10},{-50,-28},{-26,-28}}, color={0,0,127}));
@@ -173,7 +173,8 @@ equation
       points={{10,20},{16,20},{22,20}},
       color={255,255,0},
       thickness=1.5));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,100}})),
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,100}})),
                                                                  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,100}}),
                                                                                                                       graphics={Text(
           extent={{50,42},{94,36}},
@@ -190,5 +191,26 @@ p_out=50 bar
 no costs considered")}),
     experiment(StopTime=50),
     __Dymola_experimentSetupOutput,
-    __Dymola_Commands(executeCall=TransiEnt.Components.Convertor.Power2Gas.Check.TestPEMElectrolyzer_L1_Charline.plotResult() "Plot example results"));
+    __Dymola_Commands(executeCall=TransiEnt.Components.Convertor.Power2Gas.Check.TestPEMElectrolyzer_L1_Charline.plotResult() "Plot example results"),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for PEMElectrolyzer_L1</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestPEMElectrolyzer_L1_Charline;

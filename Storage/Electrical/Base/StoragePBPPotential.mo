@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Base;
 model StoragePBPPotential "Calculates primary balancing power potential using a zero order hold"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,13 +42,13 @@ model StoragePBPPotential "Calculates primary balancing power potential using a 
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   Modelica.Blocks.Math.Abs abs_P_pot_charge "Potential charging power"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
-  Modelica.Blocks.Interfaces.RealInput P_potential_charge "Connector of Real input signal"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_potential_charge "Connector of Real input signal"
     annotation (Placement(transformation(extent={{-120,-70},{-80,-30}})));
-  Modelica.Blocks.Interfaces.RealInput P_potential_discharge "Connector of Real input signal"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_potential_discharge "Connector of Real input signal"
     annotation (Placement(transformation(extent={{-120,30},{-80,70}})));
   Modelica.Blocks.Math.Min min
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
-  Modelica.Blocks.Interfaces.RealOutput P_potential_PBP "Connector of Real output signal"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_potential_PBP "Connector of Real output signal"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Discrete.ZeroOrderHold holdPBPIntervall(samplePeriod=t_pbp_interval) "Potential must be present for time x" annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 equation
@@ -95,7 +95,9 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>P_potential_charge: input for electric power in [W]- Connector of Real input signal [W]</p>
+<p>P_potential_discharge: input for electric power in [W]- Connector of Real input signal [W]</p>
+<p>P_potential_PBP: output for electric power in [W]- Connector of Real output signal [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

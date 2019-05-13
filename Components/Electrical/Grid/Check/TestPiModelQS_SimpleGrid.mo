@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.Grid.Check;
-model TestPiModelQS_SimpleGrid
+model TestPiModelQS_SimpleGrid "Model for testing a quasi stationary PiModel in a simple grid"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,12 +34,13 @@ model TestPiModelQS_SimpleGrid
     v_boundary=230) annotation (Placement(transformation(extent={{52,10},{72,-10}})));
   Basics.Adapters.EPP_to_QS Adapter annotation (Placement(transformation(rotation=0, extent={{38,-10},{18,10}})));
   Basics.Adapters.QS_to_EPP Adapter1 annotation (Placement(transformation(rotation=0, extent={{-38,-10},{-58,10}})));
-  PIModelQS pIModel_QS(l=1e3, param=Characteristics.LV_K1()) annotation (Placement(transformation(extent={{-18,-10},{2,10}})));
+  PiModelQS pIModel_QS(l=1e3, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K1)
+                              annotation (Placement(transformation(extent={{-18,-10},{2,10}})));
 equation
-  connect(Adapter1.epp_IN, Grid.epp) annotation (Line(points={{-58.175,0.1},{-69.9,0.1},{-69.9,0.1}}, color={0,127,0}));
+  connect(Adapter1.epp_IN, Grid.epp) annotation (Line(points={{-58.175,0.1},{-70,0.1},{-70,0}},       color={0,127,0}));
   connect(Adapter1.currentP, pIModel_QS.pin_p1) annotation (Line(points={{-37.975,0},{-18,0},{-18,0}}, color={85,170,255}));
   connect(Adapter.voltageP, pIModel_QS.pin_p2) annotation (Line(points={{18,0},{2.2,0},{2.2,0}}, color={85,170,255}));
-  connect(Adapter.epp, Grid1.epp) annotation (Line(points={{38,0},{51.9,0},{51.9,0.1}}, color={0,127,0}));
+  connect(Adapter.epp, Grid1.epp) annotation (Line(points={{38,0},{52,0},{52,0}},       color={0,127,0}));
 public
 function plotResult
 
@@ -59,5 +60,28 @@ createPlot(id=1, position={809, 0, 791, 364}, y={"Grid.epp.P", "Grid1.epp.P"}, r
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)));
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
+                                                                         coordinateSystem(preserveAspectRatio=false)),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Test environment for a quasistationary PiModel in a simple grid</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end TestPiModelQS_SimpleGrid;

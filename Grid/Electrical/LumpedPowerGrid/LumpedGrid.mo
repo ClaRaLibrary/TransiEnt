@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid;
 model LumpedGrid
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -67,7 +67,7 @@ model LumpedGrid
   //           Instances of other Classes
   // _____________________________________________
 
-  LumpedGridLocalStatistics LumpedGrid(
+  replaceable LumpedGridLocalStatistics LumpedGrid(
     T_tc=T_tc,
     P_el_n=P_el_n,
     P_L=P_L,
@@ -85,9 +85,9 @@ model LumpedGrid
              annotation (Placement(transformation(extent={{-38,-36},{40,36}})));
 
   Components.GlobalStatisticsAdapter LocalStatisticsAdapter annotation (Placement(transformation(extent={{-100,60},{-58,100}})));
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(rotation=0, extent={{90,-10},{110,10}})));
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"),Placement(transformation(rotation=0, extent={{90,-10},{110,10}})));
 
-  TransiEnt.Components.Sensors.ElectricActivePower line_L1_1 annotation (Placement(transformation(
+  replaceable TransiEnt.Components.Sensors.ElectricActivePower line_L1_1 constrainedby TransiEnt.Components.Sensors.ElectricPowerComplex annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"),Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={64,0})));
@@ -135,17 +135,18 @@ equation
           fillPattern=FillPattern.VerticalCylinder,
           fillColor={0,0,213},
           textString="IntegratedGrid")}),
-                                Diagram(coordinateSystem(preserveAspectRatio=false,
+                                Diagram(graphics,
+                                        coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Non-detailled grid model electric grid model (including primary and secondary control models) witch a lumped generator model</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\"></span>Level of detail depends on the used submodels</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp: active power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -153,7 +154,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">checked in TransiEnt.Grid.Electrical.LumpedPowerGrid.Check)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Heat;
 model Heatflow_L2 "Heat flow boundary with prescribed power and given volume (L2)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,17 +40,37 @@ model Heatflow_L2 "Heat flow boundary with prescribed power and given volume (L2
   parameter SI.Power Q_flow_const=100e3 "|Heat demand|Constant heating power" annotation (Dialog(enable = not use_Q_flow_in));
 
   parameter SI.MassFlowRate m_flow_nom=simCenter.m_flow_nom "|Heat exchanger|Nominal mass flow rate";
-  parameter SI.Pressure p_nom=simCenter.p_n[1] "|Heat exchanger|Nominal pressure";
+  parameter SI.Pressure p_nom=simCenter.p_nom[1] "|Heat exchanger|Nominal pressure";
   parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_nom=1e5 "|Heat exchanger|Nominal specific enthalpy";
   parameter SI.HeatCapacity C=1e9 "|Heat exchanger|Heat capacity (geometry is calculated by this value)" annotation (Evaluate=true, HideResult=true);
-  parameter ClaRa.Basics.Units.Pressure p_start=simCenter.p_n[1] "|Heat exchanger|Start value of system pressure";
+  parameter ClaRa.Basics.Units.Pressure p_start=simCenter.p_nom[1] "|Heat exchanger|Start value of system pressure";
   parameter SI.Temperature T_start=323.15 "|Heat exchanger|Initial temperature" annotation (Evaluate=true, HideResult=true);
   parameter Integer initOption=0 "|Heat exchanger|Type of initialisation" annotation(choices(choice = 0 "Use guess values", choice = 1 "Steady state", choice=201 "Steady pressure", choice = 202 "Steady enthalpy", choice=204 "Fixed rel.level (for phaseBorder = idealSeparated only)",  choice=205 "Fixed rel.level and steady pressure (for phaseBorder = idealSeparated only)"));
   replaceable model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2
-   constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L2 "|Heat exchanger|Pressure loss model" annotation (choicesAllMatching=true);
+   constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L2 "|Heat exchanger|Pressure loss model" annotation (choicesAllMatching=true, Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Model for pressure loss</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 
   parameter Real valveAuthority=0.6 "|Valve|Valve authority";
-  parameter SI.Pressure Delta_p_nom=simCenter.p_n[2]-simCenter.p_n[1] "|Valve|Nominal pressure drop";
+  parameter SI.Pressure Delta_p_nom=simCenter.p_nom[2]-simCenter.p_nom[1] "|Valve|Nominal pressure drop";
 
   // _____________________________________________
   //
@@ -58,10 +78,10 @@ model Heatflow_L2 "Heat flow boundary with prescribed power and given volume (L2
   // _____________________________________________
 
 protected
-  Modelica.Blocks.Interfaces.RealInput Q_flow_internal;
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_internal;
 
 public
-  Modelica.Blocks.Interfaces.RealInput Q_flow_prescribed if use_Q_flow_in
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_prescribed if use_Q_flow_in "RealInput (for specification of boundary power)"
     annotation (Placement(transformation(extent={{120,-20},{80,20}}),
         iconTransformation(
         extent={{20,-20},{-20,20}},
@@ -161,13 +181,14 @@ equation
       smooth=Smooth.None));
 
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}), graphics), Icon(coordinateSystem(
+            -100},{100,100}}), graphics), Icon(graphics,
+                                               coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Boundary with L2 Heat exchanger from ClaRa</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>(no remarks)</p>
+<p>L2 (defined in the CodingConventions)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
@@ -177,7 +198,7 @@ equation
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

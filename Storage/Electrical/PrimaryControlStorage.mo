@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical;
 model PrimaryControlStorage "Battery model participating on primary control"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,19 +28,19 @@ model PrimaryControlStorage "Battery model participating on primary control"
   extends Base.PartialElectricStorage;
   extends TransiEnt.Basics.Icons.StorageGenericElectric;
   extends TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider(
-      primaryBalancingController(
-      final P_nom=Storage.StorageModelParams.P_max_unload),
-      final P_nom=Storage.StorageModelParams.P_max_unload,
+    primaryBalancingController(final P_n=Storage.StorageModelParams.P_max_unload),
+    final P_n=Storage.StorageModelParams.P_max_unload,
     redeclare final TransiEnt.Producer.Electrical.Base.ControlPower.PrimaryBalancingStorage controlPowerModel(
       final P_max_load=Storage.StorageModelParams.P_max_load,
       final P_max_unload=Storage.StorageModelParams.P_max_unload,
-      final P_nom=Storage.StorageModelParams.P_max_unload,
       final P_pr_max=primaryBalancingController.P_pr_max,
       final P_el_is=epp.P,
       final P_grad_max_star=Storage.StorageModelParams.P_grad_max,
       final is_running=true,
       final P_PB_set=primaryBalancingController.P_PBP_set,
-      final P_SB_set=P_SB_set_internal),      final t_SB_act = 0,
+      final P_SB_set=P_SB_set_internal,
+      final P_n=Storage.StorageModelParams.P_max_unload),
+    final t_SB_act=0,
     redeclare final TransiEnt.Components.Sensors.ElectricFrequency gridFrequencySensor(isDeltaMeasurement=true),
     final isPrimaryControlActive=true,
     final isSecondaryControlActive=false,
@@ -91,7 +91,8 @@ annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_SB_set: input for power in [W] - secondary balancing setpoint</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

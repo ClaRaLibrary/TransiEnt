@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Records.GasProperties;
 record NormalDensities "Record containing densities at STP (T=273.15 K, p=1.01325 bar) for components of natural gas in kg/m3"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,8 +32,8 @@ record NormalDensities "Record containing densities at STP (T=273.15 K, p=1.0132
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  parameter String[:] names = {"Methane", "CH4", "Ethane", "C2H6", "Propane", "C3H8", "Butane", "C4H10", "Nitrogen", "N2", "carbon_dioxide", "CO2", "Hydrogen", "H2"};
-  parameter Modelica.SIunits.Density[:] rho_n = {0.7175, 0.7175, 1.3551, 1.3551, 2.010, 2.010, 2.709, 2.709, 1.2504, 1.2504, 1.9767, 1.9767, 0.08989, 0.08989};
+  parameter String[:] names =                   {"Methane", "CH4",  "Ethane", "C2H6", "Propane", "C3H8", "Butane", "C4H10", "Nitrogen", "N2",   "Carbon_Dioxide", "CO2",  "Hydrogen", "H2",    "Carbon_Monoxide", "CO",  "Oxygen", "O2"};
+  parameter Modelica.SIunits.Density[:] rho_n = {0.7175,    0.7175, 1.3551,   1.3551, 2.010,     2.010,  2.709,    2.709,   1.2504,     1.2504, 1.9767,           1.9767, 0.08989,    0.08989, 1.2505,            1.2505, 1.4290,  1.4290};
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -55,8 +55,9 @@ record NormalDensities "Record containing densities at STP (T=273.15 K, p=1.0132
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>G. Cerbe, B. Lendt, K. Br&uuml;ggemann, M. Dehli, F. Gr&ouml;schl, K. Heikrodt, T. Kleiber, J. Kuck, J. Mischner, T. Schmidt, A. Seemann, and W. Thielen, Grundlagen der Gastechnik. Gasbeschaffung - Gasverteilung - Gasverwendung, 8th ed. M&uuml;nchen: Carl Hanser Verlag, 2017.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Lisa Andresen (andresen@tuhh.de), Jul 2016</p>
+<p>Revised by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));
 end NormalDensities;

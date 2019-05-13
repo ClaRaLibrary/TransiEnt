@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Base;
 record PoolParameter "Enthlt die wichtigsten Simulations-Parameter"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,6 +59,8 @@ record PoolParameter "Enthlt die wichtigsten Simulations-Parameter"
 
   parameter Real SOC_cond=0.1 "SOC setpoint for conditioning" annotation (Dialog(group="Battery Management"));
 
-     annotation (defaultComponentName="param", Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                            Diagram(coordinateSystem(extent={{-100,-100},{100,100}})));
+     annotation (defaultComponentName="param", Icon(graphics,
+                                                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                            Diagram(graphics,
+                                                    coordinateSystem(extent={{-100,-100},{100,100}})));
 end PoolParameter;

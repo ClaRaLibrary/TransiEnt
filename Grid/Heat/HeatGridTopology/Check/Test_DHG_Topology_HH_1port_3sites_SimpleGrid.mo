@@ -3,10 +3,10 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,8 +36,7 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
 
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-338,240},{-318,260}})));
-  inner TransiEnt.SimCenter simCenter(p_n={420000,460000})
-                                      annotation (Placement(transformation(extent={{-358,240},{-338,260}})));
+  inner TransiEnt.SimCenter simCenter(p_nom={420000,460000}) annotation (Placement(transformation(extent={{-358,240},{-338,260}})));
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP HKW_Wedel2(
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_WW2(),
@@ -75,7 +74,7 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
         origin={263,-98})));
   TransiEnt.Grid.Heat.HeatGridControl.Controllers.SimpleDHNDispatcher simpleHeatDispatcher annotation (Placement(transformation(rotation=0, extent={{-340,168},{-278,230}})));
 
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, p_drop=50000) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler HW_HafenCity(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas, p_drop=50000) annotation (Placement(transformation(
         extent={{-19,-18},{19,18}},
         rotation=0,
         origin={-73,-110})));
@@ -190,7 +189,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(HKW_Tiefstack.epp,constantFrequency_L1_3. epp) annotation (Line(
-      points={{273.7,-5.8},{272,-5.8},{272,125.9},{-10.1,125.9}},
+      points={{273.7,-5.8},{272,-5.8},{272,126},{-10,126}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -202,7 +201,7 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
   connect(HKW_Wedel2.epp, constantFrequency_L1_3.epp) annotation (Line(
-      points={{-257.95,-70.4},{-218.975,-70.4},{-218.975,125.9},{-10.1,125.9}},
+      points={{-257.95,-70.4},{-218.975,-70.4},{-218.975,126},{-10,126}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -226,7 +225,7 @@ equation
   connect(HKW_Tiefstack.P_set, simpleHeatDispatcher.P_el_WT) annotation (Line(points={{326.74,10.0667},{326.74,221.32},{-274.9,221.32}},
                                                                                                                                        color={0,0,127}));
   connect(HKW_Wedel1.epp, constantFrequency_L1_3.epp) annotation (Line(
-      points={{-257.95,-0.4},{-236.975,-0.4},{-236.975,125.9},{-10.1,125.9}},
+      points={{-257.95,-0.4},{-236.975,-0.4},{-236.975,126},{-10,126}},
       color={0,135,135},
       thickness=0.5));
   connect(HKW_Wedel2.outlet, HKW_Wedel1.inlet) annotation (Line(
@@ -254,8 +253,31 @@ equation
   connect(T_return.y, massFlowSource_Wedel.T) annotation (Line(points={{-227,-178},{-232,-178},{-232,-138},{-236,-138}}, color={0,0,127}));
   connect(massFlowSource_HafenCity.T, T_return1.y) annotation (Line(points={{-101,-176},{-102,-176},{-102,-220},{-103,-220}}, color={0,0,127}));
   connect(massFlowSource_Tiefstack.T, T_return2.y) annotation (Line(points={{263,-110},{264,-110},{264,-128},{263,-128}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-360,-260},{360,260}})),
-                                          Icon(coordinateSystem(extent={{-360,-260},{360,260}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-360,-260},{360,260}})),
+                                          Icon(graphics,
+                                               coordinateSystem(extent={{-360,-260},{360,260}})),
     experiment(StopTime=604800),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Tester for DHG_Topology_HH_1port_3sites_SimpleGrid</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Test_DHG_Topology_HH_1port_3sites_SimpleGrid;

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model Electrolyzer_2050 "Cost model for electrolyzers in 2050"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,4 +23,25 @@ model Electrolyzer_2050 "Cost model for electrolyzers in 2050"
     Cspec_inv_der_E=0.5+0.1 "from a curve with various values over time (final value from Schiebahn 2014), +0.1 for buildings etc. Stolzenburg 2014",
     factor_OM=0.04 "4% (Stolzenburg 2014)",
     lifeTime=30 "Stolzenburg 2014 \"30 years in 10-20 years\"");
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>cost model for electrolyzer in 2050</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>[1] K. Stolzenburg, &quot;Integration von Wind-Wasserstoff-Systemen in das Energiesystem&quot;, 2014 </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Electrolyzer_2050;

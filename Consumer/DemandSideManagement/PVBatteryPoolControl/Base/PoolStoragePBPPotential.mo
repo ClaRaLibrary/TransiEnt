@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Base;
 model PoolStoragePBPPotential
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,12 +39,12 @@ model PoolStoragePBPPotential
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput P_potential_PBP "Connector of Real output signal"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_potential_PBP "Connector of Real output signal"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
     // , index(start=index, fixed=true)
   Modelica.Blocks.Routing.Extractor get_P_max_unload_star(nin=param.nSystems, index(start=index, fixed=true)) annotation (Placement(transformation(extent={{-62,-40},{-42,-20}})));
   Modelica.Blocks.Routing.Extractor get_P_max_load_star(nin=param.nSystems, index(start=index, fixed=true)) annotation (Placement(transformation(extent={{-62,-68},{-42,-88}})));
-  Modelica.Blocks.Interfaces.RealInput P_is "Input signal connector"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_is "Input signal connector"
     annotation (Placement(transformation(extent={{-124,12},{-84,52}}), iconTransformation(extent={{-110,26},{-84,52}})));
   Modelica.Blocks.Nonlinear.Limiter P_is_lim(uMax=param.P_el_max_bat) annotation (Placement(transformation(extent={{-62,22},{-42,42}})));
   Modelica.Blocks.Math.Min min
@@ -60,8 +60,8 @@ model PoolStoragePBPPotential
     annotation (Placement(transformation(extent={{-80,-60},{-68,-48}})));
 
   Modelica.Blocks.Math.Gain gain(k=param.P_el_max_bat) annotation (Placement(transformation(extent={{4,-61},{18,-47}})));
-  Modelica.Blocks.Interfaces.RealInput P_max_unload_star[param.nSystems] "Maximum unloading power in p.u" annotation (Placement(transformation(extent={{-126,-50},{-86,-10}}), iconTransformation(extent={{-110,-82},{-84,-56}})));
-  Modelica.Blocks.Interfaces.RealInput  P_max_load_star[param.nSystems] "Maximum loading power in p.u" annotation (Placement(transformation(extent={{-124,-96},{-84,-56}}), iconTransformation(extent={{-112,-36},{-86,-10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_max_unload_star[param.nSystems] "Maximum unloading power in p.u" annotation (Placement(transformation(extent={{-126,-50},{-86,-10}}), iconTransformation(extent={{-110,-82},{-84,-56}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn  P_max_load_star[param.nSystems] "Maximum loading power in p.u" annotation (Placement(transformation(extent={{-124,-96},{-84,-56}}), iconTransformation(extent={{-112,-36},{-86,-10}})));
 equation
   // _____________________________________________
   //
@@ -110,8 +110,10 @@ equation
                                                                                         color={0,0,127}));
   connect(get_P_max_load_star.u, P_max_load_star) annotation (Line(points={{-64,-78},{-76,-78},{-76,-76},{-104,-76}}, color={0,0,127}));
   connect(get_P_max_unload_star.u, P_max_unload_star) annotation (Line(points={{-64,-30},{-106,-30},{-106,-30}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                               Icon(coordinateSystem(
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+                                               Icon(graphics,
+                                                    coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -121,12 +123,15 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>P_potential_PBP: output for electric power in [W]</p>
+<p>P_is: input for electric power in [W]</p>
+<p>P_max_unload_star[param.nSystems]: input for electric power in [W]</p>
+<p>P_max_load_star[param.nSystems]: input for electric power in [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

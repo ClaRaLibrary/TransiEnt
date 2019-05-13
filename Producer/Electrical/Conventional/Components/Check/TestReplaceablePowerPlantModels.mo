@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model TestReplaceablePowerPlantModels "Tester illustrating the possibility to change level of details in power plant models"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,12 +30,13 @@ model TestReplaceablePowerPlantModels "Tester illustrating the possibility to ch
                                                        annotation (Placement(transformation(extent={{-30,36},{-1,62}})));
 equation
   connect(generator.epp, grid.epp) annotation (Line(
-      points={{-1.60417,56.28},{0,56.28},{0,55.9},{22.9,55.9}},
+      points={{-2.20833,58.1},{0,58.1},{0,56},{23,56}},
       color={0,135,135},
       thickness=0.5));
 
   connect(P_set.y, generator.P_el_set) annotation (Line(points={{-46,70},{-38,70},{-14.8958,70},{-14.8958,61.87}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), experiment(StopTime=3600, Tolerance=1e-008),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), experiment(StopTime=3600, Tolerance=1e-008),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

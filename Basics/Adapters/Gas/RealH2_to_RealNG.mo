@@ -2,10 +2,10 @@ within TransiEnt.Basics.Adapters.Gas;
 model RealH2_to_RealNG "Adapter that connects real H2 gas with real NG gas (works only in one direction)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,8 +38,8 @@ model RealH2_to_RealNG "Adapter that connects real H2 gas with real NG gas (work
   //             Visible Parameters
   // _____________________________________________
 
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_h2=simCenter.gasModel3 "hydrogen model";
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_ng=simCenter.gasModel1 "natural gas with hydrogen model";
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_h2=simCenter.gasModel3 "Hydrogen model";
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_ng=simCenter.gasModel1 "Natural gas with hydrogen model";
 
   // _____________________________________________
   //
@@ -100,7 +100,8 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(
           extent={{-100,80},{0,20}},
           lineColor={0,0,0},
@@ -127,7 +128,7 @@ NG")}),
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">It is important to ensure that the flow is always in the design flow direction.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks) </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Tested in check model &quot;TestRealGasAdapters&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks) </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

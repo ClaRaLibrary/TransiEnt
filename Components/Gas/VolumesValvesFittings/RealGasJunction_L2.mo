@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings;
 model RealGasJunction_L2 "Adiabatic Volume Junction for real gases"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,10 +29,9 @@ model RealGasJunction_L2 "Adiabatic Volume Junction for real gases"
   // changed start value for composition to default value
   // deleted "model Gas..."
   // changed eyeGas to eye
+  // added temperature start value
 
 
-  extends ClaRa.Basics.Icons.Tpipe2;
-  extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L2");
   outer TransiEnt.SimCenter simCenter;
 
 protected
@@ -57,12 +56,22 @@ public
 
   replaceable parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium = simCenter.gasModel1 annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
 
+  replaceable model PressureLoss1 =
+    ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.NoFriction constrainedby ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.BaseDp "Pressure loss model at gasPort1" annotation(Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable model PressureLoss2 =
+    ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.NoFriction constrainedby ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.BaseDp "Pressure loss model at gasPort2" annotation(Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable model PressureLoss3 =
+    ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.NoFriction constrainedby ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.BaseDp "Pressure loss model at gasPort3" annotation(Dialog(group="Fundamental Definitions"), choicesAllMatching);
+
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPort1(Medium=medium, m_flow) annotation (Placement(transformation(extent={{-110,-10},{-90,10}}), iconTransformation(extent={{-110,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPort2(Medium=medium, m_flow) annotation (Placement(transformation(extent={{-10,-110},{10,-90}}), iconTransformation(extent={{-10,-110},{10,-90}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPort3(Medium=medium, m_flow) annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
 
   parameter ClaRa.Basics.Units.Volume volume=0.1 "Volume of the junction" annotation(Dialog(group="Fundamental Definitions"));
 
+  PressureLoss1 pressureLoss1;
+  PressureLoss2 pressureLoss2;
+  PressureLoss3 pressureLoss3;
 protected
   TILMedia.VLEFluid_ph gas1(
     vleFluidType=medium,
@@ -92,21 +101,31 @@ protected
     xi=xi,
     stateSelectPreferForInputs=true,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
-
+public
   parameter Boolean showData=true "|Summary and Visualisation||True, if a data port containing p,T,h,s,m_flow shall be shown, else false";
 
   /****************** Initial values *******************/
 
-public
-  parameter ClaRa.Basics.Units.Pressure p_start=simCenter.p_amb_const+simCenter.p_eff_2 "Initial value for pressure"
-                                     annotation(Dialog(group="Initial Values"));
 //   parameter Boolean fixedInitialPressure = true
 //     "if true, initial pressure is fixed" annotation(Dialog(group="Initial Values"));
-  parameter ClaRa.Basics.Units.MassFraction[medium.nc-1] xi_start=medium.xi_default "Initial value for composition"
-                                    annotation(Dialog(group="Initial Values"));
 
-  parameter Modelica.SIunits.SpecificEnthalpy h_start=(-1850) "Initial value for gas enthalpy"   annotation(Dialog(group="Initial Values"));
+  parameter ClaRa.Basics.Units.Pressure p_start=simCenter.p_amb_const+simCenter.p_eff_2 "Initial value for gas pressure"
+    annotation(Dialog(group="Initial Values"));
+//   parameter Boolean fixedInitialPressure = true
+//     "if true, initial pressure is fixed" annotation(Dialog(group="Initial Values"));
 
+  parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_start) "Initial value for gas specific enthalpy"
+    annotation(Dialog(group="Initial Values"));
+
+  parameter ClaRa.Basics.Units.MassFraction[medium.nc - 1]
+                                                         xi_start=medium.xi_default "Initial value for mass fractions"
+                                     annotation(Dialog(group="Initial Values"));
+
+  parameter ClaRa.Basics.Units.Temperature T_start=simCenter.T_ground "Initial value for gas temperature (used in calculation of h_start)"
+    annotation(Dialog(group="Initial Values"));
+
+
+public
   ClaRa.Basics.Units.MassFraction xi[medium.nc - 1](start=xi_start);
   Modelica.SIunits.SpecificEnthalpy h(start=h_start) "Specific enthalpy";
   ClaRa.Basics.Units.Pressure p(start=p_start);
@@ -197,6 +216,9 @@ initial equation
     end if;
 
 equation
+  pressureLoss1.m_flow = gasPort1.m_flow;
+  pressureLoss2.m_flow = gasPort2.m_flow;
+  pressureLoss3.m_flow = -gasPort3.m_flow;
 
   gasPort1.xi_outflow = xi;
   gasPort2.xi_outflow = xi;
@@ -206,7 +228,7 @@ equation
   gasPort2.h_outflow = gasBulk.h;
   gasPort3.h_outflow = gasBulk.h;
 
-  gasPort1.p = p;
+  gasPort1.p =p + pressureLoss1.dp;
                // Volume is located at portA
 
   der(h) =1/mass*(gasPort1.m_flow*(gas1.h - h) + gasPort2.m_flow*(gas2.h - h) + gasPort3.m_flow*(gas3.h - h) + volume*der(p))
@@ -223,8 +245,8 @@ equation
   drhodt*volume =gasPort1.m_flow + gasPort2.m_flow + gasPort3.m_flow
                                                              "Mass balance";
 
-  gasPort1.p - gasPort2.p = 0 "Momentum balance";
-  gasPort1.p - gasPort3.p = 0 "Momentum balance";
+  gasPort2.p =p + pressureLoss2.dp  "Momentum balance";
+  gasPort3.p =p - pressureLoss3.dp  "Momentum balance";
 
   eye_int[1].T= gas2.T-273.15;
     eye_int[1].s=gas2.s/1e3;
@@ -246,19 +268,55 @@ equation
       color={190,190,190},
       smooth=Smooth.None));
 
-  annotation (defaultComponentName="junction",Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
+  annotation (defaultComponentName="junction",Diagram(graphics,
+                                                      coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=true)),
                                  Icon(coordinateSystem(extent={{-100,-100},{100,100}},
-                   preserveAspectRatio=false)),
+                   preserveAspectRatio=false), graphics={
+        Rectangle(
+          extent={{-32,-32},{32,-100}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-100,32},{100,-32}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-92,24},{92,-24}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-24,-24},{24,-92}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={215,215,215},
+          fillPattern=FillPattern.Solid),
+        Text(
+          extent={{-20,-54},{20,-96}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid,
+          textString="L2")}),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents a junction for real gases. It is a modified version of the model ClaRa.Components.VolumesValvesFittings.Fittings.FlueGasJunction_L2 from ClaRa version 1.3.0. The model is documented there and here only the changes are described. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>The two-phase region is deactivated. </p>
+<p>The two-phase region is deactivated. Pressure losses at the ports have been added.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid for real gases without phase change.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks) </p>
+<p>gasport1: inlet for gas</p>
+<p>gasport2: inlet for gas</p>
+<p>gasport3: outlet for gas</p>
+<p>eye1: outlet</p>
+<p>eye2: outlet</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -274,5 +332,7 @@ equation
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Feb 2015</p>
 <p>Edited by Carsten Bode (c.bode@tuhh.de), Apr 2016</p>
 <p>Revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (updated to new ClaRa version 1.3.0)</p>
+<p>Modified by Carsten Bode (c.bode@tuhh.de), Feb 2019 (added temperature start value)</p>
+<p>Modified by Carsten Bode (c.bode@tuhh.de), Mar 2019 (added pressure losses)</p>
 </html>"));
 end RealGasJunction_L2;

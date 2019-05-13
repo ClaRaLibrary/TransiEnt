@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.HeatExchanger;
 model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and one fluid with fixed temperature at one end"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,9 +26,9 @@ model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and o
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends ClaRa.Basics.Icons.HEX03;
   import SI = Modelica.SIunits;
   //import Modelica.Constants.eps;
+  extends TransiEnt.Basics.Icons.Heat_Exchanger;
 
   // _____________________________________________
   //
@@ -198,7 +198,8 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-26,14},{104,-16}},
           lineColor={28,108,200},
           lineThickness=0.5,

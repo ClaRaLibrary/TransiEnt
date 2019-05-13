@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas;
 model StatCycleGasGridHamburg
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -395,5 +395,7 @@ equation
   connect(source_H2_Reitbrook.outlet,h2toNG_Reitbrook. inlet) annotation (Line(points={{140,-97.4},{140,-92},{140,-89.1}},
                                                                                                                  color={0,0,0}));
   connect(mixH2_Reitbrook.inlet2,h2toNG_Reitbrook. outlet) annotation (Line(points={{140,-71.2},{140,-77.4}}, color={0,0,0}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-180,-120},{180,140}})), Icon(coordinateSystem(extent={{-180,-120},{180,140}})));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-180,-120},{180,140}})), Icon(graphics,
+                                                                                                         coordinateSystem(extent={{-180,-120},{180,140}})));
 end StatCycleGasGridHamburg;

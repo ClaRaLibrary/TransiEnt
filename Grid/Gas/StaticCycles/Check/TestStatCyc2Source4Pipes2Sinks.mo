@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCyc2Source4Pipes2Sinks
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -157,33 +157,45 @@ model TestStatCyc2Source4Pipes2Sinks
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1, T_ground=282.15)
                                       annotation (Placement(transformation(extent={{-130,100},{-110,120}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split1(
-    h_start=Init.split1.h_in,
-    xi_start=Init.split1.xi_in,
-    p_start=Init.split1.p,
+    h(
+    start = Init.split1.h_in),
+    xi(
+    start =  Init.split1.xi_in),
+    p(
+    start = Init.split1.p),
     volume=V_junction) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-36,-80})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 mix2(
-    p_start=Init.mix2.p,
-    xi_start=Init.mix2.xi_out,
-    h_start=Init.mix2.h_out,
+    p(
+    start = Init.mix2.p),
+    xi(
+    start =  Init.mix2.xi_out),
+    h(
+    start = Init.mix2.h_out),
     volume=V_junction) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=90,
         origin={74,-30})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split2(
-    xi_start=Init.split2.xi_in,
-    h_start=Init.split2.h_in,
-    p_start=Init.split2.p,
+    xi(
+    start =  Init.split2.xi_in),
+    h(
+    start = Init.split2.h_in),
+    p(
+    start = Init.split2.p),
     volume=V_junction) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={74,60})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 mix1(
-    p_start=Init.mix1.p,
-    xi_start=Init.mix1.xi_out,
-    h_start=Init.mix1.h_out,
+    p(
+    start = Init.mix1.p),
+    xi(
+    start =  Init.mix1.xi_out),
+    h(
+    start = Init.mix1.h_out),
     volume=V_junction) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -328,7 +340,8 @@ Medium independent:
 dp = dp_nom/m_flow_nom^2 * m_flow^2
 
 Medium dependent:
-dp = dp_nom/m_flow_nom^2*rho_nom * m_flow^2/rho")}),                                                Icon(coordinateSystem(extent={{-140,-120},{120,120}})),
+dp = dp_nom/m_flow_nom^2*rho_nom * m_flow^2/rho")}),                                                Icon(graphics,
+                                                                                                         coordinateSystem(extent={{-140,-120},{120,120}})),
     experiment(StopTime=1800, Interval=1),
     __Dymola_experimentSetupOutput(inputs=false, events=false),
           Documentation(info="<html>

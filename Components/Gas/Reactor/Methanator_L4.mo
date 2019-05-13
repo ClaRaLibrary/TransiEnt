@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Reactor;
 model Methanator_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed methanator"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -52,9 +52,12 @@ model Methanator_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed meth
     T_nom=503.15*ones(N_cv),
     p_nom=17e5*ones(N_cv),
     xi_nom=fill({0.296831,0.0304503,0.666944}, N_cv),
-    T_start=503.15*ones(N_cv),
-    p_start=17e5*ones(N_cv),
-    xi_start=fill({0.296831,0.0304503,0.666944}, N_cv));
+    T(
+    start = 503.15*ones(N_cv)),
+    p(
+    start = 17e5*ones(N_cv)),
+    xi(
+    start =  fill({0.296831,0.0304503,0.666944}, N_cv)));
 
   import SI = Modelica.SIunits;
   import Modelica.Constants.R "universal gas constant 8.413";
@@ -82,15 +85,18 @@ model Methanator_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed meth
   final parameter SI.Area A_tube_i=N_tube*pi*dia_tube_i*Delta_x "surface of control volume for heat transfer";
 
   //GCV+NCV
-  final parameter SI.SpecificEnthalpy[gas_sg4.nc] NCV=TransiEnt.Basics.Functions.GasProperties.getIdealGasNCVVector(gas_sg4, gas_sg4.nc) "NCV of output";
+  final parameter SI.SpecificEnthalpy[gas_sg4.nc] NCV=TransiEnt.Basics.Functions.GasProperties.getIdealGasNCVVector(gas_sg4, gas_sg4.nc) "NCV of gas components";
+  final parameter SI.SpecificEnthalpy[gas_sg4.nc] GCV=TransiEnt.Basics.Functions.GasProperties.getIdealGasGCVVector(gas_sg4, gas_sg4.nc) "GCV of gas component";
 
-  final parameter SI.EnthalpyFlowRate H_flow_n_methanation_H2= if ScalingOfReactor==1 then m_flow_n_Methane*50.013e6/0.83 elseif ScalingOfReactor==2 then m_flow_n_Hydrogen*119.972e6 elseif ScalingOfReactor==3 then H_flow_n_Methane/0.83 else H_flow_n_Hydrogen "Approximated nominal power of reactor based on NCV of hydrogen input";
+  final parameter SI.EnthalpyFlowRate H_flow_n_methanation_H2= if ScalingOfReactor==1 then m_flow_n_Methane*NCV[1]/0.83 elseif ScalingOfReactor==2 then m_flow_n_Hydrogen*NCV[4] elseif ScalingOfReactor==3 then H_flow_n_Methane/0.83 else H_flow_n_Hydrogen "Approximated nominal power of reactor based on NCV of hydrogen input";
   final parameter SI.EnthalpyFlowRate H_flow_n_methanation_CH4=H_flow_n_methanation_H2*0.83 "Approximated nominal power of reactor based on NCV of methane output";
 
   // _____________________________________________
   //
   //             Visible Parameters
   // _____________________________________________
+
+  parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated" annotation(Dialog(group="Statistics"));
 
   //properties of the catalyst and fixed-bed
   parameter SI.ThermalConductivity lambda_p=50 "Particle conductivity" annotation(Dialog(group="Catalyst"));
@@ -160,7 +166,14 @@ public
       T_flueGas=heat.T,
       H_flow_n_methanation_CH4=H_flow_n_methanation_CH4,
       H_flow_n_methanation_H2=H_flow_n_methanation_H2,
-      efficiency=eta),
+      eta_NCV=eta_NCV,
+      H_flow_in_NCV=H_flow_in_NCV,
+      H_flow_out_NCV=H_flow_out_NCV,
+      eta_GCV=eta_GCV,
+      H_flow_in_GCV=H_flow_in_GCV,
+      H_flow_out_GCV=H_flow_out_GCV,
+      eta_GCV_woWater=eta_GCV_woWater,
+      H_flow_out_GCV_woWater=H_flow_out_GCV_woWater),
     costs(
       costs=collectCosts.costsCollector.Costs,
       investCosts=collectCosts.costsCollector.InvestCosts,
@@ -177,15 +190,32 @@ public
 
 public
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectCostsGeneral collectCosts(
-    der_E_n=if ScalingOfReactor== 1 then m_flow_n_Methane*50.013e6 elseif ScalingOfReactor==2 then m_flow_n_Hydrogen*119.972e6*0.83 elseif ScalingOfReactor==3 then H_flow_n_Methane else H_flow_n_Hydrogen*0.83, redeclare model CostRecordGeneral = Components.Statistics.ConfigurationData.GeneralCostSpecs.Methanation)
-                                                                                                                                                                                                        annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
+    der_E_n=if ScalingOfReactor== 1 then m_flow_n_Methane*50.013e6 elseif ScalingOfReactor==2 then m_flow_n_Hydrogen*119.972e6*0.83 elseif ScalingOfReactor==3 then H_flow_n_Methane else H_flow_n_Hydrogen*0.83,
+    redeclare model CostRecordGeneral = CostSpecsGeneral,
+    produces_P_el=false,
+    consumes_P_el=false,
+    produces_Q_flow=false,
+    consumes_Q_flow=false,
+    produces_H_flow=false,
+    consumes_H_flow=false,
+    produces_other_flow=false,
+    consumes_other_flow=false,
+    produces_m_flow_CDE=false,
+    consumes_m_flow_CDE=false) annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 protected
-  SI.Efficiency eta "overall efficiency of reactor based on NCV";
+  SI.Efficiency eta_NCV "overall efficiency of reactor based on NCV";
+  SI.Power H_flow_in_NCV "inflowing enthalpy flow based on NCV";
+  SI.Power H_flow_out_NCV "outflowing enthalpy flow based on NCV";
+  SI.Efficiency eta_GCV "overall efficiency of reactor based on GCV";
+  SI.Power H_flow_in_GCV "inflowing enthalpy flow based on GCV";
+  SI.Power H_flow_out_GCV "outflowing enthalpy flow based on GCV";
+  SI.Efficiency eta_GCV_woWater "overall efficiency of reactor based on GCV without water";
+  SI.Power H_flow_out_GCV_woWater "outflowing enthalpy flow based on GCV without water";
   Real xi_in[4];
   Real xi_out[4];
 
@@ -217,8 +247,15 @@ protected
     input SI.HeatFlowRate Q_flow[N_cv] "Heat flow rate";
     input SI.Temperature T_flueGas[N_cv] "Flue gas temperature";
     input SI.Power H_flow_n_methanation_H2 "approximated nominal power of reactor based on NCV of hydrogen input";
-    input SI.Power H_flow_n_methanation_CH4 "approximated nominal power of reactor based on NCV of methane outpur";
-    input SI.Efficiency efficiency "overall efficiency of reactor based on NCV";
+    input SI.Power H_flow_n_methanation_CH4 "approximated nominal power of reactor based on NCV of methane output";
+    input SI.Efficiency eta_NCV "overall efficiency of reactor based on NCV";
+    input SI.Power H_flow_in_NCV "inflowing enthalpy flow based on NCV";
+    input SI.Power H_flow_out_NCV "outflowing enthalpy flow based on NCV";
+    input SI.Efficiency eta_GCV "overall efficiency of reactor based on GCV";
+    input SI.Power H_flow_in_GCV "inflowing enthalpy flow based on GCV";
+    input SI.Power H_flow_out_GCV "outflowing enthalpy flow based on GCV";
+    input SI.Efficiency eta_GCV_woWater "overall efficiency of reactor based on GCV without water";
+    input SI.Power H_flow_out_GCV_woWater "outflowing enthalpy flow based on GCV without water";
   end Outline;
 
   model Summary
@@ -277,7 +314,17 @@ equation
   B = 1.25*((1-eps_bed)/eps_bed)^(10/9);
   xi_out=cat(1,xi[N_cv,:],{1-sum(xi[N_cv,:])});
   xi_in=cat(1,gasIn.xi,{1-sum(gasIn.xi)});
-  eta=-gasPortOut.m_flow*sum(NCV*cat(1,xi[N_cv,:],{1-sum(xi[N_cv,:])}))/(max(0.001,gasPortIn.m_flow)*sum(NCV*cat(1,gasIn.xi,{1-sum(gasIn.xi)})));
+
+  H_flow_in_NCV=gasPortIn.m_flow*sum(NCV*cat(1,gasIn.xi,{1-sum(gasIn.xi)}));
+  H_flow_out_NCV=gasPortOut.m_flow*sum(NCV*cat(1,xi[N_cv,:],{1-sum(xi[N_cv,:])}));
+  eta_NCV=-H_flow_out_NCV/(max(0.001,H_flow_in_NCV));
+
+  H_flow_in_GCV=gasPortIn.m_flow*sum(GCV*cat(1,gasIn.xi,{1-sum(gasIn.xi)}));
+  H_flow_out_GCV=gasPortOut.m_flow*sum(GCV*cat(1,xi[N_cv,:],{1-sum(xi[N_cv,:])}));
+  eta_GCV=-H_flow_out_GCV/(max(0.001,H_flow_in_GCV));
+
+  H_flow_out_GCV_woWater=gasPortOut.m_flow*sum({GCV[1],GCV[2],0,GCV[4]}*cat(1,xi[N_cv,:],{1-sum(xi[N_cv,:])}));
+  eta_GCV_woWater=-H_flow_out_GCV_woWater/(max(0.001,H_flow_in_GCV));
 
   // _____________________________________________
   //
@@ -286,7 +333,8 @@ equation
 
   connect(collectCosts.costsCollector, modelStatistics.costsCollector);
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-100,80},{100,40}},
           lineColor={0,0,0},
           textString="Methanator")}),

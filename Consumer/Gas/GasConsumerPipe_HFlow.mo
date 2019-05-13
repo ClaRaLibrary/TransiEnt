@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Gas;
 model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control with a pipe representing the distance to a consumer within this district"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,44 +19,73 @@ model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.GasSink;
   import SI = ClaRa.Basics.Units;
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
   outer TransiEnt.SimCenter simCenter;
-  parameter SI.Length length=3 "|Pipe Network|Parameters|Average distance to a consumer within this district";
-  parameter SI.Length diameter=0.4 "|Pipe Network|Parameters|Diameter";
-  parameter Integer N_tubes=1 "|Pipe Network|Parameters|number of parallel tubes";
-  parameter Integer N_cv=1 "|Pipe Network|Parameters|Number of finite Volumes";
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "|General|Medium to be used";
-  parameter SI.MassFraction xi_start[medium.nc - 1]=medium.xi_default "|Pipe Network|Initialization|composition of the medium for initialization (nc-1)";
-  parameter SI.MassFraction xi_const[medium.nc - 1]=medium.xi_default "|Sink|General|Constant composition of medium (nc-1)";
-  parameter SI.MassFraction xi_nom[medium.nc - 1]=medium.xi_default "|Pipe Network|Nominal values|Nominal composition of the medium (nc-1)";
-  //parameter Boolean change_of_sign=false "|Sink|Gas Demand|change of sign of table data";
-  //parameter Real constantFactor=4.7 "|Sink|Gas Demand|constant factor multiplied with table data";
-  //parameter SI.Time startTime=0 "|Sink|Gas Demand|startTime of m_flow";
-  //parameter SI.EnthalpyMassSpecific h_const=1e6 "|Sink|General|constant enthalpy";
-  parameter SI.Temperature T_const=283.15 "|Sink|General|constant Temperature";
-  //parameter SI.EnthalpyMassSpecific h_const=2274.9 "|Sink|General|constant specific Enthalpy";
-  parameter SI.Pressure p_nom[pipe.N_cv]=ones(pipe.N_cv)*15e5 "|Pipe Network|Nominal values|Nominal absolute pressure";
-  parameter SI.EnthalpyMassSpecific h_nom[pipe.N_cv]=ones(pipe.N_cv)*788440 "|Pipe Network|Nominal values|Nominal enthalpy";
-  parameter SI.MassFlowRate m_flow_nom=140 "|Pipe Network|Nominal values|Nominal mass flow";
-  parameter SI.PressureDifference Delta_p_nom=3e4 "|Pipe Network|Nominal values|Nominal pressure loss";
-  parameter SI.Pressure p_start[pipe.N_cv]=ones(pipe.N_cv)*15e5 "|Pipe Network|Initialization|Pressure";
-  parameter SI.EnthalpyMassSpecific h_start[pipe.N_cv]=ones(pipe.N_cv)*788440 "|Pipe Network|Initialization|Enthalpy";
-  parameter SI.MassFlowRate m_flow_start[pipe.N_cv + 1]=ones(pipe.N_cv + 1)*140 "|Pipe Network|Initialization|Mass flow rate";
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+
+  parameter SI.Length length=3 "Average distance to a consumer within this district" annotation (Dialog(tab="Pipe Network", group="Parameters"));
+  parameter SI.Length diameter=0.4 "Diameter" annotation (Dialog(tab="Pipe Network", group="Parameters"));
+  parameter Integer N_tubes=1 "Number of parallel tubes" annotation (Dialog(tab="Pipe Network", group="Parameters"));
+  parameter Integer N_cv=1 "Number of finite Volumes" annotation (Dialog(tab="Pipe Network", group="Parameters"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium to be used" annotation (Dialog(tab="General", group="General"));
+  parameter SI.MassFraction xi_start[medium.nc - 1]=medium.xi_default "composition of the medium for initialization (nc-1)" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.MassFraction xi_const[medium.nc - 1]=medium.xi_default "Constant composition of medium (nc-1)" annotation (Dialog(tab="Sink", group="General"));
+  parameter SI.MassFraction xi_nom[medium.nc - 1]=medium.xi_default "Nominal composition of the medium (nc-1)" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  //parameter Boolean change_of_sign=false "change of sign of table data" annotation (Dialog(tab="Sink", group="Gas Demand"));
+  //parameter Real constantFactor=4.7 "constant factor multiplied with table data" annotation (Dialog(tab="Sink", group="Gas Demand"));
+  //parameter SI.Time startTime=0 "startTime of m_flow" annotation (Dialog(tab="Sink", group="Gas Demand"));
+  //parameter SI.EnthalpyMassSpecific h_const=1e6 "constant enthalpy" annotation (Dialog(tab="Sink", group="General"));
+  parameter SI.Temperature T_const=283.15 "constant Temperature" annotation (Dialog(tab="Sink", group="General"));
+  //parameter SI.EnthalpyMassSpecific h_const=2274.9 "constant specific Enthalpy" annotation (Dialog(tab="Sink", group="General"));
+  parameter SI.Pressure p_nom[pipe.N_cv]=ones(pipe.N_cv)*15e5 "Nominal absolute pressure" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.EnthalpyMassSpecific h_nom[pipe.N_cv]=ones(pipe.N_cv)*788440 "Nominal enthalpy" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.MassFlowRate m_flow_nom=140 "Nominal mass flow" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.PressureDifference Delta_p_nom=3e4 "Nominal pressure loss" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.Pressure p_start[pipe.N_cv]=ones(pipe.N_cv)*15e5 "Pressure" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.EnthalpyMassSpecific h_start[pipe.N_cv]=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_start) "Enthalpy" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.Temperature T_start[pipe.N_cv]=ones(pipe.N_cv)*simCenter.T_ground "Temperature" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.MassFlowRate m_flow_start[pipe.N_cv + 1]=ones(pipe.N_cv + 1)*140 "Mass flow rate" annotation (Dialog(tab="Pipe Network", group="Initialization"));
   parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
   replaceable model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4
-    constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "|Pipes|Pressure loss model" annotation (choicesAllMatching);
+    constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(tab="General", group="Pipes"), choices(choicesAllMatching));
 
-  parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "|Controller|Type of controller";
-  parameter Real k=1000 "|Controller|Gain for controller in maximum feed in control";
-  parameter Real Ti=0.1 "|Controller|Integrator time constant for controller in maximum feed in control";
-  parameter Real Td=0.1 "|Controller|Derivative time constant for controller in maximum feed in control";
+  parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "Type of controller" annotation (Dialog(tab="General", group="Controller"));
+  parameter Real k=1000 "Gain for controller in maximum feed in control" annotation (Dialog(tab="General", group="Controller"));
+  parameter Real Ti=0.1 "Integrator time constant for controller in maximum feed in control" annotation (Dialog(tab="General", group="Controller"));
+  parameter Real Td=0.1 "Derivative time constant for controller in maximum feed in control" annotation (Dialog(tab="General", group="Controller"));
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn fluidPortIn(Medium=medium) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  Modelica.Blocks.Interfaces.RealInput H_flow annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateIn H_flow "Input for enthalpy flow rate" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=180,
         origin={110,0})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
 
   TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe(
     medium=medium,
@@ -98,6 +127,11 @@ public
   TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-50,0},{-30,20}})));
 equation
 
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
+
   connect(fluidPortIn, pipe.gasPortIn) annotation (Line(
       points={{-100,0},{-92,0},{-84,0}},
       color={255,255,0},
@@ -122,7 +156,8 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(H_flow, gCVController.H_flow_set) annotation (Line(points={{110,0},{86,0},{86,-6},{83,-6}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Real gas consumer with one pipe. Gas mass flow rate demand controlled by measured gross calorific value.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Pipe can reprensent the average distance to a consumer.</span></p>
@@ -131,7 +166,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p>(no remarks)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">RealGas, RealInput for gas enthalpy flow rate</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">RealGas, RealInput for gas enthalpy flow rate in [W]</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

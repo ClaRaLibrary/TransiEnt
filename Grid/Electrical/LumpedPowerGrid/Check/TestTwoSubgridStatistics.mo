@@ -3,10 +3,10 @@ model TestTwoSubgridStatistics "Example of the component PowerPlant_PoutGrad_L1"
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model TestTwoSubgridStatistics "Example of the component PowerPlant_PoutGrad_L1"
     P_min_star=0.2,
     H=10,
     isSecondaryControlActive=false,
-    P_init=0) annotation (Placement(transformation(extent={{-60,24},{-40,44}})));
+    P_init_set=0) annotation (Placement(transformation(extent={{-60,24},{-40,44}})));
   Modelica.Blocks.Sources.Step GTload(
     height=-100e6,
     offset=0,
@@ -118,11 +118,13 @@ createPlot(id=1, position={0, 0, 1616, 209}, y={"BrownCoal1.MechanicalConnection
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     experiment(StopTime=500),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

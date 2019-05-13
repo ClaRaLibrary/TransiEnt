@@ -2,10 +2,10 @@ within TransiEnt.Components.Mechanical;
 model ConstantInertia "1D-rotational component with inertia"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,10 +33,10 @@ model ConstantInertia "1D-rotational component with inertia"
   //                   Parameters
   // _____________________________________________
 
-  SI.AngularAcceleration a "Absolute angular acceleration of component (= der(w))"
+  SI.AngularAcceleration alpha(start=0) "Absolute angular acceleration of component (= der(omega))"
     annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-  SI.Power P_rot=w*a*J "Power from changes in rotational energy";
+  SI.Power P_rot=omega*alpha*J "Power from changes in rotational energy";
 
   // _____________________________________________
   //
@@ -51,9 +51,9 @@ equation
   //               Characteristic Equations
   // _____________________________________________
 
-  a = der(w);
-  J*a = mpp_a.tau + mpp_b.tau;
-  E_kin=J*w^2/2;
+  alpha = der(omega);
+  J*alpha = mpp_a.tau + mpp_b.tau;
+  E_kin=J*omega^2/2;
 
   annotation (
     Documentation(info="<html>
@@ -64,15 +64,16 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">This model contains moment of inertia statistics. Since the shaft is always connected it constantly sends the moment of inertia specified by parameter J to the statistics component.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>mpp_a: mechanical power port</p>
+<p>mpp_b: mechanical power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;CheckInertiaConstant&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

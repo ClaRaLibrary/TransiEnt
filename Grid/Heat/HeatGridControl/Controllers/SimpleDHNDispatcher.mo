@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Heat.HeatGridControl.Controllers;
 model SimpleDHNDispatcher
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,21 +37,21 @@ model SimpleDHNDispatcher
   TransiEnt.Grid.Heat.HeatGridControl.Controllers.DHNPowerScheduler_L0 dHN_PowerScheduler_L1 annotation (Placement(transformation(extent={{17,-17},{63,21}})));
   TransiEnt.Basics.Blocks.HoldBlock holdBlock annotation (Placement(transformation(extent={{17,35},{37,55}})));
   TransiEnt.Basics.Tables.ElectricGrid.SpotPriceElectricity_Phelix_3600s_2012 spotPriceElectricity_Phelix_3600s_2012_1 annotation (Placement(transformation(extent={{-27,35},{-7,55}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_WT
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_WT
     annotation (Placement(transformation(extent={{100,62},{120,82}})));
   Modelica.Blocks.Math.MultiSum PoutWWsum(nu=2, k={-1,-1})
     annotation (Placement(transformation(extent={{74,-2},{86,10}})));
-  Modelica.Blocks.Interfaces.RealOutput P_el_WW
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_WW
     annotation (Placement(transformation(extent={{100,4},{120,24}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_WT
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_WT
     annotation (Placement(transformation(extent={{100,42},{120,62}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_WW
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_WW
     annotation (Placement(transformation(extent={{100,-32},{120,-12}})));
-  Modelica.Blocks.Interfaces.RealOutput m_flow_WT
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_WT
     annotation (Placement(transformation(extent={{100,22},{120,42}})));
-  Modelica.Blocks.Interfaces.RealOutput m_flow_WW
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_WW
     annotation (Placement(transformation(extent={{100,-58},{120,-38}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow_peak
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow_peak
     annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
   Modelica.Blocks.Math.Gain sign(k=-1)
     annotation (Placement(transformation(extent={{80,66},{92,78}})));
@@ -65,7 +65,7 @@ model SimpleDHNDispatcher
     annotation (Placement(transformation(extent={{82,-54},{94,-42}})));
   Modelica.Blocks.Math.Gain sign5(k=-1)
     annotation (Placement(transformation(extent={{82,-86},{94,-74}})));
-  Modelica.Blocks.Interfaces.RealOutput m_flow_peak
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_peak
     annotation (Placement(transformation(extent={{100,-108},{120,-88}})));
   Modelica.Blocks.Math.Gain sign6(k=-1)
     annotation (Placement(transformation(extent={{72,-104},{84,-92}})));
@@ -158,7 +158,8 @@ equation
       points={{-47,46},{-36,46},{-36,11}},
       color={162,29,33},
       pattern=LinePattern.Dash));
-  annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
+  annotation (Diagram(graphics,
+                      coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=false)),                               Icon(
         coordinateSystem(extent={{-100,-100},{100,100}}), graphics={
         Rectangle(
@@ -175,13 +176,21 @@ equation
           pattern=LinePattern.None)}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Sets heat and mass flow as well as supply and return temperature according to outside temperature and charline of the city.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Uses DHNPowerScheduler_L0 to determine Power of CHPs depending on the heat demand.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_WT: output for electric power in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_WW: output for electric power in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_WT: output for heat flow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_WW: output for heat flow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">m_flow_WT: output for mass flow rate in [kg/s]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">m_flow_WW: output for mass flow rate in [kg/s]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Q_flow_peak: output for heat flow rate in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">m_flow_peak: output for mass flow rate in [kg/s]</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

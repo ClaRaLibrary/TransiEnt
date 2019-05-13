@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind;
 model IdealWindpark "Ideal Windpark - neglecting correlation of Turbines"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,7 +46,7 @@ model IdealWindpark "Ideal Windpark - neglecting correlation of Turbines"
   parameter Modelica.SIunits.Velocity v_mean=10 "Mean wind velocity of park site";
 
   parameter Modelica.SIunits.Velocity v_wind_start=0 "Wind speed start value";
-  parameter Real P_nom = 3.3e6 "Nominated power of single wind turbine";
+  parameter Real P_n=3.3e6 "Nominated power of single wind turbine";
   parameter Real n_Turbines=10 "Number of wind turbines";
 
   replaceable TransiEnt.Producer.Electrical.Wind.Base.PartialWindTurbine WTG(redeclare model ProducerCosts = ProducerCosts, P_el_n=3.3e6) "Wind turbine model" annotation (choicesAllMatching=true, Placement(transformation(extent={{-70,-38},{-26,6}})));
@@ -70,7 +70,7 @@ model IdealWindpark "Ideal Windpark - neglecting correlation of Turbines"
   // _____________________________________________
 
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{94,-10},{114,10}})));
-  Modelica.Blocks.Interfaces.RealInput v_wind annotation (Placement(transformation(extent={{-124,-22},{-84,18}})));
+  TransiEnt.Basics.Interfaces.Ambient.VelocityIn v_wind annotation (Placement(transformation(extent={{-124,-22},{-84,18}})));
 
   // _____________________________________________
   //
@@ -87,13 +87,12 @@ model IdealWindpark "Ideal Windpark - neglecting correlation of Turbines"
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{30,-100},{50,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=typeOfPrimaryEnergyCarrier) annotation (Placement(transformation(extent={{-8,-100},{12,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts(
-    P_n=P_nom*(n_Turbines - 1) "N-1 because the wind turbine model instance adds to statistics itself",
+    P_n=P_n*(n_Turbines - 1) "N-1 because the wind turbine model instance adds to statistics itself",
     redeclare model PowerPlantCostModel = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.WindOnshore,
     P_el_is=P_el_is,
     Q_flow_fuel_is=0,
     produces_Q_flow=false,
-    consumes_H_flow=false)
-                      annotation (HideResult=false, Placement(transformation(
+    consumes_H_flow=false) annotation (HideResult=false, Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-40,-90})));
@@ -124,15 +123,16 @@ equation
   connect(v_wind, WTG.v_wind) annotation (Line(points={{-104,-2},{-67.58,-2},{-67.58,-2.58}},
                    color={0,0,127}));
   connect(WTG.epp, TurbineTerminal.epp) annotation (Line(
-      points={{-27.1,-3.68},{-4,-3.68},{-4,-2.1},{7.9,-2.1}},
+      points={{-28.2,-0.6},{-4,-0.6},{-4,-2},{8,-2}},
       color={0,135,135},
       thickness=0.5));
   connect(Power.P_el_set, Power_Windpark.y) annotation (Line(points={{58,54},{58,54},{58,59},{19.4,59}}, color={0,0,127}));
   connect(Power.epp, epp) annotation (Line(
-      points={{53.9,41.9},{46,41.9},{46,0},{104,0}},
+      points={{54,42},{46,42},{46,0},{104,0}},
       color={0,135,135},
       thickness=0.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),                                                                     Documentation(info="<html>
 <p><span style=\"font-family: MS Shell Dlg 2;\">1<b><span style=\"color: #008000;\">. Purpose of model</span></b></p>
 <p>Simple Windparkmodel neglecting coherence and smoothing effect of distributed wind turbines. Use of Synthtic Inertia possible.</p>
@@ -141,12 +141,13 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">v_wind: input for wind velocity in m/s</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

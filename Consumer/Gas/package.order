@@ -5,3 +5,5 @@ GasConsumerPipe_HFlow
 GasConsumer_HFlow
 GasConsumer_HFlow_NCV
 TableBasedGasBurningConsumer
+TableBasedGasBurningConsumer_VariableGasComposition
+GasDemandProfiler

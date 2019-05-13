@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.EconomicDispatch;
 model MeritOrderDispatcher "Forward-looking control, min, max and gradient constraints"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,13 +47,13 @@ model MeritOrderDispatcher "Forward-looking control, min, max and gradient const
   parameter Modelica.SIunits.Power P_init[nout]=zeros(nout);
   parameter Real P_grad_max_star[nout]=simCenter.generationPark.P_grad_max_star_MOD "Specific Power gradient in 1/s";
   parameter Modelica.SIunits.Power P_min_const[nout]=simCenter.generationPark.P_min_MOD;
-  parameter Modelica.SIunits.Power P_max_const[nout]=P_nom;
+  parameter Modelica.SIunits.Power P_max_const[nout]=P_n;
   parameter Boolean useVarLimits = false annotation(Evaluate=true, choices(__Dymola_checkBox=true),Dialog(tab="Time varying operating boundaries"));
   parameter Integer nVarLimits=1 annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
   parameter Integer iVarLimits[nVarLimits]=1:nVarLimits annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy C_var[nout]=simCenter.generationPark.C_var_MOD;
 
-  parameter Modelica.SIunits.Power P_nom[nout]=simCenter.generationPark.P_max_MOD;
+  parameter SI.Power P_n[nout]=simCenter.generationPark.P_max_MOD;
 
   // _____________________________________________
   //
@@ -68,14 +68,14 @@ model MeritOrderDispatcher "Forward-looking control, min, max and gradient const
         rotation=270,
         origin={0,-120})));
 
-  Modelica.Blocks.Interfaces.RealInput P_R_pos[nout] "Upwards reserve constraint, reduces maximum production (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_R_pos[nout] "Upwards reserve constraint, reduces maximum production (values are supposed to be positive)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={-40,120}), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={-40,120})));
-  Modelica.Blocks.Interfaces.RealInput P_R_neg[nout] "Downwards reserve constraint, increases minimum production (values are supposed to be positive)" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_R_neg[nout] "Downwards reserve constraint, increases minimum production (values are supposed to be positive)" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={40,120}), iconTransformation(
@@ -177,8 +177,8 @@ algorithm
     for j in 1:ntime loop
       for i in 1:nout loop
         if z[i] then
-          P_rcbl_max[i,j] := min(P_max[i], P_0[i] +  P_grad_max_star[i]*P_nom[i] * samplePeriod * j);
-          P_rcbl_min[i,j] := max(P_min[i], P_0[i] -  P_grad_max_star[i]*P_nom[i] * samplePeriod * j);
+          P_rcbl_max[i,j] :=min(P_max[i], P_0[i] + P_grad_max_star[i]*P_n[i]*samplePeriod*j);
+          P_rcbl_min[i,j] :=max(P_min[i], P_0[i] - P_grad_max_star[i]*P_n[i]*samplePeriod*j);
         else
           P_rcbl_max[i,j] :=0;
           P_rcbl_min[i,j] :=0;
@@ -219,8 +219,8 @@ algorithm
 
          // find reachable area between two steps
          for i in 1:nout loop
-           P_rcbl_max_back[i] := min(P_max[i], y[i] +  P_grad_max_star[i]*P_nom[i] * samplePeriod);
-           P_rcbl_min_back[i] := max(P_min[i], y[i] -  P_grad_max_star[i]*P_nom[i] * samplePeriod);
+           P_rcbl_max_back[i] :=min(P_max[i], y[i] + P_grad_max_star[i]*P_n[i]*samplePeriod);
+           P_rcbl_min_back[i] :=max(P_min[i], y[i] - P_grad_max_star[i]*P_n[i]*samplePeriod);
          end for;
 
          // -----------------------------------
@@ -273,9 +273,32 @@ algorithm
 equation
   der(C_var_total) = abs(y)*C_var;
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model takes in parameters of a power generation park where every unit is specified by variable generating costs (C_var), a maximum and minimum power output (P_max, P_min) and a maximum gradient (P_grad_max_star)</p>
 <p>When input load is positive it assigns the generation capacity in merit order constrained by the maximum and minimum power output and the maximum gradient</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>u[ntime]: RealInput</p>
+<p>y[nout]: RealOutput</p>
+<p>z[nout]: BooleanInput</p>
+<p>P_R_pos[nout]: input for electric power in [W] &quot;Upwards&nbsp;reserve&nbsp;constraint,&nbsp;reduces&nbsp;maximum&nbsp;production&nbsp;(values&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;positive)&quot;</p>
+<p>P_R_neg[nout]: input for electric power in [W] &quot;Downwards&nbsp;reserve&nbsp;constraint,&nbsp;increases&nbsp;minimum&nbsp;production&nbsp;(values&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;positive)&quot;</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>Tested in check model &quot;TransiEnt.Grid.Electrical.EconomicDispatch.Check.TestMeritOrderDispatcher&quot;</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(

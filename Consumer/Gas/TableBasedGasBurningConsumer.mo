@@ -1,11 +1,11 @@
 within TransiEnt.Consumer.Gas;
-model TableBasedGasBurningConsumer
+model TableBasedGasBurningConsumer "Simple model of a consumer burning natural gas for covering heat demand."
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,6 +46,10 @@ model TableBasedGasBurningConsumer
 
   parameter Modelica.SIunits.SpecificEnthalpy HoC_gas=40e6 "heat of combustion of natural gas";
 
+  parameter Boolean use_Q_flow_input=false "True, if Q_flow defined by variable input";
+
+  parameter Boolean consider_FlueGas_losses=true "True, if flue gas losses are considered in addition to 'eta'";
+
   // _____________________________________________
   //
   //                 Outer Models
@@ -61,12 +65,16 @@ model TableBasedGasBurningConsumer
 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasIn(Medium=medium) annotation (Placement(transformation(extent={{-110,10},{-90,30}}), iconTransformation(extent={{90,-50},{110,-30}})));
 
+ TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow if (use_Q_flow_input) "Variable Heat Demand" annotation (Placement(transformation(extent={{-120,40},{-80,80}}),
+        iconTransformation(extent={{-140,40},{-100,80}})));
+protected
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_in;
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
-
-  replaceable TransiEnt.Basics.Tables.GenericDataTable consumerDataTable constrainedby TransiEnt.Basics.Tables.GenericDataTable(final change_of_sign=change_of_sign, final constantfactor=constantfactor) annotation (choicesAllMatching=true, Placement(transformation(extent={{90,-48},{55,-16}})));
+public
+  replaceable TransiEnt.Basics.Tables.GenericDataTable consumerDataTable if (not use_Q_flow_input) constrainedby TransiEnt.Basics.Tables.GenericDataTable(final change_of_sign=change_of_sign, final constantfactor=constantfactor)  annotation (choicesAllMatching=true, Placement(transformation(extent={{90,-48},{55,-16}})));
 
   ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massFlowSink(
     m_flow_nom=0,
@@ -81,18 +89,26 @@ model TableBasedGasBurningConsumer
                             m_flow_set(y=-m_flow_gas_demand) "just for visualisation on diagram layer"
     annotation (Placement(transformation(extent={{28,16},{-2,36}})));
 
-    Modelica.SIunits.MassFlowRate m_flow_gas_demand;
 protected
    TILMedia.VLEFluid_pT gasMediumExhaust(
     vleFluidType=medium,
     xi=actualStream(gasIn.xi_outflow),
     p=simCenter.p_amb_const,
-    T=T_exhaustgas)
+    T=T_exhaustgas) if consider_FlueGas_losses==true
     annotation (Placement(transformation(extent={{-10,74},{10,94}})));
-  TransiEnt.Components.Statistics.Functions.GetFuelSpecificCO2Emissions fuelSpecificCO2Emissions(typeOfPrimaryEnergyCarrier=PrimaryEnergyCarrier.NaturalGas);
+  TransiEnt.Components.Statistics.Functions.GetFuelSpecificCO2Emissions fuelSpecificCO2Emissions(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas);
 public
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas) annotation (Placement(transformation(extent={{2,-100},{22,-80}})));
 
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
+protected
+   Modelica.Blocks.Sources.RealExpression gasMediumExhaust_h(y=gasMediumExhaust.h) if consider_FlueGas_losses;
+   Modelica.Blocks.Math.Gain gasMediumExhaust_h_gain;
+   Modelica.Blocks.Sources.RealExpression Zero(y=0);
+   Modelica.SIunits.MassFlowRate m_flow_gas_demand;
 equation
   // _____________________________________________
   //
@@ -100,15 +116,32 @@ equation
   // _____________________________________________
 
   // === energy balance ===
-  m_flow_gas_demand * (inStream(gasIn.h_outflow) - gasMediumExhaust.h + HoC_gas) * eta = consumerDataTable.y1;
+  if consider_FlueGas_losses then
+    m_flow_gas_demand * (inStream(gasIn.h_outflow) - gasMediumExhaust_h_gain.y + HoC_gas) * eta = Q_flow_in;
+  else
+    m_flow_gas_demand * (HoC_gas) * eta = Q_flow_in;
+  end if;
+
 
   // === CO2 Emissions ===
-  collectGwpEmissions.gwpCollector.m_flow_cde=-1*fuelSpecificCO2Emissions.m_flow_CDE_per_Energy*consumerDataTable.y1/eta;
+  collectGwpEmissions.gwpCollector.m_flow_cde=-1*fuelSpecificCO2Emissions.m_flow_CDE_per_Energy*Q_flow_in/eta;
 
+  if use_Q_flow_input then
+    connect(Q_flow_in,Q_flow);
+  else
+    connect(Q_flow_in,consumerDataTable.y1);
+  end if;
   // _____________________________________________
   //
   //               Connect Statements
   // _____________________________________________
+
+  if consider_FlueGas_losses then
+    connect(gasMediumExhaust_h.y,gasMediumExhaust_h_gain.u);
+  else
+    connect(Zero.y,gasMediumExhaust_h_gain.u);
+  end if;
+
 
   connect(modelStatistics.gwpCollectorHeat[PrimaryEnergyCarrier.NaturalGas],collectGwpEmissions.gwpCollector);
 
@@ -161,29 +194,32 @@ Exhaust Gas Temperature"),               Line(
           fillColor={255,128,0},
           fillPattern=FillPattern.Solid)}),
     Documentation(info="<html>
-<p>Simple model of a consumer burning natural gas for covering heat demand.</p>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Table based model of gas consumer.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>Assumptions:</p>
 <p>Constant heat of combustion (HoC_Gas)</p>
 <p>Constant heat loss to ambience via radiation etc. (with lumped efficiency eta)</p>
-<p>Constant tempearture of exhaust gas at output of heat exchanger (parameter T_exhaustgas)</p>
+<p>Constant temperature of exhaust gas at output of heat exchanger (parameter T_exhaustgas)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>gasIn: inlet for real gas</p>
+<p>Q_flow: input for heat flow rate in [W]</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
-<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>The usage of the model can be adapated by the following parameters:</p>
+<p>use_Q_flow_input: Choose &quot;true&quot;, if input is used to define heat flow.</p>
+<p>consider_FlueGas_losses: Choose &quot;true&quot;, if heat losses through flue gas is considered in addition to losses resulting from the parameter &apos;eta&apos;. If &quot;false&quot; the parameter &apos;eta&apos; represents the overall efficiency.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Pascal Dubucq (dubucq@tuhh.de) on 11/2014</p>
+<p>Model created by Pascal Dubucq (dubucq@tuhh.de), Nov 2014</p>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Jun 2018</p>
 </html>"));
 end TableBasedGasBurningConsumer;

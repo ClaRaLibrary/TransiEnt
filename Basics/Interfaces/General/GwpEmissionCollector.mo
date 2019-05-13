@@ -2,10 +2,10 @@ within TransiEnt.Basics.Interfaces.General;
 connector GwpEmissionCollector "Collector for gwp emissions (in metric mass of CO2 equivalents)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ connector GwpEmissionCollector "Collector for gwp emissions (in metric mass of C
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>Models of components emiting gwp exhaust gases would use this interface to define the amount of CO2 equivalent mass they are causing. The Block <a href=\"TransiEnt.ModelStatistics\">ModelStatistics</a> is then be able to sum up the equivalent masses emited by all components present in the global model where it can be read by the user.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>

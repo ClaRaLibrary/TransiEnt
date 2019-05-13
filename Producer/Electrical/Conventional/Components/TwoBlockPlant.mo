@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model TwoBlockPlant "Abstract model for power plants composed by two blocks"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,8 +20,6 @@ model TwoBlockPlant "Abstract model for power plants composed by two blocks"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-/// ***** MOST IMPORTANT RULE: BEFORE PUSHING YOUR CHANGES YOUR MODEL SHOULD "CHECK" *****
-/// (meaning if you press F8 or click the "check" Button there are no errors)
 
   // _____________________________________________
   //
@@ -34,14 +32,14 @@ model TwoBlockPlant "Abstract model for power plants composed by two blocks"
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput P_el_set_B1 "Setpoint of block 1" annotation (
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set_B1 "Setpoint of block 1" annotation (
       Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-119,120}),                                  iconTransformation(
           extent={{-15,-14},{15,14}},
         rotation=270,
         origin={-121,126})));
-  Modelica.Blocks.Interfaces.RealInput P_el_set_B2 "Setpoint of block 1" annotation (
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set_B2 "Setpoint of block 1" annotation (
       Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={59,124}),                                    iconTransformation(
@@ -65,18 +63,20 @@ equation
   // _____________________________________________
 
   connect(Block1.epp, epp) annotation (Line(
-      points={{-55.85,35.12},{-22,35.12},{-22,100},{218,100}},
+      points={{-58.7,42.4},{-22,42.4},{-22,100},{218,100}},
       color={0,135,135},
       thickness=0.5));
   connect(Block2.epp, epp) annotation (Line(
-      points={{123.15,35.12},{150,35.12},{150,100},{218,100}},
+      points={{120.3,42.4},{150,42.4},{150,100},{218,100}},
       color={0,135,135},
       thickness=0.5));
   connect(P_el_set_B1, Block1.P_el_set) annotation (Line(points={{-119,120},{-119,57.48},{-118.55,57.48}}, color={0,0,127}));
   connect(P_el_set_B2, Block2.P_el_set) annotation (Line(points={{59,124},{59,57.48},{60.45,57.48}}, color={0,0,127}));
   annotation (
-  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-220,-100},{220,120}})),
-  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-220,-100},{220,120}})),
+  Diagram(graphics,
+          coordinateSystem(preserveAspectRatio=false, extent={{-220,-100},{220,120}})),
+  Icon(graphics,
+       coordinateSystem(preserveAspectRatio=false, extent={{-220,-100},{220,120}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Abstract&nbsp;model&nbsp;for&nbsp;power&nbsp;plants&nbsp;composed&nbsp;by&nbsp;two&nbsp;blocks.</p>
@@ -85,7 +85,9 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>P_el_set_B1: input for electric power in W (setpoint for block1)</p>
+<p>P_el_set_B2: input for electric power in W (setpoint for block 2)</p>
+<p>epp: active power port</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Records;
-model RealGasBulk_L4
+model RealGasBulk_L4 "Model for generating a summary for a real gas bulk"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -52,17 +52,17 @@ model RealGasBulk_L4
     input SI.SpecificEnthalpy h[N_cv] "Specific enthalpy" annotation(Dialog);
     input SI.MassFraction xi[N_cv,mediumModel.nc - 1] "Component mass fractions"  annotation(Dialog);
     input SI.MassFraction x[N_cv,mediumModel.nc - 1] "Component molar fractions"  annotation(Dialog);
-    input SI.Density rho[N_cv] annotation(Dialog);
+    input SI.Density rho[N_cv] "Density" annotation(Dialog);
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>(Description) </p>
+<p>This model can be used to generate a summary for a real gas bulk</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(none)</p>
+<p>input for mass, temperature, specific enthalpy, pressure, component mass fraction, component molar fraction and density</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

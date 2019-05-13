@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.Noise;
 model ResidualNormalDistributed "The typical grid error from inversion is the base. From that supplementary grid errros are modeled via normal distributions"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -78,5 +78,6 @@ equation
   connect(PZ_L.y, P_Z_Grid_1.u[3]) annotation (Line(points={{-5.2,-42},{0,-42},{0,1.33333},{12,1.33333}}, color={0,0,127}));
   connect(P_Z_Grid_1.y, y[1]) annotation (Line(points={{35,0},{70,0},{70,-5},{110,-5}}, color={0,0,127}));
   connect(P_Z_Grid_2.y, y[2]) annotation (Line(points={{75.9,80},{80,80},{80,76},{80,2},{110,2},{110,5}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end ResidualNormalDistributed;

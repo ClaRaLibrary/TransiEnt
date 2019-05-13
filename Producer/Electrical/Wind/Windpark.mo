@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind;
 model Windpark "Takes a single wind turbine model (replacable) and applies a linear low pass filter to model wind park smoothing effects"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -85,7 +85,7 @@ model Windpark "Takes a single wind turbine model (replacable) and applies a lin
 
   TransiEnt.Components.Boundaries.Electrical.Power parkTerminal(change_sign=true) annotation (Placement(transformation(extent={{86,-10},{66,10}})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{94,-10},{114,10}})));
-  Modelica.Blocks.Interfaces.RealInput v_wind annotation (Placement(transformation(extent={{-124,-22},{-84,18}})));
+  TransiEnt.Basics.Interfaces.Ambient.VelocityIn v_wind "Input for the wind velocity" annotation (Placement(transformation(extent={{-124,-22},{-84,18}})));
   TransiEnt.Components.Boundaries.Electrical.Frequency turbineTerminal(useInputConnector=true) annotation (Placement(transformation(extent={{-14,-10},{6,10}})));
   Modelica.Blocks.Sources.RealExpression P_Turbine(y=turbineTerminal.epp.P) annotation (Placement(transformation(extent={{-22,50},{16,70}})));
   Modelica.Blocks.Sources.RealExpression f_grid(y=epp.f) annotation (Placement(transformation(extent={{-44,30},{-22,48}})));
@@ -113,35 +113,37 @@ equation
   connect(modelStatistics.powerCollector[typeOfResource],collectElectricPower.powerCollector);
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
   connect(parkTerminal.epp, epp) annotation (Line(
-      points={{86.1,-0.1},{92,0},{104,0}},
+      points={{86,0},{86,0},{104,0}},
       color={0,135,135},
       thickness=0.5));
   connect(v_wind, windTurbineModel.v_wind) annotation (Line(points={{-104,-2},{-92,-2},{-80,-2},{-80,15.42},{-65.58,15.42}}, color={0,0,127}));
   connect(turbineTerminal.epp, windTurbineModel.epp) annotation (Line(
-      points={{-14.1,-0.1},{-21.05,-0.1},{-21.05,14.32},{-25.1,14.32}},
+      points={{-14,0},{-21.05,0},{-21.05,17.4},{-26.2,17.4}},
       color={0,135,135},
       thickness=0.5));
   connect(P_Turbine.y, WindParkFilter.P_el_WindTurbine) annotation (Line(points={{17.9,60},{24,60},{24,0},{29.4,0}}, color={0,0,127}));
   connect(f_grid.y, turbineTerminal.f_set) annotation (Line(points={{-20.9,39},{-9.4,39},{-9.4,12}}, color={0,0,127}));
   connect(WindParkFilter.P_el_WindPark, parkTerminal.P_el_set) annotation (Line(points={{51,0},{58,0},{58,20},{82,20},{82,12}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
 <p><span style=\"font-family: MS Shell Dlg 2;\">1<b><span style=\"color: #008000;\">. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Applies a third order linear filter to the input. Can be used to filter the power output of a single turbine such that the output is as smooth at it were in a windpark of n turbines. </span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">See Dany (2000) chapter 2.9 and 3.4.3 for details.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The amplitude spectrum is approximated by a third order transfer function. See matlab scripts in</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">\\\\transientee-sources\\matlab\\pd\\Wind\\WindParkFilter\\</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">for more details how this is done.</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\"></p><p><b><span style=\"color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp: active power port</p>
+<p>v_wind: input for velocity in m/s</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

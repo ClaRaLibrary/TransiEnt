@@ -1,11 +1,11 @@
 within TransiEnt.Consumer.Heat;
-model FirstOrderHeatingNetworkConsumer "Heating network consumer, mass flow control dynamic approximated by first oder system"
+model FirstOrderHeatingNetworkConsumer "Heating network consumer, mass flow control dynamic approximated by first order system"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,14 +47,15 @@ model FirstOrderHeatingNetworkConsumer "Heating network consumer, mass flow cont
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput Q_demand "Total heat demand" annotation (Placement(transformation(extent={{-15,-15},{15,15}},
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_demand "Total heatflowrate demand" annotation (Placement(transformation(
+        extent={{-15,-15},{15,15}},
         rotation=270,
-        origin={1,103}),
-        iconTransformation(extent={{-10,-10},{10,10}},
+        origin={1,103}), iconTransformation(
+        extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-4,94})));
 
-  Modelica.Blocks.Interfaces.RealInput T_return_set if not use_T_return_const "Return temperature set point"  annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_return_set if not use_T_return_const "Return temperature set point"  annotation (Placement(transformation(
         extent={{-15,-15},{15,15}},
         rotation=270,
         origin={67,103}), iconTransformation(
@@ -63,7 +64,7 @@ model FirstOrderHeatingNetworkConsumer "Heating network consumer, mass flow cont
         origin={74,92})));
 
 protected
-  Modelica.Blocks.Interfaces.RealInput T_return_internal annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_return_internal annotation (Placement(transformation(
         extent={{-15,-15},{15,15}},
         rotation=180,
         origin={15,34}),  iconTransformation(
@@ -114,7 +115,7 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  Q_demand = m_flow_target * (inStream(fluidPortIn.h_outflow) - fluidPortOut.h_outflow);
+  Q_flow_demand = m_flow_target*(inStream(fluidPortIn.h_outflow) - fluidPortOut.h_outflow);
 
   if use_T_return_const then
     T_return_internal = T_return_const;
@@ -122,7 +123,7 @@ equation
 
   //Eye values (Visualization)
   eye.P=0;
-  eye.Q_flow=Q_demand;
+  eye.Q_flow=Q_flow_demand;
   eye.T_supply=T_in.T_celsius;
   eye.T_return=T_return_internal;
   eye.p = p_return_const;
@@ -166,7 +167,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in the check models &quot;TransiEnt.Consumer.Heat.Check.TestFirstOrderHeatingNetworkConsumer&quot; and &quot;TransiEnt.Consumer.Heat.Check.TestFirstOrderHeatingNetworkConsumer_withPlant&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
@@ -180,6 +181,7 @@ equation
           extent={{-75,-75},{75,75}}),
         Line(points={{46,60},{-60,-46}}, color={0,127,127}),
         Line(points={{60,46},{-46,-60}}, color={0,127,127})}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             100,100}})));
 end FirstOrderHeatingNetworkConsumer;

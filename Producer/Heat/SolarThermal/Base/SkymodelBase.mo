@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.SolarThermal.Base;
 partial model SkymodelBase "Base model for modeling the influence of orientation of a surface for calculation of irradiance"
 
   //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,7 +31,7 @@ partial model SkymodelBase "Base model for modeling the influence of orientation
   extends ExtraTerrestrialIrradiance;
   extends TransiEnt.Basics.Icons.Model;
 
-  outer TransiEnt.SimCenter simCenter;
+
 
   // _____________________________________________
   //
@@ -45,9 +45,8 @@ partial model SkymodelBase "Base model for modeling the influence of orientation
   //
   //             Variable Declarations
   // _____________________________________________
-
-  SI.Irradiance irradiance_direct_measured = simCenter.i_direct "Measured direct irradiance";
-  SI.Irradiance irradiance_diffuse_horizontal = simCenter.i_diffuse "Measured diffuse irradiance";
+  outer SI.Irradiance irradiance_direct_measured "Measured direct irradiance";
+  outer SI.Irradiance irradiance_diffuse_horizontal "Measured diffuse irradiance";
   SI.Irradiance irradiance_direct_horizontal "Direct horizontal irradiance";
   SI.Irradiance irradiance_direct_tilted, irradiance_diffuse_tilted, irradiance_ground_tilted;
   Real ratio_beam "Ratio between direct irradiance on a tilted surface and irradiance on a horizontal surface";
@@ -80,7 +79,7 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-UnTavo0A.png\" alt=\" ratio_beam=max(Const.small, cos(angleOfSunIncidence.tilted) /max(cos(angleOfSunIncidence.horizontal),0.01))
 \"/></p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>Model needs outer variables SI.Irradiance&nbsp;direct_measured,&nbsp;diffuse_horizontal,&nbsp;sun_horizontal.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>purely theoretical model</p>
@@ -91,6 +90,7 @@ equation
 <p>Edited by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
 <p>Modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018</p>
 </html>"), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Ellipse(
           extent={{-94,30},{2,2}},
@@ -182,5 +182,6 @@ equation
           thickness=1,
           smooth=Smooth.None,
           arrow={Arrow.None,Arrow.Open})}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end SkymodelBase;

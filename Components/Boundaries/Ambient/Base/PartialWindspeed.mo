@@ -1,11 +1,11 @@
 within TransiEnt.Components.Boundaries.Ambient.Base;
-partial model PartialWindspeed
+partial model PartialWindspeed "Model for creating an output for partial windspeeds"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,7 +31,7 @@ partial model PartialWindspeed
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Ambient.WindspeedOut value annotation (Placement(transformation(extent={{78,-10},{98,10}}), iconTransformation(extent={{78,-10},{98,10}})));
+  TransiEnt.Basics.Interfaces.Ambient.VelocityOut value annotation (Placement(transformation(extent={{78,-10},{98,10}}), iconTransformation(extent={{78,-10},{98,10}})));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}),
                    graphics={
@@ -105,18 +105,50 @@ partial model PartialWindspeed
           lineColor={0,0,0},
           fillPattern=FillPattern.Sphere,
           fillColor={255,255,255}),
-        Line(
-          points={{-72,60},{-46,52}},
-          color={0,0,0},
-          smooth=Smooth.None,
-          arrow={Arrow.Filled,Arrow.None}),
-        Line(
-          points={{-72,14},{-52,6}},
-          color={0,0,0},
-          smooth=Smooth.None,
-          arrow={Arrow.Filled,Arrow.None}),
         Ellipse(
           extent={{-68,52},{-30,6}},
-          lineColor={0,0,0},
-          lineThickness=0.5)}),  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics));
+          lineColor={165,0,0}),
+        Line(
+          points={{-52,64}},
+          color={0,0,0},
+          thickness=0.2,
+          arrow={Arrow.Filled,Arrow.None}),
+        Line(
+          points={{-46,52},{-72,60},{-64,62}},
+          color={0,0,0},
+          thickness=0.2),
+        Line(
+          points={{-72,60},{-68,54}},
+          color={0,0,0},
+          thickness=0.2),
+        Line(
+          points={{-58,8},{-72,14},{-66,16}},
+          color={0,0,0},
+          thickness=0.2),
+        Line(
+          points={{-72,14},{-70,8}},
+          color={0,0,0},
+          thickness=0.2)}),      Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>This model creates an output for a partial windspeed</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>Modelica RealOutput: windspeed in m/s</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end PartialWindspeed;

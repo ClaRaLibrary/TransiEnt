@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups;
 model Hydroturbine "Model of a hydro turbine with six states (halt / starup / running in pump / turbine mode), pyhsical constraints (Pmin,Pmax,Pgradmax) and first order dynamics"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,11 +43,40 @@ model Hydroturbine "Model of a hydro turbine with six states (halt / starup / ru
   // parameter SI.Frequency y_grad_operating = 0.02/60;
   // parameter SI.Frequency y_grad_inf=1;
 
-  outer SimCenter simCenter;
+  parameter SI.Power P_n=1e6 "Nominal power of plant";
 
-  parameter SI.Power P_nom "Nominal power of plant";
-  parameter SI.Power P_turb_init=0 "Initital power of plant";
-  parameter SI.Time T_plant=10 "Time constant of first order dynamic model";
+  parameter Real P_min_star_turb=0.2 "Dimensionless minimum power of turbine (=20% of nominal power)";
+
+  parameter Real P_min_star_pump=0.2 "Dimensionless minimum power of pump (=20% of nominal power)";
+
+  parameter Real P_max_star_turb=1 "Dimensionless maximum power of turbine (=Nominal power)";
+
+  parameter Real P_max_star_pump=1 "Dimensionless maximum power of pump (=Nominal power)";
+
+  parameter Real P_grad_max_star=0.12/60 "Dimensionless maximum power gradient per second (12% of P_nom per minute)";
+
+  parameter Real Td=1e-3 "The higher Nd, the closer y follows u"
+                                            annotation(Dialog(group="Numerical"));
+  parameter Boolean useThresh=false "Use threshould for suppression of numerical noise"
+                                                         annotation(Dialog(group="Numerical"));
+  parameter Real thres=1e-7 "If abs(u-y)< thres, y becomes a simple pass through of u. Increasing thres can improve simulation speed. However to large values can make the simulation unstable. 
+     A good starting point is the choice thres = tolerance/1000."  annotation(Dialog(group="Numerical"));
+
+  parameter Real P_turb_init=0 "Initial or guess value of turbine power (in p.u.)";
+
+  parameter SI.Time T_plant=10 "Turbine first order dynamic";
+
+  parameter SI.Time t_startup=0 "Startup time (no output during startup)";
+
+  //parameter SI.Time t_shutdown=60 "Time it takes to disconnect from grid (P=P_set during shutdown)";
+
+  parameter Real thres_hyst=1e-10 "Threshold for hysteresis for switch from halt to startup (chattering might occur, hysteresis might help avoiding this)" annotation(Dialog(group="Numerical"));
+
+  parameter SI.Time t_eps=10 "Threshold time for transitions" annotation(Dialog(group="Numerical"));
+
+  parameter Boolean useSlewRateLimiter=true "choose if slewRateLimiter is activated";
+
+  outer SimCenter simCenter;
 
   // _____________________________________________
   //
@@ -62,13 +91,12 @@ model Hydroturbine "Model of a hydro turbine with six states (halt / starup / ru
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Blocks.Math.Gain normalize(k=1/P_nom)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+  Modelica.Blocks.Math.Gain normalize(k=1/P_n) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-40,12})));
 
-  Modelica.Blocks.Math.Gain deNormalize(k=P_nom)
-    annotation (Placement(transformation(extent={{56,6},{68,18}})));
+  Modelica.Blocks.Math.Gain deNormalize(k=P_n) annotation (Placement(transformation(extent={{56,6},{68,18}})));
   Boundaries.Mechanical.Power MechanicalBoundary annotation (Placement(transformation(extent={{62,-12},{80,6}})));
 
   // _____________________________________________
@@ -78,14 +106,29 @@ model Hydroturbine "Model of a hydro turbine with six states (halt / starup / ru
 
   Real P_set_star = normalize.y;
   Real P_is_star = deNormalize.u;
-  Modelica.Blocks.Continuous.FirstOrder plantDynamic(                           T=T_plant,
+  Modelica.Blocks.Continuous.FirstOrder plantDynamic(
+    T=T_plant,
     initType=Modelica.Blocks.Types.Init.InitialOutput,
-    y_start=-P_turb_init/P_nom)                                                 annotation (Placement(transformation(extent={{18,2},{38,22}})));
-  replaceable OperatingStates.PumpstorageStates                                                  operationStatus(P_star_init=P_turb_init/P_nom, T_thresh=simCenter.Td,
-    init_state=if P_turb_init > operationStatus.P_min_operating_turb then 2 else if P_turb_init < operationStatus.P_min_operating_pump then 1 else 0)                  constrainedby TransiEnt.Components.Turbogroups.OperatingStates.PartialStateDynamic "Operating State Model" annotation (choicesAllMatching=true, Placement(transformation(extent={{-14,2},{6,26}})));
+    y_start=-P_turb_init/P_n) annotation (Placement(transformation(extent={{18,2},{38,22}})));
+  replaceable OperatingStates.PumpstorageStates operationStatus(
+    useSlewRateLimiter=useSlewRateLimiter,
+    t_startup=t_startup,
+    P_star_init=P_turb_init/P_n,
+    P_grad_operating=P_grad_max_star,
+    thres=thres,
+    useThresh=useThresh,
+    P_grad_inf=P_grad_max_star,
+    Td=Td,
+    t_eps=t_eps,
+    init_state=if P_turb_init > operationStatus.P_min_operating_turb then 2 else if P_turb_init < operationStatus.P_min_operating_pump then 1 else 0,
+    P_min_operating_pump=P_min_star_pump,
+    P_min_operating_turb=P_min_star_turb,
+    P_max_operating_pump=P_max_star_pump,
+    P_max_operating_turb=P_max_star_turb) constrainedby TransiEnt.Components.Turbogroups.OperatingStates.PartialStateDynamic "Operating State Model" annotation (choicesAllMatching=true, Placement(transformation(extent={{-14,2},{6,26}})));
+
   Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=(operationStatus.operatingTurb.active or operationStatus.operatingPump.active)) annotation (Placement(transformation(extent={{74,10},{94,30}})));
 
-  Modelica.Blocks.Interfaces.RealInput P_spinning_set "Setpoint for spinning reserve power"
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_spinning_set "Setpoint for spinning reserve power"
                                                       annotation (Placement(transformation(
         rotation=270,
         extent={{-12,-12},{12,12}},
@@ -115,7 +158,8 @@ equation
                                                                                                 color={0,0,127}));
   connect(operationStatus.P_set_star_lim, plantDynamic.u) annotation (Line(points={{4,10.5714},{12,12},{16,12}},
                                                                                                             color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(graphics={
                                    Ellipse(
           lineColor={95,95,95},
@@ -186,14 +230,17 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Note, that no statistics are involved!</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">mpp: mechanical power port</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_target: input for electric power in W</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_spinning_set: input for electric power in W (setpoint for spinning reserve power)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">isGeneratorRunning: BooleanOutput</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The input P_spinning_set is supposed to be gradient limited by limtations of the primary balancing offer mechanism which has normally a higher gradient limit than the rest of the plant.</span></p>
-<p><br><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The input P_target is the sum of secondary balancing setpoint and scheduled set point</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>

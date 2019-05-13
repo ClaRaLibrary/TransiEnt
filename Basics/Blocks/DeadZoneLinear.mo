@@ -2,10 +2,10 @@ within TransiEnt.Basics.Blocks;
 block DeadZoneLinear "Provide a region of zero output"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,8 +34,12 @@ block DeadZoneLinear "Provide a region of zero output"
   //               Visible Parameters
   // _____________________________________________
 
-  parameter Real uMax(start=1) "Upper limits of dead zones";
-  parameter Real uMin=-uMax "Lower limits of dead zones";
+  parameter Integer typeTransition=1 "Type of transition from dead zone to rest" annotation(choices(choice=1 "Step", choice=2 "3rd order polynomial"));
+  parameter Boolean use_noEvent=true "true if noEvent() should be used";
+  parameter Real uMaxSmooth(start=2) "Upper limit of smooth zone" annotation(Dialog(enable=typeTransition==2));
+  parameter Real uMax(start=1) "Upper limit of dead zone";
+  parameter Real uMin=-uMax "Lower limit of dead zone";
+  parameter Real uMinSmooth=-uMaxSmooth "Lower limit of smooth zone" annotation(Dialog(enable=typeTransition==2));
   parameter Boolean deadZoneAtInit = true "= false, if dead zone is ignored during initializiation (i.e., y=u)";
 
   // _____________________________________________
@@ -50,8 +54,22 @@ equation
 
   if initial() and not deadZoneAtInit then
      y = u;
-  else
+  elseif typeTransition==1 and use_noEvent then
      y = noEvent(smooth(1,if u > uMax then u else if u < uMin then u else 0));
+  elseif typeTransition==2 and use_noEvent then
+     y = noEvent(smooth(1,
+       if u > uMaxSmooth or u < uMinSmooth then u
+       elseif u < uMax and u > uMin then 0
+       elseif u < uMaxSmooth and u > uMax then ((uMax + uMaxSmooth)/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))*u^3 + (-(2*(uMax^2 + uMax*uMaxSmooth + uMaxSmooth^2))/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))*u^2 + ((uMax*(uMax^2 + uMax*uMaxSmooth + 4*uMaxSmooth^2))/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))*u + (-(2*uMax^2*uMaxSmooth^2)/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))
+       else ((uMin + uMinSmooth)/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2)))*u^3 + (-(2*(uMin^2 + uMin*uMinSmooth + uMinSmooth^2))/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2)))*u^2 + ((uMin*(uMin^2 + uMin*uMinSmooth + 4*uMinSmooth^2))/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2)))*u + (-(2*uMin^2*uMinSmooth^2)/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2)))));
+  elseif typeTransition==1 and not use_noEvent then
+     y = smooth(1,if u > uMax then u else if u < uMin then u else 0);
+  else
+     y = smooth(1,
+       if u > uMaxSmooth or u < uMinSmooth then u
+       elseif u < uMax and u > uMin then 0
+       elseif u < uMaxSmooth and u > uMax then ((uMax + uMaxSmooth)/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))*u^3 + (-(2*(uMax^2 + uMax*uMaxSmooth + uMaxSmooth^2))/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))*u^2 + ((uMax*(uMax^2 + uMax*uMaxSmooth + 4*uMaxSmooth^2))/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))*u + (-(2*uMax^2*uMaxSmooth^2)/((uMax - uMaxSmooth)*(uMax^2 - 2*uMax*uMaxSmooth + uMaxSmooth^2)))
+       else ((uMin + uMinSmooth)/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2)))*u^3 + (-(2*(uMin^2 + uMin*uMinSmooth + uMinSmooth^2))/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2)))*u^2 + ((uMin*(uMin^2 + uMin*uMinSmooth + 4*uMinSmooth^2))/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2)))*u + (-(2*uMin^2*uMinSmooth^2)/((uMin - uMinSmooth)*(uMin^2 - 2*uMin*uMinSmooth + uMinSmooth^2))));
   end if;
 
   // _____________________________________________
@@ -64,6 +82,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The DeadZone block defines a region of zero output. </span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">If the input is within uMin ... uMax, the output is zero. Outside of this zone, the output is a linear function of the input with a slope of 1. </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">For smooth transition (typeTransition=2), a third order polynomial is used between uMinSmooth and uMin and uMax and uMaxSmooth, respectively. Events can be avoided by switching use_noEvent to true (might lead to chattering).</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -77,11 +96,12 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in checkmodel &quot;TestDeadZoneLinear&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de), Aug 2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Carsten Bode (c.bode@tuhh.de), Mar 2019 (added smooth transition and noEvent)</span></p>
 </html>"),
     Icon(coordinateSystem(
     preserveAspectRatio=false,

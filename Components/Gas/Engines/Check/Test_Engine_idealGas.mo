@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Engines.Check;
 model Test_Engine_idealGas
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,10 +31,10 @@ model Test_Engine_idealGas
     gasModel=simCenter.gasModel2,
     variable_xi=true) annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
   Boundaries.Gas.RealGasCompositionByWtFractions_stepVariation            gasCompositionByWtFractions_stepVariation(
-    xi_start=simCenter.gasModel2.xi_default,
     period=900,
     xiNumber=7,
-    stepsize=0.011687)
+    stepsize=0.011687,
+    xi_in(start=simCenter.gasModel2.xi_default))
                    annotation (Placement(transformation(extent={{-94,1},{-76,19}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow waterSource(T_const=273.15 + 65,
     m_flow_const=1,
@@ -42,8 +42,7 @@ model Test_Engine_idealGas
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-32,-84})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi waterSink(p_const=
-        simCenter.p_n[2]) annotation (Placement(transformation(
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi waterSink(p_const=simCenter.p_nom[2]) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={60,-84})));
@@ -77,10 +76,11 @@ model Test_Engine_idealGas
     startTime=3600,
     height=0.05,
     offset=0.07)    annotation (Placement(transformation(extent={{-70,-88},{-50,-68}})));
+  Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem dummyExcitationSystem annotation (Placement(transformation(extent={{68,-2},{48,18}})));
 equation
-  connect(engine.mpp, activePowerGenerator.mpp) annotation (Line(points={{28,-20.02},{36,-20.02},{36,-20.5},{45.5,-20.5}}, color={95,95,95}));
+  connect(engine.mpp, activePowerGenerator.mpp) annotation (Line(points={{28,-20.02},{36,-20.02},{36,-20},{46,-20}},       color={95,95,95}));
   connect(activePowerGenerator.epp, ElectricGrid.epp) annotation (Line(
-      points={{66.1,-20.1},{73.9,-20.1}},
+      points={{66.1,-20.1},{70,-20.1},{70,-20},{74,-20}},
       color={0,135,135},
       thickness=0.5));
   connect(gasCompositionByWtFractions_stepVariation.xi, gasSource.xi) annotation (Line(points={{-76,10},{-66,10},{-66,4},{-62,4}}, color={0,0,127}));
@@ -111,6 +111,11 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(waterSource.m_flow, ramp.y) annotation (Line(points={{-44,-78},{-49,-78}}, color={0,0,127}));
+  connect(dummyExcitationSystem.y, activePowerGenerator.E_input) annotation (Line(points={{47.4,8},{40,8},{40,-10.1},{55.7,-10.1}}, color={0,0,127}));
+  connect(dummyExcitationSystem.epp1, activePowerGenerator.epp) annotation (Line(
+      points={{68,8},{68,-6},{68,-20.1},{66.1,-20.1}},
+      color={0,135,135},
+      thickness=0.5));
   annotation (
     experiment(
       StopTime=86400,
@@ -121,5 +126,26 @@ equation
       Advanced(GenerateVariableDependencies=false, OutputModelicaCode=false),
       Evaluate=true,
       OutputCPUtime=true,
-      OutputFlatModelica=false));
+      OutputFlatModelica=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the Engine_idealGas model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Test_Engine_idealGas;

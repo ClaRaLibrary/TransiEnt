@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Engines.Mechanics;
 model DynamicEngineMechanics
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,9 @@ model DynamicEngineMechanics
 
   Modelica.SIunits.Temperature T_cylinderWall "Temperature of cylinder wall";
   Modelica.SIunits.Temperature T_innerEngine = TemperaturesIn[2];
+
   Modelica.SIunits.Temperature T_outerEngine = TemperaturesIn[1];
+
   Real eta_start;
   // Boolean use_eta_start(start=true);
   Modelica.SIunits.Pressure p_me "Mean effective pressure";
@@ -97,14 +99,8 @@ if switch then
 
     //Efficiencies
     eta_start =min(1,(clutch.u1/P_el_set)*p_mf_n/p_mf);
-    eta_h = (1 + (1 - Specification.eta_m)*(1-eta_start))*efficiencyFunction(
-      P_el_set,
-      {Specification.P_el_max,Specification.P_el_min},
-      {Specification.eta_h_min,Specification.eta_h_max});
-    eta_el = (Specification.eta_m + (1 - Specification.eta_m)*eta_start)*efficiencyFunction(
-      P_el_set,
-      {Specification.P_el_max,Specification.P_el_min},
-      {Specification.eta_el_max,Specification.eta_el_min});
+    eta_h = (1 + (1 - Specification.eta_m)*(1-eta_start))*partloadEfficiency.eta_is[2];
+    eta_el = (Specification.eta_m + (1 - Specification.eta_m)*eta_start)*partloadEfficiency.eta_is[1];
 
 else
   //efficiencies set to 1e-10 > 0 for numerical reasons
@@ -200,5 +196,6 @@ end if;
 <p>Created by Arne Koeppen (arne.koeppen@tuhh.de), Apr 2014</p>
 <p>Edited by Jan Braune (jan.braune@tuhh.de), Mar 2015</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Aug 2015</p>
+<p>Edited by Anne Senkel (anne.senkel@tuhh.de), Feb 2019</p>
 </html>"));
 end DynamicEngineMechanics;

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler;
 model Gasboiler_dynamic_L1 "Full modulating or staged gasboiler, signal based dynamic model with splitted ideal combustion and ideal heat-transfer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,15 +31,15 @@ model Gasboiler_dynamic_L1 "Full modulating or staged gasboiler, signal based dy
   //
   //                   Parameters
   // _____________________________________________
-  parameter Integer dimension=2 "|Specification|Boiler dimension" annotation (choices(
+  parameter Integer dimension=2 "Boiler dimension" annotation (Dialog(tab="General", group="Specification"), choices(
     choice=1 "Small (Appartment/OFH): 10 to 200 kW",
     choice=2 "Medium (MFH): 100 to 800 kW",
     choice=3 "Large (DH): 600 to 5000 kW"));
-  parameter Boolean modulating = true "|Specification|Modulating operation, staged power production if false (select stages then!)" annotation (Dialog(enable = holdTemperature));
-  parameter Integer stages = 1 "|Specification|Number of burner stages for non-modulating operation" annotation (Dialog(enable = (not modulating) and holdTemperature),choices(choice=1 "1: Two-position controlled",
+  parameter Boolean modulating = true "Modulating operation, staged power production if false (select stages then!)" annotation (Dialog(tab="General", group="Specification", enable = holdTemperature));
+  parameter Integer stages = 1 "Number of burner stages for non-modulating operation" annotation (Dialog(tab="General", group="Specification", enable = (not modulating) and holdTemperature),choices(choice=1 "1: Two-position controlled",
                                                                                                   choice=2 "2: Three-position controlled"));
-  parameter Real stagePercentage = 0.3 "|Specification|Power percentage at burner stage 2" annotation (Dialog(enable = stages==2));
-  parameter SI.TemperatureDifference T_supply_tol = 3 "|Specification|Acceptable absolute tolerance of supply temperature for controlling (consider dynamics of boiler!)" annotation (Dialog(enable = (not modulating) and holdTemperature));
+  parameter Real stagePercentage = 0.3 "Power percentage at burner stage 2" annotation (Dialog(tab="General", group="Specification", enable = stages==2));
+  parameter SI.TemperatureDifference T_supply_tol = 3 "Acceptable absolute tolerance of supply temperature for controlling (consider dynamics of boiler!)" annotation (Dialog(tab="General", group="Specification", enable = (not modulating) and holdTemperature));
 
   // _____________________________________________
   //
@@ -161,5 +161,6 @@ equation
 <p>Model created by Paul Kernstock (paul.kernstock@tu-harburg.de) July 2015 </p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Aug 2015</p>
 </html>"),
-Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})));
+Diagram(graphics,
+        coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})));
 end Gasboiler_dynamic_L1;

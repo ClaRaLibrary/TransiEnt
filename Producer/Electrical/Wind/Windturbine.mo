@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind;
 model Windturbine "Pitch controlled wind turbine model based on cp-lambda characteristic"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,10 +54,9 @@ model Windturbine "Pitch controlled wind turbine model based on cp-lambda charac
   //       Final and protected parameters
   // _____________________________________________
 
-  final parameter SI.AngularVelocity w_nom = Rotor.lambda_opt*v_fullload*2/Rotor.D "Nominal angular velocity of rotor";
-  final parameter SI.AngularVelocity w_start = if v_wind_start>12 then w_nom else if (v_wind_start > 4 and v_wind_start<12) then (Rotor.lambda_opt/Rotor.D *2*v_wind_start) else 1e-3;
-  final parameter Real v_fullload = (8*P_el_n
-                                            /(Rotor.rho*Modelica.Constants.pi*Rotor.D^2*Rotor.cp_opt))^(1/3);
+  final parameter SI.AngularVelocity omega_n=Rotor.lambda_opt*v_fullload*2/Rotor.D "Nominal angular velocity of rotor";
+  final parameter SI.AngularVelocity omega_start=if v_wind_start > 12 then omega_n else if (v_wind_start > 4 and v_wind_start < 12) then (Rotor.lambda_opt/Rotor.D*2*v_wind_start) else 1e-3;
+  final parameter Real v_fullload = (8*P_el_n/(Rotor.rho*Modelica.Constants.pi*Rotor.D^2*Rotor.cp_opt))^(1/3);
 
 public
   SI.ActivePower P_el_is = -epp.P;
@@ -68,7 +67,7 @@ public
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Components.Electrical.Machines.VariableSpeedActivePowerGenerator Generator(changeSign=true) annotation (Placement(transformation(extent={{18,-22},{46,8}})));
+ TransiEnt.Components.Electrical.Machines.VariableSpeedActivePowerGenerator Generator(changeSign=true)  annotation (Placement(transformation(extent={{18,-22},{46,8}})));
   Base.WindturbineRotor Rotor(
     beta_start=beta_start,
     turbineCharacteristics=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.VariableWTG_WU(),
@@ -102,19 +101,25 @@ public
     radius=Rotor.D/2,
     cp_opt=Rotor.cp_opt,
     v_cutIn=operationRanges.v_cutIn,
-    T_nom=P_el_n/w_nom) annotation (Placement(transformation(rotation=0, extent={{12,54},{32,74}})));
+    tau_n=P_el_n/omega_n) annotation (Placement(transformation(rotation=0, extent={{12,54},{32,74}})));
   Modelica.Blocks.Sources.RealExpression wind_fullload(y=operationRanges.v_fullLoad)
     annotation (Placement(transformation(extent={{-30,62},{-2,80}})));
+
+  TransiEnt.Components.Mechanical.ConstantInertia Inertia(
+    omega(start=omega_start),
+    nSubgrid=1,
+    J=J) annotation (choicesAllMatching=true, Placement(transformation(extent={{-14,-21},{10,8}})));
+ TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter    annotation (Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={62.5,18})));
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 
-  TransiEnt.Components.Mechanical.ConstantInertia Inertia(
-    nSubgrid=1,
-    w(start=w_start),
-    J=J) annotation (choicesAllMatching=true, Placement(transformation(extent={{-14,-21},{10,8}})));
+
 equation
   // _____________________________________________
   //
@@ -129,7 +134,7 @@ equation
   //               Connect Statements
   // _____________________________________________
   connect(Generator.epp, epp) annotation (Line(
-      points={{46.14,-7.15},{54,-7.15},{54,78},{100,78}},
+      points={{46.14,-7.15},{80,-7.15},{80,78},{100,78}},
       color={0,135,135},
       thickness=0.5));
   connect(v_wind1.y, Rotor.v_wind) annotation (Line(points={{-55.2,-8},{-39.4,-8},
@@ -144,13 +149,20 @@ equation
   connect(wind_fullload.y, torqueController.wind_fullload) annotation (Line(
         points={{-0.6,71},{8,71},{8,70},{12,70}}, color={0,0,127}));
   connect(Rotor.flange, Inertia.mpp_a) annotation (Line(points={{-19.8,-8},{-16,-8},{-16,-6.5},{-14,-6.5}}, color={0,0,0}));
-  connect(Inertia.mpp_b, Generator.mpp) annotation (Line(points={{10,-6.5},{14,-6.5},{14,-7.75},{17.3,-7.75}}, color={95,95,95}));
-  connect(torqueController.y, Generator.T_set) annotation (Line(points={{33.6,64},{33.6,64},{42,64},{42,28},{31.58,28},{31.58,7.85}},
+  connect(Inertia.mpp_b, Generator.mpp) annotation (Line(points={{10,-6.5},{14,-6.5},{14,-7},{18,-7}},         color={95,95,95}));
+  connect(torqueController.y, Generator.tau_set) annotation (Line(points={{33.6,64},{33.6,64},{42,64},{42,28},{18.98,28},{18.98,-16.75}},
                                                                                                                                   color={0,0,127}));
   connect(pitchController.beta_set, Rotor.beta_set) annotation (Line(points={{-46.4,48.2},{-44,48.2},{-44,30},{-30,30},{-30,1.6}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{62.5,28},{64,28},{64,54},{80,54},{80,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{62.5,7.4},{46.25,7.4},{46.25,7.85},{31.58,7.85}}, color={0,0,127}));
     annotation (
-              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})),                                                                     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+              Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),                                                                     Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Pitch controlled WTG </span></p>
@@ -159,7 +171,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp: choice of power port</p>
+<p>v_wind: input for velocity in m/s</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

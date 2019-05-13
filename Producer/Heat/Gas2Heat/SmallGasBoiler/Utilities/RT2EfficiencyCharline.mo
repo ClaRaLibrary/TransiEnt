@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Utilities;
-block RT2EfficiencyCharline "Characteristic line for the boiler's heating efficiency in function of the heating grid return temperature"
+model RT2EfficiencyCharline "Characteristic line for the boiler's heating efficiency in function of the heating grid return temperature"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,10 +45,9 @@ protected
   // _____________________________________________
 
 public
-  Modelica.Blocks.Interfaces.RealInput T_return(unit="degC")
-    annotation (Placement(transformation(extent={{-116,-12},{-92,12}}),
+  Basics.Interfaces.General.TemperatureCelsiusIn T_return "Input for return temperature in Celsius"   annotation (Placement(transformation(extent={{-116,-12},{-92,12}}),
         iconTransformation(extent={{-116,-12},{-92,12}})));
-  Modelica.Blocks.Interfaces.RealOutput eta
+  TransiEnt.Basics.Interfaces.General.EfficiencyOut eta "Output for efficiency"
     annotation (Placement(transformation(extent={{90,-12},{114,12}}),
         iconTransformation(extent={{90,-12},{114,12}})));
 

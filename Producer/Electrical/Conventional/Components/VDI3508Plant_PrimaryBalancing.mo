@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order systems according to VDI 3508, no states, with balancing control"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,9 +32,9 @@ model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order
   extends TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider(
       final typeOfBalancingPowerResource=typeOfResource,
       primaryBalancingController(
-      P_nom=P_el_n),
+      P_n=P_el_n),
       controlPowerModel(
-      P_nom=P_el_n,
+      P_n=P_el_n,
       P_pr_max=primaryBalancingController.maxValuePrCtrl,
       P_el_is = P_el_is,
       P_grad_max_star=P_el_grad_max_SB,
@@ -81,10 +81,10 @@ model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order
   // Expert Settings (Numerical)
   parameter SI.Time t_eps=10 "Set point power has to be above the minimum power for t_eps time before plant leaves halt state"
                                                                                                     annotation(Dialog(tab="Expert Settings"));
-  parameter SI.Time T_thresh=0.2 "Time constant of numerical element between saturation block and slew rate limiter block"
-                                                                                                    annotation(Dialog(tab="Expert Settings"));
+  //parameter SI.Time T_thresh=0.2 "Time constant of numerical element between saturation block and slew rate limiter block"
+  //                                                                                                  annotation(Dialog(tab="Expert Settings"));
   parameter SI.Frequency y_grad_inf=1 "Very high power gradient used for plant shut-down" annotation(Dialog(tab="Expert Settings"));
-  parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
+  parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(tab="Expert Settings"));
 
   parameter SI.Time Td=simCenter.Td "Time constant of integrator"
@@ -96,6 +96,7 @@ model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order
   parameter Real thres=simCenter.thres "If abs(u-y)< thres, y becomes a simple pass through of u. Increasing thres can improve simulation speed. However to large values can make the simulation unstable. 
      A good starting point is the choice thres = tolerance/1000."
     annotation (Dialog(tab="Expert Settings"));
+  parameter Real thres_hyst=1e-10 "Threshold for hysteresis for switch from halt to startup (chattering might occur, hysteresis might help avoiding this)" annotation (Dialog(tab="Expert Settings"));
 
   // **** Frequency Control
 
@@ -124,10 +125,12 @@ model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order
     P_min_operating=P_min_star,
     P_grad_operating=P_grad_max_star,
     P_grad_inf=y_grad_inf,
-    T_thresh=T_thresh,
     Td=Td,
     useThresh=useThresh,
-    thres=thres) annotation (Placement(transformation(extent={{-118,52},{-98,72}})));
+    thres=thres,
+    thres_hyst=thres_hyst)
+                 annotation (Placement(transformation(extent={{-118,52},{-98,72}})));
+    //T_thresh=T_thresh,
 
   Modelica.Blocks.Math.Gain normalize(k=-1/P_el_n) annotation (Placement(transformation(
         extent={{6,-6},{-6,6}},
@@ -157,11 +160,12 @@ model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order
         origin={-113,3})));
   TransiEnt.Components.Boundaries.Mechanical.Power MechanicalBoundary annotation (Placement(transformation(extent={{8,-46},{28,-26}})));
   TransiEnt.Components.Mechanical.TwoStateInertiaWithIdealClutch MechanicalConnection(
-    w(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
+    omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid,
     P_n=P_el_n) annotation (choicesAllMatching=true, Placement(transformation(extent={{36,-47},{52,-24}})));
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator "Choice of generator model. The generator model must match the power port."
+                                                                                                                                                                                     annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-11.5,-12},{11.5,12}},
         rotation=0,
         origin={72.5,-34})));
@@ -177,6 +181,11 @@ model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order
         rotation=0,
         origin={-111,25})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=is_running) annotation (Placement(transformation(extent={{24,-10},{44,10}})));
+  replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem "Choice of excitation system model with voltage control"
+                                                                                                                                                                                                        annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={74.5,26})));
 equation
 
   // _____________________________________________
@@ -206,9 +215,9 @@ equation
   connect(MechanicalBoundary.mpp, MechanicalConnection.mpp_a) annotation (Line(points={{28,-36},{28,-35.5},{36,-35.5}}, color={95,95,95}));
   connect(deNormalize.u, SteamTurbine_MSP.y) annotation (Line(points={{5.4,-19},{0.7,-19},{0.7,-40},{-5.2,-40}},
                                                                                                     color={0,0,127}));
-  connect(MechanicalConnection.mpp_b, Generator.mpp) annotation (Line(points={{52,-35.5},{60,-35.5},{60,-34.6},{60.425,-34.6}}, color={95,95,95}));
+  connect(MechanicalConnection.mpp_b, Generator.mpp) annotation (Line(points={{52,-35.5},{60,-35.5},{60,-34},{61,-34}},         color={95,95,95}));
   connect(Generator.epp, epp) annotation (Line(
-      points={{84.115,-34.12},{100,-34.12},{100,60}},
+      points={{84.115,-34.12},{100,-34.12},{100,78}},
       color={0,135,135},
       thickness=0.5));
   connect(setPointLimiter.P_set_star_lim, Q_flow_set.u[1]) annotation (Line(points={{-96.8,62},{-86,62},{-86,40},{-136,40},{-136,2.5},{-119,2.5}}, color={0,0,127}));
@@ -221,8 +230,13 @@ equation
   connect(primaryBalancingController.P_PBP_set, pD.u) annotation (Line(points={{-28.6,54},{-64,54},{-64,36},{-28,36},{-28,23.93},{-34.67,23.93}},
                                                                                                                                                 color={0,0,127}));
   connect(booleanExpression.y, MechanicalConnection.isRunning) annotation (Line(points={{45,0},{54,0},{54,-20},{43.92,-20},{43.92,-25.495}}, color={255,0,255}));
-  connect(Generator.mpp, gridFrequencySensor.mpp) annotation (Line(points={{60.425,-34.6},{56,-34.6},{56,54},{33.2,54}}, color={95,95,95}));
+  connect(Generator.mpp, gridFrequencySensor.mpp) annotation (Line(points={{61,-34},{56,-34},{56,54},{33.2,54}},         color={95,95,95}));
   connect(normalize.y, setPointLimiter.P_set_star) annotation (Line(points={{-128,67.4},{-128,62},{-118,62}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{74.5,36},{74,36},{74,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{74.5,15.4},{74.5,-3.3},{72.155,-3.3},{72.155,-22.12}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{100,100}}),
                                graphics={
     Text( lineColor={255,255,0},
@@ -316,5 +330,6 @@ equation
 <p>Pitscheider, 2007</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Ricardo Peniche</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end VDI3508Plant_PrimaryBalancing;

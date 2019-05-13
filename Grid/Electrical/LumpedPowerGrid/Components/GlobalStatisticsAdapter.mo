@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid.Components;
 model GlobalStatisticsAdapter "Passes through local statistics to specific connectors in global statistics"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,12 +26,11 @@ model GlobalStatisticsAdapter "Passes through local statistics to specific conne
   outer SimCenter simCenter;
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectKineticEnergy collectKineticEnergy annotation (Placement(transformation(extent={{-42,0},{-22,20}})));
 
-  Modelica.Blocks.Interfaces.RealInput E_kin "Kinetic energy stored in rotating masses of synchronous generators" annotation (
+  TransiEnt.Basics.Interfaces.General.KinteticEnergyIn E_kin "Kinetic energy stored in rotating masses of synchronous generators" annotation (
       Placement(transformation(extent={{-66,-2},{-46,18}}),  iconTransformation(
           extent={{98,-48},{78,-28}})));
 
-  Modelica.Blocks.Interfaces.RealInput P_load
-                                             "Kinetic energy stored in rotating masses of synchronous generators" annotation (
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_load "Charging/discharging power" annotation (
       Placement(transformation(extent={{-66,-42},{-46,-22}}),iconTransformation(
           extent={{98,-48},{78,-28}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{-42,-42},{-22,-22}})));

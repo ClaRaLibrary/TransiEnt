@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Interfaces.Electrical;
 connector ActivePowerPort "General interface for electrical energy in TransiEnt library (Active power and frequency)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,16 +20,16 @@ connector ActivePowerPort "General interface for electrical energy in TransiEnt 
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
+extends PartialPowerPort;
+
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 
   // Potential variables ("technical connection conditions")
-  Modelica.SIunits.Frequency f "Frequency of net";
+  Modelica.SIunits.Frequency f "Frequency of grid";
 
-  // Flow variables ("Transmitted information")
-  flow Modelica.SIunits.ActivePower P "Active Power in Connector";
 
   annotation (defaultComponentName="epp",Icon(graphics={Ellipse(
           extent={{82,80},{-78,-80}},
@@ -55,7 +55,7 @@ connector ActivePowerPort "General interface for electrical energy in TransiEnt 
 <p>Q is the reactive power</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary, automatically set to state 4)</p>

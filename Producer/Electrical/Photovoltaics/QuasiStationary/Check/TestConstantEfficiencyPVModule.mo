@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.QuasiStationary.Check;
 model TestConstantEfficiencyPVModule
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,7 +35,8 @@ model TestConstantEfficiencyPVModule
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 
-  TransiEnt.Components.Electrical.Grid.PIModelQS Line(param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K1()) annotation (Placement(transformation(rotation=0, extent={{-32,2},{-12,22}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Line(CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K1)
+                                                      annotation (Placement(transformation(rotation=0, extent={{-32,2},{-12,22}})));
 
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load1(R_ref=50)
     annotation (Placement(transformation(
@@ -59,7 +60,7 @@ model TestConstantEfficiencyPVModule
     redeclare TransiEnt.Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperature,
     redeclare TransiEnt.Basics.Tables.Ambient.Wind_Hamburg_Fuhlsbuettel_3600s_2012 wind(relativepath="/ambient/Wind_Hamburg_3600s_TMY.txt")) annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
 equation
-  connect(Adapter.epp, Grid.epp) annotation (Line(points={{-44,8},{-50,8},{-50,7.9},{-51.9,7.9}},
+  connect(Adapter.epp, Grid.epp) annotation (Line(points={{-44,8},{-50,8},{-50,8},{-52,8}},
                          color={0,127,0}));
   connect(Adapter.voltageP, Line.pin_p1) annotation (Line(points={{-36,8},{-36,12},{-32,12}},    color={85,170,255}));
   connect(Load1.pin_p, Line.pin_p2) annotation (Line(points={{-4,4},{-4,12},{-11.8,12}},  color={85,170,255}));

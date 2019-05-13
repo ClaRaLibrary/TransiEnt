@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction;
 model HeatingGenerationCharline "Characteristic line of the heating load in function of the ambient temperature"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -53,9 +53,9 @@ model HeatingGenerationCharline "Characteristic line of the heating load in func
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput T_amb
+  TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn T_amb "Ambient temperature in Celsius"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}), iconTransformation(extent={{-120,0},{-100,20}})));
-  Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  Basics.Interfaces.Thermal.HeatFlowRateOut Q_flow "Heat flow rate input" annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
   // _____________________________________________
   //
@@ -160,7 +160,8 @@ equation
           extent={{-152,-109},{148,-149}},
           lineColor={0,134,134},
           textString="%name")}),
-                            Diagram(coordinateSystem(preserveAspectRatio=false,
+                            Diagram(graphics,
+                                    coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}})),
               Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">HeatingLoadCharline</span></b></p>

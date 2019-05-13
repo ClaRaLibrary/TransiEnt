@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid.Check;
 model LocalPlantInteractingWithUCTE_withIncident "Example how the continental europe grid interacts with a local grid"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,7 +61,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(lumpedGrid.epp, P_12.epp_IN) annotation (Line(
-      points={{-10.5,17.6},{0,17.6},{0,-26},{14.8,-26}},
+      points={{-11,19},{0,19},{0,-26},{14.8,-26}},
       color={0,135,135},
       thickness=0.5));
   connect(Demand.epp, P_12.epp_IN) annotation (Line(
@@ -75,13 +75,36 @@ equation
                                                                                                                   color={0,0,127}));
   connect(P_set_local.y, lumpedGrid.P_el_set) annotation (Line(points={{-53,-18},{-42,-18},{-42,24},{-21.5,24},{-21.5,21.9}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{100,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-80},{100,100}})),
     experiment(StopTime=200, __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput(equidistant=false),
-    Icon(coordinateSystem(extent={{-100,-80},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-80},{100,100}})),
     __Dymola_experimentFlags(
       Advanced(GenerateVariableDependencies=false, OutputModelicaCode=false),
       Evaluate=false,
       OutputCPUtime=true,
-      OutputFlatModelica=false));
+      OutputFlatModelica=false),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end LocalPlantInteractingWithUCTE_withIncident;

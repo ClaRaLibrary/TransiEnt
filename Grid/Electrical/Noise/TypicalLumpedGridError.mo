@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.Noise;
 block TypicalLumpedGridError "Typical grid error (derived from frequency measurements via model inversion)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,5 +38,6 @@ equation
           fillColor={0,134,134},
           fillPattern=FillPattern.Solid),
         Line(points={{-46,-56},{-46,64},{54,64},{54,-56},{-46,-56},{-46,-26},{54,-26},{54,4},{-46,4},{-46,34},{54,34},{54,64},{4,64},{4,-57}},
-            color={0,0,0})}), Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+            color={0,0,0})}), Diagram(graphics,
+                                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end TypicalLumpedGridError;

@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model PeakLoadBoiler "Peak load boiler (gas-fired)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,4 +27,25 @@ extends PartialCostSpecs(
     Cspec_OM_Q=0.15/3.6e9 "Specific O&M cost per heating energy in EUR/J",
     lifeTime=20);
 
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Peak load boiler (gas-fired)</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>[1] H. Lund,&nbsp;B. Moeller,&nbsp;B. V. Mathiesen, A.&nbsp;Dyrelund,&nbsp;&quot;The&nbsp;role&nbsp;of&nbsp;district&nbsp;heating&nbsp;in&nbsp;future&nbsp;renewable&nbsp;energy&nbsp;systems&quot;.&nbsp;Energy, 2010,&nbsp;35(3), pp.&nbsp;1381&ndash;1390</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end PeakLoadBoiler;

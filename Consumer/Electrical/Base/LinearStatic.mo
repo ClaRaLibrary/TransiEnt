@@ -1,11 +1,11 @@
 within TransiEnt.Consumer.Electrical.Base;
-block LinearStatic
+model LinearStatic
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,13 +27,13 @@ block LinearStatic
   replaceable parameter TransiEnt.Consumer.Electrical.Characteristics.Constant data constrainedby TransiEnt.Consumer.Electrical.Characteristics.PartialConsumerData annotation (choicesAllMatching=true);
   outer TransiEnt.SimCenter simCenter;
 
-  Modelica.Blocks.Interfaces.RealInput f annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.FrequencyIn f "Input for frequency" annotation (Placement(transformation(
           extent={{-120,30},{-80,70}}), iconTransformation(extent={{-100,44},{-68,
             76}})));
-  Modelica.Blocks.Interfaces.RealOutput deltaPstar annotation (Placement(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut deltaPstar "Output for electric power difference" annotation (Placement(
         transformation(extent={{66,24},{114,72}}),  iconTransformation(extent={{94,52},
             {114,72}})));
-  Modelica.Blocks.Interfaces.RealOutput deltaQstar annotation (Placement(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateOut deltaQstar "Output for heat flow rate difference" annotation (Placement(
         transformation(extent={{100,-70},{142,-28}}), iconTransformation(extent={{92,-60},
             {112,-40}})));
   Modelica.Blocks.Interfaces.RealInput u annotation (Placement(transformation(
@@ -179,7 +179,10 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">f: input for frequency in [Hz]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">deltaPstar: output for electric power difference in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">deltaQstar: output for heat flow rate difference in [W]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">u: RealInput</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.SecondaryControl.Activation;
-model ScheduleActivation "Activation of Secondary Control without discrete time behaviour that works only if the bandwidths are set by the external scheduler"
+model ScheduleActivation "Activation of Secondary Control set by the external scheduler"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -66,11 +66,34 @@ equation
   connect(maxLimit.y, limiter.limit1) annotation (Line(points={{-58.5,16},{-52,16},{-52,8},{-42,8}}, color={0,0,127}));
   connect(minLimit.y, limiter.limit2) annotation (Line(points={{-58.5,-16},{-52,-16},{-52,-8},{-42,-8}}, color={0,0,127}));
   connect(slewRateLimiter.y, y) annotation (Line(points={{71.3,-1},{87.65,-1},{87.65,0},{110,0}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={Text(
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={Text(
           extent={{48,154},{106,94}},
           lineColor={0,0,127},
           textString="-"), Text(
           extent={{-106,148},{-48,88}},
           lineColor={0,0,127},
-          textString="+")}));
+          textString="+")}),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Activation of Secondary Control without discrete time behaviour that works only if the bandwidths are set by the external scheduler</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>purely technical, only limitiation of control power and slew rate</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) in 10/2014</span></p>
+</html>"));
 end ScheduleActivation;

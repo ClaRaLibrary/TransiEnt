@@ -1,10 +1,10 @@
 within TransiEnt.Basics;
 package Functions "Basic functions"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -126,6 +126,7 @@ annotation (Diagram(graphics={Text(
         extent={{-90,-90},{90,90}},
         textString="f",
         fillColor={215,215,215},
-        fillPattern=FillPattern.Solid)}), Icon(coordinateSystem(
+        fillPattern=FillPattern.Solid)}), Icon(graphics,
+                                               coordinateSystem(
         preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end Functions;

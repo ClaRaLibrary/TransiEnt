@@ -2,10 +2,10 @@ within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components.Cont
 model TestENTSOEThermostat
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,8 +38,8 @@ model TestENTSOEThermostat
                                             realTrue=p, realFalse=0)
                                             annotation (Placement(transformation(extent={{24,-46},{44,-26}})));
   // state
-  SI.Temperature T(start=Tset, fixed=true);
-  SI.Temperature T_gridDist(start=Tset, fixed=true);
+  SI.Temperature T(start=Tset, fixed=true)  annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Temperature T_gridDist(start=Tset, fixed=true)  annotation (Dialog(group="Initialization", showStartAttribute=true));
 
   TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{-8,42},{-28,62}})));
 
@@ -57,11 +57,11 @@ equation
   thermostat_gridDist.T_is = T;
 
   connect(ElectricGrid.epp, thermostat.epp) annotation (Line(
-      points={{-7.9,51.9},{6.25,51.9},{6.25,39.8}},
+      points={{-8,52},{6.25,52},{6.25,39.8}},
       color={0,135,135},
       thickness=0.5));
   connect(ElectricGrid_gridDist.epp, thermostat_gridDist.epp) annotation (Line(
-      points={{-9.9,-14.1},{4.25,-14.1},{4.25,-26.2}},
+      points={{-10,-14},{4.25,-14},{4.25,-26.2}},
       color={0,135,135},
       thickness=0.5));
   connect(thermostat_gridDist.q, cooler_gridDist.u) annotation (Line(points={{14.2,-36},{22,-36},{22,-36}}, color={255,0,255}));
@@ -85,4 +85,25 @@ algorithm
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
+  annotation (Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the ENTOSOETThermostat</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestENTSOEThermostat;

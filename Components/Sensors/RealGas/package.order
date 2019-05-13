@@ -11,3 +11,4 @@ WobbeGCVSensor
 EnthalpyFlowSensor
 CompositionSensorDryGas
 vleDensitySensor
+CO2EmissionSensor

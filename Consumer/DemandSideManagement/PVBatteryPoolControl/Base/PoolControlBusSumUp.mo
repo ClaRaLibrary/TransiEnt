@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Base;
 model PoolControlBusSumUp "Sums up the state information of N units control busses to one single control bus which can then be connected to a controller"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -87,7 +87,8 @@ equation
   end for;
 
     annotation (
-              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+              Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
                               Line(
@@ -110,7 +111,7 @@ equation
 <p>No equations present</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>No equations present</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>See Purpose of model</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No phyical validation required. For technical validation see: Check.CheckPoolControlBusSumUp</p>

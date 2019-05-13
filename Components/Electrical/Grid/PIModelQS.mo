@@ -1,11 +1,11 @@
 within TransiEnt.Components.Electrical.Grid;
-model PIModelQS "PiModell using quasistationary interfaces"
+model PiModelQS "PiModell using quasistationary interfaces"
 
  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,16 +35,26 @@ model PIModelQS "PiModell using quasistationary interfaces"
 
   parameter SI.Length l=100;
 
-  parameter Characteristics.PiModelParams                                 param=
-     Characteristics.PiModelParams() "Parameter for PI model" annotation (
-      choicesAllMatching=true, Placement(transformation(extent={{-96,80},{-76,100}})));
+//   parameter Characteristics.PiModelParams                                 param=
+//      Characteristics.PiModelParams() "Parameter for PI model" annotation (
+//       choicesAllMatching=true, Placement(transformation(extent={{-96,80},{-76,100}})));
+  parameter Electrical.Grid.Characteristics.LVCabletypes CableType=Electrical.Grid.Characteristics.LVCabletypes.K1 "type of low voltage cable"
+                                annotation (
+    Evaluate=true,
+    HideResult=true,
+    Dialog(group="cable properties"));
 
+protected
+  parameter TransiEnt.Basics.Units.SpecificResistance r=CableData[1];
+  parameter TransiEnt.Basics.Units.SpecificReactance x=CableData[2];
+  parameter TransiEnt.Basics.Units.SpecificCapacitance c=CableData[3];
+  parameter Real CableData[4]=Base.getLVCableData(CableType) "saves the cabledata of the selected cable";
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Resistor(R_ref=
-        0.001*l*param.r)
+public
+  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Resistor(R_ref=l*r)
                         annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
@@ -55,13 +65,13 @@ model PIModelQS "PiModell using quasistationary interfaces"
         rotation=0,
         origin={48,0})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Capacitor
-    Capacitor1(C=1e-009*0.5*l*param.c)
+    Capacitor1(C=0.5*l*c)
                annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-56,-28})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Capacitor
-    Capacitor2(C=1e-009*0.5*l*param.c)
+    Capacitor2(C=0.5*l*c)
                annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
@@ -78,7 +88,7 @@ model PIModelQS "PiModell using quasistationary interfaces"
     annotation (Placement(transformation(extent={{-24,50},{-4,70}})));
   Modelica.Blocks.Math.Division division
     annotation (Placement(transformation(extent={{20,16},{40,36}})));
-  Modelica.Blocks.Sources.Constant X(k=0.001*l*param.x)
+  Modelica.Blocks.Sources.Constant X(k=l*x)
     annotation (Placement(transformation(extent={{-46,22},{-26,42}})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground ground
     annotation (Placement(transformation(extent={{-12,-100},{8,-80}})));
@@ -118,7 +128,8 @@ equation
           -38},{-2,-80}},     color={85,170,255}));
   connect(omega.y, division.u2)
     annotation (Line(points={{-3,60},{6,60},{6,20},{18,20}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                 Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Transmission line Pi-Modell using parameters of PiModelParams</span></p>
@@ -127,7 +138,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin&nbsp;pin_p2&nbsp;<span style=\"color: #006400;\">&quot;end&nbsp;of&nbsp;line&quot;</span></p>
+<p>Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin&nbsp;pin_p1&nbsp;<span style=\"color: #006400;\">&quot;beginning&nbsp;of&nbsp;line&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -135,11 +147,12 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p>Tested in check model &quot;TransiEnt.Components.Electrical.Grid.Check.TestPiModelQS&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Rebekka Denninger (rebekka.denninger@tuhh.de) on Mon Feb 29 2016</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Rebekka Denninger (rebekka.denninger@tuhh.de) in February 2016</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified (dimensions) by Jan-Peter Heckel (jan.heckel@tuhh.de) in March 2018</span></p>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={                                                                                                    Rectangle(extent={{22,8},{72,-6}},    lineColor = {0,0,0}, fillColor = {0,0,0},
             fillPattern =                                                                                                   FillPattern.Solid),
@@ -153,4 +166,4 @@ equation
         Line(points={{72,-28},{92,-28}}, color={0,0,0}),
         Line(points={{72,-24},{92,-24}}, color={0,0,0}),
         Line(points={{82,0},{82,-24}}, color={0,0,0})}));
-end PIModelQS;
+end PiModelQS;

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind.Controller;
 model PitchController_SI_dt_df "Pitch Controller for WTG with df/dt synthetic inertia control"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -125,7 +125,7 @@ Modelica.Blocks.Logical.Switch switchToStartup annotation (Placement(transformat
             {54,-34}})));
 Modelica.Blocks.Logical.Switch switchToFullLoad annotation (Placement(transformation(extent={{10,-66},
             {30,-46}})));
- Modelica.Blocks.Interfaces.RealOutput beta_set(start=beta_start) annotation (Placement(transformation(extent={{152,-74},
+ TransiEnt.Basics.Interfaces.General.AngleOut beta_set(start=beta_start) annotation (Placement(transformation(extent={{152,-74},
             {172,-54}})));
   Modelica.Blocks.Continuous.LimPID PitchController(
     Ti=Ti,
@@ -189,7 +189,7 @@ Modelica.Blocks.Logical.Switch switchToHalt1
     annotation (Placement(transformation(extent={{-8,-110},{12,-90}},
                                                                     rotation=
             0)));
-  Modelica.Blocks.Interfaces.RealInput omega_is "Connector of setpoint input signal"
+  TransiEnt.Basics.Interfaces.General.AngularVelocityIn omega_is "Connector of setpoint input signal"
                                          annotation (Placement(transformation(
         extent={{-16,-16},{16,16}},
         rotation=180,
@@ -197,7 +197,7 @@ Modelica.Blocks.Logical.Switch switchToHalt1
   Modelica.Blocks.Continuous.FirstOrder PitchControllerTimeConstant1(T=3)
                                                                          annotation (Placement(transformation(extent={{20,-108},
             {34,-94}})));
-  Modelica.Blocks.Interfaces.RealInput wind_fullLoad annotation (Placement(
+  TransiEnt.Basics.Interfaces.Ambient.VelocityIn wind_fullLoad "Velocity of wind at full load" annotation (Placement(
         transformation(
         extent={{-14,-14},{14,14}},
         rotation=0,
@@ -348,7 +348,12 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>beta_set: output for angle </p>
+<p>u_s: Modelica RealInput</p>
+<p>u_m: Modelica RealInput</p>
+<p>der_f: input for frequency derivation </p>
+<p>wind_fullload: input for velocity of wind in m/s</p>
+<p>omeag_is: input for angular velocity in rad/s</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -358,7 +363,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Validated according to reference stated below.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Wu, Lei: &QUOT;Towards an Assessment of Power System Frequency Support From Wind Pland - Modeling Aggregate Inertial Response&QUOT;</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Wu, Lei: &quot;Towards an Assessment of Power System Frequency Support From Wind Pland - Modeling Aggregate Inertial Response&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Rebekka Denninger (rebekka.denninger@tuhh.de) on June 21 2016</span></p>
 </html>"));

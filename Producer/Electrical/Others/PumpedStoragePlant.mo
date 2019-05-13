@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Others;
 model PumpedStoragePlant "Pumped storage plant model without consideration of capacity limits but with six operating states"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,34 +25,35 @@ model PumpedStoragePlant "Pumped storage plant model without consideration of ca
   //          Imports and Class Hierarchy
   // _____________________________________________
   extends TransiEnt.Producer.Electrical.Conventional.Components.NonlinearThreeStatePlant(
-    P_el_n=
-          simCenter.generationPark.P_el_n_PS,
+    P_el_n=simCenter.generationPark.P_el_n_PS,
     P_grad_max_star=simCenter.generationPark.P_grad_max_star_PS,
     P_min_star=simCenter.generationPark.P_min_star_PS,
-    H =  simCenter.generationPark.H_gen_HT,
+    H=simCenter.generationPark.H_gen_HT,
     isSecondaryControlActive=true,
     isPrimaryControlActive=false,
-    redeclare TransiEnt.Components.Turbogroups.Hydroturbine Turbine(
-      P_nom=P_el_n,
-      P_turb_init=P_init),
-    redeclare model ProducerCosts =
-        TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PumpedStorage,
+    redeclare TransiEnt.Components.Turbogroups.Hydroturbine Turbine(P_n=P_el_n, P_turb_init=P_init_set),
+    redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PumpedStorage,
     final typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.Others);
   extends TransiEnt.Basics.Icons.Hydroturbine;
 
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}), graphics), Icon(coordinateSystem(
+            -100},{100,100}}), graphics), Icon(graphics,
+                                               coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+    <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+    <p><span style=\"font-family: MS Shell Dlg 2;\">Turbine model with startup time and setpoint limits. </span></p>
 <p>Pumped&nbsp;storage&nbsp;plant&nbsp;model&nbsp;without&nbsp;consideration&nbsp;of&nbsp;capacity&nbsp;limits&nbsp;but&nbsp;with&nbsp;six&nbsp;operating&nbsp;states.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The model is a composition of a turbine model, an inertia model, a generator model with excitation system model and a primary controller.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">See base class TransiEnt.Producer.Electrical.Conventional.Components.NonlinearThreeStatePlant for more information  </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for electric power in [W] (setpoint for electric power)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_SB_set: input for electric power in [W] (secondary balancing setpoint)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port (choice of power port)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -60,7 +61,7 @@ model PumpedStoragePlant "Pumped storage plant model without consideration of ca
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in the check models &quot;TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant_Gradients&quot; and &quot;TransiEnt.Producer.Electrical.Others.Check.TestPumpedStoragePlant&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

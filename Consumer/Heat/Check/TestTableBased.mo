@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Heat.Check;
 model TestTableBased
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -53,7 +53,8 @@ model TestTableBased
         extent={{-16,-21},{16,21}},
         rotation=180,
         origin={72,-41})));
-  TableBasedHeatConsumer tableBasedHeatConsumer_L1(redeclare TransiEnt.Basics.Tables.HeatGrid.HeatDemand.HeatDemand_SLPGas_MFH_2012_3600s consumerDataTable, change_of_sign=true)
+  TableBasedHeatConsumer tableBasedHeatConsumer_L1(redeclare TransiEnt.Basics.Tables.HeatGrid.HeatDemand.HeatDemand_SLPGas_MFH_2012_3600s consumerDataTable, change_of_sign=true,
+    integrateHeatFlow=false)
     annotation (Placement(transformation(extent={{-60,-28},{6,34}})));
 
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
@@ -74,11 +75,12 @@ equation
       color={175,0,0},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},
-            {100,80}}),      graphics), Icon(coordinateSystem(extent={{-80,-80},
+            {100,80}}),      graphics), Icon(graphics,
+                                             coordinateSystem(extent={{-80,-80},
             {100,80}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Test environment for a table based heat consumer</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

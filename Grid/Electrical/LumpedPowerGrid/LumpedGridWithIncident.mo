@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid;
 model LumpedGridWithIncident
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -105,7 +105,7 @@ model LumpedGridWithIncident
   Modelica.Blocks.Sources.Constant FailingGen_Set(k=P_Z)  annotation (Placement(transformation(extent={{-96,-71},{-86,-61}})));
   TransiEnt.Components.Electrical.Grid.SeparableLine FailingLine annotation (Placement(transformation(extent={{-54,-85},{-34,-65}})));
   Modelica.Blocks.Sources.BooleanStep Incident(startValue=true, startTime=t_incident) annotation (Placement(transformation(extent={{-74,-61},{-54,-41}})));
-  TransiEnt.Consumer.Electrical.LinearElectricConsumer DemandUncovered(kpf=kpf) annotation (Placement(transformation(
+  replaceable TransiEnt.Consumer.Electrical.LinearElectricConsumer DemandUncovered(kpf=kpf) constrainedby TransiEnt.Basics.Icons.ElectricalConsumer "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true,Placement(transformation(
         extent={{-12,-10},{12,10}},
         rotation=0,
         origin={78,-75})));
@@ -128,7 +128,7 @@ equation
   connect(genericGridError.y, LumpedGrid.P_Z) annotation (Line(points={{-5,80},{-1,80},{-1,32.4}},
                                                                                                  color={0,0,127}));
   connect(FailingGen.epp, FailingLine.epp_1) annotation (Line(
-      points={{-66.5,-75.4},{-53.25,-75.4},{-53.25,-75.1},{-53.9,-75.1}},
+      points={{-67,-74},{-53.25,-74},{-53.25,-75.1},{-53.9,-75.1}},
       color={0,135,135},
       thickness=0.5));
   connect(FailingLine.isConnected, Incident.y) annotation (Line(points={{-44,-65},{-44,-65},{-44,-51},{-53,-51}}, color={255,0,255}));
@@ -176,17 +176,18 @@ equation
           points={{70,60},{96,10}},
           color={255,0,0},
           arrow={Arrow.None,Arrow.Filled})}),
-                                Diagram(coordinateSystem(preserveAspectRatio=false,
+                                Diagram(graphics,
+                                        coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Non-detailled grid model electric grid model (including primary and secondary control models) witch a lumped generator model and failure of components</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Level of detail depends on the used submodels</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>epp: active power port</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -194,7 +195,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">checked in TransiEnt.Grid.Electrical.LumpedPowerGrid.Check.LocalPlantInteractingWithUCTE_withIncident</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

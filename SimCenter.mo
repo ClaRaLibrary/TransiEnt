@@ -2,10 +2,10 @@
 model SimCenter "SimCenter for global parameters, ambient conditions and collecting statistics"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,6 +56,7 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
 
   // ==== Electric grid ====
 
+  parameter Boolean integrateElPower=false "true if electric powers shall be integrated" annotation (Dialog(tab="Electric Grid", group="General"));
   parameter Modelica.SIunits.Frequency f_n=50 annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
   parameter Modelica.SIunits.Frequency delta_f_max=0.2 annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
   parameter Modelica.SIunits.Frequency delta_f_deadband=0.01 annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
@@ -63,7 +64,7 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
   parameter Modelica.SIunits.Voltage v_n=110e3 annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
   parameter Modelica.SIunits.Power P_n_low=150e9 "Nominal power of total grid at low-load" annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
   parameter Modelica.SIunits.Power P_n_high=300e9 "Nominal power of total grid at high-load" annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
-  parameter Modelica.SIunits.Time T_grid=12 "Mechanical time constant of surrounding grid"    annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
+  parameter Modelica.SIunits.Time T_grid=12 "Mechanical time constant of rotating masses in the grid"    annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
   parameter Integer n_consumers=10 "Number of globaly parameterized consumers" annotation(Dialog(tab="Electric Grid", group="Optional"));
   parameter Modelica.SIunits.ActivePower P_consumer[n_consumers]=zeros(n_consumers) "Globaly defined consumer data"  annotation(Dialog(tab="Electric Grid", group="Optional"));
 
@@ -79,12 +80,19 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
                                                                                                     annotation(Dialog(tab="Electric Grid", group="Optional"));
   parameter Modelica.SIunits.Power P_peak_2=P_n_high "Peak load of subgrid 2, i.e. surrounding grid (used for stochastic grid error models)"
                                                                                                     annotation(Dialog(tab="Electric Grid", group="Optional"));
+  //parameter Modelica.SIunits.Time T_A=5 "Time constant of all rotating masses" annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
+
+  parameter Boolean use_reference_polar_wheel = false "If true, polar wheel angle is used as voltage angle refernce. Set true when using more than one frequency." annotation (Dialog(tab="Electric Grid", group="Optional"));
+
+  //Modelica.SIunits.Frequency f_global(start=50) "global Frequency in the electric grid" annotation (Dialog(tab="Electric Grid", group="Nominal values (Top Level)"));
 
   // ==== District heating grid ====
 
+  parameter Boolean integrateHeatFlow=false "true if heat flows shall be integrated" annotation (Dialog(tab="District Heating Grid", group="General"));
   parameter Integer no_cells_per_pipe=3 "Number of discretisation cells per pipe" annotation (Dialog(tab="District Heating Grid", group="Nominal Values"));
   parameter SI.Power Q_flow_n=100e9 "Nominal transmitted power" annotation (Dialog(tab="District Heating Grid", group="Nominal Values"));
-  parameter SI.Pressure p_n[2]={6e5,8e5} "Nominal pressure levels" annotation (Dialog(tab="District Heating Grid", group="Nominal Values"));
+  parameter SI.Pressure p_nom[2]={6e5,8e5} "Nominal pressure levels"
+                                                                   annotation (Dialog(tab="District Heating Grid", group="Nominal Values"));
   parameter SI.MassFlowRate m_flow_nom=30 "Nominal mass flow in grid" annotation (Dialog(tab="District Heating Grid", group="Nominal Values"));
   replaceable parameter TILMedia.VLEFluidTypes.TILMedia_SplineWater fluid1
    constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid(final ID=1) "Medium name of working fluid in district heating grid" annotation(choicesAllMatching, Dialog(tab="District Heating Grid"));
@@ -139,6 +147,7 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
   // ==== Economics and Emissions ====
 
   // Parameter table with economics and emissions-related assumptions
+  parameter Boolean calculateCost=false "true if cost shall be calculated"  annotation (Dialog(tab="Costs", group="General"));
   parameter Real InterestRate=0.07 "Interest Rate in percent"  annotation (Dialog(tab="Costs", group="Annuity Inputs"));
   parameter Real priceChangeRateInv=0 "Price change rate of the invest cost" annotation (Dialog(tab="Costs", group="Annuity Inputs"));
   parameter Real priceChangeRateDemand=0 "Price change rate of the demand-related cost" annotation (Dialog(tab="Costs", group="Annuity Inputs"));
@@ -243,6 +252,7 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
   parameter Real Cinv_H2_pipe(displayUnit="EUR/m")=300 annotation (Dialog(tab="Costs", group="Specific pipeline costs in EUR/m"));   //EUR/m,DN100, Includes material and mounting costs. (Source: [1]Krieg, Dennis: Konzept und Kosten eines Pipelinesystems zur Versorgung des deutschen Straßenverkehrs mit Wasserstoff, 2010 — ISBN 9783893368006)
 
   //Fuel specific Emissions, excluding supply chain related emissions (Source: FfE 2010, Basisdaten von Energietraegern. https://www.ffe.de/download/wissen/186_Basisdaten_Energietraeger/Basisdaten_von_Energietraegern_2010.pdf. page 3)
+  parameter Boolean integrateCDE=false "true if CDE should be integrated" annotation (Dialog(tab="Emissions", group="General Settings"));
   parameter TransiEnt.Basics.Units.MassOfCDEperEnergy FuelSpecEmis_BrownCoal=403/3.6e9 annotation (Dialog(tab="Emissions", group="Fuel specific CO2 emissions in kg/J (Source: FfE 2010)"));
   parameter TransiEnt.Basics.Units.MassOfCDEperEnergy FuelSpecEmis_HardCoal=337/3.6e9 annotation (Dialog(tab="Emissions", group="Fuel specific CO2 emissions in kg/J (Source: FfE 2010)"));
   parameter TransiEnt.Basics.Units.MassOfCDEperEnergy FuelSpecEmis_NaturalGas=202/3.6e9 annotation (Dialog(tab="Emissions", group="Fuel specific CO2 emissions in kg/J (Source: FfE 2010)"));
@@ -295,11 +305,11 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
   //             Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealOutput T_amb_var(value=ambientConditions.temperature.value,final quantity="Temp_C", unit="degC") "Temperature in degC (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput v_wind(value=ambientConditions.wind.value, final quantity="Velocity",unit="m/s") "Wind speed (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput i_global(value=ambientConditions.globalSolarRadiation.value,final quantity= "Irradiance", unit="W/m2") "Global solar radiation (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput i_direct(value=ambientConditions.directSolarRadiation.value,final quantity= "Irradiance", unit="W/m2") "Direct solar radiation (from component ambientConditions)";
-  Modelica.Blocks.Interfaces.RealOutput i_diffuse(value=ambientConditions.diffuseSolarRadiation.value,final quantity= "Irradiance", unit="W/m2") "Diffuse solar radiation (from component ambientConditions)";
+  TransiEnt.Basics.Interfaces.General.TemperatureCelsiusOut T_amb_var(value=ambientConditions.temperature.value) "Temperature in degC (from component ambientConditions)";
+  TransiEnt.Basics.Interfaces.Ambient.VelocityOut v_wind(value=ambientConditions.wind.value) "Wind speed (from component ambientConditions)";
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceOut i_global(value=ambientConditions.globalSolarRadiation.value) "Global solar radiation (from component ambientConditions)";
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceOut i_direct(value=ambientConditions.directSolarRadiation.value) "Direct solar radiation (from component ambientConditions)";
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceOut i_diffuse(value=ambientConditions.diffuseSolarRadiation.value) "Diffuse solar radiation (from component ambientConditions)";
 
    annotation ( defaultComponentName="simCenter",
     defaultComponentPrefixes="inner",

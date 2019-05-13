@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Base.Check;
 model CheckExponentialStatic
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -86,12 +86,14 @@ end plotResult;
 equation
   connect(exponentialStatic.f, f_grid.y) annotation (Line(points={{1.6,-2},{-26,-2},{-26,12},{-45,12}}, color={0,0,127}));
   connect(v_grid.y, exponentialStatic.v) annotation (Line(points={{-47,-20},{-40,-20},{-40,-22},{-8,-22},{-8,-12.8},{1.6,-12.8}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{100,80}})),
-                                        Icon(coordinateSystem(extent={{-80,-80},
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{100,80}})),
+                                        Icon(graphics,
+                                             coordinateSystem(extent={{-80,-80},
             {100,80}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Test environment for checking the ExponentialStatic model </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

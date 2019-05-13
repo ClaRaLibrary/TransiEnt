@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Base.ControlPower;
 partial model PartialBalancingPowerProvider "Abstract model of any kind of electric balancing power provider with statistics and control input"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,7 +33,7 @@ extends TransiEnt.Basics.Icons.PartialModel;
   //             Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Power P_nom=300e6 "Nominal power of plant"     annotation (Dialog(group="Physical Constraints"), HideResult=false,
+  parameter SI.Power P_n=300e6 "Nominal power of plant"                     annotation (Dialog(group="Physical Constraints"), HideResult=false,
     Placement(transformation(extent=100)));
 
   parameter Boolean isPrimaryControlActive = true annotation ( choices(__Dymola_checkBox=true), Dialog(group="Frequency Control", tab="Block control"));
@@ -45,7 +45,12 @@ extends TransiEnt.Basics.Icons.PartialModel;
 
   parameter SI.Time t_SB_act=simCenter.t_SB_act "Maximum reaction time for SB" annotation (Dialog(enable=isSecondaryControlActive, group="Frequency Control", tab="Block control"));
 
-  parameter Modelica.SIunits.Power P_el_grad_max_SB=0.02*P_nom/60 "Maximum power gradient for secondary balancing (default: 2%/min)"     annotation (Dialog(enable=isSecondaryControlActive, group="Frequency Control", tab="Block control"), HideResult=false,
+  parameter Modelica.SIunits.Power P_el_grad_max_SB=0.02*P_n/60 "Maximum power gradient for secondary balancing (default: 2%/min)" annotation (
+    Dialog(
+      enable=isSecondaryControlActive,
+      group="Frequency Control",
+      tab="Block control"),
+    HideResult=false,
     Placement(transformation(extent=100)));
 
   parameter EnergyResource typeOfBalancingPowerResource=EnergyResource.Conventional "Type of energy resource for global model statistics"  annotation (Dialog(group="Statistics"), HideResult = not simCenter.isExpertMode,
@@ -65,7 +70,7 @@ extends TransiEnt.Basics.Icons.PartialModel;
 //                  Interfaces
 // _____________________________________________
 
-Modelica.Blocks.Interfaces.RealInput P_SB_set if isSecondaryControlActive and isExternalSecondaryController "Secondary balancing setpoint"
+TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_SB_set if  isSecondaryControlActive and isExternalSecondaryController "Secondary balancing setpoint"
                                                                                                   annotation (Placement(transformation(
       extent={{-20,-20},{20,20}},
       rotation=0,
@@ -75,7 +80,7 @@ Modelica.Blocks.Interfaces.RealInput P_SB_set if isSecondaryControlActive and is
       origin={-89,89})));
 
 protected
-  Modelica.Blocks.Interfaces.RealInput P_SB_set_internal "Needed to connect to conditional connector for active power";
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_SB_set_internal "Needed to connect to conditional connector for active power";
 
 // _____________________________________________
 //
@@ -96,7 +101,7 @@ public
     useThresh=simCenter.useThresh,
     thres=simCenter.thres,
     k_part=if isPrimaryControlActive then 1 else 0,
-    P_nom=P_nom) constrainedby TransiEnt.Producer.Electrical.Controllers.Base.PartialPrimaryBalancingController annotation (
+    P_n=P_n) constrainedby TransiEnt.Producer.Electrical.Controllers.Base.PartialPrimaryBalancingController annotation (
     Dialog(
       enable=isPrimaryControlActive,
       group="Frequency Control",
@@ -124,7 +129,7 @@ public
 //           Variables
 // _____________________________________________
 
-  Real P_SB_set_star = P_SB_set_internal/P_nom;
+  Real P_SB_set_star=P_SB_set_internal/P_n;
 equation
 // _____________________________________________
 //
@@ -142,7 +147,7 @@ equation
   collectSBPOffer[2].powerCollector.P = controlPowerModel.P_sec_neg_offer;
 
   if not isExternalSecondaryController or not isSecondaryControlActive then
-    P_SB_set_internal = 0; // TODO: Do we nee dthis?
+    P_SB_set_internal = 0;
   end if;
 
 // _____________________________________________
@@ -163,10 +168,11 @@ equation
   connect(modelStatistics.secBalPowerCollector[typeOfBalancingPowerResource],generatedSBP.powerCollector);
   connect(modelStatistics.secBalPowerOfferCollector, collectSBPOffer.powerCollector);
 
-annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+annotation (Diagram(graphics,
+                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                                             Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Prototype model for electric power plants models with primary and secondary control containting all relevant statistics blocks.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Prototype model for electric power plants models with primary and secondary control containing all relevant statistics blocks.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -186,5 +192,6 @@ annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-1
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 </html>"),
-  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+  Icon(graphics,
+       coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end PartialBalancingPowerProvider;

@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.GlobalCollectors;
 model HeatingPowerStatistics "showing heat power and energy by type"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,14 +25,18 @@ model HeatingPowerStatistics "showing heat power and energy by type"
   constant Integer nTypes=Types.nTypeOfResource;
 
   final parameter Boolean is_setter=false "just for change of icon.." annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
+  parameter Boolean integrateHeatFlow=simCenter.integrateHeatFlow "true if heat flows shall be integrated";
+
+  outer TransiEnt.SimCenter simCenter;
 
   Modelica.Blocks.Interfaces.RealInput heatFlowCollector[nTypes]
     annotation (Placement(transformation(extent={{-10,-108},{10,-88}}),
         iconTransformation(extent={{-16,-16},{16,16}},
         rotation=90,
         origin={0,-87})));
-protected
-  SI.Energy E[nTypes](each start=0, each fixed=true, each stateSelect=StateSelect.never);
+public
+  SI.Energy E[nTypes](each start=0, each fixed=true, each stateSelect=StateSelect.never)
+                                                                                        annotation (Dialog(group="Initialization", showStartAttribute=true));
  // Heat flow rate
 public
   SI.HeatFlowRate Q_flow_consumed=-heatFlowCollector[EnergyResource.Consumer];
@@ -52,7 +56,11 @@ public
   SI.Energy E_total=sum(E)-E_consumed;
   SI.Energy E_losses=E_total-E_consumed;
 equation
-  der(E)=heatFlowCollector;
+  if integrateHeatFlow then
+    der(E)=heatFlowCollector;
+  else
+    E=zeros(nTypes);
+  end if;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
@@ -138,5 +146,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+<p>Modified by Anne Senkel (anne.senkel@tuhh.de), Dec 2017</p>
 </html>"));
 end HeatingPowerStatistics;

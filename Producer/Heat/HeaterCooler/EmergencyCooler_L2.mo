@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.HeaterCooler;
 model EmergencyCooler_L2 "Emergency cooler, e.g. if return temperature to an aperature is too high."
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,26 +21,64 @@ model EmergencyCooler_L2 "Emergency cooler, e.g. if return temperature to an ape
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
 import TransiEnt;
 extends TransiEnt.Basics.Icons.Model;
-  outer TransiEnt.SimCenter simCenter;
-outer TransiEnt.ModelStatistics modelStatistics;
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+
 parameter TILMedia.VLEFluidTypes.BaseVLEFluid Medium = simCenter.fluid1 "Medium in the component";
-
 parameter SI.Temperature T_max=340 "Turn on threshold";
-
 parameter SI.Temperature T_off=330 "Cooler turn off threshold";
 parameter SI.Temperature T_stor_max=368.15 "Maximum storage temperature";
 parameter SI.MassFlowRate m_flow_nom=simCenter.m_flow_nom;
 
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
+  outer TransiEnt.ModelStatistics modelStatistics;
+
 Boolean switch;
 Boolean switch_stor;
 
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn fpReturnIn(Medium=Medium) annotation (Placement(transformation(extent={{110,-90},{90,-70}}), iconTransformation(extent={{-110,72},{-90,92}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut fpReturnOut(Medium=Medium) annotation (Placement(transformation(extent={{-90,-90},{-110,-70}}), iconTransformation(extent={{90,70},{110,90}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn fpSupplyIn annotation (Placement(transformation(extent={{-110,30},{-90,50}}), iconTransformation(extent={{90,-90},{110,-70}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut fpSupplyOut(Medium=Medium) annotation (Placement(transformation(extent={{90,30},{110,50}}), iconTransformation(extent={{-110,-88},{-90,-68}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_stor_in "Input for temperature stored in cooler" annotation (Placement(
+        transformation(
+        extent={{-20,-20},{20,20}},
+        rotation=-90,
+        origin={0,100}), iconTransformation(
+        extent={{20,-20},{-20,20}},
+        rotation=-90,
+        origin={0,-78})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
   ClaRa.Components.HeatExchangers.IdealShell_L2 returnHeatExchanger(
     medium=Medium,
-    p_start=simCenter.p_n[1],
+    p_start=simCenter.p_nom[1],
     h_start=50*4200,
-    p_nom=simCenter.p_n[1],
+    p_nom=simCenter.p_nom[1],
     z_in=1,
     redeclare model PressureLoss =
         ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L2,
@@ -59,8 +97,7 @@ Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow returnCooler(Q_flow(
       extent={{10,10},{-10,-10}},
       rotation=90,
       origin={0,-30})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn fpReturnIn(Medium=Medium) annotation (Placement(transformation(extent={{110,-90},{90,-70}}), iconTransformation(extent={{-110,72},{-90,92}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut fpReturnOut(Medium=Medium) annotation (Placement(transformation(extent={{-90,-90},{-110,-70}}), iconTransformation(extent={{90,70},{110,90}})));
+
   TransiEnt.Components.Sensors.TemperatureSensor temperatureSupplyIn annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
@@ -71,28 +108,24 @@ Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow supplyCooler(Q_flow(
       extent={{-10,-10},{10,10}},
       rotation=90,
       origin={0,14})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn fpSupplyIn annotation (Placement(transformation(extent={{-110,30},{-90,50}}), iconTransformation(extent={{90,-90},{110,-70}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut fpSupplyOut(Medium=Medium) annotation (Placement(transformation(extent={{90,30},{110,50}}), iconTransformation(extent={{-110,-88},{-90,-68}})));
+
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower annotation (Placement(transformation(extent={{-60,80},{-40,100}})));
 ClaRa.Components.HeatExchangers.IdealShell_L2 returnHeatExchanger1(
     medium=Medium,
     h_start=50*4200,
-    p_nom=simCenter.p_n[1],
+    p_nom=simCenter.p_nom[1],
     m_flow_nom=m_flow_nom,
-    p_start=simCenter.p_n[2])
+    p_start=simCenter.p_nom[2])
   annotation (Placement(transformation(
       extent={{10,-10},{-10,10}},
       rotation=180,
       origin={0,40})));
 
-  Modelica.Blocks.Interfaces.RealInput T_stor_in annotation (Placement(
-        transformation(
-        extent={{-20,-20},{20,20}},
-        rotation=-90,
-        origin={0,100}), iconTransformation(
-        extent={{20,-20},{-20,20}},
-        rotation=-90,
-        origin={0,-78})));
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
   //Hysteresis
   switch=  temperatureReturnIn.T_celsius > T_max or pre(switch) and temperatureReturnIn.T_celsius >= T_off;
@@ -112,6 +145,11 @@ equation
 
 //Power is substracted from cogenerated Energy
   collectHeatingPower.heatFlowCollector.Q_flow=returnCooler.Q_flow+supplyCooler.Q_flow;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
   connect(collectHeatingPower.heatFlowCollector,modelStatistics.heatFlowCollector[3]);
 
@@ -204,11 +242,15 @@ equation
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Emergency cooler, e.g. if return temperature to an aperature is too high.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>(no remarks)</p>
+<p>L2 (defined in the CodingConventions)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.FluidPortIn: fpReturnIn</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.FluidPortOut: fpReturnOut</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.FluidPortIn: fpSupplyIn</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.FluidPortOut: fpSupplyOut</p>
+<p>TransiEnt.Basics.Interfaces.General.TemperatureIn: T_stor_in (input for the temperature stored in cooler)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

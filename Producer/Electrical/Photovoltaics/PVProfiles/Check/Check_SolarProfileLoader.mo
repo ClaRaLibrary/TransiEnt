@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.PVProfiles.Check;
-model Check_SolarProfileLoader
+model Check_SolarProfileLoader "Model for testing the SolarProfileLoader model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,7 +28,7 @@ model Check_SolarProfileLoader
     P_el_n=1e6) annotation (Placement(transformation(extent={{-72,36},{-52,56}})));
 equation
   connect(ElectricGrid.epp, SolarGenerationPark.epp) annotation (Line(
-      points={{21.9,7.9},{21.9,7.9},{-18.9,7.9}},
+      points={{22,8},{22,8},{-19,8}},
       color={0,135,135},
       thickness=0.5));
   connect(solarProfileLoader.y1, SolarGenerationPark.P_el_set) annotation (Line(points={{-51,46},{-23,46},{-23,20}}, color={0,0,127}));
@@ -48,8 +48,30 @@ createPlot(id=3, position={809, 0, 791, 695}, y={"SolarGenerationPark.P_el_set",
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     experiment(StopTime=3.154e+007, Interval=900),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the SolarProfileLoader model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Check_SolarProfileLoader;

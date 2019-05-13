@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Coupled;
 model Coupled_ElectricGrid_DHN "Example for sector coupling in TransiEnt library"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,11 +26,11 @@ model Coupled_ElectricGrid_DHN "Example for sector coupling in TransiEnt library
     P_el_n=3e6,
     Q_flow_n_CHP=CHP.P_el_n/0.3,
     PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_STGeneric(k_Q_flow=1/CHP.Q_flow_n_CHP, k_P_el=CHP.P_el_n)) annotation (Placement(transformation(extent={{-202,90},{-122,170}})));
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={42,36})));
-  TransiEnt.Components.Boundaries.Heat.Heatflow_L1 heatDemand(use_Q_flow_in=true, p_drop=simCenter.p_n[2] - simCenter.p_n[1] - 0.07e5) annotation (Placement(transformation(extent={{358,242},{318,282}})));
+  TransiEnt.Components.Boundaries.Heat.Heatflow_L1 heatDemand(use_Q_flow_in=true, p_drop=simCenter.p_nom[2] - simCenter.p_nom[1] - 0.07e5) annotation (Placement(transformation(extent={{358,242},{318,282}})));
   TransiEnt.Basics.Tables.GenericDataTable heatDemandTable(relativepath="heat/HeatDemand_HHWilhelmsburg_MFH3000_900s_01012012_31122012.txt", constantfactor=-1.2) annotation (Placement(transformation(extent={{184,258},{224,298}})));
   Modelica.Blocks.Sources.RealExpression electricityDemandCHP(y=-min(max(0, electricDemand.epp.P + electricGrid_SubSystem.pVPlant.epp.P + electricGrid_SubSystem.windProduction.epp.P), 1e6)) annotation (Placement(transformation(
         extent={{-50,-14},{50,14}},
@@ -126,11 +126,11 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(heatDemand.fluidPortOut, dHN_SubSystem.consumerOutlet) annotation (Line(
-      points={{320.8,242.4},{320.8,231.2},{320.16,231.2},{320.16,221.416}},
+      points={{326,242},{326,231.2},{320.16,231.2},{320.16,221.416}},
       color={175,0,0},
       thickness=0.5));
   connect(heatDemand.fluidPortIn, dHN_SubSystem.consumerInlet) annotation (Line(
-      points={{352.8,242.4},{352.8,232.2},{353.52,232.2},{353.52,222}},
+      points={{350,242},{350,232.2},{353.52,232.2},{353.52,222}},
       color={175,0,0},
       thickness=0.5));
   connect(CHP.Q_flow_set, varHeatDemandCHP.y) annotation (Line(points={{-147.2,160.667},{-147.2,210.6},{-189.225,210.6},{-189.225,210.25}},
@@ -145,11 +145,13 @@ equation
       points={{244,-108},{190,-108},{190,-22},{42,-22},{42,16},{42.4,16}},
       color={255,255,0},
       thickness=1.5));
-  connect(heatDemandTable.y1, heatDemand.Q_flow_prescribed) annotation (Line(points={{226,278},{252,278},{252,290},{352,290},{352,280.4}}, color={0,0,127}));
+  connect(heatDemandTable.y1, heatDemand.Q_flow_prescribed) annotation (Line(points={{226,278},{252,278},{252,290},{350,290},{350,278}},   color={0,0,127}));
   connect(electricDemandTable.y1, electricDemand.P_el_set) annotation (Line(points={{-342,-50},{-322,-50},{-322,-49},{-246.2,-49}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(
         preserveAspectRatio=false,
-        initialScale=0.1)), Diagram(coordinateSystem(
+        initialScale=0.1)), Diagram(graphics,
+                                    coordinateSystem(
         preserveAspectRatio=false,
         extent={{-400,-300},{400,300}},
         initialScale=0.1)),

@@ -1,11 +1,11 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
-record MolarGrossCalorificValues "Record containing the gross calorific values for different molecules in kJ per mol for 25 °C"
+record MolarGrossCalorificValues "Record containing the gross calorific values for different molecules in J per mol for 25 °C"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,8 +21,6 @@ record MolarGrossCalorificValues "Record containing the gross calorific values f
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  // Reference: DIN EN ISO 6976, „Erdgas - Berechnung von Brenn- und Heizwert, Dichte, relativer Dichte und Wobbeindex aus der Zusammensetzung“, Deutsches Institut für Normung DIN, Berlin, Sep-2005.
-
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -35,8 +33,8 @@ record MolarGrossCalorificValues "Record containing the gross calorific values f
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  parameter String[:] components =  {"Water", "CARBON_MONOXIDE", "CO",     "HYDROGEN",   "H2",     "Nitrogen",   "N2",   "CARBON_DIOXIDE",   "CO2",   "Methane",  "CH4",  "Ethane",  "C2H6",  "ETHENE", "C2H4",  "Propane", "C3H8",  "PROPENE",  "C3H6",   "Butane", "C4H10"};
-  parameter Real[:]   compValues =  {44.016,  282.98,            282.98,   285.83,       285.83,   0,            0,      0,                  0,       890.63,     890.63, 1560.69,   1560.69, 1411.18,  1411.18, 2219.17,   2219.17, 2058.02,    2058.02,  2877.40,  2877.40};
+  parameter String[:] components =  {"Water", "Carbon_Monoxide", "CO",     "Hydrogen",   "H2",     "Nitrogen",   "N2",   "Carbon_Dioxide",   "CO2",   "Methane",  "CH4",  "Ethane",  "C2H6",  "Ethene", "C2H4",  "Propane", "C3H8",  "Propene",  "C3H6",   "Butane", "C4H10", "Oxygen", "O2"};
+  parameter Real[:]   compValues =  {43.993,  282.98,            282.98,   285.83,       285.83,   0,            0,      0,                  0,       890.63,     890.63, 1560.69,   1560.69, 1411.18,  1411.18, 2219.17,   2219.17, 2058.02,    2058.02,  2877.40,  2877.40, 0.0,      0.0}*1e3;
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -57,9 +55,10 @@ record MolarGrossCalorificValues "Record containing the gross calorific values f
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>(no remarks)</p>
+<p>G. Cerbe, B. Lendt, K. Br&uuml;ggemann, M. Dehli, F. Gr&ouml;schl, K. Heikrodt, T. Kleiber, J. Kuck, J. Mischner, T. Schmidt, A. Seemann, and W. Thielen, Grundlagen der Gastechnik. Gasbeschaffung - Gasverteilung - Gasverwendung, 8th ed. M&uuml;nchen: Carl Hanser Verlag, 2017.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Paul Kernstock (paul.kernstock@tuhh.de), Jun 2015</p>
 <p>Revised and edited by Lisa Andresen (andresen@tuhh.de), Jul 2015</p>
+<p>Revised by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));
 end MolarGrossCalorificValues;

@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model BoundaryRealGas_hxiV_flow_stp "A real gas boundary defining enthalpy, mass composition and volume flow at STP (1.013 bar, 273.15 K)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,6 +35,7 @@ model BoundaryRealGas_hxiV_flow_stp "A real gas boundary defining enthalpy, mass
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium=simCenter.gasModel1 "Medium to be used"                         annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
+  parameter Boolean calculateMass=false "true if mass in boundary shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
 
   parameter Boolean variable_V_flow_n=false "True, if volume flow under normal conditions defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
   parameter Boolean variable_h=false "True, if enthalpy defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
@@ -54,7 +55,8 @@ model BoundaryRealGas_hxiV_flow_stp "A real gas boundary defining enthalpy, mass
   //          Variables
   // _____________________________________________
 
-  SI.Mass m(start=0, stateSelect=StateSelect.never);
+  SI.Mass m(start=0, stateSelect=StateSelect.never)
+                                                   annotation (Dialog(group="Initialization", showStartAttribute=true));
 
 protected
   SI.MassFlowRate m_flow_in;
@@ -74,13 +76,13 @@ protected
 public
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPort(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Modelica.Blocks.Interfaces.RealInput V_flow_n(value=V_flow_n_in) if (variable_V_flow_n) "Variable volume flow rate under normal conditions"
+  TransiEnt.Basics.Interfaces.General.VolumeFlowRateIn V_flow_n(value=V_flow_n_in) if (variable_V_flow_n) "Variable volume flow rate under normal conditions"
     annotation (Placement(transformation(extent={{-120,40},{-80,80}}),
         iconTransformation(extent={{-140,40},{-100,80}})));
-  Modelica.Blocks.Interfaces.RealInput h(value=h_in) if (variable_h) "Variable specific enthalpy"
+  TransiEnt.Basics.Interfaces.General.SpecificEnthalpyIn h(value=h_in) if (variable_h) "Variable specific enthalpy"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealInput xi[medium.nc-1](value=xi_in) if (variable_xi) "Variable mass composition"
+  TransiEnt.Basics.Interfaces.General.MassFractionIn xi[medium.nc-1](value=xi_in) if (variable_xi) "Variable mass composition"
     annotation (Placement(transformation(extent={{-120,-80},{-80,-40}}),
         iconTransformation(extent={{-140,-80},{-100,-40}})));
 
@@ -98,13 +100,13 @@ protected
     T=273.15,
     xi=xi_in,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-60,-12},{-40,8}})));
-  TILMedia.VLEFluid_ph gas_ph(
+  /*TILMedia.VLEFluid_ph gas_ph(
     vleFluidType=medium,
     p=gasPort.p,
     h=actualStream(gasPort.h_outflow),
     xi=xi_in,
     deactivateTwoPhaseRegion=true)  annotation (Placement(transformation(extent={{20,-12},{40,8}})));
-/*public 
+public 
   inner Summary summary(port(mediumModel=medium,
           xi = gas_ph.xi,
           x = gas_ph.x,
@@ -141,7 +143,11 @@ equation
   m_flow_in = V_flow_n_in*normGas_pT.d;
 
   //change of mass in boundary
-  der(m) = gasPort.m_flow;
+  if calculateMass then
+    der(m) = gasPort.m_flow;
+  else
+    m=0;
+  end if;
 
   gasPort.h_outflow=h_in;
   if m_flow_nom>0 then
@@ -170,6 +176,10 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Gas</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">IdealGasEnthPortIn</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: volume flow rate in m3/s</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: mass fraction in kg/kg</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: specific enthalpy in kJ/kg</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -177,7 +187,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

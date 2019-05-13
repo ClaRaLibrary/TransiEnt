@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Gas.Check;
 model TestGasStorage_varXi_L2
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -66,6 +66,24 @@ equation
     experiment(StopTime=2000, __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
+<h4><span style=\"color: #4b8a49\">1. Purpose of model</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">3. Limits of validity </span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">5. Nomenclature</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">6. Governing Equations</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">8. Validation</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #4b8a49\">9. References</span></h4>
+<p>(no remarks)</p>
 <h4><span style=\"color: #4b8a49\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) in Apr 2017</p>
 </html>"));

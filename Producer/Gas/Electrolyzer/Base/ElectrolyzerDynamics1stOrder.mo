@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Base;
 model ElectrolyzerDynamics1stOrder "1st order electrolyzer dynamics"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -58,7 +58,8 @@ equation
   P_el * eta = H_flow_H2 + tau * der(H_flow_H2);
 
   annotation (
-  defaultConnectionStructurallyInconsistent=true,Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Rectangle(
+  defaultConnectionStructurallyInconsistent=true,Diagram(graphics,
+                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Rectangle(
           extent={{-80,40},{80,-40}},
           lineColor={255,255,255},
           fillColor={255,255,255},

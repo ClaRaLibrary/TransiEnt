@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 partial model PartialCHP "Partial model of a large scale CHP plant with characteristics specified by PQ boundaries and PQ-Heat input table"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -73,12 +73,16 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
    final parameter EnergyResource typeOfResource=EnergyResource.Cogeneration "Type of energy resource for global model statistics" annotation (Dialog(group="Statistics"), HideResult=true, Placement(transformation(extent=100)));
 
    parameter PrimaryEnergyCarrier typeOfPrimaryEnergyCarrier=PrimaryEnergyCarrier.BlackCoal "Type of primary energy carrier for co2 emissions global statistics" annotation (Dialog(group="Statistics"), HideResult=true);
+   parameter PrimaryEnergyCarrierHeat typeOfPrimaryEnergyCarrierHeat=PrimaryEnergyCarrierHeat.BlackCoal "Type of primary energy carrier for heat for co2 emissions global statistics" annotation (Dialog(group="Statistics"), HideResult=true);
 
   parameter TransiEnt.Basics.Types.TypeOfCO2AllocationMethod typeOfCO2AllocationMethod=1 "Type of allocation method" annotation (Dialog(group="Statistics"));
 
    //Heat parameters
 
    parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium= simCenter.fluid1 "Medium to be used" annotation(choicesAllMatching, Dialog(group="Heating condenser parameters"));
+   parameter Boolean integrateHeatFlow=false "True if heat flow shall be integrated";
+   parameter Boolean integrateElectricPower=false "True if electric power shall be integrated";
+   parameter Boolean integrateElectricPowerChp=false "True if electric power of the chp shall be integrated";
   // _____________________________________________
   //
   //                  Interfaces
@@ -86,7 +90,7 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
 
   // Set values
 
-  Modelica.Blocks.Interfaces.RealInput P_set annotation (Placement(transformation(
+  Modelica.Blocks.Interfaces.RealInput P_set( final quantity= "Power", final unit="W", displayUnit="W") annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-84,144}), iconTransformation(
@@ -94,7 +98,7 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
         rotation=270,
         origin={-61,112})));
 
-  Modelica.Blocks.Interfaces.RealInput Q_flow_set annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={86,144}), iconTransformation(
@@ -104,7 +108,7 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
 
   //Electric power port
 
-  Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{90,50},{110,70}}), iconTransformation(extent={{80,42},{110,70}})));
+  replaceable Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"), Placement(transformation(extent={{90,50},{110,70}}), iconTransformation(extent={{80,42},{110,70}})));
 
   // Fuid ports
 
@@ -122,9 +126,15 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
         rotation=0,
         origin={64,110})));
 
-  HeatInputTable Q_flow_set_SG(final PQCharacteristics=PQCharacteristics) "Steam generator setpoint" annotation (Placement(transformation(extent={{-10,80},{10,100}})));
+  HeatInputTable Q_flow_set_SG(
+    final PQCharacteristics=PQCharacteristics,
+    Q_flow_n=Q_flow_n_CHP,
+    P_el_n=P_el_n) "Steam generator setpoint" annotation (Placement(transformation(extent={{-10,80},{10,100}})));
 
-  PQBoundaries pQDiagram(final PQCharacteristics=PQCharacteristics) "Possible operating regime of electric output for given thermal output" annotation (Placement(transformation(extent={{10,114},{-10,134}})));
+  PQBoundaries pQDiagram(
+    final PQCharacteristics=PQCharacteristics,
+    Q_flow_nom=Q_flow_n_CHP,
+    P_n=P_el_n) "Possible operating regime of electric output for given thermal output" annotation (Placement(transformation(extent={{10,114},{-10,134}})));
 
   Components.Sensors.TemperatureSensor T_out_sensor annotation (Placement(transformation(extent={{88,4},{68,24}})));
 
@@ -193,6 +203,8 @@ public
 
   Modelica.Blocks.Nonlinear.Limiter Q_flow_set_CHP(uMax=Q_flow_n_CHP) annotation (Placement(transformation(extent={{46,100},{26,120}})));
 
+
+
 equation
     // _____________________________________________
   //
@@ -201,17 +213,33 @@ equation
 
   P_el_is=-epp.P;
   Q_flow_is=inlet.m_flow*(outlet.h_outflow-inStream(inlet.h_outflow));
+
+  if integrateHeatFlow then
   der(Q_gen)=Q_flow_is;
+  else
+    Q_gen=0;
+  end if;
+
+  if integrateElectricPower then
   der(W_el)=P_el_is;
+  else
+    W_el=0;
+  end if;
+
   P_el_CHP_is=if useConstantSigma then sigma*Q_flow_is else min(P_el_is, pQDiagram.P_min);
+
+if integrateElectricPowerChp then
   der(W_el_CHP)=P_el_CHP_is;
+else
+  W_el_CHP=0;
+end if;
 
   // Efficiencies
   if not useConstantEfficiencies then
     eta_el=max(0,min(1, P_el_is/max(Q_flow_input,simCenter.Q_flow_small)));
     eta_th=max(0,min(1, Q_flow_is/max(Q_flow_input,simCenter.Q_flow_small)));
     eta_el_target=max(0, min(1, Q_flow_set_SG.P/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small)));
-    eta_th_target=max(0, min(1, Q_flow_set_SG.Q/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small)));
+    eta_th_target=max(0, min(1, Q_flow_set_SG.Q_flow/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small)));
   else
     eta_el=eta_el_const;
     eta_el_target=eta_el_const;
@@ -254,7 +282,7 @@ equation
   collectPowerEmissions.gwpCollector.m_flow_cde=-m_flow_cde_power;
   collectHeatingEmissions.gwpCollector.m_flow_cde=-m_flow_cde_heat;
   connect(modelStatistics.gwpCollector[typeOfPrimaryEnergyCarrier],collectPowerEmissions.gwpCollector);
-  connect(modelStatistics.gwpCollectorHeat[typeOfPrimaryEnergyCarrier],collectHeatingEmissions.gwpCollector);
+  connect(modelStatistics.gwpCollectorHeat[typeOfPrimaryEnergyCarrierHeat],collectHeatingEmissions.gwpCollector);
 
   // Economics statistics
 
@@ -274,12 +302,11 @@ equation
 
   connect(Q_flow_set_pos.y, Q_flow_set_CHP.u) annotation (Line(points={{57.4,110},{52,110},{48,110}}, color={0,0,127}));
 
-  connect(Q_flow_set_SG.Q, Q_flow_set_CHP.y) annotation (Line(points={{5.45455,102},{8,102},{8,106},{18,106},{18,110},{25,110}},
-                                                                                                                           color={0,0,127}));
+  connect(Q_flow_set_SG.Q_flow, Q_flow_set_CHP.y) annotation (Line(points={{5.45455,102},{8,102},{8,106},{18,106},{18,110},{25,110}}, color={0,0,127}));
 
   connect(Q_flow_set_CHP.y, pQDiagram.Q_flow) annotation (Line(points={{25,110},{18,110},{18,124},{12,124}}, color={0,0,127}));
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}}), graphics={
+   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}}), graphics={
                                                                                 Line(
           points={{88,-60},{88,-74}},
           pattern=LinePattern.Dash,
@@ -305,7 +332,8 @@ equation
           pattern=LinePattern.Dash,
           smooth=Smooth.None,
           color={0,0,0},
-          arrow={Arrow.None,Arrow.Filled})}), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})),
+          arrow={Arrow.None,Arrow.Filled})}), Icon(graphics,
+                                                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">This partial model offers a template for the creation of large scale CHP models with condensation-extraction configuration.</span></p>
@@ -324,14 +352,18 @@ equation
 <li><span style=\"font-family: MS Shell Dlg 2;\">LargeScaleCHP_L1_TimeConstant_two_fuels</span></li>
 <li><span style=\"font-family: MS Shell Dlg 2;\">LargeScaleCHP_L1_TimeConstant_w_CtrPower</span></li>
 <li><span style=\"font-family: MS Shell Dlg 2;\">LargeScaleCHP_L1_TimeConstant_w_PeakLoadHeater</span></li>
-<li><span style=\"font-family: MS Shell Dlg 2;\">LargeScaleCHP_L2</span></li>
+<li><span style=\"font-family: MS Shell Dlg 2;\">LargeScaleCHP_L2</span><br></li>
 </ul>
-<p><br><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica.Blocks.Interfaces.RealInput:&nbsp;Power setpoint&nbsp;</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica.Blocks.Interfaces.RealInput:&nbsp;Heat flow setpoint</p><p></span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Electrical power port can be chosen</p><p></span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Basics.Interfaces.Thermal.FluidPortOut:&nbsp;carrier medium outlet</p><p></span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Basics.Interfaces.Thermal.FluidPortIn:&nbsp;carrier medium inlet</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -343,5 +375,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end PartialCHP;

@@ -2,10 +2,10 @@ within TransiEnt.Basics.Functions.GasProperties;
 function getMolarMasses_fromRecord "gets molar masses from record"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -72,11 +72,11 @@ algorithm
 <p>No governing equations. The function just searches the name vector in the molar masses record for the component names passed. Then it returns the molar mass defined in the molar mass vector in the record.</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <ul>
-<li>To unify this function the input vector must contain shortened component names or chemical formulas for the components, e.g. &QUOT;Methane&QUOT;, or &QUOT;CH4&QUOT;</li>
+<li>To unify this function the input vector must contain shortened component names or chemical formulas for the components, e.g. &quot;Methane&quot;, or &quot;CH4&quot;</li>
 <li>If there&apos;s no corresponding entry for the component in the molar masses record, the molar mass will be supplied as zero, which might cause troubles (e.g. division by zero)</li>
 </ul>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>No validation needed.</p>
+<p>No validation needed. Tested in check model &quot;TransiEnt.Basics.Functions.GasProperties.Check.TestConvertMoleToMassFraction&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>

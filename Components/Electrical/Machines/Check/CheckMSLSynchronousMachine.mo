@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.Machines.Check;
 model CheckMSLSynchronousMachine
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,7 +22,7 @@ model CheckMSLSynchronousMachine
 //________________________________________________________________________________//
 
   extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Electrical.Machines.MSLSynchronousMachine synchronousGenerator annotation (Placement(transformation(extent={{-8,-10},{12,10}})));
+  TransiEnt.Components.Electrical.Machines.MSLSynchronousMachine synchronousGenerator annotation (Placement(transformation(extent={{-4,-10},{16,10}})));
   TransiEnt.Components.Boundaries.Mechanical.Frequency mechanicalFrequencyBoundary annotation (Placement(transformation(extent={{-42,-10},{-22,10}})));
   TransiEnt.Components.Boundaries.Electrical.ApparentPower.FrequencyVoltage electricGrid(
     Use_input_connector_f=false,
@@ -38,14 +38,15 @@ model CheckMSLSynchronousMachine
     offset=10,
     startTime=0)
     annotation (Placement(transformation(extent={{-36,38},{-16,58}})));
+  TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem_ApparentPowerPort dummyExcitationSystem_ApparentPowerPort annotation (Placement(transformation(extent={{26,30},{6,50}})));
 equation
   connect(mechanicalFrequencyBoundary.mpp, synchronousGenerator.mpp) annotation (
       Line(
-      points={{-22,0},{-18,0},{-18,-0.5},{-8.5,-0.5}},
+      points={{-22,0},{-18,0},{-18,0},{-4,0}},
       color={95,95,95},
       smooth=Smooth.None));
   connect(electricGrid.epp, synchronousGenerator.epp) annotation (Line(
-      points={{27.9,-0.1},{12.1,-0.1}},
+      points={{28,0},{22,0},{22,-0.1},{16.1,-0.1}},
       color={0,127,0},
       smooth=Smooth.None));
   connect(f_grid.y, mechanicalFrequencyBoundary.f_set) annotation (Line(
@@ -75,7 +76,35 @@ createPlot(id=1, position={0, 0, 1616, 280}, y={"synchronousGenerator.smee.power
 
 end plotResult;
 equation
-  connect(i_excitation.y, synchronousGenerator.i_e) annotation (Line(points={{-15,48},{2.1,48},{2.1,9.3}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), experiment(StopTime=0.5));
+  connect(i_excitation.y, synchronousGenerator.i_e) annotation (Line(points={{-15,48},{-14,48},{-14,-6},{-2.1,-6},{-2.1,-6.5}},
+                                                                                                           color={0,0,127}));
+  connect(dummyExcitationSystem_ApparentPowerPort.y, synchronousGenerator.E_input) annotation (Line(points={{5.4,40},{4,40},{4,9.9},{5.7,9.9}}, color={0,0,127}));
+  connect(dummyExcitationSystem_ApparentPowerPort.epp1, synchronousGenerator.epp) annotation (Line(
+      points={{26,40},{26,-0.1},{16.1,-0.1}},
+      color={0,127,0},
+      thickness=0.5));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), experiment(StopTime=0.5),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p>Test environment for MSLSynchronousMachine</p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end CheckMSLSynchronousMachine;

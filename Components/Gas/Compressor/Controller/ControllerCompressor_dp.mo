@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Compressor.Controller;
 model ControllerCompressor_dp "Controller to control the pressure difference of a compressor"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -58,22 +58,13 @@ model ControllerCompressor_dp "Controller to control the pressure difference of 
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput p_beforeCompIn(
-    final quantity="Pressure",
-    displayUnit="bar",
-    final unit="Pa") if not p_paramBefore "Pressure before the compressor"                                  annotation (Placement(transformation(extent={{-20,-20},{20,20}},
+  TransiEnt.Basics.Interfaces.General.PressureIn p_beforeCompIn if not p_paramBefore "Pressure before the compressor"                                  annotation (Placement(transformation(extent={{-20,-20},{20,20}},
         rotation=0,
         origin={-100,0})));
-  Modelica.Blocks.Interfaces.RealInput p_afterCompIn(
-    final quantity="Pressure",
-    displayUnit="bar",
-    final unit="Pa") if not p_paramAfter "Pressure after the compressor"                                 annotation (Placement(transformation(extent={{20,-20},{-20,20}},
+  TransiEnt.Basics.Interfaces.General.PressureIn p_afterCompIn if not p_paramAfter "Pressure after the compressor"                                 annotation (Placement(transformation(extent={{20,-20},{-20,20}},
         rotation=0,
         origin={100,0})));
-  Modelica.Blocks.Interfaces.RealOutput Delta_p(
-    final quantity="PressureDifference",
-    displayUnit="bar",
-    final unit="Pa") "Pressure difference of the compressor"                            annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+  TransiEnt.Basics.Interfaces.General.PressureDifferenceOut Delta_p "Pressure difference of the compressor"                            annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,-110})));
 
@@ -83,8 +74,8 @@ protected
   Modelica.Blocks.Sources.Constant p_afterCompConst(k=p_afterCompParam) if
                                                             p_paramAfter annotation (Placement(transformation(extent={{100,20},{80,40}})));
 
-  Modelica.Blocks.Interfaces.RealOutput p_beforeComp annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
-  Modelica.Blocks.Interfaces.RealOutput p_afterComp annotation (Placement(transformation(extent={{60,-10},{40,10}})));
+  TransiEnt.Basics.Interfaces.General.PressureOut p_beforeComp annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
+  TransiEnt.Basics.Interfaces.General.PressureOut p_afterComp annotation (Placement(transformation(extent={{60,-10},{40,10}})));
   // _____________________________________________
   //
   //           Instances of other Classes
@@ -113,29 +104,31 @@ equation
   connect(p_afterComp, p_afterCompIn) annotation (Line(points={{50,0},{100,0}}, color={0,0,127}));
   connect(p_afterCompConst.y, p_afterComp) annotation (Line(points={{79,30},{68,30},{68,0},{50,0}}, color={0,0,127}));
   connect(p_beforeComp, p_beforeComp) annotation (Line(points={{-50,0},{-52,0},{-50,0}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This controller gives the desired pressure difference to a compressor. The desired or given pressures before and after the compressor can be given by parameters or inputs. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The desired pressure difference is calculated given the parameters and/or inputs and given to the compressor without time delay etc. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
-<p>p_beforeCompIn: input for the pressure before the compressor </p>
-<p>p_afterCompIn: input for the pressure after the compressor </p>
-<p>Delta_p: pressure difference over the compressor </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>p_beforeCompIn: input for the pressure before the compressor in Pa</p>
+<p>p_afterCompIn: input for the pressure after the compressor in Pa</p>
+<p>Delta_p: pressure difference over the compressor in Pa</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
 </html>"));
 end ControllerCompressor_dp;

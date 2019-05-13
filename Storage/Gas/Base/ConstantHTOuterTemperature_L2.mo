@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas.Base;
 model ConstantHTOuterTemperature_L2 "Heat transfer model for a constant heat transfer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ extends ClaRa.Basics.Icons.Alpha;
   parameter ClaRa.Basics.Units.Area A_heat=10 "Heat transfer surface";
   ClaRa.Basics.Units.Temperature Delta_T_mean;
 
-  Modelica.Blocks.Interfaces.RealInput T_outer annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_outer annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
 equation
   Delta_T_mean = heat.T-T_outer;
   heat.Q_flow = alpha_nom*A_heat*Delta_T_mean;
@@ -68,5 +68,6 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Apr 05 2016</p>
 </html>"),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end ConstantHTOuterTemperature_L2;

@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Electric;
 model ElectricGrid_StandAlone
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -115,9 +115,11 @@ equation
   connect(boundaryVLE_Txim_flow.T, returnTemperatureDNH.y) annotation (Line(points={{-112,64},{-104,64},{-104,55},{-89.4,55}}, color={0,0,127}));
   connect(massFlowDHN.y, boundaryVLE_Txim_flow.m_flow) annotation (Line(points={{-89.4,81},{-98,81},{-98,70},{-112,70}}, color={0,0,127}));
   connect(electricDemandTable.y1, electricDemand.P_el_set) annotation (Line(points={{-230,148},{-182.257,148},{-182.257,147.907}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(
         preserveAspectRatio=false,
-        initialScale=0.1)), Diagram(coordinateSystem(
+        initialScale=0.1)), Diagram(graphics,
+                                    coordinateSystem(
         preserveAspectRatio=false,
         extent={{-300,-300},{300,300}},
         initialScale=0.1)),

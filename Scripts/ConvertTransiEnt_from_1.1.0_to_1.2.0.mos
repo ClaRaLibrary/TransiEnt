@@ -1,0 +1,308 @@
+
+
+//clear
+convertClear();
+
+//Start
+//
+	
+	
+//___________ReplacedModels_____________________
+
+convertClass("TransiEnt.Basics.Adapters.Gas.RealNG7_H2_var_to_RealSG4_var","TransiEnt.Basics.Adapters.Gas.RealNG7_to_RealSG4");	
+convertClass("TransiEnt.Basics.Adapters.Gas.RealSG4_var_to_RealNG7_H2_var","TransiEnt.Basics.Adapters.Gas.RealSG4_to_RealNG7");	
+convertClass("TransiEnt.Basics.Interfaces.Ambient.GlobalHorizontalIrradiationIn","TransiEnt.Basics.Interfaces.Ambient.IrradianceIn");	
+convertClass("TransiEnt.Basics.Interfaces.Ambient.GlobalHorizontalIrradiationOut","TransiEnt.Basics.Interfaces.Ambient.IrradianceOut");
+convertClass("TransiEnt.Basics.Interfaces.Ambient.TemperatureIn","TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn");
+convertClass("TransiEnt.Basics.Interfaces.Ambient.TemperatureOut","TransiEnt.Basics.Interfaces.General.TemperatureCelsiusOut");
+convertClass("TransiEnt.Basics.Interfaces.Ambient.WindspeedOut","TransiEnt.Basics.Interfaces.Ambient.VelocityOut");
+convertClass("TransiEnt.Basics.Interfaces.Gas.GasMassFlowIn","TransiEnt.Basics.Interfaces.General.MassFlowRateIn");
+convertClass("TransiEnt.Basics.Interfaces.Gas.GasMassFlowOut","TransiEnt.Basics.Interfaces.General.MassFlowRateOut");
+convertClass("TransiEnt.Basics.Interfaces.Gas.GasVolumeFlowOut","TransiEnt.Basics.Interfaces.General.VolumeFlowRateOut");
+convertClass("TransiEnt.Basics.Interfaces.Thermal.HeatPort","Modelica.Thermal.HeatTransfer.Interfaces.HeatPort");
+convertClass("TransiEnt.Basics.Interfaces.Thermal.HeatPort_a","Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a");
+convertClass("TransiEnt.Basics.Interfaces.Thermal.HeatPort_b","Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b");
+convertClass("TransiEnt.Basics.Interfaces.Thermal.MassFlowRateIn","TransiEnt.Basics.Interfaces.General.MassFlowRateIn");
+convertClass("TransiEnt.Basics.Interfaces.Thermal.MassFlowRateOut","TransiEnt.Basics.Interfaces.General.MassFlowRateOut");
+convertClass("TransiEnt.Basics.Interfaces.Thermal.TemperatureIn","TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn");
+convertClass("TransiEnt.Basics.Interfaces.Thermal.TemperatureOut","TransiEnt.Basics.Interfaces.General.TemperatureCelsiusOut");
+
+convertClass("TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Check.TestSteamReformer1","TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Check.TestSteamReformer");
+convertClass("TransiEnt.Components.Electrical.Grid.Check.TestSepearableLine","TransiEnt.Components.Electrical.Grid.Check.TestSeparableLine");	
+convertClass("TransiEnt.Components.Mechanical.Check.CheckTwoStateInertiaWitchClutch","TransiEnt.Components.Mechanical.Check.CheckTwoStateInertiaWithClutch");
+
+convertClass("TransiEnt.Producer.Electrical.Wind.Controller.PitchController_SI_delfaF","TransiEnt.Producer.Electrical.Wind.Controller.PitchController_SI_deltaF");	
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.Base.PartialBoiler","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base.PartialBoiler");
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.Base","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base");
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.Check.TestGasBoilerGasAdaptive_L1","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Check.TestGasBoilerGasAdaptive_L1");	
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.Check.TestGasBoiler_L1","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Check.TestGasBoiler_L1");	
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.Check.TestGasBoilers_L1","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Check.TestGasBoilers_L1");	
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.SimpleBoiler","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler");	
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.GasBoilerCompositionAdaptive","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.GasBoilerCompositionAdaptive");	
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.TwoFuelBoiler","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.TwoFuelBoiler");	
+convertClass("TransiEnt.Producer.Heat.Power2Heat.Components.Heatpump_L2","TransiEnt.Producer.Heat.Power2Heat.Components.HeatpumpFluidPorts");	
+convertClass("TransiEnt.Producer.Heat.SolarThermal.Check.TestCollectorFluidCycle","TransiEnt.Producer.Heat.SolarThermal.Check.TestCollectorFluidCycle_constProp");	
+convertClass("TransiEnt.Producer.Heat.SolarThermal.Controller","TransiEnt.Producer.Heat.SolarThermal.Control.ControllerPumpSolarCollectorTandG");	
+convertClass("TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1","TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp");	
+convertClass("TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport","TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler");
+
+convertClass("TransiEnt.Storage.Heat.Check.CheckHeatStorage_L2","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L2.Check.Check_HotWaterStorage_constProp_L2");	
+convertClass("TransiEnt.Storage.Heat.Check.TestHotWaterStorage_L2","TransiEnt.Storage.Heat.HotWaterStorage_L2.Check.Check_HotWaterStorage_L2");
+convertClass("TransiEnt.Storage.Heat.ElectricWaterHeater.Check.CheckStratifiedElectricWaterHeater_CoolDown","TransiEnt.Storage.Heat.ElectricWaterHeater_constProp_L4.Check.CheckStratifiedElectricWaterHeater_CoolDown");	
+convertClass("TransiEnt.Storage.Heat.ElectricWaterHeater.Check.CheckStratifiedElectricWaterHeater_Healy","TransiEnt.Storage.Heat.ElectricWaterHeater_constProp_L4.Check.CheckStratifiedElectricWaterHeater_Healy");
+convertClass("TransiEnt.Storage.Heat.ElectricWaterHeater.StratifiedElectricWaterHeater_L4","TransiEnt.Storage.Heat.ElectricWaterHeater_constProp_L4.ElectricWaterHeater_constProp_L4");
+convertClass("TransiEnt.Storage.Heat.ElectricWaterHeater","TransiEnt.Storage.Heat.ElectricWaterHeater_constProp_L4");		
+convertClass("TransiEnt.Storage.Heat.ElectricWaterHeater.Check","TransiEnt.Storage.Heat.ElectricWaterHeater_constProp_L4.Check");
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base.Diffusion","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Base.Diffusion");	
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base.IncompressibleFluidVolume","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Base.IncompressibleFluidVolume");	
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base.getIdxFromHeight","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Base.getIdxFromHeight");	
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base.getPortCount","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Base.getPortCount");	
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base.getPortSubIndex","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Base.getPortSubIndex");
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base.Buoyancy","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Base.Buoyancy");
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Base");
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Check.CheckStratifiedHotWaterStorage_L4_Loading","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Check.CheckStratifiedHotWaterStorage_L4_Loading");
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Check.CheckStratifiedHotWaterStorage_L4_Standbyloss","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Check.CheckStratifiedHotWaterStorage_L4_Standbyloss");	
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Check.CheckStratifiedHotWaterStorage_L4_Unloading","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Check.CheckStratifiedHotWaterStorage_L4_Unloading");
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Check","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Check");	
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.HotWaterStorage_constProp_L4");
+convertClass("TransiEnt.Storage.Heat.HeatStorageStratified_constProp","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4");
+convertClass("TransiEnt.Storage.Heat.HeatStorage_L2","TransiEnt.Storage.Heat.HotWaterStorage_constProp_L2.HotWaterStorage_constProp_L2");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Buoyancy","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Buoyancy");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Cubic_Geometry","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Cubic_Geometry");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.CylindricWall_HeatTransfer","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.CylindricWall_HeatTransfer");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Cylindric_Geometry","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Cylindric_Geometry");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.FlatWall_HeatConduction","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.FlatWall_HeatConduction");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.FlowSplit","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.FlowSplit");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Fluid_Volume","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Fluid_Volume");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Generic_Geometry","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Generic_Geometry");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.HeatingElectrode","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.HeatingElectrode");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Partial_Geometry","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Partial_Geometry");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Partial_HeatTransfer","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Partial_HeatTransfer");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.PortGeometry","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.PortGeometry");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.SolarInPortGeometry","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.SolarInPortGeometry");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.ThermalConductor_Fluid","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.ThermalConductor_Fluid");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics.Trapezoid_Geometry","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Trapezoid_Geometry");
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Basics","TransiEnt.Storage.Heat.HotWaterStorage_L4.Base");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Checks.TestStratifiedHotWaterStorage_L4","TransiEnt.Storage.Heat.HotWaterStorage_L4.Checks.TestStratifiedHotWaterStorage_L4");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Checks.Test_FluidVolume_01","TransiEnt.Storage.Heat.HotWaterStorage_L4.Checks.Test_FluidVolume_01");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Checks.Test_FluidVolume_02","TransiEnt.Storage.Heat.HotWaterStorage_L4.Checks.Test_FluidVolume_02");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Checks.Test_HeatStorageL4_Electrical","TransiEnt.Storage.Heat.HotWaterStorage_L4.Checks.Test_HeatStorageL4_Electrical");
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Checks","TransiEnt.Storage.Heat.HotWaterStorage_L4.Checks");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.StratifiedHotWaterStorage_L4","TransiEnt.Storage.Heat.HotWaterStorage_L4.HotWaterStorage_L4");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_Layer","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_Layer");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_PortCountVector","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_PortCountVector");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_PortCountVector_addPorts","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_PortCountVector_addPorts");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_PortCountVector_noSolar","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_PortCountVector_noSolar");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_PortCountVector_noSolar_addPorts","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_PortCountVector_noSolar_addPorts");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_Ports","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_Ports");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_Ports_addPorts","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_Ports_addPorts");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_Ports_noSolar","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_Ports_noSolar");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_Ports_noSolar_addPorts","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_Ports_noSolar_addPorts");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_SolarInputFraction_Exp","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_SolarInputFraction_Exp");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_init_segment_enthalpy_linear","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_init_segment_enthalpy_linear");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_init_segment_enthalpy_piecewise_linear","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_init_segment_enthalpy_piecewise_linear");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.get_init_segment_enthalpy_piecewise_linear_Input_Kelvin","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.get_init_segment_enthalpy_piecewise_linear_Input_Kelvin");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.trapezoid_Geometry_CrossAreas","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.trapezoid_Geometry_CrossAreas");	
+convertClass("TransiEnt.Storage.Heat/HeatStorage_Stratified.Utilities.trapezoid_Geometry_Volumes","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.trapezoid_Geometry_Volumes");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.trapezoid_Geometry_WallAreas","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.trapezoid_Geometry_WallAreas");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified","TransiEnt.Storage.Heat.HotWaterStorage_L4");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.package","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities");	
+convertClass("TransiEnt.Storage.Heat.HeatStorage_Stratified.Utilities.partial_get_init_segment_enthalpy","TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities.partial_get_init_segment_enthalpy");
+convertClass("TransiEnt.Storage.Heat.HotWaterStorage_L2","TransiEnt.Storage.Heat.HotWaterStorage_L2.HotWaterStorage_L2");	
+
+convertClass("TransiEnt.Grid.Gas.GasDemandProfiler","TransiEnt.Consumer.Gas.GasDemandProfiler");
+convertClass("TransiEnt.Grid.Gas.Check.Test_GasDemandProfiler","TransiEnt.Consumer.Gas.Check.Test_GasDemandProfiler");
+
+//______________RemovedModels_____________________
+
+//
+//TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Check.TestSteamReformer2	
+//TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Check.TestSteamReformer3	
+//TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Check.TestSteamReformer4		
+
+//TransiEnt.Consumer.Heat.SpaceHeating.RoomFloorHeating_2
+//TransiEnt.Consumer.Gas.Check.TestDynamicsGasAdaptiveControl	
+
+//TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.DNIDHI_Input.Radiation_InclinedSurface	
+//TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.GHI_Input.Radiation_InclinedSurface	
+
+//TransiEnt.Storage.Heat.HeatStorage_Stratified.StratifiedHotWaterStorageAddPorts_L4
+//TransiEnt.Storage.Heat.HeatStorage_Stratified.StratifiedHotWaterStorageElectric_L4	
+
+
+//__________RenamedVariables___________
+convertElement("TransiEnt.SimCenter","p_n","p_nom");
+convertElement("TransiEnt.Basics.Adapters.Gas.RealH2_to_RealSG4","medium_sg","medium_sg4");
+convertElement("TransiEnt.Basics.Blocks.LimPID","Ti","Tau_i");
+convertElement("TransiEnt.Basics.Blocks.LimPID","Td","Tau_d");
+convertElement("TransiEnt.Basics.Blocks.LimPID","yMax","y_max");
+convertElement("TransiEnt.Basics.Blocks.LimPID","yMin","y_min");
+convertElement("TransiEnt.Basics.Blocks.LimPID","output_inactive","y_inactive");
+convertElement("TransiEnt.Basics.Blocks.LimPID","activationTime","t_activation");
+convertElement("TransiEnt.Basics.Functions.efficiency_quadratic", "P_nominal2[3]","P_n2[3]");
+
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.PEM", "V_nom", "v_n");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC", "V_nom", "v_n");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC", "V_nom", "v_n");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC", "T_nom", "T_n");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC", "V_stack", "v_stack");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Controller.TemperatureController", "Q_nom", "Q_flow_nom");
+convertElement("TransiEnt.Components.Electrical.Machines.Check.CheckActivePowerGenerator", "w_nom", "omega_n");
+convertElement("TransiEnt.Components.Electrical.Machines.Check.CheckActivePowerGenerator", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Electrical.Machines.Check.CheckLinearSynchronousMachine", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Electrical.Machines.Check.CheckLinearSynchronousMachine", "v_nom", "v_n");
+convertElement("TransiEnt.Components.Electrical.Machines.Check.CheckVariableSpeedActivePowerGenerator", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Electrical.Machines.Check.CheckVariableSpeedActivePowerGenerator", "w_nom", "omega_n");
+convertElement("TransiEnt.Components.Turbogroups.FirstOrderThreeStateTurbine", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Turbogroups.Gasturbine", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Turbogroups.Hydroturbine", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Turbogroups.StatelessHydroturbine", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Turbogroups.StatelessTurbine", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Turbogroups.ThreeStateTurbine", "P_nom", "P_n");
+convertElement("TransiEnt.Components.Turbogroups.ThreeStateTurbine", "P_nom", "P_n");
+
+convertElement("TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Controller.BatteryPrimaryBalancingController", "P_nom", "P_n");
+convertElement("TransiEnt.Consumer.Electrical.LinearElectricConsumer", "P_el_nom", "P_el_n");
+convertElement("TransiEnt.Consumer.Electrical.LinearElectricConsumer", "P_nomimnal", "P_n");
+convertElement("TransiEnt.Consumer.Electrical.AverageLoadConsumer", "P_el_nom","P_el_n");
+convertElement("TransiEnt.Consumer.Electrical.AverageLoadConsumer", "Q_el_nom","Q_el_n");
+convertElement("TransiEnt.Consumer.Electrical.ExponentialElectricConsumer", "P_el_nom","P_el_n");
+convertElement("TransiEnt.Consumer.Electrical.ExponentialElectricConsumer", "Q_el_nom","Q_el_n");
+convertElement("TransiEnt.Consumer.Heat.FirstOrderHeatingNetworkConsumer","Q_demand","Q_flow_demand");	
+
+
+convertElement("TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerPotential", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Electrical.Controllers.Base.PartialPrimaryBalancingController", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Electrical.Controllers.Check.TestPrimaryBalancingController", "f_nom", "f_n");
+convertElement("TransiEnt.Producer.Electrical.Controllers.Check.TestPrimaryBalancingPowerDemand2012", "f_nom", "f_n");
+convertElement("TransiEnt.Producer.Electrical.Conventional.Components.Check.CheckNonlinearThreeStatePlant_SecondaryControl", "f_nom", "f_n");
+convertElement("TransiEnt.Producer.Electrical.Conventional.Components.DetailedSteamPowerPlant", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Electrical.Conventional.Components.DetailedSteamPowerPlant_InitCycle", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Base.Check.TestWindturbineRotor", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Base.Check.TestWindturbineRotor", "w_nom", "w_n"); 
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController", "tau_nom", "tau_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController", "tau_nom_set", "tau_n_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF", "tau_nom", "tau_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF", "tau_nom_set", "tau_n_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt", "tau_nom", "tau_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt", "tau_nom_set", "tau_n_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.IdealWindpark", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine", "omega_nom", "omega_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine_SI_DF", "freq_nom", "f_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine_SI_dfdt", "freq_nom", "f_n");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController","T_nom","tau_nom");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController","T_start","tau_start");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController","T_set","tau_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController","T_set_partload","tau_set_partload");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController","T_set1","tau_set1");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController","T_friction","tau_friction");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController","T_nom_set","tau_nom_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_nom","tau_nom");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_start","tau_start");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_set_pu","tau_set_pu");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_set","tau_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_set_partload","tau_set_partload");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_modulated","tau_modulated");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_inertia","tau_inertia");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_inertia_set","tau_inertia_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_inertia_max","tau_inertia_max");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_set1","tau_set1");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_set2","tau_set2");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_friction","tau_friction");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_deltaF","T_nom_set","tau_nom_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_nom","tau_nom");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_start","tau_start");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_set_pu","tau_set_pu");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_set","tau_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_set_partload","tau_set_partload");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_modulated","tau_modulated");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_inertia","tau_inertia");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_inertia_set","tau_inertia_set");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_inertia_max","tau_inertia_max");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_set2","tau_set2");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_friction","tau_friction");
+convertElement("TransiEnt.Producer.Electrical.Wind.Controller.TorqueController_SI_df_dt","T_nom_set","tau_nom_set");
+convertElement("TransiEnt.Producer.Electrical.Base.PartloadEfficiency.PartloadEfficiency","p_el_is","P_el_is");	
+convertElement("TransiEnt.Producer.Electrical.Conventional.Components.NonlinearThreeStatePlant","P_init","P_init_set");	
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine","w_nom","omega_nom");
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine","w_start","omega_start");	
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine_SI_DF","w_start","omega_start");
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine_SI_DF","w_nom","omega_nom");		
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine_SI_dfdt","w_start","omega_start");
+convertElement("TransiEnt.Producer.Electrical.Wind.Windturbine_SI_dfdt","w_nom","omega_nom")	
+convertElement("TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit","gasIn","gasPortIn");
+convertElement("TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler","p_drop","heatFlowBoundary.p_drop");
+convertElement("TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler","inlet","fluidPortIn");
+convertElement("TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler","outlet","fluidPortOut");
+convertElement("TransiEnt.Producer.Gas.MethanatorSystem.FeedInSystem_Methanation","HydrogenContentOutput","HydrogenFraction_fixed");
+convertElement("TransiEnt.Producer.Combined.LargeScaleCHP.Base.HeatInputTable","Q"," Q_flow");	
+convertElement("TransiEnt.Producer.Combined.LargeScaleCHP.Base.PQBoundaries", "P_nom_PQCharacteristics", "P_n_PQCharacteristics");
+convertElement("TransiEnt.Producer.Combined.LargeScaleCHP.Base.PQBoundaries", "P_nom", "P_n");
+convertElement("TransiEnt.Producer.Combined.LargeScaleCHP.Base.PQBoundaries", "Q_nom", "Q_flow_nom");
+convertElement("TransiEnt.Producer.Combined.LargeScaleCHP.Base.PQBoundaries", "Q_nom_PQCharacteristics", "Q_flow_nom_PQCharacteristics");
+convertElement("TransiEnt.Producer.Combined.LargeScaleCHP.CHP", "P_nom", "P_n");
+
+convertElement("TransiEnt.Components.Electrical.Machines.VariableSpeedActivePowerGenerator","T_set","tau_set");
+convertElement("TransiEnt.Components.Boundaries.Heat.Heatflow_L1","dh","h");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.PEM","Q_gen","Q_flow_reac");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.PEM","Q_massflux","Q_flow_gas");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.PEM","Q_el_set_const"," Q_flow_use");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC","Q_gen","Q_flow_reac");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC","Q_heater","Q_flow_heater");	
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC","Q_massflux","Q_flow_gas");
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC","Q_flow","Q_flow_use");	
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.SteamReformer_NaturalGas_to_H2","Q_reac","Q_flow_reac");
+convertElement("TransiEnt.Components.Electrical.Grid.Check.TestSepearableLine","P_init","P_init_set");
+convertElement("TransiEnt.Components.Gas.Reactor.Controller.Base.PartialControllerH2OForReformer","massComposition","xi");
+convertElement("TransiEnt.Components.Gas.Reactor.Controller.ControllerH2ForReformer","massComposition","xi");
+convertElement("TransiEnt.Components.Mechanical.Base.PartialMechanicalConnection","w","omega");	
+convertElement("TransiEnt.Components.Mechanical.ConstantInertia","a","alpha");	
+convertElement("TransiEnt.Components.Mechanical.TwoStateInertiaWithIdealClutch","a","alpha");
+	
+convertElement("TransiEnt.Storage.Electrical.Base.GenericElectricStorage", "V_nom", "v_n");
+convertElement("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4","waterPortIn_primaryHeatSource","waterPortIn_prod[1]");	
+convertElement("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4","waterPortOut_primaryHeatSource","waterPortOut_prod[1]");
+convertElement("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4","waterPortIn_Grid","waterPortIn_grid[1]");
+convertElement("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4","waterPortOut_Grid","waterPortOut_grid[1]");
+
+convertModifiers("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4",{"h_prodIn=1"},{"h_prodIn={%h_prodIn%}"});
+convertModifiers("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4",{"h_prodOut=1"},{"h_prodOut={%h_prodOut%}"});
+convertModifiers("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4",{"h_gridOut=1"},{"h_gridOut={%h_gridOut%}"});
+convertModifiers("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.StratifiedHotWaterStorage_L4",{"h_gridIn=1"},{"h_gridIn={%h_gridIn%}"});
+
+convertElement("TransiEnt.Grid.Electrical.EconomicDispatch.MeritOrderDispatcher", "P_nom", "P_n");
+convertElement("TransiEnt.Grid.Electrical.EconomicDispatch.MeritOrderDispatcherStatePrediction", "P_nom", "P_n");
+convertElement("TransiEnt.Grid.Electrical.SecondaryControl.SecondaryBalancingController", "P_nom", "P_n");
+
+
+//___________ChangedStartValues_________________
+
+convertElement("TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2","xi_start"," xi.start");
+convertElement("TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2","h_start","h.start");
+convertElement("TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2","p_start","p.start");
+convertElement("TransiEnt.Components.Gas.Reactor.Base.PartialFixedbedReactorIdealGas_L4","T_start","T.start");
+convertElement("TransiEnt.Components.Gas.Reactor.Base.PartialFixedbedReactorIdealGas_L4","p_start","p.start");
+convertElement("TransiEnt.Components.Gas.Reactor.Base.PartialFixedbedReactorIdealGas_L4","xi_start","xi.start");	
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.SOFC","T_start","T.start");	
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.PEM","T_start","T.start");
+convertElement("TransiEnt.Components.Boundaries.Gas.IdealGasCompositionByWtFractions_stepVariation","xi_start","xi.start");		
+convertElement("TransiEnt.Components.Boundaries.Gas.RealGasCompositionByWtFractions_stepVariation","xi_start","xi.start");	
+convertElement("TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.SteamReformer_NaturalGas_to_H2","x_i_start","x_i.start");	
+
+convertElement("TransiEnt.Consumer.Heat.SpaceHeating.RoomFloorHeating","T_start","T.start");
+convertElement("TransiEnt.Consumer.Heat.SpaceHeating.RoomFloorHeating","T_amb_start","T_amb.start");
+
+convertElement("TransiEnt.Producer.Gas.Electrolyzer.Controller.OverloadController","startState","state.state");
+
+convertElement("TransiEnt.Storage.Heat.HeatStorageStratified_constProp.Base.IncompressibleFluidVolume","T_start","T.start");
+
+
+//End
+//
+
+
+
+
+
+	

@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Interfaces.Gas;
 connector IdealGasTempPortIn "A connector for ideal gas inlets featuring T,p,xi,m_flow"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ connector IdealGasTempPortIn "A connector for ideal gas inlets featuring T,p,xi,
   // _____________________________________________
 
   extends TransiEnt.Basics.Interfaces.Gas.IdealGasTempPort;
-  annotation (Icon(graphics={Ellipse(
+  annotation (defaultComponentName="gasPortIn", Icon(graphics={Ellipse(
           extent={{-100,100},{100,-100}},
           lineColor={255,170,85},
           lineThickness=1.5,

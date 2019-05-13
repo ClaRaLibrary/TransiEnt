@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model IdealGasCompositionByWtFractions_stepVariation "Periodic step variation of mass fraction of last component in ideal gas mixture"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,7 +36,6 @@ model IdealGasCompositionByWtFractions_stepVariation "Periodic step variation of
   // _____________________________________________
   parameter TILMedia.GasTypes.BaseGas medium=simCenter.gasModel2 "Medium to be used" annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
   parameter Integer xiNumber=1 "xi vector entry that shall be varied [1 medium.nc]";
-  parameter SI.MassFraction[medium.nc-1] xi_start=medium.xi_default;
   parameter SI.Time period = 10000 "Period for discrete step";
   parameter SI.MassFraction stepsize = 0.001 "Discrete stepsize for xi[nc]";
 
@@ -46,15 +45,18 @@ model IdealGasCompositionByWtFractions_stepVariation "Periodic step variation of
   // _____________________________________________
 protected
   SI.MassFraction sumXi=sum(xi) "Control sum of set mass fractions";
-  SI.MassFraction[medium.nc-1] xi_in(start = xi_start);
-  SI.Time t_lastchange(start=0);
+public
+  SI.MassFraction[medium.nc-1] xi_in(start = medium.xi_default)
+                                                      annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Time t_lastchange(start=0)
+                               annotation (Dialog(group="Initialization", showStartAttribute=true));
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 public
-  Modelica.Blocks.Interfaces.RealOutput xi[medium.nc-1] "Composition of gas to be set"
+  TransiEnt.Basics.Interfaces.General.MassFractionOut xi[medium.nc-1] "Composition of gas to be set"
     annotation (Placement(transformation(extent={{100,0},{120,20}}),
         iconTransformation(extent={{80,-20},{120,20}})));
 
@@ -104,7 +106,7 @@ annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Real output of mass composition vector xi[medium.nc-1]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Real output of mass composition vector xi[medium.nc-1] in [kg/kg]</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Mass composition vector xi[medium.nc-1]</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">xiNumber: Position in xi vector, this mass fraction will be varied.</span></p>
@@ -124,9 +126,9 @@ annotation (Documentation(info="<html>
 <p><span style=\"font-family: MS Shell Dlg 2;\">If any other component is varied the new mass fractions can be calculated via</span></p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-ABdtekyD.png\" alt=\"xi_i=pre(xi_i)*((1-xi_xiNumber-stepsize)/(1-xi_xiNumber))\"/><span style=\"font-family: MS Shell Dlg 2;\">.</span></p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>(no remarks)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Tested in check model &quot;TransiEnt.Components.Boundaries.Gas.Check.CheckStepVariationModels&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

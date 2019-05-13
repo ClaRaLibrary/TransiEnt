@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.FuelCellSystems.Check;
 model TestFuelCellSystem_SOFC "SOFC Fuel cell system with steam reformer and electricity led control"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,7 +38,7 @@ model TestFuelCellSystem_SOFC "SOFC Fuel cell system with steam reformer and ele
         extent={{14,13},{-14,-13}},
         rotation=180,
         origin={-32,-53})));
-  FuelCell.SOFC                                                                                 FC(
+  FuelCell.SOFC FC(
     i_cell(start=0),
     A_cell=0.0361,
     no_Cells=20,
@@ -46,8 +46,14 @@ model TestFuelCellSystem_SOFC "SOFC Fuel cell system with steam reformer and ele
     m=5,
     ka=0.1,
     I_shutdown=0.1,
-    T_nom=760 + 273.15,
-    T_start=760 + 273.15) annotation (Placement(transformation(extent={{16,-62},{60,-20}})));
+    T_n=760 + 273.15,
+    T_stack(start=760 + 273.15),
+    redeclare TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp,
+    redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower powerBoundary(
+      useInputConnectorP=true,
+      useInputConnectorQ=false,
+      useCosPhi=true,
+      cosphi_boundary=1) "PQ-Boundary for ApparentPowerPort") annotation (Placement(transformation(extent={{16,-62},{60,-20}})));
   ClaRa.Components.BoundaryConditions.BoundaryGas_pTxi SinkAir(
     variable_p=false,
     variable_xi=false,
@@ -86,7 +92,7 @@ model TestFuelCellSystem_SOFC "SOFC Fuel cell system with steam reformer and ele
     V_reac=0.0024,
     p_reformer=150000,
     T_reformer(fixed=true, start=20 + 273)) annotation (Placement(transformation(extent={{-40,-25},{0,19}})));
-  TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Controller.TemperatureController TemperatureController(T_target=510 + 273, Q_nom=2e3) annotation (Placement(transformation(extent={{-30,26},{-10,44}})));
+  TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Controller.TemperatureController TemperatureController(T_target=510 + 273, Q_flow_nom=2e3) annotation (Placement(transformation(extent={{-30,26},{-10,44}})));
   ClaRa.Components.BoundaryConditions.BoundaryGas_Txim_flow SourceAir(
     variable_xi=false,
     T_const=simCenter.T_amb_const,
@@ -119,8 +125,7 @@ model TestFuelCellSystem_SOFC "SOFC Fuel cell system with steam reformer and ele
                                                              annotation (Placement(transformation(extent={{-14,60},{0,68}})));
   Modelica.Blocks.Sources.RealExpression P_el(y=-FC.P_el)
                                               annotation (Placement(transformation(extent={{-6,82},{8,90}})));
-  Modelica.Blocks.Sources.RealExpression Q_flow_out_cooling(y=-FC.Q_flow)
-                                                            annotation (Placement(transformation(extent={{-6,88},{8,96}})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_out_cooling(y=-FC.Q_flow_use) annotation (Placement(transformation(extent={{-6,88},{8,96}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_exhaustGasLatent(y=FuelCellSensor.Q_flow_exhaustGasLatent)
                                                                  annotation (Placement(transformation(extent={{48,88},{28,96}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_exhaustGasChemical(y=FuelCellSensor.Q_flow_exhaustGasChemical)
@@ -152,24 +157,24 @@ equation
   connect(OC_SC_Controller.SC_R, SC_set.y) annotation (Line(points={{-66,34.8},{-62,34.8},{-62,46},{-68,46},{-68,62},{-73,62}}, color={0,0,127}));
   connect(OC_set.y, OC_SC_Controller.OC_R) annotation (Line(points={{-43,62},{-40,62},{-40,46},{-58,46},{-58,28},{-66,28},{-66,26.8}}, color={0,0,127}));
   connect(FC.feeda, SourceAir.gas_a) annotation (Line(
-      points={{16.88,-52.55},{16.88,-65},{15,-65}},
+      points={{16,-53.6},{16,-65},{15,-65}},
       color={255,170,85},
       thickness=0.5));
-  connect(LocalPowerSensor.epp_OUT, ElectricGrid.epp) annotation (Line(points={{63.4,32},{71.9,32},{71.9,31.9}}, color={0,127,0}));
-  connect(LocalPowerSensor.epp_IN, HouseholdDemandFromGrid.epp) annotation (Line(points={{44.8,32},{38,32},{38,24},{32,24},{30,24},{30,23.9},{30.1,23.9}},
+  connect(LocalPowerSensor.epp_OUT, ElectricGrid.epp) annotation (Line(points={{63.4,32},{72,32},{72,32}},       color={0,127,0}));
+  connect(LocalPowerSensor.epp_IN, HouseholdDemandFromGrid.epp) annotation (Line(points={{44.8,32},{38,32},{38,24},{32,24},{30,24},{30,24},{30,24}},
                                                                                                     color={0,127,0}));
   connect(ElectricLoad.y, HouseholdDemandFromGrid.P_el_set) annotation (Line(points={{14.8,44},{26,44},{26,36}}, color={0,0,127}));
   connect(FC.draina, SinkAir.gas_a) annotation (Line(
-      points={{59.56,-48.35},{68.78,-48.35},{68.78,-48},{68,-48}},
+      points={{60,-53.6},{68.78,-53.6},{68.78,-48},{68,-48}},
       color={255,170,85},
       thickness=0.5));
   connect(PowerController.y, FC.I_load) annotation (Line(points={{-16.6,-53},{-2,-53},{-2,-42},{2,-42},{2,-42.26},{19.96,-42.26}}, color={0,0,127}));
   connect(LambdaHController.y, SourceNaturalGas.m_flow) annotation (Line(points={{-87.04,-81},{-87.04,-82},{-92,-82},{-92,-9},{-88,-9}},   color={0,0,127}));
-  connect(FC.lambda_H, LambdaHController.u1) annotation (Line(points={{45.04,-64.1},{45.04,-73.2},{-60,-73.2}}, color={0,0,127}));
+  connect(FC.lambda_H, LambdaHController.u1) annotation (Line(points={{46.8,-62},{46.8,-73.2},{-60,-73.2}},     color={0,0,127}));
   connect(LocalPowerSensor.P, PowerController.deltaP) annotation (Line(points={{50.2,24.2},{50.2,18},{100,18},{100,-88},{-54,-88},{-54,-46},{-46,-46},{-46,-45.2},{-44.6,-45.2}}, color={0,0,127}));
-  connect(FC.V_stack, PowerController.V_cell) annotation (Line(points={{60.44,-40.16},{72,-40.16},{84,-40.16},{84,-84},{-52,-84},{-52,-60.02},{-44.6,-60.02}}, color={0,0,127}));
+  connect(FC.v_stack, PowerController.V_cell) annotation (Line(points={{38,-41},{38,-41},{84,-41},{84,-84},{-52,-84},{-52,-60.02},{-44.6,-60.02}},             color={0,0,127}));
   connect(FC.drainh, FuelCellSensor.gasPortIn) annotation (Line(
-      points={{60,-26.93},{63,-26.93},{63,-26},{66.16,-26}},
+      points={{60,-28.4},{63,-28.4},{63,-26},{66.16,-26}},
       color={255,170,85},
       thickness=0.5));
   connect(FuelCellSensor.gasPortOut, SinkFluegas.gas_a) annotation (Line(
@@ -184,7 +189,7 @@ equation
   connect(Q_flow_exhaustGasLatent.y, SystemEfficiency.Q_flow_out_exhaustGasLatent) annotation (Line(points={{27,92},{20,92},{20,82}}, color={0,0,127}));
   connect(Q_flow_exhaustGasChemical.y, SystemEfficiency.Q_flow_out_exhaustGasChemical) annotation (Line(points={{27,86},{24.8,86},{24.8,82}}, color={0,0,127}));
   connect(SteamReformer.drain, FC.feedh) annotation (Line(
-      points={{0,-3.66},{6,-3.66},{6,-4},{16.44,-4},{16.44,-26.51}},
+      points={{0,-3.66},{6,-3.66},{6,-4},{16,-4},{16,-28.4}},
       color={255,170,85},
       thickness=0.5));
   connect(SteamReformer.feed, ReformerSensor.gasPortOut) annotation (Line(
@@ -218,7 +223,7 @@ createPlot(id=2, position={809, 0, 791, 159}, y={"PowerController.V_cell"}, rang
 
 end plotResult;
 equation
-  connect(HouseholdDemandFromGrid.epp, simpleTransformer.epp_p) annotation (Line(points={{30.1,23.9},{42,23.9},{42,6}}, color={0,127,0}));
+  connect(HouseholdDemandFromGrid.epp, simpleTransformer.epp_p) annotation (Line(points={{30,24},{42,24},{42,6}},       color={0,127,0}));
   connect(simpleTransformer.epp_n, FC.epp) annotation (Line(points={{42,-14},{40,-14},{40,-18},{36,-18},{36,-28.82},{38,-28.82}}, color={0,127,0}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Rectangle(
@@ -227,5 +232,26 @@ equation
           fillPattern=FillPattern.Solid,
           lineColor={0,0,0})}),
     experiment(StopTime=3600, __Dymola_Algorithm="Sdirk34hw"),
-    __Dymola_experimentSetupOutput);
+    __Dymola_experimentSetupOutput,
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for FuelCellSystem_SOFC</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end TestFuelCellSystem_SOFC;

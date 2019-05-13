@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CollectElectricPower "collect electric power and energy, choose type of resource"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,12 +34,20 @@ model CollectElectricPower "collect electric power and energy, choose type of re
   // _____________________________________________
 
   constant Boolean is_setter=true "just for change of icon.." annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
+
+  parameter Boolean integrateElPower=simCenter.integrateElPower "true if electric powers shall be integrated";
   parameter TransiEnt.Basics.Types.TypeOfResource typeOfResource=EnergyResource.Generic "Select the kind of resource" annotation (choices(
       choice=TransiEnt.Basics.Types.TypeOfResource.Consumer "Consumer",
       choice=TransiEnt.Basics.Types.TypeOfResource.Conventional "Conventional",
       choice=TransiEnt.Basics.Types.TypeOfResource.Cogeneration "Cogeneration",
       choice=TransiEnt.Basics.Types.TypeOfResource.Renewable "Renewable",
       choice=TransiEnt.Basics.Types.TypeOfResource.Generic "Generic"), Dialog(enable=is_setter));
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+  outer TransiEnt.SimCenter simCenter;
 
   // _____________________________________________
   //
@@ -53,7 +61,8 @@ model CollectElectricPower "collect electric power and energy, choose type of re
   //             Variable Declarations
   // _____________________________________________
 
- SI.Energy E(each start=0, each fixed=true, each stateSelect=StateSelect.never);
+  SI.Energy E(each start=0, each fixed=true, each stateSelect=StateSelect.never)
+                                                                                annotation (Dialog(group="Initialization", showStartAttribute=true));
 
 equation
   // _____________________________________________
@@ -61,7 +70,12 @@ equation
   //           Characteristic equations
   // _____________________________________________
 
-  der(E)=powerCollector.P;
+  if integrateElPower then
+    der(E)=powerCollector.P;
+  else
+    E=0;
+  end if;
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},
@@ -134,7 +148,7 @@ equation
           fillPattern=FillPattern.Solid)}),
                                  Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>model for collecting electric power and energy</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional;
 model LumpedGridGenerators "Lumped model of a number of generators for the use in a non-detailed electric grid model (including primary and secondary control models)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,13 +30,13 @@ model LumpedGridGenerators "Lumped model of a number of generators for the use i
   extends TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider(
       final typeOfBalancingPowerResource=typeOfResource,
       primaryBalancingController(
-      P_nom=P_el_n,
+      P_n=P_el_n,
       providedDroop=delta_pr,
       k_part=k_pr,
       maxGradientPrCtrl=P_pr_grad_max_star,
       maxValuePrCtrl=P_pr_max_star),
       controlPowerModel(
-      P_nom=P_el_n,
+      P_n=P_el_n,
       P_el_is = P_el_is,
       P_pr_max=primaryBalancingController.maxValuePrCtrl,
       P_grad_max_star=P_el_grad_max_SB,
@@ -75,7 +75,7 @@ model LumpedGridGenerators "Lumped model of a number of generators for the use i
 
   // **** Expert Settings
 
-  parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
+  parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(tab="Expert Settings"));
 
    Real delta_P_star = (P_el_set+P_el_is)/P_el_n;
@@ -95,23 +95,27 @@ model LumpedGridGenerators "Lumped model of a number of generators for the use i
         origin={-11.5,18})));
 
   TransiEnt.Components.Boundaries.Mechanical.Power Turbine annotation (Placement(transformation(extent={{-78,-58},{-42,-22}})));
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=1) constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator annotation (Dialog(tab="General", group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-18.5,-18},{18.5,18}},
         rotation=0,
         origin={39.5,-40})));
+   replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem annotation (Dialog(tab="General", group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={62.5,16})));
   TransiEnt.Components.Mechanical.ConstantInertia MechanicalConnection(
-    w(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
+    omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid) annotation (choicesAllMatching=true, Placement(transformation(extent={{-26,-57},{6,-23}})));
 
-  Modelica.Blocks.Interfaces.RealInput P_tie_is "Actual tie line power" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_is "Actual tie line power" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-10,100}), iconTransformation(
         extent={{-11,-11},{11,11}},
         rotation=270,
         origin={55,89})));
-  Modelica.Blocks.Interfaces.RealInput P_tie_set "Set point tie line power" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_set "Set point tie line power" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={30,100}), iconTransformation(
@@ -151,7 +155,7 @@ equation
       color={95,95,95},
       smooth=Smooth.None));
   connect(MechanicalConnection.mpp_b,Generator. mpp) annotation (Line(
-      points={{6,-40},{12,-40},{12,-40.9},{20.075,-40.9}},
+      points={{6,-40},{12,-40},{12,-40},{21,-40}},
       color={95,95,95},
       smooth=Smooth.None));
   connect(gridFrequencySensor.mpp,MechanicalConnection. mpp_b) annotation (Line(
@@ -173,20 +177,31 @@ equation
   connect(sum1.y, Turbine.P_mech_set) annotation (Line(points={{-60,-9},{-60,-18.76}},              color={0,0,127}));
   connect(secondaryBalancingController.y, PT1Transient.u) annotation (Line(points={{-24.15,18},{-31.6402,18}}, color={0,0,127}));
   connect(PT1Transient.y, sum1.u[3]) annotation (Line(points={{-46.6527,18},{-46.6527,18},{-58.6667,18},{-58.6667,14}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{62.5,26},{62,26},{62,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{62.5,5.4},{62.5,-8.3},{38.945,-8.3},{38.945,-22.18}}, color={0,0,127}));
      annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-62,-30},{28,-76}},
           lineColor={244,125,35},
-          textString="G")}),     Diagram(coordinateSystem(preserveAspectRatio=false,
+          textString="G")}),     Diagram(graphics,
+                                         coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p>Lumped&nbsp;model&nbsp;of&nbsp;a&nbsp;number&nbsp;of&nbsp;generators&nbsp;for&nbsp;the&nbsp;use&nbsp;in&nbsp;a&nbsp;non-detailed&nbsp;electric&nbsp;grid&nbsp;model&nbsp;(including&nbsp;primary&nbsp;and&nbsp;secondary&nbsp;control&nbsp;models).</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The model is a composition of a turbine model, an inertia model, a generator model with excitation system model and a primary controller.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">See base classes TransiEnt.Producer.Electrical.Base.PartialDispatchablePowerPlant and  for more information TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for electric power in [W] (setpoint for electric power)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_SB_set: input for electric power in [W] (secondary balancing setpoint)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_set: input for electric power in [W] </span>&quot;Set&nbsp;point&nbsp;tie&nbsp;line&nbsp;power&quot;</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_is: input for electric power in [W] </span>&quot;Actual&nbsp;tie&nbsp;line&nbsp;power&quot;</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port (choice of power port)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -194,7 +209,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">checked in TransiEnt.Grid.Electrical.LumpedPowerGrid.Check</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

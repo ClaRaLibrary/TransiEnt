@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckFourthOrderPlant
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,12 +56,12 @@ equation
       smooth=Smooth.Bezier));
   connect(powerPlant_3508_L0_s2_1.epp, grid1.epp)
     annotation (Line(
-      points={{1.5,5.6},{19.8,5.6},{19.8,21.9},{39.9,21.9}},
+      points={{1,7},{19.8,7},{19.8,22},{40,22}},
       color={0,0,0},
       smooth=Smooth.Bezier));
   connect(powerPlant_3508_L0_s2_2.epp, grid2.epp)
     annotation (Line(
-      points={{11.5,-64.4},{30.8,-64.4},{30.8,-48.1},{49.9,-48.1}},
+      points={{11,-63},{30.8,-63},{30.8,-48},{50,-48}},
       color={0,0,0},
       smooth=Smooth.Bezier));
 public

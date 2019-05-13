@@ -1,11 +1,11 @@
 within TransiEnt.Components.Boundaries.Heat.Check;
-model Test_Heatflow_L1
+model Test_Heatflow_L1 "Model for testing Heatflow_L1"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,7 +65,7 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  connect(realExpression.y, constantHeatflow_L1_1.Q_flow_prescribed) annotation (Line(points={{5,50},{10,50},{10,41.2},{15,41.2}}, color={0,0,127}));
+  connect(realExpression.y, constantHeatflow_L1_1.Q_flow_prescribed) annotation (Line(points={{5,50},{10,50},{10,40},{16,40}},     color={0,0,127}));
   connect(statePoint_inlet.port, massFlowSource.steam_a) annotation (Line(
       points={{-46,46},{-34,46},{-34,24},{-38,24}},
       color={0,131,169},
@@ -75,13 +75,34 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(massFlowSource.steam_a, constantHeatflow_L1_1.fluidPortIn) annotation (Line(
-      points={{-38,24},{-30,24},{-30,26},{14.6,26},{14.6,22.2}},
+      points={{-38,24},{-30,24},{-30,26},{16,26},{16,22}},
       color={0,131,169},
       thickness=0.5));
   connect(constantHeatflow_L1_1.fluidPortOut, massFlowSink.steam_a) annotation (Line(
-      points={{30.6,22.2},{56,22.2},{56,22}},
+      points={{28,22},{56,22},{56,22}},
       color={175,0,0},
       thickness=0.5));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for Heatflow_L1. This model contains the necessary components and connections for simulating the heatflow model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Test_Heatflow_L1;

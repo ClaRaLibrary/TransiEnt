@@ -1,7 +1,6 @@
-Check
-Controller
-ElectricWaterHeater
-HeatStorage_Stratified
-HeatStorageStratified_constProp
-HeatStorage_L2
+HotWaterStorage_constProp_L2
 HotWaterStorage_L2
+ElectricWaterHeater_constProp_L4
+HotWaterStorage_constProp_L4
+HotWaterStorage_L4
+Controller

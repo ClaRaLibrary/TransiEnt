@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Profiles;
 model SLPLoader "Loads standard load profiles from csv files"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,6 +21,11 @@ model SLPLoader "Loads standard load profiles from csv files"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   import TransiEnt;
   import TransiEnt.Basics.Types.SLP;
 
@@ -28,6 +33,11 @@ model SLPLoader "Loads standard load profiles from csv files"
                                                  final relativepath="electricity/StandardLoadProfiles/" + String(standardLoadProfile) + "_Hamburg_Normalized_1kWh_900s_2012.txt",
       final datasource=TransiEnt.Basics.Tables.DataPrivacy.isPublic,
                                                                   final tableName="default", final multiple_outputs = false, final columns=2:2, final use_absolute_path = false, final absolute_path="", constantfactor = scaling);
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
   parameter TransiEnt.Basics.Types.SLP standardLoadProfile=SLP.H0 "Profile used as datasource";
 
@@ -58,5 +68,6 @@ model SLPLoader "Loads standard load profiles from csv files"
           extent={{-30,70},{28,64}},
           lineColor={0,0,0},
           textString="SLP")}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end SLPLoader;

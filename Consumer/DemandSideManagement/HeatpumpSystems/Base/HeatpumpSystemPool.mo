@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base;
 model HeatpumpSystemPool
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,10 +19,19 @@ model HeatpumpSystemPool
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Model;
 
-  // Parameters:
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
   parameter TransiEnt.Basics.Types.Poolsize N=20;
 
@@ -30,23 +39,33 @@ model HeatpumpSystemPool
       getFileName(N),
       "A",
       N,
-      TransiEnt.Producer.Heat.Power2Heat.Components.nPar - 1);
+      TransiEnt.Producer.Heat.Power2Heat.Components.nPar - 1)
+                                                             "Input Matrix with Heat Pump Properties";
 
   replaceable TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base.BivalentHeatpumpSystemDSM[N] HeatPumpSystem(final A=A) constrainedby TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base.PartialHeatPumpSystemDSM(A=A) annotation (Placement(transformation(extent={{-22,-16},{24,16}})), choicesAllMatching=true);
 
-  // Interfaces
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
 
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
   Modelica.Blocks.Interfaces.BooleanInput
                                       isLoadShedding annotation (Placement(transformation(extent={{-112,-10},{-92,10}})));
 
-  // Components
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
   TransiEnt.Components.Boundaries.Electrical.Power Power annotation (Placement(transformation(extent={{80,-10},{60,10}})));
   Modelica.Blocks.Sources.RealExpression P_el_bdry(y=P_el) annotation (Placement(transformation(extent={{44,12},{64,32}})));
 
-  // ==============================================================================================================================
-  // Pool results and variables
+  // _____________________________________________
+  //
+  //             Variable Declarations
+  // _____________________________________________
 
   SI.Power P_el_n = sum(HeatPumpSystem.P_el_n);
   SI.Power P_el = sum(HeatPumpSystem.P_el);
@@ -58,6 +77,12 @@ model HeatpumpSystemPool
   Real COP_mean = sum(HeatPumpSystem.COP)/N;
   SI.Time t_pos_max = min(HeatPumpSystem.t_pos_max);
   SI.Time t_neg_max = min(HeatPumpSystem.t_neg_max);
+
+  // _____________________________________________
+  //
+  //              Private Functions
+  // _____________________________________________
+
 protected
     function getFileName
     import TransiEnt.Basics.Types;
@@ -74,11 +99,21 @@ protected
     end if;
     end getFileName;
 
+  // _____________________________________________
+  //
+  //           Characteristic Equations
+  // _____________________________________________
+
 equation
   for i in 1:N loop
       connect(isLoadShedding, HeatPumpSystem[i].isLoadShedding) annotation (Line(points={{-102,0},{-16.6812,0},{-16.6812,-0.16}}, color={255,0,255}));
 
   end for;
+
+  // _____________________________________________
+  //
+  //               Connect Statements
+  // _____________________________________________
 
   connect(Power.epp, epp) annotation (Line(
       points={{80,0},{89.05,0},{89.05,0},{100,0}},
@@ -129,5 +164,27 @@ equation
         Text(
           extent={{-64,-41},{30,-76}},
           lineColor={0,0,0},
-          textString="x")}));
+          textString="x")}), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Models several heat pumps in a pool to allow load shedding by turning off heat pumps.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Description)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>epp - Electric Power Port</p>
+<p>isLoadShedding - boolean signal</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(none)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>(no remarks)</p>
+</html>"));
 end HeatpumpSystemPool;

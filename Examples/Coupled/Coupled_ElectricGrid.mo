@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Coupled;
 model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,7 +29,7 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
     m_flow_nom=38,
     h_nom=110*4.2e3,
     T_feed_init=383.15) annotation (Placement(transformation(extent={{-202,90},{-122,170}})));
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasboilerGasport gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler    gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={40,24})));
@@ -149,9 +149,11 @@ equation
       points={{166,64},{158,64},{158,64},{148,64}},
       color={175,0,0},
       thickness=0.5));
-  annotation (Icon(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(
         preserveAspectRatio=false,
-        initialScale=0.1)), Diagram(coordinateSystem(
+        initialScale=0.1)), Diagram(graphics,
+                                    coordinateSystem(
         preserveAspectRatio=false,
         extent={{-400,-300},{400,300}},
         initialScale=0.1)),

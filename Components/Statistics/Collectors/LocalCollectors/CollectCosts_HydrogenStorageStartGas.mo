@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CollectCosts_HydrogenStorageStartGas "Cost collector for a the start gas of a hydrogen storage"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,6 +35,7 @@ model CollectCosts_HydrogenStorageStartGas "Cost collector for a the start gas o
   // _____________________________________________
 
   constant SI.SpecificEnergy GCV_H2=141.8e6 "Gross calorific value of hydrogen";
+  final parameter SI.Mass mass_H2_start(fixed=false) "Start value of the hydrogen mass";
 
   // _____________________________________________
   //
@@ -51,7 +52,6 @@ model CollectCosts_HydrogenStorageStartGas "Cost collector for a the start gas o
   // _____________________________________________
 
   SI.Mass mass_H2=1e4 "Hydrogen mass" annotation (Dialog(group="Fundamental Definitions"));
-  SI.Mass mass_H2_start "Start value of the hydrogen mass";
 
   // _____________________________________________
   //
@@ -76,10 +76,8 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  der(mass_H2_start)=0 "Value is constant because it is just the start value";
-
   //Calculation of investment costs
-  C_inv=mass_H2_start*GCV_H2/eta_ely*Cspec_demAndRev_el;
+  C_inv=if calculateCost then mass_H2_start*GCV_H2/eta_ely*Cspec_demAndRev_el else 0;
 
   //Calculation of O&M costs
   dynamic_C_OM=0;
@@ -89,7 +87,7 @@ equation
   dynamic_C_revenue=0;
 
   //Calculation of other costs
-  dynamic_C_other=C_other_fix;
+  dynamic_C_other=if calculateCost then C_other_fix else 0;
 
   annotation (
     defaultConnectionStructurallyInconsistent=true,
@@ -112,7 +110,8 @@ Start Gas"),                                                                 Tex
           lineColor={62,62,62},
           fillColor={0,134,134},
           fillPattern=FillPattern.Solid,
-          textString="%name")}), Diagram(coordinateSystem(preserveAspectRatio=
+          textString="%name")}), Diagram(graphics,
+                                         coordinateSystem(preserveAspectRatio=
             false, extent={{-100,-100},{100,100}})),
             Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>

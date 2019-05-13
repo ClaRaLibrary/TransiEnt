@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.Check;
 model TestFirstOrderHeatingNetworkConsumer_withPlant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -117,12 +117,12 @@ model TestFirstOrderHeatingNetworkConsumer_withPlant
                                                                         annotation (Placement(transformation(extent={{-10,-73},{-37,-63}})));
 equation
   connect(Plant.epp, Grid.epp) annotation (Line(
-      points={{-67.15,-33.4},{-62,-33.4},{-62,-2.06},{-58.07,-2.06}},
+      points={{-67.15,-33.4},{-62,-33.4},{-62,-2},{-58,-2}},
       color={0,135,135},
       thickness=0.5));
   connect(Plant.P_set, P_set.y) annotation (Line(points={{-103.03,-23.1333},{-103.03,-16.5},{-104.9,-16.5}},
                                                                                            color={0,0,127}));
-  connect(Q_th_demand.y, ConsumerStation.Q_demand) annotation (Line(points={{51,-10},{38.4,-10},{38.4,-28.6}},
+  connect(Q_th_demand.y, ConsumerStation.Q_flow_demand) annotation (Line(points={{51,-10},{38.4,-10},{38.4,-28.6}},
                                                                                                     color={0,0,127}));
   connect(pipe_return.outlet, Plant.inlet) annotation (Line(
       points={{-37,-68},{-46,-68},{-52,-68},{-52,-49.9},{-65.54,-49.9}},
@@ -179,5 +179,27 @@ Plant.inlet.m_flow
 Plant.Q_flow_gen")}),
     experiment(StopTime=50000, Interval=20),
     __Dymola_experimentSetupOutput(equidistant=false),
-    Icon(coordinateSystem(extent={{-160,-100},{100,100}})));
+    Icon(graphics,
+         coordinateSystem(extent={{-160,-100},{100,100}})),
+    Documentation(info="<html>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
+<p>Test environment for a first order heating network consumer using a continuous chp plant</p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
+</html>"));
 end TestFirstOrderHeatingNetworkConsumer_withPlant;

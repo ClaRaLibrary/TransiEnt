@@ -1,7 +1,7 @@
 within TransiEnt.Components.Electrical.Grid.Characteristics;
 type LVCabletypes = enumeration(
     K1 "K1 240 Al-M",
-    K2 "K2 MiSpg-Kabel, verlustfrei",
+    K2 "K2 MiSpg-Kabel, lossless",
     K3 "K3 150 M8",
     K4 "K4 150 Al",
     K5 "K5 185 Al",

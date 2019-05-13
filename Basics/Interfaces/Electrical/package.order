@@ -1,4 +1,14 @@
 ElectricPowerIn
 ElectricPowerOut
+PartialPowerPort
 ActivePowerPort
 ApparentPowerPort
+ComplexPowerPort
+ReactivePowerIn
+ReactivePowerOut
+ElectricCurrentIn
+ElectricCurrentOut
+VoltageIn
+VoltageOut
+FrequencyIn
+FrequencyOut

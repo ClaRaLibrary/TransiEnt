@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.PowerMarketModeling.MeritOrderModeling.Check;
 model TestMeritOrderModel_f_RE_Conventionals_Demand "With real genration and demand data"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -93,15 +93,34 @@ equation
   connect(dhnControl.Q_dot_DH_Targ, heatingLoadCharline_11_1.Q_flow) annotation (Line(points={{-66.4,-76.35},{-66.4,-71},{-71.7,-71}}, color={0,0,127}));
   connect(heatingLoadCharline_11_1.T_amb, temperatureHH_900s_01012012_0000_31122012_2345_1.y1) annotation (Line(points={{-78.3,-70.7},{-80.35,-70.7},{-80.35,-83.5}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=3.1536e+007, Interval=3600),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Plot: </p>
 <p>meritOrderModelStep2_1.PowerPrice</p>
 <p>- scaledWindProduction.y</p>
 <p>- scaled Demand.y</p>
 <p><br>- spotPrice... . y1</p>
 <p><br>All offers still have to be properly dimensioned. This example is so far just for proof of concept.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10.Version History</span></h4>
 </html>"));
 end TestMeritOrderModel_f_RE_Conventionals_Demand;

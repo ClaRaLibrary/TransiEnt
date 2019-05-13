@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Heat;
 model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity and heat losses"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -101,7 +101,7 @@ model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity a
         rotation=0,
         origin={61,0})));
   Modelica.Blocks.Sources.Constant T_ConsumerTarget(k=T_set) annotation (Placement(transformation(extent={{-30,42},{-10,62}})));
-  ClaRa.Components.Utilities.Blocks.LimPID CTRL_T_room(
+  TransiEnt.Basics.Blocks.LimPID CTRL_T_room(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     Ni=0.9,
     t_activation=t_ctrl_activationTime,
@@ -220,10 +220,10 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p>(no remarks)</p>
+<p>Tested in check model &quot;TransiEnt.Consumer.Heat.Check.TestThermalHeatConsumer&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no references)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
@@ -286,5 +286,6 @@ equation
           points={{-32,0},{-20,0},{-16,10},{-12,-10},{-8,0},{34,0}},
           color={0,0,0},
           smooth=Smooth.None)}),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Diagram(graphics,
+            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end ThermalHeatConsumer;

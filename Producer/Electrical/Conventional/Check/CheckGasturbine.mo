@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Electrical.Conventional.Check;
-model CheckGasturbine "Example of the component PowerPlant_PoutGrad_L1"
+model CheckGasturbine "Example of the component Gasturbine"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,11 +29,10 @@ model CheckGasturbine "Example of the component PowerPlant_PoutGrad_L1"
     offset=0,
     height=-120e6,
     startTime=100) annotation (Placement(transformation(extent={{-76,22},{-56,42}})));
-Gasturbine gasturbine(
-  eta_total=0.45,
-  P_init=0,
-  P_el_n=120000000)
-            annotation (Placement(transformation(extent={{-30,-66},{-10,-46}})));
+  Gasturbine gasturbine(
+    eta_total=0.45,
+    P_init_set=0,
+    P_el_n=120000000) annotation (Placement(transformation(extent={{-30,-66},{-10,-46}})));
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
   Modelica.Blocks.Sources.Step P_SB_neg_end(
@@ -59,7 +58,7 @@ Gasturbine gasturbine(
 equation
 
   connect(gasturbine.epp, Grid.epp) annotation (Line(
-      points={{-10.5,-50.4},{41.9,-50.4},{41.9,-50.1}},
+      points={{-11,-49},{42,-49},{42,-50}},
       color={0,135,135},
       thickness=0.5));
   connect(P_SB_neg_set_from_On.y, sum1.u[1]) annotation (Line(points={{15,2},{26,2},{26,18.6667},{34,18.6667}}, color={0,0,127}));
@@ -85,13 +84,15 @@ createPlot(id=1, position={809, 0, 791, 733}, y={"gasturbine.epp.P", "gasturbine
   resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{80,80}})),
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-80,-80},{80,80}})),
     experiment(StopTime=7200),
     __Dymola_experimentSetupOutput,
-    Icon(coordinateSystem(extent={{-100,-120},{100,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-120},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Test environment for gasturbines</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

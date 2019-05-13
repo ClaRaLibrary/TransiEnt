@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Tables.HeatGrid.HeatingCurves;
 partial model PartialHeatingCurve "partial model for heating curves, LA"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -115,7 +115,7 @@ equation
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>(Description)</p>
+<p>A model created for heating curves</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -123,7 +123,8 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
+<p>T_supply is the supply temperature</p>
+<p>T_return is the return temperature</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

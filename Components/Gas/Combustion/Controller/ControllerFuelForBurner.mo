@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Combustion.Controller;
 model ControllerFuelForBurner "Controller to control the fuel mass flow rate for the burner"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -69,12 +69,9 @@ model ControllerFuelForBurner "Controller to control the fuel mass flow rate for
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput T_flueGas(
-    final quantity="Temperature",
-    displayUnit="degC",
-    final unit="K") "Flue gas outlet temperature" annotation (Placement(transformation(extent={{120,-20},{80,20}}), iconTransformation(extent={{120,-20},{80,20}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_flueGas "Flue gas outlet temperature" annotation (Placement(transformation(extent={{120,-20},{80,20}}), iconTransformation(extent={{120,-20},{80,20}})));
 
-  Modelica.Blocks.Interfaces.RealOutput m_flow_fuel(final quantity="MassFlowRate", final unit="kg/s") "Fuel mass flow rate entering the burner system" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_fuel "Fuel mass flow rate entering the burner system" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,-100})));
@@ -84,7 +81,7 @@ model ControllerFuelForBurner "Controller to control the fuel mass flow rate for
   //           Instances of other Classes
   // _____________________________________________
 
-  ClaRa.Components.Utilities.Blocks.LimPID limPID(
+  TransiEnt.Basics.Blocks.LimPID limPID(
     k=k,
     controllerType=controllerType,
     y_start=y_start,
@@ -93,7 +90,7 @@ model ControllerFuelForBurner "Controller to control the fuel mass flow rate for
     Tau_i=Ti,
     Tau_d=Td,
     y_min=0,
-    initOption=initOption)                                                                                                                                                                                                         annotation (Placement(transformation(
+    initOption=initOption) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=0,
         origin={40,-50})));
@@ -118,29 +115,31 @@ equation
   connect(limPID.u_m, T_flueGas) annotation (Line(points={{39.9,-38},{39.9,0},{100,0}}, color={0,0,127}));
   connect(limPID.y, m_flow_fuel) annotation (Line(points={{29,-50},{0,-50},{0,-100}}, color={0,0,127}));
   connect(limPID.u_s, const.y) annotation (Line(points={{52,-50},{67,-50}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})),                                                                     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),                                                                     Icon(graphics,
+                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This is a controller to control the fuel mass flow rate for the burner for a target system outlet temperature. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The temperature at the system outlet is measured and compared to the target value. The fuel is controlled using a P, PI, PD or PID controller. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>T_flueGas: Measured flue gas outlet temperature </p>
 <p>m_flow_fuel: output for the fuel mass flow rate (positive sign) </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
+<h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
-<p>Model modified by Carsten Bode (c.bode@tuhh.de) on Mon Apr 03 2017 (exchanged P controller for ClaRa LimPID controller)<br> </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
+<p>Model modified by Carsten Bode (c.bode@tuhh.de) on Mon Apr 03 2017 (exchanged P controller for ClaRa LimPID controller)</p>
 </html>"));
 end ControllerFuelForBurner;

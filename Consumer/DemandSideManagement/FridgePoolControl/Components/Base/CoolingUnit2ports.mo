@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components.Base;
 model CoolingUnit2ports "Simple cooling unit model with two ports for fridge and freezer heat flow"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -120,22 +120,26 @@ equation
         Line(
           points={{-24,-18},{-20,-10},{-8,8},{-6,10},{2,16},{12,20},{20,20}},
           color={0,0,255},
-          smooth=Smooth.None)}),    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+          smooth=Smooth.None)}),    Diagram(graphics,
+                                            coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Simple&nbsp;cooling&nbsp;unit&nbsp;model&nbsp;with&nbsp;two&nbsp;ports&nbsp;for&nbsp;fridge&nbsp;and&nbsp;freezer&nbsp;heat&nbsp;flow. </span>Full documentation is not available yet. Please see comments in code or contact author per mail.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>(no remarks)</p>
+<p>port_a - Heat Port 1</p>
+<p>port_b - Heat Port 2</p>
+<p>q - boolean (on/off) signal</p>
+<p>epp - Electric Power Port</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>

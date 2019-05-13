@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles;
 model Adapter_H2toNG "AdapterH2NG || yellow | red"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -87,7 +87,8 @@ H2"),   Text(
           textString="VLE
 NG"),   Polygon(points={{-10,-40},{-10,40},{-20,40},{-30,8},{-44,8},{-44,-8},{-30,-8},{-20,-40},{-10,-40}}, lineColor={28,108,200}),
         Polygon(points={{10,-40},{10,40},{20,40},{30,8},{44,8},{44,-8},{30,-8},{20,-40},{10,-40}}, lineColor={28,108,200})}),
-                                 Diagram(coordinateSystem(preserveAspectRatio=false,
+                                 Diagram(graphics,
+                                         coordinateSystem(preserveAspectRatio=false,
           extent={{-60,-60},{60,60}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

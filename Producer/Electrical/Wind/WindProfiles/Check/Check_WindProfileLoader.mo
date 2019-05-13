@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.WindProfiles.Check;
 model Check_WindProfileLoader
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,13 +38,13 @@ equation
   connect(windProfileLoader.y1, WindGenerator.P_el_set)
     annotation (Line(points={{-59,56},{-19,56},{-19,36}}, color={0,0,127}));
   connect(ElectricGrid.epp, WindGenerator.epp) annotation (Line(
-      points={{-24.1,-14.1},{-44,-14.1},{-44,23.9},{-23.1,23.9}},
+      points={{-24,-14},{-44,-14},{-44,24},{-23,24}},
       color={0,135,135},
       thickness=0.5));
   connect(windProfileLoader1.y1, WindGenerator1.P_el_set)
     annotation (Line(points={{-71,-76},{-59,-76},{-59,-52}}, color={0,0,127}));
   connect(WindGenerator1.epp, WindGenerator.epp) annotation (Line(
-      points={{-54.9,-39.9},{-44,-39.9},{-44,23.9},{-23.1,23.9}},
+      points={{-55,-40},{-44,-40},{-44,24},{-23,24}},
       color={0,135,135},
       thickness=0.5));
 public
@@ -64,6 +64,27 @@ createPlot(id=1, position={809, 0, 791, 681}, y={"WindGenerator.epp.P", "WindGen
    resultFile := "Successfully plotted results for file: " + resultFile;
 
 end plotResult;
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})));
+  annotation (Diagram(graphics,
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})), Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test environment for the WindProfileLoader model</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(Purely technical component without physical modeling.)</p>
+<h4><span style=\"color: #008000\">4.Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+</html>"));
 end Check_WindProfileLoader;

@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.SecondaryControl;
 model SecondaryBalancingController "Secondary balancing control model as proposed by ENTSO-E operational handbook"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,18 +43,18 @@ model SecondaryBalancingController "Secondary balancing control model as propose
   parameter Boolean is_singleton = true "Select true, if this is the only 2ndary ctrl in total grid model"
                                                                        annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
 
- parameter Modelica.SIunits.Power P_nom=simCenter.P_n_low;
+  parameter SI.Power P_n=simCenter.P_n_low;
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 
-   Modelica.Blocks.Interfaces.RealInput P_tie_is if             not is_singleton "Requested power for exchange between multiple control areas" annotation (Placement(transformation(extent={{-111,80},{-91,100}}, rotation=0), iconTransformation(
+   TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_is if             not is_singleton "Requested power for exchange between multiple control areas" annotation (Placement(transformation(extent={{-111,80},{-91,100}}, rotation=0), iconTransformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-42,91})));
-   Modelica.Blocks.Interfaces.RealInput P_tie_set if            not is_singleton "Requested power for exchange between multiple control areas" annotation (Placement(transformation(extent={{-111,50},{-91,70}}, rotation=0), iconTransformation(
+   TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_tie_set if            not is_singleton "Requested power for exchange between multiple control areas" annotation (Placement(transformation(extent={{-111,50},{-91,70}}, rotation=0), iconTransformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-90,91})));
@@ -152,10 +152,10 @@ delta P_sec = - beta * G - 1/T_r * Int G dt"),
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;TransiEnt.Grid.Electrical.SecondaryControl.Check.TestSecondaryBalancingController&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

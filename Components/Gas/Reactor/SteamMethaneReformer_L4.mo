@@ -1,11 +1,11 @@
-﻿within TransiEnt.Components.Gas.Reactor;
+within TransiEnt.Components.Gas.Reactor;
 model SteamMethaneReformer_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed steam methane reformer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,9 +48,12 @@ model SteamMethaneReformer_L4 "Discretized pseudohomogeneous PFR model of a fixe
     Delta_p=2.3e5,
     eff=fill({0.019,0.015,0.021}, N_cv),
     final nu=[-1,0,-1,3,1; 0,1,-1,1,-1; -1,1,-2,4,0],
-    T_start=(820.574 + 273.15)*ones(N_cv),
-    p_start=24.338e5*ones(N_cv),
-    xi_start=fill({0.0319,0.1893,0.6089,0.0575,0.1073}, N_cv),
+    T(
+    start = (820.574 + 273.15)*ones(N_cv)),
+    p(
+    start = 24.338e5*ones(N_cv)),
+    xi(
+    start =  fill({0.0319,0.1893,0.6089,0.0575,0.1073}, N_cv)),
     T_nom=(820.574 + 273.15)*ones(N_cv),
     p_nom=24.338e5*ones(N_cv),
     xi_nom=fill({0.0319,0.1893,0.6089,0.0575,0.1073}, N_cv));
@@ -237,31 +240,34 @@ equation
         Text(
           extent={{-100,80},{100,40}},
           lineColor={0,0,0},
-          textString="SMR")}),                  Diagram(coordinateSystem(
+          textString="SMR")}),                  Diagram(graphics,
+                                                        coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents a discretized fixed bed steam methane reformer with reaction kinetics with constant effectiveness factors. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>The reactor is discretized and in each volume mass, impulse and energy balances as well as heat transfer between furnace gas and synthesis gas in the tubes and reaction rate equations are solved. These equations are taken from Nandasana et al. [1] except that the pressure loss is assumed to be constant and the effective reaction rates are calculated using constant effectiveness factors. Also the mass balances are stationary so changes in density are neglected. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>The reactor is discretized and in each volume mass, impulse and energy balances as well as heat transfer between furnace gas and synthesis gas in the tubes and reaction rate equations are solved. These equations are taken from Nandasana et al. [1] except that the pressure loss is assumed to be constant and the effective</p>
+<p>reaction rates are</p>
+<p>calculated using constant effectiveness factors. Also the mass balances are stationary so changes in density are neglected. </p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>The model is valid if the changes of the effectiveness factors and the pressure loss are negligible. </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: ideal gas inlet </p>
 <p>gasPortOut: ideal gas outlet </p>
 <p>heat: heat port </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The used equations are described in [1] except for the changes described in 2. The pressure calculation for each volume can be done either using the pressure in the middle or at the end of the volume. </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>The results of the model were compared to results from Rajesh et al. [2] and the outlet variables fit the results satisfyingly. </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
-<p>[1] Nandasana, Anjana D.; Ray, Ajay K.; Gupta, Santosh K. (2003): Dynamic Model of an Industrial Steam Reformer and Its Use for Multiobjective Optimization. In: Ind. Eng. Chem. Res. 42 (17), S. 4028–4042. DOI: 10.1021/ie0209576. </p>
-<p>[2] Rajesh, J. K.; Gupta, Santosh K.; Rangaiah, G. P.; Ray, Ajay K. (2000): Multiobjective Optimization of Steam Reformer Performance Using Genetic Algorithm. In: Ind. Eng. Chem. Res. 39 (3), S. 706–717. DOI: 10.1021/ie9905409. </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>[1] Nandasana, Anjana D.; Ray, Ajay K.; Gupta, Santosh K. (2003): Dynamic Model of an Industrial Steam Reformer and Its Use for Multiobjective Optimization. In: Ind. Eng. Chem. Res. 42 (17), S. 4028&ndash;4042. DOI: 10.1021/ie0209576. </p>
+<p>[2] Rajesh, J. K.; Gupta, Santosh K.; Rangaiah, G. P.; Ray, Ajay K. (2000): Multiobjective Optimization of Steam Reformer Performance Using Genetic Algorithm. In: Ind. Eng. Chem. Res. 39 (3), S. 706&ndash;717. DOI: 10.1021/ie9905409. </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
 </html>"));
 end SteamMethaneReformer_L4;

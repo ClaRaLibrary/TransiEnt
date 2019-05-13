@@ -2,5 +2,7 @@ TestCharLine
 TestBoiler_Qflowset
 TestBoiler_Qflowset_variableH2
 TestBoiler_Qflowset_variableST
+TestBoiler_HoldTemperature_static_L1
 TestBoiler_HoldTemperature_L1
 TestBoiler_HoldTemperature_L2
+TestBoilers_HoldTemperature_L2

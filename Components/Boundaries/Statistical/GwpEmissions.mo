@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Statistical;
 model GwpEmissions "Source component for gwp emissions "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,7 +36,7 @@ model GwpEmissions "Source component for gwp emissions "
   parameter Boolean useInputConnector = true "Gets parameter from input connector"
     annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Boundary"));
 
-  parameter TransiEnt.Basics.Units.MassOfCDEperEnergy m_flow_const=0 "Constant boundary"
+  parameter TransiEnt.Basics.Units.MassFlowOfCDE m_flow_const=0 "Constant boundary"
   annotation (Dialog(group="Boundary", enable = not useInputConnector));
 
   parameter Boolean change_sign=false "Change sign on input value" annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Boundary"));
@@ -62,7 +62,7 @@ model GwpEmissions "Source component for gwp emissions "
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput m_flow_set if              useInputConnector "active power input"
+ Modelica.Blocks.Interfaces.RealInput m_flow_set(final quantity="MassFlowRate", final unit= "kg/s", displayUnit="kg/s") if useInputConnector "active power input"
                                                                  annotation (Placement(transformation(extent={{-140,60},{-100,100}},
           rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
@@ -75,7 +75,7 @@ model GwpEmissions "Source component for gwp emissions "
   // _____________________________________________
 
 protected
-  Modelica.Blocks.Interfaces.RealInput m_flow_internal "Needed to connect to conditional connector for active power";
+  Modelica.Blocks.Interfaces.RealInput m_flow_internal(final quantity="MassFlowRate", final unit= "kg/s", displayUnit="kg/s") "Needed to connect to conditional connector for active power";
 
 public
   Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric            collectGwpEmissions annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
@@ -102,7 +102,8 @@ equation
   end if;
   connect(m_flow_internal, m_flow_set);
 
-  annotation (defaultComponentName="GwpEmissionSource",Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (defaultComponentName="GwpEmissionSource",Diagram(graphics,
+                                                               coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(
@@ -129,10 +130,10 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarsk for Usage</span></b></p>
+<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p>Tested in check model &quot;TransiEnt.Components.Boundaries.Statistical.Check.TestGwpEmissions&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

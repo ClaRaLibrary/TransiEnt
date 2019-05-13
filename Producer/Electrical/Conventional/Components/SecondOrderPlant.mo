@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model SecondOrderPlant "Second order transient behaviour, no states, no additional controller"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,7 +48,7 @@ model SecondOrderPlant "Second order transient behaviour, no states, no addition
   parameter Integer nSubgrid=1 "Index of subgrid for moment of inertia statistics" annotation(Dialog(group="Statistics"));
 
   // ** Inititialization **
-  parameter Boolean fixedStartValue_w = false "Wether or not the start value of the angular velocity of the plants mechanical components is fixed"
+  parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true), Dialog(group="Initialization"));
   // _____________________________________________
   //
@@ -91,14 +91,19 @@ model SecondOrderPlant "Second order transient behaviour, no states, no addition
 
   TransiEnt.Components.Boundaries.Mechanical.Power MechanicalBoundary(change_sign=true) annotation (Placement(transformation(extent={{8,-19},{28,-1}})));
   TransiEnt.Components.Mechanical.ConstantInertia MechanicalConnection(
-    w(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
+    omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid,
     P_n=P_el_n) annotation (choicesAllMatching=true, Placement(transformation(extent={{36,-20},{54,1}})));
-  TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator(eta=eta_gen) annotation (choicesAllMatching=true, Placement(transformation(
+  replaceable TransiEnt.Components.Electrical.Machines.ActivePowerGenerator Generator constrainedby TransiEnt.Components.Electrical.Machines.Base.PartialActivePowerGenerator(eta=eta_gen) annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-9.5,-9},{9.5,9}},
         rotation=0,
         origin={74.5,-9})));
+
+   replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
+        rotation=-90,
+        origin={86.5,32})));
 equation
   // _____________________________________________
   //
@@ -142,18 +147,24 @@ equation
   connect(eta_max.y, eta_is.u2) annotation (Line(points={{-45,27},{-40,27},{-40,27.2},{-39.6,27.2}}, color={0,0,127}));
   connect(eta_rel.y[1], eta_is.u1) annotation (Line(points={{-41,48},{-40,48},{-40,30.8},{-39.6,30.8}}, color={0,0,127}));
   connect(eta_is.y, product.u2) annotation (Line(points={{-32.7,29},{52.15,29},{52.15,45.2},{51.4,45.2}}, color={0,0,127}));
-  connect(MechanicalConnection.mpp_b,Generator. mpp) annotation (Line(points={{54,-9.5},{60,-9.5},{60,-9.45},{64.525,-9.45}},     color={95,95,95}));
+  connect(MechanicalConnection.mpp_b,Generator. mpp) annotation (Line(points={{54,-9.5},{60,-9.5},{60,-9},{65,-9}},               color={95,95,95}));
   connect(MechanicalBoundary.mpp,MechanicalConnection. mpp_a) annotation (Line(points={{28,-10},{36,-10},{36,-9.5}},  color={95,95,95}));
   connect(Generator.epp, epp) annotation (Line(
-      points={{84.095,-9.09},{100.093,-9.09},{100.093,60},{100,60}},
+      points={{84.095,-9.09},{100.093,-9.09},{100.093,78},{100,78}},
       color={0,0,0},
       smooth=Smooth.None));
   connect(product.y, MechanicalBoundary.P_mech_set) annotation (Line(points={{58.3,47},{68,47},{68,16},{18,16},{18,0.62}}, color={0,0,127}));
+  connect(Exciter.epp1, epp) annotation (Line(
+      points={{86.5,42},{86,42},{86,78},{100,78}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(Exciter.y, Generator.E_input) annotation (Line(points={{86.5,21.4},{86.5,11.7},{74.215,11.7},{74.215,-0.09}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics={
     Text( lineColor={255,255,0},
         extent={{-42,-84},{18,-24}},
-          textString="PT2")}),            Diagram(coordinateSystem(
+          textString="PT2")}),            Diagram(graphics,
+                                                  coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -167,7 +178,7 @@ equation
 <p>An example of the usage of this component be found in TransiEnt.Producer.Electrical.Conventional.Check.TestSecondOrderContiuousPlant</p>
 <p><br><span style=\"font-family: MS Shell Dlg 2;\">The model can be used once the following <b>parameters</b> have been defined:</span></p>
 <p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Physical restrictions:</span></p>
-<p style=\"margin-left: 60px;\"><span style=\"font-family: MS Shell Dlg 2;\">P_nom: nominal power of the plant. It is used to calculate the plant&apos;s investment costs.</span></p>
+<p style=\"margin-left: 60px;\"><span style=\"font-family: MS Shell Dlg 2;\">P_n: nominal power of the plant. It is used to calculate the plant&apos;s investment costs.</span></p>
 <p style=\"margin-left: 60px;\"><span style=\"font-family: MS Shell Dlg 2;\">eta_total: nominal efficiency of the plant at full load. It is used together with the part load charline to calculate the plant&apos;s efficiency at different loads</span></p>
 <p style=\"margin-left: 60px;\"><span style=\"font-family: MS Shell Dlg 2;\">PartLoadCharline: It is used together with the eta_load parametercalculate the plant&apos;s efficiency at different loads. For further description refer to the documentation of TransiEnt.Producer.Electrical.Base.RelativePartloadEfficiency</span></p>
 <p style=\"margin-left: 60px;\"><span style=\"font-family: MS Shell Dlg 2;\">P_el_grad: </span></p>
@@ -191,25 +202,25 @@ equation
 <p><br>This leads to the equation:</p>
 <p align=\"center\"><img src=\"modelica://TransiEnt/Images/equations/equation-vTVwjPhj.png\" alt=\"tau/0.632=60/P_el_grad\"/></p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
-<p><br>- This plant model is &QUOT;always on&QUOT; meaning that it reacts to power setpoint without delay even if current output is zero</p>
+<p><br>- This plant model is &quot;always on&quot; meaning that it reacts to power setpoint without delay even if current output is zero</p>
 <p><br>- Control power provision is not implemented</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>u: RealInput</p>
-<p>epp: ElectricPowerPort_L1 </p>
+<p>epp: type of electrical power port can be chosen </p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>no elements</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>no equations</p>
-<h4><span style=\"color: #008000\">7. Remarsk for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Recomended <b>nominal</b> <b>efficiencies</b> (based on Strau&szlig;, 2009):</span></p>
-<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Steam power plant (hard coal) --&GT; 0.40 - 0.45</span></p>
-<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Combined Cycle --&GT; 0.60</span></p>
-<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">GasTurbines --&GT; 0.32</span></p>
+<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Steam power plant (hard coal) --&gt; 0.40 - 0.45</span></p>
+<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Combined Cycle --&gt; 0.60</span></p>
+<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">GasTurbines --&gt; 0.32</span></p>
 <p><br>Recommended<b> ramp rates in</b> &percnt; P_el_n per minute (based on Brauner et. al., 2012):</p>
-<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Steam power plant (hard coal) --&GT; 4 to 6</span></p>
-<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Steam power plant (lignite) --&GT; 2.5 to 4</span></p>
-<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Combined Cycle power plant --&GT; 4 to 8</span></p>
-<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Gas turbine --&GT; 12 to 15</span></p>
+<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Steam power plant (hard coal) --&gt; 4 to 6</span></p>
+<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Steam power plant (lignite) --&gt; 2.5 to 4</span></p>
+<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Combined Cycle power plant --&gt; 4 to 8</span></p>
+<p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Gas turbine --&gt; 12 to 15</span></p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>Instead of a validation, the plausibility of the results will be model results has been roughly proofed.</p>
 <p>The results obtained with this model in the test-model <span style=\"color: #5500ff;\">TransiEnt.Producer.Electrical.Conventional.Check.TestSecondOrderContiuousPlant_PlantStart</span> are shown bellow together with rough reference values from <span style=\"font-family: MS Shell Dlg 2;\">[2]</span> are displayed bellow.</p>
@@ -219,6 +230,6 @@ equation
 <p><br>[1] Strau&szlig;, Karl: <i>Kraftwerkstechnik zur Nutzung fossiler, nuklearer und regenerativer Energiequellen</i>. 6. ed. Heidelberg&nbsp;: Springer-Verlag Berlin Heidelberg, 2009 &mdash;&nbsp;ISBN&nbsp;9783642014307</p>
 <p><br>[2] Brauner, G&uuml;nther ; Glaunsinger, Wolfgang ; Bofinger, Stefan ; John, Markus ; Magin, Wendelin ; Pyc, Ireneusz ; Sch&uuml;ler, Steffen ; Schulz, Stephan ; Schwing, Ulrich ; et al.: <i>Erneuerbare Energie braucht flexible Kraftwerke - Szenarien bis 2020</i>&nbsp;: Verband der Elektrotechnik Elektronik Informationstechnik e.V., 2012</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>(no remarks)</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end SecondOrderPlant;

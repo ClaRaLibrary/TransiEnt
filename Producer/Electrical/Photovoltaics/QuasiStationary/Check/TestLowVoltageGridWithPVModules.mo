@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.QuasiStationary.Check;
 model TestLowVoltageGridWithPVModules
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,7 +46,8 @@ model TestLowVoltageGridWithPVModules
   inner TransiEnt.SimCenter simCenter(tableInterpolationSmoothness=Modelica.Blocks.Types.Smoothness.ContinuousDerivative)
     annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable1(l=41, param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K4()) annotation (Placement(transformation(rotation=0, extent={{-42,34},{-22,54}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable1(l=41, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4)
+                                                              annotation (Placement(transformation(rotation=0, extent={{-42,34},{-22,54}})));
 
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load1(R_ref=50)
     annotation (Placement(transformation(
@@ -56,17 +57,20 @@ model TestLowVoltageGridWithPVModules
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground1
     annotation (Placement(transformation(extent={{30,30},{50,50}})));
 
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable16(param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K4(), l=24) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable16(l=24, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4)
+                                                               annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-24,22})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable17(l=86, param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K13()) annotation (Placement(transformation(rotation=0, extent={{2,14},{22,34}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable17(l=86, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K13)
+                                                               annotation (Placement(transformation(rotation=0, extent={{2,14},{22,34}})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load2(R_ref=50)
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={50,22})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable23(param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K4(), l=191) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable23(l=191, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4)
+                                                                annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-24,-6})));
@@ -77,7 +81,8 @@ model TestLowVoltageGridWithPVModules
         origin={16,4})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground3
     annotation (Placement(transformation(extent={{28,-16},{48,4}})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable29(l=66, param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K13()) annotation (Placement(transformation(rotation=0, extent={{4,-30},{24,-10}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable29(l=66, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K13)
+                                                               annotation (Placement(transformation(rotation=0, extent={{4,-30},{24,-10}})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load4(R_ref=50)
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -85,15 +90,18 @@ model TestLowVoltageGridWithPVModules
         origin={66,-14})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground4
     annotation (Placement(transformation(extent={{70,-34},{90,-14}})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable30(param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K4(), l=65) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable30(l=65, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4)
+                                                               annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-24,-36})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable43(param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K4(), l=287) annotation (Placement(transformation(
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable43(l=287, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4)
+                                                                annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-24,-68})));
-  TransiEnt.Components.Electrical.Grid.PIModelQS Cable32(l=89, param=TransiEnt.Components.Electrical.Grid.Characteristics.LV_K14()) annotation (Placement(transformation(rotation=0, extent={{2,-62},{22,-42}})));
+  TransiEnt.Components.Electrical.Grid.PiModelQS Cable32(l=89, CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K14)
+                                                               annotation (Placement(transformation(rotation=0, extent={{2,-62},{22,-42}})));
   Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load5(R_ref=50)
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
@@ -224,8 +232,8 @@ equation
                                        color={85,170,255}));
   connect(Step_20_pu.y, Grid1.v_set)
     annotation (Line(points={{-79,-42},{-66,-42},{-66,-4}}, color={0,0,127}));
-  connect(Grid1.epp, Adapter.epp) annotation (Line(points={{-82.1,8.1},{-88,8.1},
-          {-88,36},{-68,36}}, color={0,127,0}));
+  connect(Grid1.epp, Adapter.epp) annotation (Line(points={{-82,8},{-88,8},{-88,36},{-68,36}},
+                              color={0,127,0}));
   connect(pV_Module_2.u, GlobalSolarRadiation.y) annotation (Line(points={{108.4,
           -1.33227e-015},{108.4,0},{128,0},{128,52},{145.2,52}}, color={0,0,127}));
   connect(pV_Module_3.u, GlobalSolarRadiation.y) annotation (Line(points={{110.4,-40},{128,-40},{128,52},{145.2,52}},
@@ -259,7 +267,8 @@ negative power flow at grid epp")}), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Rebekka Denninger (rebekka.denninger@tuhh.de) on Mon Feb 29 2016</span></p>
 </html>"),
-    Icon(coordinateSystem(extent={{-100,-100},{160,100}})),
+    Icon(graphics,
+         coordinateSystem(extent={{-100,-100},{160,100}})),
     experiment(
       StopTime=86400,
       Interval=900,

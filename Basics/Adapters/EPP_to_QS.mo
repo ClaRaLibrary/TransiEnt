@@ -2,10 +2,10 @@ within TransiEnt.Basics.Adapters;
 model EPP_to_QS "Adapter to MSL Quasistationary interface"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -103,6 +103,7 @@ equation
             -100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}}), graphics={Line(points={{-100,0},{94,0},{90,0}}, color={28,108,200}), Line(points={{-96,0},{-8,0}}, color={0,127,0})}),
     Documentation(info="<html>
+<h4>Adapter for switching from Transient electric power port to quasi stationary pin</h4>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Adapter from Transient electric power port (EPP) to quasi stationary pin (QS). Defines active and reactive power on transient electric power port. Therefore it must be connected to Transient components defining frequency and voltage. </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
@@ -120,7 +121,7 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">The transient side must be connected to a model which defines frequency and voltage (e.g. a grid) and the quasistationary side of the adapter must be connected to a model which defines power (e.g. a consumer).</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">See <a href=\"TransiEnt.Basics.Adapters.Check.TestEPP_to_QS\">this</a> tester to learn more about how to use this model.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no validation or testing necessary)</span></p>
+<p>Tested in check model &quot;TransiEnt.Basics.Adapters.Check.TestEPP_to_QS&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>

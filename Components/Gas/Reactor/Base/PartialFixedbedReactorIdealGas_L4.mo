@@ -2,10 +2,10 @@
 partial model PartialFixedbedReactorIdealGas_L4 "Discretized model of a fixed-bed reactor using ideal gas models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.1.0                             //
+// Component of the TransiEnt Library, version: 1.2.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2018, Hamburg University of Technology.                              //
+// Copyright 2019, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -79,10 +79,6 @@ partial model PartialFixedbedReactorIdealGas_L4 "Discretized model of a fixed-be
   parameter SI.Pressure p_nom[N_cv] "Nominal pressure in the control volumes" annotation(Dialog(group="Nominal Values"));
   parameter SI.MassFraction xi_nom[N_cv,N_comp-1] "Nominal values for mass fractions" annotation(Dialog(group="Nominal Values"));
 
-  parameter SI.Temperature T_start[N_cv] "Initial gas and catalyst temperature in the control volumes" annotation(Dialog(group="Initialization"));
-  parameter SI.Pressure p_start[N_cv] "Initial pressure in the control volumes" annotation(Dialog(group="Initialization"));
-  parameter SI.MassFraction xi_start[N_cv,N_comp-1] "Initial values for mass fractions" annotation(Dialog(group="Initialization"));
-
   // _____________________________________________
   //
   //                 Outer Models
@@ -135,9 +131,10 @@ protected
   Real RR_eff[N_cv,N_reac] "Effective reaction rates of reactions N_reac in mol/(kg cat s)";
   Real RR[N_cv,N_reac] "Reaction rates of reactions N_reac in mol/(kg cat s)";
   SI.MassFlowRate m_flow = max(gasPortIn.m_flow,0) "Mass flow through the reactor";
-  SI.Temperature T[N_cv](start = T_start) "Gas and catalyst temperature in the control volumes";
-  SI.Pressure p[N_cv](start = p_start) "Pressure in the control volumes";
-  SI.MassFraction xi[N_cv,N_comp-1](start = xi_start) "Mass fraction in the control volumes";
+public
+  SI.Temperature T[N_cv] "Gas and catalyst temperature in the control volumes" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Pressure p[N_cv] "Pressure in the control volumes" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.MassFraction xi[N_cv,N_comp-1] "Mass fraction in the control volumes" annotation (Dialog(group="Initialization", showStartAttribute=true));
   //SI.Density rho[N_cv](start = rho_start) "Density in the control volumes";
 
 equation
@@ -200,30 +197,35 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(coordinateSystem(
+  annotation (Icon(graphics,
+                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(graphics,
+                                                                                                         coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
-<h4><span style=\"color:#008000\">1. Purpose of model</span></h4>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This partial model represents a discretized fixed bed reactor with reaction kinetics with constant effectiveness factors. </p>
-<h4><span style=\"color:#008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>The reactor is discretized and in each volume mass, impulse and energy balances are solved. These equations are taken from Nandasana et al. [1] except that the pressure loss is assumed to be constant and the effective reaction rates are calculated using constant effectiveness factors. Also the mass balances are stationary so changes in density are neglected. </p>
-<h4><span style=\"color:#008000\">3. Limits of validity </span></h4>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>The reactor is discretized and in each volume mass, impulse and energy balances are solved. These equations are taken from Nandasana et al. [1] except that the pressure loss is assumed to be constant and the effective reaction rates are calculated using constant effectiveness factors. Also the mass balances are stationary</p>
+<p> so changes in density are neglected. </p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>The model is valid if the changes of the effectiveness factors and the pressure loss are negligible. </p>
-<h4><span style=\"color:#008000\">4. Interfaces</span></h4>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>gasPortIn: ideal gas inlet </p>
 <p>gasPortOut: ideal gas outlet </p>
 <p>heat: heat port </p>
-<h4><span style=\"color:#008000\">5. Nomenclature</span></h4>
-<p>(no elements)</p>
-<h4><span style=\"color:#008000\">6. Governing Equations</span></h4>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>T[N_cv]&nbsp;&quot;Gas&nbsp;and&nbsp;catalyst&nbsp;temperature&nbsp;in&nbsp;the&nbsp;control&nbsp;volumes&quot;&nbsp;&nbsp;&nbsp;</p>
+<p>p[N_cv]&nbsp;&quot;Pressure&nbsp;in&nbsp;the&nbsp;control&nbsp;volumes&quot;</p>
+<p>xi[N_cv,N_comp-1]&nbsp;&quot;Mass&nbsp;fraction&nbsp;in&nbsp;the&nbsp;control&nbsp;volumes&quot;</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The used equations are described in [1] except for the changes described in 2. The pressure calculation for each volume can be done either using the pressure in the middle or at the end of the volume. </p>
-<h4><span style=\"color:#008000\">7. Remarks for Usage</span></h4>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">8. Validation</span></h4>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
-<h4><span style=\"color:#008000\">9. References</span></h4>
-<p>[1] Nandasana, Anjana D.; Ray, Ajay K.; Gupta, Santosh K. (2003): Dynamic Model of an Industrial Steam Reformer and Its Use for Multiobjective Optimization. In: Ind. Eng. Chem. Res. 42 (17), S. 4028–4042. DOI: 10.1021/ie0209576. </p>
-<h4><span style=\"color:#008000\">10. Version History</span></h4>
-<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016<br> </p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>[1] Nandasana, Anjana D.; Ray, Ajay K.; Gupta, Santosh K. (2003): Dynamic Model of an Industrial Steam Reformer and Its Use for Multiobjective Optimization. In: Ind. Eng. Chem. Res. 42 (17), S. 4028&ndash;4042. DOI: 10.1021/ie0209576. </p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
 </html>"));
 end PartialFixedbedReactorIdealGas_L4;
