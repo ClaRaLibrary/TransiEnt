@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
 partial model PartialStationaryLoss "Abstract block to calculate stationary loss energy rate in storage models"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ extends TransiEnt.Basics.Icons.Block;
         transformation(extent={{96,-10},{116,10}}),  iconTransformation(extent={{96,-10},{116,10}})));
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Abstract&nbsp;block&nbsp;to&nbsp;calculate&nbsp;stationary&nbsp;loss&nbsp;energy&nbsp;rate&nbsp;in&nbsp;storage&nbsp;models.</p>
+<p>Abstract block to calculate stationary loss energy rate in storage models.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

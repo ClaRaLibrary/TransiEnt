@@ -1,10 +1,10 @@
-within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components.Base;
+﻿within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components.Base;
 record ExplicitFridgeParameters "record for explicit fridge parameters"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,7 +59,7 @@ record ExplicitFridgeParameters "record for explicit fridge parameters"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>P. Dubucq, &ldquo;Regelung in Energienetzen mit Kraft-W&auml;rme-Kopplung zur hohen Ausnutzung erneuerbarer Energien,&rdquo; Hamburg University of Technology, 2018.</p>
+<p>P. Dubucq, &ldquo;Regelung in Energienetzen mit Kraft-Wärme-Kopplung zur hohen Ausnutzung erneuerbarer Energien,&rdquo; Hamburg University of Technology, 2018.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end ExplicitFridgeParameters;

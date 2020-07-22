@@ -1,11 +1,11 @@
-within TransiEnt.Storage.Base;
+﻿within TransiEnt.Storage.Base;
 model GenericStorage "Highly adaptable but non-physical model for all kinds of energy storages (recommended for storage without losses)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,18 +35,22 @@ model GenericStorage "Highly adaptable but non-physical model for all kinds of e
 
   Modelica.Blocks.Logical.GreaterEqualThreshold isStorageFull(threshold=params.E_max) annotation (Placement(transformation(extent={{-32,-14},{-19,0}})));
 
+  Modelica.Blocks.Logical.LessEqualThreshold isStorageEmpty(threshold=params.E_min)
+                                                                               annotation (Placement(transformation(extent={{-33,-35},{-20,-22}})));
 equation
   // _____________________________________________
   //
   //               Connect Statements
   // _____________________________________________
 
-  connect(E_is.y, isStorageFull.u) annotation (Line(points={{-46,-18},{-42,-18},{-42,-7},{-33.3,-7}}, color={0,0,127}));
-  connect(isStorageFull.y, FullAndCharging.u2) annotation (Line(points={{-18.35,-7},{-12.175,-7},{-12.175,-6.6},{-6.3,-6.6}}, color={255,0,255}));
+  connect(E_is.y, isStorageFull.u) annotation (Line(points={{-46,-20},{-42,-20},{-42,-7},{-33.3,-7}}, color={0,0,127}));
+  connect(isStorageFull.y, FullAndCharging.u2) annotation (Line(points={{-18.35,-7},{-12.175,-7},{-12.175,-6.6},{-8.3,-6.6}}, color={255,0,255}));
+  connect(E_is.y, isStorageEmpty.u) annotation (Line(points={{-46,-20},{-40,-20},{-40,-28.5},{-34.3,-28.5}}, color={0,0,127}));
+  connect(EmptyAndDischarging.u2, isStorageEmpty.y) annotation (Line(points={{-9.3,-28.6},{-14,-28.6},{-14,-28.5},{-19.35,-28.5}}, color={255,0,255}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),                   Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Highly&nbsp;adaptable&nbsp;but&nbsp;non-physical&nbsp;model&nbsp;for&nbsp;all&nbsp;kinds&nbsp;of&nbsp;energy&nbsp;storages.</p>
+<p>Highly adaptable but non-physical model for all kinds of energy storages.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -68,8 +72,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model adapted by Lisa Andresen (andresen@tuhh.de), Jan 2017</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model adapted by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Jun 2018</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model adapted by Oliver Schülting (oliver.schuelting@tuhh.de), Jun 2018</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Extended from base class by Carsten Bode (c.bode@tuhh.de), Nov 2018</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model adapted by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), April 2018: added first order plant dynamics block which can be deactivated</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model adapted by Oliver Schülting (oliver.schuelting@tuhh.de), April 2018: added first order plant dynamics block which can be deactivated</span></p>
 </html>"));
 end GenericStorage;

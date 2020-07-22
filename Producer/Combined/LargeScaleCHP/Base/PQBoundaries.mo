@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model PQBoundaries
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -81,9 +81,9 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">RealInput -&nbsp;Heat flow input signal</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">RealOutput -&nbsp;Maximum Power output signal</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">RealOutput -&nbsp;Minimum Power output signal</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">RealInput - Heat flow input signal</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">RealOutput - Maximum Power output signal</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">RealOutput - Minimum Power output signal</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
@@ -95,6 +95,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Jun 2018: Scaling, depending on P_n and Q_n added</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), Jun 2018: Scaling, depending on P_n and Q_n added</span></p>
 </html>"));
 end PQBoundaries;

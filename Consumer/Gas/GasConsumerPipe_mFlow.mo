@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Gas;
 model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representing the distance to a consumer within this district"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,6 +44,7 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   parameter SI.Length diameter=0.4 "Diameter" annotation (Dialog(tab="Pipe Network", group="Parameters"));
   parameter Integer N_tubes=1 "Number of parallel tubes" annotation (Dialog(tab="Pipe Network", group="Parameters"));
   parameter Integer N_cv=1 "Number of finite volumes" annotation (Dialog(tab="Pipe Network", group="Parameters"));
+  parameter Boolean useIsothPipe=false "true: isothermal pipe model, false: adiabatic pipe model" annotation (Dialog(tab="Pipe Network", group="Parameters"));
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium to be used" annotation (Dialog(tab="General", group="General"));
   parameter SI.MassFraction xi_start[medium.nc - 1]=medium.xi_default "Composition of the medium for initialization (nc-1)" annotation (Dialog(tab="Pipe Network", group="Initialization"));
   parameter SI.MassFraction xi_nom[medium.nc - 1]=medium.xi_default "Nominal composition of the medium (nc-1)" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
@@ -54,13 +55,13 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   //parameter SI.EnthalpyMassSpecific h_const=1e6 "Constant enthalpy" annotation (Dialog(tab="Sink", group="General"));
   parameter SI.Temperature T_const=283.15 "Constant temperature" annotation (Dialog(tab="Sink", group="General"));
   //parameter SI.EnthalpyMassSpecific h_const=2274.9 "Constant specific enthalpy" annotation (Dialog(tab="Sink", group="General"));
-  parameter SI.Pressure p_nom[pipe.N_cv]=ones(pipe.N_cv)*15e5 "Nominal absolute pressure" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
-  parameter SI.EnthalpyMassSpecific h_nom[pipe.N_cv]=ones(pipe.N_cv)*788440 "Nominal enthalpy" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.Pressure p_nom[N_cv]=ones(N_cv)*15e5 "Nominal absolute pressure" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.EnthalpyMassSpecific h_nom[N_cv]=ones(N_cv)*788440 "Nominal enthalpy" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
   parameter SI.MassFlowRate m_flow_nom=140 "Nominal mass flow" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
   parameter SI.PressureDifference Delta_p_nom=3e4 "Nominal pressure loss" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
-  parameter SI.Pressure p_start[pipe.N_cv]=ones(pipe.N_cv)*15e5 "Pressure" annotation (Dialog(tab="Pipe Network", group="Initialization"));
-  parameter SI.EnthalpyMassSpecific h_start[pipe.N_cv]=ones(pipe.N_cv)*788440 "Enthalpy" annotation (Dialog(tab="Pipe Network", group="Initialization"));
-  parameter SI.MassFlowRate m_flow_start[pipe.N_cv + 1]=ones(pipe.N_cv + 1)*140 "Mass flow rate" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.Pressure p_start[N_cv]=ones(N_cv)*15e5 "Pressure" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.EnthalpyMassSpecific h_start[N_cv]=ones(N_cv)*788440 "Enthalpy" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.MassFlowRate m_flow_start[N_cv + 1]=ones(N_cv + 1)*140 "Mass flow rate" annotation (Dialog(tab="Pipe Network", group="Initialization"));
   parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
   replaceable model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4
     constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(tab="General", group="Pipes"), choices(choicesAllMatching));
@@ -81,7 +82,7 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe(
     medium=medium,
     length=length,
     diameter_i=diameter,
@@ -96,10 +97,11 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
     N_tubes=N_tubes,
     xi_nom=xi_nom,
     N_cv=N_cv,
-    frictionAtOutlet=true,
+    frictionAtOutlet=false,
     frictionAtInlet=true,
     massBalance=massBalance,
-    redeclare model PressureLoss = PressureLoss) annotation (Placement(transformation(extent={{-82,-5},{-54,5}})));
+    redeclare model PressureLoss = PressureLoss) if not useIsothPipe
+                                                 annotation (Placement(transformation(extent={{-82,-5},{-54,5}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink(
     medium=simCenter.gasModel1,
     T_const=T_const,
@@ -113,6 +115,26 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(xiNumber=massflowSensor.medium.nc) annotation (Placement(transformation(extent={{18,0},{38,20}})));
   TransiEnt.Components.Sensors.RealGas.WobbeGCVSensor vleGCVSensor annotation (Placement(transformation(extent={{-12,0},{8,20}})));
 
+  Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_isoth(
+    medium=medium,
+    length=length,
+    diameter_i=diameter,
+    p_nom=p_nom,
+    h_nom=h_nom,
+    m_flow_nom=m_flow_nom,
+    Delta_p_nom=Delta_p_nom,
+    h_start=h_start,
+    p_start=p_start,
+    xi_start=xi_start,
+    m_flow_start=m_flow_start,
+    N_tubes=N_tubes,
+    xi_nom=xi_nom,
+    N_cv=N_cv,
+    frictionAtOutlet=false,
+    frictionAtInlet=true,
+    massBalance=massBalance,
+    redeclare model PressureLoss = PressureLoss) if useIsothPipe
+                                                 annotation (Placement(transformation(extent={{-82,-21},{-54,-11}})));
 equation
 
   // _____________________________________________
@@ -141,8 +163,15 @@ equation
       points={{38,0},{44,0},{50,0}},
       color={255,255,0},
       thickness=1.5));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
+  connect(pipe_isoth.gasPortOut, vleCompositionSensor.gasPortIn) annotation (Line(
+      points={{-54,-16},{-50,-16},{-50,0},{-44,0}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(pipe_isoth.gasPortIn, fluidPortIn) annotation (Line(
+      points={{-82,-16},{-86,-16},{-86,0},{-100,0}},
+      color={255,255,0},
+      thickness=1.5));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Real gas consumer with one pipe.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Pipe can represent the average distance to a consumer.</span></p>
@@ -166,5 +195,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Tom Lindemann (tom.lindemann@tuhh.de) in Jun 2015</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Edited by Lisa Andresen (andresen@tuhh.de) in May 2016</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Edited by Carsten Bode(c.bode@tuhh.de) in May 2020 (added option to use isothermal pipe model)</span></p>
 </html>"));
 end GasConsumerPipe_mFlow;

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestTwoBlockCHP "Example how the two block CHP model works"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,7 +22,7 @@ model TestTwoBlockCHP "Example how the two block CHP model works"
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-100,79},{-80,99}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-70,79},{-50,99}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{20,50},{32,62}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{20,50},{32,62}})));
   TwoBlockCHP                                             Plant(Block_1(
       P_el_init=0,
       Q_flow_init=0,
@@ -62,8 +62,7 @@ model TestTwoBlockCHP "Example how the two block CHP model works"
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-77,57.5})));
-  Modelica.Blocks.Sources.RealExpression P_min1(
-                                               y=-Plant.Block_1.pQDiagram.P_min)
+  Modelica.Blocks.Sources.RealExpression P_min1(y=-Plant.Block_1.pQDiagram[1].P_min)
                                                         annotation (Placement(
         transformation(
         extent={{-11,-9.5},{11,9.5}},
@@ -78,7 +77,7 @@ model TestTwoBlockCHP "Example how the two block CHP model works"
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-23,65.5})));
-  Modelica.Blocks.Sources.RealExpression P_min2(y=-Plant.Block_2.pQDiagram.P_min)
+  Modelica.Blocks.Sources.RealExpression P_min2(y=-Plant.Block_2.pQDiagram[1].P_min)
                                                         annotation (Placement(
         transformation(
         extent={{-8,-9.5},{8,9.5}},

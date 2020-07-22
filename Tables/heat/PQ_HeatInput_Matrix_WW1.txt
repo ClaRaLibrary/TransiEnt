@@ -1,5 +1,5 @@
 #1 
-double default(10,10) #Plant name: WW1. PQ heat input matrix generated with EBSILON-Professional. File: H:\01_TransiEntEE\03_Arbeitspakete\AP4_Kraftwerke_und_Fernwaermenetz\AP4.1_KW\1_EbsilonModelle\01_DKW\02_HKW-SK\Q_flow_input_generator\Q_flow_input_generator.ebs
+double default(10,10) #Plant name: WW1. PQ heat input matrix generated with EBSILON-Professional. 
 0.0e6	  0.0e6	 26.9e6	 53.9e6	 80.8e6	107.8e6	134.7e6	161.6e6	188.6e6	215.5e6
 0.0e6	  0.1e6	 37.4e6	 76.0e6	114.6e6	153.3e6	192.0e6	230.7e6	269.4e6	308.0e6
 18.8e6	 44.7e6	 55.6e6	 76.0e6	114.6e6	153.3e6	192.0e6	230.7e6	269.4e6	308.0e6

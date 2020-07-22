@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckNonlinearThreeStatePlant_PrimaryControl "Example of the component NonlinearThreeStatePlant in primary control operation"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ model CheckNonlinearThreeStatePlant_PrimaryControl "Example of the component Non
     duration_1=1,
     startTime=500)
     annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantPotentialVariableBoundary1(useInputConnector=true) annotation (Placement(transformation(extent={{70,-24},{90,-4}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantPotentialVariableBoundary1(useInputConnector=true) annotation (Placement(transformation(extent={{70,-24},{90,-4}})));
   Modelica.Blocks.Sources.Sine schedule1(
     offset=50,
     amplitude=0.1,

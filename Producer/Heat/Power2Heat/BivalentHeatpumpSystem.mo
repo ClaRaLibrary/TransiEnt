@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat;
 model BivalentHeatpumpSystem "Heatpump system with bivalent control, floor heating and lumped heat storage"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -138,16 +138,16 @@ equation
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>TransiEnt.Basics.Interfaces.Thermal.FluidPortIn: Fluid Inlet</p>
 <p>TransiEnt.Basics.Interfaces.Thermal.FluidPortOut: Fluid Outlet</p>
-<p>Modelica.Blocks.Interfaces.RealInput:&nbsp;T_feed_set&nbsp;(Setpoint&nbsp;for&nbsp;feed&nbsp;water&nbsp;temperature)</p>
-<p>TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort:&nbsp;epp</p>
+<p>Modelica.Blocks.Interfaces.RealInput: T_feed_set (Setpoint for feed water temperature)</p>
+<p>TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort: epp</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
-<p>P_el&nbsp;=&nbsp;Heatpump.epp.P&nbsp;+&nbsp;Peakload.epp.P</p>
-<p>P_el_n&nbsp;=&nbsp;Heatpump.P_el_n&nbsp;+&nbsp;Peakload.P_el_n</p>
-<p>Q_flow_demand&nbsp;=T_feed_set</p>
-<p>Q_flow_max&nbsp;=&nbsp;params.Q_flow_n_peakunit&nbsp;+&nbsp;Heatpump.COP.y*Heatpump.P_el_n</p>
-<p>Q_flow_gen&nbsp;=&nbsp;Heatpump.Q_flow.y&nbsp;+&nbsp;Q_flow_peakload.y</p>
+<p>P_el = Heatpump.epp.P + Peakload.epp.P</p>
+<p>P_el_n = Heatpump.P_el_n + Peakload.P_el_n</p>
+<p>Q_flow_demand =T_feed_set</p>
+<p>Q_flow_max = params.Q_flow_n_peakunit + Heatpump.COP.y*Heatpump.P_el_n</p>
+<p>Q_flow_gen = Heatpump.Q_flow.y + Q_flow_peakload.y</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>

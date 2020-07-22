@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.SmallScaleCHP.Check;
 model TestSmallScaleCHP_simple
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,39 +26,68 @@ model TestSmallScaleCHP_simple
     offset=2000) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
-        origin={-90,50})));
-  SmallScaleCHP_simple_fluidPorts smallScaleCHP_simple annotation (Placement(transformation(extent={{-50,20},{10,80}})));
-  Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-74,46},{-66,54}})));
+        origin={-90,60})));
+  SmallScaleCHP_simple smallScaleCHP_simple(useGasPort=true) annotation (Placement(transformation(extent={{-50,30},{10,90}})));
+  Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-74,56},{-66,64}})));
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_Txim_flow boundaryVLE_Txim_flow(variable_m_flow=false, boundaryConditions(m_flow_const=-1)) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={50,50})));
+        origin={50,60})));
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_pTxi boundaryVLE_pTxi(boundaryConditions(p_const(displayUnit="bar") = 100000)) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={50,72})));
-  Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(extent={{88,28},{68,48}})));
-  Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{40,0},{60,20}})));
+        origin={50,82})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(extent={{88,38},{68,58}})));
+  Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{40,10},{60,30}})));
+  Modelica.Blocks.Sources.Sine sine1(
+    amplitude=1500,
+    freqHz=1/86400,
+    offset=2000) annotation (Placement(transformation(
+        extent={{10,10},{-10,-10}},
+        rotation=180,
+        origin={-90,-44})));
+  SmallScaleCHP_simple smallScaleCHP_simple1(useGasPort=true, useFluidPorts=false)
+                                                             annotation (Placement(transformation(extent={{-50,-78},{10,-18}})));
+  Modelica.Blocks.Math.Gain gain1(k=-1)
+                                       annotation (Placement(transformation(extent={{-74,-48},{-66,-40}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi1
+                                                               annotation (Placement(transformation(extent={{86,-70},{66,-50}})));
+  Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid1 annotation (Placement(transformation(extent={{40,-94},{60,-74}})));
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature1(T=308.15)
+                                                                                    annotation (Placement(transformation(extent={{10,-10},{-10,10}},
+        rotation=90,
+        origin={10,-2})));
 equation
-  connect(gain.y, smallScaleCHP_simple.Q_flow_set) annotation (Line(points={{-65.6,50},{-50,50}}, color={0,0,127}));
-  connect(sine.y, gain.u) annotation (Line(points={{-79,50},{-74.8,50}},
+  connect(gain.y, smallScaleCHP_simple.Q_flow_set) annotation (Line(points={{-65.6,60},{-50,60}}, color={0,0,127}));
+  connect(sine.y, gain.u) annotation (Line(points={{-79,60},{-74.8,60}},
                                                                        color={0,0,127}));
   connect(smallScaleCHP_simple.gasPortIn, boundary_pTxi.gasPort) annotation (Line(
-      points={{10,38},{68,38}},
+      points={{10,48},{68,48}},
       color={255,255,0},
       thickness=1.5));
   connect(boundaryVLE_Txim_flow.fluidPortOut, smallScaleCHP_simple.waterPortIn) annotation (Line(
-      points={{40,50},{26,50},{26,44},{10,44}},
+      points={{40,60},{26,60},{26,54},{10,54}},
       color={175,0,0},
       thickness=0.5));
   connect(smallScaleCHP_simple.waterPortOut, boundaryVLE_pTxi.fluidPortIn) annotation (Line(
-      points={{10,56},{26,56},{26,72},{40,72}},
+      points={{10,72},{26,72},{26,82},{40,82}},
       color={175,0,0},
       thickness=0.5));
   connect(ElectricGrid.epp, smallScaleCHP_simple.epp) annotation (Line(
-      points={{40,10},{26,10},{26,26},{10,26}},
+      points={{40,20},{26,20},{26,36},{10,36}},
       color={0,135,135},
       thickness=0.5));
+  connect(gain1.y, smallScaleCHP_simple1.Q_flow_set) annotation (Line(points={{-65.6,-44},{-58,-44},{-58,-48},{-50,-48}}, color={0,0,127}));
+  connect(sine1.y, gain1.u) annotation (Line(points={{-79,-44},{-74.8,-44}}, color={0,0,127}));
+  connect(smallScaleCHP_simple1.gasPortIn, boundary_pTxi1.gasPort) annotation (Line(
+      points={{10,-60},{66,-60}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(ElectricGrid1.epp, smallScaleCHP_simple1.epp) annotation (Line(
+      points={{40,-84},{26,-84},{26,-72},{10,-72}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(smallScaleCHP_simple1.heatPort, fixedTemperature1.port) annotation (Line(points={{10,-29.4},{10,-12}}, color={191,0,0}));
   annotation (
     Icon(graphics,
          coordinateSystem(preserveAspectRatio=false)),

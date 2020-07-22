@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas.Base;
 model ConstantHTOuterTemperature_L2 "Heat transfer model for a constant heat transfer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,28 +26,20 @@ model ConstantHTOuterTemperature_L2 "Heat transfer model for a constant heat tra
 // simplified it for L2                                                      //
 // added input for temperature                                               //
 // commented out ClaRa specific code                                         //
+// revision: exchanged base class and deleted temperature input port         //
 
-extends ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.HeatTransferBaseVLE;
+  extends HeatTransferOuterTemperature_L2;
 
-extends ClaRa.Basics.Icons.Alpha;
-
-  ClaRa.Basics.Interfaces.HeatPort_a heat annotation (Placement(transformation(extent={{90,-10},
-            {110,10}}),          iconTransformation(extent={{90,-10},{110,10}})));
-
-  extends ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.TubeType_L2;
-  extends ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.ShellType_L2;
   parameter Modelica.SIunits.CoefficientOfHeatTransfer alpha_nom = 10 "Constant heat transfer coefficient"
                                           annotation(Dialog(group="Heat Transfer"));
-  parameter ClaRa.Basics.Units.Area A_heat=10 "Heat transfer surface";
   ClaRa.Basics.Units.Temperature Delta_T_mean;
 
-  TransiEnt.Basics.Interfaces.General.TemperatureIn T_outer annotation (Placement(transformation(extent={{-120,-20},{-80,20}})));
 equation
   Delta_T_mean = heat.T-T_outer;
   heat.Q_flow = alpha_nom*A_heat*Delta_T_mean;
   annotation(Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This model represents a heat transfer model with constant heat transfer coefficient. It is a modified version vom ClaRa 1.0.0 model ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L3. It was simplified for L2 and a temperature input was added.</p>
+<p>This model represents a heat transfer model with constant heat transfer coefficient. It is a modified version from ClaRa 1.0.0 model ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L3. It was simplified for L2 and a temperature input was added.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity</span></h4>
@@ -61,12 +53,13 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">8. Validation</span></h4>
-<p(no remarks)</p>
+<p><b><span style=\"color: #008000;\">8. Validation</span></b> </p>
+<p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Apr 05 2016</p>
+<p>Model modified by Carsten Bode (c.bode@tuhh.de) in May 2019 (exchanged base class and deleted temperature input port<span style=\"font-family: Courier New;\">)</span></p>
 </html>"),
     Icon(graphics,
          coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));

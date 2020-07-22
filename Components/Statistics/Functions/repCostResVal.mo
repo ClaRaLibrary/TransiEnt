@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Functions;
 function repCostResVal "Calculates the cost of replacements and the residual value based on investment cost, interest rate, price change rate, observation period and life time; price changes are neglected"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //

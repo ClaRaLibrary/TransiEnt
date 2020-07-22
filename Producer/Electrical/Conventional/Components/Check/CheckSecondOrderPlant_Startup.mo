@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckSecondOrderPlant_Startup "Example of the component SecondOrderPlant startup process (variable efficiency)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model CheckSecondOrderPlant_Startup "Example of the component SecondOrderPlant s
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency grid(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{56,-60},{76,-40}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency grid(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{56,-60},{76,-40}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   Modelica.Blocks.Sources.Step P_el_set(
     offset=0,

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Photovoltaics;
 model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -50,8 +50,29 @@ model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
 
   Modelica.Blocks.Sources.RealExpression AmbientTemperature(y=simCenter.T_amb_var)
     annotation (Placement(transformation(extent={{-52,-44},{-36,-8}})));
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power pQ_To_EPP(change_sign=true) constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components"),choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.Power pQ_To_EPP(change_sign=true) "P-Boundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower pQ_To_EPP(useInputConnectorP=true, useInputConnectorQ=false, useCosPhi=true, cosphi_boundary=1, change_sign=true)  "PQ-Boundary for ApparentPowerPort"),choice( redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary pQ_To_EPP(useInputConnectorQ=false, cosphi_boundary=1,change_sign=true) "PQ-Boundary for ComplexPowerPort"),choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage pQ_To_EPP(Use_input_connector_v=false, v_boundary=simCenter.v_n, change_sign=true)
-                                                                                                                                                                                                        "PV-Boundary for ApparentPowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PVBoundary pQ_To_EPP(v_gen=simCenter.v_n, useInputConnectorP=true, change_sign=true) "PV-Boundary for ComplexPowerPort")),Placement(transformation(extent={{86,-9},{68,9}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power pQ_To_EPP(change_sign=true) constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    Dialog(group="Replaceable Components"),
+    choices(
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power pQ_To_EPP(change_sign=true) "P-Boundary for ActivePowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower pQ_To_EPP(
+          useInputConnectorP=true,
+          useInputConnectorQ=false,
+          useCosPhi=true,
+          cosphi_boundary=1,
+          change_sign=true) "PQ-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary pQ_To_EPP(
+          useInputConnectorQ=false,
+          cosphi_boundary=1,
+          change_sign=true) "PQ-Boundary for ComplexPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage pQ_To_EPP(
+          Use_input_connector_v=false,
+          v_boundary=simCenter.v_n,
+          change_sign=true) "PV-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PVBoundary pQ_To_EPP(
+          v_gen=simCenter.v_n,
+          useInputConnectorP=true,
+          change_sign=true) "PV-Boundary for ComplexPowerPort")),
+    Placement(transformation(extent={{86,-9},{68,9}})));
   Modelica.Blocks.Math.MultiProduct Efficiency(nu=2)
     annotation (Placement(transformation(extent={{12,-7},{26,7}})));
   Modelica.Blocks.Math.Gain SurfacePower(k(unit="m2", value=A_module))
@@ -100,7 +121,7 @@ equation
           pattern=LinePattern.Dash,
           thickness=0.5)}), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Efficiency&nbsp;based&nbsp;on&nbsp;Temperature&nbsp;and&nbsp;Radiation.</p>
+<p>Efficiency based on Temperature and Radiation.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">L1E Models are based on characteristic lines, gains or efficiencies.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Solar radiation and abmient is used to calculate the effiency. Area of solar cell is regarded.</span></p>

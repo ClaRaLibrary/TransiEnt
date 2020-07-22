@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Hamburg;
 record ExampleGenerationPark2035 "Example Generation Park for the year of 2035"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,6 +19,12 @@ record ExampleGenerationPark2035 "Example Generation Park for the year of 2035"
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   import TransiEnt;
   extends ExampleGenerationPark2012(
   nPlants=20,
@@ -42,6 +48,11 @@ record ExampleGenerationPark2035 "Example Generation Park for the year of 2035"
   isMOD=1:11,
   isCHP={2,4},
   isFRE=nDispPlants+1:nPlants);
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
   parameter Modelica.SIunits.Power P_el_n_GT3 = 70e6 "Installed capacity gas turbines" annotation(Dialog(group="Installed capacity, dispatchable units"));
 

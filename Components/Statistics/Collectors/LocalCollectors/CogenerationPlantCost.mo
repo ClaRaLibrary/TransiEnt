@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CogenerationPlantCost "Cost model for conventional thermal or renewable power plants with cogeneration "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,7 +33,7 @@ model CogenerationPlantCost "Cost model for conventional thermal or renewable po
   //         Variables appearing in dialog
   // _____________________________________________
 
-  SI.ActivePower Q_flow_is=0 "Thermal power generation of plant" annotation(Dialog(group="Variables"));
+  SI.ActivePower Q_flow_is=0 "Thermal power generation of plant (should be negative)" annotation(Dialog(group="Variables"));
   SI.ActivePower A_alloc_power=0.5 "Cost allocation factor for calculation of LCOE" annotation(Dialog(group="Variables"));
   SI.ActivePower A_alloc_heat=0.5 "Cost allocation factor for calculation of LCOH" annotation(Dialog(group="Variables"));
 
@@ -42,6 +42,6 @@ model CogenerationPlantCost "Cost model for conventional thermal or renewable po
   //   Variables for power plant cost diagnostics
   // _____________________________________________
 
-  TransiEnt.Basics.Units.MonetaryUnitPerEnergy LCOH=C/max(simCenter.E_small, Q_demand)*3.6e9*A_alloc_heat "Levelized cost of heat";
+  TransiEnt.Basics.Units.MonetaryUnitPerEnergy LCOH=C/max(simCenter.E_small, -Q_revenue)*3.6e9*A_alloc_heat "Levelized cost of heat";
 
 end CogenerationPlantCost;

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Systems.Check;
 model TestElectrolyzerAndCavern "Model for testing a hydrogen cavern"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,6 +61,7 @@ end plotResult;
     PQCharacteristics=Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_WWGuD(),
     useConstantSigma=true,
     sigma=0.95,
+    quantity=1,
     redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GasCCGT,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas,
     P_grad_max_star=0.08,
@@ -68,7 +69,7 @@ end plotResult;
     typeOfCO2AllocationMethod=1,
     p_nom=12e5,
     m_flow_nom=200,
-    h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         12e5,
         130 + 273.15,
@@ -132,8 +133,7 @@ equation
       thickness=0.5));
   connect(electrolyzerAndCavern.h2Available, CHP_Plant_two_fuels.h2Available) annotation (Line(points={{-30.6,-3.8},{-29.3,-3.8},{-29.3,-4.90909},{-13.4,-4.90909}}, color={255,0,255}));
   annotation (Icon(graphics,
-                   coordinateSystem(preserveAspectRatio=false)), Diagram(graphics,
-                                                                         coordinateSystem(preserveAspectRatio=false)),
+                   coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=604800),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

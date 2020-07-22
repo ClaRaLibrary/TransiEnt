@@ -1,11 +1,11 @@
 within TransiEnt.Storage.Gas.Base;
 partial model PartialGasStorage_L1
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ partial model PartialGasStorage_L1
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Storage.Gas.Base.PartialGasStorage;
+  extends TransiEnt.Storage.Gas.Base.PartialGasStorage(includeHeatTransfer=false);
 
   // _____________________________________________
   //

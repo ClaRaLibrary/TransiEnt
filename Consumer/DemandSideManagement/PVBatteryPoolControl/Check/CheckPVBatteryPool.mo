@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Check;
 model CheckPVBatteryPool "Tester for PVBatteryPool"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -111,9 +111,9 @@ annotation (Diagram(graphics,
   experiment(
       StopTime=86400,
       Interval=30,
-      Tolerance=0.001,
+      Tolerance=1e-05,
       __Dymola_fixedstepsize=30,
-      __Dymola_Algorithm="Rkfix4"),
+      __Dymola_Algorithm="Radau"),
   __Dymola_experimentSetupOutput(derivatives=false, events=false),
     __Dymola_experimentFlags(
       Advanced(

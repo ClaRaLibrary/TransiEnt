@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Check;
 model TestPEMElectrolyzer_L1_Charline "Tester for an PEM electrolyzer"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,7 +43,7 @@ public
   parameter SI.Power P_el_n=1e6 "Nominal electrical power of the electrolyzer";
   parameter SI.Power P_el_min=0.05*P_el_n "Minimal electrical power of the electrolyzer";
   parameter SI.Power P_el_max=1.0*P_el_n "Maximal electrical power of the electrolyzer";
-  parameter SI.Temperature T_out=288.15 "Temperature of the produced hydrogen";
+  parameter SI.Temperature T_out=273.15+70 "Temperature of the produced hydrogen";
   parameter SI.Efficiency eta_n=0.75 "Nominal efficiency of the electrolyzer";
   parameter SI.Pressure p_out=50e5 "Pressure of the produced hydrogen";
 
@@ -57,23 +57,28 @@ public
     T_out=T_out,
     P_el_n=P_el_n,
     P_el_max=P_el_max,
+    usePowerPort=true,
+    useHeatPort=true,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder,
     redeclare model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer100) annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid100PowerIn annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid100PowerIn annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-70,60})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink100PowerIn(p_const=p_out) annotation (Placement(transformation(extent={{42,50},{22,70}})));
-  inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel1, redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel3)
+  inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2 gasModel1, redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2 gasModel3)
                                                                                                 annotation (Placement(transformation(extent={{70,80},{90,100}})));
   TransiEnt.Producer.Gas.Electrolyzer.PEMElectrolyzer_L1 electrolyzer200PowerIn(
+    externalMassFlowControl=true,
     eta_n=eta_n,
     T_out=T_out,
     P_el_n=P_el_n,
     P_el_max=P_el_max,
+    usePowerPort=true,
+    useFluidCoolantPort=true,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder,
     redeclare model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200) annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid200PowerIn annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid200PowerIn annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-70,20})));
@@ -84,9 +89,10 @@ public
     P_el_n=P_el_n,
     P_el_max=P_el_max,
     whichInput=2,
+    usePowerPort=true,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder,
     redeclare model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer100) annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid100MFlowIn annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid100MFlowIn annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-70,-40})));
@@ -103,9 +109,10 @@ public
     P_el_n=P_el_n,
     P_el_max=P_el_max,
     whichInput=2,
+    usePowerPort=true,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder,
     redeclare model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200) annotation (Placement(transformation(extent={{-40,-110},{-20,-90}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid200MFlowIn annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid200MFlowIn annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-70,-100})));
@@ -120,6 +127,24 @@ public
   TransiEnt.Components.Sensors.RealGas.EnthalpyFlowSensor enthalpyFlowSensor200PowerIn annotation (Placement(transformation(extent={{-10,20},{10,40}})));
   TransiEnt.Components.Sensors.RealGas.EnthalpyFlowSensor enthalpyFlowSensor100MFlowIn annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   TransiEnt.Components.Sensors.RealGas.EnthalpyFlowSensor enthalpyFlowSensor200MFlowIn annotation (Placement(transformation(extent={{-10,-100},{10,-80}})));
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=293.15) annotation (Placement(transformation(extent={{-112,32},{-92,52}})));
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow
+                                                       sink(
+    medium=simCenter.fluid1,
+    m_flow_const=10,
+    T_const=20 + 273.15)  annotation (Placement(transformation(
+        extent={{-6,-5},{6,5}},
+        rotation=180,
+        origin={6,-7})));
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi sink1(
+    medium=simCenter.fluid1,
+    p_const=17e5,
+    T_const=130 + 273.15) annotation (Placement(transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=180,
+        origin={5,5})));
+  ClaRa.Components.Sensors.SensorVLE_L1_T temperatureSensor_out(unitOption=2) annotation (Placement(transformation(extent={{-16,10},{-6,22}})));
+  ClaRa.Components.Sensors.SensorVLE_L1_T temperatureSensor_in(unitOption=2) annotation (Placement(transformation(extent={{-54,10},{-44,20}})));
 equation
   connect(ElectricGrid100PowerIn.epp, electrolyzer100PowerIn.epp) annotation (Line(
       points={{-60,60},{-40,60},{-40,60}},
@@ -173,6 +198,25 @@ equation
       points={{10,20},{16,20},{22,20}},
       color={255,255,0},
       thickness=1.5));
+  connect(electrolyzer100PowerIn.heat, fixedTemperature.port) annotation (Line(points={{-20,53.4},{-62,53.4},{-62,42},{-92,42}},
+                                                                                                                             color={191,0,0}));
+  connect(electrolyzer200PowerIn.fluidPortIn, sink.steam_a) annotation (Line(
+      points={{-20,11},{-20,-7},{-8.88178e-16,-7}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(sink1.steam_a, electrolyzer200PowerIn.fluidPortOut) annotation (Line(
+      points={{-8.88178e-16,5},{-16,5},{-16,16},{-20,16}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(electrolyzer200PowerIn.fluidPortOut, temperatureSensor_out.port) annotation (Line(
+      points={{-20,16},{-16,16},{-16,10},{-11,10}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(electrolyzer200PowerIn.fluidPortIn, temperatureSensor_in.port) annotation (Line(
+      points={{-20,11},{-34,11},{-34,10},{-49,10}},
+      color={175,0,0},
+      thickness=0.5));
   annotation (Icon(graphics,
                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,100}})),
                                                                  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-120},{100,100}}),

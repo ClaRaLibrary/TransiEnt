@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Characteristics;
 record SenvionM104_3400kW "Senvion model M104 3,4MW"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,7 +65,7 @@ cut_backin=22);
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Record&nbsp;containing&nbsp;the&nbsp;data&nbsp;of&nbsp;the&nbsp;Senvion&nbsp;Windturbine&nbsp;model&nbsp;M104&nbsp;with&nbsp;3,4MW</p>
+<p>Record containing the data of the Senvion Windturbine model M104 with 3,4MW</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

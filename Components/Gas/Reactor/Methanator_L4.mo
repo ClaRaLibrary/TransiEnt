@@ -1,10 +1,10 @@
-within TransiEnt.Components.Gas.Reactor;
+﻿within TransiEnt.Components.Gas.Reactor;
 model Methanator_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed methanator"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -367,6 +367,6 @@ equation
 <p>Model created by Tom Lindemann (tom.lindemann@tuhh.de) in Mar 2016</p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de) in May 2016</p>
 <p><br>Model modified by Carsten Bode (c.bode@tuhh.de) in Jul 2016</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Feb 2018</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) in Feb 2018</p>
 </html>"));
 end Methanator_L4;

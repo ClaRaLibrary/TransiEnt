@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model CHPStates_heatled
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,9 +61,9 @@ model CHPStates_heatled
                          stateGraphRoot
       annotation (Placement(transformation(extent={{-98,84},{-84,98}})));
   Modelica.Blocks.Nonlinear.VariableLimiter variableLimiter annotation (Placement(transformation(extent={{-6,-44},{20,-18}})));
-  Modelica.Blocks.Sources.RealExpression P_min_of_state(y=0)     annotation (Placement(transformation(extent={{-46,-52},{-26,-32}})));
-  Modelica.Blocks.Sources.RealExpression P_max_of_state(y=Q_flow_max)
-                                                                 annotation (Placement(transformation(extent={{-46,-30},{-26,-10}})));
+  Modelica.Blocks.Sources.RealExpression P_min_of_state(y=-Q_flow_max)
+                                                                 annotation (Placement(transformation(extent={{-46,-52},{-26,-32}})));
+  Modelica.Blocks.Sources.RealExpression P_max_of_state(y=0)     annotation (Placement(transformation(extent={{-46,-30},{-26,-10}})));
 
 
   // _____________________________________________
@@ -74,28 +74,28 @@ model CHPStates_heatled
 public
   Modelica.StateGraph.InitialStep init(nIn=0, nOut=3) annotation (Placement(transformation(extent={{-94,44},{-74,64}},   rotation=0)));
   Modelica.StateGraph.StepWithSignal
-                                  halt(nIn=3) annotation (Placement(transformation(extent={{-48,12},{-28,32}},   rotation=0)));
+                                  halt(nIn=3) annotation (Placement(transformation(extent={{-46,22},{-26,42}},   rotation=0)));
   Modelica.StateGraph.StepWithSignal operating(        nIn=2, nOut=1)
-                                                              annotation (Placement(transformation(extent={{48,12},{68,32}}, rotation=0)));
+                                                              annotation (Placement(transformation(extent={{52,22},{72,42}}, rotation=0)));
   Modelica.StateGraph.Transition startupSuccess(
     condition=true,
     enableTimer=true,
-    waitTime=t_startup) annotation (Placement(transformation(extent={{34,22},{54,42}},rotation=0)));
+    waitTime=t_startup) annotation (Placement(transformation(extent={{32,22},{52,42}},rotation=0)));
   Modelica.StateGraph.StepWithSignal
                            startup(       nOut=2, nIn=2)
                                    annotation (Placement(transformation(extent={{8,22},{28,42}},     rotation=0)));
   Modelica.StateGraph.Transition threshold(
     enableTimer=true,
-    condition=Q_flow_set > Q_flow_min_operating,
+    condition=Q_flow_set <= -Q_flow_min_operating,
     waitTime=t_MDT)                                                                           annotation (Placement(transformation(extent={{-16,22},{4,42}},    rotation=0)));
   Modelica.StateGraph.Transition noThreshold(
     enableTimer=true,
     waitTime=t_eps,
-    condition=Q_flow_set <= Q_flow_min_operating)  annotation (Placement(transformation(extent={{28,56},{8,76}},   rotation=0)));
+    condition=Q_flow_set > -Q_flow_min_operating)  annotation (Placement(transformation(extent={{28,56},{8,76}},   rotation=0)));
   Modelica.StateGraph.Transition noThreshold2(
     enableTimer=true,
     waitTime=t_eps,
-    condition=Q_flow_set <= Q_flow_min_operating)
+    condition=Q_flow_set > -Q_flow_min_operating)
                      annotation (Placement(transformation(extent={{68,76},{48,96}}, rotation=0)));
 
  Modelica.StateGraph.Transition initOff(
@@ -129,19 +129,19 @@ equation
       points={{-8.6,-31},{-100,-31},{-100,0}},
       color={0,0,127},
       smooth=Smooth.Bezier));
-  connect(noThreshold.outPort,halt. inPort[1]) annotation (Line(points={{16.5,66},{-58,66},{-58,22.6667},{-49,22.6667}},
+  connect(noThreshold.outPort,halt. inPort[1]) annotation (Line(points={{16.5,66},{-58,66},{-58,32.6667},{-47,32.6667}},
                                                      color={0,0,0}));
-  connect(noThreshold2.outPort,halt. inPort[2]) annotation (Line(points={{56.5,86},{-60,86},{-60,22},{-49,22}},
+  connect(noThreshold2.outPort,halt. inPort[2]) annotation (Line(points={{56.5,86},{-60,86},{-60,32},{-47,32}},
                                            color={0,0,0}));
   connect(halt.outPort[1],threshold. inPort)
-    annotation (Line(points={{-27.5,22},{-10,22},{-10,32}},    color={0,0,0}));
+    annotation (Line(points={{-25.5,32},{-10,32}},             color={0,0,0}));
   connect(startupSuccess.outPort,operating. inPort[1])
-    annotation (Line(points={{45.5,32},{47,32},{47,22.5}}, color={0,0,0}));
-  connect(operating.outPort[1],noThreshold2. inPort) annotation (Line(points={{68.5,22},{72,22},{72,86},{62,86}},
+    annotation (Line(points={{43.5,32},{51,32},{51,32.5}}, color={0,0,0}));
+  connect(operating.outPort[1],noThreshold2. inPort) annotation (Line(points={{72.5,32},{72,32},{72,86},{62,86}},
                                                    color={0,0,0}));
   connect(threshold.outPort,startup. inPort[1]) annotation (Line(points={{-4.5,32},{2,32},{2,32.5},{7,32.5}},
                                                                                                     color={0,0,0}));
-  connect(startup.outPort[1],startupSuccess. inPort) annotation (Line(points={{28.5,32.25},{32,32},{40,32}},
+  connect(startup.outPort[1],startupSuccess. inPort) annotation (Line(points={{28.5,32.25},{28.5,32},{38,32}},
                                                                                                     color={0,0,0}));
   connect(startup.outPort[2],noThreshold. inPort) annotation (Line(points={{28.5,31.75},{30,31.75},{30,34},{30,66},{22,66}},         color={0,0,0}));
   connect(variableLimiter.y, Q_flow_set_lim) annotation (Line(points={{21.3,-31},{42,-31},{42,-32},{64,-32},{64,0},{94,0},{94,0},{112,0},{112,0}}, color={0,0,127}));

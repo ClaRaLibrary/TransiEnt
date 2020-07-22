@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas;
 model GasStorageVesselHeatTransfer_L2 "Gas storage vessel including heat transfer to the environment"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,6 +30,7 @@ model GasStorageVesselHeatTransfer_L2 "Gas storage vessel including heat transfe
   import Modelica.Constants.pi;
 
   extends TransiEnt.Basics.Icons.StorageGenericGas;
+  extends Base.MatchClassGasStorage;
 
   // _____________________________________________
   //
@@ -51,10 +52,11 @@ model GasStorageVesselHeatTransfer_L2 "Gas storage vessel including heat transfe
                                     choice=2 "Central location of states",  choice=3 "Outer location of states"));
 
   parameter SI.CoefficientOfHeatTransfer alpha_nom_outer = 3 "Constant heat transfer coefficient"               annotation(Dialog(group="Heat Transfer"));
-  parameter Integer initOption=0 "Type of initialization" annotation (Dialog(group="Initialization"), choices(
-      choice=0 "Use guess values",
+  parameter Integer initOption=213 "Type of initialization" annotation (Dialog(group="Initialization"), choices(
+      choice=213 "Fixed temperature",
       choice=1 "Steady state",
-      choice=203 "Steady temperature"));
+      choice=203 "Steady temperature",
+      choice=0 "No init, use T_start as guess values"));
 
   parameter String suppressChattering="True" "Enable to suppress possible chattering in wall" annotation (Dialog(group="Numerical Efficiency"), choices(choice="False" "False (faster if no chattering occurs)",
                                                                                             choice="True" "True (faster if chattering occurs)"));
@@ -131,8 +133,8 @@ protected
     diameter_o=storage.diameter + thickness_wall,
     diameter_i=storage.diameter,
     length=storage.height,
-    initOption=initOption,
-    suppressChattering=suppressChattering) annotation (Placement(transformation(
+    suppressChattering=suppressChattering,
+    initOption=initOption) annotation (Placement(transformation(
         extent={{-15,5},{15,-5}},
         rotation=270,
         origin={-32,-18})));
@@ -143,8 +145,8 @@ protected
     width=pi/2*storage.diameter,
     T_start=T_wall_start*ones(cylindricalWall.N_ax),
     N_ax=1,
-    initOption=initOption,
-    stateLocation=stateLocation) annotation (Placement(transformation(extent={{-22,-26},{-2,-36}})));
+    stateLocation=stateLocation,
+    initOption=initOption) annotation (Placement(transformation(extent={{-22,-26},{-2,-36}})));
 
 public
   inner Summary summary(

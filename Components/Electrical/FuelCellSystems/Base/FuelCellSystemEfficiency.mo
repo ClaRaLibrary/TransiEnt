@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.FuelCellSystems.Base;
 model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effiency of fuel cell system including steam reformer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -86,19 +86,19 @@ model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effie
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Tool&nbsp;to&nbsp;calculate&nbsp;the&nbsp;thermal&nbsp;and&nbsp;electric&nbsp;effiency&nbsp;of&nbsp;fuel&nbsp;cell&nbsp;system&nbsp;including&nbsp;steam&nbsp;reformer</p>
+<p>Tool to calculate the thermal and electric effiency of fuel cell system including steam reformer</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_in_CH4&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;CH4&nbsp;heat&nbsp;flow&nbsp;rate&quot;</span>&nbsp;;</p>
-<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_in_evaporator&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;evaporator&quot;</span>&nbsp;;</p>
-<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_in_preheater&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;the&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheater&quot;</span>&nbsp;;</p>
-<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_out_exhaustGasChemical&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasChemical)&quot;</span>&nbsp;&nbsp;;</p>
-<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_out_exhaustGasLatent&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasLatent)&quot;</span>;</p>
-<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn&nbsp;Q_flow_out_cooling&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;cooling&quot;</span>&nbsp;;</p>
-<p>TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn&nbsp;P_el&nbsp;<span style=\"color: #006400;\">&quot;Input&nbsp;for&nbsp;electric&nbsp;power&quot;</span>&nbsp;;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_in_CH4 <span style=\"color: #006400;\">&quot;Input for CH4 heat flow rate&quot;</span> ;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_in_evaporator <span style=\"color: #006400;\">&quot;Input for heat flow rate of the evaporator&quot;</span> ;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_in_preheater <span style=\"color: #006400;\">&quot;Input for the heat flow rate of the preheater&quot;</span> ;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_out_exhaustGasChemical <span style=\"color: #006400;\">&quot;Input for heat flow rate of the exhaust (GasChemical)&quot;</span>  ;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_out_exhaustGasLatent <span style=\"color: #006400;\">&quot;Input for heat flow rate of the exhaust (GasLatent)&quot;</span>;</p>
+<p>TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_out_cooling <span style=\"color: #006400;\">&quot;Input for heat flow rate of the cooling&quot;</span> ;</p>
+<p>TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el <span style=\"color: #006400;\">&quot;Input for electric power&quot;</span> ;</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>eta_th is the thermal efficiency</p>
 <p>eta_el is the electric efficiency</p>

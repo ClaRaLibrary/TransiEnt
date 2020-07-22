@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Check;
 model TestPowerCurveWindPlant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,7 +20,7 @@ model TestPowerCurveWindPlant
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{70,-16},{90,4}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{70,-16},{90,4}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-104,80},{-84,100}})));
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
   PowerCurveWindPlant windTurbine_L0_scale_SenvionM104(

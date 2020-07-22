@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model Truck "Cost model for trucks"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ model Truck "Cost model for trucks"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] Stiller.2010&nbsp;Potenziale&nbsp;der&nbsp;Wind-Wasserstoff-Technologie&nbsp;in&nbsp;der&nbsp;Freien&nbsp;und&nbsp;Hansestadt&nbsp;Hamburg&nbsp;und&nbsp;in&nbsp;Schleswig-Holstein</p>
+<p>[1] Stiller.2010 Potenziale der Wind-Wasserstoff-Technologie in der Freien und Hansestadt Hamburg und in Schleswig-Holstein</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end Truck;

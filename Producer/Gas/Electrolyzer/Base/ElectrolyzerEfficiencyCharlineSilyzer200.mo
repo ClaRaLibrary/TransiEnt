@@ -2,10 +2,10 @@
 model ElectrolyzerEfficiencyCharlineSilyzer200 "Efficiency charline for Silyzer 200"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,13 +30,7 @@ model ElectrolyzerEfficiencyCharlineSilyzer200 "Efficiency charline for Silyzer 
 
   extends TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerEfficiencyCharline(eta_n_cl=0.62903);
 
-  /*parameter SI.Efficiency eta_start(
-    min=0,
-    max=1)=0.75 "Start value for eta";
-
-initial equation 
-  eta=eta_start;*/
-
+  Boolean use_arrayefficiency=false;
   // _____________________________________________
   //
   //           Characteristic Equations
@@ -51,8 +45,13 @@ equation
   else
     eta_cl*(P_el/P_el_n) = 0.06655*(P_el/P_el_n)^3 - 0.2741*(P_el/P_el_n)^2 + 0.8709*(P_el/P_el_n) - 0.03432;
   end if;*/
-
-  eta_cl=if noEvent(P_el/P_el_n<0.04) then 0 else 0.06655*(P_el/P_el_n)^2 - 0.2741*P_el/P_el_n + 0.8709 - 0.03432/(P_el/P_el_n);
+  if use_arrayefficiency then
+      eta_cl=if noEvent(P_el/P_el_n<0.02) then (0.06655*(0.392739)^2 - 0.2741*(0.392739)^1 + 0.8709 - 0.03432)/(0.392739)*P_el/P_el_n/0.02
+    elseif noEvent(P_el/P_el_n<0.392739) then (0.06655*(0.392739)^2 - 0.2741*(0.392739)^1 + 0.8709 - 0.03432)/(0.392739)
+    else 0.06655*(P_el/P_el_n)^2 - 0.2741*P_el/P_el_n + 0.8709 - 0.03432/(P_el/P_el_n);
+  else
+    eta_cl=if noEvent(P_el/P_el_n<0.04) then 0 else 0.06655*(P_el/P_el_n)^2 - 0.2741*P_el/P_el_n + 0.8709 - 0.03432/(P_el/P_el_n);
+  end if;
 
   // Calculating the output efficency
   eta = (eta_n/eta_n_cl - eta_scale * P_el/P_el_n) * eta_cl;
@@ -79,7 +78,7 @@ equation
 <h4><span style=\"color:#008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color:#008000\">9. References</span></h4>
-<p>[1] Schoenberger, D. (2016). P2G durch Elektrolyse – eine flexible Speicherloesung ... will challenge the energy industry. Zuerich: Siemens AG. </p>
+<p>[1] M. Kopp, D. Coleman, C. Stiller, K. Scheffer, J. Aichinger, and B. Scheppat, “Energiepark Mainz: Technical and economic analysis of the worldwide largest Power-to-Gas plant with PEM electrolysis,” Int. J. Hydrogen Energy, vol. 42, no. 19, pp. 13311–13320, 2017. </p>
 <h4><span style=\"color:#008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) in March 2017<br> </p>
 </html>"));

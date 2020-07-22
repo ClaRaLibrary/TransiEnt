@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckBlackCoal_Schedule
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,7 +30,7 @@ model CheckBlackCoal_Schedule
     t_startup=2700,
     Turbine(T_plant=500, redeclare TransiEnt.Components.Turbogroups.OperatingStates.ThreeStateDynamic operationStatus),
     P_grad_max_star=0.04/60) annotation (Placement(transformation(extent={{-14,-38},{6,-18}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{40,-32},{60,-12}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{40,-32},{60,-12}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},
             {-70,100}})));
   inner TransiEnt.ModelStatistics modelStatistics

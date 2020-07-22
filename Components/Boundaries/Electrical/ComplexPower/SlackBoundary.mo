@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
 model SlackBoundary "Slack Bus in TransiEnt"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -114,19 +114,19 @@ equation
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
         graphics={Line(points={{-18,6},{2,26},{2,-26}}, color={28,108,200}),
         Text(
-        visible=useInputConnectorf,
+        visible=useInputConnectorv,
           extent={{-96,128},{-74,108}},
           lineColor={0,0,255},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
-          textString="f"),
+          textString="v"),
         Text(
-        visible=useInputConnectorv,
+        visible=useInputConnectorf,
           extent={{24,130},{46,110}},
           lineColor={0,0,255},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
-          textString="V")}),
+          textString="f")}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model for slack bus when using ComplexPowerPort for LoadFlowCalculations</span></p>
@@ -137,8 +137,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">ComplexPowerPort epp</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p>P_gen&nbsp;&quot;Active&nbsp;Power&nbsp;of&nbsp;Plant,&nbsp;Load&nbsp;Flow&quot;</p>
-<p>Q_gen&nbsp;&quot;Reactive&nbsp;Power&nbsp;of&nbsp;Plant,&nbsp;Load&nbsp;Flow&quot;</p>
+<p>P_gen &quot;Active Power of Plant, Load Flow&quot;</p>
+<p>Q_gen &quot;Reactive Power of Plant, Load Flow&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>

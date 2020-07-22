@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model EnthalpyFlowSensor "Two port VLE enthalpy flow sensor, enthalpy flow difference to STP conditions"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -50,7 +50,7 @@ model EnthalpyFlowSensor "Two port VLE enthalpy flow sensor, enthalpy flow diffe
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateOut enthalpyFlow "Enthalpy flow" annotation (Placement(transformation(extent={{44,60},{64,80}},  rotation=
+  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateOut enthalpyFlow "Real Output for enthalpy flow rate" annotation (Placement(transformation(extent={{44,60},{64,80}},  rotation=
            0), iconTransformation(extent={{100,-10},{120,10}})));
 
   // _____________________________________________

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Engines.HeatFlow;
 model DynamicHeatFlow_simple
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -105,7 +105,7 @@ public
         rotation=90,
         origin={160,-54})));
 
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1_1(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_1(
       redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (
          Delta_p_nom=Delta_p_nom, m_flow_nom=m_flow_nom)) annotation (Placement(

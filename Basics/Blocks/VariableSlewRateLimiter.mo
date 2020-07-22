@@ -2,10 +2,10 @@ within TransiEnt.Basics.Blocks;
 block VariableSlewRateLimiter "Limits the signal with upper and lower boundary based on ClaRa VariableGradientLimiter"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -52,7 +52,7 @@ block VariableSlewRateLimiter "Limits the signal with upper and lower boundary b
   parameter Boolean useConstantLimits= true "True, if gradient limits are constant";
   parameter Real maxGrad_const(final unit="1/s")=1/60 annotation (Dialog(enable = useConstantLimits));
   parameter Real minGrad_const(final unit="1/s")=-maxGrad_const annotation (Dialog(enable = useConstantLimits));
-  parameter Real Td(final unit="s")=0.1;
+  parameter Real Td(final unit="s")=0.1 "The lower Td, the closer y follows u";
   parameter Real y_start=0;
 
   // _____________________________________________
@@ -129,7 +129,7 @@ equation
       smooth=Smooth.None)}),
 Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><i><span style=\"font-family: MS Shell Dlg 2;\">The model is based on </i><span style=\"font-family: Courier New; color: #006400;\">ClaRa&nbsp;<a href=\"ClaRa.Components.Utilities.Blocks.VariableGradientLimiter\">VariableGradientLimiter</a></span></p>
+<p><i><span style=\"font-family: MS Shell Dlg 2;\">The model is based on </i><span style=\"font-family: Courier New; color: #006400;\">ClaRa <a href=\"ClaRa.Components.Utilities.Blocks.VariableGradientLimiter\">VariableGradientLimiter</a></span></p>
 <p><span style=\"font-family: Courier New;\">It adds some diagnostic variables to provide more inside if numerical issues lead to odd behaviour. Furthermore the initialization is a little more robust by using the homotopy operator and</span></p>
 <p><span style=\"font-family: Courier New;\">a start value with fixed=true. </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
@@ -164,7 +164,7 @@ revisions="<html>
 <tr>
 <td valign=\"top\">4954</td>
 <td valign=\"top\">2012-03-02</td>
-<td valign=\"top\">A. Haumer &amp; D. Winkler</td>
+<td valign=\"top\">A. Haumer & D. Winkler</td>
 <td valign=\"top\"><p>Initial version based on discussion in <a href=\"https://trac.modelica.org/Modelica/ticket/529/Modelica\">#529</a></p></td>
 </tr>
 </table>

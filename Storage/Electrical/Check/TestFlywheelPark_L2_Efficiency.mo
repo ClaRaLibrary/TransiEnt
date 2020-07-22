@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Check;
 model TestFlywheelPark_L2_Efficiency "Example that keeps a flywheel's input and output at full power to check maximum efficiency"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,7 +27,7 @@ model TestFlywheelPark_L2_Efficiency "Example that keeps a flywheel's input and 
     k=2e9) annotation (Placement(transformation(extent={{-44,-32},{-24,-12}})));
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency FrequencyBoundary(useInputConnector=true) annotation (Placement(transformation(extent={{30,-32},{50,-12}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency FrequencyBoundary(useInputConnector=true) annotation (Placement(transformation(extent={{30,-32},{50,-12}})));
   Modelica.Blocks.Logical.Switch switch "switches between low and high grid frequency"
     annotation (Placement(transformation(extent={{-2,32},{18,52}})));
   Modelica.Blocks.Sources.Constant lowFrequency(k=49) "low frequency"

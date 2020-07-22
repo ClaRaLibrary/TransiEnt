@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Base;
 model LimitConditioning "Limits setpoint to loading (P_set_base>0) if battery conditioning is active"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -121,7 +121,7 @@ equation
 <p>SOC: The actual SOC of the battery</p>
 <p>P_set_limit: Limited setpoint</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>Delta_SOC_Cond: Change&nbsp;of&nbsp;SOC&nbsp;due&nbsp;to&nbsp;one&nbsp;conditioning&nbsp;operation</p>
+<p>Delta_SOC_Cond: Change of SOC due to one conditioning operation</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>No equations present</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

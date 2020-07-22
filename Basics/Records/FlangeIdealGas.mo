@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Records;
 model FlangeIdealGas "Model for generating summaries for a flange ideal gas"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,19 +34,20 @@ model FlangeIdealGas "Model for generating summaries for a flange ideal gas"
   // _____________________________________________
 
     replaceable parameter TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG6_var mediumModel "Used medium model" annotation (Dialog(tab="System"));
+    parameter Boolean useFluidModelsForSummary=true "True, if fluid models shall be used for the summary";
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 
-    input SI.MassFlowRate m_flow "Mass flow rate" annotation (Dialog);
-    input SI.Temperature T "Temperature" annotation (Dialog);
-    input SI.Pressure p "Pressure" annotation (Dialog);
-    input SI.SpecificEnthalpy h "Specific enthalpy" annotation (Dialog);
-    input SI.MassFraction xi[mediumModel.nc - 1] "Component mass fractions"  annotation(Dialog);
-    input SI.MassFraction x[mediumModel.nc - 1] "Component molar fractions"  annotation(Dialog);
-    input SI.Density rho "Density" annotation(Dialog);
+  input SI.MassFlowRate m_flow "Mass flow rate" annotation (Dialog);
+  input SI.Temperature T if   useFluidModelsForSummary "Temperature" annotation (Dialog);
+  input SI.Pressure p "Pressure" annotation (Dialog);
+  input SI.SpecificEnthalpy h  "Specific enthalpy" annotation (Dialog);
+  input SI.MassFraction xi[mediumModel.nc - 1] "Component mass fractions" annotation (Dialog);
+  input SI.MassFraction x[mediumModel.nc - 1] if   useFluidModelsForSummary "Component molar fractions" annotation (Dialog);
+  input SI.Density rho if   useFluidModelsForSummary "Density" annotation (Dialog);
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
@@ -68,6 +69,6 @@ model FlangeIdealGas "Model for generating summaries for a flange ideal gas"
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Created by Max Mustermann (mustermann@mustermail.de), Apr 2014</p>
+<p>Model created by Carsten Bode (c.bode@tuhh.de), Apr 2017</p>
 </html>"));
 end FlangeIdealGas;

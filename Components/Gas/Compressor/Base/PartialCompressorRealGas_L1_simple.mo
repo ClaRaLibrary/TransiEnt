@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Compressor.Base;
 partial model PartialCompressorRealGas_L1_simple "Partial compressor model for real gases with constant efficiency"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,6 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  final parameter Boolean allow_reverseFlow = false;
   final parameter TransiEnt.Basics.Types.TypeOfResource typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Consumer "Type of energy resource for global model statistics";
 
   // _____________________________________________
@@ -63,12 +62,16 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   parameter SI.Power P_el_n = 1e3 "Nominal power for cost calculation" annotation(Dialog(group="Statistics"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el=simCenter.Cspec_demAndRev_free "Specific demand-related cost per electric energy" annotation (Dialog(group="Statistics"));
 
+  parameter SI.PressureDifference Delta_p_start=100 "Initial value for pressure difference" annotation(Dialog(group="Initialization"));
+
+  parameter Boolean allow_reverseFlow = false "true if reverse flow should be prohibited (might be faster if small reverse flow occurs at almost zero flow)" annotation(Dialog(group="Expert Settings"));
+
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
   Real hOut;
-  SI.Pressure Delta_p(final start=100) "pressure increase" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Pressure Delta_p(start=Delta_p_start) "pressure increase";
   SI.Power P_hyd "Hydraulic power";
   SI.Power P_shaft "Drive power";
   SI.Power P_el "Electrical power";
@@ -90,8 +93,9 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
 
   ClaRa.Basics.Interfaces.Connected2SimCenter connected2SimCenter(
     powerIn=0,
-    powerOut=-P_hyd,
-    powerAux=-P_hyd + P_el) if contributeToCycleSummary;
+    powerOut_th=0,
+    powerOut_elMech=0,
+    powerAux=P_shaft) if contributeToCycleSummary;
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium, m_flow(min=if allow_reverseFlow then -Modelica.Constants.inf else 1e-5)) "inlet flow" annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium, m_flow(max=if allow_reverseFlow then Modelica.Constants.inf else -1e-5)) "outlet flow" annotation (Placement(transformation(extent={{90,-10},{110,10}})));
   TransiEnt.Basics.Interfaces.General.PressureDifferenceIn dp_in if  use_Delta_p_input "Prescribed pressure increase" annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
@@ -122,13 +126,13 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     p=gasPortIn.p,
     h=inStream(gasPortIn.h_outflow),
     xi=inStream(gasPortIn.xi_outflow),
     vleFluidType=medium,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-90,-12},{-70,8}})));
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     h=hOut,
     p=gasPortOut.p,
     xi=gasIn.xi,
@@ -346,10 +350,10 @@ equation
 <p>P_el_in: input for electrical power in W</p>
 <p>dp_in: input for pressure difference in Pa</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>Delta_p&nbsp;&quot;pressure&nbsp;increase&quot;</p>
-<p>P_hyd&nbsp;&quot;Hydraulic&nbsp;power&quot;</p>
-<p>P_shaft&nbsp;&quot;Drive&nbsp;power&quot;</p>
-<p>P_el&nbsp;&quot;Electrical&nbsp;power&quot;</p>
+<p>Delta_p &quot;pressure increase&quot;</p>
+<p>P_hyd &quot;Hydraulic power&quot;</p>
+<p>P_shaft &quot;Drive power&quot;</p>
+<p>P_el &quot;Electrical power&quot;</p>
 <p>V_flow &quot;Volume flow rate&quot;</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>

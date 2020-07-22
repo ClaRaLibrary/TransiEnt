@@ -1,3 +1,4 @@
+OverExcitationLimiter
 Check
 PartialExcitationSystem
 DummyExcitationSystem
@@ -7,3 +8,5 @@ VoltageRegulatorExcitationStabilization
 SimpleExcitationSystem
 DCExciter
 ACExciter
+SimpleExcitationSystemWithOEL
+DCExciterWithOEL

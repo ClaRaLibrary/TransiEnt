@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Gas;
 model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control with a pipe representing the distance to a consumer within this district"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,6 +44,7 @@ model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control
   parameter SI.Length diameter=0.4 "Diameter" annotation (Dialog(tab="Pipe Network", group="Parameters"));
   parameter Integer N_tubes=1 "Number of parallel tubes" annotation (Dialog(tab="Pipe Network", group="Parameters"));
   parameter Integer N_cv=1 "Number of finite Volumes" annotation (Dialog(tab="Pipe Network", group="Parameters"));
+  parameter Boolean useIsothPipe=false "true: isothermal pipe model, false: adiabatic pipe model" annotation (Dialog(tab="Pipe Network", group="Parameters"));
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium to be used" annotation (Dialog(tab="General", group="General"));
   parameter SI.MassFraction xi_start[medium.nc - 1]=medium.xi_default "composition of the medium for initialization (nc-1)" annotation (Dialog(tab="Pipe Network", group="Initialization"));
   parameter SI.MassFraction xi_const[medium.nc - 1]=medium.xi_default "Constant composition of medium (nc-1)" annotation (Dialog(tab="Sink", group="General"));
@@ -54,14 +55,14 @@ model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control
   //parameter SI.EnthalpyMassSpecific h_const=1e6 "constant enthalpy" annotation (Dialog(tab="Sink", group="General"));
   parameter SI.Temperature T_const=283.15 "constant Temperature" annotation (Dialog(tab="Sink", group="General"));
   //parameter SI.EnthalpyMassSpecific h_const=2274.9 "constant specific Enthalpy" annotation (Dialog(tab="Sink", group="General"));
-  parameter SI.Pressure p_nom[pipe.N_cv]=ones(pipe.N_cv)*15e5 "Nominal absolute pressure" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
-  parameter SI.EnthalpyMassSpecific h_nom[pipe.N_cv]=ones(pipe.N_cv)*788440 "Nominal enthalpy" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.Pressure p_nom[N_cv]=ones(N_cv)*15e5 "Nominal absolute pressure" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
+  parameter SI.EnthalpyMassSpecific h_nom[N_cv]=ones(N_cv)*788440 "Nominal enthalpy" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
   parameter SI.MassFlowRate m_flow_nom=140 "Nominal mass flow" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
   parameter SI.PressureDifference Delta_p_nom=3e4 "Nominal pressure loss" annotation (Dialog(tab="Pipe Network", group="Nominal values"));
-  parameter SI.Pressure p_start[pipe.N_cv]=ones(pipe.N_cv)*15e5 "Pressure" annotation (Dialog(tab="Pipe Network", group="Initialization"));
-  parameter SI.EnthalpyMassSpecific h_start[pipe.N_cv]=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_start) "Enthalpy" annotation (Dialog(tab="Pipe Network", group="Initialization"));
-  parameter SI.Temperature T_start[pipe.N_cv]=ones(pipe.N_cv)*simCenter.T_ground "Temperature" annotation (Dialog(tab="Pipe Network", group="Initialization"));
-  parameter SI.MassFlowRate m_flow_start[pipe.N_cv + 1]=ones(pipe.N_cv + 1)*140 "Mass flow rate" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.Pressure p_start[N_cv]=ones(N_cv)*15e5 "Pressure" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.EnthalpyMassSpecific h_start[N_cv]=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_start) "Enthalpy" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.Temperature T_start[N_cv]=ones(N_cv)*simCenter.T_ground "Temperature" annotation (Dialog(tab="Pipe Network", group="Initialization"));
+  parameter SI.MassFlowRate m_flow_start[N_cv + 1]=ones(N_cv + 1)*140 "Mass flow rate" annotation (Dialog(tab="Pipe Network", group="Initialization"));
   parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
   replaceable model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4
     constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(tab="General", group="Pipes"), choices(choicesAllMatching));
@@ -87,7 +88,7 @@ model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe(
     medium=medium,
     length=length,
     diameter_i=diameter,
@@ -104,8 +105,9 @@ model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control
     frictionAtInlet=true,
     N_cv=N_cv,
     massBalance=massBalance,
-    frictionAtOutlet=true,
-    redeclare model PressureLoss = PressureLoss) annotation (Placement(transformation(extent={{-84,-5},{-56,5}})));
+    frictionAtOutlet=false,
+    redeclare model PressureLoss = PressureLoss) if not useIsothPipe
+                                                 annotation (Placement(transformation(extent={{-84,-5},{-56,5}})));
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(xiNumber=massflowSensor.medium.nc) annotation (Placement(transformation(extent={{6,0},{26,20}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink(
     medium=simCenter.gasModel1,
@@ -125,6 +127,25 @@ model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control
 public
   TransiEnt.Components.Sensors.RealGas.WobbeGCVSensor vleGCVSensor annotation (Placement(transformation(extent={{-24,0},{-4,20}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-50,0},{-30,20}})));
+  Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_isoth(
+    medium=medium,
+    length=length,
+    diameter_i=diameter,
+    p_nom=p_nom,
+    h_nom=h_nom,
+    m_flow_nom=m_flow_nom,
+    Delta_p_nom=Delta_p_nom,
+    h_start=h_start,
+    p_start=p_start,
+    xi_start=xi_start,
+    useHomotopy=true,
+    m_flow_start=m_flow_start,
+    N_tubes=N_tubes,
+    frictionAtInlet=true,
+    N_cv=N_cv,
+    massBalance=massBalance,
+    frictionAtOutlet=false,
+    redeclare model PressureLoss = PressureLoss) if useIsothPipe annotation (Placement(transformation(extent={{-84,-21},{-56,-11}})));
 equation
 
   // _____________________________________________
@@ -156,8 +177,15 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(H_flow, gCVController.H_flow_set) annotation (Line(points={{110,0},{86,0},{86,-6},{83,-6}}, color={0,0,127}));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
+  connect(pipe_isoth.gasPortOut, vleCompositionSensor.gasPortIn) annotation (Line(
+      points={{-56,-16},{-52,-16},{-52,0},{-50,0}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(pipe_isoth.gasPortIn, fluidPortIn) annotation (Line(
+      points={{-84,-16},{-88,-16},{-88,0},{-100,0}},
+      color={255,255,0},
+      thickness=1.5));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Real gas consumer with one pipe. Gas mass flow rate demand controlled by measured gross calorific value.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Pipe can reprensent the average distance to a consumer.</span></p>
@@ -179,5 +207,6 @@ equation
 <p>(no remarks)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Created by Lisa Andresen (andresen@tuhh.de) in Jun 2016</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Edited by Carsten Bode(c.bode@tuhh.de) in May 2020 (added option to use isothermal pipe model)</span></p>
 </html>"));
 end GasConsumerPipe_HFlow;

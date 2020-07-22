@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat.Check;
 model HeatPumpGasCharlineTest
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,7 +22,7 @@ model HeatPumpGasCharlineTest
   extends TransiEnt.Basics.Icons.Checkmodel;
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=308.15) annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=270,
-        origin={-50,22})));
+        origin={-48,22})));
   Modelica.Blocks.Sources.Sine sine(
     amplitude=1500,
     freqHz=1/86400,
@@ -30,7 +30,6 @@ model HeatPumpGasCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-90,50})));
-  HeatPumpGasCharlineHeatPort_L1                                         heatPump(use_T_source_input_K=true, COP_n=4) annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-74,46},{-66,54}})));
   Modelica.Blocks.Sources.Sine sine2(
     freqHz=1/86400,
@@ -52,10 +51,6 @@ model HeatPumpGasCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={20,50})));
-  HeatPumpGasCharlineHeatPort_L1 heatPump1(
-    use_T_source_input_K=true,
-    COP_n=4,
-    use_Q_flow_input=false) annotation (Placement(transformation(extent={{50,40},{70,60}})));
   Modelica.Blocks.Sources.Sine sine3(
     freqHz=1/86400,
     amplitude=15,
@@ -72,7 +67,7 @@ model HeatPumpGasCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-90,-50})));
-  HeatPumpGasCharlineFluidPorts heatPump2(use_T_source_input_K=true, COP_n=4) annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
+  HeatPumpGasCharline heatPump2(use_T_source_input_K=true, COP_n=4) annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
   Modelica.Blocks.Math.Gain gain1(k=-1)
                                        annotation (Placement(transformation(extent={{-74,-54},{-66,-46}})));
   Modelica.Blocks.Sources.Sine sine5(
@@ -99,7 +94,7 @@ model HeatPumpGasCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={20,-50})));
-  HeatPumpGasCharlineFluidPorts heatPump3(
+  HeatPumpGasCharline heatPump3(
     use_T_source_input_K=true,
     COP_n=4,
     use_Q_flow_input=false) annotation (Placement(transformation(extent={{50,-60},{70,-40}})));
@@ -120,20 +115,17 @@ model HeatPumpGasCharlineTest
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={80,-80})));
-  Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(extent={{-10,36},{-30,56}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(extent={{-8,36},{-28,56}})));
   Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi1 annotation (Placement(transformation(extent={{-10,-64},{-30,-44}})));
   Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi2 annotation (Placement(transformation(extent={{100,36},{80,56}})));
   Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi3 annotation (Placement(transformation(extent={{100,-64},{80,-44}})));
+  HeatPumpGasCharline heatPump(use_T_source_input_K=true, useFluidPorts=false) annotation (Placement(transformation(extent={{-58,40},{-38,60}})));
+  HeatPumpGasCharline heatPump1(use_T_source_input_K=true, useFluidPorts=false) annotation (Placement(transformation(extent={{50,40},{70,60}})));
 equation
-  connect(heatPump.heat, fixedTemperature.port) annotation (Line(points={{-50,40},{-50,32}},
-                                                                                         color={191,0,0}));
-  connect(gain.y, heatPump.Q_flow_set) annotation (Line(points={{-65.6,50},{-60,50}}, color={0,0,127}));
+  connect(gain.y, heatPump.Q_flow_set) annotation (Line(points={{-65.6,50},{-58,50}}, color={0,0,127}));
   connect(sine.y, gain.u) annotation (Line(points={{-79,50},{-74.8,50}},
                                                                        color={0,0,127}));
-  connect(sine2.y, heatPump.T_source_input_K) annotation (Line(points={{-59,80},{-50,80},{-50,60}},
-                                                                                                 color={0,0,127}));
   connect(heatPump1.heat, fixedTemperature1.port) annotation (Line(points={{60,40},{60,32}}, color={191,0,0}));
-  connect(sine3.y, heatPump1.T_source_input_K) annotation (Line(points={{51,80},{60,80},{60,60}}, color={0,0,127}));
   connect(gain1.y, heatPump2.Q_flow_set) annotation (Line(points={{-65.6,-50},{-60,-50}}, color={0,0,127}));
   connect(sine4.y, gain1.u) annotation (Line(points={{-79,-50},{-74.8,-50}}, color={0,0,127}));
   connect(sine5.y, heatPump2.T_source_input_K) annotation (Line(points={{-59,-20},{-50,-20},{-50,-40}}, color={0,0,127}));
@@ -155,9 +147,8 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(sine6.y, heatPump3.H_flow_set) annotation (Line(points={{31,-50},{50,-50}}, color={0,0,127}));
-  connect(sine1.y, heatPump1.H_flow_set) annotation (Line(points={{31,50},{50,50}}, color={0,0,127}));
   connect(heatPump.gasPortIn, boundary_pTxi.gasPort) annotation (Line(
-      points={{-40,46},{-36,46},{-36,46},{-30,46}},
+      points={{-38,46},{-28,46}},
       color={255,255,0},
       thickness=1.5));
   connect(heatPump2.gasPortIn, boundary_pTxi1.gasPort) annotation (Line(
@@ -172,6 +163,16 @@ equation
       points={{70,-54},{80,-54}},
       color={255,255,0},
       thickness=1.5));
+  connect(gain.y, heatPump.Q_flow_set) annotation (Line(points={{-65.6,50},{-58,50}}, color={0,0,127}));
+  connect(fixedTemperature.port, heatPump.heat) annotation (Line(points={{-48,32},{-48,40}}, color={191,0,0}));
+  connect(boundary_pTxi.gasPort, heatPump.gasPortIn) annotation (Line(
+      points={{-28,46},{-38,46}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(sine2.y, heatPump.T_source_input_K) annotation (Line(points={{-59,80},{-48,80},{-48,60}}, color={0,0,127}));
+  connect(fixedTemperature1.port, heatPump1.heat) annotation (Line(points={{60,32},{60,40}}, color={191,0,0}));
+  connect(sine1.y, heatPump1.Q_flow_set) annotation (Line(points={{31,50},{50,50}}, color={0,0,127}));
+  connect(sine3.y, heatPump1.T_source_input_K) annotation (Line(points={{51,80},{60,80},{60,60}}, color={0,0,127}));
   annotation (
     Icon(graphics,
          coordinateSystem(preserveAspectRatio=false)),

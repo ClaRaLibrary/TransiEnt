@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles;
 model Adapter_H2toNG "AdapterH2NG || yellow | red"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,7 +54,7 @@ model Adapter_H2toNG "AdapterH2NG || yellow | red"
         rotation=90,
         origin={66,0})));
 
-  final parameter SI.Temperature T_H2 = TILMedia.VLEFluidFunctions.temperature_phxi(
+  final parameter SI.Temperature T_H2 = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.temperature_phxi(
     vleFluidType=mediumIn,
     p=p,
     h=h_in,
@@ -67,7 +67,7 @@ initial equation
   outlet.p=p;
 
   xi_out = zeros(mediumOut.nc-1);
-  h_out = TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+  h_out = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
     vleFluidType=mediumOut,
     p=p,
     T=T_H2,

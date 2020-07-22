@@ -2,10 +2,10 @@ within TransiEnt.Storage.Base;
 model GenericStorageHyst "Highly adaptable but non-physical model for all kinds of energy storages with hysteresis if storage is full (recommended for storage with losses)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model GenericStorageHyst "Highly adaptable but non-physical model for all kinds 
   // _____________________________________________
 
   parameter Real relDeltaEnergyHystFull=0.001 "Relative energy change for the hysteresis to determine if storage is full";
-
+  parameter Real relDeltaEnergyHystEmpty=0.001 "Relative energy change for the hysteresis to determine if storage is full";
   // _____________________________________________
   //
   //           Instances of other Classes
@@ -44,7 +44,12 @@ model GenericStorageHyst "Highly adaptable but non-physical model for all kinds 
     uHigh=params.E_max,
     uLow=params.E_max - relDeltaEnergyHystFull*(params.E_max - params.E_min))
                                                                           annotation (Placement(transformation(extent={{-32,-14},{-19,0}})));
-
+  Modelica.Blocks.Logical.Hysteresis isStorage_Empty(uHigh=-params.E_min, uLow=-params.E_min - relDeltaEnergyHystEmpty*(params.E_max - params.E_min))
+                                                                                                                                                   annotation (Placement(transformation(extent={{-34,-34},{-21,-20}})));
+  Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(
+        extent={{1,-1},{-1,1}},
+        rotation=90,
+        origin={-43,-25})));
 equation
 
   // _____________________________________________
@@ -52,12 +57,15 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  connect(E_is.y, isStorageFull.u) annotation (Line(points={{-46,-18},{-42,-18},{-42,-7},{-33.3,-7}}, color={0,0,127}));
-  connect(isStorageFull.y, FullAndCharging.u2) annotation (Line(points={{-18.35,-7},{-13.175,-7},{-13.175,-6.6},{-6.3,-6.6}}, color={255,0,255}));
+  connect(E_is.y, isStorageFull.u) annotation (Line(points={{-46,-20},{-42,-20},{-42,-7},{-33.3,-7}}, color={0,0,127}));
+  connect(isStorageFull.y, FullAndCharging.u2) annotation (Line(points={{-18.35,-7},{-13.175,-7},{-13.175,-6.6},{-8.3,-6.6}}, color={255,0,255}));
+  connect(EmptyAndDischarging.u2, isStorage_Empty.y) annotation (Line(points={{-9.3,-28.6},{-20.35,-28.6},{-20.35,-27}}, color={255,0,255}));
+  connect(isStorage_Empty.u, gain.y) annotation (Line(points={{-35.3,-27},{-43,-27},{-43,-26.1}}, color={0,0,127}));
+  connect(gain.u, E_is.y) annotation (Line(points={{-43,-23.8},{-43,-20},{-46,-20}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),                   Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Highly&nbsp;adaptable&nbsp;but&nbsp;non-physical&nbsp;model&nbsp;for&nbsp;all&nbsp;kinds&nbsp;of&nbsp;energy&nbsp;storages. Has a hysteresis for when the storage is full. Recommended for storage models with losses.</p>
+<p>Highly adaptable but non-physical model for all kinds of energy storages. Has a hysteresis for when the storage is full and empty. Recommended for storage models with losses.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -78,6 +86,7 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p>Model extended from base class by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
-<p>Model adapted by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), April 2018: added first order plant dynamics block which can be deactivated</p>
+<p>Model adapted by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), April 2018: added first order plant dynamics block which can be deactivated.</p>
+<p>Model adapted by Anne Senkel (anne.senkel@tuhh.de),March 2020: Hysteresis can be used when storage is empty as well. </p>
 </html>"));
 end GenericStorageHyst;

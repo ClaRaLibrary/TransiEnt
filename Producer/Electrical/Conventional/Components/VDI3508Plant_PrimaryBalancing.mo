@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order systems according to VDI 3508, no states, with balancing control"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -182,7 +182,7 @@ model VDI3508Plant_PrimaryBalancing "Transient behaviour by multiple first order
         origin={-111,25})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=is_running) annotation (Placement(transformation(extent={{24,-10},{44,10}})));
   replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem "Choice of excitation system model with voltage control"
-                                                                                                                                                                                                        annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+                                                                                                                                                                                              annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-10,-10.5},{10,10.5}},
         rotation=-90,
         origin={74.5,26})));

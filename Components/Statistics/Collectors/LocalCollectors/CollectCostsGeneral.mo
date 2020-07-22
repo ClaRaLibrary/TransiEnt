@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CollectCostsGeneral "Cost collector for general components"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,20 +38,6 @@ model CollectCostsGeneral "Cost collector for general components"
   parameter SI.Power der_E_n(displayUnit="W") = 500e6 "Nominal power of the component" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.Energy E_n(displayUnit="MWh") = 3.6e12 "Nominal energy of the component" annotation(Dialog(group="Fundamental Definitions"));
 
-  //replaceable parameter TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.ElectricityCostSpecs.NoCost CostRecordElectricity constrainedby TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.ElectricityCostSpecs.PartialCostElectricity "Electricity Cost record" annotation (Dialog(group="Demand-related Cost", enable=useP_elInput), choicesAllMatching);
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el=simCenter.Cspec_demAndRev_free "Specific demand-related cost per electric energy" annotation (Dialog(group="Demand-related Cost"));
-
-  //replaceable parameter TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.HeatCostSpecs.NoCost CostRecordHeat constrainedby TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.HeatCostSpecs.PartialCostHeat "Heat Cost record" annotation (Dialog(group="Demand-related Cost", enable=useQ_flowInput), choicesAllMatching);
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_heat=simCenter.Cspec_demAndRev_free "Specific demand-related cost per heating energy in" annotation (Dialog(group="Demand-related Cost"));
-
-  //replaceable parameter TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.GasAndFuelCostSpecs.NoCost CostRecordGasAndFuel constrainedby TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.GasAndFuelCostSpecs.PartialCostGasAndFuel "Gas And Fuel Cost record" annotation (Dialog(group="Demand-related Cost", enable=useH_flowInput), choicesAllMatching);
-  parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_gas_fuel=simCenter.Cspec_demAndRev_free "Specific demand-related cost per gas energy" annotation (Dialog(group="Demand-related Cost"));
-
-  //replaceable parameter TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.OtherResourcesCostSpecs.NoCost CostRecordOtherResources constrainedby TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.OtherResourcesCostSpecs.PartialCostOtherResources "Electricity CostSpec record" annotation (Dialog(group="Demand-related Cost", enable=useOther_flowInput), choicesAllMatching);
-  parameter Real Cspec_demAndRev_other=simCenter.Cspec_demAndRev_other_free "Specific demand-related cost per other resource, e.g. water" annotation (Dialog(group="Demand-related Cost"));
-
-  parameter Real Cspec_CO2=simCenter.C_CO2 "EUR/kg, specific price of CDE" annotation (Dialog(group="CO2 Certificates"));
-
   parameter TransiEnt.Basics.Units.MonetaryUnit C_OM_fix=0 "Fix annual operating and maintenance cost (independent from investment)";
 
   parameter Boolean produces_P_el=true "true if the component produces electric power" annotation (Dialog(group="Demand-related Cost"),choices(__Dymola_checkBox=true));
@@ -69,6 +55,12 @@ model CollectCostsGeneral "Cost collector for general components"
   //
   //              Variable Declarations
   // _____________________________________________
+
+  TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el=simCenter.Cspec_demAndRev_free "Specific demand-related cost per electric energy" annotation (Dialog(group="Demand-related Cost"));
+  TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_heat=simCenter.Cspec_demAndRev_free "Specific demand-related cost per heating energy in" annotation (Dialog(group="Demand-related Cost"));
+  TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_gas_fuel=simCenter.Cspec_demAndRev_free "Specific demand-related cost per gas energy" annotation (Dialog(group="Demand-related Cost"));
+  Real Cspec_demAndRev_other=simCenter.Cspec_demAndRev_other_free "Specific demand-related cost per other resource, e.g. water" annotation (Dialog(group="Demand-related Cost"));
+  Real Cspec_CO2=simCenter.C_CO2 "EUR/kg, specific price of CDE" annotation (Dialog(group="CO2 Certificates"));
 
   SI.Power P_el=0 "Consumed or produced electric power (target value of plant)" annotation(Dialog(group="Demand-related Cost"));
   SI.Energy W_el_demand(fixed=true, start=0, stateSelect=StateSelect.never,displayUnit="MWh") "Consumed electric energy"

@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.SpaceHeating;
 model RoomFloorHeating "Room model with floor heating system"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -85,19 +85,17 @@ protected
   // _____________________________________________
 
 public
-   TILMedia.VLEFluid_ph waterInState(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph waterInState(
     computeVLEAdditionalProperties=false,
     computeVLETransportProperties=false,
     computeTransportProperties=false,
     p=waterIn.p,
     h=inStream(waterIn.h_outflow),
-    redeclare TILMedia.VLEFluidTypes.TILMedia_Water vleFluidType)
-    annotation (Placement(transformation(extent={{56,76},{82,100}})));
-  TILMedia.VLEFluid_pT waterOutState(
+    redeclare TILMedia.VLEFluidTypes.TILMedia_Water vleFluidType) annotation (Placement(transformation(extent={{56,76},{82,100}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT waterOutState(
     redeclare TILMedia.VLEFluidTypes.TILMedia_Water vleFluidType,
     p=waterOut.p,
-    T=T_waterOut)
-    annotation (Placement(transformation(extent={{52,-100},{72,-80}})));
+    T=T_waterOut) annotation (Placement(transformation(extent={{52,-100},{72,-80}})));
 
   // _____________________________________________
   //

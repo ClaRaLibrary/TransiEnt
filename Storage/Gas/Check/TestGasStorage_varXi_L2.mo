@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Gas.Check;
 model TestGasStorage_varXi_L2
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,8 +21,7 @@ model TestGasStorage_varXi_L2
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Storage.Gas.GasStorage_varXi_L2 compressedGasStorage(V_geo=500000, xi_gas_start={1,0,0,0,0,0})
-                                                                               annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+  TransiEnt.Storage.Gas.GasStorage_varXi_L2 compressedGasStorage_adiabatic(V_geo=500000, xi_gas_start={1,0,0,0,0,0}) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   inner TransiEnt.SimCenter simCenter                                                                    annotation (Placement(transformation(extent={{-90,-100},{-70,-80}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundaryRealGas_Txim_flow1(variable_m_flow=true, variable_xi=true) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -49,18 +48,46 @@ model TestGasStorage_varXi_L2
         rotation=270,
         origin={-26,72})));
 
+  GasStorage_varXi_L2 compressedGasStorage_idealHT(
+    V_geo=500000,
+    includeHeatTransfer=true,
+    T_gas_start=283.15,
+    redeclare model HeatTransfer = Base.IdealHTOuterTemperature_L2,
+    xi_gas_start={1,0,0,0,0,0}) annotation (Placement(transformation(extent={{48,-10},{68,10}})));
+  Components.Boundaries.Gas.BoundaryRealGas_Txim_flow           boundaryRealGas_Txim_flow2(variable_m_flow=true, variable_xi=true) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={58,40})));
+  Components.Boundaries.Gas.BoundaryRealGas_Txim_flow           boundaryRealGas_Txim_flow4(variable_m_flow=true) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={58,-40})));
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=283.15) annotation (Placement(transformation(extent={{102,-10},{82,10}})));
 equation
   connect(boundaryRealGas_Txim_flow1.m_flow,timeTable1. y) annotation (Line(points={{6,52},{6,61}},           color={0,0,127}));
   connect(boundaryRealGas_Txim_flow3.m_flow,timeTable3. y) annotation (Line(points={{-6,-52},{-6,-59}}, color={0,0,127}));
   connect(timeTable2.y, boundaryRealGas_Txim_flow1.xi) annotation (Line(points={{-26,61},{-26,58},{-6,58},{-6,52}}, color={0,0,127}));
-  connect(boundaryRealGas_Txim_flow1.gasPort, compressedGasStorage.gasPortIn) annotation (Line(
+  connect(boundaryRealGas_Txim_flow1.gasPort, compressedGasStorage_adiabatic.gasPortIn) annotation (Line(
       points={{0,30},{0,4.9}},
       color={255,255,0},
       thickness=1.5));
-  connect(compressedGasStorage.gasPortOut, boundaryRealGas_Txim_flow3.gasPort) annotation (Line(
+  connect(compressedGasStorage_adiabatic.gasPortOut, boundaryRealGas_Txim_flow3.gasPort) annotation (Line(
       points={{0,-6.3},{0,-30}},
       color={255,255,0},
       thickness=1.5));
+  connect(boundaryRealGas_Txim_flow2.m_flow,timeTable1. y) annotation (Line(points={{64,52},{64,61},{6,61}},  color={0,0,127}));
+  connect(boundaryRealGas_Txim_flow4.m_flow,timeTable3. y) annotation (Line(points={{52,-52},{52,-59},{-6,-59}},
+                                                                                                        color={0,0,127}));
+  connect(timeTable2.y,boundaryRealGas_Txim_flow2. xi) annotation (Line(points={{-26,61},{-26,58},{52,58},{52,52}}, color={0,0,127}));
+  connect(boundaryRealGas_Txim_flow2.gasPort, compressedGasStorage_idealHT.gasPortIn) annotation (Line(
+      points={{58,30},{58,4.9}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(compressedGasStorage_idealHT.gasPortOut, boundaryRealGas_Txim_flow4.gasPort) annotation (Line(
+      points={{58,-6.3},{58,-30}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(fixedTemperature.port, compressedGasStorage_idealHT.heat) annotation (Line(points={{82,0},{72,0},{72,0},{62,0}}, color={191,0,0}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=2000, __Dymola_Algorithm="Dassl"),

@@ -1,6 +1,7 @@
+TestConstantHeatConsumer
+TestTableBased
 TestIdealHeatingNetworkConsumer
 TestFirstOrderHeatingNetworkConsumer
 TestFirstOrderHeatingNetworkConsumer_withPlant
 TestThermalHeatConsumer
-TestConstantHeatConsumer
-TestTableBased
+TestThermalHeatConsumer_L3

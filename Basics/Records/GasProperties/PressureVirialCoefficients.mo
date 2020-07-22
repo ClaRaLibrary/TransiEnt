@@ -1,10 +1,10 @@
-within TransiEnt.Basics.Records.GasProperties;
+﻿within TransiEnt.Basics.Records.GasProperties;
 record PressureVirialCoefficients "Record containing the pressure virial coefficients B'0 and B'30 for 0 and 30 degC"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ record PressureVirialCoefficients "Record containing the pressure virial coeffic
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Record&nbsp;containing&nbsp;the&nbsp;pressure&nbsp;virial&nbsp;coefficients&nbsp;B&apos;0&nbsp;and&nbsp;B&apos;30&nbsp;for&nbsp;0&nbsp;and&nbsp;30&nbsp;degC.</p>
+<p>Record containing the pressure virial coefficients B&apos;0 and B&apos;30 for 0 and 30 degC.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>No physical effects considered. </p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -54,13 +54,13 @@ record PressureVirialCoefficients "Record containing the pressure virial coeffic
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The names vector contains the component names</p>
 <p><img src=\"modelica://TransiEnt/Images/MolarMasses_Names.png\"/>.</p>
-<p>In the virial pressure coefficients vectors the coefficients are defined in 10^-5&nbsp;/&nbsp;kPa</p>
+<p>In the virial pressure coefficients vectors the coefficients are defined in 10^-5 / kPa</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>Be sure to store the molar mass for each component in virial pressure coefficients vector in the same column in which the name is stored in the names vector.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] DIN&nbsp;EN&nbsp;ISO&nbsp;14912<span style=\"font-family: Courier New;\">, </span>&quot;Gasanalyse&nbsp;- Umrechnung von Zusammensetzungsangaben f&uuml;r Gasgemische&quot;, Deutsches Institut f&uuml;r Normung DIN, Berlin, 2006</p>
+<p>[1] DIN EN ISO 14912<span style=\"font-family: Courier New;\">, </span>&quot;Gasanalyse - Umrechnung von Zusammensetzungsangaben für Gasgemische&quot;, Deutsches Institut für Normung DIN, Berlin, 2006</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Lisa Andresen (andresen@tuhh.de), Apr 2016</p>
 </html>"));

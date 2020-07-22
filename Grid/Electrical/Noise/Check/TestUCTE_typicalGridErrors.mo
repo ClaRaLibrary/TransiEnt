@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.Noise.Check;
 model TestUCTE_typicalGridErrors "Example of the component PowerPlant_PoutGrad_L1"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,7 @@ model TestUCTE_typicalGridErrors "Example of the component PowerPlant_PoutGrad_L
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   LumpedPowerGrid.LumpedGrid uCTEModel(P_L=simCenter.P_n_ref_2, redeclare TypicalLumpedGridError genericGridError(P_L=simCenter.P_n_ref_2)) annotation (Placement(transformation(extent={{-66,0},{0,62}})));
-  Components.Boundaries.Electrical.Power constantFrequency_L1_1(useInputConnectorP=false) annotation (Placement(transformation(extent={{42,21},{62,41}})));
+  Components.Boundaries.Electrical.ActivePower.Power constantFrequency_L1_1(useInputConnectorP=false) annotation (Placement(transformation(extent={{42,21},{62,41}})));
   Basics.Tables.GenericDataTable f_1year_60s(
     datasource=TransiEnt.Basics.Tables.DataPrivacy.isPublic,
     relativepath="electricity/GridFrequencyMeasurement_60s_01012012_31122012.txt",

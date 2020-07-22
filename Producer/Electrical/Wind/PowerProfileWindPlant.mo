@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind;
 model PowerProfileWindPlant "Ideal continuous wind plant model based on a power production input (e.g. if wind production data is available from tso), adds to statistics"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,7 +31,8 @@ model PowerProfileWindPlant "Ideal continuous wind plant model based on a power 
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.WindOnshore,
      replaceable model ProducerCosts =
         TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.WindOnshore
-                                                                                            annotation (Dialog(group="Statistics")));
+                                                                                            annotation (Dialog(group="Statistics")),
+    collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable));
 
   extends TransiEnt.Basics.Icons.Windparkmodel;
 

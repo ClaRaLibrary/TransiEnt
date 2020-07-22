@@ -2,10 +2,10 @@
 model SolarCollector_L1_constProp "Solar flat plate collector model (EN 12975) with effective heat capacity for transient behavior, constant properties"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,6 +56,7 @@ model SolarCollector_L1_constProp "Solar flat plate collector model (EN 12975) w
   parameter SI.Irradiance G_min=0 "Minimum Irradiance before collector is working" annotation (Dialog(tab="General", group="General"));
   parameter Boolean noFriction=true "true = assume no pressure loss due to friction" annotation(Dialog(group="Pressure drop"));
   parameter Boolean UseStationaryCalculationMethod=true "Choose if calculation uses only stationary equations or not" annotation (Dialog(tab="General", group="General"));
+  parameter Real Soiling=0 "Average annual losses of radiation in % due to soiling" annotation (Dialog(tab="Irradiance", group="Losses"));
 
   //Pressure loss
   parameter Integer n_serial(max=12)=1 "Number of collectors in series (max. 12)" annotation (Dialog(group="Pressure drop"));
@@ -207,9 +208,9 @@ equation
 
   T_m = 0.5*(T_in+T_out);
 
-  G_total =IAM.iam_dir*irradiance.irradiance_direct_tilted + IAM.iam_diff*irradiance.irradiance_diffuse_tilted + IAM.iam_ground*irradiance.irradiance_ground_tilted;
-
+  G_total =(IAM.iam_dir*irradiance.irradiance_direct_tilted + IAM.iam_diff*irradiance.irradiance_diffuse_tilted + IAM.iam_ground*irradiance.irradiance_ground_tilted)*(100-Soiling)/100;
   if UseStationaryCalculationMethod==false then
+
     Q_flow_collector = area*((G_total*eta_0)-a1*(T_m-T_amb)-a2*(T_m-T_amb)^2-c_eff*der_T);
   else
     Q_flow_collector = area*((G_total*eta_0)-a1*(T_m-T_amb)-a2*(T_m-T_amb)^2);
@@ -256,7 +257,7 @@ equation
                choicesAllMatching, Dialog(group="Environment"),
               Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>A&nbsp;simple&nbsp;solar&nbsp;collector&nbsp;providing&nbsp;useful&nbsp;energy&nbsp;gain&nbsp;as&nbsp;recommended&nbsp;by&nbsp;EN&nbsp;12975&nbsp;steady&nbsp;state&nbsp;thermal&nbsp;performance&nbsp;equation [1]. Effective heat capacity was added for transient behavioraccording to [2].</p>
+<p>A simple solar collector providing useful energy gain as recommended by EN 12975 steady state thermal performance equation [1]. Effective heat capacity was added for transient behavioraccording to [2].</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>No physical but parameter based model. Model considers heat loss to ambience but no convection and pressure losses (linear or quadratic).</p>
 <p>No TILMedia models used because they produce warnings at temperatures below 0&deg;C even if no heat flow is generated.</p>
@@ -301,8 +302,8 @@ equation
 <p>Model modified by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
 <p>Model modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
 <p>Model modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018: added possibility to use inputs for solar irradiation</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Aug 2018: added boolean &apos;UseStationaryCalculationMethod&apos; to deactive instationary part of heat flow calculation &apos;<span style=\"font-family: Courier New;\">-c_eff*der_T&apos;.</span> Results are nearly the same but unrealistic peaks can be avoided if calculation is stationary </p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), May 2018: added possibility to use inputs for solar irradiation</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), Aug 2018: added boolean &apos;UseStationaryCalculationMethod&apos; to deactive instationary part of heat flow calculation &apos;<span style=\"font-family: Courier New;\">-c_eff*der_T&apos;.</span> Results are nearly the same but unrealistic peaks can be avoided if calculation is stationary </p>
 <p>Model modified by Carsten Bode (c.bode@tuhh.de), Nov 2018: replaced fluid objects by equations, eliminated m_flowInv and x</p>
 </html>"), Diagram(graphics,
                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));

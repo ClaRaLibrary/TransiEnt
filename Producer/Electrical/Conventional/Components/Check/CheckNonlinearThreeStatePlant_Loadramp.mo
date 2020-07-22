@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckNonlinearThreeStatePlant_Loadramp "Example of the component NonlinearThreeStatePlant"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,7 @@ model CheckNonlinearThreeStatePlant_Loadramp "Example of the component Nonlinear
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   Components.NonlinearThreeStatePlant aSlewRateLimited2StatePBPlant(P_el_n=500e6, P_grad_max_star=0.1/60) annotation (Placement(transformation(extent={{-20,-54},{16,-20}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantPotentialVariableBoundary(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{60,-38},{80,-18}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantPotentialVariableBoundary(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{60,-38},{80,-18}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));

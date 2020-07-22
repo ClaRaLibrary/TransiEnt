@@ -1,3 +1,5 @@
+Physics
+Specifications
 ElectrolyzerDynamics0thOrder
 ElectrolyzerDynamics1stOrder
 ElectrolyzerDynamics2ndOrder
@@ -7,3 +9,5 @@ GetInputsElectrolyzer
 PartialElectrolyzerDynamics
 PartialElectrolyzerEfficiencyCharline
 PartialFeedInStation
+GetInputsElectrolyzerL2
+PartialElectrolyzer

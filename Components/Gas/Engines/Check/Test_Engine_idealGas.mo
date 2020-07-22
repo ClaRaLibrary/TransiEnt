@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Engines.Check;
 model Test_Engine_idealGas
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,7 +25,7 @@ model Test_Engine_idealGas
     redeclare model MechanicModel = Mechanics.DynamicEngineMechanics,
     redeclare model HeatFlowModel = HeatFlow.DynamicHeatFlow_simple) annotation (Placement(transformation(extent={{-24,-26},{28,26}})));
   Electrical.Machines.ActivePowerGenerator activePowerGenerator annotation (Placement(transformation(extent={{46,-30},{66,-10}})));
-  Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{74,-30},{94,-10}})));
+  Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{74,-30},{94,-10}})));
   Boundaries.Gas.BoundaryIdealGas_pTxi sink(gasModel=simCenter.exhaustGasModel) annotation (Placement(transformation(extent={{-60,26},{-40,46}})));
   Boundaries.Gas.BoundaryIdealGas_pTxi gasSource(
     gasModel=simCenter.gasModel2,

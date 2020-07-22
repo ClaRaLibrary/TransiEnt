@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestCHP_balancingControlOffer "Example how the CHP model provides information about balancing power reserves"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,13 +22,13 @@ model TestCHP_balancingControlOffer "Example how the CHP model provides informat
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-100,79},{-80,99}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-70,79},{-50,99}})));
-  Modelica.Blocks.Sources.RealExpression P_set(y=if time < 5e4 then -Plant.pQDiagram.P_min else -Plant.pQDiagram.P_max)
+  Modelica.Blocks.Sources.RealExpression P_set(y=if time < 5e4 then -Plant.pQDiagram[1].P_min else -Plant.pQDiagram[1].P_max)
                                                         annotation (Placement(
         transformation(
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-73,31.5})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{20,50},{32,62}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{20,50},{32,62}})));
   CHP Plant(
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     typeOfCO2AllocationMethod=2,
@@ -120,8 +120,7 @@ createPlot(id=2, position={746, 0, 728, 311}, y={"Plant.controlPowerModel.P_sec_
 end plotResult;
 equation
   connect(P_el_SB_set.y, Plant.P_SB_set) annotation (Line(points={{-58.9,7.5},{-42,7.5},{-42,20},{-33.47,20},{-33.47,12.65}}, color={0,0,127}));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     experiment(StopTime=86400),
     __Dymola_experimentSetupOutput(equidistant=false),
     Icon(graphics,

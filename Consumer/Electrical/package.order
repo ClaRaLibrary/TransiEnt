@@ -8,3 +8,5 @@ LinearElectricConsumer
 SLPElectricConsumer
 TableBasedElectricConsumer
 ExponentialElectricConsumerComplex
+DynamicExponentialElectricConsumerComplex
+SimpleExponentialElectricConsumerComplex

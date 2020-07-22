@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckBlackCoal_Init "Example of the component PowerPlant_PoutGrad_L1"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model CheckBlackCoal_Init "Example of the component PowerPlant_PoutGrad_L1"
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantPotentialVariableBoundary(useInputConnector=false) annotation (Placement(transformation(extent={{48,-12},{68,8}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantPotentialVariableBoundary(useInputConnector=false) annotation (Placement(transformation(extent={{48,-12},{68,8}})));
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Grid.Electrical.Base.ExampleGenerationPark generationPark)
                                       annotation (Placement(transformation(extent={{-70,80},{-50,100}})));
   inner TransiEnt.ModelStatistics modelStatistics

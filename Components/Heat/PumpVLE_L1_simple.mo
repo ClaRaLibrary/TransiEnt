@@ -1,10 +1,10 @@
 within TransiEnt.Components.Heat;
 model PumpVLE_L1_simple "A pump for VLE mixtures with a volume flow rate depending on drive power and pressure difference only"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -84,8 +84,9 @@ model PumpVLE_L1_simple "A pump for VLE mixtures with a volume flow rate dependi
 
   ClaRa.Basics.Interfaces.Connected2SimCenter connected2SimCenter(
     powerIn=0,
-    powerOut=fluidPortIn.m_flow*(fluidIn.h - fluidOut.h),
-    powerAux=(P_el - fluidPortIn.m_flow*(fluidOut.h - fluidIn.h))) if contributeToCycleSummary;
+    powerOut_elMech=0,
+    powerOut_th=0,
+    powerAux=P_drive) if contributeToCycleSummary;
   extends ClaRa.Basics.Icons.ComplexityLevel(complexity="L1");
   TransiEnt.Basics.Interfaces.General.PressureDifferenceIn dp_in if
     use_Delta_p_input "Prescribed pressure increase"

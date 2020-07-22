@@ -10,4 +10,5 @@ LeadAcidBattery
 LithiumIonBattery
 CAES
 PumpedStorage
+PumpedStorage_Generator
 SuperCapacitor

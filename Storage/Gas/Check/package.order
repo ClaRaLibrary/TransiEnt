@@ -4,3 +4,4 @@ TestUndergroundGasStoragePressureLoss_L2
 TestGasStorage_varXi_L2
 TestGasStorageVesselHeatTransfer_L2
 TestGasStorage_L1
+TestUndergroundGasStorageIdealHTInPipes_L2

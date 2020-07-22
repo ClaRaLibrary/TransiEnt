@@ -1,11 +1,11 @@
-within TransiEnt.Components.Statistics.Functions.CO2Allocation;
+﻿within TransiEnt.Components.Statistics.Functions.CO2Allocation;
 function AllocationMethod_CreditsElectrical "credits electrical to thermal generation"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -62,7 +62,7 @@ algorithm
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>No validation needed.</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[Mauch et. al.]: Allokationsmethoden f&uuml;r spezifische CO2-Emissionen von Strom und W&auml;rme aus KWK-Anlagen. In: Energiewirtschaftliche</p>
+<p>[Mauch et. al.]: Allokationsmethoden für spezifische CO2-Emissionen von Strom und Wärme aus KWK-Anlagen. In: Energiewirtschaftliche</p>
 <p>Tagesfragen Bd. 55. Jg. (2010) Heft 9</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Created by Jan Braune (jan.braune@tuhh.de), Mar 2015</p>

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.Characteristics;
 record SiemensSWT36_120_3600kW "Siemens model SWT120 3600MW"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,7 +65,7 @@ cut_backin=22);
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Record&nbsp;containing&nbsp;the&nbsp;data&nbsp;of&nbsp;the&nbsp;Siemens&nbsp;Windturbine&nbsp;model&nbsp;SWT-3.6-120&nbsp;with&nbsp;3,6MW</p>
+<p>Record containing the data of the Siemens Windturbine model SWT-3.6-120 with 3,6MW</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

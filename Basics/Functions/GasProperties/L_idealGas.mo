@@ -2,10 +2,10 @@ within TransiEnt.Basics.Functions.GasProperties;
 function L_idealGas "Calculates mass of air required for combustion with a given lamba"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ function L_idealGas "Calculates mass of air required for combustion with a given
   // _____________________________________________
 
 protected
-  TILMedia.GasObjectFunctions.GasPointer FuelPointer = TILMedia.GasObjectFunctions.GasPointer(FuelMedium.concatGasName, 7, xi_in, FuelMedium.nc_propertyCalculation, FuelMedium.nc_propertyCalculation, 1, 0);
+  TILMedia.GasObjectFunctions.GasPointerExternalObject FuelPointer = TILMedia.GasObjectFunctions.GasPointerExternalObject(mediumName=FuelMedium.concatGasName, flags=7, xi=xi_in, nc=FuelMedium.nc_propertyCalculation, condensingIndex=FuelMedium.condensingIndex, instanceName="FuelPointer");
 
   parameter String[ncF] CompsF=TransiEnt.Basics.Functions.GasProperties.shortenCompName(FuelMedium.gasNames) "Component names in fuel gas";
   parameter Integer ncF = FuelMedium.nc_propertyCalculation "Number of components in fuel gas";

@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Check;
 model TestSmartFridgeFreezer
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -366,7 +366,7 @@ model TestSmartFridgeFreezer
         rotation=0,
         origin={14,42})));
   Components.SmartFridgeFreezer      smartFridge annotation (Placement(transformation(extent={{-74,-33},{4,33}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency electricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{28,-10},{48,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{28,-10},{48,10}})));
   inner SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 equation
   connect(smartFridge.epp, electricGrid.epp) annotation (Line(

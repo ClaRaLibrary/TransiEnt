@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.SpaceHeating;
 model NormSetpointRoomTemperature
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -74,7 +74,7 @@ model NormSetpointRoomTemperature
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>DIN EN 12831-1:2017-09 Energy performance of buildings&nbsp;- Method for calculation of the design heat load&nbsp;- Part&nbsp;1: Space heating load, Module M3-3; German version EN&nbsp;12831-1:2017</p>
+<p>DIN EN 12831-1:2017-09 Energy performance of buildings - Method for calculation of the design heat load - Part 1: Space heating load, Module M3-3; German version EN 12831-1:2017</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Pascal Dubucq (dubucq@tuhh.de) <span style=\"font-family: MS Shell Dlg 2;\">on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Quality check (Code conventions) by Rebekka Denninger on 01.10.2016</span></p>

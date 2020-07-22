@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
 model SelfDischargeRate "Constant Stationary Loss approximated by self discharge rate e.g. 50%/h"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,7 +43,7 @@ equation
     points={{90,-78},{68,-70},{68,-86},{90,-78}}),
         Line(points={{-80,-78},{60,62}}, color={28,108,200})}), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Stationary&nbsp;Loss&nbsp;approximated&nbsp;by&nbsp;self&nbsp;discharge&nbsp;rate&nbsp;e.g.&nbsp;50&percnt;/h.</p>
+<p>Stationary Loss approximated by self discharge rate e.g. 50&percnt;/h.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

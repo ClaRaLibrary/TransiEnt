@@ -1,11 +1,11 @@
 within TransiEnt.Storage.Gas;
 model GasStorage_varXi_L1 "L1: Model of a simple gas storage volume for variable composition"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ initial equation
 
 equation
 
-  der(m_gas)*xi_gas+m_gas*der(xi_gas)=gasPortIn.m_flow*actualStream(gasPortIn.xi_outflow)+gasPortOut.m_flow*actualStream(gasPortOut.xi_outflow);
+  der(m_gas)*xi_gas+m_gas*der(xi_gas)=gasPortIn.m_flow*noEvent(actualStream(gasPortIn.xi_outflow))+gasPortOut.m_flow*noEvent(actualStream(gasPortOut.xi_outflow));
 
   gasPortOut.xi_outflow=xi_gas;
   gasPortIn.xi_outflow=xi_gas;

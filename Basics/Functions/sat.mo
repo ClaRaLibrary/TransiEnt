@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Functions;
 function sat "Smooth saturation of input x between xmin and xmax without state events"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,6 +65,6 @@ algorithm
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Created by Max Mustermann (mustermann@mustermail.de), Apr 2014</p>
+<p>Model created by Pascal Dubucq (dubucq@tuhh.de), Dec 2017</p>
 </html>"));
 end sat;

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Boundaries.Heat.Base;
 partial model Heatflow_L1_idContr_temp_base "Base class for heat flow boundaries with ideal control to get a given outlet temperature"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -66,7 +66,7 @@ partial model Heatflow_L1_idContr_temp_base "Base class for heat flow boundaries
   //           Instances of other Classes
   // _____________________________________________
 
-  TILMedia.VLEFluid_pT fluidOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT fluidOut(
     vleFluidType=medium,
     p=fluidPortOut.p,
     T=T_out_set_in) annotation (Placement(transformation(extent={{30,-80},{50,-60}})));
@@ -181,7 +181,7 @@ equation
           thickness=0.5)}),                                       Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This model is a base&nbsp;class&nbsp;for&nbsp;heat&nbsp;flow&nbsp;boundaries&nbsp;with&nbsp;ideal&nbsp;control&nbsp;to&nbsp;get&nbsp;a&nbsp;given&nbsp;outlet&nbsp;temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
+<p>This model is a base class for heat flow boundaries with ideal control to get a given outlet temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>There is no volume considered.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

@@ -2,10 +2,10 @@ within TransiEnt.Basics.Adapters.Gas;
 model RealSG4_to_RealNG7 "Adapter that switches from real SG4 to real NG7 fluid models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,8 +37,10 @@ model RealSG4_to_RealNG7 "Adapter that switches from real SG4 to real NG7 fluid 
   //
   //             Visible Parameters
   // _____________________________________________
-  replaceable parameter Media.Gases.VLE_VDIWA_SG4_var medium_sg4 "SG4_var fluid model"                                                                        annotation(Dialog(group="Fundamental Definitions"), choicesAllMatching);
-  replaceable parameter Media.Gases.VLE_VDIWA_NG7_H2_var medium_ng7_H2 "NG7_H2_var fluid model"                                                                        annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable parameter Media.Gases.VLE_VDIWA_SG4_var medium_sg4                       constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid
+                                                                 "SG4_var fluid model"                                                   annotation(Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable parameter Media.Gases.VLE_VDIWA_NG7_H2_var medium_ng7_H2                          constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid
+                                                                       "NG7_H2_var fluid model"                                                   annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
 
   // _____________________________________________
   //

@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Heat.SolarThermal.Base;
 model SolarTime "Calculates the solar time"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -69,7 +69,7 @@ equation
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Calculates the solar time at a given longitude in respect of zone time, difference to UTC and an optional offset.</p>
-<p>Note:&nbsp;Here&nbsp;day&nbsp;is&nbsp;provided&nbsp;as&nbsp;a&nbsp;floating&nbsp;point&nbsp;value&nbsp;which&nbsp;means&nbsp;that&nbsp;other&nbsp;models&nbsp;might&nbsp;have&nbsp;to&nbsp;use&nbsp;integer()&nbsp;if&nbsp;they&nbsp;need&nbsp;an&nbsp;integer&nbsp;value.</p>
+<p>Note: Here day is provided as a floating point value which means that other models might have to use integer() if they need an integer value.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

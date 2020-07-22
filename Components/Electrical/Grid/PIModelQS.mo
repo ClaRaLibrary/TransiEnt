@@ -1,11 +1,11 @@
 within TransiEnt.Components.Electrical.Grid;
 model PiModelQS "PiModell using quasistationary interfaces"
 
- //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -138,8 +138,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(Purely technical component without physical modeling.)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p>Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin&nbsp;pin_p2&nbsp;<span style=\"color: #006400;\">&quot;end&nbsp;of&nbsp;line&quot;</span></p>
-<p>Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin&nbsp;pin_p1&nbsp;<span style=\"color: #006400;\">&quot;beginning&nbsp;of&nbsp;line&quot;</span></p>
+<p>Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin pin_p2 <span style=\"color: #006400;\">&quot;end of line&quot;</span></p>
+<p>Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin pin_p1 <span style=\"color: #006400;\">&quot;beginning of line&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>

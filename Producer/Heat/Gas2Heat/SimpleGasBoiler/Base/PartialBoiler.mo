@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base;
 partial model PartialBoiler "Partial boiler model with setpoints, fluid ports and icon"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,20 +27,21 @@ partial model PartialBoiler "Partial boiler model with setpoints, fluid ports an
   //                Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_n=360e6;
+  parameter SI.HeatFlowRate Q_flow_n=360e6 annotation (Dialog(group="Nominal Values"));
 
-  parameter Modelica.SIunits.Efficiency eta=0.95;
+  parameter SI.Efficiency eta=0.95 annotation (Dialog(group="Technical Specifications"));
 
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium= simCenter.fluid1 "Medium to be used"
-                         annotation(choicesAllMatching, Dialog(group="Fluid Definition"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.fluid1 "Medium to be used"
+                         annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
+  parameter Boolean useFluidPorts=true "True if fluid ports shall be used" annotation (Dialog(group="Fundamental Definitions"));
 
   // _____________________________________________
   //
   //                Interfaces
   // _____________________________________________
 
-  Basics.Interfaces.Thermal.FluidPortIn inlet(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{-108,-10},{-88,10}})));
-  Basics.Interfaces.Thermal.FluidPortOut outlet(Medium=medium) annotation (Placement(transformation(extent={{90,40},{110,60}}), iconTransformation(extent={{90,-10},{110,10}})));
+  Basics.Interfaces.Thermal.FluidPortIn inlet(Medium=medium) if useFluidPorts annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{-108,-10},{-88,10}})));
+  Basics.Interfaces.Thermal.FluidPortOut outlet(Medium=medium) if useFluidPorts annotation (Placement(transformation(extent={{90,40},{110,60}}), iconTransformation(extent={{90,-10},{110,10}})));
   TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set "Setpoint for thermal heat"
     annotation (Placement(transformation(extent={{-114,-10},{-94,10}}),
         iconTransformation(extent={{-10,-10},{10,10}},
@@ -55,6 +56,7 @@ partial model PartialBoiler "Partial boiler model with setpoints, fluid ports an
 public
   outer TransiEnt.SimCenter simCenter;
   outer TransiEnt.ModelStatistics modelStatistics;
+
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Rectangle(

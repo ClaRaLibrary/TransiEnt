@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Heat.SolarThermal.Base;
+﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model IAM "Calculates the incidence angle modifier"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -130,7 +130,7 @@ equation
 <p>Model modified by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
 <p>Model modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
 <p>Model modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018: IAM representation based on [2] added</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), May 2018: IAM representation based on [2] added</p>
 </html>"),
          Icon(graphics={Line(
           points={{-76,54},{4,-94},{82,92}},

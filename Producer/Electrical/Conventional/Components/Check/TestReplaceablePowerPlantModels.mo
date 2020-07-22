@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model TestReplaceablePowerPlantModels "Tester illustrating the possibility to change level of details in power plant models"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,7 +22,7 @@ model TestReplaceablePowerPlantModels "Tester illustrating the possibility to ch
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-32,80},{-12,100}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency grid(useInputConnector=false) annotation (Placement(transformation(extent={{23,46},{43,66}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency grid(useInputConnector=false) annotation (Placement(transformation(extent={{23,46},{43,66}})));
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-11,80},{9,100}})));
   Modelica.Blocks.Sources.Constant P_set(k=-generator.P_el_n) annotation (Placement(transformation(extent={{-67,60},{-47,80}})));
 

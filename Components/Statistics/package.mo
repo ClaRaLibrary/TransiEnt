@@ -1,10 +1,10 @@
-within TransiEnt.Components;
+﻿within TransiEnt.Components;
 package Statistics "Package for statistics related models, like costs and emissions"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ package Statistics "Package for statistics related models, like costs and emissi
 <p><br>In the models within the package &QUOT;<b>ProducerCostSpecifications</b>&QUOT;, the parameters required to calculate the economic indicators are defined. These parameters are actually defined by calling the central definition in &QUOT;<b>simCenter.Cost</b>&QUOT;. The parameters are: </p>
 <ul>
 <li><pre>Specific investment costs in [EUR/kWe] </pre></li>
-<li><pre>Specific fixed Operation &AMP; Maintenance costin EUR/kWe</pre></li>
+<li><pre>Specific fixed Operation & Maintenance costin EUR/kWe</pre></li>
 <li><pre>Specific variable costs in EUR / MWhe</pre></li>
 <li><pre>Specific fuel cost in EUR/MWhth</pre></li>
 <li><pre>Specific CO2-cost in EUR/t</pre></li>
@@ -57,7 +57,7 @@ package Statistics "Package for statistics related models, like costs and emissi
 <li> Time dependent annuity payment (dummy variable)</li>
 <li>  Calculation of produced Energy</li>
 <li> Calculation of time dependent incurred fuel costs</li>
-<li> Calculation of O&AMP;M costs</li>
+<li> Calculation of O&M costs</li>
 <li> Calculation of Variable Costs</li>
 <li> Calculation of Costs for CO2-Emission</li>
 <li> Calculation of total costs</li>
@@ -65,7 +65,7 @@ package Statistics "Package for statistics related models, like costs and emissi
 </ul>
 <p><br><h4>Version: </h4></p>
 <ul>
-<li>2014.11.18: Fistr draft. Conception and implementation by R. Peniche and O. Sch&uuml;lting</li>
+<li>2014.11.18: Fistr draft. Conception and implementation by R. Peniche and O. Schülting</li>
 </ul>
 </html>"), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
           {100,100}}), graphics));

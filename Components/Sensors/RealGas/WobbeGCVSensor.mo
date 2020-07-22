@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model WobbeGCVSensor "Sensor calculating the Wobbe-Index and gross calorific value for for real gas mixtures"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -66,13 +66,13 @@ model WobbeGCVSensor "Sensor calculating the Wobbe-Index and gross calorific val
   // _____________________________________________
 
 protected
-    TILMedia.VLEFluid_pT fluid_stp(
-     p = 1.01325e5,
-     T = 273.15,
-     xi = xi,
-     vleFluidType=medium,
-     computeSurfaceTension=false,
-     deactivateTwoPhaseRegion=true);
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT fluid_stp(
+    p=1.01325e5,
+    T=273.15,
+    xi=xi,
+    vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateTwoPhaseRegion=true);
 
   TransiEnt.Basics.Media.RealGasGCV_xi realGasGCV_xi(realGasType=medium, xi_in=xi) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 

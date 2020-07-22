@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind;
 model PowerCurveWindPlant "Wind plant model based on v-P-Power Curve. Can be scaled to model windparks "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,7 +65,11 @@ model PowerCurveWindPlant "Wind plant model based on v-P-Power Curve. Can be sca
       uHigh=PowerCurveChar.cut_out + 0.001)
     annotation (Placement(transformation(extent={{-34,10},{-2,42}})));
 
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components"),choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.Power powerBoundary "PowerBoundary for ActivePowerPort"),choice( redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower powerBoundary(useInputConnectorQ=false, cosphi_boundary=1) "Power Boundary for ComplexPowerPort")), Dialog(group="Physical Constraints"), Placement(transformation(
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    Dialog(group="Replaceable Components"),
+    choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary "PowerBoundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower powerBoundary(useInputConnectorQ=false, cosphi_boundary=1) "Power Boundary for ComplexPowerPort")),
+    Dialog(group="Physical Constraints"),
+    Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={26,78})));
@@ -141,7 +145,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p>[1] Hau, Erich: Wind Turbines : Fundamentals, Technologies, Application, Economics. Berlin Heidelberg: Springer Science &amp; Business Media, 2013 - ISBN: 978-3-642-27150-2</p>
+<p>[1] Hau, Erich: Wind Turbines : Fundamentals, Technologies, Application, Economics. Berlin Heidelberg: Springer Science & Business Media, 2013 - ISBN: 978-3-642-27150-2</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"), Diagram(graphics,

@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Reactor.Base;
 partial model PartialFixedBedReactorRealGas_L1 "Partial model for L1 reactor models using real gases"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,6 +44,7 @@ partial model PartialFixedBedReactorRealGas_L1 "Partial model for L1 reactor mod
   parameter Integer N_reac "Number of reactions" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.MolarEnthalpy Delta_H[N_reac] "Reaction enthalpy for the reactions in J/mol" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.PressureDifference pressureLoss "Pressure loss over the reactor" annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
 
   // _____________________________________________
   //
@@ -66,45 +67,47 @@ partial model PartialFixedBedReactorRealGas_L1 "Partial model for L1 reactor mod
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=medium,
     p=gasPortIn.p,
-    h=actualStream(gasPortIn.h_outflow),
-    xi=actualStream(gasPortIn.xi_outflow),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-90,-12},{-70,8}})));
-  TILMedia.VLEFluid_ph gasOut(
+    h=noEvent(actualStream(gasPortIn.h_outflow)),
+    xi=noEvent(actualStream(gasPortIn.xi_outflow)),
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-90,-12},{-70,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium,
     p=gasPortOut.p,
-    h=actualStream(gasPortOut.h_outflow),
-    xi=actualStream(gasPortOut.xi_outflow),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{70,-12},{90,8}})));
+    h=noEvent(actualStream(gasPortOut.h_outflow)),
+    xi=noEvent(actualStream(gasPortOut.xi_outflow)),
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{70,-12},{90,8}})));
 public
   inner Summary summary(
-    outline(
-      Q_reac=Q_reac),
+    outline(Q_reac=Q_reac),
     gasPortIn(
       mediumModel=medium,
-      xi=gasIn.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortIn.xi_outflow)),
       x=gasIn.x,
       m_flow=gasPortIn.m_flow,
       T=gasIn.T,
       p=gasPortIn.p,
-      h=gasIn.h,
+      h=noEvent(actualStream(gasPortIn.h_outflow)),
       rho=gasIn.d),
     gasPortOut(
       mediumModel=medium,
-      xi=gasOut.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortOut.xi_outflow)),
       x=gasOut.x,
       m_flow=-gasPortOut.m_flow,
       T=gasOut.T,
       p=gasPortOut.p,
-      h=gasOut.h,
+      h=noEvent(actualStream(gasPortOut.h_outflow)),
       rho=gasOut.d)) annotation (Placement(transformation(extent={{-100,-114},{-80,-94}})));
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
+
 
 protected
   SI.HeatFlowRate Q_reac "Heat flow rate because of reactions (negative for exothermic reactions)";

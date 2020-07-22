@@ -1,10 +1,10 @@
 within TransiEnt.Components.Boundaries.Electrical.Check;
 model TestElectricBoundaries_L1 "Minimal example for electric boundaries with interface L1"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,8 +21,8 @@ model TestElectricBoundaries_L1 "Minimal example for electric boundaries with in
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  Power Consumer(useInputConnectorP=false, P_el_set_const=3e3) annotation (Placement(transformation(extent={{28,-10},{48,10}})));
-  Frequency ElectricGrid annotation (Placement(transformation(extent={{-36,-10},{-56,10}})));
+  ActivePower.Power Consumer(useInputConnectorP=false, P_el_set_const=3e3) annotation (Placement(transformation(extent={{28,-10},{48,10}})));
+  ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{-36,-10},{-56,10}})));
 equation
   connect(ElectricGrid.epp, Consumer.epp) annotation (Line(
       points={{-36,0},{28,0},{28,0}},

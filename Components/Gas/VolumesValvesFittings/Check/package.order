@@ -1,5 +1,7 @@
 CheckPipes
 CheckRealGasJunction_L2
+CheckRealGasJunction_L2_Quasistationary
 CheckThreeWayValve
 TestValves
 Test_Mixing_H2NG
+TestPressureLosses

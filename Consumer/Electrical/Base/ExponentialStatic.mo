@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Base;
 model ExponentialStatic
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -100,7 +100,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p>Tested in the check model &quot;TransiEnt.Consumer.Electrical.Base.Check.CheckExponentialStatic&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p>[1] IEEE Task Force on Load Representation for Dynamic Performance: Load representation for dynamic performance analysis (of power systems). In: <i>IEEE Transactions on Power Systems</i> Bd. 8 (1993), Nr.&nbsp;2, S.&nbsp;472&ndash;482</p>
+<p>[1] IEEE Task Force on Load Representation for Dynamic Performance: Load representation for dynamic performance analysis (of power systems). In: <i>IEEE Transactions on Power Systems</i> Bd. 8 (1993), Nr. 2, S. 472&ndash;482</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model revised by Pascal Dubucq (dubucq@tuhh.de) on 21.04.2017</span></p>

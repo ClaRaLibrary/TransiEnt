@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Check;
 model TestGasBoilerGasAdaptive_L1
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,46 +27,63 @@ model TestGasBoilerGasAdaptive_L1
     T_const=130 + 273.15) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
-        origin={38,0})));
+        origin={2,0})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow source(
     variable_m_flow=false,
     m_flow_const=100,
     T_const=60 + 273) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
-        origin={-32,0})));
-  SimpleGasBoiler.GasBoilerCompositionAdaptive gasBoilerGasAdaptive(integrateHeatFlow=false)
-                                                                    annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+        origin={-68,0})));
+  SimpleBoiler gasBoilerGasAdaptive(integrateHeatFlow=false) annotation (Placement(transformation(extent={{-46,-10},{-26,10}})));
   Modelica.Blocks.Sources.Ramp ramp(
     height=-50e6,
     offset=-100e6,
     duration=0.6,
     startTime=0.2)
-    annotation (Placement(transformation(extent={{-64,20},{-44,40}})));
-  Components.Boundaries.Gas.BoundaryRealGas_pTxi gasSource(variable_xi=true) annotation (Placement(transformation(extent={{-20,-60},{0,-40}})));
+    annotation (Placement(transformation(extent={{-100,16},{-80,36}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi gasSource(variable_xi=true) annotation (Placement(transformation(extent={{-56,-60},{-36,-40}})));
   inner ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-70,80},{-50,100}})));
   Modelica.Blocks.Sources.Constant
                                ramp1(k=-100e6)
-    annotation (Placement(transformation(extent={{-64,48},{-44,68}})));
-  Components.Boundaries.Gas.RealGasCompositionByWtFractions_stepVariation composition_linearVariation(stepsize=0.1, period=0.2) annotation (Placement(transformation(extent={{-56,-66},{-36,-46}})));
+    annotation (Placement(transformation(extent={{-100,48},{-80,68}})));
+  Components.Boundaries.Gas.RealGasCompositionByWtFractions_stepVariation composition_linearVariation(stepsize=0.1, period=0.2) annotation (Placement(transformation(extent={{-92,-66},{-72,-46}})));
+  SimpleBoiler gasBoilerGasAdaptive1(useFluidPorts=false, integrateHeatFlow=false) annotation (Placement(transformation(extent={{46,-12},{66,8}})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi gasSource1(variable_xi=true)
+                                                                             annotation (Placement(transformation(extent={{36,-62},{56,-42}})));
+  Modelica.Blocks.Sources.Constant
+                               ramp3(k=-100e6)
+    annotation (Placement(transformation(extent={{-8,46},{12,66}})));
+  Components.Boundaries.Gas.RealGasCompositionByWtFractions_stepVariation composition_linearVariation1(stepsize=0.1, period=0.2)
+                                                                                                                                annotation (Placement(transformation(extent={{0,-68},{20,-48}})));
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature1(T=308.15)
+                                                                                    annotation (Placement(transformation(extent={{10,-10},{-10,10}},
+        rotation=90,
+        origin={66,35})));
 equation
-  connect(composition_linearVariation.xi, gasSource.xi) annotation (Line(points={{-36,-56},{-22,-56}}, color={0,0,127}));
+  connect(composition_linearVariation.xi, gasSource.xi) annotation (Line(points={{-72,-56},{-58,-56}}, color={0,0,127}));
   connect(gasBoilerGasAdaptive.outlet, sink.steam_a) annotation (Line(
-      points={{10,0},{10,0},{28,0}},
+      points={{-26,0},{-8,0}},
       color={175,0,0},
       thickness=0.5));
   connect(gasBoilerGasAdaptive.inlet, source.steam_a) annotation (Line(
-      points={{-9.8,0},{-9.8,0},{-18,0},{-22,0}},
+      points={{-45.8,0},{-58,0}},
       color={175,0,0},
       thickness=0.5));
   connect(gasSource.gasPort, gasBoilerGasAdaptive.gasIn) annotation (Line(
-      points={{0,-50},{0,-10},{0.2,-10}},
+      points={{-36,-50},{-36,-10},{-35.8,-10}},
       color={255,255,0},
       thickness=1.5));
-  connect(ramp1.y, gasBoilerGasAdaptive.Q_flow_set) annotation (Line(points={{-43,58},{0,58},{0,10}},            color={0,0,127}));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
+  connect(ramp1.y, gasBoilerGasAdaptive.Q_flow_set) annotation (Line(points={{-79,58},{-36,58},{-36,10}},        color={0,0,127}));
+  connect(composition_linearVariation1.xi, gasSource1.xi) annotation (Line(points={{20,-58},{34,-58}}, color={0,0,127}));
+  connect(gasSource1.gasPort, gasBoilerGasAdaptive1.gasIn) annotation (Line(
+      points={{56,-52},{56,-12},{56.2,-12}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(ramp3.y, gasBoilerGasAdaptive1.Q_flow_set) annotation (Line(points={{13,56},{26,56},{26,16},{56,16},{56,8}}, color={0,0,127}));
+  connect(gasBoilerGasAdaptive1.heatPort, fixedTemperature1.port) annotation (Line(points={{66,6.6},{66,25}}, color={191,0,0}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Test environment for GasBoilerGasAdaptive_L1</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
@@ -86,5 +103,6 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-</html>"));
+</html>"),
+    experiment(StopTime=300));
 end TestGasBoilerGasAdaptive_L1;

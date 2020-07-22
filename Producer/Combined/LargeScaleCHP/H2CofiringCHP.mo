@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP;
 model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring (e.g. from power-2-gas technologies)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,7 +54,7 @@ model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring 
 
   parameter SI.Temperature T_feed_init = 120+273.15 "Start temperature of feed water" annotation(Dialog(group="Initialization", tab="Advanced"));
 
-  final parameter SI.SpecificEnthalpy h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+  final parameter SI.SpecificEnthalpy h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
       medium,
       p_nom,
       T_feed_init) "Start value of sytsem specific enthalpy" annotation(Dialog(group="Heating condenser parameters"));
@@ -109,28 +109,27 @@ model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring 
   Modelica.Blocks.Sources.RealExpression eta_th_source(y=eta_th_target)
                                                                  annotation (Placement(transformation(extent={{-62,-34},{-42,-14}})));
   Modelica.Blocks.Math.Product product1 annotation (Placement(transformation(extent={{-26,-14},{-18,-6}})));
-  Components.Boundaries.Electrical.Power terminal(change_sign=true) annotation (Placement(transformation(extent={{82,50},{62,70}})));
-  Modelica.Blocks.Nonlinear.VariableLimiter P_limit_on annotation (Placement(transformation(extent={{-44,96},{-24,116}})));
-  Modelica.Blocks.Math.Gain P_el_set_pos(k=-1) "Sign changed electric setpoint (>0)"
-                                               annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
-        rotation=0,
-        origin={-71,106})));
+  Components.Boundaries.Electrical.ActivePower.Power terminal(change_sign=true) annotation (Placement(transformation(extent={{82,50},{62,70}})));
 
   Modelica.SIunits.HeatFlowRate Q_flow_input_basefuel = if h2Available then Q_flow_input * (1 - simCenter.k_H2_fraction) else Q_flow_input;
-  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{62,80},{42,100}})));
+  Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{60,70},{40,90}})));
   Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
   Components.Sensors.RealGas.CO2EmissionSensor cO2EmissionOfIdealCombustion if useGasPort                                                 ==true annotation (Placement(transformation(extent={{94,80},{74,100}})));
-  Modelica.Blocks.Math.Gain m_flow_cde_gain(k=1) annotation (Placement(transformation(extent={{68,94},{60,102}})));
-protected
-  Modelica.Blocks.Sources.RealExpression Zero(y=0);
+  Modelica.Blocks.Math.Gain m_flow_cde_gain(k=1) annotation (Placement(transformation(extent={{68,86},{60,94}})));
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 public
   Modelica.SIunits.MassFlowRate m_flow_cde_total_set;
+  SI.Power P_limit_off_set[quantity];
 
+  Modelica.Blocks.Math.MultiSum multiSum_Q_flow_SG(nu=quantity)        annotation (Placement(transformation(extent={{-44,80},{-52,72}})));
+  Modelica.Blocks.Nonlinear.VariableLimiter P_limit_on[quantity] annotation (Placement(transformation(extent={{-42,100},{-32,110}})));
+  Modelica.Blocks.Sources.RealExpression P_limit_off[quantity](y=P_limit_off_set)                                                annotation (Placement(transformation(extent={{-52,76},{-32,96}})));
+  Modelica.Blocks.Math.Sum P_limit[quantity](each nin=2)          annotation (Placement(transformation(extent={{-24,98},{-12,110}})));
+  Modelica.Blocks.Math.Add add1  [quantity](each k2=-1) annotation (Placement(transformation(extent={{-62,98},{-50,110}})));
+  Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-76,104},{-68,112}})));
 equation
   // _____________________________________________
   //
@@ -172,36 +171,55 @@ equation
   connect(steamGenerator.y,product1. u1) annotation (Line(points={{-43,22},{-36,22},{-36,-7.6},{-26.8,-7.6}}, color={0,0,127}));
   connect(product1.y,heatingCondenser. u) annotation (Line(points={{-17.6,-10},{-14,-10},{-10,-10}},   color={0,0,127}));
   connect(heatingCondenser.y,prescribedHeatFlow. Q_flow) annotation (Line(points={{13,-10},{22,-10}},                  color={0,0,127}));
-  connect(steamGenerator.u, Q_flow_set_SG.Q_flow_input) annotation (Line(points={{-66,22},{-76,22},{-76,26},{-76,78},{-0.909091,78},{-0.909091,79}},
-                                                                                                                                     color={0,0,127}));
   connect(prescribedHeatFlow.port, HX.heat) annotation (Line(points={{40,-10},{52,-10}},                   color={191,0,0}));
   connect(terminal.epp, epp) annotation (Line(
       points={{82,60},{82,60},{82,60},{100,60}},
       color={0,135,135},
       thickness=0.5));
-  connect(P_set,P_el_set_pos. u) annotation (Line(points={{-84,144},{-84,144},{-84,106},{-78.2,106}}, color={0,0,127}));
-  connect(pQDiagram.P_min, P_limit_on.limit2) annotation (Line(points={{-11,121},{-50,121},{-50,98},{-46,98}}, color={0,0,127}));
-  connect(P_limit_on.limit1, pQDiagram.P_max) annotation (Line(points={{-46,114},{-46,114},{-46,122},{-46,128.4},{-11,128.4}}, color={0,0,127}));
-  connect(P_el_set_pos.y, P_limit_on.u) annotation (Line(points={{-64.4,106},{-64.4,106},{-46,106}},         color={0,0,127}));
-  connect(P_limit_on.y, Q_flow_set_SG.P) annotation (Line(points={{-23,106},{-7.27273,106},{-7.27273,102}},
-                                                                                                color={0,0,127}));
   if useGasPort==true then
-    connect(steamGenerator.y,gasConsumer_HFlow_NCV. H_flow) annotation (Line(points={{-43,22},{-38,22},{-38,-4},{-92,-4},{-92,70},{40,70},{40,90},{41,90}},     color={0,0,127}));
+    connect(steamGenerator.y,gasConsumer_HFlow_NCV. H_flow) annotation (Line(points={{-43,22},{-38,22},{-38,-4},{-92,-4},{-92,70},{40,70},{40,80},{39,80}},     color={0,0,127}));
    connect(cO2EmissionOfIdealCombustion.gasPortOut, gasConsumer_HFlow_NCV.fluidPortIn) annotation (Line(
-      points={{74,80},{66,80},{66,90},{62,90}},
+      points={{74,80},{60,80}},
       color={255,255,0},
       thickness=1.5));
    connect(cO2EmissionOfIdealCombustion.gasPortIn, gasPortIn) annotation (Line(
       points={{94,80},{100,80},{100,102}},
       color={255,255,0},
       thickness=1.5));
-   connect(cO2EmissionOfIdealCombustion.m_flow_cde,m_flow_cde_gain.u) annotation (Line(points={{73,96.8},{72,96.8},{72,98},{68.8,98}}, color={0,0,127}));
+   connect(cO2EmissionOfIdealCombustion.m_flow_cde,m_flow_cde_gain.u) annotation (Line(points={{73,96.8},{72,96.8},{72,90},{68.8,90}}, color={0,0,127}));
   else
     connect(Zero.y,m_flow_cde_gain.u);
   end if;
 
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,120}})), Icon(coordinateSystem(extent={{-100,-100},{100,120}}),
+  for i in 1:quantity loop
+    P_limit_off_set[i]=if Q_flow_set_CHP[i].y<=Q_flow_set_CHP_min.y then -pQDiagram[i].P_min else 0;
+  end for;
+
+for i in 1:quantity loop
+  connect(P_limit_on[i].y,P_limit[i].u[1]) annotation (Line(points={{-31.5,105},{-25.2,105},{-25.2,103.4}},        color={0,0,127}));
+  connect(pQDiagram[i].P_max, P_limit_on[i].limit1) annotation (Line(points={{-11,128.4},{-48,128.4},{-48,109},{-43,109}},       color={0,0,127}));
+  connect(pQDiagram[i].P_min, P_limit_on[i].limit2) annotation (Line(points={{-11,121},{-46,121},{-46,101},{-43,101}},     color={0,0,127}));
+  connect(P_limit_off[i].y,P_limit[i]. u[2]) annotation (Line(points={{-31,86},{-28,86},{-28,104.6},{-25.2,104.6}},                    color={0,0,127}));
+  connect(P_limit[i].y, Q_flow_set_SG[i].P) annotation (Line(points={{-11.4,104},{-7.27273,104},{-7.27273,102}},  color={0,0,127}));
+  connect(add1[i].y, P_limit_on[i].u) annotation (Line(points={{-49.4,104},{-46,104},{-46,105},{-43,105}}, color={0,0,127}));
+  connect(gain.y, add1[i].u1) annotation (Line(
+    points={{-67.6,108},{-66.08,108},{-66.08,107.6},{-63.2,107.6}},
+    color={0,135,135},
+    pattern=LinePattern.Dash));
+  connect(Q_flow_set_SG[i].Q_flow_input, multiSum_Q_flow_SG.u[i]) annotation (Line(
+      points={{-0.909091,79},{-0.909091,76},{-44,76}},
+      color={175,0,0},
+      pattern=LinePattern.Dash));
+  if i==1 then
+    connect(Zero.y,add1[i].u2);
+  else
+    connect(P_limit_on[i-1].y, add1[i].u2) annotation (Line(points={{-31.5,105},{-30,105},{-30,96},{-63.2,96},{-63.2,100.4}}, color={0,0,127}));
+  end if;
+  end for;
+
+  connect(P_set, gain.u) annotation (Line(points={{-84,144},{-84,108},{-76.8,108}}, color={0,0,127}));
+  connect(multiSum_Q_flow_SG.y, steamGenerator.u) annotation (Line(points={{-52.68,76},{-80,76},{-80,22},{-66,22}}, color={0,0,127}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,120}})), Icon(coordinateSystem(extent={{-100,-100},{100,120}}),
                                                                                                          graphics={
         Ellipse(
           extent={{-100,100},{100,-100}},
@@ -323,6 +341,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Ricardo Peniche, 2016</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Nov 2018: added gasPort</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) in Nov 2018: added gasPort</span></p>
 </html>"));
 end H2CofiringCHP;

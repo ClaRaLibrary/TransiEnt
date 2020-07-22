@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestH2CofiringCHP "Example how the continuous plant model behaves when ramping up"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,13 +22,13 @@ model TestH2CofiringCHP "Example how the continuous plant model behaves when ram
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-100,79},{-80,99}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-70,79},{-50,99}})));
-  Modelica.Blocks.Sources.RealExpression P_min(y=-Plant.pQDiagram.P_max)
+  Modelica.Blocks.Sources.RealExpression P_min(y=-Plant.pQDiagram[1].P_max)
                                                         annotation (Placement(
         transformation(
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-49,25.5})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{20,50},{32,62}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{20,50},{32,62}})));
   H2CofiringCHP Plant(
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     typeOfCO2AllocationMethod=2,

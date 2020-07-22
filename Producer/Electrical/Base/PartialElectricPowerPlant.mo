@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Base;
 partial model PartialElectricPowerPlant "Abstract model of an electric power plant with L1 on electric side"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -85,7 +85,7 @@ partial model PartialElectricPowerPlant "Abstract model of an electric power pla
     redeclare model PowerPlantCostModel = ProducerCosts,
     Q_flow_fuel_is=Q_flow_fuel_is,
     m_flow_CDE_is=m_flow_CDE,
-    P_el_is=P_el_is,
+    P_el_is=-P_el_is,
     produces_Q_flow=false)
                      annotation (HideResult=false, Placement(transformation(
         extent={{-10,-10},{10,10}},

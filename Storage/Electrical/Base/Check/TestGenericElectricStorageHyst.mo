@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Base.Check;
 model TestGenericElectricStorageHyst
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -79,7 +79,7 @@ model TestGenericElectricStorageHyst
     offset=0,
     table=[0,1; 1,1; 1,-1; 2,-1; 2,1; 3,1; 3,0; 4,0],
     timeScale=7200)                       "Test schedule" annotation (Placement(transformation(extent={{-86,4},{-66,24}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{48,-18},{68,2}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{48,-18},{68,2}})));
 equation
   connect(P_set.y, lossyStorage.P_set) annotation (Line(points={{-35,14},{-30,14},{0,14},{0,6.1}},
                                                                                                 color={0,0,127}));

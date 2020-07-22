@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs;
 model LithiumIonBattery "Lithium ion battery cost (including inverter)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ model LithiumIonBattery "Lithium ion battery cost (including inverter)"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] E. Mahnke,&nbsp;J.&nbsp;M&uuml;hlenhoff,&nbsp;L. Lieblang<span style=\"font-family: Courier New;\">,&nbsp;</span>&quot;Strom Speichern&quot;, published in &quot;Renews&nbsp;Spezial Nr. 75&quot;, 2014</p>
+<p>[1] E. Mahnke, J. Mühlenhoff, L. Lieblang<span style=\"font-family: Courier New;\">, </span>&quot;Strom Speichern&quot;, published in &quot;Renews Spezial Nr. 75&quot;, 2014</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end LithiumIonBattery;

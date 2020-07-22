@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Check;
 model HeatPumpGasCharlineTest
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,7 +21,7 @@ model HeatPumpGasCharlineTest
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature1(T=308.15)
-                                                                                    annotation (Placement(transformation(extent={{50,-10},{30,10}})));
+                                                                                    annotation (Placement(transformation(extent={{-68,-46},{-48,-26}})));
   Modelica.Blocks.Sources.Sine sine1(
     amplitude=1500,
     freqHz=1/86400,
@@ -29,7 +29,6 @@ model HeatPumpGasCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-70,0})));
-  TransiEnt.Producer.Heat.Gas2Heat.HeatPumpGasCharlineHeatPort_L1 heatPump(use_T_source_input_K=true, COP_n=1.5) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi GasGrid annotation (Placement(transformation(extent={{-34,-42},{-14,-22}})));
   Modelica.Blocks.Math.Gain gain1(
                                  k=-1) annotation (Placement(transformation(extent={{-34,-4},{-26,4}})));
@@ -42,21 +41,22 @@ model HeatPumpGasCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-20,40})));
+  HeatPumpGasCharline heatPump(use_T_source_input_K=true, useFluidPorts=false) annotation (Placement(transformation(extent={{-8,-10},{12,10}})));
 equation
-  connect(heatPump.heat, fixedTemperature1.port) annotation (Line(points={{0,-10},{16,-10},{16,0},{30,0}},
+  connect(heatPump.heat, fixedTemperature1.port) annotation (Line(points={{2,-10},{-40,-10},{-40,-36},{-48,-36}},
                                                                                           color={191,0,0}));
-  connect(gain1.y, heatPump.Q_flow_set) annotation (Line(points={{-25.6,0},{-10,0}},   color={0,0,127}));
+  connect(gain1.y, heatPump.Q_flow_set) annotation (Line(points={{-25.6,0},{-8,0}},    color={0,0,127}));
   connect(GasGrid.gasPort, heatPump.gasPortIn) annotation (Line(
-      points={{-14,-32},{10,-32},{10,-4}},
+      points={{-14,-32},{12,-32},{12,-4}},
       color={255,255,0},
       thickness=1.5));
   connect(sine1.y, gain1.u) annotation (Line(points={{-59,0},{-34.8,0}}, color={0,0,127}));
-  connect(sine2.y, heatPump.T_source_input_K) annotation (Line(points={{-9,40},{0,40},{0,10}},   color={0,0,127}));
+  connect(gain1.y, heatPump.Q_flow_set) annotation (Line(points={{-25.6,0},{-8,0}}, color={0,0,127}));
+  connect(sine2.y, heatPump.T_source_input_K) annotation (Line(points={{-9,40},{2,40},{2,10}}, color={0,0,127}));
   annotation (
     Icon(graphics,
          coordinateSystem(preserveAspectRatio=false)),
-    Diagram(graphics,
-            coordinateSystem(preserveAspectRatio=false)),
+    Diagram(coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=432000, Interval=900),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

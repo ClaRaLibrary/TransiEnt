@@ -2,10 +2,10 @@ within TransiEnt.Storage.Heat.HotWaterStorage_L4;
 model HotWaterStorage_L4 "Temperature and Heat flow rate based model of a stratified thermal storage with finite volume discretisation (1=top, n=bottom)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,7 +57,7 @@ model HotWaterStorage_L4 "Temperature and Heat flow rate based model of a strati
   parameter SI.Temperature minTemperature_allowed = 283.15 "minimal allowed temperature in tank in K";
   parameter SI.Temperature refTemperature_max = 363.15 "Reference temperature for maximum filling level";
   parameter SI.Temperature refTemperature= 293.15 "Reference temperature for minimal filling level in K ";
-  final parameter SI.SpecificEnthalpy h_ref=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,1e5,refTemperature) "for calculation of stored energy";
+  final parameter SI.SpecificEnthalpy h_ref=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(medium,1e5,refTemperature) "for calculation of stored energy";
    // Fluid ports for fluid from solar something else
    parameter Boolean Use_Solar =  true "Solar fluid in and outflow"
    annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Ports"));
@@ -86,7 +86,7 @@ model HotWaterStorage_L4 "Temperature and Heat flow rate based model of a strati
   //                   Final Parameter
   // _____________________________________________
 
-  final parameter SI.SpecificEnthalpy h_start[nSeg]=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+  final parameter SI.SpecificEnthalpy h_start[nSeg]=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
       medium,
       p_nom,
       T_init) "Start value of sytsem specific enthalpy" annotation(Dialog(group="Heating condenser parameters"));
@@ -245,7 +245,7 @@ if used_Ports_Int == 0 then Utilities.get_Ports_noSolar(
     Placement(transformation(extent={{74,60},{90,76}})));
 
   replaceable Base.CylindricWall_HeatTransfer[nSeg] ConductanceWall(each final height=Geometry.height_Seg, each radius=Geometry.diameter/2) constrainedby TransiEnt.Storage.Heat.HotWaterStorage_L4.Base.Partial_HeatTransfer
-                                                                                                                                                                                                        "Defines the heat conductance at the side walls of the storage" annotation (
+                                                                                                                                                                                                "Defines the heat conductance at the side walls of the storage" annotation (
     Dialog(group="Heat Losses"),
     choicesAllMatching=true,
     Placement(transformation(extent={{74,36},{90,52}})));

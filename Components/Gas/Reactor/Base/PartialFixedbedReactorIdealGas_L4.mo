@@ -2,10 +2,10 @@
 partial model PartialFixedbedReactorIdealGas_L4 "Discretized model of a fixed-bed reactor using ideal gas models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -214,9 +214,9 @@ equation
 <p>gasPortOut: ideal gas outlet </p>
 <p>heat: heat port </p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>T[N_cv]&nbsp;&quot;Gas&nbsp;and&nbsp;catalyst&nbsp;temperature&nbsp;in&nbsp;the&nbsp;control&nbsp;volumes&quot;&nbsp;&nbsp;&nbsp;</p>
-<p>p[N_cv]&nbsp;&quot;Pressure&nbsp;in&nbsp;the&nbsp;control&nbsp;volumes&quot;</p>
-<p>xi[N_cv,N_comp-1]&nbsp;&quot;Mass&nbsp;fraction&nbsp;in&nbsp;the&nbsp;control&nbsp;volumes&quot;</p>
+<p>T[N_cv] &quot;Gas and catalyst temperature in the control volumes&quot;   </p>
+<p>p[N_cv] &quot;Pressure in the control volumes&quot;</p>
+<p>xi[N_cv,N_comp-1] &quot;Mass fraction in the control volumes&quot;</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>The used equations are described in [1] except for the changes described in 2. The pressure calculation for each volume can be done either using the pressure in the middle or at the end of the volume. </p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

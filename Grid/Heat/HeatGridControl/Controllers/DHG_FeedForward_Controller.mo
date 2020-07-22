@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridControl.Controllers;
 model DHG_FeedForward_Controller "Assigns output targets to the heat generating plants based on the total expected heat demand"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,16 +47,14 @@ model DHG_FeedForward_Controller "Assigns output targets to the heat generating 
   //             Components
   // _____________________________________________
 
-    TILMedia.VLEFluid_pT h_supply(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT h_supply(
     redeclare TILMedia.VLEFluidTypes.TILMedia_InterpolatedWater vleFluidType,
     p=1200000,
-    T=supplyandReturnTemperature.T_supply_K)
-              annotation (Placement(transformation(extent={{-70,32},{-50,52}})));
-  TILMedia.VLEFluid_pT h_return(
+    T=supplyandReturnTemperature.T_supply_K) annotation (Placement(transformation(extent={{-70,32},{-50,52}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT h_return(
     redeclare TILMedia.VLEFluidTypes.TILMedia_InterpolatedWater vleFluidType,
     p=600000,
-    T=supplyandReturnTemperature.T_return_K)
-              annotation (Placement(transformation(extent={{-48,32},{-28,52}})));
+    T=supplyandReturnTemperature.T_return_K) annotation (Placement(transformation(extent={{-48,32},{-28,52}})));
 
   // _____________________________________________
   //

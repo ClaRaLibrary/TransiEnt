@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat;
 model ElectricBoiler "Electric Boiler with constant efficiency, spatial resolution can be chosen to be 0d or 1d"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,13 +39,13 @@ model ElectricBoiler "Electric Boiler with constant efficiency, spatial resoluti
   //                Parameters
   // _____________________________________________
 
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium= simCenter.fluid1 "Medium to be used"
-                         annotation(choicesAllMatching, Dialog(group="Fluid Definition"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.fluid1 "Medium to be used"
+                         annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
   final parameter Modelica.SIunits.Power P_el_n = Q_flow_n/eta "Nominal electric power";
   parameter Modelica.SIunits.HeatFlowRate Q_flow_n = 100e3 "Nominal thermal power" annotation(Dialog(group="Technical Specification"));
   parameter Modelica.SIunits.Efficiency eta=0.95 annotation(Dialog(group="Technical Specification"));
-  parameter Boolean useFluidPorts=true annotation(Dialog(group="Technical Specification"));
-  parameter Boolean usePowerPort=false  annotation(Dialog(group="Technical Specification"));
+  parameter Boolean useFluidPorts=true annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean usePowerPort=false  annotation(Dialog(group="Fundamental Definitions"));
   replaceable model ProducerCosts =
       TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.P2H
     constrainedby TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PartialPowerPlantCostSpecs annotation (Dialog(group="Statistics"), __Dymola_choicesAllMatching=true);
@@ -72,7 +72,11 @@ model ElectricBoiler "Electric Boiler with constant efficiency, spatial resoluti
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power powerBoundary if usePowerPort  constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components",enable=usePowerPort), choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.Power powerBoundary "PowerBoundary for ActivePowerPort"),choice( redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary powerBoundary(useInputConnectorQ=false, cosphi_boundary=0.99) "Power Boundary for ComplexPowerPort")),Placement(transformation(
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary if
+                                                                                usePowerPort constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    Dialog(group="Replaceable Components", enable=usePowerPort),
+    choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary "PowerBoundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary powerBoundary(useInputConnectorQ=false, cosphi_boundary=0.99) "Power Boundary for ComplexPowerPort")),
+    Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={-18,30})));
@@ -80,7 +84,7 @@ public
   replaceable TransiEnt.Components.Boundaries.Heat.Heatflow_L1 heatFlowBoundary(change_sign=true) if useFluidPorts constrainedby TransiEnt.Components.Boundaries.Heat.Base.PartialHeatBoundary "Choice of heat boundary model" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={36,7})));
+        origin={36,6})));
 
   Modelica.Blocks.Math.Gain efficiency(k=-1/eta)
     annotation (Placement(transformation(extent={{-36,54},{-18,72}})));
@@ -89,7 +93,7 @@ public
   ClaRa.Components.Sensors.SensorVLE_L1_T temperatureSensor_hex_coolant_in(medium=medium) if useFluidPorts annotation (Placement(transformation(
         extent={{-7,-7},{7,7}},
         rotation=180,
-        origin={47,-31})));
+        origin={46,-31})));
   ClaRa.Components.Sensors.SensorVLE_L1_T temperatureSensor_hex_coolant_out(medium=medium) if useFluidPorts annotation (Placement(transformation(extent={{53,39},{39,53}})));
   Modelica.Blocks.Nonlinear.Limiter Q_flow_set_limit(uMax=0, uMin=-Q_flow_n)
                                                      annotation (Placement(transformation(extent={{-72,-10},{-52,10}})));
@@ -98,7 +102,7 @@ public
     Q_flow_fuel_is=0,
     m_flow_CDE_is=0,
     Q_flow_n=Q_flow_n,
-    Q_flow_is=Q_flow_is,
+    Q_flow_is=-Q_flow_is,
     consumes_H_flow=false,
     produces_m_flow_CDE=false)
                          annotation (Placement(transformation(extent={{10,-100},{30,-80}})));
@@ -137,19 +141,20 @@ equation
   connect(modelStatistics.costsCollector, collectCosts_HeatProducer.costsCollector);
 
   if useFluidPorts then
-    connect(fluidPortIn, heatFlowBoundary.fluidPortIn) annotation (Line(points={{100,-40},{70,-40},{70,1},{46,1}}, color={175,0,0}));
-    connect(heatFlowBoundary.fluidPortOut, fluidPortOut) annotation (Line(points={{46,13},{58,13},{58,15},{70,15},{70,40},{100,40}}, color={175,0,0}));
+    connect(fluidPortIn, heatFlowBoundary.fluidPortIn) annotation (Line(points={{100,-40},{70,-40},{70,-8.88178e-16},{46,-8.88178e-16}},
+                                                                                                                   color={175,0,0}));
+    connect(heatFlowBoundary.fluidPortOut, fluidPortOut) annotation (Line(points={{46,12},{70,12},{70,40},{100,40}},                 color={175,0,0}));
     connect(sign.y, heatFlowBoundary.Q_flow_prescribed) annotation (Line(
-      points={{-1.1,0},{12.45,0},{12.45,1},{28,1}},
+      points={{-1.1,0},{12.45,0},{12.45,8.88178e-16},{28,8.88178e-16}},
       color={0,0,127}));
     connect(heatFlowBoundary.fluidPortOut, temperatureSensor_hex_coolant_out.port)
       annotation (Line(
-        points={{46,13},{46,38.3},{46,38.3},{46,39}},
+        points={{46,12},{46,39}},
         color={175,0,0},
         thickness=0.5));
     connect(heatFlowBoundary.fluidPortIn, temperatureSensor_hex_coolant_in.port)
       annotation (Line(
-        points={{46,1},{46,-24},{47,-24}},
+        points={{46,-8.88178e-16},{46,-24}},
         color={175,0,0},
         thickness=0.5));
     connect(Q_flow_set_limit.y, sign.u) annotation (Line(points={{-51,0},{-21.8,0}}, color={0,0,127}));

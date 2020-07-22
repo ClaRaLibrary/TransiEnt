@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Controllers;
 function DroopSelector "This function can be used to conveniently select a droop either by specifying a distinct value or by selecting a typical value depending on the plant type"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ function DroopSelector "This function can be used to conveniently select a droop
   // _____________________________________________
   constant Real peakLoadPlant=2.5e-2 "2,5%";
   constant Real midLoadPlant=4e-2 "4%";
-  constant Real baseLoadPlant=4e-2 "Base Load 6%";
+  constant Real baseLoadPlant=6e-2 "Base Load 6%";
 
 
 algorithm

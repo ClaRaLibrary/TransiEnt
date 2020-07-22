@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Heat;
 model Test_DHN_SubSystem
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,7 +19,25 @@ model Test_DHN_SubSystem
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.Example;
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-340,180},{-320,200}})));
+  inner TransiEnt.SimCenter simCenter(
+    k_H2_fraction=0.6,
+    showExpertSummary=false,
+    useHomotopy=false) annotation (Placement(transformation(extent={{-340,200},{-320,220}})));
+
   DHN_SubSystem dHN_SubSystem annotation (Placement(transformation(extent={{-252,-252},{248,128}})));
   TransiEnt.Basics.Blocks.Sources.PowerExpression powerExpression1(y=-1e6) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -29,10 +47,7 @@ model Test_DHN_SubSystem
         extent={{20,-20},{-20,20}},
         rotation=0,
         origin={136,160})));
-  Modelica.Blocks.Sources.Constant p_sollWedel4(k=90)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=180,
-        origin={-312,-232})));
+  Modelica.Blocks.Sources.Constant p_setWedel4(k=90) annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=180)));
   ClaRa.Components.Utilities.Blocks.LimPID PID_hot_temperature(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     sign=1,
@@ -50,38 +65,39 @@ model Test_DHN_SubSystem
         extent={{20,-20},{-20,20}},
         rotation=90,
         origin={-302,-168})));
-  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-340,180},{-320,200}})));
-  inner TransiEnt.SimCenter simCenter(                                                                                                                                     k_H2_fraction=0.6,
-    showExpertSummary=false,
-    useHomotopy=false)
-    annotation (Placement(transformation(extent={{-340,200},{-320,220}})));
+
 equation
-  connect(powerExpression1.y,consumer2. Q_flow_prescribed) annotation (Line(
-      points={{152,195},{152,195},{152,178.4},{150,178.4}},
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
+  connect(powerExpression1.y, consumer2.Q_flow_prescribed) annotation (Line(
+      points={{152,195},{152,195},{152,176},{148,176}},
       color={0,135,135},
       pattern=LinePattern.Dash));
   connect(dHN_SubSystem.consumerInlet, consumer2.fluidPortIn) annotation (Line(
-      points={{168,128},{168,140.4},{150.8,140.4}},
+      points={{168,128},{168,140},{148,140}},
       color={175,0,0},
       thickness=0.5));
   connect(consumer2.fluidPortOut, dHN_SubSystem.consumerOutlet) annotation (Line(
-      points={{118.8,140.4},{108,140.4},{108,127}},
+      points={{124,140},{108,140},{108,127}},
       color={175,0,0},
       thickness=0.5));
-  connect(p_sollWedel4.y,PID_hot_temperature. u_s) annotation (Line(points={{-318.6,-232},{-318,-232},{-330,-232},{-332,-232},{-332,-224}},                         color={0,0,127}));
-  connect(PID_hot_temperature.y,producer1. Q_flow_prescribed) annotation (Line(points={{-332,-201},{-332,-201},{-332,-154},{-320,-154},{-320.4,-154}},                    color={0,0,127}));
+  connect(p_setWedel4.y, PID_hot_temperature.u_s) annotation (Line(points={{-6.6,0},{-318,0},{-318,-232},{-332,-232},{-332,-224}}, color={0,0,127}));
+  connect(PID_hot_temperature.y, producer1.Q_flow_prescribed) annotation (Line(points={{-332,-201},{-332,-201},{-332,-154},{-318,-154},{-318,-156}}, color={0,0,127}));
   connect(producer1.fluidPortIn, dHN_SubSystem.producerInlet) annotation (Line(
-      points={{-282.4,-153.2},{-282.4,-132},{-252,-132}},
+      points={{-282,-156},{-282,-132},{-252,-132}},
       color={175,0,0},
       thickness=0.5));
   connect(producer1.fluidPortOut, dHN_SubSystem.producerOutlet) annotation (Line(
-      points={{-282.4,-185.2},{-282.4,-192},{-252,-192}},
+      points={{-282,-180},{-282,-192},{-252,-192}},
       color={175,0,0},
       thickness=0.5));
   connect(dHN_SubSystem.T1, PID_hot_temperature.u_m) annotation (Line(points={{-256,-212},{-288,-212},{-288,-211.9},{-320,-211.9}}, color={0,0,127}));
-  annotation (Icon(graphics,
-                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Diagram(graphics,
-                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-360,-260},{360,220}})),
+  annotation (
+    Icon(graphics, coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Diagram(graphics, coordinateSystem(preserveAspectRatio=false, extent={{-360,-260},{360,220}})),
     experiment(StopTime=86400, Interval=900),
     __Dymola_experimentSetupOutput(inputs=false, events=false),
     __Dymola_experimentFlags(
@@ -89,7 +105,7 @@ equation
       Evaluate=false,
       OutputCPUtime=true,
       OutputFlatModelica=false),
-Documentation(info="<html>
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Tester for small closed-loop district heating subsystem. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

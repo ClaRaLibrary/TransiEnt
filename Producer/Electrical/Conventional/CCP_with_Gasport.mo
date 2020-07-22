@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional;
 model CCP_with_Gasport
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,10 +37,12 @@ model CCP_with_Gasport
     isPrimaryControlActive=true,
     final typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional,
     final typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas,
-    redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GasCCGT);
+    redeclare model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GasCCGT,
+    P_set_total(nin=3),
+    collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional));
 
 
-  extends TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit;
+  extends TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit( final useGasPort=true);
   extends TransiEnt.Producer.Electrical.Base.PartialCDEUnit(m_flow_gas_CDE_deposited_gasPort=m_flow_gas_CDE_deposited);
   extends TransiEnt.Basics.Icons.CombinedCycleCHP;
 
@@ -52,6 +54,8 @@ model CCP_with_Gasport
   parameter Modelica.SIunits.SpecificEnthalpy HoC_gas=40e6 "heat of combustion of natural gas"  annotation(Dialog(enable = if useConstantHoC== false then false else true,group="Fuel properties"));
   parameter Boolean useLeakageMassFlow=false "Constant leakage gas mass flow of 'm_flow_small' to avoid zero mass flow"  annotation(Dialog(group="Numerical Stability"));
   parameter Modelica.SIunits.MassFlowRate m_flow_small=simCenter.m_flow_small "leakage mass flow if useLeakageMassFlow=true" annotation(Dialog(group="Numerical Stability",enable=useLeakageMassFlow));
+  parameter SI.Pressure p_min=7.5e5 "minimum pressure of gas grid neccesary" annotation(Dialog(group="Physical Constraints"));
+  parameter Boolean useMinimumGasGridPressureLimitation=false "If true, power plant will shut off if gas grid pressure falls below p_min" annotation(Dialog(group="Physical Constraints"));
   // _____________________________________________
   //
   //                Variables
@@ -59,6 +63,7 @@ model CCP_with_Gasport
 
   Modelica.SIunits.MassFlowRate m_flow_CDE_calculatedByInput;
   Modelica.SIunits.MassFlowRate m_flow_small_intern;
+  Modelica.SIunits.SpecificEnthalpy HoC_gas_actual;
 protected
   Modelica.SIunits.MolarFlowRate[5] ElementCompositionFuel;
   // _____________________________________________
@@ -67,12 +72,14 @@ protected
   // _____________________________________________
 
 public
-  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateOut enthalpyFlowRateOut "enthalpy flow of fuel" annotation (Placement(transformation(extent={{100,-100},{140,-60}}), iconTransformation(extent={{100,-100},{140,-60}})));
+  TransiEnt.Basics.Interfaces.Gas.EnthalpyFlowRateOut H_flow_gas "Enthalpy flow rate of fuel" annotation (Placement(transformation(extent={{100,-100},{140,-60}}), iconTransformation(extent={{100,-100},{140,-60}})));
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
 
+  Modelica.Blocks.Sources.RealExpression realExpression1(y=if useMinimumGasGridPressureLimitation and gasPortIn.p < p_min then -P_set_total.u[1] - P_set_total.u[2] else 0)
+                                                        annotation (Placement(transformation(extent={{-94,44},{-76,62}})));
 equation
   // _____________________________________________
   //
@@ -97,16 +104,11 @@ equation
   end if;
 
   // === energy balance ===
-  if epp.P>=0 then
-    m_flow_gas=m_flow_small_intern;
-    enthalpyFlowRateOut=0;
-  elseif useConstantHoC==true then
-    m_flow_gas * HoC_gas * eta = -epp.P + m_flow_small_intern * HoC_gas * eta;
-    enthalpyFlowRateOut=-epp.P/HoC_gas;
-  else
-    m_flow_gas *vleNCVSensor.NCV  * eta = -epp.P + m_flow_small_intern * vleNCVSensor.NCV * eta;
-    enthalpyFlowRateOut=m_flow_gas/vleNCVSensor.NCV;
-  end if;
+
+  HoC_gas_actual= if useConstantHoC then HoC_gas else vleNCVSensor.NCV;
+  m_flow_gas=max(m_flow_small_intern,(-epp.P/eta-H_flow_secondGasPort.y)/HoC_gas_actual+m_flow_small_intern);
+  H_flow_gas=max(0,(m_flow_gas-m_flow_small_intern)*HoC_gas_actual+H_flow_secondGasPort.y);
+
   // _____________________________________________
   //
   //               Connect Statements
@@ -116,6 +118,7 @@ equation
 
 
 
+  connect(realExpression1.y, P_set_total.u[3]) annotation (Line(points={{-75.1,53},{-75.1,54},{-59,54},{-59,29}}, color={0,0,127}));
 annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                graphics={
     Text( lineColor={255,255,0},
@@ -134,13 +137,14 @@ annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100}
 <p><span style=\"font-family: MS Shell Dlg 2;\">P_SB_set: input for electric power in [W] (secondary balancing setpoint)</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port (choice of power port)</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">gasPortIn: inlet for real gas</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">gasPortIn_2: second gas port - only active if useSecondGasPort==true</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">gasPortOut_CDE: outlet port for CDE. only active if &apos;useCDEPort=true&apos;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">The mass flow of gasPortIn is claculated via needed electrical power output and the efficiency of the power plant. If the second gasPort &apos;gasPortIn_2&apos; is used, the mass flow of the first gas port is reduced depending on the enthalpy flow of the second gas port. The mass flow of the second gas port needs to be defined from outside.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>

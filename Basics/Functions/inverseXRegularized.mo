@@ -2,10 +2,10 @@ within TransiEnt.Basics.Functions;
 function inverseXRegularized "Function that approximates 1/x by a twice continuously differentiable function"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,7 +65,7 @@ algorithm
   annotation (
     smoothOrder=1,Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Function&nbsp;is&nbsp;taken&nbsp;from&nbsp;the&nbsp;Buildings&nbsp;Library&nbsp;Version&nbsp;2.10</span> (https://github.com/lbl-srg/modelica-buildings)</code></p>
+<p>Function is taken from the Buildings Library Version 2.10</span> (https://github.com/lbl-srg/modelica-buildings)</code></p>
 <p>Function that approximates <i>y=1 &frasl; x</i> inside the interval <i>-&delta; &le; x &le; &delta;</i>. The approximation is twice continuously differentiable with a bounded derivative on the whole real line. </p>
 <p>See the package <code>Examples</code> for the graph. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

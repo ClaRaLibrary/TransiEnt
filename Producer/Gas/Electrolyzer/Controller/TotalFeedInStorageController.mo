@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model TotalFeedInStorageController "Controller to control the electrolyzer and storage system for feeding into a natural gas grid"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,8 +61,12 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
   parameter Real Ti=0.1 "Integrator time constant for feed-in control" annotation (Dialog(tab="General", group="Controller"));
   parameter Real Td=0.1 "Derivative time constant for feed-in control" annotation (Dialog(tab="General", group="Controller"));
 
+  parameter SI.Pressure p_minLow=20e5 "Lower limit of the target pressure in storage" annotation (Dialog(tab="General",  group="Controller"));
   parameter SI.Pressure p_maxLow=29e5 "Lower limit of the maximum pressure in storage" annotation (Dialog(tab="General", group="Controller"));
   parameter SI.Pressure p_maxHigh=30e5 "Upper limit of the maximum pressure in storage" annotation (Dialog(tab="General", group="Controller"));
+  parameter SI.Pressure p_minHigh=60e5 "if valve closed and p>p_high, open valve" annotation (Dialog(tab="General", group="Controller"));
+  parameter SI.Pressure p_minLow_constantDemand=50e5 "storage can be emptied via 'm_flow_hydrogenDemand_constant' up to 'p_minLow_constantDemand'" annotation (Dialog(tab="General", group="Controller"));
+  parameter SI.MassFlowRate m_flow_hydrogenDemand_constant=0 "constant hydrogen demand if hydrogen is available" annotation (Dialog(tab="General", group="Controller"));
 
   parameter Boolean StoreAllHydrogen=false "All Hydrogen is stored before beeing fed in" annotation (Dialog(tab="General", group="Controller"));
 
@@ -125,10 +129,14 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-60,26})));
-protected
+
   TransiEnt.Producer.Gas.Electrolyzer.Controller.FeedInStorageTWVController feedInStorageTWVController(StoreAllHydrogen=StoreAllHydrogen,
+    p_minLow=p_minLow,
     p_maxLow=p_maxLow,
-    p_maxHigh=p_maxHigh)                                                                                                                  annotation (Placement(transformation(extent={{-10,-46},{10,-26}})));
+    p_maxHigh=p_maxHigh,
+    p_minHigh=p_minHigh,
+    p_minLow_constantDemand=p_minLow_constantDemand,
+    m_flow_hydrogenDemand_constant=m_flow_hydrogenDemand_constant)                                                                        annotation (Placement(transformation(extent={{-10,-46},{10,-26}})));
   Modelica.Blocks.Math.Feedback feedback annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={60,-64})));

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat;
 model GHP_L1_idContrMFlow_temp "Model for gas heat pumps with a pump with ideal mass flow control to get a given outlet temperature"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,7 +25,9 @@ model GHP_L1_idContrMFlow_temp "Model for gas heat pumps with a pump with ideal 
   //          Imports and Class Hierarchy
   // _____________________________________________
 
+  extends TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit;
   extends TransiEnt.Producer.Heat.Base.XtH_L1_idContrMFlow_temp_base;
+
 
   // _____________________________________________
   //
@@ -61,10 +63,14 @@ public
   SI.EnthalpyFlowRate H_flow "Consumed gas enthalpy flow rate";
   SI.Temperature T_source_var=20+273.15 "Air temperature" annotation(Dialog(group="Fundamental Definitions",enable=not use_T_source_input_K));
 
+   Modelica.Blocks.Sources.RealExpression realExpression1(y=H_flow) if useGasPort annotation (Placement(transformation(extent={{-98,84},{-78,104}})));
+  Modelica.Blocks.Math.Division division if useGasPort annotation (Placement(transformation(extent={{-68,78},{-48,98}})));
+
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
+
 
 equation
   if not use_T_source_input_K then
@@ -82,7 +88,11 @@ equation
   // _____________________________________________
 
   connect(T_source_input_K, T_source_internal);
-
+  if useGasPort then
+  connect(vleNCVSensor.NCV,division. u2) annotation (Line(points={{53,92},{44,92},{44,110},{-100,110},{-100,82},{-70,82}}, color={0,0,127}));
+  connect(m_flow_gas,division. y) annotation (Line(points={{8,88},{-47,88}},   color={0,0,127}));
+  end if;
+  connect(realExpression1.y, division.u1) annotation (Line(points={{-77,94},{-70,94}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{22,22},{58,-22}},
@@ -115,7 +125,7 @@ equation
           fillPattern=FillPattern.Solid)}),                      Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This model is a gas heat pump with a pump&nbsp;with&nbsp;ideal&nbsp;mass flow control&nbsp;to&nbsp;get&nbsp;a&nbsp;given&nbsp;outlet&nbsp;temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
+<p>This model is a gas heat pump with a pump with ideal mass flow control to get a given outlet temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The COP does not depend on part load.</p>
 <p>The mass flow is calculated based on a heat flow rate and a given constant outlet temperature. There is no volume considered.</p>
@@ -141,19 +151,19 @@ equation
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #0000ff;\">if&nbsp;</span><span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow)&gt;fluidOut.h<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #0000ff;\">if&nbsp;</span>-Q_flow_set&lt;Q_flow_small<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;or&nbsp;not&nbsp;</span>allowOverheat<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.m_flow=0;</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.h_outflow=<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #0000ff;\">else</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.h_outflow=Q_flow_set/fluidPortOut.m_flow+<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.m_flow=-m_flow_max;<span style=\"color: #006400;\">&nbsp;//maximum&nbsp;mass&nbsp;flow&nbsp;to&nbsp;keep&nbsp;the&nbsp;temperature&nbsp;increase&nbsp;at&nbsp;a&nbsp;minimum</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #0000ff;\">end&nbsp;if</span>;</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #0000ff;\">else</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.h_outflow=fluidOut.h;</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.m_flow=-<span style=\"color: #ff0000;\">max</span>(0,<span style=\"font-family: Courier New; color: #ff0000;\">min</span>(m_flow_max,-Q_flow_set/(fluidPortOut.h_outflow-<span style=\"font-family: Courier New; color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow))));</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #0000ff;\">end&nbsp;if</span>;</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;Q_flow=fluidPortOut.m_flow*(fluidPortOut.h_outflow-<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow));</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">if </span><span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow)&gt;fluidOut.h<span style=\"font-family: Courier New; color: #0000ff;\"> then</span></p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">if </span>-Q_flow_set&lt;Q_flow_small<span style=\"font-family: Courier New; color: #0000ff;\"> or not </span>allowOverheat<span style=\"font-family: Courier New; color: #0000ff;\"> then</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.m_flow=0;</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.h_outflow=<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">else</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.h_outflow=Q_flow_set/fluidPortOut.m_flow+<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.m_flow=-m_flow_max;<span style=\"color: #006400;\"> //maximum mass flow to keep the temperature increase at a minimum</span></p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">end if</span>;</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">else</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.h_outflow=fluidOut.h;</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.m_flow=-<span style=\"color: #ff0000;\">max</span>(0,<span style=\"font-family: Courier New; color: #ff0000;\">min</span>(m_flow_max,-Q_flow_set/(fluidPortOut.h_outflow-<span style=\"font-family: Courier New; color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow))));</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">end if</span>;</p>
+<p><span style=\"font-family: Courier New;\">Q_flow=fluidPortOut.m_flow*(fluidPortOut.h_outflow-<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow));</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>The model is only working properly in design flow direction. Reverse flow is not supported!</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
@@ -162,5 +172,6 @@ equation
 <p>[1] A. Palzer, <i>Sektor&uuml;bergreifende Modellierung und Optimierung eines zuk&uuml;nftigen deutschen Energiesystems unter Ber&uuml;cksichtigung von Energieeffizienzma&szlig;nahmen im Geb&auml;udesektor</i>. Stuttgart: Fraunhofer Verlag, 2016.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
+<p>Model modified by Jan Westphal (j.westphal@tuhh.de), Jul 2019 (added boolean for using gas port)</p>
 </html>"));
 end GHP_L1_idContrMFlow_temp;

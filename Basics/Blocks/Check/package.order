@@ -15,3 +15,5 @@ TestTrumpetCurves
 TestVariousSlewRateLimiter
 TestWeekendPulse
 TestDelayedBooleanReplicator
+TestSwitchRamp
+TestTimers

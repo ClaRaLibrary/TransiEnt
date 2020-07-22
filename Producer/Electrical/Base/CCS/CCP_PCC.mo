@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Electrical.Base.CCS;
+﻿within TransiEnt.Producer.Electrical.Base.CCS;
 record CCP_PCC "CCGT-power plant with PCC"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -78,8 +78,8 @@ record CCP_PCC "CCGT-power plant with PCC"
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>[1] A. Kather, S. Ehlers, J. Hitzwebel, &quot;CO2-Abtrennung in GuD-Kraftwerkspro-zessen mit Post-Combustion und Oxyfuel&quot; , Abschlussbericht, 2017, p. 28</p>
-<p>[2] S. Ehlers, &quot;Auslegung und Optimierung einer nachgeschalteten CO2-Rauchgasw&auml;sche in einem erdgasbefeuerten Gas- und Dampfturbinenkraftwerk&quot; , Dissertation, 2017, p. 59</p>
+<p>[2] S. Ehlers, &quot;Auslegung und Optimierung einer nachgeschalteten CO2-Rauchgaswäsche in einem erdgasbefeuerten Gas- und Dampfturbinenkraftwerk&quot; , Dissertation, 2017, p. 59</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Max Mustermann (mustermann@mustermail.com), Apr 2014</p>
+<p>Model created by Oliver Schülting (oliver.schuelting@tuhh.de), Dec 2018</p>
 </html>"));
 end CCP_PCC;

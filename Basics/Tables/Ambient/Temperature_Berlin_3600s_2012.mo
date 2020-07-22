@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Tables.Ambient;
 model Temperature_Berlin_3600s_2012 "Berlin 2012, 1 h  resolution. Source: WebWerdis"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,6 +59,6 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>[1] DeutscherWetterDienst DWD2015; https://werdis.dwd.de</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Created by Max Mustermann (mustermann@mustermail.de), Apr 2014</p>
+<p>Model created by Ricardo Peniche (peniche@tuhh.de), May 2015</p>
 </html>"));
 end Temperature_Berlin_3600s_2012;

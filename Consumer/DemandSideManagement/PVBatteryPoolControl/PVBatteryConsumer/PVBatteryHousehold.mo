@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.PVBatteryConsumer;
 model PVBatteryHousehold "Household with pv, household and battery management systeem"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -84,7 +84,7 @@ model PVBatteryHousehold "Household with pv, household and battery management sy
   Modelica.Blocks.Routing.Extractor extractPVProfile(nin=nPVProfiles,index(start=iPVProfile, fixed=true)) annotation (Placement(transformation(extent={{-48,30},{-28,50}})));
   TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_load[nLoadProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-122,60},{-82,100}})));
   TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_PV[nPVProfiles] "Connector of Real input signals" annotation (Placement(transformation(extent={{-122,20},{-82,60}})));
-  Components.Boundaries.Electrical.Power load(change_sign=false) annotation (Placement(transformation(
+  Components.Boundaries.Electrical.ActivePower.Power load(change_sign=false) annotation (Placement(transformation(
         extent={{-13,-12},{13,12}},
         rotation=0,
         origin={28,-40})));

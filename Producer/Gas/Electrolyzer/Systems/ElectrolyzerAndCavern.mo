@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydrogen cavern (use with: TransiEnt.Producer.Combined.LargeScaleCHP.H2CofiringCHP)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -115,13 +115,12 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
   //               Complex Components
   // _____________________________________________
 
-    TILMedia.VLEFluid_pT vleFluidH2(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluidH2(
     p=p_cavern_nom,
     T=T_cavern,
     xi=X_const,
     vleFluidType=medium,
-    deactivateTwoPhaseRegion=true) "Model of used medium (hydrogen)"
-    annotation (Placement(transformation(extent={{-10,8},{10,-12}})));
+    deactivateTwoPhaseRegion=true) "Model of used medium (hydrogen)" annotation (Placement(transformation(extent={{-10,8},{10,-12}})));
 
     //Cost Collectors
   Components.Statistics.Collectors.LocalCollectors.CollectCostsGeneral collectCosts_PtG_Ely(
@@ -330,7 +329,7 @@ equation
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">See Check-Model &quot;TransiEnt.Producer.Gas.Electrolyzer.Systems.Check.TestElectrolyzerAndCavern&quot;</span></p>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">[1] Stolzenburg, Klaus ; Hamelmann, Roland ; Wietschel, Martin ; Genoese, Fabio ; Michaelis, Julia ; Lehmann, Jochen ; Miege, Andreas ; Krause, Stephan ; Sponholz, Christian ; u.&nbsp;a.: <i>Integration von Wind-Wasserstoff-Systemen in das Energiesystem Abschlussbericht</i>, 2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">[1] Stolzenburg, Klaus ; Hamelmann, Roland ; Wietschel, Martin ; Genoese, Fabio ; Michaelis, Julia ; Lehmann, Jochen ; Miege, Andreas ; Krause, Stephan ; Sponholz, Christian ; u. a.: <i>Integration von Wind-Wasserstoff-Systemen in das Energiesystem Abschlussbericht</i>, 2014</span></p>
 <p><br><b><span style=\"font-family: Arial,sans-serif; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: Arial,sans-serif;\">Ricardo Peniche, 2016</span></p>
 <p><br><br><br><br><br><br><br>Sources: </p>

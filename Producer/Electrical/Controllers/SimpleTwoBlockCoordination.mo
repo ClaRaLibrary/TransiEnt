@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Controllers;
 model SimpleTwoBlockCoordination "Assigns load to first block until second block is needed to cover load"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -74,7 +74,7 @@ equation
                       coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Assigns&nbsp;load&nbsp;to&nbsp;first&nbsp;block&nbsp;until&nbsp;second&nbsp;block&nbsp;is&nbsp;needed&nbsp;to&nbsp;cover&nbsp;load.</p>
+<p>Assigns load to first block until second block is needed to cover load.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Gas.Check;
 model TestUndergroundGasStorageHeatTransfer_L2
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ model TestUndergroundGasStorageHeatTransfer_L2
     T_wall_start=317.15,
     storage(
       V_geo=500000,
-      alpha_nom=133,
+      redeclare model HeatTransfer = TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 (alpha_nom=133),
       height=300,
       p_gas_start=6500000,
       T_gas_start=317.15)) annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
@@ -66,7 +66,7 @@ model TestUndergroundGasStorageHeatTransfer_L2
     T_wall_start=317.15,
     storage(
       V_geo=500000,
-      alpha_nom=120,
+      redeclare model HeatTransfer = TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 (alpha_nom=120),
       height=300,
       p_gas_start=6500000,
       T_gas_start=317.15)) annotation (Placement(transformation(extent={{20,-10},{40,10}})));

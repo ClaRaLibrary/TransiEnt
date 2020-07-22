@@ -1,10 +1,10 @@
 within TransiEnt.Components.Mechanical.Check;
 model CheckInertiaConstant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,7 +49,7 @@ model CheckInertiaConstant
     startTime=3600,
     height=-75e6,
     offset=-25e6)                                 annotation (Placement(transformation(extent={{-76,-4},{-56,16}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{46,70},{66,90}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{46,70},{66,90}})));
 equation
 
   connect(P_demand.y, linearElectricConsumer.P_el_set) annotation (Line(points={{51,48},{44,48},{44,30},{52,30},{52,19.6}},      color={0,0,127}));

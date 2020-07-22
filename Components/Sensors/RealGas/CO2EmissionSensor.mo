@@ -1,10 +1,10 @@
-within TransiEnt.Components.Sensors.RealGas;
+﻿within TransiEnt.Components.Sensors.RealGas;
 model CO2EmissionSensor "Calculates CO2 emissions from complete combustion of medium"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -118,7 +118,7 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Jun 2018</p>
+<p>Model created by Oliver Schülting (oliver.schuelting@tuhh.de), Jun 2018</p>
 </html>"), Icon(graphics={
         Text(
           extent={{-100,24},{100,-16}},

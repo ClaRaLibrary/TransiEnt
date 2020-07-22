@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Base.ControlPower;
 block IdealControlOffer "Ideal control power provision without constraints other than nominal power"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ equation
 
     annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Ideal&nbsp;control&nbsp;power&nbsp;provision&nbsp;without&nbsp;constraints&nbsp;other&nbsp;than&nbsp;nominal&nbsp;power.</p>
+<p>Ideal control power provision without constraints other than nominal power.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>L1 (defined in the CodingConventions) - only active power and frequency.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

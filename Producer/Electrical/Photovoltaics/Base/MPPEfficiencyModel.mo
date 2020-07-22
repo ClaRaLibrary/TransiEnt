@@ -4,10 +4,10 @@ block MPPEfficiencyModel "This efficiency model is taken from [4] Beyer, H.G., H
       systems. In: Proc. Eurosun 2004, Freiburg "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -83,7 +83,7 @@ Icon(coordinateSystem(
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p>This&nbsp;efficiency&nbsp;model&nbsp;is&nbsp;taken&nbsp;from&nbsp;[4]&nbsp;Beyer,&nbsp;H.G.,&nbsp;Heilscher,&nbsp;G.,&nbsp;Bofinger,&nbsp;S.&nbsp;(2004):&nbsp;A&nbsp;robust&nbsp;model&nbsp;for&nbsp;the&nbsp;MPP&nbsp;performance&nbsp;of&nbsp;different&nbsp;types&nbsp;of&nbsp;PV-modules&nbsp;applied&nbsp;for&nbsp;the&nbsp;performance&nbsp;check&nbsp;of&nbsp;grid&nbsp;connected&nbsp;systems.&nbsp;In:&nbsp;Proc.&nbsp;Eurosun&nbsp;2004,&nbsp;Freiburg</p>
+<p>This efficiency model is taken from [4] Beyer, H.G., Heilscher, G., Bofinger, S. (2004): A robust model for the MPP performance of different types of PV-modules applied for the performance check of grid connected systems. In: Proc. Eurosun 2004, Freiburg</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 </html>"));

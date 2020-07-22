@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Electric;
 model ElectricGrid_StandAlone
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,7 +19,25 @@ model ElectricGrid_StandAlone
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
-extends TransiEnt.Basics.Icons.Example;
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
+  extends TransiEnt.Basics.Icons.Example;
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+  inner TransiEnt.SimCenter simCenter(useHomotopy=false, ambientConditions(
+      redeclare TransiEnt.Basics.Tables.Ambient.GHI_Hamburg_3600s_2012_TMY globalSolarRadiation,
+      redeclare TransiEnt.Basics.Tables.Ambient.Temperature_Berlin_3600s_2012 temperature,
+      redeclare TransiEnt.Basics.Tables.Ambient.Wind_Hamburg_Fuhlsbuettel_3600s_2012 wind)) annotation (Placement(transformation(extent={{-280,260},{-240,300}})));
+  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-240,260},{-200,300}})));
+
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP CHP(
     P_el_n=3e6,
     Q_flow_n_CHP=CHP.P_el_n/0.3,
@@ -27,23 +45,14 @@ extends TransiEnt.Basics.Icons.Example;
     p_nom=18e5,
     T_feed_init=373.15) annotation (Placement(transformation(extent={{-236,80},{-176,20}})));
   TransiEnt.Basics.Tables.GenericDataTable heatDemandTable(relativepath="heat/HeatDemand_HHWilhelmsburg_MFH3000_900s_01012012_31122012.txt", constantfactor=-1.2) annotation (Placement(transformation(extent={{-280,190},{-240,230}})));
-  Modelica.Blocks.Sources.RealExpression constHeatDemandCHP(y=max(heatDemandTable.y1 - 5e5, -CHP.Q_flow_n_CHP))
-                                                                                                     annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression constHeatDemandCHP(y=max(heatDemandTable.y1 - 5e5, -CHP.Q_flow_n_CHP)) annotation (Placement(transformation(
         extent={{20,-10},{-20,10}},
         rotation=270,
         origin={-195,-40})));
-  Modelica.Blocks.Sources.RealExpression electricityDemandCHP1(y=-min(electricDemandTable.y1 + 0.5e6, 1e6))
-                                                                                           annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression electricityDemandCHP1(y=-min(electricDemandTable.y1 + 0.5e6, 1e6)) annotation (Placement(transformation(
         extent={{20,-10},{-20,10}},
         rotation=270,
         origin={-224,-40})));
-  inner TransiEnt.SimCenter simCenter(useHomotopy=false, ambientConditions(
-      redeclare TransiEnt.Basics.Tables.Ambient.GHI_Hamburg_3600s_2012_TMY globalSolarRadiation,
-      redeclare TransiEnt.Basics.Tables.Ambient.Temperature_Berlin_3600s_2012 temperature,
-      redeclare TransiEnt.Basics.Tables.Ambient.Wind_Hamburg_Fuhlsbuettel_3600s_2012 wind))
-                                      annotation (Placement(transformation(extent={{-280,260},{-240,300}})));
-  inner TransiEnt.ModelStatistics modelStatistics
-    annotation (Placement(transformation(extent={{-240,260},{-200,300}})));
   TransiEnt.Consumer.Electrical.LinearElectricConsumer electricDemand annotation (Placement(transformation(
         extent={{-169.786,-5.35691},{-129.6,35.3561}},
         rotation=90,
@@ -75,15 +84,19 @@ extends TransiEnt.Basics.Icons.Example;
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_Txim_flow boundaryVLE_Txim_flow(variable_T=true, boundaryConditions(p_nom=20e5)) annotation (Placement(transformation(extent={{-114,54},{-134,74}})));
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_pTxi boundaryVLE_pTxi(boundaryConditions(p_const=16e5)) annotation (Placement(transformation(extent={{-114,30},{-134,50}})));
 equation
-  connect(electricityDemandCHP1.y, CHP.P_set) annotation (Line(points={{-224,-18},{-224,-18},{-224,16},{-224.3,16},{-224.3,27}},     color={0,0,127}));
-  connect(solarProfileLoader.y1, pVPlant.P_el_set) annotation (Line(points={{-236,-110},{-236,-112},{-236,-110},{-198,-110},{-198,-120},{-198,-120.2},{-203,-120.2}},
-                                                                                                                                                          color={0,0,127}));
-  connect(windProfileLoader.y1, windProduction.P_el_set) annotation (Line(points={{-238.1,-192},{-238.1,-192},{-202,-192},{-202,-192},{-202,-200.19},{-203,-200.19}},         color={0,0,127}));
-  connect(line_L1_1.epp_2,P_12. epp_IN) annotation (Line(
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
+  connect(electricityDemandCHP1.y, CHP.P_set) annotation (Line(points={{-224,-18},{-224,-18},{-224,16},{-224.3,16},{-224.3,27}}, color={0,0,127}));
+  connect(solarProfileLoader.y1, pVPlant.P_el_set) annotation (Line(points={{-236,-110},{-236,-112},{-236,-110},{-198,-110},{-198,-120},{-198,-120.2},{-203,-120.2}}, color={0,0,127}));
+  connect(windProfileLoader.y1, windProduction.P_el_set) annotation (Line(points={{-238.1,-192},{-238.1,-192},{-202,-192},{-202,-192},{-202,-200.19},{-203,-200.19}}, color={0,0,127}));
+  connect(line_L1_1.epp_2, P_12.epp_IN) annotation (Line(
       points={{-120.15,-118},{-120.15,-118},{-99.2,-118}},
       color={0,135,135},
       thickness=0.5));
-  connect(P_12.epp_OUT,UCTE. epp) annotation (Line(
+  connect(P_12.epp_OUT, UCTE.epp) annotation (Line(
       points={{-80.6,-118},{-80.6,-120},{-62,-120}},
       color={0,135,135},
       thickness=0.5));
@@ -103,7 +116,7 @@ equation
       points={{-182,-205.7},{-172,-205.7},{-172,-118},{-162,-118},{-162,-118.16},{-149.85,-118.16}},
       color={0,135,135},
       thickness=0.5));
-  connect(CHP.Q_flow_set, constHeatDemandCHP.y) annotation (Line(points={{-194.9,27},{-194.9,-1.8},{-195,-1.8},{-195,-18}},   color={0,0,127}));
+  connect(CHP.Q_flow_set, constHeatDemandCHP.y) annotation (Line(points={{-194.9,27},{-194.9,-1.8},{-195,-1.8},{-195,-18}}, color={0,0,127}));
   connect(CHP.inlet, boundaryVLE_Txim_flow.fluidPortOut) annotation (Line(
       points={{-175.4,63.5},{-134,63.5},{-134,64}},
       color={175,0,0},
@@ -115,11 +128,9 @@ equation
   connect(boundaryVLE_Txim_flow.T, returnTemperatureDNH.y) annotation (Line(points={{-112,64},{-104,64},{-104,55},{-89.4,55}}, color={0,0,127}));
   connect(massFlowDHN.y, boundaryVLE_Txim_flow.m_flow) annotation (Line(points={{-89.4,81},{-98,81},{-98,70},{-112,70}}, color={0,0,127}));
   connect(electricDemandTable.y1, electricDemand.P_el_set) annotation (Line(points={{-230,148},{-182.257,148},{-182.257,147.907}}, color={0,0,127}));
-  annotation (Icon(graphics,
-                   coordinateSystem(
-        preserveAspectRatio=false,
-        initialScale=0.1)), Diagram(graphics,
-                                    coordinateSystem(
+  annotation (
+    Icon(graphics, coordinateSystem(preserveAspectRatio=false, initialScale=0.1)),
+    Diagram(graphics, coordinateSystem(
         preserveAspectRatio=false,
         extent={{-300,-300},{300,300}},
         initialScale=0.1)),
@@ -133,7 +144,7 @@ equation
       Evaluate=true,
       OutputCPUtime=true,
       OutputFlatModelica=false),
-Documentation(info="<html>
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Small electric system with CHP. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

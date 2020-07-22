@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckGasturbine "Example of the component Gasturbine"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model CheckGasturbine "Example of the component Gasturbine"
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{42,-60},{62,-40}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{42,-60},{62,-40}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-70,60},{-50,80}})));
   Modelica.Blocks.Sources.Step NomalStartup(
     offset=0,

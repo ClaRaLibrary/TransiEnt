@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Gas.MethanatorSystem.Controller;
+﻿within TransiEnt.Producer.Gas.MethanatorSystem.Controller;
 model MassFlowFeedInSystemController
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -70,12 +70,12 @@ model MassFlowFeedInSystemController
   replaceable Modelica.Blocks.Continuous.LimPID PID(
     y_start=0,
     initType=Modelica.Blocks.Types.InitPID.NoInit,
-    yMax=1,
-    yMin=-1,
+    yMax=30,
+    yMin=-30,
     k=2,
     Td=1000,
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
-    Ti=1e-7) if
+    Ti=1e-5) if
                useMassFlowControl                          annotation (Placement(transformation(extent={{-20,80},{0,100}})));
 
 
@@ -121,12 +121,12 @@ connect(add.u1, PID.y) annotation (Line(points={{66,74},{40,74},{12,74},{12,90},
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn&nbsp;P_el_set&nbsp;&quot;Input&nbsp;for&nbsp;electric&nbsp;power&quot;&nbsp;</p>
-<p>TransiEnt.Basics.Interfaces.General.MassFlowRateIn&nbsp;m_flow_feed&nbsp;&quot;Input&nbsp;for&nbsp;mass&nbsp;flow&nbsp;rate&quot;&nbsp;</p>
+<p>TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set &quot;Input for electric power&quot; </p>
+<p>TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_feed &quot;Input for mass flow rate&quot; </p>
 <p>TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_feed_H2 &quot;Input for mass flow rate of H2 output&quot; </p>
-<p>TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut&nbsp;P_el_ely&nbsp;&quot;Output&nbsp;for&nbsp;electric&nbsp;power&quot;&nbsp;</p>
-<p>TransiEnt.Basics.Interfaces.General.MassFlowRateOut&nbsp;m_flow_feed_ely&nbsp;&quot;Output&nbsp;for&nbsp;mass&nbsp;flow&nbsp;rate&quot;&nbsp;</p>
-<p>TransiEnt.Basics.Interfaces.General.MassFlowRateIn&nbsp;m_flow_feed_CH4_is&nbsp;&quot;Input&nbsp;for&nbsp;mass&nbsp;flow&nbsp;rate&nbsp;of&nbsp;CH4&quot;&nbsp;</p>
+<p>TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_el_ely &quot;Output for electric power&quot; </p>
+<p>TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_feed_ely &quot;Output for mass flow rate&quot; </p>
+<p>TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_feed_CH4_is &quot;Input for mass flow rate of CH4&quot; </p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -138,6 +138,6 @@ connect(add.u1, PID.y) annotation (Line(points={{66,74},{40,74},{12,74},{12,90},
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de)</p>
+<p>Model created by Oliver Schülting (oliver.schuelting@tuhh.de)</p>
 </html>"));
 end MassFlowFeedInSystemController;

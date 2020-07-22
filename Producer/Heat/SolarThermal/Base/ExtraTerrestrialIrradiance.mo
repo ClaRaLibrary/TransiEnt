@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Heat.SolarThermal.Base;
 model ExtraTerrestrialIrradiance "Calculates the extraterrestrial irradiance of the sun"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -72,7 +72,7 @@ equation
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Calculates the extraterrestrial irradiance of the sun, equation is given by Duffie/Beckman (2006): Solar Engineering of Thermal Processes</p>
-<p>Model&nbsp;provides&nbsp;the&nbsp;angle&nbsp;of&nbsp;incidence&nbsp;and&nbsp;the&nbsp;irradiance&nbsp;of&nbsp;the&nbsp;sun&nbsp;on&nbsp;a&nbsp;horizontal&nbsp;surface&nbsp;at&nbsp;a&nbsp;position&nbsp;with&nbsp;the&nbsp;parameter&nbsp;latitude&nbsp;in&nbsp;respect&nbsp;to&nbsp;local&nbsp;(=solar)&nbsp;time.&nbsp;Solar&nbsp;time&nbsp;and&nbsp;day&nbsp;have&nbsp;to&nbsp;be&nbsp;provided&nbsp;as&nbsp;outer&nbsp;variables.</p>
+<p>Model provides the angle of incidence and the irradiance of the sun on a horizontal surface at a position with the parameter latitude in respect to local (=solar) time. Solar time and day have to be provided as outer variables.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The model considers the differences of sun-earth distance during a year, neglects periodical differences of sun activity. </p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

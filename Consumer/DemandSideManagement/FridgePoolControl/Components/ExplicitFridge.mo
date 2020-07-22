@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components;
 model ExplicitFridge "Model of a hysteresis controlled fridge as explicit declaration"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -98,7 +98,7 @@ equation
                                                                          coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model&nbsp;of&nbsp;a&nbsp;hysteresis&nbsp;controlled&nbsp;fridge&nbsp;as&nbsp;explicit&nbsp;declaration.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model of a hysteresis controlled fridge as explicit declaration.</span></p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

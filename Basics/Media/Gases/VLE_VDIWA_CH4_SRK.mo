@@ -2,10 +2,10 @@ within TransiEnt.Basics.Media.Gases;
 record VLE_VDIWA_CH4_SRK "{CH4} VDIWA SRK"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -25,8 +25,7 @@ record VLE_VDIWA_CH4_SRK "{CH4} VDIWA SRK"
     final fixedMixingRatio=true,
     final nc_propertyCalculation=1,
     final vleFluidNames={"VDIWA2006.Methane(EOS=SRK,REF=STP)"},
-    final mixingRatio_propertyCalculation={1},
-    final concatVLEFluidName="VDIWA2006.Methane(EOS=SRK,REF=STP)");
+    final mixingRatio_propertyCalculation={1});
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This record contains the mixing ratio of the Vapor-Liquid Equilibrium CH4_SRK</p>

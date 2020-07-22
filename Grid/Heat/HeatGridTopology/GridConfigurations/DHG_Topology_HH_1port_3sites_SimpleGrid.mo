@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
 model DHG_Topology_HH_1port_3sites_SimpleGrid
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -306,13 +306,13 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
     N_tubes=25,
     m_flow_nom=m_flow_nom,
     p_nom(displayUnit="bar") = simCenter.p_nom[2],
-    h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         simCenter.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumerWest.p_nom,
-    h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         simCenter.p_nom[2],
         273.15 + 50,
@@ -344,13 +344,13 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
     N_tubes=25,
     m_flow_nom=m_flow_nom,
     p_nom(displayUnit="bar") = simCenter.p_nom[2],
-    h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         simCenter.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumerWest.p_nom,
-    h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         simCenter.p_nom[2],
         273.15 + 50,
@@ -383,13 +383,13 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
     N_tubes=25,
     m_flow_nom=m_flow_nom,
     p_nom(displayUnit="bar") = simCenter.p_nom[2],
-    h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         simCenter.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumerWest.p_nom,
-    h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         simCenter.p_nom[2],
         273.15 + 50,

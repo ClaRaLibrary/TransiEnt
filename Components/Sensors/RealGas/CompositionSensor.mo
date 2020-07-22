@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model CompositionSensor "One Port VLE Composition Sensor"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -71,14 +71,13 @@ model CompositionSensor "One Port VLE Composition Sensor"
 
   Modelica.SIunits.MolarMass molarMass=fluid.M;
 protected
-  TILMedia.VLEFluid_ph fluid(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluid(
     vleFluidType=medium,
-    p = gasPortIn.p,
-    h = if flowDefinition==1 then actualStream(gasPortIn.h_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.h_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.h_outflow) else inStream(gasPortOut.h_outflow),
-    xi = if flowDefinition==1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow),
+    p=gasPortIn.p,
+    h=if flowDefinition == 1 then actualStream(gasPortIn.h_outflow) elseif flowDefinition == 2 then noEvent(actualStream(gasPortIn.h_outflow)) elseif flowDefinition == 3 then inStream(gasPortIn.h_outflow) else inStream(gasPortOut.h_outflow),
+    xi=if flowDefinition == 1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition == 2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition == 3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow),
     computeSurfaceTension=false,
-    deactivateTwoPhaseRegion=true)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 
   // _____________________________________________
   //

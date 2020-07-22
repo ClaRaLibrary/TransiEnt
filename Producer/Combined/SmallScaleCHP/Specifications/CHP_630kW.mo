@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Combined.SmallScaleCHP.Specifications;
+﻿within TransiEnt.Producer.Combined.SmallScaleCHP.Specifications;
 record CHP_630kW "ICE 630 kWel"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,7 +65,7 @@ record CHP_630kW "ICE 630 kWel"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>A. K&ouml;ppen, &ldquo;Modellierung und Simulation von gekoppelten Energiesystemen in Modelica,&rdquo; Hamburg University of Technology, 2013.</p>
+<p>A. Köppen, &ldquo;Modellierung und Simulation von gekoppelten Energiesystemen in Modelica,&rdquo; Hamburg University of Technology, 2013.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end CHP_630kW;

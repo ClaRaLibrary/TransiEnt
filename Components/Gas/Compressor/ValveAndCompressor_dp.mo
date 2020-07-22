@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Compressor;
 model ValveAndCompressor_dp
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,8 +47,10 @@ model ValveAndCompressor_dp
   parameter SI.Pressure p_startJunction = 1e5 "Start pressure in the junction" annotation(Dialog(group="Initial Values"));
   parameter SI.MassFraction xi_startSplit[medium.nc-1] = medium.xi_default "Start composition in the split" annotation(Dialog(group="Initial Values"));
   parameter SI.MassFraction xi_startJunction[medium.nc-1] = medium.xi_default "Start composition in the junction" annotation(Dialog(group="Initial Values"));
-  parameter SI.SpecificEnthalpy h_startSplit = -180e3 "Start specific enthalpy in the split" annotation(Dialog(group="Initial Values"));
-  parameter SI.SpecificEnthalpy h_startJunction = -180e3 "Start specific enthalpy in the Junction" annotation(Dialog(group="Initial Values"));
+  parameter SI.Temperature T_startSplit = simCenter.T_ground "Start temperature in the split" annotation(Dialog(group="Initial Values"));
+  parameter SI.Temperature T_startJunction = simCenter.T_ground "Start temperature in the Junction" annotation(Dialog(group="Initial Values"));
+  parameter SI.SpecificEnthalpy h_startSplit = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(medium, p_startSplit, T_startSplit, xi_startSplit) "Start specific enthalpy in the split" annotation(Dialog(group="Initial Values"));
+  parameter SI.SpecificEnthalpy h_startJunction = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(medium, p_startJunction, T_startJunction, xi_startJunction) "Start specific enthalpy in the Junction" annotation(Dialog(group="Initial Values"));
   parameter Integer initOptionSplit=0 "Type of initialisation" annotation (Dialog(tab="Initialisation"), choices(
       choice=0 "Use guess values",
       choice=1 "Steady state",
@@ -63,6 +65,8 @@ model ValveAndCompressor_dp
       choice=202 "Steady enthalpy",
       choice=208 "Steady pressure and enthalpy",
       choice=210 "Steady density"));
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
+
   // _____________________________________________
   //
   //                 Outer Models
@@ -96,14 +100,16 @@ public
 protected
   model ValveRecord
     extends TransiEnt.Basics.Icons.Record;
-    input SI.MassFlowRate m_flow "Mass flow rate";
-    input SI.PressureDifference Delta_p "Pressure difference";
-    input SI.Temperature T_in "Inlet temperature";
-    input SI.Temperature T_out "Outlet temperature";
-    input SI.Pressure p_in "Inlet pressure";
-    input SI.Pressure p_out "Outlet pressure";
-    input SI.SpecificEnthalpy h_in "Inlet specific enthalpy";
-    input SI.SpecificEnthalpy h_out "Outlet specific enthalpy";
+    parameter Boolean showSummary=true;
+
+    input SI.MassFlowRate m_flow if showSummary "Mass flow rate";
+    input SI.PressureDifference Delta_p if showSummary "Pressure difference";
+    input SI.Temperature T_in if showSummary "Inlet temperature";
+    input SI.Temperature T_out if showSummary "Outlet temperature";
+    input SI.Pressure p_in if showSummary "Inlet pressure";
+    input SI.Pressure p_out if showSummary "Outlet pressure";
+    input SI.SpecificEnthalpy h_in if showSummary "Inlet specific enthalpy";
+    input SI.SpecificEnthalpy h_out if showSummary "Outlet specific enthalpy";
   end ValveRecord;
 
   model CompressorRecord
@@ -135,83 +141,83 @@ protected
   end Summary;
 
 public
-  inner Summary  summary(
-   gasPortIn(
-    mediumModel=medium,
-    xi=split.summary.gasPort1.xi,
-    x=split.summary.gasPort1.x,
-    m_flow=split.summary.gasPort1.m_flow,
-    T=split.summary.gasPort1.T,
-    p=split.summary.gasPort1.p,
-    h=split.summary.gasPort1.h,
-    rho=split.summary.gasPort1.rho),
-   gasPortOut(
-    mediumModel=medium,
-    xi=junction.summary.gasPort3.xi,
-    x=junction.summary.gasPort3.x,
-    m_flow=junction.summary.gasPort3.m_flow,
-    T=junction.summary.gasPort3.T,
-    p=junction.summary.gasPort3.p,
-    h=junction.summary.gasPort3.h,
-    rho=junction.summary.gasPort3.rho),
-   compressor(
-    m_flow=compressor.summary.gasPortIn.m_flow,
-    V_flow=compressor.summary.outline.V_flow,
-    P_hyd=compressor.summary.outline.P_hyd,
-    P_shaft=compressor.summary.outline.P_shaft,
-    P_el=compressor.summary.outline.P_el,
-    W_el=compressor.summary.outline.W_el,
-    Pi=compressor.summary.outline.Pi,
-    Delta_p=compressor.summary.outline.Delta_p,
-    eta=compressor.summary.outline.eta,
-    T_in=compressor.summary.gasPortIn.T,
-    T_out=compressor.summary.gasPortOut.T,
-    p_in=compressor.summary.gasPortIn.p,
-    p_out=compressor.summary.gasPortOut.p,
-    h_in=compressor.summary.gasPortIn.h,
-    h_out=compressor.summary.gasPortOut.h),
-   valve(
-    m_flow=valve.summary.gasPortIn.m_flow,
-    Delta_p=valve.gasPortIn.p-gasPortOut.p,
-    T_in=valve.summary.gasPortIn.T,
-    T_out=valve.summary.gasPortOut.T,
-    p_in=valve.summary.gasPortIn.p,
-    p_out=valve.summary.gasPortOut.p,
-    h_in=valve.summary.gasPortIn.h,
-    h_out=valve.summary.gasPortOut.h),
-   costs(
-    costs=compressor.summary.costs.costs,
-    investCosts=compressor.summary.costs.investCosts,
-    demandCosts=compressor.summary.costs.demandCosts,
-    oMCosts=compressor.summary.costs.oMCosts,
-    otherCosts=compressor.summary.costs.otherCosts,
-    revenues=compressor.summary.costs.revenues))
-  annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+  inner Summary summary(
+    gasPortIn(
+      mediumModel=medium,
+      xi=split.summary.gasPort1.xi,
+      x=split.summary.gasPort1.x,
+      m_flow=split.summary.gasPort1.m_flow,
+      T=split.summary.gasPort1.T,
+      p=split.summary.gasPort1.p,
+      h=split.summary.gasPort1.h,
+      rho=split.summary.gasPort1.rho),
+    gasPortOut(
+      mediumModel=medium,
+      xi=junction.summary.gasPort3.xi,
+      x=junction.summary.gasPort3.x,
+      m_flow=junction.summary.gasPort3.m_flow,
+      T=junction.summary.gasPort3.T,
+      p=junction.summary.gasPort3.p,
+      h=junction.summary.gasPort3.h,
+      rho=junction.summary.gasPort3.rho),
+    compressor(
+      m_flow=compressor.summary.gasPortIn.m_flow,
+      V_flow=compressor.summary.outline.V_flow,
+      P_hyd=compressor.summary.outline.P_hyd,
+      P_shaft=compressor.summary.outline.P_shaft,
+      P_el=compressor.summary.outline.P_el,
+      W_el=compressor.summary.outline.W_el,
+      Pi=compressor.summary.outline.Pi,
+      Delta_p=compressor.summary.outline.Delta_p,
+      eta=compressor.summary.outline.eta,
+      T_in=compressor.summary.gasPortIn.T,
+      T_out=compressor.summary.gasPortOut.T,
+      p_in=compressor.summary.gasPortIn.p,
+      p_out=compressor.summary.gasPortOut.p,
+      h_in=compressor.summary.gasPortIn.h,
+      h_out=compressor.summary.gasPortOut.h),
+    valve(
+      m_flow=valve.summary.gasPortIn.m_flow,
+      showSummary=useFluidModelsForSummary,
+      Delta_p=valve.gasPortIn.p - gasPortOut.p,
+      T_in=valve.summary.gasPortIn.T,
+      T_out=valve.summary.gasPortOut.T,
+      p_in=valve.summary.gasPortIn.p,
+      p_out=valve.summary.gasPortOut.p,
+      h_in=valve.summary.gasPortIn.h,
+      h_out=valve.summary.gasPortOut.h),
+    costs(
+      costs=compressor.summary.costs.costs,
+      investCosts=compressor.summary.costs.investCosts,
+      demandCosts=compressor.summary.costs.demandCosts,
+      oMCosts=compressor.summary.costs.oMCosts,
+      otherCosts=compressor.summary.costs.otherCosts,
+      revenues=compressor.summary.costs.revenues)) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
 protected
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction(
     medium=medium,
     volume=volumeJunction,
     initOption=initOptionJunction,
-    xi(start=xi_startJunction),
-    h(start=h_startJunction),
-    p(start=p_startJunction))      annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+    p_start=p_startJunction,
+    h_start=h_startJunction,
+    xi_start=xi_startJunction,
+    T_start=T_startJunction)      annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split(
     medium=medium,
     volume=volumeSplit,
     initOption=initOptionSplit,
-    xi(start=xi_startSplit),
-    h(start=h_startSplit),
-    p(start=p_startSplit))      annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+    p_start=p_startSplit,
+    h_start=h_startSplit,
+    xi_start=xi_startSplit,
+    T_start=T_startSplit)      annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Controller.ControllerValveAndCompressor_dp                                     controllerValveOrCompressor annotation (Placement(transformation(extent={{-10,32},{10,52}})));
 
   Compressor compressor(
     medium=medium,
     presetVariableType="dp",
     use_Delta_p_input=true) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  VolumesValvesFittings.ValveDesiredMassFlow                          valve(
-    medium=medium)
-              annotation (Placement(transformation(extent={{-10,-36},{10,-24}})));
+  VolumesValvesFittings.ValveDesiredMassFlow valve(medium=medium, useFluidModelsForSummary=useFluidModelsForSummary) annotation (Placement(transformation(extent={{-10,-36},{10,-24}})));
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlowSensoreBefore(medium=medium) annotation (Placement(transformation(extent={{-70,0},{-50,20}})));
 
 

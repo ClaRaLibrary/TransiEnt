@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs;
 model PumpStorage "Pumped storage cost specification record"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ model PumpStorage "Pumped storage cost specification record"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] M. Aebli, J. Tr&uuml;ssel, &quot;Rentabilit&auml;t&nbsp;von&nbsp;Pumpspeicherkraftwerken&quot;, 2012, Zuerich</p>
+<p>[1] M. Aebli, J. Trüssel, &quot;Rentabilität von Pumpspeicherkraftwerken&quot;, 2012, Zuerich</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end PumpStorage;

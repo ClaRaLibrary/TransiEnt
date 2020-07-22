@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Base;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Base;
 model ElectrolyzerEfficiencyCharlineSilyzer100 "Efficiency charline for Silyzer 100"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -64,7 +64,7 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>[1] Siemens AG (2011). Enabling the power of hydrogen. Industry Sector - Hydrogen Electrolyzer - Product Line 1. Erlangen. </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Created by Patrick G&ouml;ttsch (patrick.goettsch@tuhh.de) in April 2014</p>
+<p>Created by Patrick Göttsch (patrick.goettsch@tuhh.de) in April 2014</p>
 <p>Edited by Tom Lindemann (tom.lindemann@tuhh.de) in Dec 2015</p>
 <p>Edited by Lisa Andresen (andresen@tuhh.de) in May 2016</p>
 <p>Edited by Carsten Bode (c.bode@tuhh.de) in March 2017</p>

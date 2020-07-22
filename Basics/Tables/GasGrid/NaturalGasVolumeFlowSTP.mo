@@ -1,10 +1,10 @@
-within TransiEnt.Basics.Tables.GasGrid;
+﻿within TransiEnt.Basics.Tables.GasGrid;
 model NaturalGasVolumeFlowSTP "Model for describing the average volume flow of natural gas"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,7 @@ model NaturalGasVolumeFlowSTP "Model for describing the average volume flow of n
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>Source:</p>
-<p>Brauer, Thomas ; Schoof, Ren&eacute;: Kompaktes 1 MW - PEM - Wasserelektrolysesystem. Regenerativer Wasserstoff f&uuml;r Mobilit&auml;t und Energiespeicherung. In: <i>NIP Vollversamlung</i>, 2013</p>
+<p>Brauer, Thomas ; Schoof, Ren&eacute;: Kompaktes 1 MW - PEM - Wasserelektrolysesystem. Regenerativer Wasserstoff für Mobilität und Energiespeicherung. In: <i>NIP Vollversamlung</i>, 2013</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>(no remarks) </p>
 <p><br><br><img src=\"modelica://TransiEnt/Images/Gas Ganglinie.JPG\"/></p>

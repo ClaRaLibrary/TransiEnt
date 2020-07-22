@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Heat;
 model Heatflow_L2 "Heat flow boundary with prescribed power and given volume (L2)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,14 +40,14 @@ model Heatflow_L2 "Heat flow boundary with prescribed power and given volume (L2
   parameter SI.Power Q_flow_const=100e3 "|Heat demand|Constant heating power" annotation (Dialog(enable = not use_Q_flow_in));
 
   parameter SI.MassFlowRate m_flow_nom=simCenter.m_flow_nom "|Heat exchanger|Nominal mass flow rate";
-  parameter SI.Pressure p_nom=simCenter.p_nom[1] "|Heat exchanger|Nominal pressure";
+  parameter SI.Pressure p_nom=simCenter.p_nom[1] "Nominal pressure" annotation (Dialog(group="Heat exchanger"));
   parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_nom=1e5 "|Heat exchanger|Nominal specific enthalpy";
   parameter SI.HeatCapacity C=1e9 "|Heat exchanger|Heat capacity (geometry is calculated by this value)" annotation (Evaluate=true, HideResult=true);
-  parameter ClaRa.Basics.Units.Pressure p_start=simCenter.p_nom[1] "|Heat exchanger|Start value of system pressure";
+  parameter SI.Pressure p_start=simCenter.p_nom[1] "Start value of system pressure" annotation (Dialog(group="Heat exchanger"));
   parameter SI.Temperature T_start=323.15 "|Heat exchanger|Initial temperature" annotation (Evaluate=true, HideResult=true);
   parameter Integer initOption=0 "|Heat exchanger|Type of initialisation" annotation(choices(choice = 0 "Use guess values", choice = 1 "Steady state", choice=201 "Steady pressure", choice = 202 "Steady enthalpy", choice=204 "Fixed rel.level (for phaseBorder = idealSeparated only)",  choice=205 "Fixed rel.level and steady pressure (for phaseBorder = idealSeparated only)"));
   replaceable model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2
-   constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L2 "|Heat exchanger|Pressure loss model" annotation (choicesAllMatching=true, Documentation(info="<html>
+   constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.PressureLoss_L2 "|Heat exchanger|Pressure loss model" annotation (choicesAllMatching=true, Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Model for pressure loss</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
@@ -116,7 +116,7 @@ public
         rotation=180,
         origin={30,0})));
 
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 controlValve(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 controlValve(
       openingInputIsActive=true,
     showData=false,
     redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (

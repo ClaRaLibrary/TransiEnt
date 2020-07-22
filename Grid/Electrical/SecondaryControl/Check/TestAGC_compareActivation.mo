@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Electrical.SecondaryControl.Check;
 model TestAGC_compareActivation "Compares three variants of secondary balancing control activation"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ TransiEnt.Grid.Electrical.SecondaryControl.AGC aGC_ProRata(
     startTime=60,
     isExternalTielineSetpoint=true,
     redeclare Activation.ProRataActivation SecondaryControlActivation "Pro Rata Activation") annotation (Placement(transformation(extent={{6,10},{26,30}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{66,-14},{86,6}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{66,-14},{86,6}})));
   Modelica.Blocks.Sources.Constant P_tie_set(k=0) annotation (Placement(transformation(extent={{-58,52},{-38,72}})));
   Modelica.Blocks.Sources.Step P_tie_is(
     height=10e6,

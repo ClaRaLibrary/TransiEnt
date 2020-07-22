@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell.Check;
 model TestSOFC "Model for testing the SOFC model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,6 +35,7 @@ model TestSOFC "Model for testing the SOFC model"
     A_cell=0.0625,
     cp=850,
     ka=0.3,
+    usePowerPort=true,
     T_stack(start=25 + 273),
     v_n=0.733,
     redeclare Basics.Interfaces.Electrical.ApparentPowerPort epp,
@@ -147,7 +148,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(ElectricGrid.epp, GridMeter.epp_OUT) annotation (Line(points={{80,88},{70.95,88},{70.95,90},{61.4,90}},       color={0,127,0}));
-  connect(PowerController.V_cell,FC.v_stack)  annotation (Line(points={{-43,26.6},{-43,18},{-68,18},{-68,6},{24,6},{24,-27},{-2,-27}},
+  connect(PowerController.V_cell,FC.v_stack)  annotation (Line(points={{-43,26.6},{-43,18},{-68,18},{-68,6},{24,6},{24,-27},{-23,-27}},
                                                                                                     color={0,0,127}));
   connect(PowerController.y, FC.I_load) annotation (Line(points={{-63,32},{-63,32},{-78,32},{-78,-28.26},{-40.22,-28.26}}, color={0,0,127}));
   connect(GridMeter.P, PowerController.deltaP) annotation (Line(points={{48.2,82.2},{48.2,64},{48,64},{48,46},{-36,46},{-36,38},{-43,38}}, color={0,0,127}));

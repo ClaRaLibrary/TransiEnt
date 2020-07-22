@@ -13,3 +13,4 @@ TwoAxisSynchronousMachineComplexSubtransient
 MotorComplex
 InductionMotorComplex_L1E
 InductionMotorComplex_L3E
+InductionMotorSimple

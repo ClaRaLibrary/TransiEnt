@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Gas;
 model GasGrid_SubSystem "Very simple gas grid featuring the main components"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,10 +20,10 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  outer TransiEnt.SimCenter simCenter;
+
   // _____________________________________________
   //
-  //                  Parameters
+  //               Visible Parameters
   // _____________________________________________
 
   // feedInStation
@@ -36,10 +36,10 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
   parameter Modelica.SIunits.Temperature T_Init=283.15 "|Initialization|Sets initial value for T";
   parameter Modelica.SIunits.Efficiency eta_n(
     min=0,
-    max=1)=0.75 "|Electrolyzer|Nominal efficency coefficient (min = 0, max = 1)";
+    max=1) = 0.75 "|Electrolyzer|Nominal efficency coefficient (min = 0, max = 1)";
   parameter Modelica.SIunits.Efficiency eta_scale(
     min=0,
-    max=1)=0 "|Electrolyzer|Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)";
+    max=1) = 0 "|Electrolyzer|Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)";
   parameter Modelica.SIunits.AbsolutePressure p_out=35e5 "|Electrolyzer|Hydrogen output pressure from electrolyzer";
   parameter Modelica.SIunits.Temperature T_out=283.15 "|Electrolyzer|Hydrogen output temperature from electrolyzer";
   parameter Real t_overload=0.5*3600 "|Electrolyzer|Maximum time the ely can work in overload in seconds";
@@ -55,39 +55,37 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
   parameter Real f_2=0.5;
   parameter Real phi_H2max=0.1;
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
-    initOption=0,
-    xi(
-    start =  init.junction1.xi_in),
-    h(
-    start = init.junction1.h_in),
-    volume=1,
-    p(
-    start = init.junction1.p))
-                              annotation (Placement(transformation(
-        extent={{-10,10},{10,-10}},
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
+
+
+  // _____________________________________________
+  //
+  //                Interfaces
+  // _____________________________________________
+
+  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp "Electric power port" annotation (Placement(transformation(extent={{-220,20},{-180,60}}), iconTransformation(extent={{-220,20},{-180,60}})));
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set "Set power" annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={-60,-98})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe1(
-    frictionAtInlet=true,
-    frictionAtOutlet=true,
-    initOption=0,
-    length=1000,
-    N_cv=5,
-    h_start = ones(pipe1.N_cv)*init.pipe1.h_in,
-    p_start = linspace(
-        init.pipe1.p_in,
-        init.pipe1.p_out,
-        pipe1.N_cv),
-    m_flow_start=ones(pipe1.N_cv + 1)*init.pipe1.m_flow,
-    xi_start =  init.pipe1.xi_in,
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
-        extent={{-20,-10},{20,10}},
-        rotation=90,
-        origin={-60,-56})));
-  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source1(m_flow_nom=0) annotation (Placement(transformation(extent={{-200,-118},{-160,-78}})));
-  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source2(m_flow_nom=0) annotation (Placement(transformation(extent={{200,42},{160,82}})));
-  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink1(p_nom=0, m_flow_const=1000*m_flow_start) annotation (Placement(transformation(extent={{-22,2},{-42,22}})));
+        origin={-208,138}), iconTransformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={-196,140})));
+  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasIn(Medium=simCenter.gasModel1) "Gas port" annotation (Placement(transformation(extent={{190,-62},{220,-32}}), iconTransformation(extent={{190,-60},{210,-40}})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+
+
+public
   inner InitGasGrid_PtG init(
     source1_T=source1.T_const,
     source1_xi=source2.xi_const,
@@ -107,156 +105,11 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
     sink1_m_flow=sink1.m_flow_const,
     sink2_m_flow=1e-5,
     feedIn1_m_flow=m_flow_start,
-    feedIn2_m_flow=m_flow_start)
-                       annotation (Placement(transformation(extent={{-194,162},{-160,196}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe2(
-    frictionAtInlet=true,
-    frictionAtOutlet=true,
-    initOption=0,
-    h_start = ones(pipe2.N_cv)*init.pipe2.h_in,
-    p_start = linspace(
-        init.pipe2.p_in,
-        init.pipe2.p_out,
-        pipe2.N_cv),
-    m_flow_start=ones(pipe2.N_cv + 1)*init.pipe2.m_flow,
-    xi_start =  init.pipe2.xi_in,
-    length=1000,
-    N_cv=5,
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
-        extent={{-20,-10},{20,10}},
-        rotation=180,
-        origin={0,62})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe3(
-    frictionAtInlet=true,
-    frictionAtOutlet=true,
-    initOption=0,
-    h_start = ones(pipe3.N_cv)*init.pipe3.h_in,
-    p_start = linspace(
-        init.pipe3.p_in,
-        init.pipe3.p_out,
-        pipe3.N_cv),
-    m_flow_start=ones(pipe3.N_cv + 1)*init.pipe3.m_flow,
-    xi_start =  init.pipe3.xi_in,
-    length=1000,
-    N_cv=5,
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
-        extent={{-20,-10},{20,10}},
-        rotation=270,
-        origin={60,22})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe4(
-    frictionAtInlet=true,
-    frictionAtOutlet=true,
-    initOption=0,
-    h_start = ones(pipe4.N_cv)*init.pipe4.h_in,
-    p_start = linspace(
-        init.pipe4.p_in,
-        init.pipe4.p_out,
-        pipe4.N_cv),
-    m_flow_start=ones(pipe4.N_cv + 1)*init.pipe4.m_flow,
-    xi_start =  init.pipe4.xi_in,
-    length=1000,
-    N_cv=5,
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
-        extent={{-20,-10},{20,10}},
-        rotation=0,
-        origin={0,-98})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
-    initOption=0,
-    p(
-    start = init.junction2.p),
-    xi(
-    start =  init.junction2.xi_out),
-    h(
-    start = init.junction2.h_out),
-    volume=1) annotation (Placement(transformation(
-        extent={{-10,10},{10,-10}},
-        rotation=270,
-        origin={-60,12})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
-    initOption=0,
-    xi(
-    start =  init.junction3.xi_in),
-    h(
-    start = init.junction3.h_in),
-    volume=1,
-    p(
-    start = init.junction3.p))
-                              annotation (Placement(transformation(
+    feedIn2_m_flow=m_flow_start) annotation (Placement(transformation(extent={{-194,162},{-160,196}})));
+  Modelica.Blocks.Routing.Replicator replicator(nout=2) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={60,62})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(
-    initOption=0,
-    p(
-    start = init.junction4.p),
-    xi(
-    start =  init.junction4.xi_out),
-    h(
-    start = init.junction4.h_out),
-    volume=1) annotation (Placement(transformation(
-        extent={{-10,10},{10,-10}},
-        rotation=270,
-        origin={60,-48})));
-  TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{-220,20},{-180,60}}), iconTransformation(extent={{-220,20},{-180,60}})));
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-208,138}),
-                         iconTransformation(
-        extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-196,140})));
-protected
-  TransiEnt.Grid.Gas.Controller.MaxH2MassFlow_phi c_H2_max_1(phi_H2max=phi_H2max) annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-138,-98})));
-  Modelica.Blocks.Math.Gain gainFeedIn1(k=f_1) annotation (Placement(transformation(
-        extent={{10,-9.5},{-10,9.5}},
-        rotation=90,
-        origin={-112,8.5})));
-public
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn1(
-    initOption=0,
-    xi(
-    start =  init.junction1.xi_in),
-    h(
-    start = init.junction1.h_in),
-    volume=0.1,
-    p(
-    start = init.junction1.p))
-                              annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=180,
-        origin={-110,-98})));
-  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_1(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-94,-98},{-76,-80}})));
-protected
-  TransiEnt.Grid.Gas.Controller.MaxH2MassFlow_phi c_H2_max_2(phi_H2max=phi_H2max) annotation (Placement(transformation(
-        extent={{10,-10},{-10,10}},
-        rotation=0,
-        origin={144,62})));
-public
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn2(
-    initOption=0,
-    xi(
-    start =  init.junction1.xi_in),
-    h(
-    start = init.junction1.h_in),
-    volume=0.1,
-    p(
-    start = init.junction1.p))
-                              annotation (Placement(transformation(
-        extent={{10,-10},{-10,10}},
-        rotation=180,
-        origin={116,62})));
-  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_2(compositionDefinedBy=2) annotation (Placement(transformation(extent={{80,62},{100,82}})));
-protected
-  Modelica.Blocks.Math.Gain gainFeedIn2(k=f_2) annotation (Placement(transformation(extent={{70,128},{90,148}})));
-public
-  Modelica.Blocks.Routing.Replicator replicator(nout=2) annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-172,138})));
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasIn(Medium=simCenter.gasModel1) annotation (Placement(transformation(extent={{190,-62},{220,-32}}), iconTransformation(extent={{190,-60},{210,-40}})));
   Components.Electrical.Grid.Line_PS line_L1_PS annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=0,
@@ -298,7 +151,167 @@ public
     P_el_max=P_el_max*f_2,
     P_el_min=P_el_min*f_2,
     P_el_overload=P_el_overload*f_2) annotation (Placement(transformation(extent={{100,100},{134,132}})));
+
+
+protected
+  TransiEnt.Grid.Gas.Controller.MaxH2MassFlow_phi c_H2_max_1(phi_H2max=phi_H2max) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={-138,-98})));
+  Modelica.Blocks.Math.Gain gainFeedIn1(k=f_1) annotation (Placement(transformation(
+        extent={{10,-9.5},{-10,9.5}},
+        rotation=90,
+        origin={-112,8.5})));
+  Modelica.Blocks.Math.Gain gainFeedIn2(k=f_2) annotation (Placement(transformation(extent={{70,128},{90,148}})));
+  TransiEnt.Grid.Gas.Controller.MaxH2MassFlow_phi c_H2_max_2(phi_H2max=phi_H2max) annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=0,
+        origin={144,62})));
+
+  // Source
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source1(m_flow_nom=0) annotation (Placement(transformation(extent={{-200,-118},{-160,-78}})));
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source2(m_flow_nom=0) annotation (Placement(transformation(extent={{200,42},{160,82}})));
+
+  // Consumer
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink1(p_nom=0, m_flow_const=1000*m_flow_start) annotation (Placement(transformation(extent={{-22,2},{-42,22}})));
+
+  // Pipes and Fittings
+
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
+    initOption=0,
+    xi(start=init.junction1.xi_in),
+    h(start=init.junction1.h_in),
+    volume=1,
+    p(start=init.junction1.p)) annotation (Placement(transformation(
+        extent={{-10,10},{10,-10}},
+        rotation=0,
+        origin={-60,-98})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
+    frictionAtInlet=true,
+    frictionAtOutlet=true,
+    initOption=0,
+    length=1000,
+    N_cv=5,
+    h_start=ones(pipe1.N_cv)*init.pipe1.h_in,
+    p_start=linspace(
+        init.pipe1.p_in,
+        init.pipe1.p_out,
+        pipe1.N_cv),
+    m_flow_start=ones(pipe1.N_cv + 1)*init.pipe1.m_flow,
+    xi_start=init.pipe1.xi_in,
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
+        extent={{-20,-10},{20,10}},
+        rotation=90,
+        origin={-60,-56})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
+    frictionAtInlet=true,
+    frictionAtOutlet=true,
+    initOption=0,
+    h_start=ones(pipe2.N_cv)*init.pipe2.h_in,
+    p_start=linspace(
+        init.pipe2.p_in,
+        init.pipe2.p_out,
+        pipe2.N_cv),
+    m_flow_start=ones(pipe2.N_cv + 1)*init.pipe2.m_flow,
+    xi_start=init.pipe2.xi_in,
+    length=1000,
+    N_cv=5,
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
+        extent={{-20,-10},{20,10}},
+        rotation=180,
+        origin={0,62})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
+    frictionAtInlet=true,
+    frictionAtOutlet=true,
+    initOption=0,
+    h_start=ones(pipe3.N_cv)*init.pipe3.h_in,
+    p_start=linspace(
+        init.pipe3.p_in,
+        init.pipe3.p_out,
+        pipe3.N_cv),
+    m_flow_start=ones(pipe3.N_cv + 1)*init.pipe3.m_flow,
+    xi_start=init.pipe3.xi_in,
+    length=1000,
+    N_cv=5,
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
+        extent={{-20,-10},{20,10}},
+        rotation=270,
+        origin={60,22})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe4(
+    frictionAtInlet=true,
+    frictionAtOutlet=true,
+    initOption=0,
+    h_start=ones(pipe4.N_cv)*init.pipe4.h_in,
+    p_start=linspace(
+        init.pipe4.p_in,
+        init.pipe4.p_out,
+        pipe4.N_cv),
+    m_flow_start=ones(pipe4.N_cv + 1)*init.pipe4.m_flow,
+    xi_start=init.pipe4.xi_in,
+    length=1000,
+    N_cv=5,
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.CharLine_L4 (final temperatureDifference="Outlet")) annotation (Placement(transformation(
+        extent={{-20,-10},{20,10}},
+        rotation=0,
+        origin={0,-98})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
+    initOption=0,
+    p(start=init.junction2.p),
+    xi(start=init.junction2.xi_out),
+    h(start=init.junction2.h_out),
+    volume=1) annotation (Placement(transformation(
+        extent={{-10,10},{10,-10}},
+        rotation=270,
+        origin={-60,12})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
+    initOption=0,
+    xi(start=init.junction3.xi_in),
+    h(start=init.junction3.h_in),
+    volume=1,
+    p(start=init.junction3.p)) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={60,62})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(
+    initOption=0,
+    p(start=init.junction4.p),
+    xi(start=init.junction4.xi_out),
+    h(start=init.junction4.h_out),
+    volume=1) annotation (Placement(transformation(
+        extent={{-10,10},{10,-10}},
+        rotation=270,
+        origin={60,-48})));
+
+public
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn1(
+    initOption=0,
+    xi(start=init.junction1.xi_in),
+    h(start=init.junction1.h_in),
+    volume=0.1,
+    p(start=init.junction1.p)) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-110,-98})));
+  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_1(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-94,-98},{-76,-80}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn2(
+    initOption=0,
+    xi(start=init.junction1.xi_in),
+    h(start=init.junction1.h_in),
+    volume=0.1,
+    p(start=init.junction1.p)) annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=180,
+        origin={116,62})));
+  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_2(compositionDefinedBy=2) annotation (Placement(transformation(extent={{80,62},{100,82}})));
+
+
 equation
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
+
   connect(junction2.gasPort1, pipe2.gasPortOut) annotation (Line(
       points={{-60,22},{-60,62},{-20,62}},
       color={255,255,0},
@@ -343,9 +356,8 @@ equation
       points={{-76,-98},{-70,-98}},
       color={255,255,0},
       thickness=1.5));
-  connect(gainFeedIn2.u, replicator.y[2]) annotation (Line(points={{68,138},{68,138},{-161,138},{-161,138.5}},                           color={0,0,127}));
-  connect(P_el_set, replicator.u) annotation (Line(points={{-208,138},{-208,138},{-184,138}},
-                                                                                           color={0,0,127}));
+  connect(gainFeedIn2.u, replicator.y[2]) annotation (Line(points={{68,138},{68,138},{-161,138},{-161,138.5}}, color={0,0,127}));
+  connect(P_el_set, replicator.u) annotation (Line(points={{-208,138},{-208,138},{-184,138}}, color={0,0,127}));
   connect(junction3.gasPort3, vleCompositionSensor_2.gasPortIn) annotation (Line(
       points={{70,62},{80,62}},
       color={255,255,0},
@@ -403,16 +415,18 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(gainFeedIn1.u, replicator.y[1]) annotation (Line(points={{-112,20.5},{-112,20.5},{-112,128},{-112,137.5},{-161,137.5}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(
+  annotation (
+    Icon(coordinateSystem(
         preserveAspectRatio=false,
         extent={{-200,-200},{200,200}},
         initialScale=0.1), graphics={
-                                   Rectangle(
+        Rectangle(
           extent={{-200,200},{200,-200}},
           lineColor={135,135,135},
           radius=5,
           fillColor={255,255,255},
-          fillPattern=FillPattern.Solid), Text(
+          fillPattern=FillPattern.Solid),
+        Text(
           extent={{-200,24},{200,-24}},
           lineColor={135,135,135},
           fillColor={255,255,255},
@@ -424,11 +438,10 @@ equation
           extent={{-118,110},{110,-108}},
           lineColor={255,255,0},
           lineThickness=0.5)}),
-                            Diagram(coordinateSystem(
+    Diagram(coordinateSystem(
         preserveAspectRatio=false,
         extent={{-200,-200},{200,200}},
-        initialScale=0.1), graphics={
-                                   Rectangle(
+        initialScale=0.1), graphics={Rectangle(
           extent={{-200,200},{200,-200}},
           lineColor={135,135,135},
           radius=5,
@@ -441,7 +454,7 @@ equation
           textString="Gas Grid",
           origin={0,-164},
           rotation=360)}),
-Documentation(info="<html>
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Small closed-loop gas grid subsystem. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

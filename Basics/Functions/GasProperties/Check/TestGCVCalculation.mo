@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Functions.GasProperties.Check;
 model TestGCVCalculation "Tester for adaptive gross calorific value calculation"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,11 +37,11 @@ model TestGCVCalculation "Tester for adaptive gross calorific value calculation"
     //table for discrete raise of hydrogen content
   TransiEnt.Components.Boundaries.Gas.RealGasCompositionByWtFractions_stepVariation gasCompositionByWtFractions_linearVariation                                          annotation (Placement(transformation(extent={{-34,-10},{-14,10}})));
 protected
-  TILMedia.VLEFluid_pT realGas(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT realGas(
     p=p,
     T=T,
     xi=gasCompositionByWtFractions_linearVariation.xi,
-    vleFluidType=simCenter.gasModel1)                  annotation (Placement(transformation(extent={{-96,-18},{-76,2}})));
+    vleFluidType=simCenter.gasModel1) annotation (Placement(transformation(extent={{-96,-18},{-76,2}})));
 protected
   TILMedia.Gas_pT idealGas(
     p=p,

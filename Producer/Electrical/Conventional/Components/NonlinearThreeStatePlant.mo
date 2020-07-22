@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Electrical.Conventional.Components;
+﻿within TransiEnt.Producer.Electrical.Conventional.Components;
 model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power limited (shuts down below minimum power), with primary and secondary balancing controller where secondary balancing power is lumped inside"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -96,6 +96,8 @@ model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power li
 
   parameter SI.Time t_min_operating = 0 "Minimum operation time" annotation(Dialog(group="Physical Constraints"));
 
+  parameter Boolean smoothShutDown=true "shut down process will be smoothed - power gradient will be limit by 'P_grad_operating'" annotation(Dialog(group="Physical Constraints"));
+
   parameter SI.Time MinimumDownTime=0 "Minimum time the plant needs to be shut down before starting again" annotation(Dialog(group="Physical Constraints"));
 
   parameter SI.Time T_plant=0.63/P_grad_max_star "Time constant of first order model representing plant dynamics" annotation(Dialog(group="Physical Constraints"));
@@ -103,6 +105,8 @@ model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power li
   parameter SI.MassFraction CO2_Deposition_Rate=0 "Fraction of CO2 that is deposited via CCS" annotation (Dialog(group="Physical Constraints"));
 
   parameter Base.CCS.NoCCS CCS_Characteristics=Base.CCS.NoCCS() "Choose characteristic efficiency losses due to CCS" annotation (Dialog(group="Physical Constraints"), __Dymola_choicesAllMatching=true);
+
+  parameter Integer quantity=1 "amount of power plant blocks into which nominal power is split" annotation (Dialog(group="Physical Constraints"));
 
 
   // _____________________________________________
@@ -119,7 +123,7 @@ model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power li
   //
   //                  Interfaces
   // _____________________________________________
-  Modelica.Blocks.Interfaces.BooleanInput UseCCS if CO2_Deposition_Rate>0 "true, if CCS is used" annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+  Modelica.Blocks.Interfaces.BooleanInput useCCS if CO2_Deposition_Rate>0 "true, if CCS is used"                          annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
 
   // _____________________________________________
   //
@@ -157,6 +161,7 @@ public
     thres=thres,
     t_startup=t_startup,
     t_min_operating=t_min_operating,
+    smoothShutDown=smoothShutDown,
     thres_hyst=thres_hyst,
     MinimumDownTime=MinimumDownTime) constrainedby TransiEnt.Components.Turbogroups.Base.PartialTurbine "Choice of turbine model" annotation (
     choicesAllMatching=true,
@@ -170,12 +175,14 @@ public
         extent={{-5,-5},{5,5}},
         rotation=270,
         origin={-59,23})));
-  Base.PartloadEfficiency.PartloadEfficiency PartloadEfficiency(eta_n=eta_total, EfficiencyCharLine=EfficiencyCharLine,CCS_Characteristics=CCS_Characteristics, CO2_Deposition_Rate=CO2_Deposition_Rate)                                                                                                                    annotation (Placement(transformation(extent={{32,-100},{52,-80}})));
+  Base.PartloadEfficiency.PartloadEfficiency PartloadEfficiency(eta_n=eta_total, EfficiencyCharLine=EfficiencyCharLine,CCS_Characteristics=CCS_Characteristics, CO2_Deposition_Rate=CO2_Deposition_Rate,
+    quantity=quantity,
+    P_min_star=P_min_star)                                                                                                                                                                                                     annotation (Placement(transformation(extent={{32,-100},{52,-80}})));
   Modelica.Blocks.Sources.RealExpression p_is(y=P_star) annotation (Placement(transformation(extent={{12,-100},{26,-80}})));
   Modelica.Blocks.Nonlinear.VariableLimiter variableLimiter if  CO2_Deposition_Rate>0                annotation (Placement(transformation(extent={{-5,-5},{5,5}},
         rotation=-90,
         origin={-59,-7})));
-  Modelica.Blocks.Sources.RealExpression P_max_with_CCS(y=if UseCCS then -(eta_total - CCS_Characteristics.CCS_Absolute_Efficiency_Loss[end, 2])/eta_total*PartloadEfficiency.CCS_Efficiency_Losses_Scaling.y[1] else -P_max_star) if               CO2_Deposition_Rate>0 "just for visualisation on diagram layer" annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression P_max_with_CCS(y=-P_max_star) if                                                                                                                                                                           CO2_Deposition_Rate>0 "just for visualisation on diagram layer" annotation (Placement(transformation(
         extent={{-3,-3},{3,3}},
         rotation=-90,
         origin={-63,11})));
@@ -246,13 +253,13 @@ equation
       thickness=0.5));
 
   if CO2_Deposition_Rate>0 then
-    connect(UseCCS,switch1. u2) annotation (Line(points={{-120,0},{-93.2,0}},                       color={255,0,255}));
+    connect(useCCS,switch1. u2) annotation (Line(points={{-120,0},{-93.2,0}},                       color={255,0,255}));
     connect(switch1.u1,CO2_Deposited_set. y) annotation (Line(points={{-93.2,4.8},{-96,4.8},{-96,9},{-99.4,9}},
                                                                                              color={0,0,127}));
     connect(Zero.y,switch1. u3) annotation (Line(points={{-99.4,-9},{-96,-9},{-96,-4.8},{-93.2,-4.8}},
                                                                               color={0,0,127}));
     connect(switch1.y,gain. u) annotation (Line(points={{-79.4,0},{-76.8,0}},   color={0,0,127}));
-    connect(UseCCS, PartloadEfficiency.UseCCS);
+    connect(useCCS, PartloadEfficiency.UseCCS);
     connect(P_set_total.y, variableLimiter.u) annotation (Line(points={{-59,17.5},{-59,-1}},color={0,0,127}));
     connect(variableLimiter.y, Turbine.P_target) annotation (Line(points={{-59,-12.5},{-59,-16.25},{-60.18,-16.25},{-60.18,-24.7}}, color={0,0,127}));
     connect(P_min_with_CCS.y, variableLimiter.limit1) annotation (Line(points={{-55,7.7},{-55,-1}},                       color={0,0,127}));
@@ -273,9 +280,9 @@ end if;
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Slew&nbsp;Rate&nbsp;limited&nbsp;(=nonlinear),&nbsp;Minimum&nbsp;power&nbsp;limited&nbsp;(shuts&nbsp;down&nbsp;below&nbsp;minimum&nbsp;power),&nbsp;with&nbsp;primary&nbsp;and&nbsp;secondary&nbsp;balancing&nbsp;controller&nbsp;where&nbsp;secondary&nbsp;balancing&nbsp;power&nbsp;is&nbsp;lumped&nbsp;inside.</p>
+<p>Slew Rate limited (=nonlinear), Minimum power limited (shuts down below minimum power), with primary and secondary balancing controller where secondary balancing power is lumped inside.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Carbon Capture &amp; Storage (CCS):</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Carbon Capture & Storage (CCS):</span></p>
 <p>Via parameter &apos;CO2_Deposition_Rate&apos; the fraction of CO2 that shall be deposited can be defined. The efficiency losses due to CCS can be defined via characterstic lines which are stored in records and which can be chosen via &apos;CCS_Characteristics&apos;. If &apos;NoCCS&apos; is chosen there will be no efficiency losses. Though CO2 will still be depositied if COS_DepostionRate&gt;0.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
@@ -297,6 +304,6 @@ end if;
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on Dez 2018: added CCS</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) on Dez 2018: added CCS</span></p>
 </html>"));
 end NonlinearThreeStatePlant;

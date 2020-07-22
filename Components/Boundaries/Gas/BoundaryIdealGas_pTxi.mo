@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as inputs"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,13 +37,15 @@ model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as input
   parameter TILMedia.GasTypes.BaseGas gasModel "Medium in the component" annotation (choices(choice=simCenter.gasModel2 "gasModel 2 (simCenter_TransiEnt)",
                                                   choice=simCenter.exhaustGasModel "exhaustGasModel (simCenter_TransiEnt)"),
                                                      Dialog(group="Fundamental Definitions"));
-  parameter Boolean calculateMass=false "true if mass in boundary shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean calculateMass=false "True if mass in boundary shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean calculateH_GCV=false "True if energy related to GCV shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean calculateH_NCV=false "True if energy related to NCV shall be calculated" annotation(Dialog(group="Fundamental Definitions"));
 
   parameter Boolean variable_p=false "True, if mass flow defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
   parameter Boolean variable_T=false "True, if temperature defined by variable input" annotation(Dialog(group="Define Variable Boundaries"));
   parameter Boolean variable_xi=false "True, if composition defined by variable input"    annotation(Dialog(group="Define Variable Boundaries"));
 
-  parameter Boolean verbose = false "show initial gas compostion in log" annotation(Dialog(group="Define Variable Boundaries"));
+  parameter Boolean verbose = false "Show initial gas compostion in log" annotation(Dialog(group="Define Variable Boundaries"));
 
   parameter SI.AbsolutePressure p_const=simCenter.p_amb_const+simCenter.p_eff_2 "Constant absolute pressure" annotation (Dialog(group="Constant Boundaries", enable=not variable_p));
   parameter SI.Temperature T_const=simCenter.T_ground "Constant temperature of source" annotation (Dialog(group="Constant Boundaries", enable=not variable_T));
@@ -59,7 +61,6 @@ model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as input
 
   Modelica.SIunits.Mass m(start=0, stateSelect=StateSelect.never)
                                                                  annotation (Dialog(group="Initialization", showStartAttribute=true));
-protected
   SI.AbsolutePressure p_in;
   SI.Temperature T_in;
   SI.MassFraction xi_in[gasModel.nc - 1];
@@ -87,6 +88,18 @@ public
   //
   //          Complex components
   // _____________________________________________
+  Modelica.Blocks.Sources.RealExpression xi_actual[gasModel.nc - 1](y=noEvent(actualStream(gasPort.xi_outflow))) if calculateH_GCV     annotation (Placement(transformation(extent={{-60,76},{-40,96}})));
+  Modelica.Blocks.Math.Product product if calculateH_GCV     annotation (Placement(transformation(extent={{18,58},{38,78}})));
+  Modelica.Blocks.Continuous.Integrator integrator if calculateH_GCV     annotation (Placement(transformation(extent={{54,58},{74,78}})));
+  Modelica.Blocks.Interfaces.RealOutput H_GCV annotation (Placement(transformation(extent={{80,50},{100,70}}), iconTransformation(extent={{80,50},{100,70}})));
+  Modelica.Blocks.Sources.Constant zero(k=0, y(unit="J")) if not calculateH_GCV     annotation (Placement(transformation(extent={{18,30},{38,50}})));
+  Modelica.Blocks.Sources.RealExpression MassFlow(y=gasPort.m_flow) if calculateH_GCV           annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
+  Modelica.Blocks.Sources.RealExpression xi_actual2[gasModel.nc - 1](y=noEvent(actualStream(gasPort.xi_outflow))) if calculateH_NCV     annotation (Placement(transformation(extent={{-60,-44},{-40,-24}})));
+  Modelica.Blocks.Math.Product product1 if calculateH_NCV    annotation (Placement(transformation(extent={{18,-64},{38,-44}})));
+  Modelica.Blocks.Continuous.Integrator integrator1 if calculateH_NCV    annotation (Placement(transformation(extent={{48,-64},{68,-44}})));
+  Modelica.Blocks.Interfaces.RealOutput H_NCV annotation (Placement(transformation(extent={{80,-70},{100,-50}}), iconTransformation(extent={{80,-70},{100,-50}})));
+  Modelica.Blocks.Sources.Constant zero1(k=0, y(unit="J")) if not calculateH_NCV    annotation (Placement(transformation(extent={{18,-90},{38,-70}})));
+  Modelica.Blocks.Sources.RealExpression Massflow2(y=gasPort.m_flow) if calculateH_NCV          annotation (Placement(transformation(extent={{-60,-84},{-40,-64}})));
 protected
   TILMedia.Gas_pT gas_pT(
     p=p_in,
@@ -108,6 +121,8 @@ protected
           h = Gas_pT.h,
           rho = Gas_pT.d))   annotation (Placement(transformation(extent={{-100,-114},{-80,-94}})));*/
 
+  Basics.Media.IdealGasGCV_xi_Block idealGasGCV_xi(idealGasType=gasModel) if calculateH_GCV annotation (Placement(transformation(extent={{-30,76},{-10,96}})));
+  Basics.Media.IdealGasNCV_xi_Block idealGasNCV_xi(idealGasType=gasModel) if calculateH_NCV annotation (Placement(transformation(extent={{-28,-44},{-8,-24}})));
 initial equation
 
   if verbose and variable_xi then
@@ -146,8 +161,22 @@ equation
   end if;
   gasPort.xi_outflow=xi_in;
 
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  connect(idealGasGCV_xi.xi_in,xi_actual. y) annotation (Line(points={{-30,86},{-39,86}}, color={0,0,127}));
+  connect(product.u1,idealGasGCV_xi. GCV) annotation (Line(points={{16,74},{2,74},{2,86},{-9,86}}, color={0,0,127}));
+  connect(product.y,integrator. u) annotation (Line(points={{39,68},{52,68}}, color={0,0,127}));
+  connect(zero.y, H_GCV) annotation (Line(points={{39,40},{80,40},{80,60},{90,60}}, color={0,0,127}));
+  connect(product.u2,MassFlow. y) annotation (Line(points={{16,62},{2,62},{2,50},{-39,50}}, color={0,0,127}));
+  connect(idealGasNCV_xi.xi_in,xi_actual2. y) annotation (Line(points={{-28,-34},{-34,-34},{-34,-34},{-39,-34}},
+                                                                                            color={0,0,127}));
+  connect(idealGasNCV_xi.NCV,product1. u1) annotation (Line(points={{-7,-34},{4,-34},{4,-48},{16,-48}}, color={0,0,127}));
+  connect(product1.y,integrator1. u) annotation (Line(points={{39,-54},{46,-54}}, color={0,0,127}));
+  connect(integrator1.y, H_NCV) annotation (Line(points={{69,-54},{84,-54},{84,-60},{90,-60}},
+                                                                             color={0,0,127}));
+  connect(zero1.y, H_NCV) annotation (Line(points={{39,-80},{80,-80},{80,-60},{90,-60}}, color={0,0,127}));
+    connect(product1.u2,Massflow2. y) annotation (Line(points={{16,-60},{4,-60},{4,-74},{-39,-74}}, color={0,0,127}));
+  connect(integrator.y, H_GCV) annotation (Line(points={{75,68},{86,68},{86,60},{90,60}},
+                                                                          color={0,0,127}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>

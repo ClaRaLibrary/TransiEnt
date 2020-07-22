@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Gas.MethanatorSystem;
+﻿within TransiEnt.Producer.Gas.MethanatorSystem;
 model FeedInStation_Methanation
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,9 +32,9 @@ model FeedInStation_Methanation
   //              Visible Parameters
   // _____________________________________________
 
-  parameter Real hydrogenFraction_fixed=0 "Target fraction of hydrogen in ouput"  annotation (Dialog(enable=(not useVariableHydrogenFraction),group="General",enable=not useVariableHydrogenFraction));
+  parameter Real hydrogenFraction_fixed=0 "Target fraction of hydrogen in ouput"  annotation (Dialog(group="General"));
   parameter Boolean useSeperateHydrogenOutput=false "Use additional gas port for hydrogen only"  annotation (Dialog(               group="General"));
-  parameter Boolean useVariableHydrogenFraction=false "define volumetric hydrogen content in SNG via input - in not 'HydrogenFraction_fixed' is used" annotation (Dialog(               group="General"));
+  parameter Boolean useVariableHydrogenFraction=false "meassured hydrogen fraction for hydrogen-fraction-controller" annotation (Dialog(               group="General"));
   parameter Boolean useMassFlowControl=true "choose if output of FeedInStation is limited by m_flow_feedIn - if 'false': m_flow_feedIn has no effect - should only be 'false' if feedInStation_Hydrogen has no storage and useMassFlowControl='false' in feedInStation_Hydrogen as well" annotation(Dialog(group="General"));
   parameter Boolean useCO2Input=false "Use gas port for CO2 for methanation" annotation (Dialog(               group="General"));
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Natural Gas model to be used" annotation (Dialog(tab="General", group="General"));
@@ -47,6 +47,8 @@ model FeedInStation_Methanation
                 choice=2 "Define Reactor Scaling by nominal hydrogen flow at input",
                 choice=3 "Define Reactor Scaling by nominal methane enthalpy flow at output",
                 choice=4 "Define Reactor Scaling by nominal hydrogen enthalpy flow at input"));
+  parameter Integer heatLossCalculation=1 annotation(Dialog(tab="Methanation",group="Coolant"),choices(__Dymola_radioButtons=true, choice=1 "logarithmic approximation", choice=2 "use fix percentage", choice=3 "no heat losses"));
+  parameter Real percentageLosses=0.01 annotation(Dialog(tab="Methanation",group="Coolant",enable=if heatLossCalculation==2 then true else false));
   parameter SI.MassFlowRate m_flow_n_Methane=0.0675008 "Nominal mass flow rate of methane at the outlet" annotation(Dialog(tab="Methanation",group="Nominal Values",enable = if scalingOfReactor== 1 then true else false));
   parameter SI.MassFlowRate m_flow_n_Hydrogen=0.0339027 "Nominal mass flow rate of hydrogen at the inlet" annotation(Dialog(tab="Methanation",group="Nominal Values",enable = if scalingOfReactor== 2 then true else false));
   parameter SI.EnthalpyFlowRate H_flow_n_Methane=3.375921e6 "Nominal enthalpy flow rate of methane at the output" annotation(Dialog(tab="Methanation",group="Nominal Values",enable = if scalingOfReactor== 3 then true else false));
@@ -57,12 +59,17 @@ model FeedInStation_Methanation
   parameter SI.Temperature T_out_SNG=273.15+20 "Temperature of Synthetic Natural Gas after drying" annotation (Dialog(tab="Methanation", group="Fundamental Definitions"));
   parameter Boolean useLeakageMassFlow=false "Constant leakage gas mass flow of 'm_flow_small' to avoid zero mass flow"  annotation(Dialog(group="Numerical Stability"));
   parameter SI.MassFlowRate m_flow_small=simCenter.m_flow_small "leakage mass flow if useLeakageMassFlow=true" annotation(Dialog(group="Numerical Stability",enable=useLeakageMassFlow));
+  parameter Boolean useFluidCoolantPort=false "choose if fluid port for coolant shall be used" annotation (Dialog(enable=not useHeatPort,group="Coolant"));
+  parameter Boolean useHeatPort=false "choose if heat port for coolant shall be used" annotation (Dialog(enable=not useFluidCoolantPort,group="Coolant"));
+  parameter Boolean useVariableCoolantOutputTemperature=false "choose if temperature of cooland output shall be defined by input" annotation (Dialog(enable=useFluidCoolantPort,group="Coolant"));
+  parameter SI.Temperature T_out_coolant_target=500+273.15 "output temperature of coolant - will be limited by temperature which is technically feasible" annotation (Dialog(enable=useFluidCoolantPort,group="Coolant"));
+  parameter Boolean externalMassFlowControl=false "choose if coolant mass flow is defined by input" annotation (Dialog(enable=useFluidCoolantPort and (not useVariableCoolantOutputTemperature), group="Coolant"));
+  parameter Integer chooseHeatSources=1 annotation(Dialog(group="Coolant"),choices(__Dymola_radioButtons=true, choice=1 "Methanation", choice=2 "Electrolyzer", choice=3 "Methanation and Electrolyzer"));
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
-
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut_H2(Medium=simCenter.gasModel1) if useSeperateHydrogenOutput annotation (Placement(transformation(extent={{92,-10},{112,10}}), iconTransformation(extent={{82,-20},{112,10}})));
   TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow_feedIn_H2 if useSeperateHydrogenOutput annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
@@ -74,22 +81,33 @@ model FeedInStation_Methanation
   Modelica.Blocks.Interfaces.RealInput hydrogenFraction_input if useVariableHydrogenFraction              annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=180,
-        origin={-104,72}), iconTransformation(
+        origin={-106,-50}),iconTransformation(
         extent={{12,-12},{-12,12}},
         rotation=180,
         origin={-98,-80})));
+  Basics.Interfaces.Thermal.FluidPortIn fluidPortIn(Medium=simCenter.fluid1) if useFluidCoolantPort annotation (Placement(transformation(extent={{90,-100},{110,-80}})));
+  Basics.Interfaces.Thermal.FluidPortOut fluidPortOut(Medium=simCenter.fluid1) if useFluidCoolantPort     annotation (Placement(transformation(extent={{90,-50},{110,-30}})));
+  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn_CO2(Medium=medium) if useCO2Input annotation (Placement(transformation(extent={{-70,-110},{-50,-90}})));
+  Basics.Interfaces.General.TemperatureIn T_set_coolant_out if
+                                                           useFluidCoolantPort and useVariableCoolantOutputTemperature annotation (Placement(transformation(extent={{128,16},{88,56}}), iconTransformation(extent={{112,32},{88,56}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat if useHeatPort annotation (Placement(transformation(extent={{90,-76},{110,-56}})));
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
 
-  replaceable TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_woStorage feedInStation_Hydrogen annotation (Placement(transformation(extent={{-10,20},{10,40}})),  choices(
+  replaceable TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_woStorage feedInStation_Hydrogen( usePowerPort=usePowerPort,
+    useFluidCoolantPort=useFluidCoolantPort and chooseHeatSources>=2,
+    useHeatPort=useHeatPort and chooseHeatSources >= 2,
+    useVariableCoolantOutputTemperature=useVariableCoolantOutputTemperature and chooseHeatSources == 2,
+    T_out_coolant_target=273.15+68,
+    externalMassFlowControl=externalMassFlowControl and chooseHeatSources==2 or chooseHeatSources==3)                                                                                                annotation (Placement(transformation(extent={{-10,20},{10,40}})),  choices(
       choice(redeclare TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_woStorage feedInStation_Hydrogen),
       choice(redeclare TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_Storage feedInStation_Hydrogen),
       choice(redeclare TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_CavernComp feedInStation_Hydrogen)));
   TransiEnt.Producer.Gas.MethanatorSystem.Controller.MassFlowFeedInSystemController massFlowFeedInSystemController(P_el_max=feedInStation_Hydrogen.P_el_max, eta_n_ely=feedInStation_Hydrogen.eta_n,
     useMassFlowControl=useMassFlowControl,
-    PID(k=1, Ti=0.1))                                                                                                                                                                                annotation (Placement(transformation(
+    PID(k=1, Ti=30))                                                                                                                                                                                 annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={0,64})));
@@ -99,13 +117,14 @@ model FeedInStation_Methanation
         origin={-5,-63})));
   TransiEnt.Basics.Media.Gases.VLE_VDIWA_SG4_var vle_sg4;
   TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG4_var gas_sg4;
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     deactivateTwoPhaseRegion=true,
     h=inStream(compositionSensor.gasPortOut.h_outflow),
     p=compositionSensor.gasPortOut.p,
     xi=compositionSensor.gasPortOut.xi_outflow,
     vleFluidType=simCenter.gasModel1) annotation (Placement(transformation(extent={{18,-100},{38,-80}})));
-  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundary_Txim_flow1(m_flow_const=m_flow_small) if useLeakageMassFlow annotation (Placement(transformation(extent={{-20,-58},{-16,-54}})));
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundary_Txim_flow1(m_flow_const=m_flow_small*0.9) if
+                                                                                                                  useLeakageMassFlow  annotation (Placement(transformation(extent={{-22,-48},{-18,-44}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundary_Txim_flow2(m_flow_const=-m_flow_small, xi_const={0,0,0,0,0,0}) if useSeperateHydrogenOutput and useLeakageMassFlow annotation (Placement(transformation(
         extent={{-2,-2},{2,2}},
         rotation=90,
@@ -135,7 +154,7 @@ protected
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlowSensor_SNG(xiNumber=0)
                                                                          annotation (Placement(transformation(extent={{-5,-5},{5,5}},
         rotation=-90,
-        origin={5,-47})));
+        origin={5,-51})));
 public
   inner Summary summary(
     outline(
@@ -147,7 +166,7 @@ public
       mass_SNG=1,
       eta_electrolysis_GCV=feedInStation_Hydrogen.electrolyzer.summary.outline.eta_GCV,
       eta_electrolysis_NCV=feedInStation_Hydrogen.electrolyzer.summary.outline.eta_NCV,
-      eta_methanation_NCV=methanation.methanator.summary.outline.eta_NCV),
+      eta_methanation_NCV=methanation.summary.outline.eta_NCV),
     gasPortOutElectrolyzer(
       mediumModel=feedInStation_Hydrogen.electrolyzer.summary.gasPortOut.mediumModel,
       xi=feedInStation_Hydrogen.electrolyzer.summary.gasPortOut.xi,
@@ -184,13 +203,20 @@ public
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlowSensor_SNG1 if useSeperateHydrogenOutput  annotation (Placement(transformation(extent={{-5,-5},{5,5}},
         rotation=0,
         origin={63,5})));
-  Modelica.Blocks.Sources.RealExpression realExpression1(y=1 - max(min(1, m_flow_feedIn_H2/max(1e-4, -feedInStation_Hydrogen.gasPortOut.m_flow)), 0)) if useSeperateHydrogenOutput                              annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+  Modelica.Blocks.Sources.RealExpression realExpression1(y=if useLeakageMassFlow then min(max(m_flow_small/max(1e-4, -feedInStation_Hydrogen.gasPortOut.m_flow), (m_flow_small + ((-feedInStation_Hydrogen.gasPortOut.m_flow) - m_flow_feedIn_H2))/max(1e-4, -feedInStation_Hydrogen.gasPortOut.m_flow)), 1) else 1 - max(min(1, m_flow_feedIn_H2/max(1e-4, -feedInStation_Hydrogen.gasPortOut.m_flow)), 0)) if
+                                                                                                                                                         useSeperateHydrogenOutput                              annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Modelica.Blocks.Sources.RealExpression Zero;
-  MethanatorSystem methanation(
+  replaceable MethanatorSystem_L4 methanation constrainedby TransiEnt.Producer.Gas.MethanatorSystem.PartialMethanatorSystem(
+    useFluidCoolantPort=useFluidCoolantPort and chooseHeatSources <> 2,
+    useHeatPort=useHeatPort and chooseHeatSources <> 2,
+    externalMassFlowControl=externalMassFlowControl and chooseHeatSources <> 2,
+    N_cv=N_cv,
+    useVariableCoolantOutputTemperature=useVariableCoolantOutputTemperature and chooseHeatSources <> 2,
+    T_out_coolant_target=T_out_coolant_target,
     T_nom=T_nom,
     p_nom=p_nom,
     xi_nom=xi_nom,
-    ScalingOfReactor=scalingOfReactor,
+    scalingOfReactor=scalingOfReactor,
     m_flow_n_Methane=m_flow_n_Methane,
     m_flow_n_Hydrogen=m_flow_n_Hydrogen,
     H_flow_n_Methane=H_flow_n_Methane,
@@ -204,8 +230,8 @@ public
     useVariableHydrogenFraction=useVariableHydrogenFraction) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
-        origin={0,-30})));
-  TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn_CO2(Medium=medium) if useCO2Input annotation (Placement(transformation(extent={{-70,-110},{-50,-90}})));
+        origin={0,-30})), choicesAllMatching=true);
+
 equation
   // _____________________________________________
   //
@@ -257,21 +283,21 @@ equation
   end if;
 
   if useLeakageMassFlow==true then
-    connect(compositionSensor.gasPortIn, boundary_Txim_flow1.gasPort) annotation (Line(
-      points={{8.88178e-16,-58},{0,-58},{0,-56},{-16,-56}},
+    connect(massFlowSensor_SNG.gasPortIn, boundary_Txim_flow1.gasPort) annotation (Line(
+      points={{8.88178e-16,-46},{-18,-46}},
       color={255,255,0},
       thickness=1.5));
   end if;
 
   connect(methanation.gasPortOut, massFlowSensor_SNG.gasPortIn) annotation (Line(
-      points={{-1.77636e-15,-40},{-1.77636e-15,-45},{1.77636e-15,-45},{1.77636e-15,-42}},
+      points={{-1.77636e-15,-40},{-1.77636e-15,-45},{1.77636e-15,-45},{1.77636e-15,-46}},
       color={255,255,0},
       thickness=1.5));
   connect(compositionSensor.gasPortIn, massFlowSensor_SNG.gasPortOut) annotation (Line(
-      points={{0,-58},{0,-52}},
+      points={{0,-58},{0,-56}},
       color={255,255,0},
       thickness=1.5));
-  connect(massFlowSensor_SNG.m_flow, massFlowFeedInSystemController.m_flow_feed_CH4_is) annotation (Line(points={{5,-52.5},{5,-58},{32,-58},{32,58},{12,58}}, color={0,0,127}));
+  connect(massFlowSensor_SNG.m_flow, massFlowFeedInSystemController.m_flow_feed_CH4_is) annotation (Line(points={{5,-56.5},{5,-58},{32,-58},{32,58},{12,58}}, color={0,0,127}));
   if useCO2Input then
   connect(methanation.gasPortIn_CO2, gasPortIn_CO2) annotation (Line(
       points={{-10,-24},{-60,-24},{-60,-100}},
@@ -284,9 +310,54 @@ equation
       color={255,255,0},
       thickness=1.5));
   if useVariableHydrogenFraction then
-    connect(hydrogenFraction_input, methanation.HydrogenFraction_input) annotation (Line(points={{-104,72},{-76,72},{-76,-14},{-7.6,-14},{-7.6,-20.2}},   color={0,0,127}));
+    connect(hydrogenFraction_input,methanation.hydrogenFraction_input)  annotation (Line(points={{-106,-50},{-76,-50},{-76,-14},{-5,-14},{-5,-19}},       color={0,0,127}));
   end if;
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+
+  if chooseHeatSources==1 then
+    if useVariableCoolantOutputTemperature then
+      connect(methanation.T_set_coolant_out, T_set_coolant_out) annotation (Line(points={{7,-42},{8,-42},{8,-46},{46,-46},{46,36},{108,36}}, color={0,0,127}));
+    end if;
+    if useFluidCoolantPort then
+      connect(methanation.fluidPortIn, fluidPortIn) annotation (Line(
+        points={{-9,-40},{-9,-50},{66,-50},{66,-88},{100,-88},{100,-90}},
+        color={175,0,0},
+        thickness=0.5));
+      connect(methanation.fluidPortOut, fluidPortOut) annotation (Line(
+        points={{-4,-40},{-4,-48},{66,-48},{66,-40},{100,-40}},
+        color={175,0,0},
+        thickness=0.5));
+    end if;
+    if useHeatPort then
+      connect(methanation.heat, heat) annotation (Line(points={{-6.6,-40},{-6,-40},{-6,-66},{100,-66}},    color={191,0,0}));
+    end if;
+  elseif chooseHeatSources==2 then
+    if useVariableCoolantOutputTemperature then
+      connect(feedInStation_Hydrogen.T_set_coolant_out, T_set_coolant_out);
+    end if;
+    if useFluidCoolantPort then
+      connect(feedInStation_Hydrogen.fluidPortIn, fluidPortIn);
+      connect(feedInStation_Hydrogen.fluidPortOut, fluidPortOut);
+    end if;
+    if useHeatPort then
+      connect(feedInStation_Hydrogen.heat, heat);
+    end if;
+  else
+    if useVariableCoolantOutputTemperature then
+      connect(methanation.T_set_coolant_out, T_set_coolant_out);
+    end if;
+    if useFluidCoolantPort then
+      connect(fluidPortIn, feedInStation_Hydrogen.fluidPortIn);
+      connect(feedInStation_Hydrogen.fluidPortOut,methanation.fluidPortIn);
+      connect(methanation.fluidPortOut,fluidPortOut);
+    end if;
+    if useHeatPort then
+      connect(methanation.heat,heat);
+      connect(feedInStation_Hydrogen.heat,heat);
+    end if;
+  end if;
+
+
+        annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Text(
           extent={{4,44},{98,-26}},
           lineColor={244,125,35},
@@ -301,9 +372,9 @@ equation
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The hydrogen can be produced in an electrolyzer and be stored if desired. Herefore one of the FeedInSystems with an electrolzer can be chosen. </p>
 <p>The methanation of hydrogen takes place after the hydrogen production and the possible storage. </p>
-<p>The methanation can be avoided by a bypass. This bypass is is controlled by the output molar content of hydrogen which can be defined by the parameter &apos;HydrogenContentOutput&apos;. If this parameter is set to &apos;1&apos; all hydrogen is bypassed. If the parameter is set to &apos;0&apos; all hydrogen is methanated.</p>
+<p>The methanation can be avoided by a bypass. This bypass is is controlled by the output molar content of hydrogen which can be defined by the parameter &apos;hydrogenContentOutput&apos;. If this parameter is set to &apos;1&apos; all hydrogen is bypassed. If the parameter is set to &apos;0&apos; all hydrogen is methanated. The bypass fraction is controlled via a PID-controller whereby the set value is equal to &apos;hydrogenContentOutput&apos;. if &apos;<span style=\"font-family: Courier New;\">useVariableHydrogenFraction&apos;=false the meassurement-signal is equal to the volumetric hydrogen fraction at the output. If &apos;useVariableHydrogenFraction&apos;=true the meassurement-signal is equal to the input value &apos;hydrogenFraction_input&apos;. </span>This allows defining the hydrogen fraction in the SNG depending of the hydrogen fraction in an outer gas grid.</p>
 <p>Consider that the output of the methanator still contains hydrogen such that an actual molar hydrogen content of &apos;0&apos; can not be achieved.</p>
-<p>Via the parameter &apos;<span style=\"font-family: Courier New;\">UseSeperateHydrogenOutput</span>&apos; an additional hydrogen output can be activated. The gas of this output is not methanated before and can be controlled via the input m_flow_feedIn_H2.</p>
+<p>Via the parameter &apos;<span style=\"font-family: Courier New;\">useSeperateHydrogenOutput</span>&apos; an additional hydrogen output can be activated. The gas of this output is not methanated before and can be controlled via the input m_flow_feedIn_H2.</p>
 <p>Via parameter &apos;useLeakageMassFlow&apos; a small mass flow of &apos;simCenter.m_flow_small&apos; is always flowing out of gas ports (to avoid Zero-Mass-Flow problems)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>see sub models </p>
@@ -326,9 +397,9 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p><br>Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Feb 2018</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Jul 2018: added conditional separate hydrogen port</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Nov 2018: TWV for Hydrogen output is controled without PID now for faster simulation results. useLeakageMassFlow added</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in April 2019: added Boolean useMassFlowControl</p>
+<p><br>Model created by Oliver Schülting (oliver.schuelting@tuhh.de) in Feb 2018</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) in Jul 2018: added conditional separate hydrogen port</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) in Nov 2018: TWV for Hydrogen output is controled without PID now for faster simulation results. useLeakageMassFlow added</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) in April 2019: added Boolean useMassFlowControl</p>
 </html>"));
 end FeedInStation_Methanation;

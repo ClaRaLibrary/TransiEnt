@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP;
 model ContinuousCHP_noHX "Simple large CHP model with plant limits, time constants and fuel input matrix but without distinc operating states (always running)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,7 @@ model ContinuousCHP_noHX "Simple large CHP model with plant limits, time constan
 
   parameter SI.Temperature T_feed_init = 120+273.15 "Start temperature of feed water" annotation(Dialog(group="Initialization", tab="Advanced"));
 
-  final parameter SI.SpecificEnthalpy h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+  final parameter SI.SpecificEnthalpy h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
       medium,
       p_nom,
       T_feed_init) "Start value of sytsem specific enthalpy" annotation(Dialog(group="Heating condenser parameters"));
@@ -58,6 +58,7 @@ model ContinuousCHP_noHX "Simple large CHP model with plant limits, time constan
   //
   //                Components
   // _____________________________________________
+  SI.Power P_limit_off_set[quantity];
 
   Modelica.Blocks.Continuous.FirstOrder turboGenerator(
     T=T_turboGenerator,
@@ -77,7 +78,7 @@ model ContinuousCHP_noHX "Simple large CHP model with plant limits, time constan
     initType=Modelica.Blocks.Types.Init.InitialOutput,
     y_start=Q_flow_init)                              annotation (Placement(transformation(extent={{-18,-22},{2,-2}})));
 
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power terminal(change_sign=true) constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary  annotation (choicesAllMatching=true,Placement(transformation(extent={{80,50},{60,70}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power terminal(change_sign=true) constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary annotation (choicesAllMatching=true, Placement(transformation(extent={{80,50},{60,70}})));
 
   Modelica.Blocks.Sources.RealExpression eta_el_source(y=eta_el_target)
                                                                  annotation (Placement(transformation(extent={{-72,32},{-52,52}})));
@@ -89,23 +90,17 @@ model ContinuousCHP_noHX "Simple large CHP model with plant limits, time constan
 
   Modelica.Blocks.Math.Product product1 annotation (Placement(transformation(extent={{-36,-16},{-28,-8}})));
 
-  Modelica.Blocks.Nonlinear.VariableLimiter P_limit_on annotation (Placement(transformation(extent={{-42,92},{-22,112}})));
-  Modelica.Blocks.Math.Gain P_el_set_pos(k=-1) "Sign changed electric setpoint (>0)"
-                                               annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
-        rotation=0,
-        origin={-69,102})));
   Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{64,82},{44,102}})));
   Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
   Components.Sensors.RealGas.CO2EmissionSensor cO2EmissionOfIdealCombustion if useGasPort                                                 ==true annotation (Placement(transformation(extent={{86,92},{74,104}})));
   Modelica.Blocks.Math.Gain m_flow_cde_gain(k=1) annotation (Placement(transformation(extent={{68,96},{64,100}})));
-protected
-  Modelica.Blocks.Sources.RealExpression Zero(y=0);
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 public
+  SI.Power P_set_single[quantity];
+  Real activePowerPlants;
   Modelica.SIunits.MassFlowRate m_flow_cde_total_set;
 
   Components.Boundaries.Heat.Heatflow_L1        HX(change_sign=true)
@@ -113,6 +108,17 @@ public
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={54,-18})));
+  Modelica.Blocks.Nonlinear.VariableLimiter P_limit_on[quantity] annotation (Placement(transformation(extent={{-42,100},{-32,110}})));
+  Modelica.Blocks.Sources.RealExpression P_limit_off[quantity](y=P_limit_off_set)                                                annotation (Placement(transformation(extent={{-52,76},{-32,96}})));
+  Modelica.Blocks.Math.Sum P_limit[quantity](each nin=2)          annotation (Placement(transformation(extent={{-24,98},{-12,110}})));
+  Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-76,104},{-68,112}})));
+  Modelica.Blocks.Math.MultiSum multiSum_Q_flow_SG(nu=quantity)        annotation (Placement(transformation(extent={{-44,70},{-52,62}})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_peak(y=min(Q_flow_n_Peak, max(0, -Q_flow_set - Q_flow_n_CHP)))
+                                                                                                        annotation (Placement(transformation(extent={{-12,-62},{8,-42}})));
+  Modelica.Blocks.Math.Sum Q_flow(nin=2) annotation (Placement(transformation(extent={{24,-29},{34,-19}})));
+  Modelica.Blocks.Sources.RealExpression realExpression3[quantity](y=-P_set_single)                                                  annotation (Placement(transformation(extent={{-86,80},{-66,100}})));
+  Modelica.Blocks.Sources.RealExpression fuelMassFlow_set(y=if P_set + Q_flow_set >= 0 then 0 else steamGenerator.y + Q_flow_peak.y/eta_peakload) if
+                                                                                                                      useGasPort annotation (Placement(transformation(extent={{10,60},{30,80}})));
 equation
 
   // _____________________________________________
@@ -125,7 +131,19 @@ equation
     m_flow_cde_total_set=m_flow_cde_gain.y;
   end if;
 
-  Q_flow_input = steamGenerator.u;
+  Q_flow_input=multiSum_Q_flow_SG.y+Q_flow_peak.y/eta_peakload;
+
+  activePowerPlants=floor(-Q_flow_set/Q_flow_n_CHP_single-Modelica.Constants.eps)+1;
+
+  for i in 1:quantity loop
+    if activePowerPlants<i then
+      P_set_single[i]=0;
+    elseif i==1 then
+      P_set_single[i]=P_set+(max(0,activePowerPlants-1))*pQDiagram[i].P_min;
+    else
+      P_set_single[i]=P_set+(max(0,activePowerPlants-i))*pQDiagram[i].P_min+sum(P_limit_on[1:i-1].y);
+    end if;
+  end for;
 
   // _____________________________________________
   //
@@ -149,16 +167,7 @@ equation
   connect(steamGenerator.y, product.u1) annotation (Line(points={{-53,12},{-48,12},{-48,31.6},{-40.8,31.6}}, color={0,0,127}));
   connect(steamGenerator.y, product1.u1) annotation (Line(points={{-53,12},{-46,12},{-46,-9.6},{-36.8,-9.6}}, color={0,0,127}));
   connect(product1.y, heatingCondenser.u) annotation (Line(points={{-27.6,-12},{-23.8,-12},{-20,-12}}, color={0,0,127}));
-  connect(steamGenerator.u, Q_flow_set_SG.Q_flow_input) annotation (Line(points={{-76,12},{-86,12},{-86,14},{-86,66},{-0.909091,66},{-0.909091,79}},
-                                                                                                                                     color={0,0,127}));
-  connect(P_limit_on.y, Q_flow_set_SG.P) annotation (Line(points={{-21,102},{-7.27273,102},{-7.27273,102}},
-                                                                                                color={0,0,127}));
-  connect(P_limit_on.limit1, pQDiagram.P_max) annotation (Line(points={{-44,110},{-44,110},{-54,110},{-54,128.4},{-11,128.4}}, color={0,0,127}));
-  connect(pQDiagram.P_min, P_limit_on.limit2) annotation (Line(points={{-11,121},{-60,121},{-60,94},{-44,94}}, color={0,0,127}));
-  connect(P_el_set_pos.y, P_limit_on.u) annotation (Line(points={{-62.4,102},{-62.4,102},{-44,102}},         color={0,0,127}));
-  connect(P_set,P_el_set_pos. u) annotation (Line(points={{-84,144},{-84,144},{-84,102},{-76.2,102}}, color={0,0,127}));
   if useGasPort==true then
-    connect(steamGenerator.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{-53,12},{-52,12},{-52,-16},{-92,-16},{-92,70},{40,70},{40,92},{43,92}},   color={0,0,127}));
 
     connect(cO2EmissionOfIdealCombustion.m_flow_cde,m_flow_cde_gain. u) annotation (Line(points={{73.4,102.08},{70,102.08},{70,98},{68.4,98}},
                                                                                                                                     color={0,0,127}));
@@ -173,7 +182,6 @@ equation
   else
      connect(Zero.y,m_flow_cde_gain.u);
   end if;
-  connect(heatingCondenser.y, HX.Q_flow_prescribed) annotation (Line(points={{3,-12},{24,-12},{24,-24},{46,-24}}, color={0,0,127}));
   connect(T_out_sensor.port, HX.fluidPortOut) annotation (Line(
       points={{78,4},{72,4},{72,-12},{64,-12}},
       color={0,131,169},
@@ -184,6 +192,35 @@ equation
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
+
+
+
+  for i in 1:quantity loop
+    P_limit_off_set[i]=if Q_flow_set_CHP[i].y<=Q_flow_set_CHP_min.y then -pQDiagram[i].P_min else 0;
+  end for;
+
+for i in 1:quantity loop
+  connect(P_limit_on[i].y,P_limit[i].u[1]) annotation (Line(points={{-31.5,105},{-25.2,105},{-25.2,103.4}},        color={0,0,127}));
+  connect(pQDiagram[i].P_max, P_limit_on[i].limit1) annotation (Line(points={{-11,128.4},{-48,128.4},{-48,109},{-43,109}},       color={0,0,127}));
+  connect(pQDiagram[i].P_min, P_limit_on[i].limit2) annotation (Line(points={{-11,121},{-46,121},{-46,101},{-43,101}},     color={0,0,127}));
+  connect(P_limit_off[i].y,P_limit[i]. u[2]) annotation (Line(points={{-31,86},{-28,86},{-28,104.6},{-25.2,104.6}},                    color={0,0,127}));
+  connect(P_limit[i].y, Q_flow_set_SG[i].P) annotation (Line(points={{-11.4,104},{-7.27273,104},{-7.27273,102}},  color={0,0,127}));
+  connect(Q_flow_set_SG[i].Q_flow_input, multiSum_Q_flow_SG.u[i]) annotation (Line(
+      points={{-0.909091,79},{-0.909091,66},{-44,66}},
+      color={175,0,0},
+      pattern=LinePattern.Dash));
+  if i==1 then
+  else
+  end if;
+  end for;
+
+  connect(P_set, gain.u) annotation (Line(points={{-84,144},{-84,108},{-76.8,108}}, color={0,0,127}));
+  connect(steamGenerator.u, multiSum_Q_flow_SG.y) annotation (Line(points={{-76,12},{-80,12},{-80,66},{-52.68,66}}, color={0,0,127}));
+  connect(Q_flow_peak.y,Q_flow. u[2]) annotation (Line(points={{9,-52},{16,-52},{16,-23.5},{23,-23.5}},  color={0,0,127}));
+  connect(heatingCondenser.y, Q_flow.u[1]) annotation (Line(points={{3,-12},{16,-12},{16,-24.5},{23,-24.5}}, color={0,0,127}));
+  connect(Q_flow.y, HX.Q_flow_prescribed) annotation (Line(points={{34.5,-24},{46,-24}}, color={0,0,127}));
+  connect(realExpression3.y, P_limit_on.u) annotation (Line(points={{-65,90},{-60,90},{-60,100},{-56,100},{-56,105},{-43,105}}, color={0,0,127}));
+  connect(fuelMassFlow_set.y, gasConsumer_HFlow_NCV.H_flow) annotation (Line(points={{31,70},{34,70},{34,92},{43,92}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}})), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p>This model is equal to the model &apos;ContinuousCHP&apos; except for that the heat exchanger model is exchanged by a simple heat boundary</p><p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
@@ -202,7 +239,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on Nov 2018</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Oliver Schülting (oliver.schuelting@tuhh.de) on Nov 2018</span></p>
 </html>"),
     Icon(graphics,
          coordinateSystem(extent={{-100,-100},{100,140}})));

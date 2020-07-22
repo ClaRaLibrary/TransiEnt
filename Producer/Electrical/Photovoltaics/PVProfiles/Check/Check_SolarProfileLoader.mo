@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.PVProfiles.Check;
 model Check_SolarProfileLoader "Model for testing the SolarProfileLoader model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,8 +20,8 @@ model Check_SolarProfileLoader "Model for testing the SolarProfileLoader model"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
  extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Boundaries.Electrical.Power SolarGenerationPark annotation (choicesAllMatching=true, Placement(transformation(extent={{-19,-2},{-39,18}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{22,-2},{42,18}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power SolarGenerationPark annotation (choicesAllMatching=true, Placement(transformation(extent={{-19,-2},{-39,18}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{22,-2},{42,18}})));
   SolarProfileLoader solarProfileLoader(
     change_of_sign=true,
     REProfile=TransiEnt.Producer.Electrical.Photovoltaics.PVProfiles.SolarData.Solar2011_Gesamt_900s,

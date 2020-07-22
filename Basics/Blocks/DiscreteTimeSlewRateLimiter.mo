@@ -2,10 +2,10 @@ within TransiEnt.Basics.Blocks;
 block DiscreteTimeSlewRateLimiter "Limits the signal with upper and lower boundary using a discrete block with given sample time"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -127,7 +127,7 @@ revisions="<html>
 <tr>
 <td valign=\"top\">4954</td>
 <td valign=\"top\">2012-03-02</td>
-<td valign=\"top\">A. Haumer &amp; D. Winkler</td>
+<td valign=\"top\">A. Haumer & D. Winkler</td>
 <td valign=\"top\"><p>Initial version based on discussion in <a href=\"https://trac.modelica.org/Modelica/ticket/529/Modelica\">#529</a></p></td>
 </tr>
 </table>

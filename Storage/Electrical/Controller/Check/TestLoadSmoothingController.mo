@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Controller.Check;
 model TestLoadSmoothingController "Example to evaluate self discharge time"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model TestLoadSmoothingController "Example to evaluate self discharge time"
 
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{66,-40},{86,-20}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{66,-40},{86,-20}})));
   TransiEnt.Producer.Electrical.Wind.WindProfiles.WindProfileLoader P_wind(REProfile=TransiEnt.Producer.Electrical.Wind.WindProfiles.WindData.Wind2012_TenneT_900s, constantfactor=0.2*30000e6) annotation (Placement(transformation(extent={{-80,-2},{-60,18}})));
   Modelica.Blocks.Math.Add P_residual(k1=-1, k2=+1)
     annotation (Placement(transformation(extent={{-40,-22},{-20,-2}})));
@@ -36,8 +36,8 @@ model TestLoadSmoothingController "Example to evaluate self discharge time"
         P_max_load=90e6,
         eta_unload=1,
         eta_load=1)) annotation (Placement(transformation(extent={{29,-41},{51,-19}})));
-  TransiEnt.Components.Boundaries.Electrical.Power Consumer annotation (Placement(transformation(extent={{48,-84},{28,-64}})));
-  TransiEnt.Components.Boundaries.Electrical.Power WindGenerator annotation (Placement(transformation(extent={{48,-2},{28,18}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power Consumer annotation (Placement(transformation(extent={{48,-84},{28,-64}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power WindGenerator annotation (Placement(transformation(extent={{48,-2},{28,18}})));
   Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{16,24},{24,32}})));
   Modelica.Blocks.Sources.RealExpression P_residual_smoothed(y=-ElectricGrid.epp.P) annotation (Placement(transformation(extent={{68,-12},{88,8}})));
 equation

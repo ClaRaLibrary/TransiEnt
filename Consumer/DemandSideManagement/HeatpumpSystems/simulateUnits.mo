@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems;
 function simulateUnits "Function that allows to simulate N uncoordinated heat pump systems in series using parameter values from a N x 24 mat file"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,5 +54,6 @@ algorithm
   Modelica.Utilities.Streams.print(simulationCall);
   success:=DymolaCommands.SimulatorAPI.simulateModel(simulationCall, stopTime=tend,outputInterval=dt, tolerance=1e-005, resultFile=resultFileName + "_"+String(i));
 
-end for;
+ end for;
+ annotation(__Dymola_interactive=true);
 end simulateUnits;

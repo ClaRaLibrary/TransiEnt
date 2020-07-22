@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Blocks;
 block FirstOrder "First order transfer function block (= 1 pole, allows Tau = 0 and a gain)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,7 +28,7 @@ block FirstOrder "First order transfer function block (= 1 pole, allows Tau = 0 
                                                                                             choice=4 "no init"));
   parameter Real y_start=1 "Start value at output" annotation(Dialog(enable = Tau>0 and initOption==2));
 protected
-  Real y_aux;
+  Real y_aux(stateSelect=if Tau==0 then StateSelect.never else StateSelect.always);
 initial equation
   if Tau < Modelica.Constants.eps then
     // do nothing because no initialization is necessary

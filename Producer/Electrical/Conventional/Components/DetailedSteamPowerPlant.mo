@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components;
 model DetailedSteamPowerPlant "A closed steam cycle including single reheat, feedwater tank, LP and HP preheaters"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,7 +61,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     p_nom=NOM.Turbine_HP.p_in,
     m_flow_nom=NOM.Turbine_HP.m_flow,
     Pi=NOM.Turbine_HP.p_out/NOM.Turbine_HP.p_in,
-    rho_nom=TILMedia.VLEFluidFunctions.density_phxi(
+    rho_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
         simCenter.fluid1,
         NOM.Turbine_HP.p_in,
         NOM.Turbine_HP.h_in),
@@ -88,7 +88,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     Delta_p_nomIP=NOM.Delta_p_RS_nom,
     CL_Delta_pHP_mLS_=INIT.CharLine_Delta_p_HP_mLS_,
     CL_Delta_pIP_mLS_=INIT.CharLine_Delta_p_IP_mRS_,
-    initOption_HP=0,
+    initOption_HP=202,
     initOption_IP=208,
     Tau_dead=30,
     Tau_bal=60)        annotation (Placement(transformation(extent={{-152,50},{-124,88}})));
@@ -96,7 +96,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     p_nom=NOM.Turbine_IP.p_in,
     m_flow_nom=NOM.Turbine_IP.m_flow,
     Pi=NOM.Turbine_IP.p_out/NOM.Turbine_IP.p_in,
-    rho_nom=TILMedia.VLEFluidFunctions.density_phxi(
+    rho_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
         simCenter.fluid1,
         NOM.Turbine_IP.p_in,
         NOM.Turbine_IP.h_in),
@@ -110,7 +110,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     p_nom=NOM.Turbine_LP2.p_in,
     m_flow_nom=NOM.Turbine_LP2.m_flow,
     Pi=NOM.Turbine_LP2.p_out/NOM.Turbine_LP2.p_in,
-    rho_nom=TILMedia.VLEFluidFunctions.density_phxi(
+    rho_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
         simCenter.fluid1,
         NOM.Turbine_LP2.p_in,
         NOM.Turbine_LP2.h_in),
@@ -131,7 +131,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         origin={272,-34})));
 
   Modelica.Blocks.Sources.RealExpression Q_cond(y=-(Turbine_LP2.summary.outlet.h
-         - TILMedia.VLEFluidFunctions.bubbleSpecificEnthalpy_pxi(
+         - TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.bubbleSpecificEnthalpy_pxi(
         simCenter.fluid1, NOM.p_condenser))*Turbine_LP2.summary.outlet.m_flow)
     annotation (Placement(transformation(extent={{334,-48},{296,-20}})));
   ClaRa.Visualisation.Quadruple quadruple(decimalSpaces(p=2))
@@ -222,7 +222,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         rotation=0,
         origin={34,38})));
 
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valve_IP(redeclare model PressureLoss =
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valve_IP(redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      Delta_p_nom=20e5 - 12.8e5, m_flow_nom=65.895))
     annotation (Placement(transformation(
         extent={{-10,6},{10,-6}},
@@ -232,7 +232,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     p_nom=NOM.Turbine_LP1.p_in,
     m_flow_nom=NOM.Turbine_LP1.m_flow,
     Pi=NOM.Turbine_LP1.p_out/NOM.Turbine_LP1.p_in,
-    rho_nom=TILMedia.VLEFluidFunctions.density_phxi(
+    rho_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
         simCenter.fluid1,
         NOM.Turbine_LP1.p_in,
         NOM.Turbine_LP1.h_in),
@@ -259,8 +259,10 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         origin={162,22})));
 
   ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple Pump_preheater_LP1(eta_mech=1) annotation (Placement(transformation(extent={{102,-160},{82,-180}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valve_LP1(redeclare model PressureLoss =
-        ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticNominalPoint (                   Delta_p_nom=NOM.valve_LP1.Delta_p_nom, m_flow_nom=NOM.valve_LP1.m_flow))
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valve_LP1(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.Quadratic_EN60534_incompressible (
+        paraOption=2,
+        Delta_p_nom=NOM.valve_LP1.Delta_p_nom,
+        m_flow_nom=NOM.valve_LP1.m_flow))
     annotation (Placement(transformation(
         extent={{-10,6},{10,-6}},
         rotation=270,
@@ -318,21 +320,23 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         extent={{10,10},{-10,-10}},
         rotation=90,
         origin={-140,-40})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valve1_HP(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valve1_HP(
     openingInputIsActive=false,
     showExpertSummary=true,
-    redeclare model PressureLoss =
-        ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticNominalPoint (
+    redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.Quadratic_EN60534_compressible (
+        paraOption=2,
         rho_in_nom=23,
         Delta_p_nom=NOM.valve1_HP.Delta_p_nom,
         m_flow_nom=NOM.valve1_HP.m_flow))
     annotation (Placement(transformation(
         extent={{10,-6},{-10,6}},
         rotation=90,
-        origin={-88,-12})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valve2_HP(
-    openingInputIsActive=true, redeclare model PressureLoss =
-        ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticNominalPoint (                   m_flow_nom=NOM.valve_cut.m_flow, Delta_p_nom=NOM.valve_cut.Delta_p))
+        origin={-86,-12})));
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valve2_HP(
+    openingInputIsActive=true, redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.Quadratic_EN60534_incompressible (
+        paraOption=2,
+        m_flow_nom=NOM.valve_cut.m_flow,
+        Delta_p_nom=NOM.valve_cut.Delta_p))
     annotation (Placement(transformation(
         extent={{-10,-6},{10,6}},
         rotation=0,
@@ -365,13 +369,12 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     Tau_cond=0.3,
     Tau_evap=0.03,
     redeclare model HeatTransfer_Shell = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L3 (alpha_nom={1500,8000}),
-    redeclare model PressureLossShell = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearParallelZones_L3 (Delta_p_nom={100,100,100}),
+    redeclare model PressureLossShell = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L3,
     p_nom_tubes=NOM.preheater_LP1.p_cond,
     p_start_tubes(displayUnit="bar") = INIT.preheater_LP1.p_cond,
     initOptionShell=204,
-    initOptionWall=1,
-    initOptionTubes=0)
-                      annotation (Placement(transformation(
+    initOptionTubes=0,
+    initOptionWall=1) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={162,-124})));
@@ -424,7 +427,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     p_condenser=NOM.p_condenser*0.2,
     preheater_HP_p_tap=NOM.preheater_HP_p_tap*0.2,
     preheater_HP_m_flow_tap=NOM.preheater_HP_m_flow_tap*0.2) annotation (Placement(transformation(extent={{-310,-238},{-290,-218}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valve_LP2(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valve_LP2(
                                           Tau=1e-3, redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      m_flow_nom=NOM.valve_LP2.m_flow, Delta_p_nom=NOM.valve_LP2.Delta_p_nom))
     annotation (Placement(transformation(
@@ -542,7 +545,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
         origin={257.5,76})));
 
   replaceable TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem "Choice of excitation system model with voltage control"
-                                                                                                                                                                                                        annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
+                                                                                                                                                                                              annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{10,-10.5},{-10,10.5}},
         rotation=0,
         origin={288,113})));
@@ -645,7 +648,7 @@ equation
       smooth=Smooth.None));
   connect(valve1_HP.outlet, preheater_HP.In1)
                                              annotation (Line(
-      points={{-88,-22},{-88,-40},{-130.2,-40}},
+      points={{-86,-22},{-86,-40},{-130.2,-40}},
       color={0,131,169},
       thickness=0.5,
       smooth=Smooth.None));
@@ -730,7 +733,7 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
   connect(join_HP.outlet2, valve1_HP.inlet) annotation (Line(
-      points={{-86,8},{-86,4},{-88,4},{-88,-2}},
+      points={{-86,8},{-86,-2}},
       color={0,131,169},
       thickness=0.5,
       smooth=Smooth.None));
@@ -801,7 +804,7 @@ equation
       color={190,190,190},
       smooth=Smooth.None));
   connect(valve1_HP.eye, quadruple11.eye) annotation (Line(
-      points={{-84,-22},{-84,-21.7},{-80,-21.7},{-80,-32}},
+      points={{-82,-22},{-82,-21.7},{-80,-21.7},{-80,-32}},
       color={190,190,190},
       smooth=Smooth.None));
   connect(quadruple12.eye, valve2_HP.eye) annotation (Line(

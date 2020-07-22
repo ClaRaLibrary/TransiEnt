@@ -1,10 +1,10 @@
 within TransiEnt.Components.Boundaries.Heat;
 model Heatflow_L1_idContrMFlow_temp "Heat flow boundary with pump with ideal mass flow control to get a given outlet temperature"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,7 +57,7 @@ equation
           thickness=0.5)}),                                       Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This model is a heat flow boundary with a pump whose mass flow is ideally controlled&nbsp;to get a given&nbsp;outlet&nbsp;temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
+<p>This model is a heat flow boundary with a pump whose mass flow is ideally controlled to get a given outlet temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The mass flow is calculated based on a heat flow rate and a given constant outlet temperature. There is no volume considered.</p>
 <p>There are no pressure losses included (pressures at inlet and outlet are given from the outside).</p>

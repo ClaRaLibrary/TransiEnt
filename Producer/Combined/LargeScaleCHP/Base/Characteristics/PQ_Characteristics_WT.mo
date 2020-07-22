@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics;
 record PQ_Characteristics_WT "Black coal steam unit based on 'CHP Tiefstack (TS)', Source: Cerbe2002"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -60,7 +60,7 @@ record PQ_Characteristics_WT "Black coal steam unit based on 'CHP Tiefstack (TS)
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p><span style=\"font-family: sans-serif;\">[1] CERBE, A. &quot;Prozessnahe Einsatzoptimierung mit BoFiT unter Ber&uuml;cksichtigung der Netzrestriktionen.&quot; Hamburg: Hamburgische Electricit&auml;ts-Werke AG, 2002 </span></p>
+<p><span style=\"font-family: sans-serif;\">[1] CERBE, A. &quot;Prozessnahe Einsatzoptimierung mit BoFiT unter Berücksichtigung der Netzrestriktionen.&quot; Hamburg: Hamburgische Electricitäts-Werke AG, 2002 </span></p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end PQ_Characteristics_WT;

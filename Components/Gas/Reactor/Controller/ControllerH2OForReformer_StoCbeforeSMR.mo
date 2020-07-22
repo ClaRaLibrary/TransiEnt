@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Reactor.Controller;
 model ControllerH2OForReformer_StoCbeforeSMR "Controller to control the water mass flow rate for the prereformer and steam methane reformer for given steam to carbon ratio in front of SMR"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //

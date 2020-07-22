@@ -1,11 +1,11 @@
-within TransiEnt.Consumer.Gas;
+﻿within TransiEnt.Consumer.Gas;
 model TableBasedGasBurningConsumer "Simple model of a consumer burning natural gas for covering heat demand."
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -90,12 +90,11 @@ public
     annotation (Placement(transformation(extent={{28,16},{-2,36}})));
 
 protected
-   TILMedia.VLEFluid_pT gasMediumExhaust(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasMediumExhaust(
     vleFluidType=medium,
     xi=actualStream(gasIn.xi_outflow),
     p=simCenter.p_amb_const,
-    T=T_exhaustgas) if consider_FlueGas_losses==true
-    annotation (Placement(transformation(extent={{-10,74},{10,94}})));
+    T=T_exhaustgas) if consider_FlueGas_losses==true annotation (Placement(transformation(extent={{-10,74},{10,94}})));
   TransiEnt.Components.Statistics.Functions.GetFuelSpecificCO2Emissions fuelSpecificCO2Emissions(typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas);
 public
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas) annotation (Placement(transformation(extent={{2,-100},{22,-80}})));
@@ -220,6 +219,6 @@ Exhaust Gas Temperature"),               Line(
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Pascal Dubucq (dubucq@tuhh.de), Nov 2014</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Jun 2018</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), Jun 2018</p>
 </html>"));
 end TableBasedGasBurningConsumer;

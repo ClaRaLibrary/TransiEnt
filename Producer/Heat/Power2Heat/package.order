@@ -4,8 +4,8 @@ Components
 Controller
 BivalentHeatpumpSystem
 ElectricBoiler
-HeatPumpElectricCharlineHeatPort_L1
-HeatPumpElectricCharlineFluidPorts
+ElectricBoilerImpedance
+HeatPumpElectricCharline
 ElectricBoiler_L1_idContrMFlow_temp
 ElectricBoiler_L1_idContrQFlow_temp
 EHP_L1_idContrMFlow_temp

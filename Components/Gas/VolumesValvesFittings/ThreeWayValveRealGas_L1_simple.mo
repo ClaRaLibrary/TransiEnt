@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings;
 model ThreeWayValveRealGas_L1_simple "Three way valve for one phase vle media | no reverse flow | works for zero flow | no pressure dependency |"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,30 +49,31 @@ public
     outline(splitRatio=splitRatio),
     gasPortIn(
       mediumModel=medium,
-      xi=gasIn.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortIn.xi_outflow)),
       x=gasIn.x,
       m_flow=gasPortIn.m_flow,
       T=gasIn.T,
       p=gasPortIn.p,
-      h=gasIn.h,
+      h=noEvent(actualStream(gasPortIn.h_outflow)),
       rho=gasIn.d),
     gasPortOut1(
       mediumModel=medium,
-      xi=gasOut1.xi,
+      xi=noEvent(actualStream(gasPortOut1.xi_outflow)),
       x=gasOut1.x,
       m_flow=gasPortOut1.m_flow,
       T=gasOut1.T,
       p=gasPortOut1.p,
-      h=gasOut1.h,
+      h=noEvent(actualStream(gasPortOut1.h_outflow)),
       rho=gasOut1.d),
     gasPortOut2(
       mediumModel=medium,
-      xi=gasOut2.xi,
+      xi=noEvent(actualStream(gasPortOut2.xi_outflow)),
       x=gasOut2.x,
       m_flow=gasPortOut2.m_flow,
       T=gasOut2.T,
       p=gasPortOut2.p,
-      h=gasOut2.h,
+      h=noEvent(actualStream(gasPortOut2.h_outflow)),
       rho=gasOut2.d)) annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
 
 equation

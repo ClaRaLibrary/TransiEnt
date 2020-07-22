@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycSourcePipeSink
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,7 +40,7 @@ model TestStatCycSourcePipeSink
     m_flow_nom_pipe=10,
     m_flow_sink=-10)         annotation (Placement(transformation(extent={{-100,60},{-80,80}})));
   TransiEnt.Basics.Tables.GasGrid.NaturalGasVolumeFlowSTP naturalGasVolumeFlowInNorm_HH_Reitbrook(constantfactor=2.710602*0.844499954) annotation (Placement(transformation(extent={{86,-16},{66,4}})));
-  Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe(
     Delta_p_nom=Init.Delta_p_nom_pipe,
     h_start=ones(pipe.N_cv)*Init.pipe.h_in,
     m_flow_start=ones(pipe.N_cv + 1)*Init.pipe.m_flow,

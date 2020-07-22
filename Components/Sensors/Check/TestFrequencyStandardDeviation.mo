@@ -1,10 +1,10 @@
 within TransiEnt.Components.Sensors.Check;
 model TestFrequencyStandardDeviation
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,7 +21,7 @@ model TestFrequencyStandardDeviation
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   FrequencyStandardDeviation frequencyStandardDeviation annotation (Placement(transformation(extent={{-16,6},{4,26}})));
-  Boundaries.Electrical.Frequency constantFrequency_L1_1 annotation (Placement(transformation(extent={{44,-10},{64,10}})));
+  Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1 annotation (Placement(transformation(extent={{44,-10},{64,10}})));
   Basics.Tables.GenericDataTable f_1year_60s(
     datasource=TransiEnt.Basics.Tables.DataPrivacy.isPublic,
     relativepath="electricity/GridFrequencyMeasurement_60s_01012012_31122012.txt",

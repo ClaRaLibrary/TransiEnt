@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.PowerTransformation;
 model IdealTriac "Basic model of a PowerTransformer with constant loss in percent"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -163,8 +163,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p>Active power port epp_in &quot;power&nbsp;port&nbsp;on&nbsp;generator&nbsp;side&quot;</p>
-<p>Active power port epp_out &quot;power&nbsp;port&nbsp;on&nbsp;consumer&nbsp;side&nbsp;(smaller&nbsp;power&nbsp;flow&nbsp;if&nbsp;triac&nbsp;active)&quot;</p>
+<p>Active power port epp_in &quot;power port on generator side&quot;</p>
+<p>Active power port epp_out &quot;power port on consumer side (smaller power flow if triac active)&quot;</p>
 <p>Modelica RealInput: u </p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no elements)</span></p>

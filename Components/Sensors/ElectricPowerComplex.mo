@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors;
 model ElectricPowerComplex "Measure Frequency on ComplexPowerPort"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -75,7 +75,7 @@ equation
   epp_IN.Q + epp_OUT.Q = 0;
   Connections.branch(epp_IN.f,epp_OUT.f);
 
-  P = if change_of_sign then -1*epp_OUT.P else epp_OUT.P;
+  P = if change_of_sign then -1*epp_OUT.P else noEvent(epp_OUT.P);
   Q = if change_of_sign then -1*epp_OUT.Q else epp_OUT.Q;
 
   annotation (defaultConnectionStructurallyInconsistent=true,Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),

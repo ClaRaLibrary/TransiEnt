@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 partial model PartialCHP "Partial model of a large scale CHP plant with characteristics specified by PQ boundaries and PQ-Heat input table"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,8 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
   // _____________________________________________
 
   // Physical constraints
-  parameter TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.Generic_PQ_Characteristics PQCharacteristics=Characteristics.PQ_Characteristics_WW1() "Characteristics of CHP plant" annotation (choicesAllMatching, Dialog(group="Physical Constraints"));
+  parameter TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.Generic_PQ_Characteristics PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_WW1()
+                                                                                                                                                                 "Characteristics of CHP plant" annotation (choicesAllMatching, Dialog(group="Physical Constraints"));
 
   parameter Modelica.SIunits.Power P_el_n=300e6 "Installed capacity for investment cost calculation" annotation(Dialog(group="Physical Constraints"));
 
@@ -59,9 +60,12 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
   parameter Boolean useConstantEfficiencies = false "True, constant efficiency over load" annotation(Evaluate=true, choices(__Dymola_checkBox=true),Dialog(group="Physical Constraints"));
   parameter SI.Efficiency eta_el_const = 0.4 "Constant efficiency used if useConstantEfficiencies=true" annotation(Dialog(group="Physical Constraints", enable=useConstantEfficiencies));
   parameter SI.Efficiency eta_th_const = 0.5 "Constant efficiency used if useConstantEfficiencies=true" annotation(Dialog(group="Physical Constraints", enable=useConstantEfficiencies));
+  parameter SI.Efficiency eta_peakload=0.98 "Constant efficiency of peak load heater annotation" annotation(Dialog(group="Physical Constraints"));
 
   parameter Boolean useConstantSigma = false "True, use constant power to heat ration (sigma) instead of PQ characteristics" annotation(Evaluate=true, choices(__Dymola_checkBox=true),Dialog(group="Physical Constraints"));
   parameter Real sigma= 0.3 "Power to heat ration used only if useConstantSigma=true" annotation(Dialog(group="Physical Constraints", enable = useConstantSigma));
+
+  parameter Integer quantity=1;
 
   // Statistics
 
@@ -70,10 +74,13 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
     constrainedby TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PartialPowerPlantCostSpecs
                                                                                             annotation (Dialog(group="Statistics"), __Dymola_choicesAllMatching=true);
 
-   final parameter EnergyResource typeOfResource=EnergyResource.Cogeneration "Type of energy resource for global model statistics" annotation (Dialog(group="Statistics"), HideResult=true, Placement(transformation(extent=100)));
+   final parameter TransiEnt.Basics.Types.TypeOfResource typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration "Type of energy resource for global model statistics" annotation (
+    Dialog(group="Statistics"),
+    HideResult=true,
+    Placement(transformation(extent=100)));
 
-   parameter PrimaryEnergyCarrier typeOfPrimaryEnergyCarrier=PrimaryEnergyCarrier.BlackCoal "Type of primary energy carrier for co2 emissions global statistics" annotation (Dialog(group="Statistics"), HideResult=true);
-   parameter PrimaryEnergyCarrierHeat typeOfPrimaryEnergyCarrierHeat=PrimaryEnergyCarrierHeat.BlackCoal "Type of primary energy carrier for heat for co2 emissions global statistics" annotation (Dialog(group="Statistics"), HideResult=true);
+   parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal "Type of primary energy carrier for co2 emissions global statistics" annotation (Dialog(group="Statistics"), HideResult=true);
+   parameter TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat typeOfPrimaryEnergyCarrierHeat=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.BlackCoal "Type of primary energy carrier for heat for co2 emissions global statistics" annotation (Dialog(group="Statistics"), HideResult=true);
 
   parameter TransiEnt.Basics.Types.TypeOfCO2AllocationMethod typeOfCO2AllocationMethod=1 "Type of allocation method" annotation (Dialog(group="Statistics"));
 
@@ -83,6 +90,9 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
    parameter Boolean integrateHeatFlow=false "True if heat flow shall be integrated";
    parameter Boolean integrateElectricPower=false "True if electric power shall be integrated";
    parameter Boolean integrateElectricPowerChp=false "True if electric power of the chp shall be integrated";
+   final parameter SI.Power P_el_n_single=P_el_n/quantity;
+   final parameter SI.Power Q_flow_n_CHP_single=Q_flow_n_CHP/quantity;
+   Modelica.Blocks.Sources.RealExpression Zero;
   // _____________________________________________
   //
   //                  Interfaces
@@ -108,52 +118,57 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
 
   //Electric power port
 
-  replaceable Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"), Placement(transformation(extent={{90,50},{110,70}}), iconTransformation(extent={{80,42},{110,70}})));
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (
+    choicesAllMatching=true,
+    Dialog(group="Replaceable Components"),
+    Placement(transformation(extent={{90,50},{110,70}}), iconTransformation(extent={{80,42},{110,70}})));
 
   // Fuid ports
 
-  Basics.Interfaces.Thermal.FluidPortOut outlet(Medium=medium) annotation (Placement(transformation(extent={{90,-6},{110,14}}), iconTransformation(extent={{92,-16},{112,4}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut outlet(Medium=medium) annotation (Placement(transformation(extent={{90,-6},{110,14}}), iconTransformation(extent={{92,-16},{112,4}})));
 
-  Basics.Interfaces.Thermal.FluidPortIn inlet(Medium=medium) annotation (Placement(transformation(extent={{90,-34},{110,-14}}), iconTransformation(extent={{92,-44},{112,-24}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn inlet(Medium=medium) annotation (Placement(transformation(extent={{90,-34},{110,-14}}), iconTransformation(extent={{92,-44},{112,-24}})));
 
   // _____________________________________________
   //
   //                Components
   // _____________________________________________
 
-  Modelica.Blocks.Math.Gain Q_flow_set_pos(k=-1) "Thermal setpoint sign changed (>0)" annotation (Placement(transformation(
+  Modelica.Blocks.Math.Gain Q_flow_set_pos[quantity](each k=-1) "Thermal setpoint sign changed (>0)" annotation (Placement(transformation(
         extent={{6,-6},{-6,6}},
         rotation=0,
-        origin={64,110})));
+        origin={46,110})));
 
-  HeatInputTable Q_flow_set_SG(
-    final PQCharacteristics=PQCharacteristics,
-    Q_flow_n=Q_flow_n_CHP,
-    P_el_n=P_el_n) "Steam generator setpoint" annotation (Placement(transformation(extent={{-10,80},{10,100}})));
+  TransiEnt.Producer.Combined.LargeScaleCHP.Base.HeatInputTable Q_flow_set_SG[quantity](
+    each final PQCharacteristics=PQCharacteristics,
+    each Q_flow_n=Q_flow_n_CHP_single,
+    each P_el_n=P_el_n_single)
+                        "Steam generator setpoint" annotation (Placement(transformation(extent={{-10,80},{10,100}})));
 
-  PQBoundaries pQDiagram(
-    final PQCharacteristics=PQCharacteristics,
-    Q_flow_nom=Q_flow_n_CHP,
-    P_n=P_el_n) "Possible operating regime of electric output for given thermal output" annotation (Placement(transformation(extent={{10,114},{-10,134}})));
+  PQBoundaries pQDiagram[quantity](
+    each final PQCharacteristics=PQCharacteristics,
+    each Q_flow_nom=Q_flow_n_CHP_single,
+    each P_n=P_el_n_single)
+                     "Possible operating regime of electric output for given thermal output" annotation (Placement(transformation(extent={{10,114},{-10,134}})));
 
-  Components.Sensors.TemperatureSensor T_out_sensor annotation (Placement(transformation(extent={{88,4},{68,24}})));
+  TransiEnt.Components.Sensors.TemperatureSensor T_out_sensor annotation (Placement(transformation(extent={{88,4},{68,24}})));
 
-  Components.Sensors.TemperatureSensor T_in_sensor annotation (Placement(transformation(extent={{88,-42},{68,-24}})));
+  TransiEnt.Components.Sensors.TemperatureSensor T_in_sensor annotation (Placement(transformation(extent={{88,-42},{68,-24}})));
 
   // Statistical Collectors
 
-  Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
-  Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower(typeOfResource=EnergyResource.Cogeneration) annotation (Placement(transformation(extent={{12,-100},{32,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration) annotation (Placement(transformation(extent={{12,-100},{32,-80}})));
 
-  Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectPowerEmissions annotation (Placement(transformation(extent={{34,-100},{54,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectPowerEmissions annotation (Placement(transformation(extent={{34,-100},{54,-80}})));
 
-  Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectHeatingEmissions annotation (Placement(transformation(extent={{56,-100},{76,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectHeatingEmissions annotation (Placement(transformation(extent={{56,-100},{76,-80}})));
 
-  Components.Statistics.Collectors.LocalCollectors.CogenerationPlantCost collectCosts(
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CogenerationPlantCost collectCosts(
     Q_flow_fuel_is=Q_flow_input,
-    Q_flow_is=Q_flow_is,
-    P_el_is=P_el_is,
+    Q_flow_is=-Q_flow_is,
+    P_el_is=-P_el_is,
     P_n=P_el_n,
     A_alloc_power=A_cde_alloc_power,
     A_alloc_heat=A_cde_alloc_heat,
@@ -199,12 +214,26 @@ public
 
    //Visualisation
 
-  Basics.Interfaces.General.EyeOut eye annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
+  TransiEnt.Basics.Interfaces.General.EyeOut eye annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
 
-  Modelica.Blocks.Nonlinear.Limiter Q_flow_set_CHP(uMax=Q_flow_n_CHP) annotation (Placement(transformation(extent={{46,100},{26,120}})));
+  Modelica.Blocks.Nonlinear.VariableLimiter
+                                    Q_flow_set_CHP[quantity]                    annotation (Placement(transformation(extent={{32,104},{20,116}})));
 
+ // Modelica.Blocks.Math.MultiSum multiSum[quantity](each k=vector([{1};ones(quantity-1)*(-1)]),nu=quantity)  annotation (Placement(transformation(extent={{74,104},{62,116}})));
+  Modelica.Blocks.Math.MultiSum multiSum[quantity](each k=ones(quantity),each nu=quantity)  annotation (Placement(transformation(extent={{70,104},{58,116}})));
 
-
+  Modelica.Blocks.Sources.RealExpression Q_flow_set_CHP_max(y=Q_flow_n_CHP_single) annotation (Placement(transformation(extent={{50,122},{40,132}})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_set_CHP_min(y=1e-3) annotation (Placement(transformation(extent={{50,92},{40,102}})));
+  replaceable TransiEnt.Producer.Combined.LargeScaleCHP.Base.CHPStates_heatled        plantState(
+    Q_flow_min_operating=1,
+    Q_flow_max_operating=Q_flow_n_CHP,
+    t_startup=0,
+    init_state=if Q_flow_init > 0 then TransiEnt.Basics.Types.on1 else TransiEnt.Basics.Types.off) constrainedby TransiEnt.Producer.Combined.LargeScaleCHP.Base.CHPStates_heatled(
+    t_startup=t_startup,
+    init_state=if Q_flow_init > 0 then TransiEnt.Basics.Types.on1 else TransiEnt.Basics.Types.off)
+                               annotation (Placement(transformation(extent={{-5.5,-5},{5.5,5}},
+        rotation=180,
+        origin={79.5,111})));
 equation
     // _____________________________________________
   //
@@ -226,7 +255,7 @@ equation
     W_el=0;
   end if;
 
-  P_el_CHP_is=if useConstantSigma then sigma*Q_flow_is else min(P_el_is, pQDiagram.P_min);
+  P_el_CHP_is=if useConstantSigma then sigma*Q_flow_is else min(P_el_is, pQDiagram[1].P_min);
 
 if integrateElectricPowerChp then
   der(W_el_CHP)=P_el_CHP_is;
@@ -238,8 +267,8 @@ end if;
   if not useConstantEfficiencies then
     eta_el=max(0,min(1, P_el_is/max(Q_flow_input,simCenter.Q_flow_small)));
     eta_th=max(0,min(1, Q_flow_is/max(Q_flow_input,simCenter.Q_flow_small)));
-    eta_el_target=max(0, min(1, Q_flow_set_SG.P/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small)));
-    eta_th_target=max(0, min(1, Q_flow_set_SG.Q_flow/max(Q_flow_set_SG.Q_flow_input, simCenter.Q_flow_small)));
+    eta_el_target=max(0, min(1, sum(Q_flow_set_SG.P)/max(sum(Q_flow_set_SG.Q_flow_input), simCenter.Q_flow_small)));
+    eta_th_target=max(0, min(1, sum(Q_flow_set_SG.Q_flow)/max(sum(Q_flow_set_SG.Q_flow_input), simCenter.Q_flow_small)));
   else
     eta_el=eta_el_const;
     eta_el_target=eta_el_const;
@@ -288,24 +317,37 @@ end if;
 
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
 
-  connect(Q_flow_set_pos.u, Q_flow_set) annotation (Line(
-      points={{71.2,110},{86,110},{86,144}},
-      color={0,0,127},
-      smooth=Smooth.None));
-
   connect(outlet, T_out_sensor.port) annotation (Line(points={{100,4},{78,4}},             color={175,0,0}, thickness=0.5));
 
   connect(inlet, T_in_sensor.port) annotation (Line(points={{100,-24},{96,-24},{96,-42},{92,-42},{78,-42}},
                                                                                               color={175,0,0}, thickness=0.5));
 
   //General Annotations
+  for i in 1:quantity loop
+  connect(Q_flow_set_CHP[i].limit1, Q_flow_set_CHP_max.y) annotation (Line(points={{33.2,114.8},{33.2,121.4},{39.5,121.4},{39.5,127}}, color={0,0,127}));
+  connect(Q_flow_set_CHP[i].limit2, Q_flow_set_CHP_min.y) annotation (Line(points={{33.2,105.2},{36,105.2},{36,97},{39.5,97}},           color={0,0,127}));
+  connect(Q_flow_set_pos[i].y, Q_flow_set_CHP[i].u) annotation (Line(points={{39.4,110},{33.2,110}},        color={0,0,127}));
+  connect(Q_flow_set_SG[i].Q_flow, Q_flow_set_CHP[i].y) annotation (Line(points={{5.45455,102},{8,102},{8,106},{18,106},{18,110},{19.4,110}},
+                                                                                                                                            color={0,0,127}));
+  connect(Q_flow_set_CHP[i].y, pQDiagram[i].Q_flow) annotation (Line(points={{19.4,110},{18,110},{18,124},{12,124}},
+                                                                                                                   color={0,0,127}));
+  connect(multiSum[i].u[1], plantState.Q_flow_set_lim) annotation (Line(points={{70,110},{73.34,110},{73.34,111}}, color={0,0,127}));
+  for j in 2:quantity loop
+    if j<=i then
+       connect(Q_flow_set_CHP[j-1].y, multiSum[i].u[j]) annotation (Line(points={{19.4,110},{18,110},{18,96},{70,96},{70,110}},              color={0,0,127}));
+    else
+       connect(Zero.y, multiSum[i].u[j]);
+    end if;
+  end for;
+  end for;
 
-  connect(Q_flow_set_pos.y, Q_flow_set_CHP.u) annotation (Line(points={{57.4,110},{52,110},{48,110}}, color={0,0,127}));
 
-  connect(Q_flow_set_SG.Q_flow, Q_flow_set_CHP.y) annotation (Line(points={{5.45455,102},{8,102},{8,106},{18,106},{18,110},{25,110}}, color={0,0,127}));
+  connect(Q_flow_set_pos.u, multiSum.y) annotation (Line(points={{53.2,110},{56.98,110}},                   color={0,0,127}));
 
-  connect(Q_flow_set_CHP.y, pQDiagram.Q_flow) annotation (Line(points={{25,110},{18,110},{18,124},{12,124}}, color={0,0,127}));
-
+  connect(plantState.Q_flow_set, Q_flow_set) annotation (Line(
+      points={{85,111},{85,119.5},{86,119.5},{86,144}},
+      color={175,0,0},
+      pattern=LinePattern.Dash));
    annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,140}}), graphics={
                                                                                 Line(
           points={{88,-60},{88,-74}},

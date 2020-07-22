@@ -2,10 +2,10 @@ within TransiEnt.Basics.Adapters.Gas;
 model Real_to_Ideal "Adapter that switches from real to ideal fluid models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -62,7 +62,7 @@ model Real_to_Ideal "Adapter that switches from real to ideal fluid models"
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=real,
     h=inStream(gasPortIn.h_outflow),
     p=gasPortIn.p,

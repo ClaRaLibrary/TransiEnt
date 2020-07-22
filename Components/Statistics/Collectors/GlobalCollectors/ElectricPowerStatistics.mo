@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.GlobalCollectors;
 model ElectricPowerStatistics "Total electric power statistics (different types of resources and balancing types)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -101,6 +101,7 @@ model ElectricPowerStatistics "Total electric power statistics (different types 
   SI.ActivePower P_conventional_with_CHP=powerCollector[Types.TypeOfResource.Conventional]+powerCollector[Types.TypeOfResource.Cogeneration];
   SI.ActivePower P_CHP=powerCollector[Types.TypeOfResource.Cogeneration];
   SI.ActivePower P_conventional=powerCollector[Types.TypeOfResource.Conventional];
+  SI.ActivePower P_storage=-powerCollector[Types.TypeOfResource.Storage];
   SI.ActivePower P_prim_bal_total(start=0) = sum(primBalPowerCollector);
   SI.ActivePower P_sec_bal_total(start=0) = sum(secBalPowerCollector);
   SI.ActivePower P_prim_bal_pos_offer_total = -primBalPowerOfferCollector[1];

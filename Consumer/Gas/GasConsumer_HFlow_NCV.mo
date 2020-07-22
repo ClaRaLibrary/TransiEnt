@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Gas;
 model GasConsumer_HFlow_NCV "Gas sink dependent on net calorific value"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,10 +49,12 @@ model GasConsumer_HFlow_NCV "Gas sink dependent on net calorific value"
   parameter SI.Temperature T_const=283.15 "constant Temperature" annotation (Dialog(tab="Sink", group="General"));
   //parameter SI.EnthalpyMassSpecific h_const=2274.9 "constant specific Enthalpy" annotation (Dialog(tab="Sink", group="General"));
 
+  parameter String mode="Consumer" annotation(Dialog(tab="General", group="Controller"),choices(choice = "Consumer" "Consumer", choice = "Producer" "Producer", choice = "Both" "Both", __Dymola_radioButtons=true));
   parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "Type of controller" annotation (Dialog(tab="General", group="Controller"));
   parameter Real k=1000 "Gain for controller in maximum feed in control" annotation (Dialog(tab="General",  group="Controller"));
   parameter Real Ti=0.1 "Integrator time constant for controller in maximum feed in control" annotation (Dialog(tab="General",  group="Controller"));
   parameter Real Td=0.1 "Derivative time constant for controller in maximum feed in control" annotation (Dialog(tab="General",  group="Controller"));
+  final parameter Integer flowDefinition = if mode == "Consumer" then 3 elseif mode == "Producer" then 4 else 1;
 
   // _____________________________________________
   //
@@ -82,13 +84,14 @@ model GasConsumer_HFlow_NCV "Gas sink dependent on net calorific value"
         rotation=180,
         origin={44,0})));
   Control.NCVController nCVController(
+    mode=mode,
     controllerType=controllerType,
     k=k,
     Ti=Ti,
     Td=Td) annotation (Placement(transformation(extent={{82,-16},{62,4}})));
-  Components.Sensors.RealGas.NCVSensor                vleNCVSensor(medium=medium)
+  Components.Sensors.RealGas.NCVSensor                vleNCVSensor(medium=medium,flowDefinition=flowDefinition)
                                                                    annotation (Placement(transformation(extent={{-24,0},{-4,20}})));
-  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2, medium=medium)
+  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2, medium=medium,flowDefinition=flowDefinition)
                                                                                                       annotation (Placement(transformation(extent={{-50,0},{-30,20}})));
 equation
 

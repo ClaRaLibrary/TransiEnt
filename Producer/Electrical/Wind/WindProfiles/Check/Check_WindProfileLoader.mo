@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Wind.WindProfiles.Check;
 model Check_WindProfileLoader
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,13 +24,13 @@ model Check_WindProfileLoader
     change_of_sign=true,
     REProfile=TransiEnt.Producer.Electrical.Wind.WindProfiles.WindData.Wind2013_LK_E66_HH,
     P_el_n=360e6) annotation (Placement(transformation(extent={{-80,46},{-60,66}})));
-  TransiEnt.Components.Boundaries.Electrical.Power WindGenerator annotation (choicesAllMatching=true, Placement(transformation(extent={{-23,14},{-3,34}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{-24,-24},{-4,-4}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power WindGenerator annotation (choicesAllMatching=true, Placement(transformation(extent={{-23,14},{-3,34}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{-24,-24},{-4,-4}})));
   WindProfileLoader windProfileLoader1(
     change_of_sign=true,
     REProfile=TransiEnt.Producer.Electrical.Wind.WindProfiles.WindData.Wind2011_TenneT_Offshore_900s,
     P_el_n=360e6) annotation (Placement(transformation(extent={{-92,-86},{-72,-66}})));
-  TransiEnt.Components.Boundaries.Electrical.Power WindGenerator1 annotation (choicesAllMatching=true, Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power WindGenerator1 annotation (choicesAllMatching=true, Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-65,-40})));

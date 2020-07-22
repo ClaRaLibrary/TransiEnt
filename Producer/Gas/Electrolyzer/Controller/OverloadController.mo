@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Controller;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model OverloadController "Control overload operation of electrolyzer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -154,6 +154,6 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Tom Lindemann in April 2016</p>
 <p>Model modified by Lisa Andresen (andresen@tuhh.de), May 2016</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), April 2018</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), April 2018</p>
 </html>"));
 end OverloadController;

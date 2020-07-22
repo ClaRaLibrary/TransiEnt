@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model vleDensitySensor "Two port density sensor for VLE fluids"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -72,22 +72,20 @@ model vleDensitySensor "Two port density sensor for VLE fluids"
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph fluid(
-    p = gasPortIn.p,
-    h = if flowDefinition==1 then actualStream(gasPortIn.h_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.h_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.h_outflow) else inStream(gasPortOut.h_outflow),
-    xi = if flowDefinition==1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow),
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluid(
+    p=gasPortIn.p,
+    h=if flowDefinition == 1 then actualStream(gasPortIn.h_outflow) elseif flowDefinition == 2 then noEvent(actualStream(gasPortIn.h_outflow)) elseif flowDefinition == 3 then inStream(gasPortIn.h_outflow) else inStream(gasPortOut.h_outflow),
+    xi=if flowDefinition == 1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition == 2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition == 3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow),
     vleFluidType=medium,
     computeSurfaceTension=false,
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,18},
-            {10,38}})));
-  TILMedia.VLEFluid_pT fluid_n(
-    p = 101325,
-    T = 273.15,
-    xi = if flowDefinition==1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow),
+    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,18},{10,38}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT fluid_n(
+    p=101325,
+    T=273.15,
+    xi=if flowDefinition == 1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition == 2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition == 3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow),
     vleFluidType=medium,
     computeSurfaceTension=false,
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-42},
-            {10,-22}})));
+    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-42},{10,-22}})));
 
   // _____________________________________________
   //

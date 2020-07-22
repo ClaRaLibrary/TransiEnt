@@ -1,11 +1,11 @@
-within TransiEnt.Components.Boundaries.Ambient;
+﻿within TransiEnt.Components.Boundaries.Ambient;
 model UndergroundTemperature "Gives the underground temperature at specified depth and time as a cosinal characteristic"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -141,9 +141,9 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p>Tested in check model &quot;TestUndergroundTemperature&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p>[1] Ramming, Klaus: <i>Bewertung und Optimierung oberfl&auml;chennaher Erdw&auml;rmekollektoren f&uuml;r verschiedene Lastf&auml;lle</i>, Technical University Dresden, 2007</p>
-<p>[2] Grigull, Ulrich ; Sandner, Heinrich: <i>W&auml;rmeleitung</i>, <i>W&auml;rme- und Stoff&uuml;bertragung</i>. Berlin, Heidelberg&nbsp;: Springer Berlin Heidelberg, 1990 &mdash;&nbsp;ISBN&nbsp;978-3-540-52315-4</p>
-<p>[3] VDI 4640 Blatt 1: Thermische Nutzung des Untergrunds - Grundlagen, Genehmigungen, Umweltaspekte. In: <i>Verein Deutscher Ingenieure e.V.</i> D&uuml;sseldorf (2010)</p>
+<p>[1] Ramming, Klaus: <i>Bewertung und Optimierung oberflächennaher Erdwärmekollektoren für verschiedene Lastfälle</i>, Technical University Dresden, 2007</p>
+<p>[2] Grigull, Ulrich ; Sandner, Heinrich: <i>Wärmeleitung</i>, <i>Wärme- und Stoffübertragung</i>. Berlin, Heidelberg : Springer Berlin Heidelberg, 1990 &mdash; ISBN 978-3-540-52315-4</p>
+<p>[3] VDI 4640 Blatt 1: Thermische Nutzung des Untergrunds - Grundlagen, Genehmigungen, Umweltaspekte. In: <i>Verein Deutscher Ingenieure e.V.</i> Düsseldorf (2010)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Lisa Andresen (andresen@tuhh.de), Dec 2016</span></p>
 </html>"));

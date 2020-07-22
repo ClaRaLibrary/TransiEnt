@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Electrical.Conventional.Components;
+﻿within TransiEnt.Producer.Electrical.Conventional.Components;
 model SecondOrderPlant "Second order transient behaviour, no states, no additional controller"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -212,7 +212,7 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>no equations</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Recomended <b>nominal</b> <b>efficiencies</b> (based on Strau&szlig;, 2009):</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Recomended <b>nominal</b> <b>efficiencies</b> (based on Strauß, 2009):</span></p>
 <p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Steam power plant (hard coal) --&gt; 0.40 - 0.45</span></p>
 <p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">Combined Cycle --&gt; 0.60</span></p>
 <p style=\"margin-left: 30px;\"><span style=\"font-family: MS Shell Dlg 2;\">GasTurbines --&gt; 0.32</span></p>
@@ -227,8 +227,8 @@ equation
 <p align=\"center\"><br><img src=\"modelica://TransiEnt/Images/PlantStart.png\"/></p>
 <p align=\"center\"><span style=\"font-family: MS Shell Dlg 2;\"><img src=\"modelica://TransiEnt/Images/simple_powerplant_dynamics_brauner.jpg\"/></span></p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p><br>[1] Strau&szlig;, Karl: <i>Kraftwerkstechnik zur Nutzung fossiler, nuklearer und regenerativer Energiequellen</i>. 6. ed. Heidelberg&nbsp;: Springer-Verlag Berlin Heidelberg, 2009 &mdash;&nbsp;ISBN&nbsp;9783642014307</p>
-<p><br>[2] Brauner, G&uuml;nther ; Glaunsinger, Wolfgang ; Bofinger, Stefan ; John, Markus ; Magin, Wendelin ; Pyc, Ireneusz ; Sch&uuml;ler, Steffen ; Schulz, Stephan ; Schwing, Ulrich ; et al.: <i>Erneuerbare Energie braucht flexible Kraftwerke - Szenarien bis 2020</i>&nbsp;: Verband der Elektrotechnik Elektronik Informationstechnik e.V., 2012</p>
+<p><br>[1] Strauß, Karl: <i>Kraftwerkstechnik zur Nutzung fossiler, nuklearer und regenerativer Energiequellen</i>. 6. ed. Heidelberg : Springer-Verlag Berlin Heidelberg, 2009 &mdash; ISBN 9783642014307</p>
+<p><br>[2] Brauner, Günther ; Glaunsinger, Wolfgang ; Bofinger, Stefan ; John, Markus ; Magin, Wendelin ; Pyc, Ireneusz ; Schüler, Steffen ; Schulz, Stephan ; Schwing, Ulrich ; et al.: <i>Erneuerbare Energie braucht flexible Kraftwerke - Szenarien bis 2020</i> : Verband der Elektrotechnik Elektronik Informationstechnik e.V., 2012</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Systems.Check;
 model Test_FeedInStation_woStorage "Model for testing a feed in station without a storage"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,6 +29,7 @@ model Test_FeedInStation_woStorage "Model for testing a feed in station without 
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel3, redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_SRK_var gasModel1)
                                                                                                   annotation (Placement(transformation(extent={{70,40},{90,60}})));
   TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_woStorage feedInStation(
+    usePowerPort=true,
     eta_n=0.75,
     P_el_n=1e6,
     P_el_min=1e5,
@@ -56,7 +57,7 @@ model Test_FeedInStation_woStorage "Model for testing a feed in station without 
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={22,20})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-68,-54})));

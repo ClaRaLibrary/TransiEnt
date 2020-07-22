@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Heat.Check;
 model TestFirstOrderHeatingNetworkConsumer_withPlant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,7 +28,7 @@ model TestFirstOrderHeatingNetworkConsumer_withPlant
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-117,-16.5})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{-58,-8},{-44,4}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{-58,-8},{-44,4}})));
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP Plant(
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     typeOfCO2AllocationMethod=2,

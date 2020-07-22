@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind.Check;
 model Test_WTG_SI_df_dt "Validation of WTG with df/dt SI control"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ model Test_WTG_SI_df_dt "Validation of WTG with df/dt SI control"
     integratePower=false)
                     annotation (Placement(transformation(extent={{-2,6},{18,28}})));
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{58,12},{78,32}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{58,12},{78,32}})));
   Modelica.Blocks.Sources.Constant Wind_konst(k=9)
     annotation (Placement(transformation(extent={{-70,12},{-50,32}})));
 

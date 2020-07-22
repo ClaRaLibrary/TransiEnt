@@ -1,11 +1,11 @@
 within TransiEnt.Basics.Adapters.Gas;
 model RealH2_to_RealSG4 "Adapter that switches from real H2 to real SG4 fluid models"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -62,14 +62,14 @@ model RealH2_to_RealSG4 "Adapter that switches from real H2 to real SG4 fluid mo
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph gasIn(
-  vleFluidType=medium_h2,
-  h=inStream(gasPortIn.h_outflow),
-  p=gasPortIn.p,
-  xi=inStream(gasPortIn.xi_outflow),
-  deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-70,-12},{-50,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
+    vleFluidType=medium_h2,
+    h=inStream(gasPortIn.h_outflow),
+    p=gasPortIn.p,
+    xi=inStream(gasPortIn.xi_outflow),
+    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-70,-12},{-50,8}})));
 
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium_sg4,
     h=gasPortOut.h_outflow,
     p=gasPortOut.p,
@@ -91,7 +91,7 @@ equation
   gasPortIn.m_flow+gasPortOut.m_flow=0;
 
   gasPortIn.h_outflow=inStream(gasPortOut.h_outflow);
-  gasPortIn.xi_outflow=ones(medium_h2.nc-1);
+  gasPortIn.xi_outflow=zeros(medium_h2.nc-1);
 
   gasPortOut.xi_outflow=zeros(medium_sg4.nc - 1);
 

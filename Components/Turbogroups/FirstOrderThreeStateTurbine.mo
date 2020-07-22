@@ -1,10 +1,10 @@
-within TransiEnt.Components.Turbogroups;
+﻿within TransiEnt.Components.Turbogroups;
 model FirstOrderThreeStateTurbine "Generic model of a turbine with three states (halt / startup / running), pyhsical constraints (Pmin,Pmax,Pgradmax) and first order dynamic"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -55,6 +55,8 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
   parameter SI.Time t_startup=0 "Startup time (no output during startup)";
 
   parameter SI.Time t_min_operating = 0 "Minimum operation time";
+
+  parameter Boolean smoothShutDown=true "shut down process will be smoothed - power gradient will be limit by 'P_grad_operating'";
 
   //parameter SI.Time t_shutdown=60 "Time it takes to disconnect from grid (P=P_set during shutdown)";
 
@@ -124,6 +126,7 @@ model FirstOrderThreeStateTurbine "Generic model of a turbine with three states 
     P_min_operating=P_min_star,
     P_max_operating=P_max_star,
     P_grad_operating=P_grad_max_star,
+    smoothShutDown=smoothShutDown,
     thres_hyst=thres_hyst,
     thres=thres,
     useThresh=useThresh,
@@ -244,6 +247,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on April 2019: added minimum operation time</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) on April 2019: added minimum operation time</span></p>
 </html>"));
 end FirstOrderThreeStateTurbine;

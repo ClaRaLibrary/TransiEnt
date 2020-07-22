@@ -1,4 +1,4 @@
-within TransiEnt.Producer.Heat.SolarThermal;
+﻿within TransiEnt.Producer.Heat.SolarThermal;
 model SolarCollectorField_L1 "Solar collector field model with up to 12 collector in series and chooeable number in parallel"
   import TransiEnt;
   import TransiEnt;
@@ -14,10 +14,10 @@ model SolarCollectorField_L1 "Solar collector field model with up to 12 collecto
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -567,8 +567,14 @@ public
         rotation=0,
         origin={534,-44})));
 
-  TILMedia.VLEFluid_ph vleFluidIn(vleFluidType=medium, p=waterIn.p, h=h_in) annotation (Placement(transformation(extent={{-708,-12},{-688,8}})));
-  TILMedia.VLEFluid_ph vleFluidOut(vleFluidType=medium, p=waterOut.p, h=h_out) annotation (Placement(transformation(extent={{720,-50},{740,-30}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluidIn(
+    vleFluidType=medium,
+    p=waterIn.p,
+    h=h_in) annotation (Placement(transformation(extent={{-708,-12},{-688,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluidOut(
+    vleFluidType=medium,
+    p=waterOut.p,
+    h=h_out) annotation (Placement(transformation(extent={{720,-50},{740,-30}})));
 
   ClaRa.Components.Sensors.SensorVLE_L1_T temperature annotation (Placement(transformation(extent={{562,-44},{582,-24}})));
   ClaRa.Components.VolumesValvesFittings.Valves.ThreeWayValveVLE_L1_simple threeWayValveVLE_L1_simple(splitRatio_input=true) annotation (Placement(transformation(extent={{-608,-54},{-588,-36}})));
@@ -1141,7 +1147,7 @@ equation
 <p>Created by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
 <p>Modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018: added possibility to use inputs for solar irradiation</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), May 2018: added possibility to use inputs for solar irradiation</p>
 </html>"),
     Diagram(graphics,
             coordinateSystem(extent={{-760,-140},{760,140}}, preserveAspectRatio=false)),

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckBlackCoal_PriBal
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,7 +30,7 @@ model CheckBlackCoal_PriBal
     P_min_star=0.2,
     isPrimaryControlActive=true,
     primaryBalancingController(k_part=1, plantType=TransiEnt.Basics.Types.ControlPlantType.PeakLoad)) annotation (Placement(transformation(extent={{-32,-20},{-12,0}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=true) annotation (Placement(transformation(extent={{24,-14},{44,6}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=true) annotation (Placement(transformation(extent={{24,-14},{44,6}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},
             {-70,100}})));
   inner TransiEnt.ModelStatistics modelStatistics

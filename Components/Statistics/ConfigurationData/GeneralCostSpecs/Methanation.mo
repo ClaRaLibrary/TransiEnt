@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model Methanation "Methanation 2020"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,7 +20,7 @@ model Methanation "Methanation 2020"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-//Joachim Nitsch, Thomas Pregger, Tobias Naegler, Dominik Heide, Diego Luca de Tena, Franz Trieb, Yvonne Scholz, et al. 2012. “Langfristszenarien Und Strategien Für Den Ausbau Der Erneuerbaren Energien in Deutschland Bei Berücksichtigung Der Entwicklung in Europa Und Global. Schlussbericht.” Stuttgart, Kassel, Teltow.
+//Joachim Nitsch, Thomas Pregger, Tobias Naegler, Dominik Heide, Diego Luca de Tena, Franz Trieb, Yvonne Scholz, et al. 2012. "Langfristszenarien Und Strategien Für Den Ausbau Der Erneuerbaren Energien in Deutschland Bei Berücksichtigung Der Entwicklung in Europa Und Global. Schlussbericht." Stuttgart, Kassel, Teltow.
   extends PartialCostSpecs(
     size1=1e6 "H_flow_n_CH4: Nominal methane enthalpy flow rate",
     C_inv_size=(400e-3)*size1,
@@ -44,7 +44,7 @@ model Methanation "Methanation 2020"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] J.&nbsp;Nitsch,&nbsp;T.&nbsp;Pregger,&nbsp;T.&nbsp;Naegler,&nbsp;D.&nbsp;Heide,&nbsp;D.&nbsp;L.&nbsp;de&nbsp;Tena,&nbsp;F.&nbsp;Trieb,&nbsp;Y.&nbsp;Scholz,&nbsp;&ldquo;Langfristszenarien&nbsp;Und&nbsp;Strategien&nbsp;F&uuml;r&nbsp;Den&nbsp;Ausbau&nbsp;Der&nbsp;Erneuerbaren&nbsp;Energien&nbsp;in&nbsp;Deutschland&nbsp;Bei&nbsp;Ber&uuml;cksichtigung&nbsp;Der&nbsp;Entwicklung&nbsp;in&nbsp;Europa&nbsp;Und&nbsp;Global.&nbsp;Schlussbericht.&rdquo;, et al. 2012,&nbsp;Stuttgart,&nbsp;Kassel,&nbsp;Teltow.</p>
+<p>[1] J. Nitsch, T. Pregger, T. Naegler, D. Heide, D. L. de Tena, F. Trieb, Y. Scholz, &ldquo;Langfristszenarien Und Strategien Für Den Ausbau Der Erneuerbaren Energien in Deutschland Bei Berücksichtigung Der Entwicklung in Europa Und Global. Schlussbericht.&rdquo;, et al. 2012, Stuttgart, Kassel, Teltow.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end Methanation;

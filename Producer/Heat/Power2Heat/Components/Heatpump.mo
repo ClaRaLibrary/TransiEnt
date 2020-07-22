@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat.Components;
 model Heatpump "Heatpump model with on off controller and operating range defined by bivalent point, dynamics are represented only by time relais restriction"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -105,14 +105,14 @@ equation
 <p>Modelica.Blocks.Interfaces.RealInput: u_meas (measurement value)</p>
 <p>Modelica.Blocks.Interfaces.RealInput: T_source_input_K (input ambient temperature in Kelvin)</p>
 <p>Modelica.Blocks.Interfaces.RealInput: T_source_internal (ambient temperature from SimCenter)</p>
-<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b:&nbsp;heatPort</p>
+<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b: heatPort</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
-<p>eta_HP&nbsp;=&nbsp;COP_n/((273.15+40)/(40-2))</p>
-<p>P_el_n&nbsp;=&nbsp;Q_flow_n&nbsp;/&nbsp;COP_n</p>
+<p>eta_HP = COP_n/((273.15+40)/(40-2))</p>
+<p>P_el_n = Q_flow_n / COP_n</p>
 <p>COP(y=COP_Carnot*eta_HP)</p>
-<p>COP_Carnot=(u_set&nbsp;+&nbsp;Delta_T_internal)/max(2*Delta_T_internal,&nbsp;u_set&nbsp;+&nbsp;2*Delta_T_internal&nbsp;-&nbsp;T_source_internal)</p>
+<p>COP_Carnot=(u_set + Delta_T_internal)/max(2*Delta_T_internal, u_set + 2*Delta_T_internal - T_source_internal)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>

@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycFlowReversal
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,7 @@ model TestStatCycFlowReversal
 
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
   StatCycFlowReversal Init(Delta_p_nom_pipe=0.32e5*3, m_flow_sink=-100) annotation (Placement(transformation(extent={{-100,60},{-80,80}})));
-  Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe(
     p_nom=ones(pipe.N_cv)*15.013e5,
     h_nom=ones(pipe.N_cv)*788440,
     m_flow_nom=100,

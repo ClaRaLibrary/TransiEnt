@@ -2,11 +2,11 @@ within TransiEnt.Producer.Heat.SolarThermal.Check;
 model TestCollectorEN12975 "Tester for a solar collector using the ambient tables and fluid sinks and sources"
   import TransiEnt;
   import TransiEnt;
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -193,7 +193,7 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>Note that the inlet temperature should never fall below 0 &deg;C. A possible controller for this case can be looked at under TransiEnt.Producer.Heat.SolarThermal.Controller.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Max Mustermann (max.mustermann@mustermail.com) on Thu Apr 24 2014</p>
+<p>Created by Lisa Andresen (andresen@tuhh.de), Apr 2014</p>
 </html>"), Diagram(graphics,
                    coordinateSystem(preserveAspectRatio=false, extent={{-100,-40},{120,100}})),
     experiment(

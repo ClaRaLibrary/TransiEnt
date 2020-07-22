@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind;
 model Windturbine "Pitch controlled wind turbine model based on cp-lambda characteristic"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -67,7 +67,8 @@ public
   //           Instances of other Classes
   // _____________________________________________
 
- TransiEnt.Components.Electrical.Machines.VariableSpeedActivePowerGenerator Generator(changeSign=true)  annotation (Placement(transformation(extent={{18,-22},{46,8}})));
+ replaceable
+ TransiEnt.Components.Electrical.Machines.VariableSpeedActivePowerGenerator Generator(changeSign=true)  annotation (Dialog(group="Replaceable Components"),Placement(transformation(extent={{18,-22},{46,8}})));
   Base.WindturbineRotor Rotor(
     beta_start=beta_start,
     turbineCharacteristics=TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed.VariableWTG_WU(),
@@ -109,7 +110,9 @@ public
     omega(start=omega_start),
     nSubgrid=1,
     J=J) annotation (choicesAllMatching=true, Placement(transformation(extent={{-14,-21},{10,8}})));
- TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter    annotation (Placement(transformation(
+ replaceable
+ TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem Exciter constrainedby TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageController.PartialExcitationSystem
+                                                                                                              annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"),Placement(transformation(
         extent={{-10,-10.5},{10,10.5}},
         rotation=-90,
         origin={62.5,18})));

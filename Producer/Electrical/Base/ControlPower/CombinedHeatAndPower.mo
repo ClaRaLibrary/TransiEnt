@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Base.ControlPower;
 block CombinedHeatAndPower "Control Power Estimation for Combined heat and power plants (extraction back pressure turbine)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -55,7 +55,7 @@ equation
 
     annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Control&nbsp;Power&nbsp;Estimation&nbsp;for&nbsp;Combined&nbsp;heat&nbsp;and&nbsp;power&nbsp;plants&nbsp;(extraction&nbsp;back&nbsp;pressure&nbsp;turbine)</p>
+<p>Control Power Estimation for Combined heat and power plants (extraction back pressure turbine)</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>L1 (defined in the CodingConventions) - only active power and frequency.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

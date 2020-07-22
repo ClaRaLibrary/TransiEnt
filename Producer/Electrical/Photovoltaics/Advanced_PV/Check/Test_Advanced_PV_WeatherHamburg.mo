@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.Check;
 model Test_Advanced_PV_WeatherHamburg
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,7 +27,7 @@ model Test_Advanced_PV_WeatherHamburg
   TransiEnt.Basics.Tables.Ambient.Temperature_Hamburg_Fuhlsbuettel_3600s_2012 Temperature_Hamburg_3600s_IWEC annotation (Placement(transformation(extent={{-214,-46},{-194,-26}})));
   TransiEnt.Basics.Tables.Ambient.Wind_Hamburg_3600s_TMY Wind_Hamburg_3600s_IWEC annotation (Placement(transformation(extent={{-214,-90},{-194,-70}})));
   TransiEnt.Basics.Tables.Ambient.GHI_Hamburg_3600s_2012_TMY GHI_Hamburg_3600s_IWEC annotation (Placement(transformation(extent={{-214,-124},{-194,-106}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{84,-10},{104,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{84,-10},{104,10}})));
   TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.GHI_Input.PVModule GHI_Input_0(
     P_inst=200000,
     Area=1.18,

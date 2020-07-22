@@ -2,10 +2,10 @@ within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Components.Cont
 model TestENTSOEThermostat
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,9 +41,9 @@ model TestENTSOEThermostat
   SI.Temperature T(start=Tset, fixed=true)  annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.Temperature T_gridDist(start=Tset, fixed=true)  annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{-8,42},{-28,62}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{-8,42},{-28,62}})));
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid_gridDist(useInputConnector=true)  annotation (Placement(transformation(extent={{-10,-24},{-30,-4}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid_gridDist(useInputConnector=true) annotation (Placement(transformation(extent={{-10,-24},{-30,-4}})));
   Modelica.Blocks.Sources.TimeTable f_grid1(table=[0,49.8; 2890,49.8; 2920,50.0; 3820,50.0])                                                                                                                                                                                                         annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,

@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Coupled;
 model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,7 +19,21 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.Example;
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+  inner TransiEnt.SimCenter simCenter(useHomotopy=false) annotation (Placement(transformation(extent={{-380,260},{-340,300}})));
+  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-380,220},{-340,260}})));
 
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP CHP(
     P_el_n=3e6,
@@ -29,7 +43,16 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
     m_flow_nom=38,
     h_nom=110*4.2e3,
     T_feed_init=383.15) annotation (Placement(transformation(extent={{-202,90},{-122,170}})));
-  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler    gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas) annotation (Placement(transformation(
+  TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler gasBoiler(Q_flow_n=5e6, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat.NaturalGas,
+    redeclare TransiEnt.Components.Boundaries.Heat.Heatflow_L2 heatFlowBoundary(
+      Q_flow_n=gasBoiler.Q_flow_n,
+      change_sign=true,
+      m_flow_nom=38,
+      p_nom=2400000,
+      h_nom=4200*60,
+      C=1e6,
+      p_start=2400000,
+      T_start=333.15))                                                                                                                                                               annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={40,24})));
@@ -38,10 +61,7 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
         extent={{-52,-13},{52,13}},
         rotation=0,
         origin={-252,179})));
-  inner TransiEnt.SimCenter simCenter(useHomotopy=false)
-                                      annotation (Placement(transformation(extent={{-380,260},{-340,300}})));
-  inner TransiEnt.ModelStatistics modelStatistics
-    annotation (Placement(transformation(extent={{-380,220},{-340,260}})));
+
   TransiEnt.Consumer.Electrical.LinearElectricConsumer electricDemand annotation (Placement(transformation(
         extent={{-177.45,-5.26305},{-135.45,34.7368}},
         rotation=90,
@@ -59,7 +79,7 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
     P_pr_grad_max_star=0.02/30,
     beta=0.2,
     redeclare TransiEnt.Grid.Electrical.Noise.TypicalLumpedGridError genericGridError,
-    isSecondaryControlActive=false)                                                    annotation (Placement(transformation(
+    isSecondaryControlActive=false) annotation (Placement(transformation(
         extent={{40,-40},{-40,40}},
         rotation=0,
         origin={60,-180})));
@@ -67,7 +87,7 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi gasGrid annotation (Placement(transformation(extent={{286,-128},{244,-88}})));
   Modelica.Blocks.Sources.RealExpression heatLoss(y=-0.5e6) annotation (Placement(transformation(extent={{-396,116},{-348,146}})));
   Modelica.Blocks.Math.Add totalHeatDemand annotation (Placement(transformation(extent={{-302,98},{-262,138}})));
-  Modelica.Blocks.Sources.RealExpression varHeatDemandCHP(y=-min(totalHeatDemand.y, CHP.Q_flow_n_CHP))  annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression varHeatDemandCHP(y=-min(totalHeatDemand.y, CHP.Q_flow_n_CHP)) annotation (Placement(transformation(
         extent={{47.75,15.75},{-47.75,-15.75}},
         rotation=180,
         origin={-249.75,204.25})));
@@ -75,8 +95,7 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
         extent={{-35.5,-10.5},{35.5,10.5}},
         rotation=0,
         origin={-12.5,54.5})));
-  Modelica.Blocks.Continuous.FirstOrder firstOrder(T=0.1)
-                                                   annotation (Placement(transformation(extent={{108,-129},{128,-109}})));
+  Modelica.Blocks.Continuous.FirstOrder firstOrder(T=0.1) annotation (Placement(transformation(extent={{108,-129},{128,-109}})));
   Modelica.Blocks.Sources.RealExpression residualElectricPowerForPtG(y=max(0, -(electricDemand.epp.P + electricGrid_SubSystem.pVPlant.epp.P + electricGrid_SubSystem.windProduction.epp.P + CHP.epp.P))) annotation (Placement(transformation(
         extent={{-63.5,-11.5},{63.5,11.5}},
         rotation=0,
@@ -85,15 +104,19 @@ model Coupled_ElectricGrid "Example for sector coupling in TransiEnt library"
     variable_m_flow=true,
     variable_T=true,
     changeSign=true) annotation (Placement(transformation(extent={{204,106},{164,146}})));
-  Modelica.Blocks.Sources.RealExpression m_flow_DHN(y=-38)
-                                                          annotation (Placement(transformation(extent={{302,134},{236,162}})));
+  Modelica.Blocks.Sources.RealExpression m_flow_DHN(y=-38) annotation (Placement(transformation(extent={{302,134},{236,162}})));
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_pTxi dHN_sink(boundaryConditions(p_const=24e5, T_const=100 + 273.15)) annotation (Placement(transformation(extent={{206,44},{166,84}})));
   Modelica.Blocks.Sources.RealExpression T_VL(y=273.15 + 60) annotation (Placement(transformation(extent={{300,106},{236,132}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1_1(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (Kvs=38/1000*3600))
-                                                                          annotation (Placement(transformation(extent={{112,58},{132,70}})));
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_1(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.Quadratic_EN60534_incompressible (Kvs_in=38/1000*3600, m_flow_nom=38))
+                                                                                                                                                                                                        annotation (Placement(transformation(extent={{112,58},{132,70}})));
   ClaRa.Components.Sensors.SensorVLE_L1_T T_vl_is(unitOption=2) annotation (Placement(transformation(extent={{138,64},{158,84}})));
 equation
-  connect(P_12.epp_OUT,UCTE. epp) annotation (Line(
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
+  connect(P_12.epp_OUT, UCTE.epp) annotation (Line(
       points={{7.16,-180},{7.16,-180},{20,-180}},
       color={0,135,135},
       thickness=0.5));
@@ -119,24 +142,20 @@ equation
       points={{244,-108},{190,-108},{190,-22},{42,-22},{42,4},{40.4,4}},
       color={255,255,0},
       thickness=1.5));
-  connect(varHeatDemandCHP.y, CHP.Q_flow_set) annotation (Line(points={{-197.225,204.25},{-147.2,204.25},{-147.2,160.667}},
-                                                                                                                     color={0,0,127}));
-  connect(varHeatDemandGasBoiler.y, gasBoiler.Q_flow_set) annotation (Line(points={{26.55,54.5},{40,54.5},{40,44}},
-                                                                                                                 color={0,0,127}));
+  connect(varHeatDemandCHP.y, CHP.Q_flow_set) annotation (Line(points={{-197.225,204.25},{-147.2,204.25},{-147.2,160.667}}, color={0,0,127}));
+  connect(varHeatDemandGasBoiler.y, gasBoiler.Q_flow_set) annotation (Line(points={{26.55,54.5},{40,54.5},{40,44}}, color={0,0,127}));
   connect(heatLoss.y, totalHeatDemand.u1) annotation (Line(points={{-345.6,131},{-339.8,131},{-339.8,130},{-306,130}}, color={0,0,127}));
-  connect(CHP.P_set, electricityDemandCHP.y) annotation (Line(points={{-186.4,160.667},{-186.4,178.6},{-194.8,178.6},{-194.8,179}},
-                                                                                                                              color={0,0,127}));
-  connect(residualElectricPowerForPtG.y,firstOrder. u) annotation (Line(points={{99.35,-118.5},{88.675,-118.5},{88.675,-119},{106,-119}}, color={0,0,127}));
+  connect(CHP.P_set, electricityDemandCHP.y) annotation (Line(points={{-186.4,160.667},{-186.4,178.6},{-194.8,178.6},{-194.8,179}}, color={0,0,127}));
+  connect(residualElectricPowerForPtG.y, firstOrder.u) annotation (Line(points={{99.35,-118.5},{88.675,-118.5},{88.675,-119},{106,-119}}, color={0,0,127}));
   connect(electricDemandTable.y1, electricDemand.P_el_set) annotation (Line(points={{-340,-50},{-310,-50},{-310,-49},{-246.2,-49}}, color={0,0,127}));
   connect(heatDemandTable.y1, totalHeatDemand.u2) annotation (Line(points={{-348,96},{-334,96},{-334,106},{-306,106}}, color={0,0,127}));
-  connect(m_flow_DHN.y,DHN_source. m_flow) annotation (Line(points={{232.7,148},{217.05,148},{217.05,138},{208,138}}, color={0,0,127}));
-  connect(T_VL.y,DHN_source. T) annotation (Line(points={{232.8,119},{218.05,119},{218.05,126},{208,126}},
-                                                                                                       color={0,0,127}));
-  connect(gasBoiler.outlet,valveVLE_L1_1. inlet) annotation (Line(
+  connect(m_flow_DHN.y, DHN_source.m_flow) annotation (Line(points={{232.7,148},{217.05,148},{217.05,138},{208,138}}, color={0,0,127}));
+  connect(T_VL.y, DHN_source.T) annotation (Line(points={{232.8,119},{218.05,119},{218.05,126},{208,126}}, color={0,0,127}));
+  connect(gasBoiler.outlet, valveVLE_L1_1.inlet) annotation (Line(
       points={{60,24},{86,24},{86,64},{112,64}},
       color={175,0,0},
       thickness=0.5));
-  connect(valveVLE_L1_1.outlet,T_vl_is. port) annotation (Line(
+  connect(valveVLE_L1_1.outlet, T_vl_is.port) annotation (Line(
       points={{132,64},{140,64},{148,64}},
       color={0,131,169},
       pattern=LinePattern.Solid,
@@ -149,11 +168,9 @@ equation
       points={{166,64},{158,64},{158,64},{148,64}},
       color={175,0,0},
       thickness=0.5));
-  annotation (Icon(graphics,
-                   coordinateSystem(
-        preserveAspectRatio=false,
-        initialScale=0.1)), Diagram(graphics,
-                                    coordinateSystem(
+  annotation (
+    Icon(graphics, coordinateSystem(preserveAspectRatio=false, initialScale=0.1)),
+    Diagram(          coordinateSystem(
         preserveAspectRatio=false,
         extent={{-400,-300},{400,300}},
         initialScale=0.1)),
@@ -167,7 +184,7 @@ equation
       Evaluate=true,
       OutputCPUtime=true,
       OutputFlatModelica=false),
-Documentation(info="<html>
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Coupled electric grid system. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

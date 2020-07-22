@@ -2,10 +2,10 @@ within TransiEnt.Components.Sensors.RealGas;
 model GCVSensor "Sensor calculating the gross calorific value of real gas mixtures at 25 C"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -55,6 +55,7 @@ model GCVSensor "Sensor calculating the gross calorific value of real gas mixtur
   // _____________________________________________
 
   TransiEnt.Basics.Interfaces.General.SpecificEnthalpyOut GCV(displayUnit="kWh/kg") "Gross calorific value for given composition" annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  Basics.Interfaces.General.EnthalpyFlowRateOut H_flow_GCV(displayUnit="W") "Enthalphy flow rate based on GCV" annotation (Placement(transformation(extent={{-100,-10},{-120,10}})));
 
   // _____________________________________________
   //
@@ -79,6 +80,7 @@ protected
 equation
   xi = if flowDefinition==1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow);
   GCV = realGasGCV_xi.GCV;
+  H_flow_GCV=gasPortIn.m_flow*GCV;
 
   // _____________________________________________
   //
@@ -119,7 +121,7 @@ equation
           rotation=90)}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Gross calorific value sensor for VLEFluidTypes.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Gross calorific value sensor and enthalpy flow rate sensor for VLEFluidTypes.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p>(no remarks)</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -128,8 +130,10 @@ equation
 <p>GasPortIn, GasPortOut and RealOutpus for GCV.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p>GCV in [J/kg]</p>
+<p>EnthalpyFlowRateOut in [W]</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p>GCV = sum(xi_i*GCV_i)</p>
+<p>EnthalpyFlowRateOut=gasPortIn.m_flow*NCV</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p>Gross calorific values of the pure components are defined in the record TransiEnt.Basics.Records.GasProperties.GrossCalorificValues.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
@@ -138,5 +142,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Lisa Andresen (andresen@tuhh.de) in Jun 2016</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Jul 2019: added enthalpy flow rate</span></p>
 </html>"));
 end GCVSensor;

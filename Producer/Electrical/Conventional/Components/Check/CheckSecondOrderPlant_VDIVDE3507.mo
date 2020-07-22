@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckSecondOrderPlant_VDIVDE3507 "Example of the component PowerPlant_PoutGrad_L1"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model CheckSecondOrderPlant_VDIVDE3507 "Example of the component PowerPlant_Pout
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantPotentialVariableBoundary(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{56,-60},{76,-40}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantPotentialVariableBoundary(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{56,-60},{76,-40}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   Modelica.Blocks.Sources.Ramp P_el_set(
     startTime=3600,

@@ -1,0 +1,12 @@
+#1 
+# Supply and return temperature for district heating network (Norbert Schaefer, "Fernwaermeversorgung - Hausanlagentechnik in Theorie und Praxis", Springer-Verlag Berlin Heidelberg 2001, ISBN: 3-540-67755-0)
+ double default(9,3) 
+-20		80		60
+-15		80		60
+-10		80		60
+-5		74		56
+0		68		52
+5		62		48
+10		52		42
+15		41		35
+20		22		22

@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
 model DHG_Topology_HH_2ports_2sites_ClosedGrid
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -52,13 +52,13 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     N_tubes=25,
     m_flow_nom=m_flow_nom,
     p_nom(displayUnit="bar") = returnPipeLeft1.p_nom[1],
-    h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipeLeft2.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumer.p_nom,
-    h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipeLeft1.p_nom[1],
         273.15 + 50,
@@ -71,7 +71,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{13,14},{-13,-14}},
         rotation=90,
         origin={-6,245})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 PressureReduction(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 PressureReduction(
     checkValve=false,
     openingInputIsActive=true,
     redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=1e4, m_flow_nom=m_flow_nom)) annotation (Placement(transformation(
@@ -80,7 +80,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         origin={-7,299})));
   ClaRa.Visualisation.Quadruple quadruple3
     annotation (Placement(transformation(extent={{-52,270},{-14,286}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 DifferentialPressure(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 DifferentialPressure(
     openingInputIsActive=true,
     checkValve=false,
     redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=1e4, m_flow_nom=m_flow_nom)) annotation (Placement(transformation(
@@ -101,7 +101,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Delta_p_nom=(19.5 - 6.7)*1e5,
     length=20e3,
     diameter_i=0.7,
-    h_nom=ones(supplyPipeLeft1.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(supplyPipeLeft1.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipeLeft1.p_nom[1],
         273.15 + 100,
@@ -122,7 +122,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Delta_p_nom=(10 - 6)*1e5,
     length=1000,
     diameter_i=0.7,
-    h_nom=ones(supplyPipeLeft2.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(supplyPipeLeft2.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipeLeft2.p_nom[1],
         273.15 + 100,
@@ -143,7 +143,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     diameter_i=0.8,
     Delta_p_nom=(4.2 - 1.9)*1e5,
     length=1000,
-    h_nom=ones(returnPipeLeft1.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipeLeft1.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipeLeft1.p_nom[1],
         273.15 + 50,
@@ -164,7 +164,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Delta_p_nom=(3.7 - 2.3)*1e5,
     length=3.5e3,
     diameter_i=0.8,
-    h_nom=ones(returnPipeLeft2.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipeLeft2.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipeLeft2.p_nom[1],
         273.15 + 50,
@@ -185,7 +185,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4,
     length=16.5e3,
     diameter_i=0.7,
-    h_nom=ones(returnPipeLeft3.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipeLeft3.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipeLeft3.p_nom[1],
         273.15 + 50,
@@ -198,14 +198,9 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     frictionAtInlet=false,
     showData=true,
     initOption=0) annotation (Placement(transformation(extent={{-368,138},{-396,148}})));
-  Modelica.Blocks.Sources.Constant p_soll_VL_Consumer2(k=1) "Druckbegrenzer Hausanlage"  annotation (Placement(transformation(
-        extent={{6,6},{-6,-6}},
-        rotation=-90,
-        origin={132,180})));
-  Modelica.Blocks.Sources.Constant p_sollLeft7(k=10.7e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=270,
-        origin={-238,394})));
+  Modelica.Blocks.Sources.Constant p_set_VL_Consumer2(k=1) "Pressure limiter of the house system"   annotation (Placement(transformation(extent={{6,6},{-6,-6}}, rotation=-90)));
+  Modelica.Blocks.Sources.Constant p_setLeft7(k=10.7e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=270)));
   ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pumpLeft annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -222,7 +217,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-282,144})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1_4(redeclare model PressureLoss =
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_4(redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      Delta_p_nom=1e4, m_flow_nom=m_flow_nom)) annotation (Placement(transformation(
         extent={{-10,-6},{10,6}},
         rotation=90,
@@ -258,10 +253,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-408,162})));
-  Modelica.Blocks.Sources.Constant p_sollLeft3(k=3e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=0,
-        origin={-452,206})));
+  Modelica.Blocks.Sources.Constant p_setLeft3(k=3e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=0)));
   ClaRa.Components.Utilities.Blocks.LimPID PID1(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -275,10 +268,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-428,206})));
-  Modelica.Blocks.Sources.Constant p_sollLeft4(k=4.6e5)
-    annotation (Placement(transformation(extent={{6,-6},{-6,6}},
-        rotation=0,
-        origin={54,300})));
+  Modelica.Blocks.Sources.Constant p_setLeft4(k=4.6e5)
+    annotation (Placement(transformation(extent={{6,-6},{-6,6}}, rotation=0)));
   ClaRa.Components.Utilities.Blocks.LimPID PID2(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -296,10 +287,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{10,-10},{-10,10}},
         rotation=270,
         origin={4,274})));
-  Modelica.Blocks.Sources.Constant p_sollLeft8(k=4.2e5)
-    annotation (Placement(transformation(extent={{6,-6},{-6,6}},
-        rotation=0,
-        origin={48,194})));
+  Modelica.Blocks.Sources.Constant p_setLeft8(k=4.2e5)
+    annotation (Placement(transformation(extent={{6,-6},{-6,6}}, rotation=0)));
   ClaRa.Components.Utilities.Blocks.LimPID PID3(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -321,10 +310,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-244,134})));
-  Modelica.Blocks.Sources.Constant p_sollLeft9(k=2.3e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={-282,90})));
+  Modelica.Blocks.Sources.Constant p_setLeft9(k=2.3e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=90)));
   ClaRa.Components.Utilities.Blocks.LimPID PID4(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -338,10 +325,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-282,114})));
-  Modelica.Blocks.Sources.Constant p_sollLeft5(k=1.9e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={-152,90})));
+  Modelica.Blocks.Sources.Constant p_setLeft5(k=1.9e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=90)));
   ClaRa.Components.Utilities.Blocks.LimPID PID5(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -376,7 +361,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Delta_p_nom=(19.5 - 6.7)*1e5,
     length=20e3,
     diameter_i=0.7,
-    h_nom=ones(supplyPipeLeft1.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(supplyPipeLeft1.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipeLeft1.p_nom[1],
         273.15 + 100,
@@ -397,7 +382,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Delta_p_nom=(10 - 6)*1e5,
     length=1000,
     diameter_i=0.7,
-    h_nom=ones(supplyPipeLeft2.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(supplyPipeLeft2.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipeLeft2.p_nom[1],
         273.15 + 100,
@@ -418,7 +403,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     diameter_i=0.8,
     Delta_p_nom=(4.2 - 1.9)*1e5,
     length=1000,
-    h_nom=ones(returnPipeLeft1.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipeLeft1.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipeLeft1.p_nom[1],
         273.15 + 50,
@@ -442,7 +427,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Delta_p_nom=(3.7 - 2.3)*1e5,
     length=3.5e3,
     diameter_i=0.8,
-    h_nom=ones(returnPipeLeft2.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipeLeft2.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipeLeft2.p_nom[1],
         273.15 + 50,
@@ -463,7 +448,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4,
     length=16.5e3,
     diameter_i=0.7,
-    h_nom=ones(returnPipeLeft3.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipeLeft3.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipeLeft3.p_nom[1],
         273.15 + 50,
@@ -476,10 +461,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     frictionAtInlet=false,
     showData=true,
     initOption=0) annotation (Placement(transformation(extent={{406,142},{434,152}})));
-  Modelica.Blocks.Sources.Constant p_sollLeft1(k=10.7e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=270,
-        origin={200,396})));
+  Modelica.Blocks.Sources.Constant p_setLeft1(k=10.7e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=270)));
   ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pumpRight annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -496,7 +479,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={338,147})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1_1(redeclare model PressureLoss =
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_1(redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      Delta_p_nom=1e4, m_flow_nom=m_flow_nom)) annotation (Placement(transformation(
         extent={{-10,-6},{10,6}},
         rotation=90,
@@ -533,10 +516,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={448,164})));
-  Modelica.Blocks.Sources.Constant p_sollLeft2(k=3e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=0,
-        origin={404,208})));
+  Modelica.Blocks.Sources.Constant p_setLeft2(k=3e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=0)));
   ClaRa.Components.Utilities.Blocks.LimPID PID7(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -554,10 +535,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={300,116})));
-  Modelica.Blocks.Sources.Constant p_sollLeft11(k=2.3e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={338,92})));
+  Modelica.Blocks.Sources.Constant p_setLeft11(k=2.3e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=90)));
   ClaRa.Components.Utilities.Blocks.LimPID PID10(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -571,10 +550,8 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={338,116})));
-  Modelica.Blocks.Sources.Constant p_sollLeft12(k=1.9e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={180,94})));
+  Modelica.Blocks.Sources.Constant p_setLeft12(k=1.9e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=90)));
   ClaRa.Components.Utilities.Blocks.LimPID PID11(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -657,8 +634,7 @@ equation
                                                                                                           color={190,190,190}));
   connect(returnPipeLeft1.eye,quadruple17. eye) annotation (Line(points={{-70.6,141.6},{-70,141.6},{-70,142},{-74,142},{-74,131}}, color={190,190,190}));
   connect(PID.y,pumpLeft1. P_drive) annotation (Line(points={{-238,361},{-238,356}},color={0,0,127}));
-  connect(PID.u_s,p_sollLeft7. y) annotation (Line(points={{-238,384},{-238,387.4}},
-                                                                                  color={0,0,127}));
+  connect(PID.u_s,p_setLeft7.y)  annotation (Line(points={{-238,384},{-238,188},{-238,-6.6},{0,-6.6}}, color={0,0,127}));
   connect(pumpLeft1.outlet,vlePressureSensor. port) annotation (Line(
       points={{-228,344},{-206,344}},
       color={0,131,169},
@@ -681,28 +657,27 @@ equation
       points={{-398,196},{-398,186},{-398,162}},
       color={0,131,169},
       thickness=0.5));
-  connect(PID1.u_s,p_sollLeft3. y) annotation (Line(points={{-440,206},{-442,206},{-445.4,206}},
-                                                                                               color={0,0,127}));
+  connect(PID1.u_s,p_setLeft3.y)  annotation (Line(points={{-440,206},{6.6,206},{6.6,0}}, color={0,0,127}));
   connect(PID1.y,pumpLeft. P_drive) annotation (Line(points={{-417,206},{-410,206}}, color={0,0,127}));
   connect(vlePressureSensor1.p,PID1. u_m) annotation (Line(points={{-408,173},{-427.9,173},{-427.9,194}},
                                                                                                     color={0,0,127}));
   connect(PressureReduction.opening_in,PID2. y) annotation (Line(points={{0.5,299},{3.25,299},{3.25,300},{7,300}},
                                                                                                                 color={0,0,127}));
-  connect(p_sollLeft4.y,PID2. u_s) annotation (Line(points={{47.4,300},{38,300},{30,300}}, color={0,0,127}));
+  connect(p_setLeft4.y, PID2.u_s) annotation (Line(points={{-6.6,0},{30,0},{30,300}}, color={0,0,127}));
   connect(HeatConsumer.inlet,vlePressureSensor2. port) annotation (Line(
       points={{-6,258},{-6,274}},
       color={0,131,169},
       thickness=0.5));
   connect(vlePressureSensor2.p,PID2. u_m) annotation (Line(points={{4,285},{12,285},{12,288},{17.9,288}},
                                                                                                     color={0,0,127}));
-  connect(p_sollLeft8.y,PID3. u_s) annotation (Line(points={{41.4,194},{34,194},{30,194}},    color={0,0,127}));
+  connect(p_setLeft8.y, PID3.u_s) annotation (Line(points={{-6.6,0},{30,0},{30,194}}, color={0,0,127}));
   connect(vlePressureSensor3.p,PID3. u_m) annotation (Line(points={{18,177},{18,182},{17.9,182}},  color={0,0,127}));
   connect(DifferentialPressure.opening_in,PID3. y) annotation (Line(points={{0.5,195},{6.25,195},{6.25,194},{7,194}},    color={0,0,127}));
   connect(returnPipeLeft1.inlet,vlePressureSensor3. port) annotation (Line(
       points={{-42,145},{-32,145},{-32,144},{8,144},{8,166}},
       color={0,131,169},
       thickness=0.5));
-  connect(PID4.u_s,p_sollLeft9. y) annotation (Line(points={{-282,102},{-282,96.6}},   color={0,0,127}));
+  connect(PID4.u_s,p_setLeft9.y)  annotation (Line(points={{-282,102},{-282,54},{-282,6.6},{0,6.6}}, color={0,0,127}));
   connect(vlePressureSensor4.p,PID4. u_m) annotation (Line(points={{-255,134},{-260,134},{-260,114},{-270,114},{-270,114.1}},
                                                                                                     color={0,0,127}));
   connect(pumpLeft2.inlet,vlePressureSensor4. port) annotation (Line(
@@ -710,7 +685,7 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(pumpLeft2.P_drive,PID4. y) annotation (Line(points={{-282,132},{-282,125}}, color={0,0,127}));
-  connect(PID5.u_s,p_sollLeft5. y) annotation (Line(points={{-152,102},{-152,96.6}},   color={0,0,127}));
+  connect(PID5.u_s,p_setLeft5.y)  annotation (Line(points={{-152,102},{-152,54},{-152,6.6},{0,6.6}}, color={0,0,127}));
   connect(vlePressureSensor5.p,PID5. u_m) annotation (Line(points={{-131,128},{-130,128},{-130,114},{-140,114},{-140,114.1}},
                                                                                                     color={0,0,127}));
   connect(pumpLeft3.inlet,vlePressureSensor5. port) annotation (Line(
@@ -766,7 +741,7 @@ equation
   connect(returnPipeRight1.eye,quadruple19. eye) annotation (Line(points={{90.6,143.6},{52,143.6},{52,117}},  color={190,190,190}));
   connect(PID6.y,pumpRight1. P_drive) annotation (Line(points={{200,363},{200,356},{198,356}},
                                                                                          color={0,0,127}));
-  connect(PID6.u_s,p_sollLeft1. y) annotation (Line(points={{200,386},{200,389.4}}, color={0,0,127}));
+  connect(PID6.u_s,p_setLeft1.y)  annotation (Line(points={{200,386},{200,190},{200,-6.6},{0,-6.6}}, color={0,0,127}));
   connect(pumpRight1.outlet,vlePressureSensor6. port) annotation (Line(
       points={{188,344},{168,344},{144,344}},
       color={0,131,169},
@@ -787,18 +762,18 @@ equation
       points={{458,198},{458,188},{458,164}},
       color={0,131,169},
       thickness=0.5));
-  connect(PID7.u_s,p_sollLeft2. y) annotation (Line(points={{416,208},{414,208},{410.6,208}}, color={0,0,127}));
+  connect(PID7.u_s,p_setLeft2.y)  annotation (Line(points={{416,208},{6.6,208},{6.6,0}}, color={0,0,127}));
   connect(PID7.y,pumpRight. P_drive) annotation (Line(points={{439,208},{446,208}},       color={0,0,127}));
   connect(vlePressureSensor7.p,PID7. u_m) annotation (Line(points={{448,175},{428.1,175},{428.1,196}},
                                                                                                     color={0,0,127}));
-  connect(PID10.u_s,p_sollLeft11. y) annotation (Line(points={{338,104},{338,98.6}},   color={0,0,127}));
+  connect(PID10.u_s,p_setLeft11.y)  annotation (Line(points={{338,104},{338,56},{338,6.6},{0,6.6}}, color={0,0,127}));
   connect(vlePressureSensor10.p,PID10. u_m) annotation (Line(points={{311,116},{318,116},{318,116.1},{326,116.1}},      color={0,0,127}));
   connect(pumpRight2.inlet,vlePressureSensor10. port) annotation (Line(
       points={{328,147},{300,147},{300,126}},
       color={0,131,169},
       thickness=0.5));
   connect(pumpRight2.P_drive,PID10. y) annotation (Line(points={{338,135},{338,127}},   color={0,0,127}));
-  connect(PID11.u_s,p_sollLeft12. y) annotation (Line(points={{180,106},{180,100.6}},   color={0,0,127}));
+  connect(PID11.u_s,p_setLeft12.y)  annotation (Line(points={{180,106},{180,56},{180,6.6},{0,6.6}}, color={0,0,127}));
   connect(vlePressureSensor11.p,PID11. u_m) annotation (Line(points={{153,118},{153,118.1},{168,118.1}},                      color={0,0,127}));
   connect(pumpRight3.inlet,vlePressureSensor11. port) annotation (Line(
       points={{170,147},{170,148},{162,148},{142,148},{142,128}},
@@ -849,8 +824,7 @@ equation
         Text(
           extent={{-70,306},{-18,292}},
           lineColor={28,108,200},
-          textString="Druckminderer
-(Reduzierstation)"),
+          textString="pressure reducer"),
         Text(
           extent={{-296,350},{-262,346}},
           lineColor={127,0,0},

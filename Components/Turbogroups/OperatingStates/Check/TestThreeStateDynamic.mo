@@ -1,10 +1,10 @@
 within TransiEnt.Components.Turbogroups.OperatingStates.Check;
 model TestThreeStateDynamic "Model for testing the three state dynamic"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,11 +21,13 @@ model TestThreeStateDynamic "Model for testing the three state dynamic"
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   TransiEnt.Components.Turbogroups.OperatingStates.ThreeStateDynamic threeStateDynamic(
-    t_startup=900,
+    t_startup=0,
     t_eps=950,
-    useThresh=true) annotation (Placement(transformation(extent={{12,-32},{48,4}})));
+    useThresh=true,
+    smoothShutDown=true)
+                    annotation (Placement(transformation(extent={{14,-26},{50,10}})));
   Modelica.Blocks.Sources.Trapezoid Trapezoid(
-    amplitude=1,
+    amplitude=-1,
     rising=900,
     falling=900,
     period=86400,
@@ -38,7 +40,7 @@ model TestThreeStateDynamic "Model for testing the three state dynamic"
 equation
   connect(Trapezoid.y, P_set.u2) annotation (Line(points={{-41,-36},{-36,-36},{-36,-20},{-30,-20}}, color={0,0,127}));
   connect(Step.y, P_set.u1) annotation (Line(points={{-43,8},{-36,8},{-36,-8},{-30,-8}}, color={0,0,127}));
-  connect(P_set.y, threeStateDynamic.P_set_star) annotation (Line(points={{-7,-14},{12,-14}},                     color={0,0,127}));
+  connect(P_set.y, threeStateDynamic.P_set_star) annotation (Line(points={{-7,-14},{4,-14},{4,-8},{14,-8}}, color={0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-50,80},{38,38}},

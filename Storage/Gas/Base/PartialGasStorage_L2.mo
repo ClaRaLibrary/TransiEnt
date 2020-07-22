@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas.Base;
 partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume for real gases"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Storage.Gas.Base.PartialGasStorage;
+  extends TransiEnt.Storage.Gas.Base.PartialGasStorage(includeHeatTransfer=true);
   import Modelica.Constants.pi;
 
   // _____________________________________________
@@ -43,8 +43,6 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   // _____________________________________________
 
   parameter SI.Height height=3.779*V_geo^(1/3) "Height of storage" annotation(Dialog(group="Geometry")); //based on height to diameter ratio 6.51:1
-
-  parameter SI.CoefficientOfHeatTransfer alpha_nom=4 "heat transfer coefficient inside the storage cylinder" annotation(Dialog(group="Heat Transfer"));
 
   parameter Boolean start_pressure=true "true if a start pressure is defined, false if a start mass is defined" annotation(Dialog(group="Initialization"));
   parameter SI.Pressure p_gas_start=1e5 "pressure in storage at t=0" annotation(Dialog(group="Initialization"));
@@ -68,28 +66,29 @@ partial model PartialGasStorage_L2 "Partial model of a simple gas storage volume
   // _____________________________________________
   replaceable model HeatTransfer =
     TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2
-    constrainedby TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 "Heat transfer model for inside the storage" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
+    constrainedby TransiEnt.Storage.Gas.Base.HeatTransferOuterTemperature_L2 "Heat transfer model for inside the storage" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
 
 protected
-  TILMedia.VLEFluid_ph gasBulk(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasBulk(
     vleFluidType=medium,
     p=gasPortIn.p,
     h=h_gas,
     xi=xi_gas,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-22},{10,-2}})));
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=medium,
     p=gasPortIn.p,
     h=actualStream(gasPortIn.h_outflow),
     xi=actualStream(gasPortIn.xi_outflow),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,18},{10,38}})));
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium,
     p=gasPortOut.p,
     h=actualStream(gasPortOut.h_outflow),
     xi=actualStream(gasPortOut.xi_outflow),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-42},{10,-22}})));
-  HeatTransfer heatTransfer(alpha_nom=alpha_nom, A_heat=A_heat) annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
+public
+  HeatTransfer heatTransfer(final A_heat=A_heat) annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
 
   // _____________________________________________
   //
@@ -110,18 +109,14 @@ initial equation
   if start_pressure then
     gasBulk.p = p_gas_start;
   else
-    gasBulk.p = TILMedia.VLEFluidFunctions.pressure_dTxi(
+    gasBulk.p = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.pressure_dTxi(
       vleFluidType=medium,
       d=m_gas_start/V_geo,
       T=T_gas_start,
       xi=gasBulk.xi);
   end if;
 
-  h_gas=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
-    vleFluidType=medium,
-    p=gasBulk.p,
-    T=T_gas_start,
-    xi=gasBulk.xi);
+  gasBulk.T=T_gas_start;
 
 equation
   p_gas = gasBulk.p;

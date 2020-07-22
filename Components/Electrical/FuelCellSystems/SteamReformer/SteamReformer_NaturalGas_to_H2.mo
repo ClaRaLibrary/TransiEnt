@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer;
 model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction kinetics depending on input gascomposition, including mass fraction balance and reaction volume (input natural gas, output H2 rich syngas)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -246,15 +246,15 @@ equation
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Steam Reformer&nbsp;with&nbsp;calculation&nbsp;of&nbsp;reaction&nbsp;kinetics&nbsp;depending&nbsp;on&nbsp;input&nbsp;gas composition,&nbsp;including&nbsp;mass&nbsp;fraction&nbsp;balance&nbsp;and&nbsp;reaction&nbsp;volume&nbsp;(input&nbsp;natural&nbsp;gas,&nbsp;output&nbsp;H2&nbsp;rich&nbsp;syngas).</p>
+<p>Steam Reformer with calculation of reaction kinetics depending on input gas composition, including mass fraction balance and reaction volume (input natural gas, output H2 rich syngas).</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortIn&nbsp;feed(Medium=Syngas)&nbsp;</p>
-<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortOut&nbsp;drain(Medium=Syngas)&nbsp;</p>
-<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a&nbsp;heatport&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortIn feed(Medium=Syngas) </p>
+<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortOut drain(Medium=Syngas) </p>
+<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatport     </p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

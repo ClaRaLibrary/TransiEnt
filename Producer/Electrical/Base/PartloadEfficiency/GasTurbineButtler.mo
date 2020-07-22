@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Electrical.Base.PartloadEfficiency;
+﻿within TransiEnt.Producer.Electrical.Base.PartloadEfficiency;
 record GasTurbineButtler "Gas turbine part load efficiency by Buttler et al. 2015"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,7 +43,7 @@ record GasTurbineButtler "Gas turbine part load efficiency by Buttler et al. 201
 1, 1]);
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Gas&nbsp;turbine&nbsp;part&nbsp;load&nbsp;efficiency curve&nbsp;by&nbsp;[1].</p>
+<p>Gas turbine part load efficiency curve by [1].</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -59,7 +59,7 @@ record GasTurbineButtler "Gas turbine part load efficiency by Buttler et al. 201
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] A. Buttler, J. Hentschel, S. Kahlert, and M. Angerer, &ldquo;Statusbericht Flexibilit&auml;tsbedarf im Stromsektor,&rdquo; M&uuml;nchen, 2015.</p>
+<p>[1] A. Buttler, J. Hentschel, S. Kahlert, and M. Angerer, &ldquo;Statusbericht Flexibilitätsbedarf im Stromsektor,&rdquo; München, 2015.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));

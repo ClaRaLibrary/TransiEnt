@@ -7,3 +7,4 @@ TableBasedHeatConsumer
 IdealHeatingNetworkConsumer
 FirstOrderHeatingNetworkConsumer
 ThermalHeatConsumer
+ThermalHeatConsumer_L3

@@ -2,10 +2,10 @@ within TransiEnt.Basics.Media;
 model RealGasNCV_xi "Model for net calorific value calculation for real gases, input xi"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,17 +27,7 @@ model RealGasNCV_xi "Model for net calorific value calculation for real gases, i
   // _____________________________________________
 
   extends TransiEnt.Basics.Icons.Model;
-  outer TransiEnt.SimCenter simCenter;
-
-  // _____________________________________________
-  //
-  //               Visible Parameters
-  // _____________________________________________
-
-  replaceable parameter TILMedia.VLEFluidTypes.BaseVLEFluid realGasType
-   constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid "Real gas type" annotation(choicesAllMatching=true);
-  parameter SI.SpecificEnthalpy NCVIn=0.0 "Set this to a specific value for a constant NCV or to zero for NCV calculation";
-  final parameter SI.SpecificEnthalpy[realGasType.nc] NCV_vec=Functions.GasProperties.getRealGasNCVVector(                 realGasType, realGasType.nc);
+  extends TransiEnt.Basics.Media.Base.RealGas_MediaBaseNCV;
 
   // _____________________________________________
   //
@@ -45,11 +35,8 @@ model RealGasNCV_xi "Model for net calorific value calculation for real gases, i
   // _____________________________________________
 
 public
-  input SI.MassFraction[realGasType.nc-1] xi_in "Mass fractions" annotation(Dialog);
   SI.SpecificEnthalpy NCV "Net calorific value";
 
-protected
-  SI.MassFraction[realGasType.nc] xi=cat(1,xi_in,{1-sum(xi_in)}) "Mass weighted composition of components per kg fuel";
 
 equation
   // _____________________________________________

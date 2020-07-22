@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.Grid;
 model PiModelComplex "pi-Modell of a cable for ComplexPowerPort"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,26 +21,21 @@ model PiModelComplex "pi-Modell of a cable for ComplexPowerPort"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  extends TransiEnt.Basics.Icons.Model;
-
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  outer TransiEnt.SimCenter simCenter;
 
+  extends TransiEnt.Components.Electrical.Grid.Base.PartialTwoPortAdmittanceComplex(
+                                                                          Y_11(
+                                                                        re =    R*p/(R^2+X^2),im =    p*B/2-p*X/(R^2+X^2)), Y_12(
+                                                                                                                           re =    -R*p/(R^2+X^2),im =    p*X/(R^2+X^2)));
   // _____________________________________________
   //
   //        Constants and Hidden Parameters
   // _____________________________________________
-  parameter Integer ChooseVoltageLevel=1 "Choose Voltage Level" annotation(Dialog(group="Fundamental Definitions"),choices(__Dymola_radioButtons=true, choice=1 "Low Voltage", choice=2 "Medium Voltage", choice=3 "High Voltage", choice=4 "Custom Data"));
 
-  parameter Real p = 1 "Number of parallel lines" annotation(Dialog(group="Fundamental Definitions"));
-  parameter TransiEnt.Basics.Units.SpecificResistance r_custom=0.06e-3 "Resistance load per unit length" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
-  parameter TransiEnt.Basics.Units.SpecificReactance x_custom=0.301e-3 "Reactance load per unit length" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
-  parameter TransiEnt.Basics.Units.SpecificCapacitance c_custom=0.0125e-9 "Capacitance load per unit length" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
-  parameter SI.Current i_r_custom=1290 "Rated current" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
 
 protected
   parameter TransiEnt.Basics.Units.SpecificResistance r=if ChooseVoltageLevel==4 then r_custom else CableData[1];
@@ -60,6 +55,13 @@ protected
   // _____________________________________________
 
 public
+  parameter Integer ChooseVoltageLevel=1 "Choose Voltage Level" annotation(Dialog(group="Fundamental Definitions"),choices(__Dymola_radioButtons=true, choice=1 "Low Voltage", choice=2 "Medium Voltage", choice=3 "High Voltage", choice=4 "Custom Data"));
+
+  parameter Real p = 1 "Number of parallel lines" annotation(Dialog(group="Fundamental Definitions"));
+  parameter TransiEnt.Basics.Units.SpecificResistance r_custom=0.06e-3 "Resistance load per unit length" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
+  parameter TransiEnt.Basics.Units.SpecificReactance x_custom=0.301e-3 "Reactance load per unit length" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
+  parameter TransiEnt.Basics.Units.SpecificCapacitance c_custom=0.0125e-9 "Capacitance load per unit length" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
+  parameter SI.Current i_r_custom=1290 "Rated current" annotation(Dialog(group="cable properties",enable=if ChooseVoltageLevel==4 then true else false));
   parameter TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes LVCableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K1 "Type of low voltage cable" annotation (
     Evaluate=true,
     HideResult=true,
@@ -73,82 +75,18 @@ public
   HideResult=true,
   Dialog(group="cable properties", enable = if ChooseVoltageLevel==3 then true else false));
   parameter SI.Length l = 1 "Cable Length" annotation(Evaluate=true, Dialog(group = "cable properties"));
+
   final parameter SI.Resistance R=r*l;
   final parameter SI.Reactance X=x*l;
   final parameter SI.Capacitance C=c*l;
   final parameter Modelica.SIunits.Susceptance B=2*Modelica.Constants.pi*simCenter.f_n*C;
-  final parameter SI.ComplexAdmittance Y_11(re=R*p/(R^2+X^2),im=p*B/2-p*X/(R^2+X^2));
-  final parameter SI.ComplexAdmittance Y_12(re=-R*p/(R^2+X^2),im=p*X/(R^2+X^2));
-  final parameter SI.ComplexAdmittance Y_21=Y_12;
-  final parameter SI.ComplexAdmittance Y_22=Y_11;
-
-  // _____________________________________________
-  //
-  //                  Interfaces
-  // _____________________________________________
-
-  TransiEnt.Basics.Interfaces.Electrical.ComplexPowerPort epp_p annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  TransiEnt.Basics.Interfaces.Electrical.ComplexPowerPort epp_n annotation (Placement(transformation(extent={{90,-10},{110,10}})));
+//   final parameter SI.ComplexAdmittance Y_11(re=R*p/(R^2+X^2),im=p*B/2-p*X/(R^2+X^2));
+//   final parameter SI.ComplexAdmittance Y_12(re=-R*p/(R^2+X^2),im=p*X/(R^2+X^2));
+//   final parameter SI.ComplexAdmittance Y_21=Y_12;
+//   final parameter SI.ComplexAdmittance Y_22=Y_11;
 
 
-  // _____________________________________________
-  //
-  //             Variable Declarations
-  // _____________________________________________
-
-
-  SI.ComplexPower S_p;
-  SI.ComplexPower S_n;
-  SI.ComplexVoltage v_p;
-  SI.ComplexVoltage v_n;
-  SI.ComplexCurrent i_p;
-  SI.ComplexCurrent i_n;
-     SI.ActivePower P(start=0);
-     SI.ReactivePower Q(start=0);
-
-  // _____________________________________________
-  //
-  //           Instances of other Classes
-  // _____________________________________________
-
-equation
-
-  // _____________________________________________
-  //
-  //           Characteristic Equations
-  // _____________________________________________
-
-
-   epp_p.f = epp_n.f;
-
-   Connections.branch(epp_p.f,epp_n.f);
-
-  i_p=Y_11*v_p+Y_12*v_n;
-  i_n=Y_21*v_p+Y_22*v_n;
-
-  S_p=v_p* Modelica.ComplexMath.conj(i_p);
-  S_n=v_n* Modelica.ComplexMath.conj(i_n);
-
-      P =S_p.re;
-      Q =S_p.im;
-
-  S_p.re     = epp_p.P;
-  S_p.im     = epp_p.Q;
-  v_p.re     = epp_p.v*cos(epp_p.delta);
-  v_p.im     = epp_p.v*sin(epp_p.delta);
-
-  S_n.re    =epp_n.P;
-  S_n.im    =epp_n.Q;
-
-  v_n.re     = epp_n.v*cos(epp_n.delta);
-  v_n.im     = epp_n.v*sin(epp_n.delta);
-
-  // _____________________________________________
-  //
-  //               Connect Statements
-  // _____________________________________________
-
- annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100,-100},{100,100}}), graphics), Icon(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
+ annotation(Icon(coordinateSystem(preserveAspectRatio=false,   extent={{-100,
             -100},{100,100}}),                                                                                                    graphics={  Line(points = {{-100,0},{100,0}}, color = {0,0,0}, smooth = Smooth.None),Rectangle(extent = {{-80,6},{80,-6}}, lineColor = {0,0,0}, fillColor = {0,0,0},
             fillPattern =                                                                                                   FillPattern.Solid),Text(extent = {{-100,-16},{100,-52}}, lineColor = {0,0,0}, fillColor = {0,0,255},
             fillPattern =                                                                                                   FillPattern.Solid, textString = "L = %l"),Text(extent={{
@@ -168,6 +106,7 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">Quasi-stationary model, model of line with concentrated elements, limited by the wavelength of the 50 Hz oscillation </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Two ComplexPowerPort for each terminal of the transmission line</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Boolean input for switching</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p>U is uses for voltages</p>
 <p>P is used for active powers</p>
@@ -185,5 +124,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">[1] M. Schaefer, KIT, URL: https://www.zml.kit.edu/downloads/Elektrische_Energieuebertragung_Leseprobe_Kapitel_2.pdf, 2018</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Jan-Peter Heckel (jan.heckel@tuhh.de) in March 2018</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model made more modular by Jan-Peter Heckel (jan.heckel@tuhh.de) in May 2019</span></p>
 </html>"));
 end PiModelComplex;

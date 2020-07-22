@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind.Check;
 model TestWindturbine_SI_DF "Validation WTG with delta f SI control"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,7 +36,7 @@ model TestWindturbine_SI_DF "Validation WTG with delta f SI control"
     integratePower=false)
                     annotation (Placement(transformation(extent={{-28,8},{-8,32}})));
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{66,14},{86,34}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{66,14},{86,34}})));
 
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},
             {-70,100}})));

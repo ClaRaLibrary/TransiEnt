@@ -1,11 +1,11 @@
-within TransiEnt.Components.Gas.VolumesValvesFittings;
+﻿within TransiEnt.Components.Gas.VolumesValvesFittings;
 model ValveDesiredMassFlow_PT1 "Simple valve with prescribed mass flow rate"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,6 +48,7 @@ model ValveDesiredMassFlow_PT1 "Simple valve with prescribed mass flow rate"
   parameter SI.Pressure p_high=1.1e5 "Upper value for hyseteresis with inlet pressure" annotation(Dialog(group="Fundamental Definitions"));
   parameter Boolean useLeakageMassFlow=false "Constant leakage gas mass flow of 'm_flow_small' to avoid zero mass flow"  annotation(Dialog(group="Numerical Stability"));
   parameter SI.MassFlowRate m_flow_small=simCenter.m_flow_small "leakage mass flow if useLeakageMassFlow=true" annotation(Dialog(group="Numerical Stability",enable=useLeakageMassFlow));
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
 
   // _____________________________________________
   //
@@ -72,40 +73,39 @@ model ValveDesiredMassFlow_PT1 "Simple valve with prescribed mass flow rate"
 
 protected
   Modelica.Blocks.Logical.Hysteresis hysteresis(uLow=if hysteresisWithDelta_p then Delta_p_low else p_low, uHigh=if hysteresisWithDelta_p then Delta_p_high else p_high) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=medium,
     p=gasPortIn.p,
     h=noEvent(actualStream(gasPortIn.h_outflow)),
     xi=noEvent(actualStream(gasPortIn.xi_outflow)),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
-  TILMedia.VLEFluid_ph gasOut(
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium,
     p=gasPortOut.p,
     h=noEvent(actualStream(gasPortOut.h_outflow)),
     xi=noEvent(actualStream(gasPortOut.xi_outflow)),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{70,-12},{90,8}})));
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{70,-12},{90,8}})));
 
 public
-  Summary summary(
-    gasPortIn(
+  Summary summary(gasPortIn(
       mediumModel=medium,
-      xi=gasIn.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortIn.xi_outflow)),
       x=gasIn.x,
       m_flow=gasPortIn.m_flow,
       T=gasIn.T,
       p=gasPortIn.p,
-      h=gasIn.h,
-      rho=gasIn.d),
-    gasPortOut(
+      h=noEvent(actualStream(gasPortIn.h_outflow)),
+      rho=gasIn.d), gasPortOut(
       mediumModel=medium,
-      xi=gasOut.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortOut.xi_outflow)),
       x=gasOut.x,
       m_flow=gasPortOut.m_flow,
       T=gasOut.T,
       p=gasPortOut.p,
-      h=gasOut.h,
-      rho=gasOut.d))
-    annotation (Placement(transformation(extent={{-60,-102},{-40,-82}})));
+      h=noEvent(actualStream(gasPortOut.h_outflow)),
+      rho=gasOut.d)) annotation (Placement(transformation(extent={{-60,-102},{-40,-82}})));
 
   // _____________________________________________
   //
@@ -126,6 +126,7 @@ public
   Modelica.Blocks.Continuous.TransferFunction transferFunction(b={1}, a={50,1})
                                                                                annotation (Placement(transformation(extent={{-10,-42},{10,-22}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=m_flow_gasPortIn_set) annotation (Placement(transformation(extent={{-50,-42},{-30,-22}})));
+
 equation
   // _____________________________________________
   //
@@ -195,6 +196,6 @@ equation
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Apr 05 2016</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on Nov 2018: added useLeakageMassFlow</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) on Nov 2018: added useLeakageMassFlow</p>
 </html>"));
 end ValveDesiredMassFlow_PT1;

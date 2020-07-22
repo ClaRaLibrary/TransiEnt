@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Heat.SolarThermal.Check;
 model TestCollectorFluidCycle_constProp2 "Tester for a solar collector using a fluid cycle"
   import TransiEnt;
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -92,7 +92,7 @@ model TestCollectorFluidCycle_constProp2 "Tester for a solar collector using a f
         rotation=90,
         origin={132,32})));
 
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1_2(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint)
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_2(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint)
                                                                                         annotation (Placement(transformation(extent={{56,38},{76,50}})));
   TransiEnt.Producer.Heat.SolarThermal.SolarCollector_L1_constProp solarCollector(
     area=2.33,
@@ -188,6 +188,6 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Max Mustermann (max.mustermann@mustermail.com) on Thu Apr 24 2014</p>
+<p>Model created by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
 </html>"));
 end TestCollectorFluidCycle_constProp2;

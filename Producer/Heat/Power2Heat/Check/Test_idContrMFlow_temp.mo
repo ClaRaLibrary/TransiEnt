@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Power2Heat.Check;
 model Test_idContrMFlow_temp
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,7 +27,8 @@ model Test_idContrMFlow_temp
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={-10,0})));
-  ElectricBoiler_L1_idContrMFlow_temp electricBoiler_L1_idContrMFlow_temp(use_varTemp=true, m_flow_max=40)   annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
+  ElectricBoiler_L1_idContrMFlow_temp electricBoiler_L1_idContrMFlow_temp(use_varTemp=true, m_flow_max=40,
+    usePowerPort=true)                                                                                       annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Modelica.Blocks.Math.Gain gain1(k=-1)
                                        annotation (Placement(transformation(extent={{-26,-4},{-34,4}})));
   Modelica.Blocks.Sources.Sine sine1(
@@ -66,7 +67,8 @@ model Test_idContrMFlow_temp
   EHP_L1_idContrMFlow_temp            eHP_L1_idContrMFlow_temp(
     use_varTemp=true,
     m_flow_max=40,
-    use_T_source_input_K=true)                                                                               annotation (Placement(transformation(extent={{40,-10},{60,10}})));
+    use_T_source_input_K=true,
+    usePowerPort=true)                                                                                       annotation (Placement(transformation(extent={{40,-10},{60,10}})));
   Modelica.Blocks.Math.Gain gain2(k=-1)
                                        annotation (Placement(transformation(extent={{74,-4},{66,4}})));
   Modelica.Blocks.Sources.Sine sine4(
@@ -104,6 +106,8 @@ model Test_idContrMFlow_temp
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={90,30})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{-78,-10},{-98,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid1(useInputConnector=false) annotation (Placement(transformation(extent={{26,-10},{6,10}})));
 equation
   connect(gain1.y, electricBoiler_L1_idContrMFlow_temp.Q_flow_set) annotation (Line(points={{-34.4,0},{-40,0}},     color={0,0,127}));
   connect(sine.y, gain1.u) annotation (Line(points={{-21,0},{-25.2,0}}, color={0,0,127}));
@@ -116,7 +120,7 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(sine1.y, source.T) annotation (Line(points={{-70,-49},{-70,-40}}, color={0,0,127}));
-  connect(sine2.y, electricBoiler_L1_idContrMFlow_temp.T_out_set) annotation (Line(points={{-59,30},{-50,30},{-50,10}}, color={0,0,127}));
+  connect(sine2.y, electricBoiler_L1_idContrMFlow_temp.T_out_set) annotation (Line(points={{-59,30},{-55,30},{-55,10}}, color={0,0,127}));
   connect(gain2.y, eHP_L1_idContrMFlow_temp.Q_flow_set) annotation (Line(points={{65.6,0},{60,0}}, color={0,0,127}));
   connect(sine3.y, gain2.u) annotation (Line(points={{79,0},{74.8,0}}, color={0,0,127}));
   connect(source1.fluidPortIn, eHP_L1_idContrMFlow_temp.fluidPortIn) annotation (Line(
@@ -128,8 +132,16 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(sine4.y, source1.T) annotation (Line(points={{30,-49},{30,-40}}, color={0,0,127}));
-  connect(sine5.y, eHP_L1_idContrMFlow_temp.T_out_set) annotation (Line(points={{41,30},{50,30},{50,10}}, color={0,0,127}));
+  connect(sine5.y, eHP_L1_idContrMFlow_temp.T_out_set) annotation (Line(points={{41,30},{45,30},{45,10}}, color={0,0,127}));
   connect(sine6.y, eHP_L1_idContrMFlow_temp.T_source_input_K) annotation (Line(points={{79,30},{70,30},{70,5.9638},{60.0363,5.9638}}, color={0,0,127}));
+  connect(electricBoiler_L1_idContrMFlow_temp.epp, electricGrid.epp) annotation (Line(
+      points={{-60,0},{-78,0}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(eHP_L1_idContrMFlow_temp.epp, electricGrid1.epp) annotation (Line(
+      points={{40,0},{26,0}},
+      color={0,135,135},
+      thickness=0.5));
   annotation (
     Icon(graphics,
          coordinateSystem(preserveAspectRatio=false)),

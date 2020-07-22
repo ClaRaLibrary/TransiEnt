@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization.Check;
 model TestStatisticsVisualizationTable
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,13 +27,13 @@ model TestStatisticsVisualizationTable
     integrateElPower=true,
     integrateHeatFlow=true,
     integrateCDE=true)                  annotation (Placement(transformation(extent={{-70,80},{-50,100}})));
-  Modelica.Blocks.Sources.RealExpression P_min(y=-Plant.pQDiagram.P_min)
+  Modelica.Blocks.Sources.RealExpression P_min(y=-Plant.pQDiagram[1].P_min)
                                                         annotation (Placement(
         transformation(
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-49,25.5})));
-  Boundaries.Electrical.Frequency                      Grid(useInputConnector=false) annotation (Placement(transformation(extent={{24,46},{36,58}})));
+  Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{24,46},{36,58}})));
   Producer.Combined.LargeScaleCHP.CHP Plant(
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     typeOfCO2AllocationMethod=2,

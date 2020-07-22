@@ -1,10 +1,10 @@
 within TransiEnt.Components.Visualization.Check;
 model Test_PQDiagram_Display
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,7 +43,7 @@ model Test_PQDiagram_Display
         extent={{-20,-11},{20,11}},
         rotation=0,
         origin={-80,42})));
-  Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{40,42},{60,62}})));
+  Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{40,42},{60,62}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi pressureSink_pT2(p_const(displayUnit="Pa") = 450000, T_const(displayUnit="K") = 384.624)
                                            annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},

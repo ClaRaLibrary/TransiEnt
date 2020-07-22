@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
 record GenericStorageParameters
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,7 +36,7 @@ extends TransiEnt.Basics.Icons.Record;
   parameter SI.Frequency selfDischargeRate=0 "E.g. 0.5/3600 = 50% discharge per hour, used if no detailed staionary loss model is available" annotation(Dialog(group="Efficiency"));
 
   parameter Real P_max_load_over_SOC[:,:]=[0,1;1,1] "maximum possible relative load power over SOC";
-  parameter Real P_max_unload_over_SOC[:,:]=[0,1;1,1] "maximum possible relative un+load power over SOC";
+  parameter Real P_max_unload_over_SOC[:,:]=[0,1;1,1] "maximum possible relative unload power over SOC";
   parameter Real a=0 "Approximation parameter for part load efficiency calculation";
   parameter Real b=1 "Approximation parameter for part load efficiency calculation";
   parameter Real c=1 "Approximation parameter for part load efficiency calculation";

@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model CollectCosts_HydrogenStorageStartGas "Cost collector for a the start gas of a hydrogen storage"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -105,12 +105,7 @@ equation
           fillColor={0,127,0},
           fillPattern=FillPattern.Solid,
           textString="Costs Cavern
-Start Gas"),                                                                 Text(
-          extent={{-106,96},{94,130}},
-          lineColor={62,62,62},
-          fillColor={0,134,134},
-          fillPattern=FillPattern.Solid,
-          textString="%name")}), Diagram(graphics,
+Start Gas")}),                   Diagram(graphics,
                                          coordinateSystem(preserveAspectRatio=
             false, extent={{-100,-100},{100,100}})),
             Documentation(info="<html>

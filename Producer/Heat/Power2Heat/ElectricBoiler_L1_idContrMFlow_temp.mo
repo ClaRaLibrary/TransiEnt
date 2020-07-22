@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Power2Heat;
 model ElectricBoiler_L1_idContrMFlow_temp "Model for electric boilers with a pump with ideal mass flow control to get a given outlet temperature"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -33,6 +33,7 @@ model ElectricBoiler_L1_idContrMFlow_temp "Model for electric boilers with a pum
   // _____________________________________________
 
   parameter Real eta = 0.99 "Efficiency" annotation(Dialog(group="Technical Specifications"));
+  parameter Boolean usePowerPort=true "True if power port shall be used" annotation (Dialog(group="Fundamental Definitions"));
 
   // _____________________________________________
   //
@@ -41,6 +42,19 @@ model ElectricBoiler_L1_idContrMFlow_temp "Model for electric boilers with a pum
 
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Consumer)
                                                                                                                                       annotation (Placement(transformation(extent={{40,-100},{60,-80}})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=P_el) annotation (Placement(transformation(extent={{-72,52},{-52,72}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary if
+                                                                                usePowerPort constrainedby TransiEnt.Components.Boundaries.Electrical.ActivePower.Power "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary "PowerBoundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary powerBoundary(useInputConnectorQ=false, cosphi_boundary=1) "Power Boundary for ComplexPowerPort")),
+    Dialog(group="Replaceable Components"),
+    Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={-28,40})));
+  replaceable Basics.Interfaces.Electrical.ActivePowerPort epp if            usePowerPort constrainedby Basics.Interfaces.Electrical.ActivePowerPort "Choice of power port" annotation (
+    choicesAllMatching=true,
+    Dialog(group="Replaceable Components"),
+    Placement(transformation(extent={{-110,-10},{-90,10}})));
 
   // _____________________________________________
   //
@@ -53,6 +67,8 @@ model ElectricBoiler_L1_idContrMFlow_temp "Model for electric boilers with a pum
   //
   //           Characteristic Equations
   // _____________________________________________
+
+
 equation
 
   P_el=-Q_flow/eta;
@@ -65,6 +81,13 @@ equation
   // _____________________________________________
 
   connect(modelStatistics.powerCollector[collectElectricPower.typeOfResource],collectElectricPower.powerCollector);
+  if usePowerPort then
+  connect(powerBoundary.epp,epp)  annotation (Line(
+      points={{-38,40},{-60,40},{-60,0},{-100,0}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(realExpression.y,powerBoundary. P_el_set) annotation (Line(points={{-51,62},{-34,62},{-34,52}}, color={0,0,127}));
+  end if;
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{28,-14},{52,-24}},
@@ -88,7 +111,7 @@ equation
           fillPattern=FillPattern.VerticalCylinder)}),           Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>This model is an electric boiler with a pump&nbsp;with&nbsp;ideal&nbsp;mass flow control&nbsp;to&nbsp;get&nbsp;a&nbsp;given&nbsp;outlet&nbsp;temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
+<p>This model is an electric boiler with a pump with ideal mass flow control to get a given outlet temperature. It can be chosen if the outlet set temperature is constant or given by an input.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>The efficiency is constant.</p>
 <p>The mass flow is calculated based on a heat flow rate and a given constant outlet temperature. There is no volume considered.</p>
@@ -112,19 +135,19 @@ equation
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #0000ff;\">if&nbsp;</span><span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow)&gt;fluidOut.h<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #0000ff;\">if&nbsp;</span>-Q_flow_set&lt;Q_flow_small<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;or&nbsp;not&nbsp;</span>allowOverheat<span style=\"font-family: Courier New; color: #0000ff;\">&nbsp;then</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.m_flow=0;</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.h_outflow=<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #0000ff;\">else</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.h_outflow=Q_flow_set/fluidPortOut.m_flow+<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.m_flow=-m_flow_max;<span style=\"color: #006400;\">&nbsp;//maximum&nbsp;mass&nbsp;flow&nbsp;to&nbsp;keep&nbsp;the&nbsp;temperature&nbsp;increase&nbsp;at&nbsp;a&nbsp;minimum</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color: #0000ff;\">end&nbsp;if</span>;</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #0000ff;\">else</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.h_outflow=fluidOut.h;</span></p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;&nbsp;&nbsp;fluidPortOut.m_flow=-<span style=\"color: #ff0000;\">max</span>(0,<span style=\"font-family: Courier New; color: #ff0000;\">min</span>(m_flow_max,-Q_flow_set/(fluidPortOut.h_outflow-<span style=\"font-family: Courier New; color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow))));</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;<span style=\"color: #0000ff;\">end&nbsp;if</span>;</p>
-<p><span style=\"font-family: Courier New;\">&nbsp;&nbsp;Q_flow=fluidPortOut.m_flow*(fluidPortOut.h_outflow-<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow));</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">if </span></span><span style=\"color: #ff0000;\">inStream(fluidPortIn.h_outflow)&gt;fluidOut.h<span style=\"font-family: Courier New; color: #0000ff;\"> then</span></p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">if </span>-Q_flow_set&lt;Q_flow_small<span style=\"font-family: Courier New; color: #0000ff;\"> or not </span>allowOverheat<span style=\"font-family: Courier New; color: #0000ff;\"> then</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.m_flow=0;</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.h_outflow=<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">else</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.h_outflow=Q_flow_set/fluidPortOut.m_flow+<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow);</p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.m_flow=-m_flow_max;<span style=\"color: #006400;\"> //maximum mass flow to keep the temperature increase at a minimum</span></p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">end if</span>;</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">else</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.h_outflow=fluidOut.h;</span></p>
+<p><span style=\"font-family: Courier New;\">fluidPortOut.m_flow=-<span style=\"color: #ff0000;\">max</span>(0,<span style=\"font-family: Courier New; color: #ff0000;\">min</span>(m_flow_max,-Q_flow_set/(fluidPortOut.h_outflow-<span style=\"font-family: Courier New; color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow))));</p>
+<p><span style=\"font-family: Courier New; color: #0000ff;\">end if</span>;</p>
+<p><span style=\"font-family: Courier New;\">Q_flow=fluidPortOut.m_flow*(fluidPortOut.h_outflow-<span style=\"color: #ff0000;\">inStream</span>(fluidPortIn.h_outflow));</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>The model is only working properly in design flow direction. Reverse flow is not supported!</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
@@ -133,5 +156,6 @@ equation
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
+<p>Model modified by Jan Westphal (j.westphal@tuhh.de), Jul 2019 ( added power port)</p>
 </html>"));
 end ElectricBoiler_L1_idContrMFlow_temp;

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestCHP_startup "Example how the continuous plant model behaves when ramping up"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,13 +22,13 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-100,79},{-80,99}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-70,79},{-50,99}})));
-  Modelica.Blocks.Sources.RealExpression P_min(y=-Plant.pQDiagram.P_min)
+  Modelica.Blocks.Sources.RealExpression P_min(y=-Plant.pQDiagram[1].P_min)
                                                         annotation (Placement(
         transformation(
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-51,65.5})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{18,82},{30,94}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(extent={{18,82},{30,94}})));
   CHP Plant(
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     typeOfCO2AllocationMethod=2,
@@ -72,15 +72,15 @@ model TestCHP_startup "Example how the continuous plant model behaves when rampi
         origin={29,74})));
   Components.Visualization.PQDiagram_Display PQDiagram(PQCharacteristics=Base.Characteristics.PQ_Characteristics_WT()) annotation (Placement(transformation(extent={{64,6},{94,34}})));
   Components.Visualization.InfoBoxLargeCHP infoBoxLargeCHP annotation (Placement(transformation(extent={{28,-11},{46,11}})));
-  Modelica.Blocks.Sources.RealExpression P_min1(y=-Plant.pQDiagram.P_min)
+  Modelica.Blocks.Sources.RealExpression P_min1(y=-Plant.pQDiagram[1].P_min)
                                                         annotation (Placement(
         transformation(
         extent={{-11,-9.5},{11,9.5}},
         rotation=0,
         origin={-59,-38.5})));
-  Components.Boundaries.Electrical.Frequency           Grid1(useInputConnector=false)
-                                                                                     annotation (Placement(transformation(extent={{10,-14},{22,-2}})));
+  Components.Boundaries.Electrical.ActivePower.Frequency Grid1(useInputConnector=false) annotation (Placement(transformation(extent={{10,-14},{22,-2}})));
   CHP Plant1(
+    quantity=2,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal,
     typeOfCO2AllocationMethod=2,
     h_nom=547e3,

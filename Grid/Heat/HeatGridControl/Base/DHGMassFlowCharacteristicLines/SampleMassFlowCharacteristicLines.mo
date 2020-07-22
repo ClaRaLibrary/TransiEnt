@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Grid.Heat.HeatGridControl.Base.DHGMassFlowCharacteristicLines;
 record SampleMassFlowCharacteristicLines "record for sample mass flow characteristic lines"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -97,8 +97,8 @@ record SampleMassFlowCharacteristicLines "record for sample mass flow characteri
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>Merged from two different sources: </p>
-<p>[1]Beecken, Jens ; Ridder, Mathias ; Schaper, Hartwig ; Sch&ouml;ttker, Peter ; Micus, Wolfgang ; Rogalla, Bernd-Uwe ; Feuerriegel, Susanne: Verbundprojekt &bdquo;KWK-Optimierung Band 5&ldquo;, 2007 (Klopsch2007)</p>
-<p>[2] Teilprojekt Hannover-Hamburg: &bdquo;Analyse des Regelverhaltens von Fernw&auml;rmenetzen&ldquo; / Pilotprojekt Hannover / Pilotprojekt Hamburg. Hamburg, 2000 (Beecken2000)</p>
+<p>[1]Beecken, Jens ; Ridder, Mathias ; Schaper, Hartwig ; Schöttker, Peter ; Micus, Wolfgang ; Rogalla, Bernd-Uwe ; Feuerriegel, Susanne: Verbundprojekt &bdquo;KWK-Optimierung Band 5&ldquo;, 2007 (Klopsch2007)</p>
+<p>[2] Teilprojekt Hannover-Hamburg: &bdquo;Analyse des Regelverhaltens von Fernwärmenetzen&ldquo; / Pilotprojekt Hannover / Pilotprojekt Hamburg. Hamburg, 2000 (Beecken2000)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end SampleMassFlowCharacteristicLines;

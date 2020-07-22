@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.Machines;
 model LinearSynchronousMachineComplex "ComplexPowerPort: Linear generator model with constant efficiency"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,7 +61,7 @@ equation
   // _____________________________________________
 
   if OwnFrequency==true then
-  epp.P - D_cage * der(theta)= if mpp.tau>0 then -(mpp.tau * omega * eta) else -(mpp.tau*omega/eta);
+  epp.P - D_cage * der(theta)= if noEvent(mpp.tau>0) then -(mpp.tau * omega * eta) else -(mpp.tau*omega/eta);
   else
   epp.P = if noEvent(mpp.tau>0) then -(mpp.tau * omega * eta) else -(mpp.tau*omega/eta);
   end if;

@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Check;
 model TestFlywheelDischarge "Example to evaluate self discharge time"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,7 @@ model TestFlywheelDischarge "Example to evaluate self discharge time"
   TransiEnt.Storage.Electrical.FlywheelStorage_L2 flywheelElectricStorage(K=2000000000, params=Specifications.DetailedFlywheel.Rotokinetik1000()) annotation (Placement(transformation(extent={{-50,-40},{-14,-4}})));
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
-  TransiEnt.Components.Boundaries.Electrical.Power constantPowerBoundary(useInputConnectorP=false) annotation (Placement(transformation(extent={{28,-38},{58,-6}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power constantPowerBoundary(useInputConnectorP=false) annotation (Placement(transformation(extent={{28,-38},{58,-6}})));
 equation
   connect(constantPowerBoundary.epp, flywheelElectricStorage.epp) annotation (
       Line(

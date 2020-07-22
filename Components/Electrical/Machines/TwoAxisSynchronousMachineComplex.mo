@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.Machines;
 model TwoAxisSynchronousMachineComplex "ComplexPowerPort: Stationary Two-Axis SM model with excitation voltage input"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -149,7 +149,7 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">Tested in the check model &quot;TransiEnt.Components.Electrical.Machines.Check.CheckTwoAxisSynchronousMachineComplex&quot;</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">[1] F. Milano, &ldquo;Power System Modelling and Scripting&rdquo;, Springer London, 2010, p. 223</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">[2] J. Arrillaga, C.P. Arnold, &ldquo;Computer Analysis of Power Systems&rdquo;, John Wiley &amp; Sons Ltd Chihcester, 1990</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">[2] J. Arrillaga, C.P. Arnold, &ldquo;Computer Analysis of Power Systems&rdquo;, John Wiley & Sons Ltd Chihcester, 1990</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Jan-Peter Heckel (jan.heckel@tuhh.de) in March 2018 </span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model made more modular (extension of partial class and one version for Slack and PU-Bus) in June/July 2018</span></p>

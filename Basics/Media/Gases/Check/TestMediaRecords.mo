@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Media.Gases.Check;
 model TestMediaRecords
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,7 @@ model TestMediaRecords
   parameter Modelica.SIunits.Pressure p_start=1.014e5+120e5;
   Modelica.SIunits.Temperature T;
   Modelica.SIunits.Pressure p;
-  Modelica.SIunits.Temperature T_ph_H2_SRK=TILMedia.VLEFluidFunctions.temperature_phxi(vleFluid_H2SRK_pT.vleFluidType,1e5,vleFluid_H2SRK_pT.h);
+  Modelica.SIunits.Temperature T_ph_H2_SRK=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.temperature_phxi(vleFluid_H2SRK_pT.vleFluidType,1e5,vleFluid_H2SRK_pT.h);
 
   Modelica.Blocks.Sources.Ramp T_ramp(
     height=50,
@@ -37,75 +37,64 @@ model TestMediaRecords
     offset=p_start,
     startTime=10) annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
 
-  TILMedia.VLEFluid_pT vleFluid_H2_pT(
-      deactivateTwoPhaseRegion=true,
-      p=p,
-      T=T,
-    redeclare VLE_VDIWA_H2 vleFluidType)
-                       annotation (Placement(transformation(extent={{-84,36},{-64,56}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_H2_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_H2 vleFluidType) annotation (Placement(transformation(extent={{-84,36},{-64,56}})));
 
-   TILMedia.VLEFluid_pT vleFluid_NG7_pT(
-       p=p,
-       T=T,
-       deactivateTwoPhaseRegion=true,
-      redeclare VLE_VDIWA_NG7_H2_var vleFluidType)
-             annotation (Placement(transformation(extent={{-54,36},{-34,56}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_NG7_pT(
+    p=p,
+    T=T,
+    deactivateTwoPhaseRegion=true,
+    redeclare VLE_VDIWA_NG7_H2_var vleFluidType) annotation (Placement(transformation(extent={{-54,36},{-34,56}})));
 
-   TILMedia.VLEFluid_pT vleFluid_H2SRK_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_H2_SRK vleFluidType)
-                        annotation (Placement(transformation(extent={{-26,36},{-6,56}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_H2SRK_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_H2_SRK vleFluidType) annotation (Placement(transformation(extent={{-26,36},{-6,56}})));
 
-   TILMedia.VLEFluid_pT vleFluid_NG7SRK_pT(
-         deactivateTwoPhaseRegion=true,
-         p=p,
-         T=T,
-       redeclare VLE_VDIWA_NG7_H2_SRK_var vleFluidType)
-                          annotation (Placement(transformation(extent={{-84,12},{-64,32}})));
-   TILMedia.VLEFluid_pT vleFluid_CH4_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_CH4 vleFluidType)
-                        annotation (Placement(transformation(extent={{-56,12},{-36,32}})));
-   TILMedia.VLEFluid_pT vleFluid_CH4SRK_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_CH4_SRK vleFluidType)
-                        annotation (Placement(transformation(extent={{-26,12},{-6,32}})));
-   TILMedia.VLEFluid_pT vleFluid_CH4_H2_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_CH4_H2_var vleFluidType)
-                        annotation (Placement(transformation(extent={{-84,-12},{-64,8}})));
-   TILMedia.VLEFluid_pT vleFluid_NG7_SG_O2_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_NG7_SG_O2_var vleFluidType)
-                        annotation (Placement(transformation(extent={{-54,-12},{-34,8}})));
-   TILMedia.VLEFluid_pT vleFluid_NG7_SG_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_NG7_SG_var vleFluidType)
-                        annotation (Placement(transformation(extent={{-26,-12},{-6,8}})));
-   TILMedia.VLEFluid_pT vleFluid_SG4_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_SG4_var vleFluidType)
-                        annotation (Placement(transformation(extent={{-84,-40},{-64,-20}})));
-   TILMedia.VLEFluid_pT vleFluid_SG6_pT(
-       deactivateTwoPhaseRegion=true,
-       p=p,
-       T=T,
-     redeclare VLE_VDIWA_SG6_var vleFluidType)
-                        annotation (Placement(transformation(extent={{-54,-40},{-34,-20}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_NG7SRK_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_NG7_H2_SRK_var vleFluidType) annotation (Placement(transformation(extent={{-84,12},{-64,32}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_CH4_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_CH4 vleFluidType) annotation (Placement(transformation(extent={{-56,12},{-36,32}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_CH4SRK_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_CH4_SRK vleFluidType) annotation (Placement(transformation(extent={{-26,12},{-6,32}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_CH4_H2_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_CH4_H2_var vleFluidType) annotation (Placement(transformation(extent={{-84,-12},{-64,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_NG7_SG_O2_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_NG7_SG_O2_var vleFluidType) annotation (Placement(transformation(extent={{-54,-12},{-34,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_NG7_SG_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_NG7_SG_var vleFluidType) annotation (Placement(transformation(extent={{-26,-12},{-6,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_SG4_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_SG4_var vleFluidType) annotation (Placement(transformation(extent={{-84,-40},{-64,-20}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid_SG6_pT(
+    deactivateTwoPhaseRegion=true,
+    p=p,
+    T=T,
+    redeclare VLE_VDIWA_SG6_var vleFluidType) annotation (Placement(transformation(extent={{-54,-40},{-34,-20}})));
 
    TILMedia.Gas_pT gas_H2_pT(
          p=p,
@@ -149,12 +138,12 @@ model TestMediaRecords
       T=T,
      redeclare Gas_VDIWA_SG7_var gasType)
            annotation (Placement(transformation(extent={{46,-32},{66,-12}})));
-   TILMedia.VLEFluid_ph vleFluid_H2SRK_ph(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluid_H2SRK_ph(
     deactivateTwoPhaseRegion=true,
     redeclare VLE_VDIWA_H2_SRK vleFluidType,
     h=vleFluid_H2SRK_pT.h,
     p=100000) annotation (Placement(transformation(extent={{2,-76},{22,-56}})));
-   TILMedia.VLEFluid_ph vleFluid_H2_ph(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluid_H2_ph(
     deactivateTwoPhaseRegion=true,
     redeclare VLE_VDIWA_H2 vleFluidType,
     h=vleFluid_H2_pT.h,

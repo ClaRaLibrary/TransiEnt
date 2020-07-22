@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCyc2Source4Pipes2Sinks
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,7 +57,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-2,30})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
     medium=simCenter.gasModel1,
     h_start=ones(pipe1.N_cv)*Init.pipe1.h_in,
     m_flow_start=ones(pipe1.N_cv + 1)*Init.pipe1.m_flow,
@@ -79,7 +79,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{-14,-5},{14,5}},
         rotation=90,
         origin={-36,-23})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
     medium=simCenter.gasModel1,
     length=100,
     h_start=ones(pipe2.N_cv)*Init.pipe2.h_in,
@@ -104,7 +104,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{-14,-5},{14,5}},
         rotation=180,
         origin={24,60})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe4(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -129,7 +129,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={48,-80})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,

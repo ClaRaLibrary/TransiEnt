@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas;
 model UndergroundGasStoragePressureLossHeatTransfer_L2 "Model of a simple gas storage volume for constant composition with adiabatic inlet and outlet pipes with pressure losses and heat transfer to the cavern walls"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,6 +31,7 @@ model UndergroundGasStoragePressureLossHeatTransfer_L2 "Model of a simple gas st
   import Modelica.Constants.pi;
 
   extends TransiEnt.Basics.Icons.StorageGenericGasPressureLoss;
+  extends Base.MatchClassGasStorage;
 
   // _____________________________________________
   //
@@ -61,16 +62,17 @@ model UndergroundGasStoragePressureLossHeatTransfer_L2 "Model of a simple gas st
   parameter SI.Diameter diameter_pipe_i= 0.3 "|Geometry|Inner diameter of the pipe";
   parameter Integer N_pipes= 1 "|Geometry|Number of parallel pipes";*/
 
-  parameter SI.Thickness thickness_wall=2 "Thickness of the surrounding material which takes part in the heat transfer"
-                                                                                                    annotation(Dialog(group="Heat Transfer"));
-  parameter SI.Temperature T_surrounding=317.15 "Constant temperature of the surrounding material" annotation(Dialog(group="Heat Transfer"));
+  parameter SI.Thickness thickness_wall=2 "Thickness of the surrounding material which takes part in the heat transfer" annotation(Dialog(group="Heat Transfer"));
+  parameter SI.Temperature T_surrounding=317.15 "Constant temperature of the surrounding material of the storage" annotation(Dialog(group="Heat Transfer"));
+  parameter SI.Temperature T_ground=simCenter.T_ground "Constant ground temperature at surface" annotation(Dialog(group="Heat Transfer"));
   parameter SI.Temperature T_wall_start=317.15 "Initial temperature of the material" annotation(Dialog(group="Initialization"));
   parameter Integer stateLocation = 2 "Location of states" annotation(Dialog(group="Numerical Efficiency"), choices(choice=1 "Inner location of states",
                                     choice=2 "Central location of states",  choice=3 "Outer location of states"));
-  parameter Integer initOption=0 "Type of initialization" annotation (Dialog(group="Initialization"), choices(
-      choice=0 "Use guess values",
+  parameter Integer initOption=213 "Type of initialization" annotation (Dialog(group="Initialization"), choices(
+      choice=213 "Fixed temperature",
       choice=1 "Steady state",
-      choice=203 "Steady temperature"));
+      choice=203 "Steady temperature",
+      choice=0 "No init, use T_start as guess values"));
 
   parameter String suppressChattering="True" "Enable to suppress possible chattering in wall" annotation (Dialog(group="Numerical Efficiency"), choices(choice="False" "False (faster if no chattering occurs)",
                                                                                             choice="True" "True (faster if chattering occurs)"));
@@ -104,27 +106,28 @@ model UndergroundGasStoragePressureLossHeatTransfer_L2 "Model of a simple gas st
   //           Instances of other Classes
   // _____________________________________________
 public
-  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipeIn(
+  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeIn(
     medium=medium,
-    frictionAtInlet=true,
-    frictionAtOutlet=false,
+    constantComposition=true,
+    frictionAtInlet=false,
+    frictionAtOutlet=true,
     N_cv=1,
     length=1000,
     diameter_i=0.3,
     z_in=-1000,
     z_out=0,
     N_tubes=1,
-    showExpertSummary=true)
-               annotation (
+    showExpertSummary=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choices(choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi "Constant composition", choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi "Variable composition"),
     Placement(transformation(
-        extent={{14,-5},{-14,5}},
+        extent={{-14,-5},{14,5}},
         rotation=270,
         origin={-20,23})));
 public
-  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipeOut(
+  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeOut(
     medium=medium,
+    constantComposition=true,
     frictionAtInlet=true,
     frictionAtOutlet=false,
     N_cv=1,
@@ -133,8 +136,7 @@ public
     z_in=-1000,
     z_out=0,
     N_tubes=1,
-    showExpertSummary=true)
-               annotation (
+    showExpertSummary=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choices(choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi "Constant composition", choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi "Variable composition"),
     Placement(transformation(
@@ -143,12 +145,19 @@ public
         origin={-20,-25})));
 
 protected
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperatureOut[pipeOut.N_cv](each T=simCenter.T_ground)
-                                                                                       annotation (Placement(transformation(extent={{74,-41},{54,-21}})));
-  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperatureIn[pipeIn.N_cv](each T=T_surrounding) annotation (Placement(transformation(extent={{74,21},{54,41}})));
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperatureOut[pipeOut.N_cv](T=if pipeOut.N_cv==1 then {(T_ground+T_surrounding)/2} else linspace(
+      T_surrounding,
+      T_ground,
+      pipeOut.N_cv)) annotation (Placement(transformation(extent={{74,-41},{54,-21}})));
+  Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperatureIn[pipeIn.N_cv](T=if pipeIn.N_cv==1 then {(T_ground+T_surrounding)/2} else linspace(
+      T_ground,
+      T_surrounding,
+      pipeIn.N_cv)) annotation (Placement(transformation(extent={{74,21},{54,41}})));
 public
-  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(calculateCost=calculateCost)
-                                                                  constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
+  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(
+    V_geo=500000,                                                 calculateCost=calculateCost,
+    p_gas_start=12000000,
+    T_gas_start=317.15)                                           constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choicesAllMatching,
     Placement(transformation(extent={{-10,-10},{10,10}})));
@@ -162,8 +171,8 @@ protected
     diameter_o=storage.diameter + thickness_wall,
     diameter_i=storage.diameter,
     length=storage.height,
-    initOption=initOption,
-    suppressChattering=suppressChattering) annotation (Placement(transformation(
+    suppressChattering=suppressChattering,
+    initOption=initOption) annotation (Placement(transformation(
         extent={{-10,-5},{10,5}},
         rotation=270,
         origin={30,0})));
@@ -174,8 +183,8 @@ protected
     width=pi/2*storage.diameter,
     T_start=T_wall_start*ones(cylindricalWall.N_ax),
     N_ax=1,
-    initOption=initOption,
-    stateLocation=stateLocation) annotation (Placement(transformation(extent={{8,-15},{22,-22}})));
+    stateLocation=stateLocation,
+    initOption=initOption) annotation (Placement(transformation(extent={{8,-15},{22,-22}})));
 
 public
   inner Summary summary(
@@ -231,11 +240,11 @@ public
       Q_flow=fixedTemperature.port.Q_flow,
       T=fixedTemperature.port.T),
     heatPipeIn(
-      N_cv=1,
+      N_cv=pipeIn.N_cv,
       Q_flow=pipeIn.heat.Q_flow,
       T=pipeIn.heat.T),
     heatPipeOut(
-      N_cv=1,
+      N_cv=pipeOut.N_cv,
       Q_flow=pipeOut.heat.Q_flow,
       T=pipeOut.heat.T),
     costs(
@@ -278,26 +287,18 @@ equation
   //               Connect Statements
   // _____________________________________________
 
-  connect(pipeIn.gasPortOut, gasPortIn) annotation (Line(
-      points={{-20,37},{-20,44},{0,44},{0,49}},
-      color={255,255,0},
-      thickness=1.5));
   connect(pipeOut.gasPortOut, gasPortOut) annotation (Line(
       points={{-20,-39},{-20,-46},{0,-46},{0,-53}},
       color={255,255,0},
       thickness=1.5));
   connect(pipeOut.heat, fixedTemperatureOut.port) annotation (Line(
-      points={{-16,-25},{-16,-24},{0,-24},{0,-31},{54,-31}},
+      points={{-16.6667,-25},{-16.6667,-24},{0,-24},{0,-31},{54,-31}},
       color={167,25,48},
       thickness=0.5));
   connect(pipeIn.heat, fixedTemperatureIn.port) annotation (Line(
-      points={{-16,23},{-16,24},{0,24},{0,31},{54,31}},
+      points={{-16.6667,23},{-16.6667,24},{0,24},{0,31},{54,31}},
       color={167,25,48},
       thickness=0.5));
-  connect(pipeIn.gasPortIn, storage.gasPortIn) annotation (Line(
-      points={{-20,9},{-20,6},{0,6},{0,4.9}},
-      color={255,255,0},
-      thickness=1.5));
   connect(pipeOut.gasPortIn, storage.gasPortOut) annotation (Line(
       points={{-20,-11},{-20,-8},{0,-8},{0,-6.3}},
       color={255,255,0},
@@ -319,10 +320,17 @@ equation
       points={{25,8.88178e-16},{14,8.88178e-16},{14,0},{4,0}},
       color={167,25,48},
       thickness=0.5));
+  connect(pipeIn.gasPortIn, gasPortIn) annotation (Line(
+      points={{-20,37},{-20,49},{0,49}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(pipeIn.gasPortOut, storage.gasPortIn) annotation (Line(
+      points={{-20,9},{-20,4.9},{0,4.9}},
+      color={255,255,0},
+      thickness=1.5));
                                                                                                                    annotation(Dialog(group="Numerical Efficiency"), choices(choice=1 "Inner location of states",
                                     choice=2 "Central location of states",  choice=3 "Outer location of states"),
-              Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={Text(
+              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={Text(
           extent={{-30,12},{30,-48}},
           lineColor={0,0,0},
           textString="L2")},                                                                             coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),

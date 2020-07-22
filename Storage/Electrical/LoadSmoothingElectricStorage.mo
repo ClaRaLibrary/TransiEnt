@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical;
 model LoadSmoothingElectricStorage "Storage model including a replaceable storage unit and a replaceable control unit"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,7 +37,7 @@ model LoadSmoothingElectricStorage "Storage model including a replaceable storag
   replaceable model StationaryLossModel = TransiEnt.Storage.Base.NoStationaryLoss
                                                                 "Model for stationary energy losses" annotation(choicesAllMatching=true, Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Model&nbsp;for&nbsp;stationary&nbsp;energy&nbsp;losses.</p>
+<p>Model for stationary energy losses.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -88,7 +88,7 @@ equation
   connect(P_load, loadSmoothingController.P_load) annotation (Line(points={{0,106},{0,42.7},{6.84,42.7}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Storage&nbsp;model&nbsp;including&nbsp;a&nbsp;replaceable&nbsp;storage&nbsp;unit&nbsp;and&nbsp;a&nbsp;replaceable&nbsp;control&nbsp;unit.</p>
+<p>Storage model including a replaceable storage unit and a replaceable control unit.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

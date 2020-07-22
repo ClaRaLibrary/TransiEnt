@@ -1,10 +1,10 @@
 within TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer.Controller;
 model TemperatureController
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -85,7 +85,7 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p>Modelica RealOutput: heat flow rate in W</p>
-<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a&nbsp;heatport</p>
+<p>Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatport</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

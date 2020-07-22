@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Base;
 model LinearStationaryLoss "Linear stationary loss (= a * E + b)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,7 +49,7 @@ equation
     fillPattern=FillPattern.Solid,
     points={{90,-78},{68,-70},{68,-86},{90,-78}})}), Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Linear&nbsp;stationary&nbsp;loss&nbsp;(=&nbsp;a&nbsp;*&nbsp;E&nbsp;+&nbsp;b).</p>
+<p>Linear stationary loss (= a * E + b).</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

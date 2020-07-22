@@ -1,11 +1,11 @@
-within TransiEnt.Grid.Electrical.EconomicDispatch;
+﻿within TransiEnt.Grid.Electrical.EconomicDispatch;
 model LoadPredictionAdaption "Adaption of power point setpoints in case of load prediction errors according to Albrecht1997"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -103,7 +103,7 @@ equation
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>Tested in check model &quot;TransiEnt.Grid.Electrical.EconomicDispatch.Check.TestLoadPredictionAdaption&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>Vorrausschauende optimale Steuer-und Regelstrategien zur Verbesserung der Kraftwerksf&uuml;hrung [ISBN: 3-18-361608-4 ] Albrecht, Jens; 1997 </p>
+<p>Vorrausschauende optimale Steuer-und Regelstrategien zur Verbesserung der Kraftwerksführung [ISBN: 3-18-361608-4 ] Albrecht, Jens; 1997 </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end LoadPredictionAdaption;

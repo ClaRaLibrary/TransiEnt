@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Heat;
 model FirstOrderHeatingNetworkConsumer "Heating network consumer, mass flow control dynamic approximated by first order system"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -97,8 +97,8 @@ public
   // _____________________________________________
 
   SI.MassFlowRate m_flow_target "Mass flow is determined by heat balance";
-  SI.SpecificHeatCapacity cp_in = TILMedia.VLEFluidFunctions.liquidSpecificHeatCapacity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
-  SI.Density rho = TILMedia.VLEFluidFunctions.liquidDensity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
+  SI.SpecificHeatCapacity cp_in = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.liquidSpecificHeatCapacity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
+  SI.Density rho = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.liquidDensity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
   SI.HeatFlowRate Q_consumer_is = fluidPortIn.m_flow * inStream(fluidPortIn.h_outflow) + fluidPortOut.m_flow * fluidPortOut.h_outflow;
 
   Modelica.Blocks.Nonlinear.Limiter m_flow_lim_set(uMax=m_flow_large, uMin=m_flow_small) annotation (Placement(transformation(extent={{50,-38},{30,-18}})));

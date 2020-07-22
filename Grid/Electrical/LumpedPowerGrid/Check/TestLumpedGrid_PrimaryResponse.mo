@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid.Check;
 model TestLumpedGrid_PrimaryResponse
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,7 @@ model TestLumpedGrid_PrimaryResponse
 extends TransiEnt.Basics.Icons.Checkmodel;
 
   LumpedGrid lumpedGrid annotation (Placement(transformation(extent={{-30,-2},{-10,18}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=true) annotation (Placement(transformation(extent={{22,-2},{42,18}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=true) annotation (Placement(transformation(extent={{22,-2},{42,18}})));
   Modelica.Blocks.Continuous.FirstOrder firstOrder(
     k=1,
     T=5,

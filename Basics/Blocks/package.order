@@ -22,3 +22,7 @@ UserDefinedFunctionMISO
 FilterPosNeg
 FirstOrder
 LimPID
+SwitchRamp
+TimerResetWhenTrue
+TimerConstWhenFalse
+IntegerEqual

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components;
 model SimplePowerPlant "No transient behaviuor, no operating states, constant efficiency (with optional primary balancing controller)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -73,11 +73,11 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
         extent={{-10,-10.5},{10,10.5}},
         rotation=-90,
         origin={62.5,16})));
-  TransiEnt.Components.Mechanical.ConstantInertia MechanicalConnection(
+  replaceable TransiEnt.Components.Mechanical.ConstantInertia MechanicalConnection(
     omega(fixed=fixedStartValue_w, start=2*simCenter.f_n*Modelica.Constants.pi),
     J=J,
     nSubgrid=nSubgrid,
-    P_n=P_el_n) annotation (choicesAllMatching=true, Placement(transformation(extent={{-28,-57},{4,-23}})));
+    P_n=P_el_n) constrainedby TransiEnt.Components.Mechanical.Base.PartialMechanicalConnection annotation (choicesAllMatching=true, Placement(transformation(extent={{-28,-57},{4,-23}})));
 
   Modelica.Blocks.Math.MultiSum targetSum(nu=2) annotation (Placement(
         transformation(

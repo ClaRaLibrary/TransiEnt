@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Gas;
 model InitGasGrid_PtG
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,8 +20,19 @@ model InitGasGrid_PtG
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.ModelStaticCycle;
-  outer TransiEnt.SimCenter simCenter;
+
+
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium natural gas mixture";
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid mediumH2=simCenter.gasModel3 "Medium hydrogen";
@@ -54,6 +65,20 @@ model InitGasGrid_PtG
   parameter Modelica.SIunits.MassFlowRate feedIn2_m_flow "|Feed-in|Mass flow rate at source";
   parameter Modelica.SIunits.MassFraction feedin2_xi[mediumH2.nc - 1]=zeros(feedIn2.medium.nc - 1) "|Feed-in|Mass specific composition at source";
   parameter Modelica.SIunits.Temperature feedIn2_T=simCenter.T_ground "|Feed-in|Temperature at source";
+
+
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
+
+  outer TransiEnt.SimCenter simCenter;
+
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
 
   TransiEnt.Grid.Gas.StaticCycles.Source_yellow_T source1(
     medium=medium,
@@ -132,7 +157,14 @@ model InitGasGrid_PtG
         rotation=270,
         origin={70,80})));
 
+
 equation
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
+
   connect(junction3.outlet1, pipe2.inlet) annotation (Line(points={{29.2,60.3333},{21.64,60.3333},{21.64,60},{8.3,60}}, color={0,0,0}));
   connect(junction3.outlet2, pipe3.inlet) annotation (Line(points={{40,51.3333},{40,38.3}}, color={0,0,0}));
   connect(pipe3.outlet, junction4.inlet1) annotation (Line(points={{40,19.8},{40,-0.76},{39.1667,-0.76}}, color={0,0,0}));

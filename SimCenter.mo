@@ -2,10 +2,10 @@
 model SimCenter "SimCenter for global parameters, ambient conditions and collecting statistics"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -103,9 +103,9 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
 
   // ==== Gas grid ====
 
-  replaceable parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1 constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid "Medium name of real gas model" annotation (Dialog(tab="Media and Materials", group="TransiEnt-based models: Gas Grid"), choicesAllMatching);
+  replaceable parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_SRK_var gasModel1 constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid "Medium name of real gas model" annotation (Dialog(tab="Media and Materials", group="TransiEnt-based models: Gas Grid"), choicesAllMatching);
   replaceable parameter TransiEnt.Basics.Media.Gases.Gas_VDIWA_NG7_H2_var gasModel2 constrainedby TILMedia.GasTypes.BaseGas "Medium name of ideal gas model" annotation (Dialog(tab="Media and Materials", group="TransiEnt-based models: Gas Grid"), choicesAllMatching);
-  replaceable parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2 gasModel3 constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid "Medium name of real gas model" annotation (Dialog(tab="Media and Materials", group="TransiEnt-based models: Gas Grid"), choicesAllMatching);
+  replaceable parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel3 constrainedby TILMedia.VLEFluidTypes.BaseVLEFluid "Medium name of real gas model" annotation (Dialog(tab="Media and Materials", group="TransiEnt-based models: Gas Grid"), choicesAllMatching);
   replaceable parameter TransiEnt.Basics.Media.Gases.Gas_ExhaustGas exhaustGasModel constrainedby TILMedia.GasTypes.BaseGas "Medium name of ideal exhaust gas model" annotation (Dialog(tab="Media and Materials", group="TransiEnt-based models: Gas Grid"), choicesAllMatching);
 
   //replaceable parameter TransiEnt.Producer.Combined.CHPPackage.Records.ExhaustGas_VLEType exhaustVLEModel
@@ -117,6 +117,21 @@ model SimCenter "SimCenter for global parameters, ambient conditions and collect
 
   parameter SI.VolumeFraction phi_H2max=0.1 "|Gas Grid|Parameters|Maximum admissible volume fraction of H2 in NGH2 at STP";
   parameter Real f_gasDemand=2.7097280217 "|Gas Grid|Parameters|Scaling factor gas demand"; //3.0104424893;//
+
+  parameter Boolean useConstCompInGasComp=false "true if equations for constant gas composition should be used in gas components" annotation (Dialog(tab="Gas Grid", group="Parameters"));
+  parameter Integer initOptionGasPipes=0 "Type of initialization" annotation (Dialog(tab="Gas Grid", group="Parameters"), choices(
+      choice=0 "Use guess values",
+      choice=208 "Steady pressure and enthalpy",
+      choice=201 "Steady pressure",
+      choice=202 "Steady enthalpy",
+      choice=210 "Steady density"));
+  parameter Integer massBalanceGasPipes=1 "Mass balance and species balance fomulation" annotation (Dialog(tab="Gas Grid", group="Parameters"), choices(
+      choice=1 "ClaRa formulation",
+      choice=2 "TransiEnt formulation 1a",
+      choice=3 "TransiEnt formulation 1b"));
+  parameter Integer variableCompositionEntriesGasPipes[:](min=0)={0} "Entries of medium vector in gas pipes which are supposed to be completely variable" annotation(Dialog(tab="Gas Grid",group="Parameters",enable=not useConstCompInGasComp));
+
+  parameter SI.Height roughnessGasPipes=0.1e-3 "Absolute roughness of gas pipes" annotation (Dialog(tab="Gas Grid", group="Parameters"));
 
   // ===== Expert Settings ====
 

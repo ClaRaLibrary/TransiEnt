@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat.Check;
 model TestPtH_limiter "\"Test model for the component: PtH_limiter\""
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model TestPtH_limiter "\"Test model for the component: PtH_limiter\""
   Modelica.Blocks.Sources.RealExpression heatDemand(y=180e6) annotation (Placement(transformation(extent={{-60,55},{-34,69}})));
   Modelica.Blocks.Sources.RealExpression Temperature(y=45 + 273.15) annotation (Placement(transformation(extent={{-94,-45},{-68,-31}})));
   Modelica.Blocks.Sources.RealExpression massFlow(y=1000) annotation (Placement(transformation(extent={{-94,-31},{-68,-17}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{2,-70},{22,-50}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{2,-70},{22,-50}})));
 equation
   connect(ptH_limiter.Q_flow_set_PtH, gain.u) annotation (Line(
       points={{0,15},{0,-2.3},{0.5,-2.3}},

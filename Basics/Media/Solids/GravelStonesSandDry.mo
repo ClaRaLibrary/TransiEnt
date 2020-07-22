@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Media.Solids;
 model GravelStonesSandDry "Gravel, stones, sand, dry "
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -55,8 +55,8 @@ equation
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1]&nbsp;VDI&nbsp;4640&nbsp;Blatt&nbsp;1:&nbsp;Thermische&nbsp;Nutzung&nbsp;des&nbsp;Untergrunds&nbsp;-&nbsp;Grundlagen,&nbsp;Genehmigungen,&nbsp;Umweltaspekte.&nbsp;In:&nbsp;Verein&nbsp;Deutscher&nbsp;Ingenieure&nbsp;e.V.&nbsp;Duesseldorf&nbsp;(2010)</p>
-<p>[2]&nbsp;Grimm,&nbsp;Rdiger:&nbsp;Effiziente&nbsp;Loesungen&nbsp;fuer&nbsp;die&nbsp;Wohnungs-&nbsp;und&nbsp;Immobilienwirtschaft&nbsp;Beispiel:&nbsp;Sanierung&nbsp;Talstrae&nbsp;5-9&nbsp;in&nbsp;Freiberg/Sa.&nbsp;Bochum&nbsp;(2011)</p>
+<p>[1] VDI 4640 Blatt 1: Thermische Nutzung des Untergrunds - Grundlagen, Genehmigungen, Umweltaspekte. In: Verein Deutscher Ingenieure e.V. Duesseldorf (2010)</p>
+<p>[2] Grimm, Rdiger: Effiziente Loesungen fuer die Wohnungs- und Immobilienwirtschaft Beispiel: Sanierung Talstrae 5-9 in Freiberg/Sa. Bochum (2011)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end GravelStonesSandDry;

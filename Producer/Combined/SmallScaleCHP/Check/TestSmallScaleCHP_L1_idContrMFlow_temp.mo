@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.SmallScaleCHP.Check;
 model TestSmallScaleCHP_L1_idContrMFlow_temp
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,10 +26,12 @@ model TestSmallScaleCHP_L1_idContrMFlow_temp
     offset=2000) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
-        origin={-10,0})));
-  SmallScaleCHP_L1_idContrMFlow_temp  smallScaleCHP_L1_idContrMFlow_temp(use_varTemp=true, m_flow_max=40)    annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
+        origin={0,0})));
+  SmallScaleCHP_L1_idContrMFlow_temp  smallScaleCHP_L1_idContrMFlow_temp(use_varTemp=true, m_flow_max=40,
+    useGasPort=true,
+    usePowerPort=false)                                                                                      annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Modelica.Blocks.Math.Gain gain1(k=-1)
-                                       annotation (Placement(transformation(extent={{-26,-4},{-34,4}})));
+                                       annotation (Placement(transformation(extent={{-18,-4},{-26,4}})));
   Modelica.Blocks.Sources.Sine sine1(
     freqHz=1/86400,
     amplitude=15,
@@ -38,15 +40,15 @@ model TestSmallScaleCHP_L1_idContrMFlow_temp
                  annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=270,
-        origin={-70,-60})));
+        origin={-66,-60})));
   Components.Boundaries.FluidFlow.BoundaryVLE_pTxi           source(boundaryConditions(p_const(displayUnit="bar") = 100000), variable_T=true) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-70,-30})));
+        origin={-66,-30})));
   Components.Boundaries.FluidFlow.BoundaryVLE_pTxi           sink(boundaryConditions(p_const(displayUnit="bar") = 200000)) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-30,-30})));
+        origin={-34,-30})));
   Modelica.Blocks.Sources.Sine sine2(
     freqHz=1/86400,
     amplitude=15,
@@ -56,19 +58,27 @@ model TestSmallScaleCHP_L1_idContrMFlow_temp
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-70,30})));
+  Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={-18,-60})));
 equation
-  connect(gain1.y, smallScaleCHP_L1_idContrMFlow_temp.Q_flow_set) annotation (Line(points={{-34.4,0},{-40,0}}, color={0,0,127}));
-  connect(sine.y,gain1. u) annotation (Line(points={{-21,0},{-25.2,0}}, color={0,0,127}));
+  connect(gain1.y, smallScaleCHP_L1_idContrMFlow_temp.Q_flow_set) annotation (Line(points={{-26.4,0},{-40,0}}, color={0,0,127}));
+  connect(sine.y,gain1. u) annotation (Line(points={{-11,0},{-17.2,0}}, color={0,0,127}));
   connect(source.fluidPortIn, smallScaleCHP_L1_idContrMFlow_temp.fluidPortIn) annotation (Line(
-      points={{-70,-20},{-70,-10},{-54,-10}},
+      points={{-66,-20},{-66,-10},{-54,-10}},
       color={175,0,0},
       thickness=0.5));
   connect(smallScaleCHP_L1_idContrMFlow_temp.fluidPortOut, sink.fluidPortIn) annotation (Line(
-      points={{-46,-10},{-30,-10},{-30,-20}},
+      points={{-46,-10},{-34,-10},{-34,-20}},
       color={175,0,0},
       thickness=0.5));
-  connect(sine1.y,source. T) annotation (Line(points={{-70,-49},{-70,-40}}, color={0,0,127}));
-  connect(sine2.y, smallScaleCHP_L1_idContrMFlow_temp.T_out_set) annotation (Line(points={{-59,30},{-50,30},{-50,10}}, color={0,0,127}));
+  connect(sine1.y,source. T) annotation (Line(points={{-66,-49},{-66,-40}}, color={0,0,127}));
+  connect(sine2.y, smallScaleCHP_L1_idContrMFlow_temp.T_out_set) annotation (Line(points={{-59,30},{-55,30},{-55,10}}, color={0,0,127}));
+  connect(smallScaleCHP_L1_idContrMFlow_temp.gasPortIn, boundary_pTxi.gasPort) annotation (Line(
+      points={{-40,-4},{-30,-4},{-30,-18},{-18,-18},{-18,-50}},
+      color={255,255,0},
+      thickness=1.5));
   annotation (
     Icon(graphics,
          coordinateSystem(preserveAspectRatio=false)),

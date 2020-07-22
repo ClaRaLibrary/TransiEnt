@@ -35,3 +35,5 @@ KinteticEnergyIn
 KineticEnergyOut
 AngularVelocityIn
 AngleOut
+EnthalpyFlowRateIn
+EnthalpyFlowRateOut

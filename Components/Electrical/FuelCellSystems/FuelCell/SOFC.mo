@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell;
 model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal operation, Ramp down)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -76,6 +76,7 @@ model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal oper
 
   parameter SI.Voltage v_n=simCenter.v_n "Nominal Voltage for grid";
 
+  parameter Boolean usePowerPort=true "True if power port shall be used" annotation (Dialog(group="Replaceable Components"));
 
   // _____________________________________________
   //
@@ -178,7 +179,7 @@ model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal oper
         extent={{-20,-20},{20,20}},
         rotation=0,
         origin={100,-80})));
-  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(extent={{-10,48},{10,68}}), iconTransformation(extent={{-10,48},{10,68}})));
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp if usePowerPort constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(extent={{-10,48},{10,68}}), iconTransformation(extent={{-10,48},{10,68}})));
 
   // _____________________________________________
   //
@@ -186,9 +187,21 @@ model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal oper
   // _____________________________________________
 
 
-   Modelica.Blocks.Sources.RealExpression realExpression(y=P_el) annotation (Placement(transformation(extent={{-62,54},{-42,74}})));
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components"),choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.Power powerBoundary "P-Boundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower powerBoundary(useInputConnectorP=true, useInputConnectorQ=false, useCosPhi=true, cosphi_boundary=1)  "PQ-Boundary for ApparentPowerPort"),choice( redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower powerBoundary(useInputConnectorQ=false, cosphi_boundary=1) "PQ-Boundary for ComplexPowerPort"),choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage powerBoundary(Use_input_connector_v=false, v_boundary=SOFC.v_n)
-                                                                                                                                                                                                        "PV-Boundary for ApparentPowerPort"), choice(redeclare TransiEnt.Components.Electrical.QuasiStationaryComponentsBusses.PUMachine powerBoundary(v_gen=SOFC.v_n, useInputConnectorP=true) "PV-Boundary for ComplexPowerPort")),Placement(transformation(extent={{-22,18},{-42,38}})));
+   Modelica.Blocks.Sources.RealExpression realExpression(y=P_el) if usePowerPort annotation (Placement(transformation(extent={{-62,54},{-42,74}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary if
+                                                                                usePowerPort constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    Dialog(group="Replaceable Components"),
+    choices(
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary "P-Boundary for ActivePowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower powerBoundary(
+          useInputConnectorP=true,
+          useInputConnectorQ=false,
+          useCosPhi=true,
+          cosphi_boundary=1) "PQ-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower powerBoundary(useInputConnectorQ=false, cosphi_boundary=1) "PQ-Boundary for ComplexPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage powerBoundary(Use_input_connector_v=false, v_boundary=SOFC.v_n) "PV-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Electrical.QuasiStationaryComponentsBusses.PUMachine powerBoundary(v_gen=SOFC.v_n, useInputConnectorP=true) "PV-Boundary for ComplexPowerPort")),
+    Placement(transformation(extent={{-22,18},{-42,38}})));
 
 
   TILMedia.Gas_pT syng(
@@ -220,6 +233,7 @@ model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal oper
     xi=draina.xi_outflow,
     gasType = Air) "Moist air is used which consists of N2, H2O and O2. This is why the component O2 can be used from it!"
     annotation (Placement(transformation(extent={{64,-58},{88,-28}})));
+
 
 equation
   // _____________________________________________
@@ -314,12 +328,13 @@ equation
   // impulse equation
   feedh.p = drainh.p;
   feeda.p = draina.p;
-
+  if usePowerPort then
   connect(realExpression.y, powerBoundary.P_el_set) annotation (Line(points={{-41,64},{-28,64},{-28,40},{-26,40}},   color={0,0,127}));
   connect(powerBoundary.epp, epp) annotation (Line(
       points={{-22,28},{-22,28},{-22,28},{0,28},{0,58}},
       color={0,127,0},
       thickness=0.5));
+  end if;
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={
         Rectangle(
@@ -361,7 +376,7 @@ equation
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Model&nbsp;of&nbsp;one&nbsp;SOFC-Cell&nbsp;Stack&nbsp;with&nbsp;three&nbsp;states&nbsp;(Ramp&nbsp;up,&nbsp;Normal&nbsp;operation,&nbsp;Ramp&nbsp;down).</p>
+<p>Model of one SOFC-Cell Stack with three states (Ramp up, Normal operation, Ramp down).</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

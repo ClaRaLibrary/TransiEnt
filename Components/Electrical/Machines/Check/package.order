@@ -10,3 +10,4 @@ CheckTwoAxisSynchronousMachineComplexSubtransient
 CheckMotorComplex
 CheckInductionMotor_L1E
 CheckInductionMotor_L3E
+CheckInductionMotorSimple

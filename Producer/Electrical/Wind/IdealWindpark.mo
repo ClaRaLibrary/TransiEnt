@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Wind;
 model IdealWindpark "Ideal Windpark - neglecting correlation of Turbines"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -79,17 +79,18 @@ model IdealWindpark "Ideal Windpark - neglecting correlation of Turbines"
 
   Modelica.Blocks.Sources.RealExpression Power_Windpark(y=WTG.epp.P*n_Turbines)
     annotation (Placement(transformation(extent={{-10,50},{18,68}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency TurbineTerminal(useInputConnector=true) annotation (Placement(transformation(extent={{8,-12},{28,8}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency TurbineTerminal(useInputConnector=true) annotation (Placement(transformation(extent={{8,-12},{28,8}})));
   Modelica.Blocks.Sources.RealExpression f_grid(y=epp.f) annotation (Placement(transformation(extent={{-22,14},
             {0,32}})));
-  TransiEnt.Components.Boundaries.Electrical.Power Power(change_sign=false) annotation (Placement(transformation(extent={{54,32},{74,52}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power Power(change_sign=false) annotation (Placement(transformation(extent={{54,32},{74,52}})));
 
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{30,-100},{50,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable)
+                                                                                                       annotation (Placement(transformation(extent={{30,-100},{50,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=typeOfPrimaryEnergyCarrier) annotation (Placement(transformation(extent={{-8,-100},{12,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts(
     P_n=P_n*(n_Turbines - 1) "N-1 because the wind turbine model instance adds to statistics itself",
     redeclare model PowerPlantCostModel = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.WindOnshore,
-    P_el_is=P_el_is,
+    P_el_is=-P_el_is,
     Q_flow_fuel_is=0,
     produces_Q_flow=false,
     consumes_H_flow=false) annotation (HideResult=false, Placement(transformation(

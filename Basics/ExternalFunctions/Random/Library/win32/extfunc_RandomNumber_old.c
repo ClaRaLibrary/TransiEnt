@@ -1,5 +1,5 @@
 /*******************************************
-* Funktion für Modelica, die Zufallszahlen zurückliefert.
+* Funktion fÃ¼r Modelica, die Zufallszahlen zurÃ¼ckliefert.
 *
 *
 *******************************************/
@@ -38,12 +38,12 @@ long random (long init)
 * int UseSeed:				0: Kein Seed,
 *							1: Benutze Systemzeit
 *							2: Benutze feste Zahl SeedNumber
-* int SeedNumber:			Zahl mit dem der Zufallsgenerator initialisiert wird. Für
+* int SeedNumber:			Zahl mit dem der Zufallsgenerator initialisiert wird. FÃ¼r
 *							reproduzierbare Ergebnisse
-* int MaxNumber:			Maximale Zahl, die zurückgegeben wird.
-*							Für Null wird die Systemeinstellung verwendet
-* int MinNumber:			Maximale Zahl, die zurückgegeben wird.
-*							Für Null wird die Systemeinstellung verwendet
+* int MaxNumber:			Maximale Zahl, die zurÃ¼ckgegeben wird.
+*							FÃ¼r Null wird die Systemeinstellung verwendet
+* int MinNumber:			Maximale Zahl, die zurÃ¼ckgegeben wird.
+*							FÃ¼r Null wird die Systemeinstellung verwendet
 ****************************************/
 long extfunc_RandomNumber(int UseSeed, long SeedNumber, long MaxNumber, long MinNumber)
 {

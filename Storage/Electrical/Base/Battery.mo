@@ -2,10 +2,10 @@ within TransiEnt.Storage.Electrical.Base;
 model Battery "Typical characteristic of battery storage"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,11 +27,10 @@ model Battery "Typical characteristic of battery storage"
   // _____________________________________________
 
   extends GenericElectricStorage(storageModel(
-      eta_unload(y=1/batterySystemEfficiency.eta),
-      loadingEfficiency(y=batterySystemEfficiency.eta),
+      eta_unload(y=1/(eta_unload)),
+      loadingEfficiency(y=eta_load),
       P_max_load(y=batteryPowerLimit.P_max_load_star*storageModel.params.P_max_load),
       P_max_unload_neg(y=-batteryPowerLimit.P_max_unload_star*storageModel.params.P_max_unload)));
-
   // _____________________________________________
   //
   //           Instances of other Classes
@@ -40,15 +39,36 @@ model Battery "Typical characteristic of battery storage"
   BatterySystemEfficiency batterySystemEfficiency(
     P_el_n=StorageModelParams.P_max_unload,
     eta_max=1,
-    eta_min=0.4) annotation (Placement(transformation(extent={{-40,-32},{-20,-12}})));
-  BatteryPowerLimit batteryPowerLimit annotation (Placement(transformation(extent={{-36,72},{-16,92}})));
-  Modelica.Blocks.Sources.RealExpression SOC(y=storageModel.SOC) annotation (Placement(transformation(extent={{-68,72},{-44,92}})));
+    eta_min=0.4,
+    a=StorageModelParams.a,
+    b=StorageModelParams.b,
+    c=StorageModelParams.c,
+    d=StorageModelParams.d)
+                 annotation (Placement(transformation(extent={{-40,-32},{-20,-12}})));
+  BatteryPowerLimit batteryPowerLimit(P_max_load_over_SOC(table=StorageModelParams.P_max_load_over_SOC), P_max_unload_over_SOC(table=StorageModelParams.P_max_unload_over_SOC))
+                                      annotation (Placement(transformation(extent={{-36,72},{-16,92}})));
+  Modelica.Blocks.Sources.RealExpression SOC(y=max(0, storageModel.SOC))
+                                                                 annotation (Placement(transformation(extent={{-68,72},{-44,92}})));
+  Modelica.SIunits.Efficiency eta_unload;
+  Modelica.SIunits.Efficiency eta_load;
+  parameter Integer efficiencyCalculation=1 "choose if constant efficiency or load depending efficiency is used" annotation(Dialog(group="Parameters"),choices(__Dymola_radioButtons=true, choice=1 "Load depending efficiency", choice=2 "Constant efficiency"));
+
 
   // _____________________________________________
   //
   //                 Equations
   // _____________________________________________
 equation
+  if efficiencyCalculation==1 then
+    eta_load=batterySystemEfficiency.eta;
+    eta_unload=batterySystemEfficiency.eta;
+  else
+    eta_load=StorageModelParams.eta_load;
+    eta_unload=StorageModelParams.eta_unload;
+  end if;
+
+
+
   connect(batterySystemEfficiency.P_is, P_set) annotation (Line(points={{-40,-22},{-62,-22},{-62,36},{-104,36}}, color={0,0,127}));
   connect(SOC.y, batteryPowerLimit.SOC) annotation (Line(points={{-42.8,82},{-36.4,82}}, color={0,0,127}));
   annotation (Icon(graphics={      Ellipse(
@@ -117,7 +137,7 @@ equation
           rotation=360)}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Typical&nbsp;characteristic&nbsp;of&nbsp;battery&nbsp;storage.</p>
+<p>Typical characteristic of battery storage.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
@@ -130,12 +150,13 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">(Choose via parameter &apos;efficiencyCalculation&apos; if constant efficiency is used (eta_load and eta_unload from StorageModelParams) or if load depending system efficiency is calculation (via parameters a,b,c,d from StorageModelParams).</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on Feb 2020: added Boolean to choose efficiency calculation method</span></p>
 </html>"));
 end Battery;

@@ -2,10 +2,10 @@
 model SyngasSensor "Sensor measuring fuel cell performance (including a simple gas burner model for burning of remainding H2 in flue gas)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -128,22 +128,22 @@ equation
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Sensor&nbsp;measuring&nbsp;fuel&nbsp;cell&nbsp;performance&nbsp;(including&nbsp;a&nbsp;simple&nbsp;gas&nbsp;burner&nbsp;model&nbsp;for&nbsp;burning&nbsp;of&nbsp;remainding&nbsp;H2&nbsp;in&nbsp;flue&nbsp;gas)</p>
+<p>Sensor measuring fuel cell performance (including a simple gas burner model for burning of remainding H2 in flue gas)</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortIn&nbsp;gasPortIn(Medium=Syngas)</p>
-<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortOut&nbsp;gasPortOut(Medium=Syngas)</p>
+<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortIn gasPortIn(Medium=Syngas)</p>
+<p>TransiEnt.Basics.Interfaces.Gas.IdealGasTempPortOut gasPortOut(Medium=Syngas)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>Q_flow_in_CH4&nbsp;<span style=\"color: #006400;\">&nbsp;&quot;CH4&nbsp;heat&nbsp;flow&nbsp;rate&quot;</span></p>
-<p>Q_flow_exhaustGasChemical&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasChemical)&quot;</span></p>
-<p>Q_flow_in_evaporator&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;evaporator&quot;</span></p>
-<p>Q_flow_exhaustGasLatent&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;exhaust&nbsp;(GasLatent)&quot;</span></p>
-<p>Q_flow_in_preheater&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheater&quot;</span>;</p>
-<p>Q_flow_in_CH4_preheat&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheated&nbsp;CH4&quot;</span></p>
-<p>Q_flow_in_air_preheat&nbsp;<span style=\"color: #006400;\">&quot;Heat&nbsp;flow&nbsp;rate&nbsp;of&nbsp;the&nbsp;preheated&nbsp;air&quot;</span></p>
+<p>Q_flow_in_CH4 <span style=\"color: #006400;\"> &quot;CH4 heat flow rate&quot;</span></p>
+<p>Q_flow_exhaustGasChemical <span style=\"color: #006400;\">&quot;Heat flow rate of the exhaust (GasChemical)&quot;</span></p>
+<p>Q_flow_in_evaporator <span style=\"color: #006400;\">&quot;Heat flow rate of the evaporator&quot;</span></p>
+<p>Q_flow_exhaustGasLatent <span style=\"color: #006400;\">&quot;Heat flow rate of the exhaust (GasLatent)&quot;</span></p>
+<p>Q_flow_in_preheater <span style=\"color: #006400;\">&quot;Heat flow rate of the preheater&quot;</span>;</p>
+<p>Q_flow_in_CH4_preheat <span style=\"color: #006400;\">&quot;Heat flow rate of the preheated CH4&quot;</span></p>
+<p>Q_flow_in_air_preheat <span style=\"color: #006400;\">&quot;Heat flow rate of the preheated air&quot;</span></p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

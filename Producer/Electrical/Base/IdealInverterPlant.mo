@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Base;
 model IdealInverterPlant "Ideal plant model for inverter coupled plants (i.e. no reaction to grid frequency)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,11 @@ model IdealInverterPlant "Ideal plant model for inverter coupled plants (i.e. no
   // _____________________________________________
   Real delta_P_star = (P_el_set+P_el_is)/P_el_n;
 
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (choicesAllMatching=true,Dialog(group="Replaceable Components"), Dialog(group="Physical Constraints"), Placement(transformation(extent={{76,50},{56,70}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    choicesAllMatching=true,
+    Dialog(group="Replaceable Components"),
+    Dialog(group="Physical Constraints"),
+    Placement(transformation(extent={{76,50},{56,70}})));
 equation
   // _____________________________________________
   //

@@ -3,10 +3,10 @@ model Test_CHP_ice
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,7 +29,7 @@ model Test_CHP_ice
     redeclare model Motorblock = Components.Gas.Engines.Engine_idealGas (redeclare model MechanicModel = TransiEnt.Components.Gas.Engines.Mechanics.StaticEngineMechanics),
     NCV_const=0)                                                    annotation (Placement(transformation(extent={{-28,-40},{28,16}})));
     //redeclare function EfficiencyFunction = Basics.Functions.efficiency_linear,
-  Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{54,-70},{76,-48}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{54,-70},{76,-48}})));
   Components.Boundaries.Gas.BoundaryIdealGas_pTxi sink(gasModel=simCenter.exhaustGasModel) annotation (Placement(transformation(extent={{-88,34},{-68,54}})));
   inner ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-110,60},{-90,80}})));
   inner SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1) annotation (Placement(transformation(extent={{-110,80},{-90,100}})));

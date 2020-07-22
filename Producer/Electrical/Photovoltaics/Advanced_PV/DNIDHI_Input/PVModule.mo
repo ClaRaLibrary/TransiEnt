@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.DNIDHI_Input;
+﻿within TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.DNIDHI_Input;
 model PVModule "Simple efficiency-based PV model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -131,7 +131,7 @@ model PVModule "Simple efficiency-based PV model"
 
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp "power output" annotation (Placement(transformation(extent={{88,-8},{108,12}}), iconTransformation(extent={{76,-22},{110,10}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts_PowerProducer(
-    P_el_is=P_out,
+    P_el_is=-P_out,
     P_n=Pmpp,
     redeclare model PowerPlantCostModel = ProducerCosts,
     produces_Q_flow=false,
@@ -264,11 +264,11 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">The POA irradiation is being calculated in IrradianceOnATiltedSurface model.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6.2. Module Temperature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The module temperature <b>T_module </b>is estimated following [2]:</span></p>
-<p><code>T_module&nbsp;=&nbsp;273.15&nbsp;+&nbsp;T_in&nbsp;+&nbsp;POA_Irradiation&nbsp;*&nbsp;(<span style=\"color: #ff0000;\">exp</span>(-3.47&nbsp;-&nbsp;0.0594&nbsp;*&nbsp;WindSpeed_in))</code></p>
+<p><code>T_module = 273.15 + T_in + POA_Irradiation * (<span style=\"color: #ff0000;\">exp</span>(-3.47 - 0.0594 * WindSpeed_in))</code></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6.3. Direct Current Power output P_dc</span></b></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2;\">P_dc</span></b> is calculated by:</p>
-<p>P_dc = <code>PowerCurve_PV_Irradiation.y[1]&nbsp;*&nbsp;&nbsp;PowerCurve_PV_Temp.y[1]&nbsp;/&nbsp;Pmpp&nbsp;*&nbsp;(100&nbsp;-&nbsp;LossesDC)&nbsp;/&nbsp;100&nbsp;*&nbsp;P_inst&nbsp;/&nbsp;Pmpp</code></p>
-<p><code><b>PowerCurve_PV_Irradiation.y[1]</b> is the Maximum Power Point (MPP) power at the current Irradiation at reference temperature of the simulated module. <b>PowerCurve_PV_Temp.y[1]</b> is the MPP power at the current temperature at reference irradiation of the simulated module. <b>Pmpp</b> is the MPP power at reference conditions of the simulated module. <b>LossesDC</b> are the losses&nbsp;in&nbsp;&percnt;&nbsp;through&nbsp;Connections,&nbsp;Wiring,&nbsp;Tracking&nbsp;Error&nbsp;and&nbsp;Mismatches. <b>P_inst</b> is the cumulated installed power.</code></p>
+<p>P_dc = <code>PowerCurve_PV_Irradiation.y[1] *  PowerCurve_PV_Temp.y[1] / Pmpp * (100 - LossesDC) / 100 * P_inst / Pmpp</code></p>
+<p><code><b>PowerCurve_PV_Irradiation.y[1]</b> is the Maximum Power Point (MPP) power at the current Irradiation at reference temperature of the simulated module. <b>PowerCurve_PV_Temp.y[1]</b> is the MPP power at the current temperature at reference irradiation of the simulated module. <b>Pmpp</b> is the MPP power at reference conditions of the simulated module. <b>LossesDC</b> are the losses in &percnt; through Connections, Wiring, Tracking Error and Mismatches. <b>P_inst</b> is the cumulated installed power.</code></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6.3. Power Output P_out</span></b></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2;\">P_out</span></b> is calculated by:</p>
 <pre>if P_dc*EfficiencyCurve_Inverter.y[1]*(100-LossesAC)/100 &LT; P_inverter then
@@ -276,28 +276,28 @@ equation
 else
   P_out=P_inverter;
 end if;</pre>
-<p><code><b>EfficiencyCurve_Inverter.y[1]</b> is the efficiency of the simulated inverter depending on the inverter load. If P_dc exceeds the inverter power <b>P_inverter</b> the output is cut off to P_inverter as its maximum, where P_inverter is defined as the installed PV DC power divided by <b>DCtoACratio</b> which is the ratio&nbsp;between&nbsp;installed&nbsp;DC&nbsp;and&nbsp;AC&nbsp;power. <b>LossesAC</b> are losses&nbsp;on&nbsp;the AC&nbsp;side&nbsp;not&nbsp;included&nbsp;in&nbsp;inverter&nbsp;efficiency.</code></p>
+<p><code><b>EfficiencyCurve_Inverter.y[1]</b> is the efficiency of the simulated inverter depending on the inverter load. If P_dc exceeds the inverter power <b>P_inverter</b> the output is cut off to P_inverter as its maximum, where P_inverter is defined as the installed PV DC power divided by <b>DCtoACratio</b> which is the ratio between installed DC and AC power. <b>LossesAC</b> are losses on the AC side not included in inverter efficiency.</code></p>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">For the calculation of the output power, manufacturer datasheets are to be digitalized, e.g. with http://arohatgi.info/WebPlotDigitizer/. This is an example for a Sanyo HIT 200BA module [2]. Digitalize the following figures: </span></p>
 <p><img src=\"modelica://TransiEnt/Images/Sanyo_HIT_200BA20_20C.jpg\"/>[2]</p>
 <p><img src=\"modelica://TransiEnt/Images/Sanyo_HIT_200BA20_1000W.jpg\"/>[2]</p>
 <p>After digitalization, calculate the MPP power of each curve and write those to a record as shown in TransiEnt.Producer.Electrical.Photovoltaics.Advanced_PV.Characteristics. For the above shown curves the record is:</p>
-<p><code><span style=\"color: #0000ff;\">record</span>&nbsp;PVModule_Characteristics_Sanyo_HIT_200_BA3</code></p>
-<p><code>&nbsp;&nbsp;<span style=\"color: #0000ff;\">extends&nbsp;</span><span style=\"color: #ff0000;\">Generic_Characteristics_PVModule</span>(</code></p>
-<pre>&nbsp;&nbsp;MPP_dependency_on_Temp_fixedIrradiation=[
-&nbsp;0,214.3545548;
-&nbsp;25,200.8472531;
-&nbsp;50,187.3094253;
-&nbsp;75,173.1095017],
-&nbsp;&nbsp;MPP_dependency_on_irradiation_fixedTemperature=[
-&nbsp;&nbsp;0,0;
+<p><code><span style=\"color: #0000ff;\">record</span> PVModule_Characteristics_Sanyo_HIT_200_BA3</code></p>
+<p><code>  <span style=\"color: #0000ff;\">extends </span><span style=\"color: #ff0000;\">Generic_Characteristics_PVModule</span>(</code></p>
+<pre>  MPP_dependency_on_Temp_fixedIrradiation=[
+ 0,214.3545548;
+ 25,200.8472531;
+ 50,187.3094253;
+ 75,173.1095017],
+  MPP_dependency_on_irradiation_fixedTemperature=[
+  0,0;
 200,37.69290789;
 400,77.36493756;
 600,117.7097234;
 800,159.0501238;
 1000,201.294124]);</pre>
-<p><code>&nbsp;&nbsp;<span style=\"color: #0000ff;\">annotation&nbsp;</span>(Icon(coordinateSystem(preserveAspectRatio=false)),&nbsp;Diagram(coordinateSystem(preserveAspectRatio=false)));</code></p>
-<p><code><span style=\"color: #0000ff;\">end&nbsp;</span>PVModule_Characteristics_Sanyo_HIT_200_BA3;</code></p>
+<p><code>  <span style=\"color: #0000ff;\">annotation </span>(Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)));</code></p>
+<p><code><span style=\"color: #0000ff;\">end </span>PVModule_Characteristics_Sanyo_HIT_200_BA3;</code></p>
 <pre> 
 Hereby the firste table (MPP_dependency_on_Temp_fixedIrradiation) gives the MPP power (second column) for fixed irradiation and different temperatures (first column) and the second table (MPP_dependency_on_irradiation_fixedTemperature) gives the MPP power (second column) for fixed temperature and different irradiation (first column).</pre>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
@@ -307,8 +307,8 @@ Hereby the firste table (MPP_dependency_on_Temp_fixedIrradiation) gives the MPP 
 <pre>[1] https://sam.nrel.gov/
 [2] http://store.affordable-solar.com/site/doc/Doc_sanyo_specs_20061106173925.pdf</pre>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<pre>Advanced_PV by Oliver Sch&uuml;lting and Ricardo Peniche, Technische Universit&auml;t Hamburg, Institut f&uuml;r Energietechnik, 2015
-Revision by Tobias Becke, Technische Universit&auml;t Hamburg, Institut f&uuml;r Energietechnik, 2016</pre>
+<pre>Advanced_PV by Oliver Schülting and Ricardo Peniche, Technische Universität Hamburg, Institut für Energietechnik, 2015
+Revision by Tobias Becke, Technische Universität Hamburg, Institut für Energietechnik, 2016</pre>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(

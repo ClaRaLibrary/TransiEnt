@@ -1,11 +1,11 @@
 within TransiEnt.Components.Gas.VolumesValvesFittings;
-model RealGasJunction_L2 "Adiabatic Volume Junction for real gases"
+model RealGasJunction_L2 "Volume junction for real gases"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,9 +30,12 @@ model RealGasJunction_L2 "Adiabatic Volume Junction for real gases"
   // deleted "model Gas..."
   // changed eyeGas to eye
   // added temperature start value
-
+  // added Boolean to turn on constant composition (improves model speed in that case)
+  // added heat port
+  // added mass quasi-stationary mass balance and mass balances for dependent mass fractions
 
   outer TransiEnt.SimCenter simCenter;
+  extends TransiEnt.Basics.Icons.RealGasJunction_L2;
 
 protected
   inner model Summary
@@ -43,18 +46,18 @@ protected
     TransiEnt.Basics.Records.FlangeRealGas gasPort3;
   end Summary;
 
+// ***************************** defintion of medium used in cell *************************************************
+
 public
-  inner parameter Integer initOption=0 "Type of initialisation" annotation (Dialog(tab="Initialisation"), choices(
+  replaceable parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium = simCenter.gasModel1 annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
+
+  inner parameter Integer initOption=0 "Type of initialisation" annotation (                              choices(
       choice=0 "Use guess values",
       choice=1 "Steady state",
       choice=201 "Steady pressure",
       choice=202 "Steady enthalpy",
       choice=208 "Steady pressure and enthalpy",
-      choice=210 "Steady density"));
-
-// ***************************** defintion of medium used in cell *************************************************
-
-  replaceable parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium = simCenter.gasModel1 annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
+      choice=210 "Steady density"), Dialog(group="Initial Values"));
 
   replaceable model PressureLoss1 =
     ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.NoFriction constrainedby ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.BaseDp "Pressure loss model at gasPort1" annotation(Dialog(group="Fundamental Definitions"), choicesAllMatching);
@@ -63,41 +66,51 @@ public
   replaceable model PressureLoss3 =
     ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.NoFriction constrainedby ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.BaseDp "Pressure loss model at gasPort3" annotation(Dialog(group="Fundamental Definitions"), choicesAllMatching);
 
+
+
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPort1(Medium=medium, m_flow) annotation (Placement(transformation(extent={{-110,-10},{-90,10}}), iconTransformation(extent={{-110,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPort2(Medium=medium, m_flow) annotation (Placement(transformation(extent={{-10,-110},{10,-90}}), iconTransformation(extent={{-10,-110},{10,-90}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPort3(Medium=medium, m_flow) annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
 
   parameter ClaRa.Basics.Units.Volume volume=0.1 "Volume of the junction" annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean constantComposition=simCenter.useConstCompInGasComp "Use simplified equation for constant composition (xi_nom will be used)" annotation(Dialog(group="Fundamental Definitions"));
+  parameter SI.MassFraction xi_nom[medium.nc - 1] = medium.xi_default "Constant composition" annotation (Dialog(group="Fundamental Definitions",enable=constantComposition));
+  parameter Integer variableCompositionEntries[:](min=0,max=medium.nc)={0} "Entries of medium vector which are supposed to be completely variable" annotation(Dialog(group="Fundamental Definitions",enable=not constantComposition));
+  parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "Dynamic", choice=4 "Quasi stationary"));
+  final parameter Integer dependentCompositionEntries[:]=if variableCompositionEntries[1] == 0 then 1:medium.nc else TransiEnt.Basics.Functions.findSetDifference(
+                                                                                                                                                  1:medium.nc, variableCompositionEntries) "Entries of medium vector which are supposed to be dependent on the variable entries";
+  parameter Boolean showHeatPort=false annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean useHomotopy=simCenter.useHomotopy "True, if homotopy method is used during initialisation" annotation(Dialog(group="Initial Values"));
 
   PressureLoss1 pressureLoss1;
   PressureLoss2 pressureLoss2;
   PressureLoss3 pressureLoss3;
 protected
-  TILMedia.VLEFluid_ph gas1(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gas1(
     vleFluidType=medium,
     p=p,
     h=noEvent(actualStream(gasPort1.h_outflow)),
     xi=noEvent(actualStream(gasPort1.xi_outflow)),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-80,-12},{-60,8}})));
 
-  TILMedia.VLEFluid_ph gas2(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gas2(
     vleFluidType=medium,
     p=gasPort2.p,
     h=noEvent(actualStream(gasPort2.h_outflow)),
     xi=noEvent(actualStream(gasPort2.xi_outflow)),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-86},{10,-66}})));
 
-  TILMedia.VLEFluid_ph gas3(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gas3(
     vleFluidType=medium,
     p=gasPort3.p,
     h=noEvent(actualStream(gasPort3.h_outflow)),
     xi=noEvent(actualStream(gasPort3.xi_outflow)),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{66,-10},{86,10}})));
 
-  inner TILMedia.VLEFluid_ph gasBulk(
+  inner TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasBulk(
     vleFluidType=medium,
     p=p,
-    h=h,
+    T=heat.T,
     xi=xi,
     stateSelectPreferForInputs=true,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
@@ -114,7 +127,7 @@ public
 //   parameter Boolean fixedInitialPressure = true
 //     "if true, initial pressure is fixed" annotation(Dialog(group="Initial Values"));
 
-  parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_start) "Initial value for gas specific enthalpy"
+  parameter ClaRa.Basics.Units.EnthalpyMassSpecific h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(medium,p_start,T_start,xi_start) "Initial value for gas specific enthalpy"
     annotation(Dialog(group="Initial Values"));
 
   parameter ClaRa.Basics.Units.MassFraction[medium.nc - 1]
@@ -124,11 +137,11 @@ public
   parameter ClaRa.Basics.Units.Temperature T_start=simCenter.T_ground "Initial value for gas temperature (used in calculation of h_start)"
     annotation(Dialog(group="Initial Values"));
 
-
 public
-  ClaRa.Basics.Units.MassFraction xi[medium.nc - 1](start=xi_start);
+  ClaRa.Basics.Units.MassFraction xi[medium.nc - 1](start=xi_start,stateSelect={if Modelica.Math.Vectors.find(j, dependentCompositionEntries) == 0 then StateSelect.always else StateSelect.never for j in 1:medium.nc - 1});
+  Modelica.SIunits.MassFraction xi_end=1-sum(xi) "Last entry of mass fraction";
   Modelica.SIunits.SpecificEnthalpy h(start=h_start) "Specific enthalpy";
-  ClaRa.Basics.Units.Pressure p(start=p_start);
+  ClaRa.Basics.Units.Pressure p(start=p_start, stateSelect=if massBalance==4 then StateSelect.never else StateSelect.prefer);
 
   ClaRa.Basics.Units.Mass mass "Gas mass in control volume";
 protected
@@ -194,6 +207,7 @@ public
         iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={40,-110})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat annotation (Placement(transformation(extent=if showHeatPort then {{-10,20},{10,40}} else {{0,30},{0,30}})));
 initial equation
 
     if initOption == 1 then //steady state
@@ -215,6 +229,20 @@ initial equation
      assert(initOption == 0,"Invalid init option");
     end if;
 
+  if not constantComposition and not massBalance == 4 then
+    if variableCompositionEntries[1] <> 0 then
+      for j in variableCompositionEntries loop
+        if j <> medium.nc then
+          xi[j] = xi_start[j];
+        else
+          xi_end = 1-sum(xi_start);
+        end if;
+      end for;
+    else
+      xi = xi_start;
+    end if;
+  end if;
+
 equation
   pressureLoss1.m_flow = gasPort1.m_flow;
   pressureLoss2.m_flow = gasPort2.m_flow;
@@ -227,20 +255,58 @@ equation
   gasPort1.h_outflow = gasBulk.h;
   gasPort2.h_outflow = gasBulk.h;
   gasPort3.h_outflow = gasBulk.h;
+  h = gasBulk.h;
 
   gasPort1.p =p + pressureLoss1.dp;
                // Volume is located at portA
 
-  der(h) =1/mass*(gasPort1.m_flow*(gas1.h - h) + gasPort2.m_flow*(gas2.h - h) + gasPort3.m_flow*(gas3.h - h) + volume*der(p))
+  der(h) =1/mass*(gasPort1.m_flow*(gas1.h - h) + gasPort2.m_flow*(gas2.h - h) + gasPort3.m_flow*(gas3.h - h) + volume*der(p) + heat.Q_flow)
                        "Energy balance";
 
-  der(xi) =1/mass*(gasPort1.m_flow*(gas1.xi - xi) + gasPort2.m_flow*(gas2.xi - xi) + gasPort3.m_flow*(gas3.xi - xi))     "Component mass balance";
+  if massBalance==4 then //quasi stationary
+
+    drhodt = 0;
+    if constantComposition then
+      xi = xi_nom;
+    else
+      xi = (noEvent(max(0, gasPort1.m_flow))*inStream(gasPort1.xi_outflow) + noEvent(max(0, gasPort2.m_flow))*inStream(gasPort2.xi_outflow) + noEvent(max(0, gasPort3.m_flow))*inStream(gasPort3.xi_outflow))/
+            (noEvent(max(0, gasPort1.m_flow)) + noEvent(max(0, gasPort2.m_flow)) + noEvent(max(0, gasPort3.m_flow)));
+    end if;
+
+  else
+
+    if not constantComposition then
+      if variableCompositionEntries[1] == 0 then //all components are considered fully variable
+        der(xi) = 1/mass*(gasPort1.m_flow*(gas1.xi - xi) + gasPort2.m_flow*(gas2.xi - xi) + gasPort3.m_flow*(gas3.xi - xi)) "Component mass balance";
+      else
+        if variableCompositionEntries[end] == medium.nc then //the last component is considered fully variable and the last dependent entry is left out instead
+          for j in variableCompositionEntries[1:end - 1] loop
+            der(xi[j]) = 1/mass*(gasPort1.m_flow*(gas1.xi[j] - xi[j]) + gasPort2.m_flow*(gas2.xi[j] - xi[j]) + gasPort3.m_flow*(gas3.xi[j] - xi[j])) "Component mass balance";
+          end for;
+          der(xi_end) = 1/mass*(gasPort1.m_flow*(1-sum(gas1.xi) - xi_end) + gasPort2.m_flow*(1-sum(gas2.xi) - xi_end) + gasPort3.m_flow*(1-sum(gas3.xi) - xi_end)) "Component mass balance";
+          for j in dependentCompositionEntries[1:end - 1] loop
+            xi[j] = (1 - (sum(xi[k] for k in variableCompositionEntries[1:end - 1]) + xi_end))/(1 - (sum(xi_nom[k] for k in variableCompositionEntries[1:end - 1]) + 1 - sum(xi_nom)))*xi_nom[j];
+          end for;
+        else //the last component is calculated from the sum of the remaining
+          for j in variableCompositionEntries loop
+            der(xi[j]) = 1/mass*(gasPort1.m_flow*(gas1.xi[j] - xi[j]) + gasPort2.m_flow*(gas2.xi[j] - xi[j]) + gasPort3.m_flow*(gas3.xi[j] - xi[j])) "Component mass balance";
+          end for;
+          for j in dependentCompositionEntries[1:end - 1] loop
+                xi[j] = (1 - sum(xi[k] for k in variableCompositionEntries))/(1 - sum(xi_nom[k] for k in variableCompositionEntries))*xi_nom[j];
+          end for;
+        end if;
+      end if;
+    else
+      xi=xi_nom;
+    end if;
+
+    drhodt = gasBulk.drhodh_pxi*der(h) + gasBulk.drhodp_hxi*der(p) + sum({gasBulk.drhodxi_ph[i]*der(gasBulk.xi[i]) for i in 1:medium.nc - 1}) "Total differential";
+
+  end if;
 
   mass =volume*gasBulk.d
                        "Mass in cell";
 
-  drhodt =gasBulk.drhodh_pxi*der(h) + gasBulk.drhodp_hxi*der(p) + sum({gasBulk.drhodxi_ph[i]*der(gasBulk.xi[i]) for i in 1:medium.nc - 1})
-                                                                                                                                "Total differential";
 
   drhodt*volume =gasPort1.m_flow + gasPort2.m_flow + gasPort3.m_flow
                                                              "Mass balance";
@@ -268,37 +334,29 @@ equation
       color={190,190,190},
       smooth=Smooth.None));
 
-  annotation (defaultComponentName="junction",Diagram(graphics,
-                                                      coordinateSystem(extent={{-100,-100},{100,100}},
+  annotation (defaultComponentName="junction",Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=true)),
                                  Icon(coordinateSystem(extent={{-100,-100},{100,100}},
                    preserveAspectRatio=false), graphics={
         Rectangle(
-          extent={{-32,-32},{32,-100}},
-          lineColor={0,0,0},
+          extent={{-92,32},{-74,-32}},
           pattern=LinePattern.None,
-          fillColor={0,0,0},
-          fillPattern=FillPattern.Solid),
+          fillColor={118,106,98},
+          fillPattern=FillPattern.Solid,
+          visible=pressureLoss1.hasPressureLoss), Rectangle(
+          extent={{74,32},{92,-32}},
+          pattern=LinePattern.None,
+          fillColor={118,106,98},
+          fillPattern=FillPattern.Solid,
+          visible=pressureLoss2.hasPressureLoss),
         Rectangle(
-          extent={{-100,32},{100,-32}},
-          lineColor={0,0,0},
+          extent={{-32,-76},{32,-92}},
           pattern=LinePattern.None,
-          fillColor={0,0,0},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{-92,24},{92,-24}},
-          lineColor={0,0,0},
-          pattern=LinePattern.None,
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{-24,-24},{24,-92}},
-          lineColor={0,0,0},
-          pattern=LinePattern.None,
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid),
+          fillColor={118,106,98},
+          fillPattern=FillPattern.Solid,
+          visible=pressureLoss3.hasPressureLoss),
         Text(
-          extent={{-20,-54},{20,-96}},
+          extent={{-20,-40},{20,-82}},
           lineColor={0,0,0},
           pattern=LinePattern.None,
           fillColor={0,0,0},
@@ -308,15 +366,16 @@ equation
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents a junction for real gases. It is a modified version of the model ClaRa.Components.VolumesValvesFittings.Fittings.FlueGasJunction_L2 from ClaRa version 1.3.0. The model is documented there and here only the changes are described. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>The two-phase region is deactivated. Pressure losses at the ports have been added.</p>
+<p>The two-phase region is deactivated. Pressure losses at the ports have been added. A simplified equation for constant composition can be used to improve simulation speed. Also, a heat port is added with which heat transfer can be integrated. You can choose a quasi-stationary or dynamic mass balance implementations. Additionally, the parameter variableCompositionEntries can be used in case that not all components are freely variable, e.g. when hydrogen is fed into natural gas.</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid for real gases without phase change.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>gasport1: inlet for gas</p>
-<p>gasport2: inlet for gas</p>
-<p>gasport3: outlet for gas</p>
+<p>gasPort1: inlet for gas</p>
+<p>gasPort2: inlet for gas</p>
+<p>gasPort3: outlet for gas</p>
 <p>eye1: outlet</p>
 <p>eye2: outlet</p>
+<p>heat: heat port</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
@@ -334,5 +393,8 @@ equation
 <p>Revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (updated to new ClaRa version 1.3.0)</p>
 <p>Modified by Carsten Bode (c.bode@tuhh.de), Feb 2019 (added temperature start value)</p>
 <p>Modified by Carsten Bode (c.bode@tuhh.de), Mar 2019 (added pressure losses)</p>
+<p>Modified by Carsten Bode (c.bode@tuhh.de), May 2019 (added simplified equation for constant composition)</p>
+<p>Modified by Carsten Bode (c.bode@tuhh.de), Sep 2019 (added heat port)</p>
+<p>Modified by Carsten Bode (c.bode@tuhh.de), May 2020 (added quasi-stationary equations and simplified equations for only dependent mass fractions)</p>
 </html>"));
 end RealGasJunction_L2;

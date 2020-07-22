@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.Check;
 model CheckPVBatteryPoolSingleHouse "Model for testing the photovoltaic battery pool with an example profile of a single house"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,7 +49,7 @@ extends TransiEnt.Basics.Icons.Checkmodel;
   Modelica.Blocks.Math.Gain P_Load(k=2500*3.6e6) annotation (Placement(transformation(extent={{-4,30},{8,42}})));
   Modelica.Blocks.Math.Gain P_PV(k=2.5*1e3) annotation (Placement(transformation(extent={{-2,-8},{10,4}})));
   inner SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
-  Components.Boundaries.Electrical.Frequency lumpedGrid annotation (Placement(transformation(extent={{2,-62},{-18,-42}})));
+  Components.Boundaries.Electrical.ActivePower.Frequency lumpedGrid annotation (Placement(transformation(extent={{2,-62},{-18,-42}})));
 equation
 
   connect(PBBatteryPool.P_el_load[1], P_Load.y) annotation (Line(points={{33.16,-38.18},{18,-38.18},{18,36},{8.6,36}}, color={0,0,127}));

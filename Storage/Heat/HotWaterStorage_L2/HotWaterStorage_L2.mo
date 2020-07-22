@@ -2,10 +2,10 @@ within TransiEnt.Storage.Heat.HotWaterStorage_L2;
 model HotWaterStorage_L2 "Stratified hot water storage without spatial discretisation (based on analytic solution for output temperature at steady state)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -141,31 +141,27 @@ Modelica.SIunits.SpecificHeatCapacity cpGen;
 //                Complex Components
 // _____________________________________________
 
-  TILMedia.VLEFluid_ph GenIn_State(
-  h=inStream(GenIn.h_outflow),
-  p=GenIn.p,
-  vleFluidType=Medium)
-    annotation (Placement(transformation(extent={{-50,70},{-30,90}})));
-  TILMedia.VLEFluid_ph GenOut_State(
-  h=GenOut.h_outflow,
-  p=GenOut.p,
-  vleFluidType=Medium)
-    annotation (Placement(transformation(extent={{-52,-92},{-32,-72}})));
-  TILMedia.VLEFluid_pT Tank_Medium(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph GenIn_State(
+    h=inStream(GenIn.h_outflow),
+    p=GenIn.p,
+    vleFluidType=Medium) annotation (Placement(transformation(extent={{-50,70},{-30,90}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph GenOut_State(
+    h=GenOut.h_outflow,
+    p=GenOut.p,
+    vleFluidType=Medium) annotation (Placement(transformation(extent={{-52,-92},{-32,-72}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT Tank_Medium(
     vleFluidType=Medium,
-    p=(GenIn.p+GenOut.p+ConIn.p+ConOut.p)/4,
-    T=T_stor)
-    annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
+    p=(GenIn.p + GenOut.p + ConIn.p + ConOut.p)/4,
+    T=T_stor) annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
 
-  TILMedia.VLEFluid_ph ConIn_State(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph ConIn_State(
     vleFluidType=Medium,
     h=inStream(ConIn.h_outflow),
     p=ConIn.p) annotation (Placement(transformation(extent={{74,68},{94,88}})));
-   TILMedia.VLEFluid_ph ConOut_State(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph ConOut_State(
     vleFluidType=Medium,
     h=ConOut.h_outflow,
-    p=ConOut.p)
-    annotation (Placement(transformation(extent={{76,-94},{96,-74}})));
+    p=ConOut.p) annotation (Placement(transformation(extent={{76,-94},{96,-74}})));
 
 initial equation
   E_stor=Volume*Tank_Medium.d*Tank_Medium.cp*(T_start-273.15);

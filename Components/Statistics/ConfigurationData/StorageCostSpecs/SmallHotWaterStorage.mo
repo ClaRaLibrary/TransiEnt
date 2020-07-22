@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs;
 model SmallHotWaterStorage "small hot water storage cost specification record"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,7 +57,7 @@ model SmallHotWaterStorage "small hot water storage cost specification record"
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>[1] Fraunhofer UMSICHT, &quot;Speicher fuer die Energiewende&quot;, 2013</p>
-<p>[2] D. Buoro, P. Pinamonti, M. Reini, &quot;Optimization&nbsp;of&nbsp;a&nbsp;distributed&nbsp;cogeneration&nbsp;system&nbsp;with&nbsp;solar&nbsp;district&nbsp;heating&quot;, 2014</p>
+<p>[2] D. Buoro, P. Pinamonti, M. Reini, &quot;Optimization of a distributed cogeneration system with solar district heating&quot;, 2014</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end SmallHotWaterStorage;

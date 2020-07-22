@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.HeatExchanger.Check;
 model TestHeatExchanger
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ model TestHeatExchanger
         origin={-30,60})));
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1)
                                                                                                            annotation (Placement(transformation(extent={{-90,-100},{-70,-80}})));
-  TransiEnt.Components.Gas.HeatExchanger.HEXOneRealGasOuterTIdeal_L1 hEXOneRealGasOuterTIdeal_L1(Delta_p=10000, T_fluidOut=323.15) annotation (Placement(transformation(extent={{-70,0},{-50,-20}})));
+  TransiEnt.Components.Gas.HeatExchanger.HEXOneRealGasOuterTIdeal_L1 hEXOneRealGasOuterTIdeal_L1(Delta_p=10000, T_fluidOutConst=323.15) annotation (Placement(transformation(extent={{-70,0},{-50,-20}})));
   TransiEnt.Components.Gas.HeatExchanger.HEXOneRealGasOuterQflowIdeal_L1 hEXOneRealGasOuterQflowIdeal_L1(medium=simCenter.gasModel3, Delta_p=100000) annotation (Placement(transformation(extent={{-70,-50},{-50,-30}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source_gas4(
     medium=simCenter.gasModel3,

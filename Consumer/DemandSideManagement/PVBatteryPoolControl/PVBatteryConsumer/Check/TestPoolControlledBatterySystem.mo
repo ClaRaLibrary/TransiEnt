@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.PVBatteryPoolControl.PVBatteryConsumer.Check;
 model TestPoolControlledBatterySystem
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,7 +39,7 @@ inner Base.PoolParameter param(nSystems=1) annotation (Placement(transformation(
 
   MinimalPoolController ctrl annotation (Placement(transformation(extent={{-64,34},{-36,60}})));
   PoolControlledBatterySystem batterySystem annotation (Placement(transformation(extent={{-44,-30},{26,32}})));
-  Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{42,-21},{62,-1}})));
+  Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{42,-21},{62,-1}})));
 equation
     connect(batterySystem.epp, ElectricGrid.epp) annotation (Line(
       points={{26,-11.4},{40,-11.4},{40,-11},{42,-11}},

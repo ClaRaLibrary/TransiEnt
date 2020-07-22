@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Check;
 model TestPrimaryControlWithBattery "Example to evaluate self discharge time"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,7 @@ model TestPrimaryControlWithBattery "Example to evaluate self discharge time"
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{33,-10},{53,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{33,-10},{53,10}})));
   Modelica.Blocks.Sources.TimeTable DiscontiniousTestSchedule(table=[0,50; 3600,50; 43000,50.2; 53000,50.2; 100000,49.8; 110000,49.8])
     annotation (Placement(transformation(extent={{-16,32},{4,52}})));
   Modelica.Blocks.Continuous.FirstOrder f_grid(

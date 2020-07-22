@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas;
 model GasStorage_varXi_L2 "L2: Model of a simple gas storage volume for variable composition"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ model GasStorage_varXi_L2 "L2: Model of a simple gas storage volume for variable
   // _____________________________________________
   //
   //                 Outer Models
-  // _____________________________________________                                                                                                                                            "General Storage Cost Record" annotation(Dialog(group="Statistics"),choicesAllMatching);
+  // _____________________________________________
 
   // _____________________________________________
   //
@@ -70,8 +70,8 @@ protected
     produces_other_flow=false,
     consumes_other_flow=false,
     produces_m_flow_CDE=false,
-    consumes_m_flow_CDE=false)
-           annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+    consumes_m_flow_CDE=false,
+    calculateCost=calculateCost) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 public
   inner Summary summary(
     outline(
@@ -154,7 +154,7 @@ equation
 
   //der(m_gas*xi_gas)=gasPortIn.m_flow*actualStream(gasPortIn.xi_outflow)+gasPortOut.m_flow*actualStream(gasPortOut.xi_outflow);
   //der(m_gas)*xi_gas+m_gas*der(xi_gas)=gasPortIn.m_flow*actualStream(gasPortIn.xi_outflow)+gasPortOut.m_flow*actualStream(gasPortOut.xi_outflow);
-  V_geo*drhodt*xi_gas+m_gas*der(xi_gas)=gasPortIn.m_flow*actualStream(gasPortIn.xi_outflow)+gasPortOut.m_flow*actualStream(gasPortOut.xi_outflow);
+  V_geo*drhodt*xi_gas+m_gas*der(xi_gas)=gasPortIn.m_flow*noEvent(actualStream(gasPortIn.xi_outflow))+gasPortOut.m_flow*noEvent(actualStream(gasPortOut.xi_outflow));
 
   drhodt = gasBulk.drhodh_pxi*der(h_gas) + gasBulk.drhodp_hxi*der(p_gas) + sum({gasBulk.drhodxi_ph[i] * der(xi_gas[i]) for i in 1:medium.nc-1});
 

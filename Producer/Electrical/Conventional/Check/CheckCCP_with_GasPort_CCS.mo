@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckCCP_with_GasPort_CCS
     import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model CheckCCP_with_GasPort_CCS
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Grid.Electrical.Base.ExampleGenerationPark generationPark)
                                       annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantPotentialVariableBoundary(useInputConnector=false) annotation (Placement(transformation(extent={{70,14},{90,34}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantPotentialVariableBoundary(useInputConnector=false) annotation (Placement(transformation(extent={{70,14},{90,34}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi annotation (Placement(transformation(extent={{88,-10},{68,10}})));
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-70,80},{-50,100}})));
@@ -102,8 +102,8 @@ equation
       points={{12,-76},{24,-76},{24,48}},
       color={255,255,0},
       thickness=1.5));
-  connect(booleanPulse.y, cCP_with_Gasport1.UseCCS) annotation (Line(points={{-59,-44},{-10,-44}},                     color={255,0,255}));
-  connect(booleanConstant.y, cCP_with_Gasport2.UseCCS) annotation (Line(points={{-59,-80},{-10,-80}},                     color={255,0,255}));
+  connect(booleanPulse.y, cCP_with_Gasport1.useCCS) annotation (Line(points={{-59,-44},{-10,-44}}, color={255,0,255}));
+  connect(booleanConstant.y, cCP_with_Gasport2.useCCS) annotation (Line(points={{-59,-80},{-10,-80}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=360000, Interval=60));
 end CheckCCP_with_GasPort_CCS;

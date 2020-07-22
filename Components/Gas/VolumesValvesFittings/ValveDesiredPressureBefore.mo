@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings;
 model ValveDesiredPressureBefore "Simple valve with desired pressure before the valve"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,6 +42,7 @@ model ValveDesiredPressureBefore "Simple valve with desired pressure before the 
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium used in the valve" annotation(Dialog(group="Fundamental Definitions"),choicesAllMatching);
   parameter SI.Pressure p_BeforeValveDes=30e5 "Desired pressure before the valve" annotation(Dialog(group="Fundamental Definitions"));
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
 
 
   // _____________________________________________
@@ -70,40 +71,40 @@ model ValveDesiredPressureBefore "Simple valve with desired pressure before the 
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=medium,
     p=gasPortIn.p,
     h=noEvent(actualStream(gasPortIn.h_outflow)),
     xi=noEvent(actualStream(gasPortIn.xi_outflow)),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
-  TILMedia.VLEFluid_ph gasOut(
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium,
     p=gasPortOut.p,
     h=noEvent(actualStream(gasPortOut.h_outflow)),
     xi=noEvent(actualStream(gasPortOut.xi_outflow)),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{70,-12},{90,8}})));
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{70,-12},{90,8}})));
 
 public
-  Summary summary(
-    gasPortIn(
+  Summary summary(gasPortIn(
       mediumModel=medium,
-      xi=gasIn.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortIn.xi_outflow)),
       x=gasIn.x,
       m_flow=gasPortIn.m_flow,
       T=gasIn.T,
       p=gasPortIn.p,
-      h=gasIn.h,
-      rho=gasIn.d),
-    gasPortOut(
+      h=noEvent(actualStream(gasPortIn.h_outflow)),
+      rho=gasIn.d), gasPortOut(
       mediumModel=medium,
-      xi=gasOut.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortOut.xi_outflow)),
       x=gasOut.x,
       m_flow=gasPortOut.m_flow,
       T=gasOut.T,
       p=gasPortOut.p,
-      h=gasOut.h,
-      rho=gasOut.d))
-    annotation (Placement(transformation(extent={{-100,-48},{-80,-28}})));
+      h=noEvent(actualStream(gasPortOut.h_outflow)),
+      rho=gasOut.d)) annotation (Placement(transformation(extent={{-100,-48},{-80,-28}})));
+
 
 
 protected

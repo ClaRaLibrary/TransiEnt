@@ -1,6 +1,6 @@
 #1
-# [1] H. Gadd and S. Werner, “Heat load patterns in district heating substations,” Appl. Energy, vol. 108, pp. 176–183, 2013. Source: Gadd2013a
-# See also: \\transientee-sources\matlab\pd\Grundlagen\Verbraucherdaten\Fernwärme\DecemberDailyPattern.m
+# [1] H. Gadd and S. Werner, 'Heat load patterns in district heating substations,' Appl. Energy, vol. 108, pp. 176â€“183, 2013. Source: Gadd2013a
+# See also: \\transientee-sources\matlab\pd\Grundlagen\Verbraucherdaten\FernwÃ¤rme\DecemberDailyPattern.m
 double	default(672,2)
 0	0.9493819
 900	0.9479282

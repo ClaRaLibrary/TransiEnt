@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction;
 model WeeklyHeatProfile "Normalized typical daily load profile is applied to input heat demand"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,7 +47,7 @@ model WeeklyHeatProfile "Normalized typical daily load profile is applied to inp
     datasource=TransiEnt.Basics.Tables.DataPrivacy.isPublic,
     tablename="default",
     columns={2},
-    relativepath="heat/DistrictHeatingWeeklyHeatProfileWinter_900s.txt") "H. Gadd and S. Werner, “Heat load patterns in district heating substations,” Appl. Energy, vol. 108, pp. 176–183, 2013." annotation (Placement(transformation(extent={{-38,-46},{-18,-26}})));
+    relativepath="heat/DistrictHeatingWeeklyHeatProfileWinter_900s.txt") "H. Gadd and S. Werner, 'Heat load patterns in district heating substations,' Appl. Energy, vol. 108, pp. 176–183, 2013." annotation (Placement(transformation(extent={{-38,-46},{-18,-26}})));
   Basics.Blocks.Sources.SawTooth second_in_week(
     period=604800,
     amplitude=604800,
@@ -66,7 +66,7 @@ model WeeklyHeatProfile "Normalized typical daily load profile is applied to inp
     datasource=TransiEnt.Basics.Tables.DataPrivacy.isPublic,
     tablename="default",
     columns={2},
-    relativepath="heat/DistrictHeatingWeeklyHeatProfileSummer_900s.txt") "H. Gadd and S. Werner, “Heat load patterns in district heating substations,” Appl. Energy, vol. 108, pp. 176–183, 2013." annotation (Placement(transformation(extent={{-38,-74},{-18,-54}})));
+    relativepath="heat/DistrictHeatingWeeklyHeatProfileSummer_900s.txt") "H. Gadd and S. Werner, 'Heat load patterns in district heating substations,' Appl. Energy, vol. 108, pp. 176–183, 2013." annotation (Placement(transformation(extent={{-38,-74},{-18,-54}})));
   Modelica.Blocks.Logical.Switch switch1 annotation (Placement(transformation(extent={{18,-30},{38,-10}})));
   Modelica.Blocks.Sources.BooleanExpression isHeatingPeriod(y=time < t_hp_end or time >= t_hp_start)
                                                                                                     annotation (Placement(transformation(extent={{-40,22},{-20,42}})));

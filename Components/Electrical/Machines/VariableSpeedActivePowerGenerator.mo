@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.Machines;
 model VariableSpeedActivePowerGenerator "ActicePowerPort: Static machine model with torque control for the shaft speed"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -57,8 +57,24 @@ model VariableSpeedActivePowerGenerator "ActicePowerPort: Static machine model w
   // _____________________________________________
 
   Modelica.Mechanics.Rotational.Sources.Torque torque annotation (Placement(transformation(extent={{-16,-10},{-36,10}})));
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power terminal(change_sign=true) constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components"),choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.Power terminal(change_sign=true) "P-Boundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower terminal(change_sign=true, useInputConnectorP=true, useInputConnectorQ=false, useCosPhi=true, cosphi_boundary=1)  "PQ-Boundary for ApparentPowerPort"),choice( redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary terminal(change_sign=true, useInputConnectorQ=false, cosphi_boundary=1) "PQ-Boundary for ComplexPowerPort"),choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage terminal(Use_input_connector_v=false, v_boundary=simCenter.v_n)
-                                                                                                                                                                                                      "PV-Boundary for ApparentPowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PVBoundary terminal(v_gen=simCenter.v_n, useInputConnectorP=true) "PV-Boundary for ComplexPowerPort")),Placement(transformation(extent={{68,-10},{48,10}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power terminal(change_sign=true) constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    Dialog(group="Replaceable Components"),
+    choices(
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power terminal(change_sign=true) "P-Boundary for ActivePowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower terminal(
+          change_sign=true,
+          useInputConnectorP=true,
+          useInputConnectorQ=false,
+          useCosPhi=true,
+          cosphi_boundary=1) "PQ-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary terminal(
+          change_sign=true,
+          useInputConnectorQ=false,
+          cosphi_boundary=1) "PQ-Boundary for ComplexPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage terminal(Use_input_connector_v=false, v_boundary=simCenter.v_n) "PV-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PVBoundary terminal(v_gen=simCenter.v_n, useInputConnectorP=true, change_sign=true) "PV-Boundary for ComplexPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPowerAdvanced.InverterQcurve terminal(v_n=simCenter.v_n,change_sign=true))),
+    Placement(transformation(extent={{68,-10},{48,10}})));
    Modelica.Mechanics.Rotational.Sensors.PowerSensor powerSensor   annotation (Placement(transformation(extent={{-74,-10},
             {-54,10}})));
   Modelica.Blocks.Math.Gain sign(k=if changeSign then -1 else 1) annotation (Placement(transformation(

@@ -2,10 +2,10 @@ within TransiEnt.Storage.Electrical.Base;
 model GenericElectricStorage "Generic storage model that can be used for most electric storage types in quasistationary power system simulations "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,8 +59,19 @@ model GenericElectricStorage "Generic storage model that can be used for most el
   //           Instances of other Classes
   // _____________________________________________
 
-  replaceable TransiEnt.Components.Boundaries.Electrical.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (Dialog(group="Replaceable Components"),choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.Power powerBoundary "P-Boundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower powerBoundary(useInputConnectorP=true, useInputConnectorQ=false, useCosPhi=true, cosphi_boundary=1)  "PQ-Boundary for ApparentPowerPort"),choice( redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary powerBoundary(useInputConnectorQ=false, cosphi_boundary=1) "PQ-Boundary for ComplexPowerPort"),choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage powerBoundary(Use_input_connector_v=false, v_boundary=Storage.v_n)
-                                                                                                                                                                                                        "PV-Boundary for ApparentPowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PVBoundary powerBoundary(v_gen=Storage.v_n, useInputConnectorP=true) "PV-Boundary for ComplexPowerPort")), Placement(transformation(extent={{52,-10},{32,10}})));
+  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
+    Dialog(group="Replaceable Components"),
+    choices(
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary "P-Boundary for ActivePowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower powerBoundary(
+          useInputConnectorP=true,
+          useInputConnectorQ=false,
+          useCosPhi=true,
+          cosphi_boundary=1) "PQ-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary powerBoundary(useInputConnectorQ=false, cosphi_boundary=1) "PQ-Boundary for ComplexPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.PowerVoltage powerBoundary(Use_input_connector_v=false, v_boundary=Storage.v_n) "PV-Boundary for ApparentPowerPort"),
+      choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PVBoundary powerBoundary(v_gen=Storage.v_n, useInputConnectorP=true) "PV-Boundary for ComplexPowerPort")),
+    Placement(transformation(extent={{52,-10},{32,10}})));
 
   replaceable model StorageModel = TransiEnt.Storage.Base.GenericStorage constrainedby TransiEnt.Storage.Base.GenericStorage_base "Pick GenericStorage for a loss free storage and GenericStorageHyst for storage with losses" annotation(choicesAllMatching=true);
   parameter TransiEnt.Storage.Base.GenericStorageParameters StorageModelParams "Record of generic storage parameters" annotation (choicesAllMatching=true);
@@ -77,10 +88,13 @@ model GenericElectricStorage "Generic storage model that can be used for most el
     Delta_E_n=StorageModelParams.E_max,
     P_el_is=storageModel.P_is,
     produces_Q_flow=false,
-    consumes_Q_flow=false) if calculateCost    annotation (Placement(transformation(extent={{72,-100},{100,-74}})));
+    consumes_Q_flow=false) if calculateCost    annotation (Placement(transformation(extent={{80,-100},{100,-80}})));
+  Components.Statistics.Collectors.LocalCollectors.CollectElectricPower           collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Storage)
+                                                                                                       annotation (Placement(transformation(extent={{60,-100},{80,-80}})));
 equation
 
-  if calculateCost then
+ collectElectricPower.powerCollector.P=epp.P;
+ if calculateCost then
     connect(modelStatistics.costsCollector, collectCosts.costsCollector);
   end if;
   connect(P_set, storageModel.P_set) annotation (Line(points={{-104,36},{-49.04,36},{-49.04,36.04}}, color={0,0,127}));
@@ -89,9 +103,11 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(storageModel.P_is, powerBoundary.P_el_set) annotation (Line(points={{-1.28,36.76},{-1.28,36.76},{48,36.76},{48,12}}, color={0,0,127}));
+  connect(modelStatistics.powerCollector[TransiEnt.Basics.Types.TypeOfResource.Storage],collectElectricPower.powerCollector);
+
 annotation(defaultComponentName="Storage", Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Generic&nbsp;storage&nbsp;model&nbsp;that&nbsp;can&nbsp;be&nbsp;used&nbsp;for&nbsp;most&nbsp;electric&nbsp;storage&nbsp;types&nbsp;in&nbsp;quasistationary&nbsp;power&nbsp;system&nbsp;simulations.</p>
+<p>Generic storage model that can be used for most electric storage types in quasistationary power system simulations.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

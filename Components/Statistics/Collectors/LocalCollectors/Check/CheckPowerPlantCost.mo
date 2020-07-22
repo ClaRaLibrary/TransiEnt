@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors.Check;
 model CheckPowerPlantCost
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ model CheckPowerPlantCost
   PowerPlantCost powerPlantCost(
       redeclare model PowerPlantCostModel = ConfigurationData.PowerProducerCostSpecs.GasTurbine,
       P_n=100e3,
-      P_el_is=100e3*time/31622400,
+      P_el_is=-100e3*time/31622400,
       Q_flow_fuel_is=120e3*time/31622400,
       produces_Q_flow=false)    annotation (Placement(transformation(extent={{-10,-6},{10,14}})));
 

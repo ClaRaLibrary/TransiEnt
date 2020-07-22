@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities;
 function get_PortCountVector_noSolar_addPorts "generates port count vector for tank with solar, CHP and grid in and outputs"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //

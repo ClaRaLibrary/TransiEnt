@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs;
 model ElectricStorageGeneral "General electric storage data from Energiesystem Deutschland 2050 Fraunhofer ISE, 2013"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,7 +48,7 @@ model ElectricStorageGeneral "General electric storage data from Energiesystem D
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] Fraunhofer&nbsp;ISE,<span style=\"font-family: Courier New;\"> </span>&quot;Energiesystem&nbsp;Deutschland&nbsp;2050&quot;,&nbsp;2013</p>
+<p>[1] Fraunhofer ISE,<span style=\"font-family: Courier New;\"> </span>&quot;Energiesystem Deutschland 2050&quot;, 2013</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end ElectricStorageGeneral;

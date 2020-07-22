@@ -1,11 +1,11 @@
 ﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model Skymodel_isotropicDiffuse "Isotropic calculation of the irradiance on a tilted surface"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,7 +61,7 @@ equation
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>Purely theoretical model</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>Duffie &amp; Beckman&nbsp;(2006):&nbsp;Solar&nbsp;Engineering&nbsp;of&nbsp;Thermal&nbsp;Processes</p>
+<p>Duffie & Beckman (2006): Solar Engineering of Thermal Processes</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Tobias Toerber (tobias.toerber@tuhh.de), Jul 2015</p>
 <p>Edited by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Systems.Check;
 model Test_FeedInStation_CavernComp "Model for testing a feed in station for hydrogen with a compressor and an underground storage"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -28,6 +28,7 @@ model Test_FeedInStation_CavernComp "Model for testing a feed in station for hyd
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel3, redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_SRK_var gasModel1)
                                                                                                   annotation (Placement(transformation(extent={{0,40},{20,60}})));
   TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_CavernComp feedInStation(
+    usePowerPort=true,
     start_pressure=true,
     eta_n=0.75,
     t_overload=900,
@@ -42,7 +43,7 @@ model Test_FeedInStation_CavernComp "Model for testing a feed in station for hyd
     integrateMassFlow=false)
                     annotation (Placement(transformation(extent={{-38,-64},{-18,-44}})));
     //includeHeatTransfer=true,
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-72,-54})));

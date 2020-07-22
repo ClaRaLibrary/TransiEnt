@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckCCP "Model for testing combined cycle gas plant models"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,7 +37,7 @@ model CheckCCP "Model for testing combined cycle gas plant models"
         39600,-162.4e6; 39600,-406e6; 43200,-406e6; 43200,-121.8e6; 46800,-121.8e6;
         46800,-406e6; 50400,-406e6])
     annotation (Placement(transformation(extent={{-90,32},{-70,52}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{38,6},{58,26}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{38,6},{58,26}})));
   TransiEnt.Producer.Electrical.Conventional.CCP CCP(
     isPrimaryControlActive=false,
     isSecondaryControlActive=false,

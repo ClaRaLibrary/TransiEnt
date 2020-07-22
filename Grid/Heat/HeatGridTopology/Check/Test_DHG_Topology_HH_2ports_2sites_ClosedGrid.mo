@@ -3,10 +3,10 @@ model Test_DHG_Topology_HH_2ports_2sites_ClosedGrid
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -55,7 +55,7 @@ model Test_DHG_Topology_HH_2ports_2sites_ClosedGrid
     h_nom=120*4.2) annotation (Placement(transformation(extent={{340,-50},{272,18}})));
     //typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
   TransiEnt.Grid.Heat.HeatGridControl.Controllers.SimpleDHNDispatcher simpleHeatDispatcher annotation (Placement(transformation(rotation=0, extent={{-340,168},{-278,230}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_3(useInputConnector=false) annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_3(useInputConnector=false) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=270,
         origin={-10,136})));

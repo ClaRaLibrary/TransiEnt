@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Electrical.Wind;
+﻿within TransiEnt.Producer.Electrical.Wind;
 model Windpark "Takes a single wind turbine model (replacable) and applies a linear low pass filter to model wind park smoothing effects"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -74,19 +74,21 @@ model Windpark "Takes a single wind turbine model (replacable) and applies a lin
   //
   //           Instances of other Classes
   // _____________________________________________
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{30,-100},{50,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable)
+                                                                                                       annotation (Placement(transformation(extent={{30,-100},{50,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=typeOfPrimaryEnergyCarrier) annotation (Placement(transformation(extent={{-8,-100},{12,-80}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts(redeclare model PowerPlantCostModel = ProducerCosts, P_n=windTurbineModel.P_el_n*(N - 1) "N-1 because the wind turbine model instance adds to statistics itself",
     produces_Q_flow=false,
-    consumes_H_flow=false)                                                                                                                                                                                                         annotation (HideResult=false, Placement(transformation(
+    consumes_H_flow=false,
+    P_el_is=-P_el_is)                                                                                                                                                                                                         annotation (HideResult=false, Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-40,-90})));
 
-  TransiEnt.Components.Boundaries.Electrical.Power parkTerminal(change_sign=true) annotation (Placement(transformation(extent={{86,-10},{66,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power parkTerminal(change_sign=true) annotation (Placement(transformation(extent={{86,-10},{66,10}})));
   TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp annotation (Placement(transformation(extent={{94,-10},{114,10}})));
   TransiEnt.Basics.Interfaces.Ambient.VelocityIn v_wind "Input for the wind velocity" annotation (Placement(transformation(extent={{-124,-22},{-84,18}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency turbineTerminal(useInputConnector=true) annotation (Placement(transformation(extent={{-14,-10},{6,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency turbineTerminal(useInputConnector=true) annotation (Placement(transformation(extent={{-14,-10},{6,10}})));
   Modelica.Blocks.Sources.RealExpression P_Turbine(y=turbineTerminal.epp.P) annotation (Placement(transformation(extent={{-22,50},{16,70}})));
   Modelica.Blocks.Sources.RealExpression f_grid(y=epp.f) annotation (Placement(transformation(extent={{-44,30},{-22,48}})));
 
@@ -148,7 +150,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">[1] G. Dany, &ldquo;Kraftwerksreserve in elektrischen Verbundsystemen mit hohem Windenergieanteil,&rdquo; Rheinisch-Westf&auml;lische Technische Hochschule Aachen, 2000.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">[1] G. Dany, &ldquo;Kraftwerksreserve in elektrischen Verbundsystemen mit hohem Windenergieanteil,&rdquo; Rheinisch-Westfälische Technische Hochschule Aachen, 2000.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on Wedn Apr 14 2016</span></p>
 </html>"),

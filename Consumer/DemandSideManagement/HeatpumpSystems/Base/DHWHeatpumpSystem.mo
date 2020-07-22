@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base;
 model DHWHeatpumpSystem "Model for domestic hot water production"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -99,7 +99,7 @@ equation
                                                                          coordinateSystem(preserveAspectRatio=false, extent={{-120,-100},{100,100}})),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Domestic&nbsp;hot&nbsp;water&nbsp;production&nbsp;by&nbsp;monovalent&nbsp;heat&nbsp;pump&nbsp;system.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Domestic hot water production by monovalent heat pump system.</span></p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

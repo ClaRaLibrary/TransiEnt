@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Check;
 model TestPoolResponsePrequalification
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,7 +20,7 @@ model TestPoolResponsePrequalification
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Boundaries.Electrical.Frequency electricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{36,-10},{56,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{36,-10},{56,10}})));
   parameter Integer n=100;
   Pool.FridgePool fridgePool(
     dbf=0.4,
@@ -42,7 +42,7 @@ model TestPoolResponsePrequalification
         293.768739206794,279.750036491753,2.30729977986316,280.10899044404,4575.49700042311,4575.49700042311,0.479301386251288,4799.35929049327,1.75572306603622; 292.106221269086,278.151501315008,0.992142946712453,278.372672325544,4740.05282533291,4740.05282533291,0.478086474089755,4801.80886262052,1.75213283966645; 291.289615096269,278.795979261477,1.54700838626002,278.844260300378,5509.90007592193,5509.90007592193,0.600169530543113,4798.92013374926,1.69712558841555; 302.227999076355,278.983161501741,1.30351232275697,278.473250863838,4386.80846879666,4386.80846879666,0.547549674977454,4800.19918944408,1.76940319049458; 299.616492778662,279.403629414732,1.50916152510199,279.602486155964,5176.64086429815,5176.64086429815,0.478399807813611,4798.47897343823,1.87480330730892; 295.572605477715,278.14787958129,1.79535542571791,277.477314088002,4948.13910717529,4948.13910717529,0.532447036868179,4799.27636887471,1.85468060190382; 290.878644921944,279.43298059585,1.74141439233486,
         278.796151106752,4687.74717977801,4687.74717977801,0.481996184942301,4799.40674968499,1.57765747732987; 292.053595908336,278.422291680195,1.48677947755663,277.825489615068,4292.65308193914,4292.65308193914,0.535294250967471,4800.40133633982,1.82579497319734; 294.120397657306,279.189714029055,1.93310105801594,278.497716524258,4663.61234177944,4663.61234177944,0.570792453421829,4800.94213331924,1.71118452692978; 297.024248184886,279.541413533197,1.8867181772516,278.915497227781,4758.38866441953,4758.38866441953,0.419774216570147,4800.3004859676,1.58900233766723; 290.653986736054,279.346235980306,1.89421426535481,278.770866355728,4094.69036424655,4094.69036424655,0.551442653450101,4799.62692934137,1.46520495763976],
     startStatus={false,false,false,true,true,false,false,false,false,false,false,false,false,false,true,false,false,false,true,false,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,true,false,false,false,true,false,false,false,false,false,false,false,true,true,false,false,true,false,false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false,false,false,false,false,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false})
-                                                                                                                                                                                                        annotation (Placement(transformation(extent={{-50,-28},{14,28}})));
+                                                                                                                                                                                              annotation (Placement(transformation(extent={{-50,-28},{14,28}})));
 
   inner SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
   Modelica.Blocks.Sources.TimeTable f_grid(table=[0,50; 6000,50; 6000,49.8; 6900,49.8; 6900,50]) annotation (Placement(transformation(

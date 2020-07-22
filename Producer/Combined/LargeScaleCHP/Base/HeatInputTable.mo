@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model HeatInputTable "Table based model which delivers the amount of heat input required by a Large Scale CHP plant to produce a given el. and th. output"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -202,14 +202,14 @@ equation
           textString="%name")}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Table&nbsp;based&nbsp;model&nbsp;which&nbsp;delivers&nbsp;the&nbsp;amount&nbsp;of&nbsp;heat flow&nbsp;input&nbsp;required&nbsp;by&nbsp;a&nbsp;Large&nbsp;Scale&nbsp;CHP&nbsp;plant&nbsp;to&nbsp;produce&nbsp;a&nbsp;given&nbsp;el.&nbsp;and&nbsp;th.&nbsp;output</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Table based model which delivers the amount of heat flow input required by a Large Scale CHP plant to produce a given el. and th. output</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">RealInput -&nbsp;electrical power setpoint input</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">RealInput -&nbsp;thermal energy setpoint input</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">RealInput - electrical power setpoint input</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">RealInput - thermal energy setpoint input</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">HeatFlowRateOut - required heat flow output</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
@@ -222,6 +222,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Jun 2018: Scaling, depending on P_n and Q_flow_nom added</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), Jun 2018: Scaling, depending on P_n and Q_flow_nom added</span></p>
 </html>"));
 end HeatInputTable;

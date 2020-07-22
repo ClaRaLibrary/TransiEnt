@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Compressor.Check;
 model TestCompressors "Model for testing compressors"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,22 +48,23 @@ model TestCompressors "Model for testing compressors"
     duration=500,
     offset=0.5,
     startTime=250) annotation (Placement(transformation(extent={{-86,14},{-66,34}})));
-  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi source3(p_const=5000000, T_const=293.15) annotation (Placement(transformation(extent={{-60,-70},{-40,-50}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink3(variable_p=true) annotation (Placement(transformation(extent={{60,-70},{40,-50}})));
   CompressorRealGasIsothermal_L1_simple                                     compressorRealGasIsothermal_L1_simple1(
-    presetVariableType="m_flow",
+    presetVariableType="dp",
+    use_Delta_p_input=true,
     P_el_n(displayUnit="MW") = 10000000,
     redeclare model CostSpecsGeneral = Statistics.ConfigurationData.GeneralCostSpecs.IonicCompressor,
-    m_flowInput=true,
-    Cspec_demAndRev_el(displayUnit="EUR/MWh") = 2.7777777777778e-08)
-    annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
+    m_flowInput=false,
+    Cspec_demAndRev_el(displayUnit="EUR/MWh") = 2.7777777777778e-8)
+    annotation (Placement(transformation(extent={{-12,-70},{8,-50}})));
   Modelica.Blocks.Sources.Ramp ramp1(
     duration=500,
     startTime=250,
     height=50e5,
     offset=100e5) annotation (Placement(transformation(extent={{94,-64},{74,-44}})));
-  Controller.ControllerCompressor_dp controllerCompressor_dp annotation (Placement(transformation(extent={{-18,-40},{2,-20}})));
+  Controller.ControllerCompressor_dp controllerCompressor_dp annotation (Placement(transformation(extent={{-18,-38},{2,-18}})));
   Sensors.RealGas.PressureSensor pressureSensor annotation (Placement(transformation(extent={{14,-60},{34,-40}})));
+  Boundaries.Gas.BoundaryRealGas_Txim_flow source3(m_flow_const=1) annotation (Placement(transformation(extent={{-60,-70},{-40,-50}})));
 equation
   connect(source1.gasPort, compressorRealGasIsentropicEff_L1_simple.gasPortIn) annotation (Line(
       points={{-40,50},{-40,50},{-10,50}},
@@ -83,23 +84,22 @@ equation
       thickness=1.5));
   connect(ramp.y, compressorRealGasIsentropicEff_L1_simple.m_flow_in) annotation (Line(points={{-65,24},{-8,24},{-8,39}}, color={0,0,127}));
   connect(compressorRealGasIsothermal_L1_simple.m_flow_in, ramp.y) annotation (Line(points={{-8,11},{-8,24},{-65,24}}, color={0,0,127}));
-  connect(source3.gasPort, compressorRealGasIsothermal_L1_simple1.gasPortIn) annotation (Line(
-      points={{-40,-60},{-25,-60},{-10,-60}},
-      color={255,255,0},
-      thickness=1.5));
   connect(ramp1.y, sink3.p) annotation (Line(points={{73,-54},{68,-54},{62,-54}}, color={0,0,127}));
-  connect(controllerCompressor_dp.Delta_p, compressorRealGasIsothermal_L1_simple1.m_flow_in) annotation (Line(points={{-8,-41},{-8,-49}}, color={0,0,127}));
   connect(compressorRealGasIsothermal_L1_simple1.gasPortOut, pressureSensor.gasPortIn) annotation (Line(
-      points={{10,-60},{14,-60}},
+      points={{8,-60},{14,-60}},
       color={255,255,0},
       thickness=1.5));
   connect(pressureSensor.gasPortOut, sink3.gasPort) annotation (Line(
       points={{34,-60},{40,-60}},
       color={255,255,0},
       thickness=1.5));
-  connect(pressureSensor.p, controllerCompressor_dp.p_afterCompIn) annotation (Line(points={{35,-50},{36,-50},{36,-46},{36,-30},{2,-30}}, color={0,0,127}));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  connect(pressureSensor.p, controllerCompressor_dp.p_afterCompIn) annotation (Line(points={{35,-50},{36,-50},{36,-28},{2,-28}},          color={0,0,127}));
+  connect(compressorRealGasIsothermal_L1_simple1.gasPortIn, source3.gasPort) annotation (Line(
+      points={{-12,-60},{-40,-60}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(controllerCompressor_dp.Delta_p, compressorRealGasIsothermal_L1_simple1.dp_in) annotation (Line(points={{-8,-39},{-8,-46},{6,-46},{6,-49}}, color={0,0,127}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Test environment for compressors</p>

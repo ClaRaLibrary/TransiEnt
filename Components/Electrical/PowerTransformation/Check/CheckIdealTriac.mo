@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.PowerTransformation.Check;
 model CheckIdealTriac "Example how to use the power transformator model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model CheckIdealTriac "Example how to use the power transformator model"
 
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Boundaries.Electrical.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency Grid(useInputConnector=false) annotation (Placement(transformation(
         extent={{-8,-8},{8,8}},
         rotation=0,
         origin={57,0})));
@@ -31,7 +31,7 @@ model CheckIdealTriac "Example how to use the power transformator model"
   inner TransiEnt.ModelStatistics modelStatistics
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
   TransiEnt.Components.Electrical.PowerTransformation.IdealTriac Triac(isValveMode=false) annotation (Placement(transformation(extent={{-16,-12},{8,12}})));
-  TransiEnt.Components.Boundaries.Electrical.Power TurboGen(useInputConnectorP=true) annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power TurboGen(useInputConnectorP=true) annotation (Placement(transformation(
         extent={{8,-8},{-8,8}},
         rotation=0,
         origin={-47,0})));

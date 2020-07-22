@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.HeatExchanger;
 model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and one fluid with fixed temperature at one end"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,8 +48,10 @@ model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and o
 
   parameter Boolean fixedTemperatureRealGas=true "true if the real gas temperature is fixed" annotation(Dialog(group="Heat Transfer"));
   parameter SI.Temperature T_out_fixed=293.15 "Fixed temperature of one of the mediums at its outlet" annotation(Dialog(group="Heat Transfer"));
+  parameter Boolean deactivateTwoPhaseRegionForRealGas=true "Deactivate calculation of two phase region" annotation (Dialog(group="Heat Transfer"),Evaluate=true);
 
   parameter Real eps=1e-10 "Small number under which equations change due to small mass flows" annotation(Dialog(group="Numerics"));
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
 
   // _____________________________________________
   //
@@ -73,73 +75,76 @@ model HEXOneRealGasOneFluidIdeal_L1 "Ideal heat exchanger for one real gas and o
   //           Instances of other Classes
   // _____________________________________________
 protected
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=mediumRealGas,
     p=gasPortOut.p,
-    h=actualStream(gasPortOut.h_outflow),
-    xi=actualStream(gasPortOut.xi_outflow),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{60,-12},{80,8}})));
-  TILMedia.VLEFluid_ph gasIn(
+    h=noEvent(actualStream(gasPortOut.h_outflow)),
+    xi=noEvent(actualStream(gasPortOut.xi_outflow)),
+    deactivateTwoPhaseRegion=deactivateTwoPhaseRegionForRealGas) annotation (Placement(transformation(extent={{60,-12},{80,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=mediumRealGas,
     p=gasPortIn.p,
-    h=actualStream(gasPortIn.h_outflow),
-    xi=actualStream(gasPortIn.xi_outflow),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-80,-12},{-60,8}})));
-  TILMedia.VLEFluid_ph fluidIn(
+    h=noEvent(actualStream(gasPortIn.h_outflow)),
+    xi=noEvent(actualStream(gasPortIn.xi_outflow)),
+    deactivateTwoPhaseRegion=deactivateTwoPhaseRegionForRealGas) if
+                                      useFluidModelsForSummary annotation (Placement(transformation(extent={{-80,-12},{-60,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidIn(
     vleFluidType=mediumFluid,
     p=fluidPortIn.p,
-    h=actualStream(fluidPortIn.h_outflow),
-    xi=actualStream(fluidPortIn.xi_outflow)) annotation (Placement(transformation(extent={{-10,-82},{10,-62}})));
-  TILMedia.VLEFluid_ph fluidOut(
+    h=noEvent(actualStream(fluidPortIn.h_outflow)),
+    xi=noEvent(actualStream(fluidPortIn.xi_outflow))) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-10,-82},{10,-62}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidOut(
     vleFluidType=mediumFluid,
     p=fluidPortOut.p,
-    h=actualStream(fluidPortOut.h_outflow),
-    xi=actualStream(fluidPortOut.xi_outflow)) annotation (Placement(transformation(extent={{-10,58},{10,78}})));
+    h=noEvent(actualStream(fluidPortOut.h_outflow)),
+    xi=noEvent(actualStream(fluidPortOut.xi_outflow))) annotation (Placement(transformation(extent={{-10,58},{10,78}})));
 public
   inner Summary summary(
-    outline(
-      Q_flow=Q_flow),
+    outline(Q_flow=Q_flow),
     gasPortIn(
       mediumModel=mediumRealGas,
-      xi=gasIn.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortIn.xi_outflow)),
       x=gasIn.x,
       m_flow=gasPortIn.m_flow,
       T=gasIn.T,
       p=gasPortIn.p,
-      h=gasIn.h,
+      h=noEvent(actualStream(gasPortIn.h_outflow)),
       rho=gasIn.d),
     gasPortOut(
       mediumModel=mediumRealGas,
-      xi=gasOut.xi,
+      xi=noEvent(actualStream(gasPortOut.xi_outflow)),
       x=gasOut.x,
       m_flow=-gasPortOut.m_flow,
       T=gasOut.T,
       p=gasPortOut.p,
-      h=gasOut.h,
+      h=noEvent(actualStream(gasPortOut.h_outflow)),
       rho=gasOut.d),
     fluidPortIn(
       mediumModel=mediumFluid,
-      xi=fluidIn.xi,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(fluidPortIn.xi_outflow)),
       x=fluidIn.x,
       m_flow=fluidPortIn.m_flow,
       T=fluidIn.T,
       p=fluidPortIn.p,
-      h=fluidIn.h,
+      h=noEvent(actualStream(fluidPortIn.h_outflow)),
       rho=fluidIn.d),
     fluidPortOut(
       mediumModel=mediumFluid,
-      xi=fluidOut.xi,
+      xi=noEvent(actualStream(fluidPortOut.xi_outflow)),
       x=fluidOut.x,
       m_flow=-fluidPortOut.m_flow,
       T=fluidOut.T,
       p=fluidPortOut.p,
-      h=fluidOut.h,
+      h=noEvent(actualStream(fluidPortOut.h_outflow)),
       rho=fluidOut.d)) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
+
 
 protected
   SI.HeatFlowRate Q_flow "Heat flow from medium2 to medium1";

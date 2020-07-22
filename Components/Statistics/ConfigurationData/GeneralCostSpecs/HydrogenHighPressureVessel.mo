@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model HydrogenHighPressureVessel "Hydrogen high pressure vessels (40...8000 m3 stp, >200 bar)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,8 +29,8 @@ model HydrogenHighPressureVessel "Hydrogen high pressure vessels (40...8000 m3 s
     lifeTime=30 "Stolzenburg 2014, small storages");
 
   final parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2_SRK vle_h2;
-  final parameter Real dV_stp=dm/TILMedia.VLEFluidFunctions.density_pTxi(vle_h2,1.01325e5,273.15);
-  final parameter Real dm=(TILMedia.VLEFluidFunctions.density_pTxi(vle_h2,size2,288.15)-TILMedia.VLEFluidFunctions.density_pTxi(vle_h2,1.01325e5,288.15))*size1;
+  final parameter Real dV_stp=dm/TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_pTxi(vle_h2,1.01325e5,273.15);
+  final parameter Real dm=(TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_pTxi(vle_h2,size2,288.15)-TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_pTxi(vle_h2,1.01325e5,288.15))*size1;
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Hydrogen high pressure vessels (40...8000 m3 stp, &gt;200 bar)</p>

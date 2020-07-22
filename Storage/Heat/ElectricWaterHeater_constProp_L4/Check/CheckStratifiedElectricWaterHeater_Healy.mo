@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.ElectricWaterHeater_constProp_L4.Check;
 model CheckStratifiedElectricWaterHeater_Healy
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,7 +51,7 @@ model CheckStratifiedElectricWaterHeater_Healy
   Modelica.Blocks.Sources.BooleanConstant HeaterSwitch2(k=false) annotation (Placement(transformation(extent={{-62,33},{-42,53}})));
   Modelica.Blocks.Sources.Constant Tamb(k=273.15 + 19.7)
                                                   annotation (Placement(transformation(extent={{-74,-5},{-54,15}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{30,-12},{50,8}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{30,-12},{50,8}})));
   Modelica.Blocks.Math.Product TestSchedule annotation (Placement(transformation(extent={{-46,-58},{-26,-38}})));
   Modelica.Blocks.Sources.Step drawend(
     height=-1,

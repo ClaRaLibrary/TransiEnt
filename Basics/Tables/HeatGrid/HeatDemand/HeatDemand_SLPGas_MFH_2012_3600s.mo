@@ -1,10 +1,10 @@
-within TransiEnt.Basics.Tables.HeatGrid.HeatDemand;
+﻿within TransiEnt.Basics.Tables.HeatGrid.HeatDemand;
 model HeatDemand_SLPGas_MFH_2012_3600s "SLP Gas for heating and hot-Water energy demand for multi-family houses scaled to 1 J"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,7 +40,7 @@ parameter SI.Energy Q_demand = 1 "Heating and hot Water demand of the multi-fami
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Extends Tools.GenericDataTable, defining MSL CombiTimeTable with data paths and interfaces. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
-<p>calculated&nbsp;by gas load&nbsp;BDEW/WKU/GEODE,&nbsp;normed&nbsp;with&nbsp;annual&nbsp;heat&nbsp;consumption&nbsp;Hamburg</p>
+<p>calculated by gas load BDEW/WKU/GEODE, normed with annual heat consumption Hamburg</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Calculated standard load profile for multy-family houses in Hamburg.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
@@ -56,7 +56,7 @@ parameter SI.Energy Q_demand = 1 "Heating and hot Water demand of the multi-fami
 <p>(calculated profile, if possible, compare to measured profile)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>[1] <span style=\"font-family: sans-serif;\">BDEW Bundesverband der Energie-und Wasserwirtschaft e.V., Verband kommunaler Unternehmen e.V.(VKU), GEODE &ndash; Groupement Europ&eacute;en des entreprises et Organismes de Distribution d&rsquo;&Eacute;nergie (EWIV), </span>&quot;BDEW/VKU/GEODE Leitfaden&quot;, 2013</p>
-<p>[2] VDI-Gesellschaft Energie und Umwelt, &quot;VDI 4655 Referenzlastprofile von Ein- und Mehrfamilienh&auml;usern f&uuml;r den Einsatz von KWK-Anlagen&quot;, 2008</p>
+<p>[2] VDI-Gesellschaft Energie und Umwelt, &quot;VDI 4655 Referenzlastprofile von Ein- und Mehrfamilienhäusern für den Einsatz von KWK-Anlagen&quot;, 2008</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>(no remarks)</p>
 </html>"));

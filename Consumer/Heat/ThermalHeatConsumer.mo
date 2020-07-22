@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Heat;
 model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity and heat losses"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,8 +59,10 @@ model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity a
   parameter Real yMax=1 "Upper limit of output";
   parameter Real yMin=-CTRL_T_room.y_max "Lower limit of output";
 
-  replaceable model PressureLoss =
-      ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticNominalPoint (                   Delta_p_nom=Delta_p_nom, rho_in_nom=rho_in_nom, m_flow_nom=m_flow_nom) constrainedby ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.GenericPressureLoss
+  replaceable model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.Quadratic_EN60534_incompressible (
+        paraOption=2,
+        m_flow_nom=m_flow_nom,
+        Delta_p_nom=Delta_p_nom) constrainedby ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.GenericPressureLoss
                                                                                                     annotation (__Dymola_choicesAllMatching=true);
 
   // _____________________________________________
@@ -91,7 +93,7 @@ model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity a
         origin={-54,-38},
         extent={{10,-10},{-10,10}},
         rotation=90)));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 Valve(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 Valve(
     opening_const_=0.5,
     openingInputIsActive=true,
     opening_leak_=0.005,

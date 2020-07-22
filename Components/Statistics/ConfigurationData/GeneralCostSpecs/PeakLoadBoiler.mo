@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model PeakLoadBoiler "Peak load boiler (gas-fired)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ extends PartialCostSpecs(
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] H. Lund,&nbsp;B. Moeller,&nbsp;B. V. Mathiesen, A.&nbsp;Dyrelund,&nbsp;&quot;The&nbsp;role&nbsp;of&nbsp;district&nbsp;heating&nbsp;in&nbsp;future&nbsp;renewable&nbsp;energy&nbsp;systems&quot;.&nbsp;Energy, 2010,&nbsp;35(3), pp.&nbsp;1381&ndash;1390</p>
+<p>[1] H. Lund, B. Moeller, B. V. Mathiesen, A. Dyrelund, &quot;The role of district heating in future renewable energy systems&quot;. Energy, 2010, 35(3), pp. 1381&ndash;1390</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end PeakLoadBoiler;

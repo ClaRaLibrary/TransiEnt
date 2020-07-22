@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles;
 model Pipe_yellow " Pipe || yellow | yellow"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ model Pipe_yellow " Pipe || yellow | yellow"
   final parameter Real zeta_tot = if quadraticPressureLoss then Delta_p_nom/m_flow_nom^2 else 1.0*Delta_p_nom/m_flow_nom "Linear/quadratic pressure loss coefficient";
   final parameter SI.PressureDifference Delta_p_tot = if quadraticPressureLoss then zeta_tot*m_flow^2 else zeta_tot*m_flow "Pressure drop by quadratic/linear coefficient";
   final parameter SI.Pressure p_out = p_in - Delta_p_tot - Delta_p_grav "Outlet pressure";
-  final parameter SI.Pressure Delta_p_grav=TILMedia.VLEFluidFunctions.density_phxi(medium, p_in, h_in, xi_in) * Modelica.Constants.g_n * (z_out - z_in) "Geostatic pressure difference";
+  final parameter SI.Pressure Delta_p_grav=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(medium, p_in, h_in, xi_in) * Modelica.Constants.g_n * (z_out - z_in) "Geostatic pressure difference";
 
 public
   TransiEnt.Grid.Gas.StaticCycles.Base.FluidSignal_yellow inlet(Medium=medium, m_flow=m_flow) annotation (Placement(transformation(

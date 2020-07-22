@@ -1,10 +1,10 @@
-within TransiEnt.Grid.Heat.HeatGridAnalysis;
+﻿within TransiEnt.Grid.Heat.HeatGridAnalysis;
 model OpenLoop_MassFlow_and_Pressure_Controlled
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -97,7 +97,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
     m_flow_nom=1160,
     Delta_p_nom=(19.5 - 6.7)*1e5,
     p_nom=ones(supplyPipe.N_cv)*19.5*1e5,
-    h_nom=ones(supplyPipe.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(supplyPipe.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipe.p_nom[1],
         273.15 + 100,
@@ -106,7 +106,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
     p_start=supplyPipe.p_nom,
     initOption=0) annotation (Placement(transformation(extent={{-50,128},{-26,136}})));
 
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 supplyValve1(redeclare model PressureLoss =
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 supplyValve1(redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      Delta_p_nom=0.5e5, m_flow_nom(displayUnit="kg/s") = 1160))
                     annotation (Placement(transformation(
         extent={{-9,-5},{9,5}},
@@ -227,7 +227,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
     annotation (Placement(transformation(extent={{-108,-50},{-76,-32}})));
   ClaRa.Visualisation.Quadruple quadruple8
     annotation (Placement(transformation(extent={{-18,-92},{14,-74}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 returnValve2(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 returnValve2(
       redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (
          Kvs=5000)) annotation (Placement(transformation(
@@ -297,7 +297,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
         origin={122,-12})));
   ClaRa.Visualisation.Quadruple quadruple10
     annotation (Placement(transformation(extent={{100,-98},{132,-80}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 returnValve1(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 returnValve1(
       redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV (
          Kvs=5000)) annotation (Placement(transformation(
@@ -368,7 +368,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
         rotation=0,
         origin={156,98})));
 
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveHeatingCondenser(redeclare model PressureLoss =
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveHeatingCondenser(redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      m_flow_nom=1160, Delta_p_nom=0.5e5))
                     annotation (Placement(transformation(
         extent={{-9,5},{9,-5}},
@@ -596,8 +596,8 @@ Control"),
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(does not apply)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p>[1] BEECKEN, J., RIDDER, M., SCHAPER, H., SCH&Ouml;TTKER, P., MICUS, W., ROGALLA, B.-U. and FEUERRIEGEL, S. <i>Bessere Ausnutzung von Fernw&auml;rmeanlagen, Teilprojekt Hannover-Hamburg: Analyse des Regelverhaltens von Fernw&auml;rmenetzen</i> [online]. Hamburg&nbsp;: Hamburgische Electricit&auml;ts-Werke AG, 2000    [viewed&nbsp;20&nbsp;March&nbsp;2017]. Available from: https://www.tib.eu/de/suchen/download///?tx_tibsearch_search&percnt;5Bdocid&percnt;5D=TIBKAT&percnt;3A32977557X</p>
-<p>[2] G&Auml;TH, J. <i>Dynamische Modellierung eines Fernw&auml;rmestranges unter Ber&uuml;cksichtigung der hydraulischen Betriebssicherheit</i>. TUHH, 2015.</p>
+<p>[1] BEECKEN, J., RIDDER, M., SCHAPER, H., SCHöTTKER, P., MICUS, W., ROGALLA, B.-U. and FEUERRIEGEL, S. <i>Bessere Ausnutzung von Fernwärmeanlagen, Teilprojekt Hannover-Hamburg: Analyse des Regelverhaltens von Fernwärmenetzen</i> [online]. Hamburg : Hamburgische Electricitäts-Werke AG, 2000    [viewed 20 March 2017]. Available from: https://www.tib.eu/de/suchen/download///?tx_tibsearch_search&percnt;5Bdocid&percnt;5D=TIBKAT&percnt;3A32977557X</p>
+<p>[2] GäTH, J. <i>Dynamische Modellierung eines Fernwärmestranges unter Berücksichtigung der hydraulischen Betriebssicherheit</i>. TUHH, 2015.</p>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p>Ricardo Peniche, 2017</p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Jakobus Gaeth, 2015</span></p>

@@ -1,10 +1,10 @@
 within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model DistrictHeatingGrid "Cost model for a distric heating grid"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ model DistrictHeatingGrid "Cost model for a distric heating grid"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] MVV&nbsp;Energie&nbsp;AG,&nbsp;&quot;Waermetransport&nbsp;im&nbsp;Wettbewerb&nbsp;zu&nbsp;dislozierter&nbsp;Waeeerzeugung&quot;,&nbsp;2013</p>
+<p>[1] MVV Energie AG, &quot;Waermetransport im Wettbewerb zu dislozierter Waeeerzeugung&quot;, 2013</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end DistrictHeatingGrid;

@@ -1,10 +1,10 @@
-within TransiEnt.Consumer.Heat.SpaceHeating.Characteristics;
+﻿within TransiEnt.Consumer.Heat.SpaceHeating.Characteristics;
 record HouseType100 "House type 100 characteristics according to EnEV 2007"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -46,7 +46,7 @@ record HouseType100 "House type 100 characteristics according to EnEV 2007"
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] Bundesgesetzblatt, &quot;V<span style=\"font-family: sans-serif;\">erordnung &uuml;ber energiesparenden W&auml;rmeschutz und energiesparende Anlagentechnik bei Geb&auml;uden(Energieeinsparverordnung</span><span style=\"font-family: monospace;\">&ndash;</span><span style=\"font-family: sans-serif;\">EnEV)&quot;, Bonn, 2007</span></p>
+<p>[1] Bundesgesetzblatt, &quot;V<span style=\"font-family: sans-serif;\">erordnung über energiesparenden Wärmeschutz und energiesparende Anlagentechnik bei Gebäuden(Energieeinsparverordnung</span><span style=\"font-family: monospace;\">&ndash;</span><span style=\"font-family: sans-serif;\">EnEV)&quot;, Bonn, 2007</span></p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end HouseType100;

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics;
 record Generic_PQ_Characteristics "record for generic PQ characteristics (empty)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -21,10 +21,11 @@ record Generic_PQ_Characteristics "record for generic PQ characteristics (empty)
 //________________________________________________________________________________//
 
   parameter Real PQboundaries[:,3] "Limits of electric power for given thermal power output";
-  parameter Real PQ_HeatInput_Matrix[:,10] "Heat input demand for given thermal and electric power setpoint";
+  parameter Real PQ_HeatInput_Matrix[:,:] "Heat input demand for given thermal and electric power setpoint";
 
   parameter Real k_Q_flow = 1 "Allows to scale Q_flow (= 1/Q_flow_n for generic pq diagrams)";
   parameter Real k_P_el = 1 "Allows to scale P_el (= P_el_n for use of generic pq diagrams)";
+  parameter Modelica.SIunits.HeatFlowRate Q_nom_condenser=max(PQboundaries[:,1]) "define condenser nominal power separately without scaling PQ-characteristics";
 
   parameter Modelica.SIunits.Efficiency eta_total_best=1 "Total efficiency in the best operating point";
 

@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model TestDetailedSteamPowerPlant
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,7 +36,7 @@ model TestDetailedSteamPowerPlant
     height=0.8*800e6)
     annotation (Placement(transformation(extent={{-100,-6},{-80,14}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{56,36},{76,56}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{56,36},{76,56}})));
 
 function plotResult
 
@@ -93,7 +93,10 @@ equation
   connect(add1.y, SteamPowerPlant1.P_set) annotation (Line(points={{-45,24},{-24.38,24},{-24.38,20.52}}, color={0,0,127}));
   connect(add2.y, SteamPowerPlant2.P_set) annotation (Line(points={{5,-70},{22,-70},{22,-14},{31.8,-14},{31.8,-21.2}}, color={0,0,127}));
   annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), experiment(StopTime=50000),
+                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), experiment(
+      StopTime=50000,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Esdirk23a"),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model FeedInStorageTWVController "Controller to control the three way valve after the electrolyzer to grid and storage"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,8 +40,12 @@ model FeedInStorageTWVController "Controller to control the three way valve afte
   //             Visible Parameters
   // _____________________________________________
   parameter Boolean StoreAllHydrogen=false "All Hydrogen is stored before beeing fed in";
+  parameter SI.Pressure p_minLow=20e5 "Lower limit of the target pressure in storage" annotation (Dialog(tab="General",  group="Controller"));
   parameter SI.Pressure p_maxLow=29e5 "Lower limit of the target pressure in storage" annotation (Dialog(tab="General",  group="Controller"));
   parameter SI.Pressure p_maxHigh=30e5 "Upper limit of the target pressure in storage" annotation (Dialog(tab="General",  group="Controller"));
+  parameter SI.Pressure p_minHigh=60e5 "if valve closed and p>p_high, open valve" annotation (Dialog(tab="General", group="Controller"));
+  parameter SI.Pressure p_minLow_constantDemand=50e5 "storage can be emptied via 'm_flow_hydrogenDemand_constant' up to 'p_minLow_constantDemand'" annotation (Dialog(tab="General",  group="Controller"));
+  parameter SI.MassFlowRate m_flow_hydrogenDemand_constant=0 "constant hydrogen demand if hydrogen is available" annotation (Dialog(tab="General",  group="Controller"));
   // _____________________________________________
   //
   //             Variable Declarations
@@ -83,6 +87,12 @@ model FeedInStorageTWVController "Controller to control the three way valve afte
         origin={0,111}), iconTransformation(extent={{10,-10},{-10,10}},
         rotation=90,
         origin={0,110})));
+  Modelica.Blocks.Sources.RealExpression realExpression1
+                                                        annotation (Placement(transformation(extent={{48,40},{58,52}})));
+  Modelica.Blocks.Logical.Hysteresis hysteresis1(uLow=-p_minHigh, uHigh=-p_minLow)        annotation (Placement(transformation(extent={{48,54},{58,64}})));
+  Modelica.Blocks.Logical.Switch switch1 annotation (Placement(transformation(extent={{68,54},{78,64}})));
+  Modelica.Blocks.Sources.RealExpression realExpression2(y=1)   annotation (Placement(transformation(extent={{48,66},{58,78}})));
+  Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{36,56},{42,62}})));
 equation
   // _____________________________________________
   //
@@ -90,7 +100,13 @@ equation
   // _____________________________________________
 
   m_flow_ely_min = max(eps,m_flow_ely); //always greater than zero => no division by zero in next equation
-  splitRatio= if StoreAllHydrogen==true then 1 else  min(1,max(0,(m_flow_ely_min-(m_flow_feedIn))/m_flow_ely_min));
+  if StoreAllHydrogen==true then
+    splitRatio= 1;
+  //else
+  //  splitRatio=min(1,max(0,(m_flow_ely_min-(m_flow_feedIn))/m_flow_ely_min));
+  else
+    splitRatio=min(1,max(0,(m_flow_ely_min-(m_flow_feedIn))/m_flow_ely_min))+min(1,max(0,switch1.y));
+  end if;
 
   // _____________________________________________
   //
@@ -98,8 +114,12 @@ equation
   // _____________________________________________
 
   connect(p,hysteresis. u) annotation (Line(points={{0,111},{0,111},{0,82},{8.88178e-016,82}}, color={0,0,127}));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics,
+  connect(hysteresis1.y, switch1.u2) annotation (Line(points={{58.5,59},{67,59}}, color={255,0,255}));
+  connect(realExpression1.y, switch1.u3) annotation (Line(points={{58.5,46},{64,46},{64,55},{67,55}}, color={0,0,127}));
+  connect(realExpression2.y,switch1. u1) annotation (Line(points={{58.5,72},{64,72},{64,63},{67,63}},       color={0,0,127}));
+  connect(hysteresis1.u, gain.y) annotation (Line(points={{47,59},{42.3,59}}, color={0,0,127}));
+  connect(p, gain.u) annotation (Line(points={{0,111},{0,90},{26,90},{26,59},{35.4,59}}, color={0,0,127}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics,
                                                                                                          coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
   Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

@@ -2,10 +2,10 @@ within TransiEnt.Basics.Functions.GasProperties;
 function getMolarMasses_realGas "Function to calculate the molar masses of a VLE medium's components with TILMedia"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ algorithm
 
   //get molar masses of fuels's components
   for i in 0:nc-1 loop
-     M_i[i+1] :=TILMedia.VLEFluidFunctions.molarMass_n(realGasType, i);
+     M_i[i+1] :=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.molarMass_n(realGasType, i);
   end for;
 
   annotation (Documentation(info="<html>

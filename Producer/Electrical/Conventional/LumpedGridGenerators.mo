@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional;
 model LumpedGridGenerators "Lumped model of a number of generators for the use in a non-detailed electric grid model (including primary and secondary control models)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -190,7 +190,7 @@ equation
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Lumped&nbsp;model&nbsp;of&nbsp;a&nbsp;number&nbsp;of&nbsp;generators&nbsp;for&nbsp;the&nbsp;use&nbsp;in&nbsp;a&nbsp;non-detailed&nbsp;electric&nbsp;grid&nbsp;model&nbsp;(including&nbsp;primary&nbsp;and&nbsp;secondary&nbsp;control&nbsp;models).</p>
+<p>Lumped model of a number of generators for the use in a non-detailed electric grid model (including primary and secondary control models).</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The model is a composition of a turbine model, an inertia model, a generator model with excitation system model and a primary controller.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">See base classes TransiEnt.Producer.Electrical.Base.PartialDispatchablePowerPlant and  for more information TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider</span></p>
@@ -199,8 +199,8 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">4. Interfaces</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for electric power in [W] (setpoint for electric power)</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">P_SB_set: input for electric power in [W] (secondary balancing setpoint)</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_set: input for electric power in [W] </span>&quot;Set&nbsp;point&nbsp;tie&nbsp;line&nbsp;power&quot;</p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_is: input for electric power in [W] </span>&quot;Actual&nbsp;tie&nbsp;line&nbsp;power&quot;</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_set: input for electric power in [W] </span>&quot;Set point tie line power&quot;</p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">P_tie_is: input for electric power in [W] </span>&quot;Actual tie line power&quot;</p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">epp: active power port (choice of power port)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>

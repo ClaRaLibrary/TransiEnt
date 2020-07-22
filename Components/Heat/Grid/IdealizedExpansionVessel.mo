@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat.Grid;
 model IdealizedExpansionVessel "Expansion vessel with constant pressure and variable temperature"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,7 +54,10 @@ model IdealizedExpansionVessel "Expansion vessel with constant pressure and vari
   //
   //           Instances of other Classes
   // _____________________________________________
-   TILMedia.VLEFluid_ph vleFluid(p=waterPort.p, h=inStream(waterPort.h_outflow),xi=inStream(waterPort.xi_outflow),
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluid(
+    p=waterPort.p,
+    h=inStream(waterPort.h_outflow),
+    xi=inStream(waterPort.xi_outflow),
     vleFluidType=Medium);
 
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_pTxi sink(variable_T=true, redeclare ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi boundaryConditions(p_const=p)) annotation (Placement(transformation(

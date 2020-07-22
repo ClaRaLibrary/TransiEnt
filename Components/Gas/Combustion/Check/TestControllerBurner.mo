@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Combustion.Check;
 model TestControllerBurner "Model for testing a combustion with a controlled mass flow rate of the air and the fuel"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,6 +22,7 @@ model TestControllerBurner "Model for testing a combustion with a controlled mas
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_SG_O2_var vle_ng7_sg_o2;
+
 
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundaryRealGas_Txim_flow1(
     variable_m_flow=true,
@@ -69,7 +70,7 @@ model TestControllerBurner "Model for testing a combustion with a controlled mas
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-50,32})));
-  TransiEnt.Components.Gas.Combustion.Burner_L1 burner(Delta_p=10000) annotation (Placement(transformation(extent={{-10,-20},{10,0}})));
+  TransiEnt.Components.Gas.Combustion.Burner_L1 burner(Delta_p=10000, useFluidModelsForSummary=false) annotation (Placement(transformation(extent={{-10,-20},{10,0}})));
   Modelica.Thermal.HeatTransfer.Sources.FixedHeatFlow fixedHeatFlow(Q_flow=-5e7) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
@@ -89,6 +90,7 @@ model TestControllerBurner "Model for testing a combustion with a controlled mas
         extent={{-4,-4},{4,4}},
         rotation=270,
         origin={-144,56})));
+
 equation
   connect(ramp1.y,boundaryRealGas_Txim_flow1. T) annotation (Line(points={{-123,2},{-123,2},{-122,2},{-122,-10},{-116,-10}},
                                                                                             color={0,0,127}));

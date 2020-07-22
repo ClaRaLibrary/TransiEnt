@@ -1,10 +1,10 @@
-within TransiEnt.Basics.Tables.Ambient;
+﻿within TransiEnt.Basics.Tables.Ambient;
 model Temperature_Hamburg_900s_2012 "Hamburg 2012, 15 min resolution"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,9 +59,9 @@ equation
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] Lange, Ingo. KlimaCampus - Wettermast Hamburg. Universit&auml;t Hamburg - Meteorologisches Institut http://wettermast-hamburg.zmaw.de</p>
+<p>[1] Lange, Ingo. KlimaCampus - Wettermast Hamburg. Universität Hamburg - Meteorologisches Institut http://wettermast-hamburg.zmaw.de</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Created by Max Mustermann (mustermann@mustermail.de), Apr 2014</p>
+<p>Model created by Ricardo Peniche (peniche@tuhh.de), Mar 2014</p>
 <p><br><img src=\"modelica://TransiEnt/Images/TemperatureHH_900s_2012.png\"/></p>
 </html>"));
 end Temperature_Hamburg_900s_2012;

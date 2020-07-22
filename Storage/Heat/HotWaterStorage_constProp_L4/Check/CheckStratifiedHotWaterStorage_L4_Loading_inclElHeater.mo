@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Check;
 model CheckStratifiedHotWaterStorage_L4_Loading_inclElHeater "Validation of one dimensional hot water storage with CHP loading scenario"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -102,7 +102,7 @@ model CheckStratifiedHotWaterStorage_L4_Loading_inclElHeater "Validation of one 
   Modelica.Blocks.Sources.RealExpression T_60(y=hotWaterStorage.controlVolume[60].T - 273.15) annotation (Placement(transformation(extent={{-96,24},{-76,44}})));
   Modelica.Blocks.Sources.RealExpression T_80(y=hotWaterStorage.controlVolume[80].T - 273.15) annotation (Placement(transformation(extent={{-56,26},{-36,46}})));
   Modelica.Blocks.Sources.RealExpression T_100(y=hotWaterStorage.controlVolume[100].T - 273.15) annotation (Placement(transformation(extent={{-16,26},{4,46}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{12,-92},{32,-72}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{12,-92},{32,-72}})));
   Modelica.Blocks.Sources.Step step(height=-hotWaterStorage.Q_flow_n_elHeater[1], startTime=7000) annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
 equation
 //_____________________________________________________________________________

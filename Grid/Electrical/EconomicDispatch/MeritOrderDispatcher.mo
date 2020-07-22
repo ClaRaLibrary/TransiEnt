@@ -2,10 +2,10 @@ within TransiEnt.Grid.Electrical.EconomicDispatch;
 model MeritOrderDispatcher "Forward-looking control, min, max and gradient constraints"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -286,8 +286,8 @@ equation
 <p>u[ntime]: RealInput</p>
 <p>y[nout]: RealOutput</p>
 <p>z[nout]: BooleanInput</p>
-<p>P_R_pos[nout]: input for electric power in [W] &quot;Upwards&nbsp;reserve&nbsp;constraint,&nbsp;reduces&nbsp;maximum&nbsp;production&nbsp;(values&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;positive)&quot;</p>
-<p>P_R_neg[nout]: input for electric power in [W] &quot;Downwards&nbsp;reserve&nbsp;constraint,&nbsp;increases&nbsp;minimum&nbsp;production&nbsp;(values&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;positive)&quot;</p>
+<p>P_R_pos[nout]: input for electric power in [W] &quot;Upwards reserve constraint, reduces maximum production (values are supposed to be positive)&quot;</p>
+<p>P_R_neg[nout]: input for electric power in [W] &quot;Downwards reserve constraint, increases minimum production (values are supposed to be positive)&quot;</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

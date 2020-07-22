@@ -1,10 +1,10 @@
 within TransiEnt.Components.Heat.Base;
 partial model Pump_Base "Base class for pumps"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -76,11 +76,11 @@ protected
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph fluidIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidIn(
     vleFluidType=medium,
     p=fluidPortIn.p,
     h=homotopy(actualStream(fluidPortIn.h_outflow), inStream(fluidPortIn.h_outflow))) annotation (Placement(transformation(extent={{-88,-12},{-68,8}})));
-  TILMedia.VLEFluid_ph fluidOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidOut(
     vleFluidType=medium,
     p=fluidPortOut.p,
     h=homotopy(actualStream(fluidPortOut.h_outflow), fluidPortOut.h_outflow)) annotation (Placement(transformation(extent={{66,-10},{86,10}})));

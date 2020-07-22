@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.VolumesValvesFittings.Check;
 model CheckPipes
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -82,7 +82,7 @@ model CheckPipes
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={88,-22})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe(
+ PipeFlow_L4_Simple pipe(
     diameter_i=0.366,
     Delta_p_nom(displayUnit="bar") = 534880,
     length=30650,
@@ -102,7 +102,7 @@ model CheckPipes
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-42,-22})));
-  PipeFlow_L4_Simple_varXi pipe1(
+  PipeFlow_L4_Simple pipe1(
     diameter_i=0.366,
     Delta_p_nom(displayUnit="bar") = 534880,
     length=30650,
@@ -119,8 +119,7 @@ model CheckPipes
         pipe1.N_cv),
     N_cv=3,
     m_flow_start=ones(pipe1.N_cv + 1)*88.949/3/2,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.VLE_PL.QuadraticNominalPoint_L4)
-            annotation (Placement(transformation(
+    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.VLE_PL.QuadraticNominalPoint_L4) annotation (Placement(transformation(
         extent={{-14,-5},{14,5}},
         rotation=0,
         origin={22,-52})));
@@ -134,7 +133,8 @@ model CheckPipes
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={88,-52})));
-  PipeFlow_L4_Simple_constXi pipe2(
+  PipeFlow_L4_Simple pipe2(
+    constantComposition=true,
     diameter_i=0.366,
     Delta_p_nom(displayUnit="bar") = 534880,
     length=30650,
@@ -172,6 +172,67 @@ model CheckPipes
     period=240,
     stepsize=0.011)
                   annotation (Placement(transformation(extent={{-102,-4},{-82,16}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth
+                     pipe3(
+    diameter_i=0.366,
+    Delta_p_nom(displayUnit="bar") = 534880,
+    length=30650,
+    m_flow_nom=88.949/3,
+    N_tubes=1,
+    frictionAtOutlet=true,
+    p_nom=ones(pipe1.N_cv)*17e5,
+    h_nom=ones(pipe1.N_cv)*(-1849),
+    h_start=ones(pipe1.N_cv)*(-1849),
+    frictionAtInlet=false,
+    p_start=linspace(
+        17,
+        14.5,
+        pipe1.N_cv),
+    N_cv=3,
+    m_flow_start=ones(pipe1.N_cv + 1)*88.949/3/2,
+    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.VLE_PL.QuadraticNominalPoint_L4) annotation (Placement(transformation(
+        extent={{-14,-5},{14,5}},
+        rotation=0,
+        origin={22,-112})));
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source_mFlow3(
+    m_flow_const=-88.949/2/3,
+    variable_m_flow=true,
+    variable_xi=true)                                                                                                          annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={-42,-112})));
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink_p3(p_const=1450000) annotation (Placement(transformation(
+        extent={{-10,10},{10,-10}},
+        rotation=180,
+        origin={88,-112})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth
+                     pipe4(
+    constantComposition=true,
+    diameter_i=0.366,
+    Delta_p_nom(displayUnit="bar") = 534880,
+    length=30650,
+    N_tubes=3,
+    m_flow_nom=88.949/3,
+    frictionAtOutlet=true,
+    frictionAtInlet=false,
+    h_start=ones(pipe2.N_cv)*(-1849),
+    p_nom=ones(pipe2.N_cv)*17e5,
+    p_start=linspace(
+        17,
+        14.5,
+        pipe2.N_cv),
+    h_nom=ones(pipe2.N_cv)*(-1849)) annotation (Placement(transformation(
+        extent={{-14,-5},{14,5}},
+        rotation=0,
+        origin={22,-142})));
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source_mFlow4(variable_m_flow=false, m_flow_const=-88.949/2/3) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={-42,-142})));
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink_p4(p_const=1450000) annotation (Placement(transformation(
+        extent={{-10,10},{10,-10}},
+        rotation=180,
+        origin={88,-142})));
 equation
   connect(boundaryVLE_hxim_flow.steam_a, pipeFlow_L2_Simple.inlet) annotation (Line(
       points={{-34,52},{8,52}},
@@ -220,10 +281,30 @@ equation
   connect(sine.y, source_mFlow1.m_flow) annotation (Line(points={{-81,-52},{-76,-52},{-76,-46},{-54,-46}}, color={0,0,127}));
   connect(realGasCompositionByWtFractions_stepVariation.xi, boundary_mFlow.xi) annotation (Line(points={{-82,6},{-72,6},{-56,6}}, color={0,0,127}));
   connect(realGasCompositionByWtFractions_stepVariation.xi, source_mFlow1.xi) annotation (Line(points={{-82,6},{-72,6},{-72,-58},{-54,-58}}, color={0,0,127}));
+  connect(source_mFlow3.gasPort,pipe3. gasPortIn) annotation (Line(
+      points={{-32,-112},{8,-112}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(pipe3.gasPortOut,sink_p3. gasPort) annotation (Line(
+      points={{36,-112},{78,-112}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(source_mFlow4.gasPort,pipe4. gasPortIn) annotation (Line(
+      points={{-32,-142},{8,-142}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(pipe4.gasPortOut,sink_p4. gasPort) annotation (Line(
+      points={{36,-142},{78,-142}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(sine.y,source_mFlow3. m_flow) annotation (Line(points={{-81,-52},{-76,-52},{-76,-106},{-54,-106}},
+                                                                                                           color={0,0,127}));
+  connect(realGasCompositionByWtFractions_stepVariation.xi,source_mFlow3. xi) annotation (Line(points={{-82,6},{-72,6},{-72,-118},{-54,-118}},
+                                                                                                                                             color={0,0,127}));
   annotation (Icon(graphics,
-                   coordinateSystem(preserveAspectRatio=false, extent={{-120,-100},{120,100}})),
+                   coordinateSystem(preserveAspectRatio=false, extent={{-120,-160},{120,100}})),
                                                                  Diagram(coordinateSystem(preserveAspectRatio=false,
-          extent={{-120,-100},{120,100}}), graphics={Text(
+          extent={{-120,-160},{120,100}}), graphics={Text(
           extent={{-18,94},{76,72}},
           lineColor={28,108,200},
           horizontalAlignment=TextAlignment.Left,

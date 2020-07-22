@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.HeatExchanger;
 model HEXOneRealGasOuterQflowIdeal_L1 "Ideal heat exchanger for one real gas with heat port for heat flow"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,6 +45,7 @@ model HEXOneRealGasOuterQflowIdeal_L1 "Ideal heat exchanger for one real gas wit
 
   parameter SI.Temperature T_heat=293.15 "Average temperature of heat transfer" annotation(Dialog(group="Heat Transfer"));
 
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
   // _____________________________________________
   //
   //                 Outer Models
@@ -67,40 +68,40 @@ model HEXOneRealGasOuterQflowIdeal_L1 "Ideal heat exchanger for one real gas wit
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium,
     p=gasPortOut.p,
     h=gasPortOut.h_outflow,
     xi=gasPortOut.xi_outflow,
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{60,-12},{80,8}})));
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{60,-12},{80,8}})));
 
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=medium,
     p=gasPortIn.p,
     h=inStream(gasPortIn.h_outflow),
     xi=inStream(gasPortIn.xi_outflow),
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-80,-12},{-60,8}})));
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-80,-12},{-60,8}})));
 public
   inner Summary summary(
     gasPortIn(
       mediumModel=medium,
-      xi=gasIn.xi,
+      xi=inStream(gasPortIn.xi_outflow),
       x=gasIn.x,
       m_flow=gasPortIn.m_flow,
       T=gasIn.T,
       p=gasPortIn.p,
-      h=gasIn.h,
+      h=inStream(gasPortIn.h_outflow),
       rho=gasIn.d),
     gasPortOut(
       mediumModel=medium,
-      xi=gasOut.xi,
+      xi=gasPortOut.xi_outflow,
       x=gasOut.x,
       m_flow=-gasPortOut.m_flow,
       T=gasOut.T,
       p=gasPortOut.p,
-      h=gasOut.h,
+      h=gasPortOut.h_outflow,
       rho=gasOut.d),
-    heat(Q_flow=heat.Q_flow, T=heat.T)) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+    heat(Q_flow=heat.Q_flow, T=heat.T)) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
   // _____________________________________________
   //

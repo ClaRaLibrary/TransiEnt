@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat.Grid;
 model PressureDifferenceControl "ClaRa pump regulated by pressure differnce in heat grid "
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -74,11 +74,8 @@ model PressureDifferenceControl "ClaRa pump regulated by pressure differnce in h
   ClaRa.Components.Sensors.SensorVLE_L1_p returnPressureSensor(medium=Medium) annotation (Placement(transformation(extent={{104,-92},{84,-72}})));
   ClaRa.Components.Sensors.SensorVLE_L1_p supplyPressureSensor1(medium=Medium) annotation (Placement(transformation(extent={{104,-50},{84,-70}})));
 
-  Modelica.Blocks.Sources.Constant p_soll_Consumer(k=Delta_p_set)
-                                                            annotation (Placement(transformation(
-        extent={{6,-6},{-6,6}},
-        rotation=90,
-        origin={-8,72})));
+  Modelica.Blocks.Sources.Constant p_set_Consumer(k=Delta_p_set)
+                                                            annotation (Placement(transformation(extent={{6,-6},{-6,6}}, rotation=90)));
   Modelica.Blocks.Math.Feedback feedbackLoop
     annotation (Placement(transformation(extent={{-6,-6},{6,6}},
         rotation=270,
@@ -154,7 +151,7 @@ equation
       color={0,131,169},
       thickness=0.5,
       smooth=Smooth.None));
-  connect(feedbackLoop.u1, p_soll_Consumer.y) annotation (Line(points={{-8,54.8},{-8,65.4}},           color={0,0,127}));
+  connect(feedbackLoop.u1,p_set_Consumer.y)  annotation (Line(points={{-8,54.8},{-8,24},{-8,-6.6},{0,-6.6}}, color={0,0,127}));
   connect(gain.y, feedbackLoop.u2) annotation (Line(points={{-49.2,50},{-40,50},{-12.8,50}},        color={0,0,127}));
   connect(gain.u, Delta_p_measured) annotation (Line(points={{-67.6,50},{-108,50}},        color={0,0,127}));
   connect(feedbackLoop.y, pascal2Bar.u) annotation (Line(points={{-8,44.6},{-8,44.6},{-8,29.6}},

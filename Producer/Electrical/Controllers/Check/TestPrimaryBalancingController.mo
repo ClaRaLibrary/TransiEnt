@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Controllers.Check;
 model TestPrimaryBalancingController "Example how to calculate the demand of primary balancing power"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,8 @@ model TestPrimaryBalancingController "Example how to calculate the demand of pri
     T_grid=7.5) annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   inner TransiEnt.ModelStatistics                    modelStatistics
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
-  PrimaryBalancingController PBC(integratePowerNeg=false, integratePowerPos=false)
+  PrimaryBalancingController PBC(
+    use_SlewRateLimiter=true,    integratePowerNeg=false, integratePowerPos=false)
                                  annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Modelica.Blocks.Sources.TimeTable DiscontiniousTestSchedule(table=[0,50; 3600,50; 43000,50.2; 53000,50.2; 100000,49.8; 110000,49.8])
     annotation (Placement(transformation(extent={{-72,-10},{-52,10}})));

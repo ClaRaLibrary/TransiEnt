@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Combustion;
 model Burner_L1 "Simple model of a burner with vle_ng7_sg_o2 gas"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -27,7 +27,7 @@ model Burner_L1 "Simple model of a burner with vle_ng7_sg_o2 gas"
   // _____________________________________________
 
   import SI = Modelica.SIunits;
-  import TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi;
+  import TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi;
   extends TransiEnt.Basics.Icons.Model;
 
   // _____________________________________________
@@ -55,6 +55,7 @@ model Burner_L1 "Simple model of a burner with vle_ng7_sg_o2 gas"
   parameter SI.Temperature T_out_max=1487+273.15 "Maximum temperature (for medium calculation)" annotation(Dialog(group="Numerics"));
   parameter SI.Pressure p_out_minmax=1e5 "Pressure for minimum and maximum specific enthalpy calculation" annotation(Dialog(group="Numerics"));
   parameter SI.MassFraction xi_out_minmax[medium.nc-1]={0,0,0,0,0.727119,0.144291,0.108613,0,0.0200132} "Composition for minimum and maximum specific enthalpy calculation" annotation(Dialog(group="Numerics"));
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
 
   // _____________________________________________
   //
@@ -78,39 +79,44 @@ model Burner_L1 "Simple model of a burner with vle_ng7_sg_o2 gas"
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=medium,
     p=gasPortIn.p,
-    h=actualStream(gasPortIn.h_outflow),
-    xi=actualStream(gasPortIn.xi_outflow),
-    deactivateTwoPhaseRegion=true) annotation(Placement(transformation(extent={{-90,-12},{-70,8}})));
-  TILMedia.VLEFluid_ph gasOut(
+    h=noEvent(actualStream(gasPortIn.h_outflow)),
+    xi=noEvent(actualStream(gasPortIn.xi_outflow)),
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-90,-12},{-70,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium,
     p=gasPortOut.p,
-    h=actualStream(gasPortOut.h_outflow),
-    xi=actualStream(gasPortOut.xi_outflow),
-    deactivateTwoPhaseRegion=true) annotation(Placement(transformation(extent={{70,-12},{90,8}})));
+    h=noEvent(actualStream(gasPortOut.h_outflow)),
+    xi=noEvent(actualStream(gasPortOut.xi_outflow)),
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{70,-12},{90,8}})));
 public
-  inner Summary summary(outline(
-    Q_flow = heat.Q_flow,
-    T_heat = heat.T,
-    Delta_p = Delta_p),
-    gasPortIn(mediumModel = medium,
-          xi = gasIn.xi,
-          x = gasIn.x,
-          m_flow = gasPortIn.m_flow,
-          T = gasIn.T,
-          p = gasPortIn.p,
-          h = gasIn.h,
-          rho = gasIn.d),
-    gasPortOut(mediumModel=medium,
-          xi = gasOut.xi,
-          x = gasOut.x,
-          m_flow = -gasPortOut.m_flow,
-          T = gasOut.T,
-          p = gasPortOut.p,
-          h = gasOut.h,
-          rho = gasOut.d))   annotation (Placement(transformation(extent={{-100,-114},{-80,-94}})));
+  inner Summary summary(
+    outline(
+      Q_flow=heat.Q_flow,
+      T_heat=heat.T,
+      Delta_p=Delta_p),
+    gasPortIn(
+      mediumModel=medium,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortIn.xi_outflow)),
+      x=gasIn.x,
+      m_flow=gasPortIn.m_flow,
+      T=gasIn.T,
+      p=gasPortIn.p,
+      h=noEvent(actualStream(gasPortIn.h_outflow)),
+      rho=gasIn.d),
+    gasPortOut(
+      mediumModel=medium,
+      useFluidModelsForSummary=useFluidModelsForSummary,
+      xi=noEvent(actualStream(gasPortOut.xi_outflow)),
+      x=gasOut.x,
+      m_flow=-gasPortOut.m_flow,
+      T=gasOut.T,
+      p=gasPortOut.p,
+      h=noEvent(actualStream(gasPortOut.h_outflow)),
+      rho=gasOut.d)) annotation (Placement(transformation(extent={{-100,-114},{-80,-94}})));
 
   // _____________________________________________
   //

@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Electrical.Controllers;
+﻿within TransiEnt.Producer.Electrical.Controllers;
 model PrimaryBalancingController "Primary balancing controller model based on Weissbach (2009)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -67,6 +67,7 @@ model PrimaryBalancingController "Primary balancing controller model based on We
   // _____________________________________________
 
   final parameter SI.Power P_PBP_max=maxValuePrCtrl*k_part*P_n;
+   parameter Boolean use_SlewRateLimiter=true "True if Gradient of Primary Balancing Power shall be limited";
   parameter Boolean integratePowerNeg=false "True if negative power shall be integrated";
   parameter Boolean integratePowerPos=false "True if positive power shall be integrated";
 protected
@@ -88,7 +89,7 @@ public
     Td=Td_GradientLimiter,
     useThresh=useThresh,
     thres=thres,
-    y_start=0) annotation (Placement(transformation(extent={{41,-10},{61,10}})));
+    y_start=0) if use_SlewRateLimiter annotation (Placement(transformation(extent={{41,-10},{61,10}})));
   Modelica.Blocks.Math.Gain P_PBP_ideal_star(k=1/droop) annotation (Placement(transformation(extent={{-20,-9},{-2,10}})));
   Modelica.Blocks.Math.Gain P_PBP(k=k_part*P_n) annotation (Placement(transformation(extent={{69,-9},{88,9}})));
 
@@ -130,20 +131,24 @@ equation
   //
   //               Connect Statements
   // _____________________________________________
+  if use_SlewRateLimiter then
+ connect(P_PBP_limit_star.y, P_PBP_star.u) annotation (Line(points={{27,0},{39,0}}, color={0,0,127}));
 
-  connect(P_PBP.y, P_PBP_set) annotation (Line(
-      points={{88.95,0},{106,0}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(P_PBP_star.y, P_PBP.u) annotation (Line(
       points={{62,0},{67.1,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  else
+    connect(P_PBP_limit_star.y, P_PBP_set);
+  end if;
+   connect(P_PBP.y, P_PBP_set) annotation (Line(
+      points={{88.95,0},{106,0}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(delta_f, delta_f_star.u) annotation (Line(
       points={{-110,0},{-82,0}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(P_PBP_limit_star.y, P_PBP_star.u) annotation (Line(points={{27,0},{39,0}}, color={0,0,127}));
   connect(P_PBP_ideal_star.y, P_PBP_limit_star.u) annotation (Line(points={{-1.1,0.5},{0,0.5},{0,0},{4,0}},       color={0,0,127}));
   if UseDeadband==true then
     connect(deadband.y, P_PBP_ideal_star.u) annotation (Line(points={{-29,0},{-26,0},{-26,0.5},{-21.8,0.5}}, color={0,0,127}));
@@ -181,7 +186,7 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p>Tested in check model &quot;TestPrimaryBalancingController&quot;</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">&quot;Verbesserung des Kraftwerks- und Netzregelverhaltens bez&uuml;glich handelsseitiger Fahrplan&auml;nderungen&quot;; Wei&szlig;bach, Tobias; 2009, Universit&auml;t Stuttgart</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">&quot;Verbesserung des Kraftwerks- und Netzregelverhaltens bezüglich handelsseitiger Fahrplanänderungen&quot;; Weißbach, Tobias; 2009, Universität Stuttgart</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 </html>"));

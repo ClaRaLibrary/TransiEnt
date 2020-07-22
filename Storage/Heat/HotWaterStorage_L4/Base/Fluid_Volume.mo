@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.HotWaterStorage_L4.Base;
 model Fluid_Volume "A very simple control volume for liquid"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,8 +59,8 @@ model Fluid_Volume "A very simple control volume for liquid"
   parameter Integer nPorts = 2 "Number of fluid ports";
 
 protected
-  parameter SI.Density d_nom= TILMedia.VLEFluidFunctions.density_phxi(medium, p_nom, h_nom) "Nominal density";
-  parameter SI.Density d_start= TILMedia.VLEFluidFunctions.density_phxi(medium, p_start, h_start) "Start density";
+  parameter SI.Density d_nom= TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(medium, p_nom, h_nom) "Nominal density";
+  parameter SI.Density d_start= TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(medium, p_start, h_start) "Start density";
 
   // _____________________________________________
   //
@@ -103,25 +103,24 @@ public
   // _____________________________________________
 //Media
 public
-  TILMedia.VLEFluid_ph[nPorts] fluidPorts(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph[nPorts] fluidPorts(
     each vleFluidType=medium,
     each computeTransportProperties=false,
     each computeVLEAdditionalProperties=false,
     each computeVLETransportProperties=false,
     each deactivateTwoPhaseRegion=true,
     final h=h_ports,
-    final p=ports.p) annotation (Placement(transformation(extent={{-10,-82},{10,
-            -62}},
-          rotation=0)));
+    final p=ports.p) annotation (Placement(transformation(extent={{-10,-82},{10,-62}}, rotation=0)));
 
 protected
-  inner TILMedia.VLEFluid_ph  bulk(vleFluidType =    medium, p=p, h=h,
+  inner TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph bulk(
+    vleFluidType=medium,
+    p=p,
+    h=h,
     computeVLEAdditionalProperties=false,
     computeVLETransportProperties=false,
     deactivateTwoPhaseRegion=true,
-    computeTransportProperties=false)
-    annotation (Placement(transformation(extent={{-10,-8},{10,12}},
-                     rotation=0)));
+    computeTransportProperties=false) annotation (Placement(transformation(extent={{-10,-8},{10,12}}, rotation=0)));
 
   // _____________________________________________
   //

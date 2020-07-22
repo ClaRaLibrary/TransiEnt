@@ -1,0 +1,74 @@
+within TransiEnt.Producer.Gas.Electrolyzer.Base.Physics;
+package Pressures "Contains pressures base class and specific model implementations"
+
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
+//                                                                                //
+// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Copyright 2020, Hamburg University of Technology.                              //
+//________________________________________________________________________________//
+//                                                                                //
+// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
+// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// The TransiEnt Library research team consists of the following project partners://
+// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
+// Institute of Energy Systems (Hamburg University of Technology),                //
+// Institute of Electrical Power and Energy Technology                            //
+// (Hamburg University of Technology)                                             //
+// Institute of Electrical Power Systems and Automation                           //
+// (Hamburg University of Technology)                                             //
+// and is supported by                                                            //
+// XRG Simulation GmbH (Hamburg, Germany).                                        //
+//________________________________________________________________________________//
+
+
+ extends TransiEnt.Basics.Icons.Package;
+
+  annotation (Icon(graphics={
+        Text(
+          extent={{-150,-105},{150,-145}},
+          lineColor={0,134,134},
+          textString="%name"),
+        Polygon(
+          points={{-14,-82},{14,-82},{0,-68},{-14,-82}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={255,170,213},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{0,-70},{-38,-48},{-56,-20},{-62,24},{-44,68},{-24,82},{0,88},{24,82},{44,70},{64,24},{56,-20},{36,-48},{0,-70}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={255,170,213},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{10,24},{36,24},{36,32},{52,22},{36,12},{36,20},{10,20},{10,24}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{8,-12},{28,-22},{34,-12},{34,-28},{20,-36},{26,-26},{6,-16},{8,-12}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-12,24},{-40,24},{-40,30},{-54,22},{-40,14},{-40,20},{-12,20},{-12,24}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-12,-12},{-34,-18},{-38,-6},{-42,-22},{-28,-32},{-32,-22},{-10,-16},{-12,-12}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{2,44},{2,68},{12,68},{0,80},{-10,68},{-2,68},{-2,44},{2,44}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid)}));
+end Pressures;

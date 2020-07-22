@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Electrical.Profiles;
 model ExampleHousehold_ElectricityDemand_VDI4665_60s "Example single family house electric demand (VDI4665, RG1, 150m2, 4 person, build in 1991)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //

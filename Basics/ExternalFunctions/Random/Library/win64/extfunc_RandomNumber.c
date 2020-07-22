@@ -1,6 +1,6 @@
 /*******************************************
-* Funktion für Modelica, die Zufallszahlen zurückliefert.
-* Weitere mögliche Funktionen sind WELL Algorithmus: http://de.wikipedia.org/wiki/Well_Equidistributed_Long-period_Linear
+* Funktion fÃ¼r Modelica, die Zufallszahlen zurÃ¼ckliefert.
+* Weitere mÃ¶gliche Funktionen sind WELL Algorithmus: http://de.wikipedia.org/wiki/Well_Equidistributed_Long-period_Linear
 * Mersenne-Twister / TT800: http://de.wikipedia.org/wiki/Mersenne-Twister
 *
 *
@@ -68,12 +68,12 @@ uint32_t random(uint32_t init)
 * int UseSeed:				0: Kein Seed,
 *							1: Benutze Systemzeit
 *							2: Benutze feste Zahl SeedNumber
-* int SeedNumber:			Zahl mit dem der Zufallsgenerator initialisiert wird. Für
+* int SeedNumber:			Zahl mit dem der Zufallsgenerator initialisiert wird. FÃ¼r
 *							reproduzierbare Ergebnisse
-* int MaxNumber:			Maximale Zahl, die zurückgegeben wird.
-*							Für Null wird die Systemeinstellung verwendet
-* int MinNumber:			Maximale Zahl, die zurückgegeben wird.
-*							Für Null wird die Systemeinstellung verwendet
+* int MaxNumber:			Maximale Zahl, die zurÃ¼ckgegeben wird.
+*							FÃ¼r Null wird die Systemeinstellung verwendet
+* int MinNumber:			Maximale Zahl, die zurÃ¼ckgegeben wird.
+*							FÃ¼r Null wird die Systemeinstellung verwendet
 ****************************************/
 int32_t extfunc_RandomNumber(int UseSeed, uint32_t SeedNumber, int32_t MaxNumber, int32_t MinNumber)
 {
@@ -116,12 +116,12 @@ int32_t extfunc_RandomNumber(int UseSeed, uint32_t SeedNumber, int32_t MaxNumber
 * int UseSeed:				0: Kein Seed,
 *							1: Benutze Systemzeit
 *							2: Benutze feste Zahl SeedNumber
-* int SeedNumber:			Zahl mit dem der Zufallsgenerator initialisiert wird. Für
+* int SeedNumber:			Zahl mit dem der Zufallsgenerator initialisiert wird. FÃ¼r
 *							reproduzierbare Ergebnisse
-* int MaxNumber:			Maximale Zahl, die zurückgegeben wird.
-*							Für Null wird die Systemeinstellung verwendet
-* int MinNumber:			Maximale Zahl, die zurückgegeben wird.
-*							Für Null wird die Systemeinstellung verwendet
+* int MaxNumber:			Maximale Zahl, die zurÃ¼ckgegeben wird.
+*							FÃ¼r Null wird die Systemeinstellung verwendet
+* int MinNumber:			Maximale Zahl, die zurÃ¼ckgegeben wird.
+*							FÃ¼r Null wird die Systemeinstellung verwendet
 ****************************************/
 int extfunc_RandomNumberOld(int UseSeed, int SeedNumber, int MaxNumber, int MinNumber)
 {

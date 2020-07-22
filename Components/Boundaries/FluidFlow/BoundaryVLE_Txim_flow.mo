@@ -1,10 +1,10 @@
 within TransiEnt.Components.Boundaries.FluidFlow;
 model BoundaryVLE_Txim_flow "A boundary defining temperature, mass composition and mass flow"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -75,12 +75,11 @@ protected
   SI.Temperature T_in;
   Modelica.SIunits.MassFraction xi_in[medium.nc-1];
 
-   TILMedia.VLEFluid_ph fluidIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidIn(
     vleFluidType=medium,
     p=fluidPortOut.p,
     xi=xi_in,
-    h=actualStream(fluidPortOut.h_outflow))
-              annotation (Placement(transformation(extent={{32,-70},{52,-50}})));
+    h=actualStream(fluidPortOut.h_outflow)) annotation (Placement(transformation(extent={{32,-70},{52,-50}})));
 public
   ClaRa.Basics.Interfaces.EyeOut eye if boundaryConditions.showData
     annotation (Placement(transformation(extent={{98,-66},{110,-54}}),

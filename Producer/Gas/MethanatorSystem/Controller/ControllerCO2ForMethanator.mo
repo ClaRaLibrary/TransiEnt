@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Gas.MethanatorSystem.Controller;
 model ControllerCO2ForMethanator
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -93,8 +93,8 @@ equation
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput:&nbsp;m_flow_H2 in [kg/s]</span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealOutput:&nbsp;m_flow_CO2 in [kg/s]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealInput: m_flow_H2 in [kg/s]</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modelica RealOutput: m_flow_CO2 in [kg/s]</span></p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

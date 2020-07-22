@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Heat;
 model DHN_StandAlone
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,16 +20,31 @@ model DHN_StandAlone
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  parameter Modelica.SIunits.Length L_grid=1000;
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.Example;
 
-  inner TransiEnt.SimCenter simCenter(                                                                                                                                     k_H2_fraction=0.6,
-    showExpertSummary=false)
-    annotation (Placement(transformation(extent={{-280,140},{-260,160}})));
-  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-280,120},{-260,140}})));
-  Modelica.Blocks.Sources.IntegerConstant pipe_N_cv(k=3) annotation (Placement(transformation(extent={{-280,80},{-260,100}})));
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
-  TransiEnt.Basics.Blocks.Sources.HeatExpression  heatExpression1( y=-1e6) annotation (Placement(transformation(
+  parameter Modelica.SIunits.Length L_grid=1000;
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+  inner TransiEnt.SimCenter simCenter(k_H2_fraction=0.6, showExpertSummary=false) annotation (Placement(transformation(extent={{-280,140},{-260,160}})));
+  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-280,120},{-260,140}})));
+
+
+  // Consumer
+  TransiEnt.Basics.Blocks.Sources.HeatExpression heatExpression1(y=-1e6) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={102,132})));
@@ -41,11 +56,33 @@ model DHN_StandAlone
         extent={{20,-20},{-20,20}},
         rotation=0,
         origin={-64,30})));
-  TransiEnt.Basics.Blocks.Sources.HeatExpression  heatExpression( y=-1e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
+  TransiEnt.Basics.Blocks.Sources.HeatExpression heatExpression(y=-1e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
+
+  // Producer
   TransiEnt.Components.Boundaries.Heat.Heatflow_L1 producer1(use_Q_flow_in=true) annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=90,
         origin={-256,-110})));
+
+  // Hydraulic Components
+  Modelica.Blocks.Sources.IntegerConstant pipe_N_cv(k=3) annotation (Placement(transformation(extent={{-280,80},{-260,100}})));
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massFlowLosses(showData=true, m_flow_const=-0.26) annotation (Placement(transformation(extent={{-80,-188},{-60,-168}})));
+  ClaRa.Visualisation.Quadruple quadruple6(decimalSpaces(m_flow=2)) annotation (Placement(transformation(extent={{-46,-191},{10,-176}})));
+  ClaRa.Visualisation.Quadruple quadruple1 annotation (Placement(transformation(extent={{122,-15},{178,2}})));
+  ClaRa.Visualisation.Quadruple quadruple4 annotation (Placement(transformation(extent={{-4,-19},{50,-2}})));
+  ClaRa.Visualisation.Quadruple quadruple3 annotation (Placement(transformation(extent={{-8,77},{44,92}})));
+  ClaRa.Visualisation.Quadruple quadruple5 annotation (Placement(transformation(extent={{-292,-16},{-248,-3}})));
+  ClaRa.Visualisation.StatePoint_phTs statePoint_phTs annotation (Placement(transformation(extent={{-172,10},{-152,32}})));
+  ClaRa.Visualisation.Quadruple quadruple2 annotation (Placement(transformation(extent={{-288,-71},{-240,-58}})));
+  ClaRa.Components.Sensors.SensorVLE_L1_T temperature(unitOption=2) annotation (Placement(transformation(extent={{-196,-140},{-216,-160}})));
+  ClaRa.Visualisation.Quadruple quadruple7 annotation (Placement(transformation(extent={{10,-147},{52,-132}})));
+
+
+  Modelica.Blocks.Sources.Constant P_feedPump(k=1e4) annotation (Placement(transformation(
+        extent={{-6,-6},{6,6}},
+        rotation=0,
+        origin={-160,-178})));
+  ClaRa.Visualisation.Quadruple quadruple8 annotation (Placement(transformation(extent={{-120,-151},{-78,-136}})));
   ClaRa.Components.MechanicalSeparation.BalanceTank_L3 balanceTank1(
     diameter_i=10,
     s_wall=0.02,
@@ -57,16 +94,16 @@ model DHN_StandAlone
     T_gas_start=273.15 + 90,
     h_liq_start=600e3,
     p_start=18e5,
-    relLevel_start=0.5)                      annotation (Placement(transformation(extent={{-150,-158},{-180,-128}})));
+    relLevel_start=0.5) annotation (Placement(transformation(extent={{-150,-158},{-180,-128}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi pressurizer(showData=false, p_const=25e5) annotation (Placement(transformation(extent={{-104,-90},{-124,-70}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 make_up_ctrl_valve(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 make_up_ctrl_valve(
     checkValve=false,
     openingInputIsActive=true,
     redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=2e5, m_flow_nom=50)) annotation (Placement(transformation(
         extent={{9,-5},{-9,5}},
         rotation=0,
         origin={-142,-80})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveGas_L1 pressure_reduction_valve(medium=simCenter.airModel, redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=50e5, m_flow_nom=0.01)) annotation (Placement(transformation(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveGas_L1 pressure_reduction_valve(medium=simCenter.airModel, redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=50e5, m_flow_nom=0.01)) annotation (Placement(transformation(
         extent={{10,6},{-10,-6}},
         rotation=0,
         origin={-142,-102})));
@@ -197,6 +234,8 @@ model DHN_StandAlone
         extent={{-17,-6},{17,6}},
         rotation=180,
         origin={20,67})));
+
+  // Control
   ClaRa.Components.Utilities.Blocks.LimPID PID_level(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -213,21 +252,8 @@ model DHN_StandAlone
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-156,-58})));
-  Modelica.Blocks.Sources.Constant level_set(k=0.5) annotation (Placement(transformation(
-        extent={{6,-6},{-6,6}},
-        rotation=180,
-        origin={-180,-58})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massFlowLosses(showData=true, m_flow_const=-0.26) annotation (Placement(transformation(extent={{-80,-188},{-60,-168}})));
-  ClaRa.Visualisation.Quadruple quadruple6(decimalSpaces(m_flow=2))
-                                            annotation (Placement(transformation(extent={{-46,-191},{10,-176}})));
-  ClaRa.Visualisation.Quadruple quadruple1  annotation (Placement(transformation(extent={{122,-15},{178,2}})));
-  ClaRa.Visualisation.Quadruple quadruple4  annotation (Placement(transformation(extent={{-4,-19},{50,-2}})));
-  ClaRa.Visualisation.Quadruple quadruple3  annotation (Placement(transformation(extent={{-8,77},{44,92}})));
-  ClaRa.Visualisation.Quadruple quadruple5  annotation (Placement(transformation(extent={{-292,-16},{-248,-3}})));
-  ClaRa.Visualisation.StatePoint_phTs statePoint_phTs annotation (Placement(transformation(extent={{-172,10},{-152,32}})));
-  ClaRa.Visualisation.Quadruple quadruple2  annotation (Placement(transformation(extent={{-288,-71},{-240,-58}})));
-  ClaRa.Components.Sensors.SensorVLE_L1_T temperature(unitOption=2) annotation (Placement(transformation(extent={{-196,-140},{-216,-160}})));
-  ClaRa.Visualisation.Quadruple quadruple7  annotation (Placement(transformation(extent={{10,-147},{52,-132}})));
+
+  Modelica.Blocks.Sources.Constant p_setWedel4(k=90) annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=180)));
   ClaRa.Components.Utilities.Blocks.LimPID PID_hot_temperature(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     sign=1,
@@ -241,16 +267,19 @@ model DHN_StandAlone
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-286,-150})));
-  Modelica.Blocks.Sources.Constant p_sollWedel4(k=90)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
+  Modelica.Blocks.Sources.Constant level_set(k=0.5) annotation (Placement(transformation(
+        extent={{6,-6},{-6,6}},
         rotation=180,
-        origin={-266,-174})));
-  Modelica.Blocks.Sources.Constant P_feedPump(k=1e4) annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
-        rotation=0,
-        origin={-160,-178})));
-  ClaRa.Visualisation.Quadruple quadruple8  annotation (Placement(transformation(extent={{-120,-151},{-78,-136}})));
+        origin={-180,-58})));
+
+
 equation
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
+
   connect(producer1.fluidPortOut, balanceTank1.inlet3) annotation (Line(
       points={{-236,-122},{-206.2,-122},{-206.2,-128},{-178,-128}},
       color={175,0,0},
@@ -325,14 +354,12 @@ equation
       thickness=0.5));
   connect(PID_level.y, make_up_ctrl_valve.opening_in) annotation (Line(points={{-145,-58},{-145,-58},{-142,-58},{-142,-72.5}}, color={0,0,127}));
   connect(level_set.y, PID_level.u_s) annotation (Line(points={{-173.4,-58},{-173.4,-58},{-168,-58}}, color={0,0,127}));
-  connect(massFlowLosses.steam_a,split_cold. inlet) annotation (Line(
+  connect(massFlowLosses.steam_a, split_cold.inlet) annotation (Line(
       points={{-60,-178},{-56,-178},{-44,-178},{-44,-154},{-22,-154}},
       color={0,131,169},
       thickness=0.5));
-  connect(split_cold.eye[1], quadruple7.eye) annotation (Line(points={{-2,-148},{2,-148},{2,-139.5},{10,-139.5}},
-                                                                                                             color={190,190,190}));
-  connect(massFlowLosses.eye,quadruple6. eye) annotation (Line(points={{-60,-186},{-46,-186},{-46,-183.5}},
-                                                                                                          color={190,190,190}));
+  connect(split_cold.eye[1], quadruple7.eye) annotation (Line(points={{-2,-148},{2,-148},{2,-139.5},{10,-139.5}}, color={190,190,190}));
+  connect(massFlowLosses.eye, quadruple6.eye) annotation (Line(points={{-60,-186},{-46,-186},{-46,-183.5}}, color={190,190,190}));
   connect(pipe2.eye, quadruple1.eye) annotation (Line(points={{124.08,-19.2714},{124.08,-10.6357},{122,-10.6357},{122,-6.5}}, color={190,190,190}));
   connect(pipe1.eye, quadruple4.eye) annotation (Line(points={{-7.92,-19.2714},{-7.92,-14.6357},{-4,-14.6357},{-4,-10.5}}, color={190,190,190}));
   connect(pipe4.eye, quadruple3.eye) annotation (Line(points={{2.27143,71.08},{2.27143,70.54},{-8,70.54},{-8,84.5}}, color={190,190,190}));
@@ -342,8 +369,8 @@ equation
       points={{-178,-128},{-206,-128},{-206,-140}},
       color={0,131,169},
       thickness=0.5));
-  connect(PID_hot_temperature.y, producer1.Q_flow_prescribed) annotation (Line(points={{-286,-139},{-286,-139},{-286,-96},{-272,-96},{-272,-98}},                         color={0,0,127}));
-  connect(p_sollWedel4.y, PID_hot_temperature.u_s) annotation (Line(points={{-272.6,-174},{-272,-174},{-284,-174},{-286,-174},{-286,-162}},                         color={0,0,127}));
+  connect(PID_hot_temperature.y, producer1.Q_flow_prescribed) annotation (Line(points={{-286,-139},{-286,-139},{-286,-96},{-272,-96},{-272,-98}}, color={0,0,127}));
+  connect(p_setWedel4.y, PID_hot_temperature.u_s) annotation (Line(points={{-6.6,0},{-272,0},{-272,-174},{-286,-174},{-286,-162}}, color={0,0,127}));
   connect(PID_hot_temperature.u_m, temperature.T) annotation (Line(points={{-274,-149.9},{-274,-150},{-217,-150}}, color={0,0,127}));
   connect(join_hot.inlet2, statePoint_phTs.port) annotation (Line(
       points={{-226,10},{-172,10}},
@@ -360,15 +387,15 @@ equation
       points={{98,102},{98,105},{102,105},{102,121}},
       color={175,0,0},
       pattern=LinePattern.Dash));
-  annotation (Icon(graphics,
-                   coordinateSystem(preserveAspectRatio=false, initialScale=0.1)),               Diagram(graphics,
-                                                                                                         coordinateSystem(preserveAspectRatio=false, extent={{-300,-220},{200,160}})),
-  experiment(
-    StopTime=259200,
-    Interval=900,
-    __Dymola_Algorithm="Dassl"),
-  __Dymola_experimentSetupOutput(inputs=false, events=false),
-Documentation(info="<html>
+  annotation (
+    Icon(graphics, coordinateSystem(preserveAspectRatio=false, initialScale=0.1)),
+    Diagram(graphics, coordinateSystem(preserveAspectRatio=false, extent={{-300,-220},{200,160}})),
+    experiment(
+      StopTime=259200,
+      Interval=900,
+      __Dymola_Algorithm="Dassl"),
+    __Dymola_experimentSetupOutput(inputs=false, events=false),
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Small closed-loop district heating system. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

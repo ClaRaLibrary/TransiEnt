@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4;
 model HotWaterStorage_constProp_L4 "Temperature and heat flow rate based model of a stratified thermal storage with finite volume discretisation (1=top, n=bottom) and constant fluid properties, electric heating rods can be added"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -80,7 +80,8 @@ model HotWaterStorage_constProp_L4 "Temperature and heat flow rate based model o
   replaceable model CostStatisticsModel = TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.SmallHotWaterStorage constrainedby TransiEnt.Components.Statistics.ConfigurationData.StorageCostSpecs.PartialStorageCostSpecs
    "Model for global cost calculation" annotation (choicesAllMatching=true, Dialog(group="Statistics"));
   replaceable connector ElectricPowerPort = TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Model for electric power port" annotation (Dialog(group="Replaceable Components",enable=usePowerPort),choicesAllMatching=true);
-  replaceable model PowerBoundary = TransiEnt.Components.Boundaries.Electrical.Power constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Model for boundary in electric boiler (has to fit to chosen power port)" annotation (Dialog(group="Replaceable Components",enable=usePowerPort),choicesAllMatching=true);
+  replaceable model PowerBoundary = TransiEnt.Components.Boundaries.Electrical.ActivePower.Power
+                                                                                     constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Model for boundary in electric boiler (has to fit to chosen power port)" annotation (Dialog(group="Replaceable Components",enable=usePowerPort),choicesAllMatching=true);
 
   // _____________________________________________
   //
@@ -189,6 +190,7 @@ model HotWaterStorage_constProp_L4 "Temperature and heat flow rate based model o
   //                  Variables
   // _____________________________________________
 
+  SI.Temperature T[N_cv]=controlVolume.T;
   SI.Temperature T_mean = sum(controlVolume.T)/N_cv;
   Real SOC = (T_mean-T_min_ref)/(T_max_ref - T_min_ref);
   SI.Energy E = (sum(controlVolume.T)-T_min_ref)*c_v*m/N_cv;

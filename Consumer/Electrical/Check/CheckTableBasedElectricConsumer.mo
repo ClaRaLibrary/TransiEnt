@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Check;
 model CheckTableBasedElectricConsumer
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -34,7 +34,7 @@ model CheckTableBasedElectricConsumer
   // _____________________________________________
 
   TableBasedElectricConsumer Consumer(redeclare TransiEnt.Basics.Tables.ElectricGrid.ElectricityDemand_HH_900s_2012 consumerDataTable) annotation (Placement(transformation(extent={{16,-16},{50,16}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{-10,-16},{-40,16}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{-10,-16},{-40,16}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-50,60},{-30,80}})));
   inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
 equation

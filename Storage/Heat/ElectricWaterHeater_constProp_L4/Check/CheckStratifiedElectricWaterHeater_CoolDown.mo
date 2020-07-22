@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.ElectricWaterHeater_constProp_L4.Check;
 model CheckStratifiedElectricWaterHeater_CoolDown
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -39,7 +39,7 @@ model CheckStratifiedElectricWaterHeater_CoolDown
   Modelica.Blocks.Sources.RealExpression T_sim2(y=stor.T[17] - 273.15)            annotation (Placement(transformation(extent={{64,59},{84,79}})));
   Modelica.Blocks.Sources.RealExpression T_sim3(y=stor.T[34] - 273.15)            annotation (Placement(transformation(extent={{64,45},{84,65}})));
   Modelica.Blocks.Sources.RealExpression T_sim4(y=stor.T[50] - 273.15)            annotation (Placement(transformation(extent={{64,29},{84,49}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{30,-12},{50,8}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{30,-12},{50,8}})));
   Modelica.Blocks.Sources.Constant WaterDrawn(k=0) annotation (Placement(transformation(extent={{-60,-16},{-40,4}})));
   TransiEnt.Basics.Blocks.Sources.BooleanArrayConstant HeaterSwitch(k=fill(false, stor.N_heaters), nout=stor.N_heaters) annotation (Placement(transformation(extent={{-52,36},{-32,56}})));
   Modelica.Blocks.Sources.RealExpression Tamb_meas_K(y=293)                    annotation (Placement(transformation(extent={{-56,7},{-36,27}})));

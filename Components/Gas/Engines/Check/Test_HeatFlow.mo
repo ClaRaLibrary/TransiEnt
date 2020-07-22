@@ -1,10 +1,10 @@
 within TransiEnt.Components.Gas.Engines.Check;
 model Test_HeatFlow "Tester for static heat flow"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -56,7 +56,7 @@ model Test_HeatFlow "Tester for static heat flow"
     offset=0.07)    annotation (Placement(transformation(extent={{66,-64},{86,-44}})));
   Mechanics.StaticEngineMechanics staticEngineMechanics annotation (Placement(transformation(extent={{-20,42},{18,76}})));
   Electrical.Machines.ActivePowerGenerator activePowerGenerator annotation (Placement(transformation(extent={{28,50},{48,70}})));
-  Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{56,50},{76,70}})));
+  Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{56,50},{76,70}})));
   Electrical.Machines.ExcitationSystemsVoltageController.DummyExcitationSystem dummyExcitationSystem annotation (Placement(transformation(extent={{58,80},{38,100}})));
 equation
   connect(temperatureWaterIn.port,waterSource. steam_a) annotation (Line(

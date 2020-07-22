@@ -3,10 +3,10 @@ model PhotovoltaicProfilePlant "Ideal continuous photovoltaic plant that produce
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,13 +32,14 @@ model PhotovoltaicProfilePlant "Ideal continuous photovoltaic plant that produce
     typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable,
     typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.Solar,
     replaceable model ProducerCosts =
-        TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PV);
+        TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PV,
+    collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable));
 
   extends TransiEnt.Basics.Icons.SolarElectricalModel;
 
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Ideal&nbsp;continuous&nbsp;photovoltaic&nbsp;plant&nbsp;that&nbsp;produces&nbsp;exactly&nbsp;what&nbsp;the&nbsp;connected&nbsp;profile&nbsp;prescribes&nbsp;and&nbsp;adds&nbsp;to&nbsp;global&nbsp;statistics.</p>
+<p>Ideal continuous photovoltaic plant that produces exactly what the connected profile prescribes and adds to global statistics.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">L1E Models are based on characteristic lines, gains or efficiencies.</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">The input is directly the output power.</span></p>

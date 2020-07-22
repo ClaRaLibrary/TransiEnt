@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Compressor;
 model CompressorRealGasIsentropicEff_L1_simple "Simple compressor or fan for a one phase VLE fluid"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,6 +42,7 @@ model CompressorRealGasIsentropicEff_L1_simple "Simple compressor or fan for a o
   // _____________________________________________
 
   parameter Real eta_is = 0.8 "Isentropic efficiency" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Real Pi_start = 1.1 "Start value for pressure ratio (is only used for determination of start value for deltah)" annotation(Dialog(group="Initialization"));
 
   // _____________________________________________
   //
@@ -59,7 +60,7 @@ model CompressorRealGasIsentropicEff_L1_simple "Simple compressor or fan for a o
   // _____________________________________________
 
 protected
-  TILMedia.VLEFluid_ph flueGas_outlet_isentropic(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph flueGas_outlet_isentropic(
     h=hOut_is,
     p=gasPortOut.p,
     xi=gasIn.xi,
@@ -71,10 +72,9 @@ protected
   //             Variable Declarations
   // _____________________________________________
 
-protected
-  SI.SpecificEnthalpy deltah "Specific enthalpy difference between outlet and inlet";
+public
+  SI.SpecificEnthalpy deltah(start=-15727*Pi_start^2+140258*Pi_start-124060)  "Specific enthalpy difference between outlet and inlet" annotation (Dialog(showStartAttribute=true));
   SI.SpecificEnthalpy hOut_is "Specific enthalpy after an isentropic compression";
-
 equation
   // _____________________________________________
   //

@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Base;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Base;
 partial model PartialFeedInStation
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -50,7 +50,9 @@ partial model PartialFeedInStation
         rotation=270,
         origin={0,104})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=simCenter.gasModel1) annotation (Placement(transformation(extent={{-10,-106},{10,-86}}), iconTransformation(extent={{-20,-116},{10,-86}})));
-  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (choicesAllMatching=true, Dialog(tab="General", group="General"), Placement(transformation(extent={{-110,-10},{-90,10}})));
+  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp if usePowerPort constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (choicesAllMatching=true, Dialog(tab="General", group="General"), Placement(transformation(extent={{-110,-10},{-90,10}})));
+  parameter Boolean usePowerPort=true "True if power port shall be used" annotation (Dialog(group="General"));
+
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics),                    Diagram(graphics,
                                                                        coordinateSystem(preserveAspectRatio=false)),
@@ -77,7 +79,7 @@ partial model PartialFeedInStation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p><br>Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in April 2018</p>
+<p><br>Model created by Oliver Schülting (oliver.schuelting@tuhh.de) in April 2018</p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
 </html>"));
 end PartialFeedInStation;

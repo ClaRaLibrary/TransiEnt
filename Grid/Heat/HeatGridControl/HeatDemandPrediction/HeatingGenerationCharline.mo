@@ -1,10 +1,10 @@
-within TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction;
+﻿within TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction;
 model HeatingGenerationCharline "Characteristic line of the heating load in function of the ambient temperature"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -192,6 +192,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008c48;\">8. Validation</span></b></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008c48;\">9. References</span></b></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008c48;\">5. Version History</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Oliver Sch&uuml;lting and Ricardo Peniche,  2015</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Oliver Schülting and Ricardo Peniche,  2015</span></p>
 </html>"));
 end HeatingGenerationCharline;

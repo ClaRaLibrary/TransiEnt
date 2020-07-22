@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Heat;
 model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,21 +20,50 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  outer TransiEnt.SimCenter simCenter;
-  outer TransiEnt.ModelStatistics modelStatistics;
 
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium= simCenter.fluid1 "Medium to be used"
-                                                                                              annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
+
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.fluid1 "Medium to be used" annotation (choicesAllMatching, Dialog(group="Fundamental Definitions"));
 
   parameter Modelica.SIunits.Length L_grid=1000;
 
-  Modelica.Blocks.Sources.IntegerConstant pipe_N_cv(k=3) annotation (Placement(transformation(extent={{-264,140},{-244,160}})));
+  // _____________________________________________
+  //
+  //                 Outer Models
+  // _____________________________________________
 
+  outer TransiEnt.SimCenter simCenter;
+  outer TransiEnt.ModelStatistics modelStatistics;
+
+  // _____________________________________________
+  //
+  //                Interfaces
+  // _____________________________________________
+
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut consumerOutlet(Medium=medium) annotation (Placement(transformation(extent={{57,156},{63,162}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn consumerInlet(Medium=medium) annotation (Placement(transformation(extent={{117,157},{123,163}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn producerInlet(Medium=medium) annotation (Placement(transformation(extent={{-303,-103},{-297,-97}})));
+  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut producerOutlet(Medium=medium) annotation (Placement(transformation(extent={{-303,-163},{-297,-157}})));
+  TransiEnt.Basics.Interfaces.General.TemperatureOut T1 "Temperature in port medium" annotation (Placement(transformation(extent={{-300,-184},{-308,-176}})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
+
+
+
+  // Consumer
   TransiEnt.Components.Boundaries.Heat.Heatflow_L1 consumer1(use_Q_flow_in=true, Medium=medium) annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=0,
         origin={-64,30})));
-  TransiEnt.Basics.Blocks.Sources.HeatExpression  heatExpression( y=-0.5e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
+  TransiEnt.Basics.Blocks.Sources.HeatExpression heatExpression(y=-0.5e6) annotation (Placement(transformation(extent={{-102,44},{-82,64}})));
+
+  // Hydraulic Components
   ClaRa.Components.MechanicalSeparation.BalanceTank_L3 balanceTank1(
     diameter_i=10,
     s_wall=0.02,
@@ -47,18 +76,20 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
     h_liq_start=600e3,
     p_start=18e5,
     relLevel_start=0.5,
-    liquidMedium=medium)                     annotation (Placement(transformation(extent={{-150,-158},{-180,-128}})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi pressurizer(showData=false, p_const=25e5,
-    medium=medium)                                                                               annotation (Placement(transformation(extent={{-104,-90},{-124,-70}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 make_up_ctrl_valve(
+    liquidMedium=medium) annotation (Placement(transformation(extent={{-150,-158},{-180,-128}})));
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi pressurizer(
+    showData=false,
+    p_const=25e5,
+    medium=medium) annotation (Placement(transformation(extent={{-104,-90},{-124,-70}})));
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 make_up_ctrl_valve(
     checkValve=false,
     openingInputIsActive=true,
     redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=2e5, m_flow_nom=50),
-    medium=medium)                                                                                                                                 annotation (Placement(transformation(
+    medium=medium) annotation (Placement(transformation(
         extent={{9,-5},{-9,5}},
         rotation=0,
         origin={-142,-80})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveGas_L1 pressure_reduction_valve(medium=simCenter.airModel, redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=50e5, m_flow_nom=0.01)) annotation (Placement(transformation(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveGas_L1 pressure_reduction_valve(medium=simCenter.airModel, redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=50e5, m_flow_nom=0.01)) annotation (Placement(transformation(
         extent={{10,6},{-10,-6}},
         rotation=0,
         origin={-142,-102})));
@@ -66,8 +97,7 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
     xi_const={0,0,0,0,0.79,0.21,0,0,0},
     medium=simCenter.airModel,
     p_const=1e5) annotation (Placement(transformation(extent={{-104,-111},{-124,-91}})));
-  ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pump(medium=medium)
-                                                              annotation (Placement(transformation(
+  ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pump(medium=medium) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-136,-154})));
@@ -102,7 +132,7 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
     m_flow_nom=250,
     length=1e3,
     Delta_p_nom=1e5,
-    medium=medium)   annotation (Placement(transformation(
+    medium=medium) annotation (Placement(transformation(
         extent={{-17,-6},{17,6}},
         rotation=90,
         origin={-12,-37})));
@@ -129,8 +159,7 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
     m_flow_nom=250,
     Delta_p_nom=1e5,
     length=1e3,
-    medium=medium)
-                annotation (Placement(transformation(
+    medium=medium) annotation (Placement(transformation(
         extent={{-17,-6},{17,6}},
         rotation=90,
         origin={120,-37})));
@@ -166,8 +195,7 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
     m_flow_nom=500,
     Delta_p_nom=1e5,
     length=1e3,
-    medium=medium)
-                annotation (Placement(transformation(
+    medium=medium) annotation (Placement(transformation(
         extent={{17,-6},{-17,6}},
         rotation=90,
         origin={-236,-37})));
@@ -194,11 +222,33 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
     m_flow_nom=250,
     Delta_p_nom=1e4,
     length=1e3,
-    medium=medium)
-                annotation (Placement(transformation(
+    medium=medium) annotation (Placement(transformation(
         extent={{-17,-6},{17,6}},
         rotation=180,
         origin={20,67})));
+
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massFlowLosses(
+    showData=true,
+    m_flow_const=-0.26,
+    medium=medium) annotation (Placement(transformation(extent={{-80,-188},{-60,-168}})));
+
+  Modelica.Blocks.Sources.IntegerConstant pipe_N_cv(k=3) annotation (Placement(transformation(extent={{-264,140},{-244,160}})));
+  ClaRa.Visualisation.Quadruple quadruple6(decimalSpaces(m_flow=2)) annotation (Placement(transformation(extent={{-46,-191},{10,-176}})));
+  ClaRa.Visualisation.Quadruple quadruple1 annotation (Placement(transformation(extent={{122,-15},{178,2}})));
+  ClaRa.Visualisation.Quadruple quadruple4 annotation (Placement(transformation(extent={{-4,-19},{50,-2}})));
+  ClaRa.Visualisation.Quadruple quadruple3 annotation (Placement(transformation(extent={{-8,77},{44,92}})));
+  ClaRa.Visualisation.Quadruple quadruple5 annotation (Placement(transformation(extent={{-292,-16},{-248,-3}})));
+  ClaRa.Visualisation.StatePoint_phTs statePoint_phTs annotation (Placement(transformation(extent={{-172,10},{-152,32}})));
+  ClaRa.Visualisation.Quadruple quadruple2 annotation (Placement(transformation(extent={{-288,-71},{-240,-58}})));
+  ClaRa.Components.Sensors.SensorVLE_L1_T temperature(unitOption=2, medium=medium) annotation (Placement(transformation(extent={{-198,-170},{-218,-190}})));
+  ClaRa.Visualisation.Quadruple quadruple7 annotation (Placement(transformation(extent={{10,-147},{52,-132}})));
+  Modelica.Blocks.Sources.Constant P_feedPump(k=1.5e4) annotation (Placement(transformation(
+        extent={{-6,-6},{6,6}},
+        rotation=0,
+        origin={-160,-178})));
+  ClaRa.Visualisation.Quadruple quadruple8 annotation (Placement(transformation(extent={{-120,-151},{-78,-136}})));
+
+  // Control
   ClaRa.Components.Utilities.Blocks.LimPID PID_level(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -219,31 +269,14 @@ model DHN_SubSystem "A subsystem derived from DHN_StandAlone"
         extent={{6,-6},{-6,6}},
         rotation=180,
         origin={-180,-58})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massFlowLosses(showData=true, m_flow_const=-0.26,
-    medium=medium)                                                                                            annotation (Placement(transformation(extent={{-80,-188},{-60,-168}})));
-  ClaRa.Visualisation.Quadruple quadruple6(decimalSpaces(m_flow=2))
-                                            annotation (Placement(transformation(extent={{-46,-191},{10,-176}})));
-  ClaRa.Visualisation.Quadruple quadruple1  annotation (Placement(transformation(extent={{122,-15},{178,2}})));
-  ClaRa.Visualisation.Quadruple quadruple4  annotation (Placement(transformation(extent={{-4,-19},{50,-2}})));
-  ClaRa.Visualisation.Quadruple quadruple3  annotation (Placement(transformation(extent={{-8,77},{44,92}})));
-  ClaRa.Visualisation.Quadruple quadruple5  annotation (Placement(transformation(extent={{-292,-16},{-248,-3}})));
-  ClaRa.Visualisation.StatePoint_phTs statePoint_phTs annotation (Placement(transformation(extent={{-172,10},{-152,32}})));
-  ClaRa.Visualisation.Quadruple quadruple2  annotation (Placement(transformation(extent={{-288,-71},{-240,-58}})));
-  ClaRa.Components.Sensors.SensorVLE_L1_T temperature(unitOption=2, medium=medium) annotation (Placement(transformation(extent={{-198,-170},{-218,-190}})));
-  ClaRa.Visualisation.Quadruple quadruple7  annotation (Placement(transformation(extent={{10,-147},{52,-132}})));
-  Modelica.Blocks.Sources.Constant P_feedPump(k=1.5e4)
-                                                     annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
-        rotation=0,
-        origin={-160,-178})));
-  ClaRa.Visualisation.Quadruple quadruple8  annotation (Placement(transformation(extent={{-120,-151},{-78,-136}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut consumerOutlet(Medium=medium) annotation (Placement(transformation(extent={{57,156},{63,162}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn consumerInlet(Medium=medium) annotation (Placement(transformation(extent={{117,157},{123,163}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortIn producerInlet(Medium=medium) annotation (Placement(transformation(extent={{-303,-103},{-297,-97}})));
-  TransiEnt.Basics.Interfaces.Thermal.FluidPortOut producerOutlet(Medium=medium) annotation (Placement(transformation(extent={{-303,-163},{-297,-157}})));
-  TransiEnt.Basics.Interfaces.General.TemperatureOut T1
-                                          "Temperature in port medium" annotation (Placement(transformation(extent={{-300,-184},{-308,-176}})));
+
+
 equation
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
   connect(pressure_reduction_valve.inlet, ambience.gas_a) annotation (Line(
       points={{-132,-102},{-126,-101},{-124,-101}},
       color={118,106,98},
@@ -300,19 +333,16 @@ equation
       thickness=0.5));
   connect(PID_level.y, make_up_ctrl_valve.opening_in) annotation (Line(points={{-145,-58},{-145,-58},{-142,-58},{-142,-72.5}}, color={0,0,127}));
   connect(level_set.y, PID_level.u_s) annotation (Line(points={{-173.4,-58},{-173.4,-58},{-168,-58}}, color={0,0,127}));
-  connect(massFlowLosses.steam_a,split_cold. inlet) annotation (Line(
+  connect(massFlowLosses.steam_a, split_cold.inlet) annotation (Line(
       points={{-60,-178},{-60,-178},{-44,-178},{-44,-154},{-22,-154}},
       color={0,131,169},
       thickness=0.5));
-  connect(split_cold.eye[1], quadruple7.eye) annotation (Line(points={{-2,-148},{2,-148},{2,-139.5},{10,-139.5}},
-                                                                                                             color={190,190,190}));
-  connect(massFlowLosses.eye,quadruple6. eye) annotation (Line(points={{-60,-186},{-46,-186},{-46,-183.5}},
-                                                                                                          color={190,190,190}));
+  connect(split_cold.eye[1], quadruple7.eye) annotation (Line(points={{-2,-148},{2,-148},{2,-139.5},{10,-139.5}}, color={190,190,190}));
+  connect(massFlowLosses.eye, quadruple6.eye) annotation (Line(points={{-60,-186},{-46,-186},{-46,-183.5}}, color={190,190,190}));
   connect(pipe2.eye, quadruple1.eye) annotation (Line(points={{124.08,-19.2714},{124.08,-10.6357},{122,-10.6357},{122,-6.5}}, color={190,190,190}));
   connect(pipe1.eye, quadruple4.eye) annotation (Line(points={{-7.92,-19.2714},{-7.92,-14.6357},{-4,-14.6357},{-4,-10.5}}, color={190,190,190}));
   connect(pipe4.eye, quadruple3.eye) annotation (Line(points={{2.27143,71.08},{2.27143,70.54},{-8,70.54},{-8,84.5}}, color={190,190,190}));
-  connect(join_hot.eye, quadruple5.eye) annotation (Line(points={{-244,1.77636e-015},{-244,1.77636e-015},{-244,-9.5},{-292,-9.5}},
-                                                                                                                         color={190,190,190}));
+  connect(join_hot.eye, quadruple5.eye) annotation (Line(points={{-244,1.77636e-015},{-244,1.77636e-015},{-244,-9.5},{-292,-9.5}}, color={190,190,190}));
   connect(quadruple2.eye, pipe3.eye) annotation (Line(points={{-288,-64.5},{-230,-64.5},{-230,-54.7286},{-231.92,-54.7286}}, color={190,190,190}));
   connect(balanceTank1.inlet3, temperature.port) annotation (Line(
       points={{-178,-128},{-208,-128},{-208,-170}},
@@ -346,13 +376,18 @@ equation
       points={{-81,54},{-52,54},{-52,46}},
       color={175,0,0},
       pattern=LinePattern.Dash));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-300,-220},{200,160}},
-        initialScale=1), graphics={Rectangle(
+  annotation (
+    Icon(coordinateSystem(
+        preserveAspectRatio=false,
+        extent={{-300,-220},{200,160}},
+        initialScale=1), graphics={
+        Rectangle(
           extent={{-300,160},{200,-220}},
           lineColor={135,135,135},
           radius=5,
           fillColor={255,255,255},
-          fillPattern=FillPattern.Solid), Text(
+          fillPattern=FillPattern.Solid),
+        Text(
           extent={{-300,-180},{200,-220}},
           lineColor={135,135,135},
           fillColor={255,255,255},
@@ -361,7 +396,10 @@ equation
         Ellipse(
           extent={{-162,82},{56,-128}},
           lineColor={175,0,0},
-          lineThickness=1)}),                                                                    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-300,-220},{200,160}},
+          lineThickness=1)}),
+    Diagram(coordinateSystem(
+        preserveAspectRatio=false,
+        extent={{-300,-220},{200,160}},
         initialScale=1), graphics={Rectangle(
           extent={{-300,160},{200,-220}},
           lineColor={135,135,135},
@@ -373,7 +411,7 @@ equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="District Heating Net")}),
-Documentation(info="<html>
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Small closed-loop district heating subsystem. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

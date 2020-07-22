@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Electrical.Base.Check;
 model TestPowerPlant "Model for testing power plants"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -20,7 +20,7 @@ model TestPowerPlant "Model for testing power plants"
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
     extends TransiEnt.Basics.Icons.Checkmodel;
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{20,12},{40,32}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=false) annotation (Placement(transformation(extent={{20,12},{40,32}})));
   Modelica.Blocks.Sources.Constant const(k=-1e7)
     annotation (Placement(transformation(extent={{-92,42},{-72,62}})));
   TransiEnt.Producer.Electrical.Conventional.Components.SimplePowerPlant inertContinuousPBPlant annotation (Placement(transformation(extent={{-40,16},{-20,36}})));

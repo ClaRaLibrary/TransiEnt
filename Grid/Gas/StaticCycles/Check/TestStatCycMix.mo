@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycMix
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ model TestStatCycMix
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
     medium=simCenter.gasModel1,
     Delta_p_nom=Init.Delta_p_nom_pipe1,
     frictionAtInlet=true,
@@ -38,11 +38,11 @@ model TestStatCycMix
     diameter_i=0.4,
     N_cv=2,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4,
-    massBalance=1)                                                                                                            annotation (Placement(transformation(
+    massBalance=1) annotation (Placement(transformation(
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={-12,86})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -57,7 +57,7 @@ model TestStatCycMix
         pipe2.N_cv),
     N_cv=6,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4,
-    massBalance=1)                                                                                                            annotation (Placement(transformation(
+    massBalance=1) annotation (Placement(transformation(
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={52,86})));
@@ -104,7 +104,7 @@ model TestStatCycMix
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={20,64})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
     medium=simCenter.gasModel1,
     Delta_p_nom=Init.Delta_p_nom_pipe1,
     frictionAtInlet=true,
@@ -123,7 +123,7 @@ model TestStatCycMix
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={-12,-8})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe4(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -182,7 +182,8 @@ model TestStatCycMix
     height=-1.25,
     offset=-0.25)
                annotation (Placement(transformation(extent={{-100,0},{-80,20}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipeH2_1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeH2_1(
+    constantComposition=true,
     frictionAtInlet=true,
     frictionAtOutlet=true,
     h_start=ones(pipeH2_1.N_cv)*Init.pipeH2.h_in,
@@ -202,7 +203,8 @@ model TestStatCycMix
         extent={{8,-4},{-8,4}},
         rotation=270,
         origin={20,-56})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipeH2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeH2(
+    constantComposition=true,
     frictionAtInlet=true,
     frictionAtOutlet=true,
     medium=simCenter.gasModel3,

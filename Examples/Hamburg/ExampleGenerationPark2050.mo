@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Hamburg;
 record ExampleGenerationPark2050 "Example Generation Park for the year of 2050"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,6 +19,13 @@ record ExampleGenerationPark2050 "Example Generation Park for the year of 2050"
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   import TransiEnt;
   extends TransiEnt.Examples.Hamburg.ExampleGenerationPark2035(
   P_el_n_BM = 227e6, P_el_n_WindOn = 2582e6, P_el_n_WindOff = 639e6, P_el_n_PV = 1378e6,

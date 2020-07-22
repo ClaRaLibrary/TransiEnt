@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Specifications;
 record CAES "Typical parameters of compressed air energy storage"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ record CAES "Typical parameters of compressed air energy storage"
      E_start=E_min, E_max=P_max_unload*4*3600, E_min=0.3*E_max, P_max_unload=300e6, P_grad_max=P_max_unload/(20*60), eta_unload=0.7, eta_load=0.7,selfDischargeRate=0);
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Typical&nbsp;parameters&nbsp;of&nbsp;compressed&nbsp;air&nbsp;energy&nbsp;storage.</p>
+<p>Typical parameters of compressed air energy storage.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

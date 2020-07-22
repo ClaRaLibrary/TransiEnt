@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas;
 model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume for constant composition with adiabatic inlet and outlet pipes with pressure losses"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,6 +30,7 @@ model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume
   import SI = Modelica.SIunits;
 
   extends TransiEnt.Basics.Icons.StorageGenericGasPressureLoss;
+  extends Base.MatchClassGasStorage;
 
   // _____________________________________________
   //
@@ -91,33 +92,36 @@ model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(calculateCost=calculateCost)
-                                                                  constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
+  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(
+    V_geo=500000,                                                 calculateCost=calculateCost,
+    p_gas_start=12000000,
+    T_gas_start=317.15)                                           constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage_L2(medium=medium, final includeHeatTransfer=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choicesAllMatching,
     Placement(transformation(extent={{-10,-10},{10,10}})));
 public
-  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipeIn(
+  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeIn(
     medium=medium,
-    frictionAtInlet=true,
-    frictionAtOutlet=false,
+    constantComposition=true,
+    frictionAtInlet=false,
+    frictionAtOutlet=true,
     N_cv=1,
     length=1000,
     diameter_i=0.3,
     z_in=-1000,
     z_out=0,
     N_tubes=1,
-    showExpertSummary=true)
-               annotation (
+    showExpertSummary=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choices(choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi "Constant composition", choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi "Variable composition"),
     Placement(transformation(
-        extent={{14,-5},{-14,5}},
+        extent={{-14,-5},{14,5}},
         rotation=270,
         origin={18,23})));
 public
-  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipeOut(
+  replaceable TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeOut(
     medium=medium,
+    constantComposition=true,
     frictionAtInlet=true,
     frictionAtOutlet=false,
     length=1000,
@@ -126,8 +130,7 @@ public
     N_cv=1,
     z_in=-1000,
     z_out=0,
-    showExpertSummary=true)
-             annotation (
+    showExpertSummary=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choices(choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi "Constant composition", choice=TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi "Variable composition"),
     Placement(transformation(
@@ -224,26 +227,27 @@ equation
   connect(p_gas, storage.p_gas) annotation (Line(points={{-50,0},{-5,0}}, color={0,0,127}));
   connect(storage.heat, heatStorage) annotation (Line(points={{4,0},{30,0},{30,-8},{40,-8}}, color={191,0,0}));
   connect(pipeOut.gasPortIn, storage.gasPortOut) annotation (Line(
-      points={{18,-11},{18,-8},{0,-8},{0,-6.3}},
+      points={{18,-11},{18,-10},{0,-10},{0,-6.3}},
       color={255,255,0},
       thickness=1.5));
   connect(pipeOut.gasPortOut, gasPortOut) annotation (Line(
-      points={{18,-39},{18,-46},{0,-46},{0,-53}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(pipeIn.gasPortOut, gasPortIn) annotation (Line(
-      points={{18,37},{18,44},{0,44},{0,49}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(pipeIn.gasPortIn, storage.gasPortIn) annotation (Line(
-      points={{18,9},{18,6},{0,6},{0,4.9}},
+      points={{18,-39},{18,-53},{0,-53}},
       color={255,255,0},
       thickness=1.5));
   connect(heatPipeIn, heatPipeIn) annotation (Line(points={{40,34},{44,34},{44,30},{44,34},{40,34}}, color={191,0,0}));
-  connect(pipeOut.heat, heatPipeOut) annotation (Line(points={{22,-25},{40,-25},{40,-48}}, color={191,0,0}));
-  connect(pipeIn.heat, heatPipeIn) annotation (Line(points={{22,23},{40,23},{40,34}}, color={191,0,0}));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={Text(
+  connect(pipeOut.heat, heatPipeOut) annotation (Line(points={{21.3333,-25},{40,-25},{40,-48}},
+                                                                                           color={191,0,0}));
+  connect(pipeIn.heat, heatPipeIn) annotation (Line(points={{21.3333,23},{40,23},{40,34}},
+                                                                                      color={191,0,0}));
+  connect(pipeIn.gasPortIn, gasPortIn) annotation (Line(
+      points={{18,37},{18,49},{0,49}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(pipeIn.gasPortOut, storage.gasPortIn) annotation (Line(
+      points={{18,9},{0,9},{0,4.9}},
+      color={255,255,0},
+      thickness=1.5));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={Text(
           extent={{-30,12},{30,-48}},
           lineColor={0,0,0},
           textString="L2")},                                                                             coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),

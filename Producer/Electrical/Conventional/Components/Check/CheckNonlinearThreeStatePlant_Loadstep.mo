@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckNonlinearThreeStatePlant_Loadstep "Example of the component NonlinearThreeStatePlant"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,7 @@ model CheckNonlinearThreeStatePlant_Loadstep "Example of the component Nonlinear
     isSecondaryControlActive=false,
     isExternalSecondaryController=false,
     isPrimaryControlActive=true)         annotation (Placement(transformation(extent={{-52,-26},{-16,8}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantPotentialVariableBoundary(useInputConnector=false) annotation (Placement(transformation(extent={{48,-12},{68,8}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantPotentialVariableBoundary(useInputConnector=false) annotation (Placement(transformation(extent={{48,-12},{68,8}})));
   inner TransiEnt.SimCenter simCenter(useThresh=false)
                                       annotation (Placement(transformation(extent={{-70,80},{-50,100}})));
   inner TransiEnt.ModelStatistics modelStatistics
@@ -50,7 +50,7 @@ model CheckNonlinearThreeStatePlant_Loadstep "Example of the component Nonlinear
     isSecondaryControlActive=false,
     isExternalSecondaryController=false,
     isPrimaryControlActive=true)         annotation (Placement(transformation(extent={{-54,-112},{-18,-78}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantPotentialVariableBoundary1(useInputConnector=false) annotation (Placement(transformation(extent={{48,-98},{68,-78}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantPotentialVariableBoundary1(useInputConnector=false) annotation (Placement(transformation(extent={{48,-98},{68,-78}})));
   Modelica.Blocks.Sources.Step P_step1(
     offset=-500e6,
     startTime=900,

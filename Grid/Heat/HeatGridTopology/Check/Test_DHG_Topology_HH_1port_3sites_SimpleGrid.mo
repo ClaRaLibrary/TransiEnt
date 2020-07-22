@@ -3,10 +3,10 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
   import TransiEnt;
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -78,7 +78,7 @@ model Test_DHG_Topology_HH_1port_3sites_SimpleGrid
         extent={{-19,-18},{19,18}},
         rotation=0,
         origin={-73,-110})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_3(useInputConnector=false) annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_3(useInputConnector=false) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=270,
         origin={-10,136})));

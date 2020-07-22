@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.HotWaterStorage_L4.Utilities;
 function get_SolarInputFraction_Exp "returns vector with fraction of total inflow for each solar input layer. sum of fractions is 1."
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //

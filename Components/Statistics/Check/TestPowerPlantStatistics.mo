@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Check;
 model TestPowerPlantStatistics "Example of statistics of electric power plants"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,7 +32,7 @@ model TestPowerPlantStatistics "Example of statistics of electric power plants"
   Producer.Electrical.Conventional.Components.SimplePowerPlant cogen(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration, typeOfPrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.BlackCoal) annotation (Placement(transformation(extent={{-22,-134},{38,-76}})));
   Modelica.Blocks.Sources.Constant cogenTarget(k=-300e6)
     annotation (Placement(transformation(extent={{-80,-104},{-60,-84}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency constantFrequency_L1_1(useInputConnector=false, f_set_const=50.01) annotation (Placement(transformation(extent={{90,-50},{110,-30}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency constantFrequency_L1_1(useInputConnector=false, f_set_const=50.01) annotation (Placement(transformation(extent={{90,-50},{110,-30}})));
 equation
   connect(conventionalTarget.y, conventional.P_el_set) annotation (Line(
       points={{-65,-38},{-32,-38},{-32,60},{6,60},{6,20},{9.5,20},{9.5,23.71}},

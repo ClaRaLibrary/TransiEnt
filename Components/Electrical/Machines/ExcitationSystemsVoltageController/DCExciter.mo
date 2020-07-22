@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.Machines.ExcitationSystemsVoltageControll
 model DCExciter "Simple Voltage Controller with PT1-dynamics with DC Exciter"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,7 +54,7 @@ model DCExciter "Simple Voltage Controller with PT1-dynamics with DC Exciter"
   parameter Real TST=1 "Time constantb of stabilization loop";
   parameter Real KST=0.5 "Gain of stabilization loop";
 
-
+  parameter Real LimitofExcitation=2 "maximum factor of excitation (current)";
 
 
   // _____________________________________________
@@ -91,7 +91,8 @@ model DCExciter "Simple Voltage Controller with PT1-dynamics with DC Exciter"
     b={TC,1},
     a={TB,1},
     initType=Modelica.Blocks.Types.Init.SteadyState) annotation (Placement(transformation(extent={{34,40},{22,52}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=2*v_n) annotation (Placement(transformation(extent={{-4,40},{-16,52}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=LimitofExcitation*v_n)
+                                                        annotation (Placement(transformation(extent={{-4,40},{-16,52}})));
   Modelica.Blocks.Continuous.Derivative derivative(
     k=KST,
     T=TST,

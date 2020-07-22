@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Blocks;
 block LimPID "P, PI, PD, and PID controller with limited output, anti-windup compensation and delayed, smooth activation (if wanted)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,6 +24,7 @@ block LimPID "P, PI, PD, and PID controller with limited output, anti-windup com
   import Modelica.Blocks.Types.SimpleController;
 
   output Real controlError = u_s - u_m "Control error (set point - measurement)";
+  output Real controlErrorRel = (u_s - u_m)/max(Modelica.Constants.eps,u_s) "Relative control error (set point - measurement)/(set point)";
 
 //---------------------------------------
 //General Design of the Controller ------
@@ -67,7 +68,7 @@ parameter ClaRa.Basics.Units.Time Tau_lag_I=0.0 "Time lag for activation of inte
     annotation (Dialog(tab="Controller activation"));
 
 parameter Real y_inactive = 1 "Controller output if controller is not active" annotation(Dialog(tab="Controller activation"));
-parameter Boolean use_reset = use_activateInput "Use reset ability" annotation(Dialog(tab="Controller activation",enable=use_activateInput));
+parameter Boolean use_reset = use_activateInput or t_activation>0 "Use reset ability" annotation(Dialog(tab="Controller activation",enable=use_activateInput or t_activation>0));
 
 //Signal Smoothening---------------------------
 
@@ -240,10 +241,12 @@ public
                                                                    rotation=270,
         origin={56,-30})));
 Modelica.Blocks.Sources.BooleanExpression activate_(y=time >= t_activation) annotation (Placement(transformation(extent={{-194,180},{-174,200}})));
-Modelica.Blocks.Logical.Timer time_lag_I_activation annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=0, origin={18,142})));
+Modelica.Blocks.Logical.Timer time_lag_I_activation if with_I
+                                                    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=0, origin={18,142})));
 Modelica.Blocks.Logical.And controllerActive if use_activateInput annotation (Placement(transformation(extent={{-134,170},{-114,150}})));
 Modelica.Blocks.Routing.BooleanPassThrough booleanPassThrough if not use_activateInput annotation (Placement(transformation(extent={{-60,180},{-40,200}})));
-Modelica.Blocks.Logical.GreaterThreshold I_activation(threshold=Tau_lag_I) annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=270, origin={-152,-66})));
+Modelica.Blocks.Logical.GreaterThreshold I_activation(threshold=Tau_lag_I) if with_I
+                                                                           annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=270, origin={-152,-66})));
 initial equation
   if use_reset then
     resetValueI =   if with_D then if perUnitConversion then y_start/y_ref - addPID.u1 else y_start-addPID.u1 else 0;

@@ -1,11 +1,11 @@
 within TransiEnt.Producer.Combined.SmallScaleCHP.Base;
 partial model PartialCHP "Model consisting of replaceable engine and generator and control interface"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -42,7 +42,7 @@ partial model PartialCHP "Model consisting of replaceable engine and generator a
 
   //Specification
 
-  replaceable TransiEnt.Producer.Combined.SmallScaleCHP.Specifications.Dachs_HKA_G_5_5kW Specification constrainedby TransiEnt.Producer.Combined.SmallScaleCHP.Base.BaseCHPSpecification "Record containing technical data of CHP" annotation (Dialog(tab="General", group="Specification"), choices(choicesAllMatching=true));
+  replaceable TransiEnt.Producer.Combined.SmallScaleCHP.Specifications.Dachs_HKA_G_5_5kW Specification constrainedby TransiEnt.Producer.Combined.SmallScaleCHP.Base.BaseCHPSpecification "Record containing technical data of CHP" annotation (Dialog(tab="General", group="Specification"), choicesAllMatching=true);
 
   replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (
     Dialog(tab="General", group="Replaceable Components"),
@@ -277,10 +277,10 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
 <p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set - Electric Power setpoint</span></p>
-<p>T_return - Heating Water Return&nbsp;temperature </p>
-<p>T_supply - Heating Water Supply&nbsp;temperature</p>
+<p>T_return - Heating Water Return temperature </p>
+<p>T_supply - Heating Water Supply temperature</p>
 <p>switch</p>
-<p>P_el_pump_set&nbsp;- Electric Pump Power setpoint</p>
+<p>P_el_pump_set - Electric Pump Power setpoint</p>
 <p>epp - Electric Power Port, type can be chosen</p>
 <p>gasPortIn - Fuel Gas Input Port</p>
 <p>gasPortOut - Fuel Gas Output Port</p>

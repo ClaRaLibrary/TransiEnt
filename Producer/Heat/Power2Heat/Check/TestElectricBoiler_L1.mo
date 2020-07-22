@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat.Check;
 model TestElectricBoiler_L1
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -22,7 +22,7 @@ model TestElectricBoiler_L1
 //________________________________________________________________________________//
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency electricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{8,20},{28,40}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{8,20},{28,40}})));
   TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler simpleElectricBoiler(
     Q_flow_n=140e6,
     usePowerPort=true,
@@ -45,8 +45,7 @@ model TestElectricBoiler_L1
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-16,-78})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency electricGrid1(useInputConnector=false)
-                                                                                             annotation (Placement(transformation(extent={{8,-80},{28,-60}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid1(useInputConnector=false) annotation (Placement(transformation(extent={{8,-80},{28,-60}})));
   TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler simpleElectricBoiler1(
     Q_flow_n=140e6,
     usePowerPort=true,

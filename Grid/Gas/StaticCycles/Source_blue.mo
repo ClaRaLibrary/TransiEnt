@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles;
 model Source_blue "Blue boundary"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,7 +49,7 @@ model Source_blue "Blue boundary"
 initial equation
 
     p = outlet.p;
-    h = TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
     vleFluidType=medium,
     p=p,
     T=T,

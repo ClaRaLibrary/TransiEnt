@@ -1,10 +1,10 @@
-within TransiEnt.Examples.Hamburg;
+﻿within TransiEnt.Examples.Hamburg;
 record ExampleGenerationPark2012 "Example Generation Park for the year of 2012 (based on german generation park in 2012)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,6 +19,12 @@ record ExampleGenerationPark2012 "Example Generation Park for the year of 2012 (
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   import TransiEnt;
   extends TransiEnt.Grid.Electrical.Base.PartialGenerationPark(
   nPlants=22,
@@ -39,6 +45,11 @@ record ExampleGenerationPark2012 "Example Generation Park for the year of 2012 (
          "CHP West, Block2", "Black Coal", "Combined Cycle Plant", "Gas Turbine 1", "Gas Turbine 2",
          "Oil fired plant", "Oil Gas Turbine", "Garbage Plant", "Biomass","Pumped Storage",
          "Pumped Storage (Pump)", "Curtailment", "Import", "Run-off water plants", "Photovoltaic", "Wind Onshore", "Wind Offshore"});
+
+  // _____________________________________________
+  //
+  //              Visible Parameters
+  // _____________________________________________
 
   // ==== Installed power ====
   parameter Modelica.SIunits.Power P_el_n_NUC = 300e6 "Installed capacity of nuclear plant" annotation(Dialog(group="Installed capacity, dispatchable units"));
@@ -146,9 +157,9 @@ record ExampleGenerationPark2012 "Example Generation Park for the year of 2012 (
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">[1] 50HERTZ TRANSMISSION, AMPRION, TENNET TSO and TRANSNETBW. Netzentwicklungsplan Strom 2014 -Zweiter Entwurf der &Uuml;bertragungsnetzbetreiber. 2014, </span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">[2] 50HERTZ TRANSMISSION GMBH, AMPRION GMBH, TENNET TSO GMBH and TRANSNETBW GMBH. Netzentwicklungsplan Strom 2025, 2. Entwurf der &Uuml;bertragungsnetzbetreiber. 2016 </span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">[3] BUNDESMINISTERIUM and BUNDESMINISTERIUM DER JUSTIZ UND F&Uuml;R VERBRAUCHERSCHUTZ. Gesetz f&uuml;r den Ausbau erneuerbarer Energien (Erneuerbare-Energien-Gesetz-EEG 2014). 2014. </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">[1] 50HERTZ TRANSMISSION, AMPRION, TENNET TSO and TRANSNETBW. Netzentwicklungsplan Strom 2014 -Zweiter Entwurf der übertragungsnetzbetreiber. 2014, </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">[2] 50HERTZ TRANSMISSION GMBH, AMPRION GMBH, TENNET TSO GMBH and TRANSNETBW GMBH. Netzentwicklungsplan Strom 2025, 2. Entwurf der übertragungsnetzbetreiber. 2016 </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">[3] BUNDESMINISTERIUM and BUNDESMINISTERIUM DER JUSTIZ UND FüR VERBRAUCHERSCHUTZ. Gesetz für den Ausbau erneuerbarer Energien (Erneuerbare-Energien-Gesetz-EEG 2014). 2014. </span></p>
 <p>[4] L. Andresen, P. Dubucq, R. Peniche Garcia, G. Ackermann, A. Kather, and G. Schmitz, &ldquo;Transientes Verhalten gekoppelter Energienetze mit hohem Anteil Erneuerbarer Energien: Abschlussbericht des Verbundvorhabens,&rdquo; Hamburg, 2017.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on Mon Aug 18 2014</span></p>

@@ -1,11 +1,11 @@
-within TransiEnt.Storage.Gas.Base;
+﻿within TransiEnt.Storage.Gas.Base;
 partial model PartialGasStorage
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,6 +30,7 @@ partial model PartialGasStorage
   import SI = Modelica.SIunits;
 
   extends TransiEnt.Basics.Icons.StorageGenericGas;
+  extends MatchClassGasStorage;
 
   // _____________________________________________
   //
@@ -48,7 +49,7 @@ partial model PartialGasStorage
   parameter SI.Volume V_geo=1 "geometric inner volume of the storage cylinder" annotation(Dialog(group="Geometry"));
   parameter SI.Mass m_gas_start=1e5 "Initial mass in the storage" annotation(Dialog(group="Initialization"));
   parameter Boolean calculateCost=simCenter.calculateCost "true if cost shall be calculated"  annotation (Dialog(group="Statistics"));
-  parameter Boolean includeHeatTransfer=false "consider heat transfer" annotation(Dialog(group="Heat Transfer"));
+  parameter Boolean includeHeatTransfer=true "consider heat transfer" annotation(Dialog(group="Fundamental Definitions"));
 
   // _____________________________________________
   //
@@ -155,6 +156,6 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), Dec 2018</p>
+<p>Model created by Oliver Schülting (oliver.schuelting@tuhh.de), Dec 2018</p>
 </html>"));
 end PartialGasStorage;

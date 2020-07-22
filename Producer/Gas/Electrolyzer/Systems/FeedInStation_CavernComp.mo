@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model FeedInStation_CavernComp
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ model FeedInStation_CavernComp
   //parameter SI.Temperature T_Init=283.15 "Sets initial value for T" annotation (Dialog(tab="General", group="Initialization"));
   parameter Modelica.SIunits.Efficiency eta_n(
     min=0,
-    max=1)=0.75 "Nominal efficency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
+    max=1)=0.75 "Nominal efficency refering to the GCV (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter Modelica.SIunits.Efficiency eta_scale(
     min=0,
     max=1)=0 "Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
@@ -57,7 +57,8 @@ model FeedInStation_CavernComp
   parameter SI.Temperature T_out=283.15 "Hydrogen output temperature from electrolyser" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter Real specificWaterConsumption=10 "Mass of water per mass of hydrogen" annotation (Dialog(tab="General", group="Electrolyzer"));
 
-  parameter SI.SpecificEnthalpy h_start_junction=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(medium_h2,p_start_junction,T_start_junction,medium_h2.xi_default) "Initial specific enthalpy (can be calculated by StaticCycle)" annotation (Dialog(tab="General", group="Junction"));
+  parameter Boolean useIsothMix=false "Choose if the temperature changes in junction should be neglected" annotation (Dialog(group="Junction"));
+  parameter SI.SpecificEnthalpy h_start_junction=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(medium_h2,p_start_junction,T_start_junction,medium_h2.xi_default) "Initial specific enthalpy (can be calculated by StaticCycle)" annotation (Dialog(tab="General", group="Junction"));
   parameter SI.AbsolutePressure p_start_junction=simCenter.p_amb_const+simCenter.p_eff_2 "Initial pressure in the junction" annotation (Dialog(tab="General", group="Junction"));
   parameter SI.Temperature T_start_junction=simCenter.T_ground "Initial temperature" annotation (Dialog(tab="General", group="Junction"));
   parameter ClaRa.Basics.Units.Volume volume_junction=0.1 "Volume of the junction" annotation (Dialog(tab="General", group="Junction"));
@@ -75,6 +76,9 @@ model FeedInStation_CavernComp
   parameter SI.Pressure p_maxLow= 174e5 "Lower value of the storage where it can be filled again" annotation (Dialog(tab="Storage"));
   parameter SI.Pressure p_minLow=58e5 "if valve open and p<p_low, close valve" annotation (Dialog(tab="Storage"));
   parameter SI.Pressure p_minHigh=60e5 "if valve closed and p>p_high, open valve" annotation (Dialog(tab="Storage"));
+  parameter SI.Pressure p_minLow_constantDemand=50e5 "storage can be emptied via 'm_flow_hydrogenDemand_constant' up to 'p_minLow_constantDemand'" annotation (Dialog(tab="Storage"));
+  parameter SI.MassFlowRate m_flow_hydrogenDemand_constant=0 "constant hydrogen demand if hydrogen is available" annotation (Dialog(tab="Storage", group="Control"));
+
   parameter SI.Volume V_geo=1e5 "Geometric volume of storage" annotation (Dialog(tab="Storage"));
   parameter SI.Height height=3.779*V_geo^(1/3) "Height of storage" annotation (Dialog(tab="Storage"));
   parameter SI.CoefficientOfHeatTransfer alpha_nom=133 "Heat transfer coefficient inside the storage cylinder" annotation (Dialog(tab="Storage"));
@@ -110,13 +114,21 @@ model FeedInStation_CavernComp
     constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost configuration compressor" annotation (Dialog(tab="Statistics"), choices(choicesAllMatching=true));
   parameter Modelica.SIunits.Power P_el_n_compressor=1e5 "Nominal power of compressor for cost calculation" annotation (Dialog(tab="Statistics"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el_other=simCenter.Cspec_demAndRev_el_70_150_GWh "Specific demand-related cost per electric energy for compressor and start gas generation" annotation (Dialog(tab="Statistics"));
-  parameter Boolean integrateMassFlow=false "True if mass flow shall be integrated";
+  parameter Boolean integrateMassFlow=false "True, if mass flow shall be integrated";
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary"));
+
+  parameter Boolean useFluidCoolantPort=false "choose if fluid port for coolant shall be used" annotation (Dialog(enable=not useHeatPort,group="Coolant"));
+  parameter Boolean useHeatPort=false "choose if heat port for coolant shall be used" annotation (Dialog(enable=not useFluidCoolantPort,group="Coolant"));
+  parameter Boolean useVariableCoolantOutputTemperature=false "choose if temperature of cooland output shall be defined by input" annotation (Dialog(enable=useFluidCoolantPort,group="Coolant"));
+  parameter SI.Temperature T_out_coolant_target=500+273.15 "output temperature of coolant - will be limited by temperature which is technically feasible" annotation (Dialog(enable=useFluidCoolantPort,group="Coolant"));
+  parameter Boolean externalMassFlowControl=false "choose if heat port for coolant shall be used" annotation (Dialog(enable=useFluidCoolantPort and (not useVariableCoolantOutputTemperature), group="Coolant"));
 
   // _____________________________________________
   //
   //                  Variables
   // _____________________________________________
   SI.Mass mass_H2_fedIn "Hydrogen mass fed into grid";
+  SI.ActivePower P_el_max_is=if controlTotalElyStorage.overloadController.state==3 then controlTotalElyStorage.overloadController.P_el_cooldown elseif controlTotalElyStorage.feedInStorageController.storageFull then controlTotalElyStorage.feedInStorageController.limPID.y else P_el_max;
 
 
   // _____________________________________________
@@ -167,6 +179,12 @@ protected
                          annotation (Placement(transformation(extent={{-96,-36},{-84,-24}})));
 public
   TransiEnt.Producer.Gas.Electrolyzer.PEMElectrolyzer_L1 electrolyzer(
+    useFluidCoolantPort=useFluidCoolantPort,
+    useHeatPort=useHeatPort,
+    externalMassFlowControl=externalMassFlowControl,
+    useVariableCoolantOutputTemperature=useVariableCoolantOutputTemperature,
+    T_out_coolant_target=T_out_coolant_target,
+    usePowerPort=usePowerPort,
     final P_el_n=P_el_n,
     final P_el_max=P_el_max,
     final eta_n=eta_n,
@@ -180,7 +198,10 @@ public
     redeclare model CostSpecsGeneral = CostSpecsElectrolyzer,
     Cspec_demAndRev_el=Cspec_demAndRev_el_electrolyzer) annotation (Placement(transformation(extent={{-84,-16},{-54,16}})));
 protected
-  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore valve_pBeforeValveDes(final medium=medium_h2, p_BeforeValveDes=p_out) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore valve_pBeforeValveDes(
+    final medium=medium_h2,
+    p_BeforeValveDes=p_out,
+    useFluidModelsForSummary=useFluidModelsForSummary) annotation (Placement(transformation(
         extent={{8,-4},{-8,4}},
         rotation=90,
         origin={8,-18})));
@@ -204,7 +225,7 @@ public
     storage(
       start_pressure=start_pressure,
       V_geo=V_geo,
-      alpha_nom=alpha_nom,
+      redeclare model HeatTransfer = TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 (alpha_nom=alpha_nom),
       m_gas_start=m_start,
       p_gas_start=p_start,
       T_gas_start=T_start,
@@ -235,7 +256,8 @@ protected
     splitRatio_input=true,
     medium=medium_h2,
     showExpertSummary=false,
-    showData=false) annotation (Placement(transformation(extent={{0,-8},{16,6}})));
+    showData=false,
+    useFluidModelsForSummary=useFluidModelsForSummary) annotation (Placement(transformation(extent={{0,-8},{16,6}})));
 
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor_ely(final medium=medium_h2, xiNumber=0)            annotation (Placement(transformation(
         extent={{7,6},{-7,-6}},
@@ -253,6 +275,10 @@ public
     eta_n=eta_n,
     eta_scale=eta_scale,
     startState=startState,
+    p_minLow=p_minLow,
+    p_minHigh=p_minHigh,
+    p_minLow_constantDemand=p_minLow_constantDemand,
+    m_flow_hydrogenDemand_constant=m_flow_hydrogenDemand_constant,
     redeclare model Charline = Charline,
     p_maxLow=p_maxLow,
     p_maxHigh=p_maxHigh,
@@ -286,8 +312,7 @@ protected
 
 public
   inner Summary summary(
-    outline(mass_H2_fedIn=mass_H2_fedIn,
-      P_el_compressor=compressorCavern.summary.outline.P_el),
+    outline(mass_H2_fedIn=mass_H2_fedIn, P_el_compressor=compressorCavern.summary.outline.P_el),
     electrolyzer(
       P_el=electrolyzer.summary.outline.P_el,
       W_el=electrolyzer.summary.outline.W_el,
@@ -332,6 +357,7 @@ public
       rho=storage.summary.gasPortOut.rho),
     gasPortAfterBypassValve(
       mediumModel=valve_pBeforeValveDes.summary.gasPortOut.mediumModel,
+      useFluidModelsForSummary=useFluidModelsForSummary,
       xi=valve_pBeforeValveDes.summary.gasPortOut.xi,
       x=valve_pBeforeValveDes.summary.gasPortOut.x,
       m_flow=valve_pBeforeValveDes.summary.gasPortOut.m_flow,
@@ -371,8 +397,32 @@ public
       otherCosts=compressorCavern.summary.costs.otherCosts,
       revenues=compressorCavern.summary.costs.revenues)) annotation (Placement(transformation(extent={{-58,-100},{-38,-80}})));
 
+
+  Basics.Interfaces.Thermal.FluidPortIn fluidPortIn(Medium=simCenter.fluid1) if useFluidCoolantPort annotation (Placement(transformation(extent={{90,-100},{110,-80}})));
+  Basics.Interfaces.Thermal.FluidPortOut fluidPortOut(Medium=simCenter.fluid1) if useFluidCoolantPort     annotation (Placement(transformation(extent={{90,-50},{110,-30}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat if useHeatPort annotation (Placement(transformation(extent={{90,-76},{110,-56}})));
+  Basics.Interfaces.General.TemperatureIn T_set_coolant_out if useVariableCoolantOutputTemperature annotation (Placement(transformation(extent={{128,16},{88,56}})));
+public
+Components.Boundaries.Gas.BoundaryRealGas_Txim_flow           boundary_Txim_flow2(
+    medium=medium_h2,
+    variable_m_flow=true,
+    T_const=T_out)                                                                 annotation (Placement(transformation(extent={{5,-5},{-5,5}},
+        rotation=-90,
+        origin={81,-49})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=if storage.p_gas >= p_minLow_constantDemand then m_flow_hydrogenDemand_constant else 0) annotation (Placement(transformation(extent={{11,-8},{-11,8}},
+        rotation=-90,
+        origin={85,-74})));
+  Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth mix_H2_isoth(
+    p_start=p_start_junction,
+    redeclare model PressureLoss1 = PressureLossAtOutlet,
+    medium=medium_h2,
+    volume=volume_junction,
+    initOption=initOption) if useIsothMix annotation (Placement(transformation(
+        extent={{-8,8},{8,-8}},
+        rotation=0,
+        origin={-10,-50})));
 protected
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=medium_ng,
     deactivateTwoPhaseRegion=true,
     h=gasPortOut.h_outflow,
@@ -392,10 +442,12 @@ equation
   end if;
 
   connect(ramp.y,sourceH2.m_flow) annotation (Line(points={{-83.4,-30},{-83.4,-30.2},{-77.6,-30.2}},color={0,0,127}));
+  if usePowerPort then
   connect(electrolyzer.epp, epp) annotation (Line(
       points={{-84,0},{-84,0},{-100,0}},
       color={0,135,135},
       thickness=0.5));
+  end if;
   connect(threeWayValve.gasPortOut2, valve_pBeforeValveDes.gasPortIn) annotation (Line(
       points={{8,-8},{8,-10},{8.57143,-10}},
       color={255,255,0},
@@ -446,14 +498,33 @@ equation
       points={{14,54},{14,16},{86,16},{86,-40},{70.2857,-40}},
       color={0,0,127},
       pattern=LinePattern.Dash));
-  connect(mix_H2.gasPort1, h2toNG.gasPortIn) annotation (Line(
-      points={{0,-56},{0,-60},{0,-64}},
-      color={255,255,0},
-      thickness=1.5));
-  connect(mix_H2.gasPort3, valveDesiredMassFlow.gasPortOut) annotation (Line(
-      points={{16,-56},{42,-56},{65.1429,-56},{65.1429,-54}},
-      color={255,255,0},
-      thickness=1.5));
+  if not useIsothMix then
+    connect(mix_H2.gasPort1, h2toNG.gasPortIn) annotation (Line(
+        points={{0,-56},{0,-60},{0,-64}},
+        color={255,255,0},
+        thickness=1.5));
+    connect(mix_H2.gasPort3, valveDesiredMassFlow.gasPortOut) annotation (Line(
+        points={{16,-56},{16,-54},{65.1429,-54}},
+        color={255,255,0},
+        thickness=1.5));
+    connect(massflowSensor_bypass.gasPortOut, mix_H2.gasPort2) annotation (Line(
+        points={{8,-44},{8,-46},{8,-48}},
+        color={255,255,0},
+        thickness=1.5));
+  else
+    connect(mix_H2_isoth.gasPort1, h2toNG.gasPortIn) annotation (Line(
+        points={{-18,-50},{-18,-64},{0,-64}},
+        color={255,255,0},
+        thickness=1.5));
+    connect(mix_H2_isoth.gasPort3, valveDesiredMassFlow.gasPortOut) annotation (Line(
+        points={{-2,-50},{-2,-54},{65.1429,-54}},
+        color={255,255,0},
+        thickness=1.5));
+    connect(massflowSensor_bypass.gasPortOut, mix_H2_isoth.gasPort2) annotation (Line(
+        points={{8,-44},{8,-42},{-10,-42}},
+        color={255,255,0},
+        thickness=1.5));
+  end if;
   connect(electrolyzer.gasPortOut, massflowSensor_ely.gasPortIn) annotation (Line(
       points={{-54,0},{-37,0}},
       color={255,255,0},
@@ -470,12 +541,29 @@ equation
       points={{8.57143,-26},{8,-28},{8,-30}},
       color={255,255,0},
       thickness=1.5));
-  connect(massflowSensor_bypass.gasPortOut, mix_H2.gasPort2) annotation (Line(
-      points={{8,-44},{8,-46},{8,-48}},
+  if useFluidCoolantPort then
+    connect(electrolyzer.fluidPortIn, fluidPortIn) annotation (Line(
+      points={{-54,-14.4},{26,-14.4},{26,-14},{38,-14},{38,-90},{100,-90}},
+      color={175,0,0},
+      thickness=0.5));
+    connect(fluidPortOut, electrolyzer.fluidPortOut) annotation (Line(
+      points={{100,-40},{52,-40},{52,-6.4},{-54,-6.4}},
+      color={175,0,0},
+      thickness=0.5));
+  end if;
+  if useHeatPort then
+  connect(heat, electrolyzer.heat) annotation (Line(points={{100,-66},{46,-66},{46,-10.56},{-54,-10.56}},color={191,0,0}));
+  end if;
+  if useVariableCoolantOutputTemperature then
+    connect(electrolyzer.T_set_coolant_out, T_set_coolant_out) annotation (Line(points={{-51,11.2},{74,11.2},{74,36},{108,36}},  color={0,0,127}));
+  end if;
+
+  connect(boundary_Txim_flow2.gasPort, storage.gasPortOut) annotation (Line(
+      points={{81,-44},{80,-44},{80,-26.45},{66,-26.45}},
       color={255,255,0},
       thickness=1.5));
-  annotation (defaultComponentName="feedInStation",Diagram(graphics,
-                                                           coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
+  connect(boundary_Txim_flow2.m_flow, realExpression.y) annotation (Line(points={{84,-55},{84,-61.9},{85,-61.9}}, color={0,0,127}));
+  annotation (defaultComponentName="feedInStation",Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Text(
           extent={{-150,20},{150,-20}},
           lineColor={0,134,134},
@@ -500,6 +588,7 @@ equation
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>For start up, a small hydrogen mass flow for the electrolyzer can be set to allow for simpler initialisation. </p>
+<p>Constant mass flow &apos;m_flow_hydrogenDemand_constant&apos; is pulled from hydrogen storage if storage pressure is above p_min_Low_constantDemand. If pressure falls below &apos;p_minLow&apos; hydrogen in storage is only used for supply of &apos;m_flow_hydrogenDemand_constant&apos; and no more hydrogen can be fed in.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>Tested in check model &quot;TransiEnt.Producer.Gas.Electrolyzer.Systems.Check.Test_FeedInStation_CavernComp&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
@@ -507,5 +596,7 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Lisa Andresen (andresen@tuhh.de) in September 2016</p>
 <p>Model revised by Carsten Bode (c.bode@tuhh.de) in Apr 2018 (fixed for update to ClaRa 1.3.0)</p>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Mar 2020: added boundary for constant internal hydrogen demand</p>
+<p>Model modified by Carsten Bode (c.bode@tuhh.de) in May 2020: added option to use isothermal junction</p>
 </html>"));
 end FeedInStation_CavernComp;

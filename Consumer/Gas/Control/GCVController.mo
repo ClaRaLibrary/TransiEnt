@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.Gas.Control;
 model GCVController "Gas adaptive controller with demanded enthalpy flow rate and gross calorific value as inputs and desired mass flow rate as output"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,6 +32,8 @@ model GCVController "Gas adaptive controller with demanded enthalpy flow rate an
   //                  Parameters
   // _____________________________________________
 
+  parameter String mode="Consumer" annotation(Dialog(tab="General", group="Controller"),choices(choice = "Consumer" "Consumer", choice = "Producer" "Producer", choice = "Both" "Both", __Dymola_radioButtons=true));
+  parameter Boolean usePIDcontroller=true "if 'true' m_flow_desired' is calculated by PID";
   parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "Type of controller" annotation (Dialog(tab="General", group="Controller"));
   parameter Real k=1 "Gain for controller" annotation (Dialog(tab="General", group="Controller"));
   parameter Real Ti=0.1 "Integrator time constant" annotation (Dialog(tab="General", group="Controller"));
@@ -62,14 +64,14 @@ model GCVController "Gas adaptive controller with demanded enthalpy flow rate an
   //               Complex Components
   // _____________________________________________
 
-  Modelica.Blocks.Continuous.LimPID                                           LimPID(
+  TransiEnt.Basics.Blocks.LimPID LimPID(
     k=k,
-    Ti=Ti,
-    Td=Td,
+    Tau_i=Ti,
+    Tau_d=Td,
     controllerType=controllerType,
-    yMax=Modelica.Constants.inf,
+    y_max=if mode=="Consumer" or mode=="Both" then Modelica.Constants.inf else 0,
     xi_start=30,
-    yMin=0)
+    y_min=if mode=="Producer" or mode=="Both" then -Modelica.Constants.inf else 0) if usePIDcontroller
           annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -86,9 +88,10 @@ equation
   //
   //             Connect Statements
   // _____________________________________________
-
-  connect(m_flow_is, LimPID.u_m) annotation (Line(points={{40,106},{40,-18},{20,-18},{20,-12}},
-                                                                               color={0,0,127}));
+  if (not usePIDcontroller) then
+    connect(division.y, m_flow_desired);
+  end if;
+  connect(m_flow_is, LimPID.u_m) annotation (Line(points={{40,106},{40,-18},{20.1,-18},{20.1,-12}},color={0,0,127}));
   connect(LimPID.y, m_flow_desired) annotation (Line(points={{31,0},{110,0}}, color={0,0,127}));
   connect(H_flow_set, division.u1) annotation (Line(points={{-110,0},{-82,0},{-82,-6},{-30,-6}}, color={0,0,127}));
   connect(division.y, LimPID.u_s) annotation (Line(points={{-7,0},{8,0}}, color={0,0,127}));

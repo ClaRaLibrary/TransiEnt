@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Gas.Electrolyzer.Check;
 model TestPEMElectrolyzer_L1_Dynamics "Tester for a PEM electrolyzer"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,12 +51,13 @@ public
     T_out=T_out,
     P_el_n=P_el_n,
     P_el_max=P_el_max,
+    usePowerPort=true,
     redeclare model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder,
     redeclare model CostSpecsGeneral = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Electrolyzer_2035,
     Cspec_demAndRev_el=simCenter.Cspec_demAndRev_el_70_150_GWh,
     Cspec_demAndRev_other=simCenter.Cspec_demAndRev_other_water) annotation (Placement(transformation(extent={{0,20},{20,40}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid_0thOrder annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid_0thOrder annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-30,30})));
@@ -66,12 +67,13 @@ public
     T_out=T_out,
     P_el_n=P_el_n,
     P_el_max=P_el_max,
+    usePowerPort=true,
     redeclare model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics1stOrder,
     redeclare model CostSpecsGeneral = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Electrolyzer_2035,
     Cspec_demAndRev_el=simCenter.Cspec_demAndRev_el_70_150_GWh,
     Cspec_demAndRev_other=simCenter.Cspec_demAndRev_other_water) annotation (Placement(transformation(extent={{0,-20},{20,0}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid_1stOrder annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid_1stOrder annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-30,-10})));
@@ -83,12 +85,13 @@ public
     T_out=T_out,
     P_el_n=P_el_n,
     P_el_max=P_el_max,
+    usePowerPort=true,
     redeclare model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200,
     redeclare model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics2ndOrder,
     redeclare model CostSpecsGeneral = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Electrolyzer_2035,
     Cspec_demAndRev_el=simCenter.Cspec_demAndRev_el_70_150_GWh,
     Cspec_demAndRev_other=simCenter.Cspec_demAndRev_other_water) annotation (Placement(transformation(extent={{0,-60},{20,-40}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid_2ndOrder annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid_2ndOrder annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-30,-50})));

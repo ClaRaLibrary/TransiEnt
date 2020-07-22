@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridControl;
 model MassFlowCharacteristicLines "Model for the specification of the heating water massflow at each feed-in point as a funcion of the total amount of heating water massflow"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //

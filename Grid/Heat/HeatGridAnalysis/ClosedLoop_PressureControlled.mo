@@ -1,10 +1,10 @@
 within TransiEnt.Grid.Heat.HeatGridAnalysis;
 model ClosedLoop_PressureControlled "\"Closed loop district heating model with pressure controlled pumps and valves, constant massflow and variable heat flows\""
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -54,7 +54,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     length=4,
     N_tubes=25,
     m_flow_nom=m_flow_nom,
-    h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipe2.p_nom[1],
         273.15 + 100,
@@ -95,13 +95,13 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     N_tubes=25,
     m_flow_nom=m_flow_nom,
     p_nom(displayUnit="bar") = returnPipe1.p_nom[1],
-    h_start=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipe2.p_nom[1],
         273.15 + 50,
         simCenter.fluid1.xi_default),
     p_start(displayUnit="bar") = HeatConsumer.p_nom,
-    h_nom=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipe1.p_nom[1],
         273.15 + 50,
@@ -114,7 +114,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         extent={{13,14},{-13,-14}},
         rotation=90,
         origin={264,35})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 PressureReduction(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 PressureReduction(
     checkValve=false,
     openingInputIsActive=true,
     redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=1e4, m_flow_nom=m_flow_nom)) annotation (Placement(transformation(
@@ -123,7 +123,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         origin={263,89})));
   ClaRa.Visualisation.Quadruple quadruple3
     annotation (Placement(transformation(extent={{218,60},{256,76}})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 DifferentialPressure(
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 DifferentialPressure(
     openingInputIsActive=true,
     checkValve=false,
     redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=1e4, m_flow_nom=m_flow_nom)) annotation (Placement(transformation(
@@ -148,7 +148,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     Delta_p_nom=(19.5 - 6.7)*1e5,
     length=20e3,
     diameter_i=0.7,
-    h_nom=ones(supplyPipe1.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(supplyPipe1.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipe1.p_nom[1],
         273.15 + 100,
@@ -169,7 +169,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     Delta_p_nom=(10 - 6)*1e5,
     length=1000,
     diameter_i=0.7,
-    h_nom=ones(supplyPipe2.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(supplyPipe2.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         supplyPipe2.p_nom[1],
         273.15 + 100,
@@ -190,7 +190,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     diameter_i=0.8,
     Delta_p_nom=(4.2 - 1.9)*1e5,
     length=1000,
-    h_nom=ones(returnPipe1.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipe1.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipe1.p_nom[1],
         273.15 + 50,
@@ -211,7 +211,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     Delta_p_nom=(3.7 - 2.3)*1e5,
     length=3.5e3,
     diameter_i=0.8,
-    h_nom=ones(returnPipe2.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipe2.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipe2.p_nom[1],
         273.15 + 50,
@@ -232,7 +232,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4,
     length=16.5e3,
     diameter_i=0.7,
-    h_nom=ones(returnPipe3.N_cv)*TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(
+    h_nom=ones(returnPipe3.N_cv)*TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
         simCenter.fluid1,
         returnPipe3.p_nom[1],
         273.15 + 50,
@@ -245,10 +245,8 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
     frictionAtInlet=false,
     showData=true,
     initOption=0) annotation (Placement(transformation(extent={{-98,-72},{-126,-62}})));
-  Modelica.Blocks.Sources.Constant p_sollLeft7(k=10.7e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=270,
-        origin={32,184})));
+  Modelica.Blocks.Sources.Constant p_setLeft7(k=10.7e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=270)));
   ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple Pump_Left annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -265,7 +263,7 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-12,-66})));
-  ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1 valveVLE_L1_4(redeclare model PressureLoss =
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_4(redeclare model PressureLoss =
         ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (                      Delta_p_nom=1e4, m_flow_nom=m_flow_nom)) annotation (Placement(transformation(
         extent={{-10,-6},{10,6}},
         rotation=90,
@@ -301,10 +299,8 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-138,-48})));
-  Modelica.Blocks.Sources.Constant p_sollLeft3(k=3e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=0,
-        origin={-182,-4})));
+  Modelica.Blocks.Sources.Constant p_setLeft3(k=3e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=0)));
   ClaRa.Components.Utilities.Blocks.LimPID PID1(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -318,10 +314,8 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-158,-4})));
-  Modelica.Blocks.Sources.Constant p_sollLeft4(k=4.6e5)
-    annotation (Placement(transformation(extent={{6,-6},{-6,6}},
-        rotation=0,
-        origin={324,90})));
+  Modelica.Blocks.Sources.Constant p_setLeft4(k=4.6e5)
+    annotation (Placement(transformation(extent={{6,-6},{-6,6}}, rotation=0)));
   ClaRa.Components.Utilities.Blocks.LimPID PID2(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -339,10 +333,8 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         extent={{10,-10},{-10,10}},
         rotation=270,
         origin={274,64})));
-  Modelica.Blocks.Sources.Constant p_sollLeft8(k=4.2e5)
-    annotation (Placement(transformation(extent={{6,-6},{-6,6}},
-        rotation=0,
-        origin={318,-16})));
+  Modelica.Blocks.Sources.Constant p_setLeft8(k=4.2e5)
+    annotation (Placement(transformation(extent={{6,-6},{-6,6}}, rotation=0)));
   ClaRa.Components.Utilities.Blocks.LimPID PID3(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -364,10 +356,8 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={26,-76})));
-  Modelica.Blocks.Sources.Constant p_sollLeft9(k=2.3e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={-12,-120})));
+  Modelica.Blocks.Sources.Constant p_setLeft9(k=2.3e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=90)));
   ClaRa.Components.Utilities.Blocks.LimPID PID4(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -381,10 +371,8 @@ model ClosedLoop_PressureControlled "\"Closed loop district heating model with p
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-12,-96})));
-  Modelica.Blocks.Sources.Constant p_sollLeft5(k=1.9e5)
-    annotation (Placement(transformation(extent={{-6,-6},{6,6}},
-        rotation=90,
-        origin={118,-120})));
+  Modelica.Blocks.Sources.Constant p_setLeft5(k=1.9e5)
+    annotation (Placement(transformation(extent={{-6,-6},{6,6}}, rotation=90)));
   ClaRa.Components.Utilities.Blocks.LimPID PID5(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     y_min=0,
@@ -525,7 +513,7 @@ equation
   connect(returnPipe2.eye, quadruple12.eye) annotation (Line(points={{41.4,-70.4},{46,-70.4},{46,-85}}, color={190,190,190}));
   connect(returnPipe1.eye, quadruple17.eye) annotation (Line(points={{199.4,-68.4},{200,-68.4},{200,-68},{196,-68},{196,-79}}, color={190,190,190}));
   connect(PID.y, pumpSupply.P_drive) annotation (Line(points={{32,151},{32,146}}, color={0,0,127}));
-  connect(PID.u_s, p_sollLeft7.y) annotation (Line(points={{32,174},{32,177.4}}, color={0,0,127}));
+  connect(PID.u_s,p_setLeft7.y)  annotation (Line(points={{32,174},{32,84},{32,-6.6},{0,-6.6}}, color={0,0,127}));
   connect(pumpSupply.outlet, vlePressureSensor.port) annotation (Line(
       points={{42,134},{64,134}},
       color={0,131,169},
@@ -545,19 +533,19 @@ equation
       points={{-128,-14},{-128,-24},{-128,-48}},
       color={0,131,169},
       thickness=0.5));
-  connect(PID1.u_s, p_sollLeft3.y) annotation (Line(points={{-170,-4},{-172,-4},{-175.4,-4}}, color={0,0,127}));
+  connect(PID1.u_s,p_setLeft3.y)  annotation (Line(points={{-170,-4},{6.6,-4},{6.6,0}}, color={0,0,127}));
   connect(PID1.y, Pump_Left.P_drive) annotation (Line(points={{-147,-4},{-140,-4}},   color={0,0,127}));
   connect(vlePressureSensor1.p, PID1.u_m) annotation (Line(points={{-138,-37},{-157.9,-37},{-157.9,-16}},
                                                                                                     color={0,0,127}));
   connect(PressureReduction.opening_in, PID2.y) annotation (Line(points={{270.5,89},{273.25,89},{273.25,90},{277,90}}, color={0,0,127}));
-  connect(p_sollLeft4.y, PID2.u_s) annotation (Line(points={{317.4,90},{308,90},{300,90}}, color={0,0,127}));
+  connect(p_setLeft4.y, PID2.u_s) annotation (Line(points={{-6.6,0},{300,0},{300,90}}, color={0,0,127}));
   connect(HeatConsumer.inlet, vlePressureSensor2.port) annotation (Line(
       points={{264,48},{264,64}},
       color={0,131,169},
       thickness=0.5));
   connect(vlePressureSensor2.p, PID2.u_m) annotation (Line(points={{274,75},{282,75},{282,78},{287.9,78}},
                                                                                                     color={0,0,127}));
-  connect(p_sollLeft8.y, PID3.u_s) annotation (Line(points={{311.4,-16},{304,-16},{300,-16}}, color={0,0,127}));
+  connect(p_setLeft8.y, PID3.u_s) annotation (Line(points={{-6.6,0},{300,0},{300,-16}}, color={0,0,127}));
   connect(vlePressureSensor3.p, PID3.u_m) annotation (Line(points={{272,-37},{287.9,-37},{287.9,-28}},
                                                                                                    color={0,0,127}));
   connect(DifferentialPressure.opening_in, PID3.y) annotation (Line(points={{270.5,-15},{276.25,-15},{276.25,-16},{277,-16}}, color={0,0,127}));
@@ -565,7 +553,7 @@ equation
       points={{228,-65},{238,-65},{238,-66},{263,-66},{262,-48}},
       color={0,131,169},
       thickness=0.5));
-  connect(PID4.u_s, p_sollLeft9.y) annotation (Line(points={{-12,-108},{-12,-113.4}}, color={0,0,127}));
+  connect(PID4.u_s,p_setLeft9.y)  annotation (Line(points={{-12,-108},{-12,-50},{-12,6.6},{0,6.6}}, color={0,0,127}));
   connect(vlePressureSensor4.p, PID4.u_m) annotation (Line(points={{15,-76},{10,-76},{10,-96},{0,-96},{0,-95.9}},
                                                                                                     color={0,0,127}));
   connect(Pump_Left2.inlet, vlePressureSensor4.port) annotation (Line(
@@ -573,7 +561,7 @@ equation
       color={0,131,169},
       thickness=0.5));
   connect(Pump_Left2.P_drive, PID4.y) annotation (Line(points={{-12,-78},{-12,-85}},   color={0,0,127}));
-  connect(PID5.u_s, p_sollLeft5.y) annotation (Line(points={{118,-108},{118,-113.4}}, color={0,0,127}));
+  connect(PID5.u_s,p_setLeft5.y)  annotation (Line(points={{118,-108},{118,-50},{118,6.6},{0,6.6}}, color={0,0,127}));
   connect(vlePressureSensor5.p, PID5.u_m) annotation (Line(points={{139,-82},{140,-82},{140,-96},{130,-96},{130,-95.9}},
                                                                                                     color={0,0,127}));
   connect(Pump_Left3.inlet, vlePressureSensor5.port) annotation (Line(

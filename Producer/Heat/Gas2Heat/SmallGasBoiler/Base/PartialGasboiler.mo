@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Base;
 partial model PartialGasboiler "Full modulating gasboiler, partial model with splitted combustion and heat-transfer"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,7 +51,7 @@ partial model PartialGasboiler "Full modulating gasboiler, partial model with sp
     else simCenter.heatingCurve.T_supply_const - simCenter.heatingCurve.T_return_const "Maximum heat carrier temperature spread" annotation (Dialog(tab="General", group="Specification"));
   parameter SI.MassFlowRate m_flow_min= 0.15 "Mass flow rate to switch off. Non-zero mass flow leads to higher numerical stability" annotation (Dialog(tab="General", group="Specification"));
   parameter SI.Pressure Delta_p_nom=2000 "Nominal pressure loss" annotation (Dialog(tab="General", group="Specification"));
-  final parameter SI.SpecificHeatCapacity cp_water=TILMedia.VLEFluidFunctions.specificIsobaricHeatCapacity_pTxi(WaterMedium, 6*1e5, 273.15+60, {1});
+  final parameter SI.SpecificHeatCapacity cp_water=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificIsobaricHeatCapacity_pTxi(WaterMedium, 6*1e5, 273.15+60, {1});
 
   parameter Boolean condensing=true "Condensing operation, influence on emission calculation only." annotation (Dialog(tab="General", group="Combustion"));
   parameter Real lambda=1.2 "Combustion air ratio" annotation (Dialog(tab="General", group="Combustion"));

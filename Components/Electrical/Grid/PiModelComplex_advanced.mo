@@ -2,10 +2,10 @@ within TransiEnt.Components.Electrical.Grid;
 model PiModelComplex_advanced "pi-Modell of a cable for ComplexPowerPort, better numerics"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -45,7 +45,7 @@ model PiModelComplex_advanced "pi-Modell of a cable for ComplexPowerPort, better
   // _____________________________________________
 
 
-
+  parameter Boolean calculateOverload=true "choose if boolean variable 'overload' is calculated'" annotation(Dialog(group="Fundamental Definitions"));
 
   // _____________________________________________
   //
@@ -58,8 +58,6 @@ model PiModelComplex_advanced "pi-Modell of a cable for ComplexPowerPort, better
   //
   //             Variable Declarations
   // _____________________________________________
-
-
 
 
      Boolean overload(start=false);
@@ -83,22 +81,22 @@ equation
 
 
 
-      I_1_mag=Modelica.ComplexMath.'abs'(i_p);
-      I_2_mag=Modelica.ComplexMath.'abs'(i_n);
+  I_1_mag=Modelica.ComplexMath.'abs'(i_p);
+  I_2_mag=Modelica.ComplexMath.'abs'(i_n);
 
-if I_1_mag > I_2_mag then
-  I_g_mag=I_1_mag;
-else
-  I_g_mag=I_2_mag;
-end if;
+I_g_mag=max(I_1_mag,I_2_mag);
 
-if I_g_mag>(i_r*p*sqrt(3)) then
-  overload=true;
-else
-  overload=false;
-end if;
+  if calculateOverload then
+    if I_g_mag>(i_r*p*sqrt(3)) then
+      overload=true;
+    else
+      overload=false;
+    end if;
+  else
+    overload=false;
+  end if;
 
-usage=I_g_mag/(i_r*p*sqrt(3));
+  usage=I_g_mag/(i_r*p*sqrt(3));
 
   // _____________________________________________
   //

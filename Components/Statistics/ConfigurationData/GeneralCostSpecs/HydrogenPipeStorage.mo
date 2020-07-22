@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model HydrogenPipeStorage "Hydrogen buried pipe storage (1300...6800 m3 geo, <100 bar)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ model HydrogenPipeStorage "Hydrogen buried pipe storage (1300...6800 m3 geo, <10
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] U.Buenger, J.&nbsp;Michalski, F.&nbsp;Crotogino, O.&nbsp;Kruck,&nbsp;&quot;Large-scale&nbsp;underground&nbsp;storage&nbsp;of&nbsp;hydrogen&nbsp;for&nbsp;the&nbsp;grid&nbsp;integration&nbsp;of&nbsp;renewable&nbsp;energy&nbsp;and&nbsp;other&nbsp;applications&quot;&nbsp;In:&nbsp;Ball&nbsp;M,&nbsp;Basile&nbsp;A,&nbsp;Veziroǧlu&nbsp;TN,&nbsp;editors.&nbsp;Compend.&nbsp;Hydrog.&nbsp;Energy,&nbsp;Oxford:&nbsp;Woodhead&nbsp;Publishing;&nbsp;2016,&nbsp;p.&nbsp;133&ndash;163.</p>
+<p>[1] U.Buenger, J. Michalski, F. Crotogino, O. Kruck, &quot;Large-scale underground storage of hydrogen for the grid integration of renewable energy and other applications&quot; In: Ball M, Basile A, Veziroǧlu TN, editors. Compend. Hydrog. Energy, Oxford: Woodhead Publishing; 2016, p. 133&ndash;163.</p>
 <p>[2] K. Stolzenburg, &quot;Integration von Wind-Wasserstoff-Systemen in das Energiesystem&quot;, 2014 </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));

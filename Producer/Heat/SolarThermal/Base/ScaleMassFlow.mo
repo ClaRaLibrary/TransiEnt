@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.SolarThermal.Base;
 model ScaleMassFlow "Scaling mass flow up or down or leave it"
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -63,8 +63,14 @@ model ScaleMassFlow "Scaling mass flow up or down or leave it"
   //           Instances of other Classes
   // _____________________________________________
 protected
-  TILMedia.VLEFluid_ph vleFluidIn(vleFluidType=medium, p=fluidPortIn.p, h=h_in) annotation (Placement(transformation(extent={{-84,16},{-64,36}})));
-  TILMedia.VLEFluid_ph vleFluidOut(vleFluidType=medium, p=fluidPortOut.p, h=h_out) annotation (Placement(transformation(extent={{62,12},{82,32}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluidIn(
+    vleFluidType=medium,
+    p=fluidPortIn.p,
+    h=h_in) annotation (Placement(transformation(extent={{-84,16},{-64,36}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluidOut(
+    vleFluidType=medium,
+    p=fluidPortOut.p,
+    h=h_out) annotation (Placement(transformation(extent={{62,12},{82,32}})));
 
 equation
   // _____________________________________________

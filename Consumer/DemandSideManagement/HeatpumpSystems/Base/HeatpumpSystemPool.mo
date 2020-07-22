@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base;
 model HeatpumpSystemPool
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -59,7 +59,7 @@ model HeatpumpSystemPool
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Components.Boundaries.Electrical.Power Power annotation (Placement(transformation(extent={{80,-10},{60,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power Power annotation (Placement(transformation(extent={{80,-10},{60,10}})));
   Modelica.Blocks.Sources.RealExpression P_el_bdry(y=P_el) annotation (Placement(transformation(extent={{44,12},{64,32}})));
 
   // _____________________________________________

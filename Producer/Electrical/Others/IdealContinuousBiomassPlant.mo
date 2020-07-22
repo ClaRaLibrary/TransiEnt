@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Others;
 model IdealContinuousBiomassPlant "Ideal transient behaviour, no states, no heat offer, no controller basically just the icon.."
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -75,7 +75,7 @@ model IdealContinuousBiomassPlant "Ideal transient behaviour, no states, no heat
           fillColor={240,160,79})}),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Biomass plant with ideal&nbsp;transient&nbsp;behaviour,&nbsp;no&nbsp;states,&nbsp;no&nbsp;heat&nbsp;offer,&nbsp;no&nbsp;controller&nbsp;basically&nbsp;just&nbsp;the&nbsp;icon.</p>
+<p>Biomass plant with ideal transient behaviour, no states, no heat offer, no controller basically just the icon.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">L1E Models are based on characteristic lines, gains or efficiencies</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Generation as steady-state boundary</span></p>

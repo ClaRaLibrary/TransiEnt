@@ -1,10 +1,10 @@
 within TransiEnt.Components.Heat;
 model Valve "Valve model. Extends from ClaRa ValveVLE_L1"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,7 +19,7 @@ model Valve "Valve model. Extends from ClaRa ValveVLE_L1"
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
-  extends ClaRa.Components.VolumesValvesFittings.Valves.ValveVLE_L1;
+  extends ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1;
   extends TransiEnt.Basics.Icons.Valve;
 
   annotation (Icon(graphics,

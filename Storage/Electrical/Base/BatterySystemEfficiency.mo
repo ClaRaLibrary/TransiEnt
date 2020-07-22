@@ -1,10 +1,10 @@
-within TransiEnt.Storage.Electrical.Base;
+﻿within TransiEnt.Storage.Electrical.Base;
 model BatterySystemEfficiency "Typical characteristic line of battery system efficiency (including inverter efficiency)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -63,7 +63,7 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  eta_cycle =max(eta_min, min(eta_max, eta_max/d*P_star_abs/(a + b*((P_star_abs))^c)));
+  eta_cycle =max(eta_min, min(eta_max, eta_max/d*P_star_abs/(a + b*((P_star_abs))^c+Modelica.Constants.eps)));
 
   eta = sqrt(eta_cycle);
 
@@ -91,7 +91,7 @@ equation
           smooth=Smooth.Bezier)}),
                 Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Typical&nbsp;characteristic&nbsp;line&nbsp;of&nbsp;battery&nbsp;system&nbsp;efficiency&nbsp;(including&nbsp;inverter&nbsp;efficiency.</p>
+<p>Typical characteristic line of battery system efficiency (including inverter efficiency.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -108,7 +108,7 @@ equation
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>Tested in check model &quot;TransiEnt.Storage.Electrical.Base.Check.TestBatteryEfficiency&quot;</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] Arne D&ouml;rschlag, &quot;Erbringung von Prim&auml;rregelleistung durch Kleinbatteriespeicher im Poolverbund unter Ber&uuml;cksichtigung solarer Eigenstromoptimierung&quot;, M.S. thesis, Institute of Electric Power Systems and Automation, Hamburg of Technical University, Sep. 2014</p>
+<p>[1] Arne Dörschlag, &quot;Erbringung von Primärregelleistung durch Kleinbatteriespeicher im Poolverbund unter Berücksichtigung solarer Eigenstromoptimierung&quot;, M.S. thesis, Institute of Electric Power Systems and Automation, Hamburg of Technical University, Sep. 2014</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Pascal Dubucq (dubucq@tuhh.de) <span style=\"font-family: MS Shell Dlg 2;\">on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Quality check (Code conventions) by Rebekka Denninger on 01.10.2016</span></p>

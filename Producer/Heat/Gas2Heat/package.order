@@ -1,7 +1,6 @@
 Check
 SimpleGasBoiler
 SmallGasBoiler
-HeatPumpGasCharlineHeatPort_L1
-HeatPumpGasCharlineFluidPorts
+HeatPumpGasCharline
 GHP_L1_idContrMFlow_temp
 GB_L1_idContrMFlow_temp

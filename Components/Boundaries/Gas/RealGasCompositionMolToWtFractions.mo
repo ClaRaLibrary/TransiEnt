@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Gas;
 model RealGasCompositionMolToWtFractions "Boundary for real gas composition, input: mole fractions, output: mass fractions"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,7 +38,7 @@ model RealGasCompositionMolToWtFractions "Boundary for real gas composition, inp
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1;
   parameter SI.MoleFraction[medium.nc-1] x_in "Mole fraction vector of size(nc-1)";
-  final parameter SI.MolarMass[medium.nc] M_i=TILMedia.VLEFluidFunctions.molarMass_n(medium,0:medium.nc-1) "Molar mass vector for components of mixture";
+  final parameter SI.MolarMass[medium.nc] M_i=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.molarMass_n(medium,0:medium.nc-1) "Molar mass vector for components of mixture";
 
   // _____________________________________________
   //

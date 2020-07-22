@@ -1,7 +1,7 @@
 /*******************************************
-* Funktion in C für Modelica, die gleichverteilte 
-* Zufallszahlen zurückliefert.
-* Patrick Göttsch, 01.06.2014
+* Funktion in C fÃ¼r Modelica, die gleichverteilte 
+* Zufallszahlen zurÃ¼ckliefert.
+* Patrick GÃ¶ttsch, 01.06.2014
 *
 *******************************************/
 
@@ -12,8 +12,8 @@
 *	Marsaglia KISS 2003 Implementierung nach 
 *	http://de.wikipedia.org/wiki/KISS_Zufallszahlengenerator
 *
-*	uint32_t init:		Startwert für die Initialisierung des Zufallzahlengenerators
-*	uint32_t return:	Rückgabewert: Generierte Zufallszahlen im Bereich 0 bis 4.294.967.295
+*	uint32_t init:		Startwert fÃ¼r die Initialisierung des Zufallzahlengenerators
+*	uint32_t return:	RÃ¼ckgabewert: Generierte Zufallszahlen im Bereich 0 bis 4.294.967.295
 ********************************************/
 uint32_t random(uint32_t init)
 {
@@ -44,20 +44,20 @@ uint32_t random(uint32_t init)
 
 /****************************************
 *	extfunc_RandomNumber
-*	Aufrufprogramm für Zufallszahlengenerator.
+*	Aufrufprogramm fÃ¼r Zufallszahlengenerator.
 *	Setzt die obere und untere Grenze der gelieferten Zufallszahlen
 *	Setzt den Initialisierungswert
 *
 * int UseSeed:			0: Kein Seed,
 *						1: Benutze Systemzeit
 *						2: Benutze feste Zahl SeedNumber
-* uint32_t SeedNumber:	Zahl mit dem der Zufallsgenerator initialisiert wird. Für
+* uint32_t SeedNumber:	Zahl mit dem der Zufallsgenerator initialisiert wird. FÃ¼r
 *						reproduzierbare Ergebnisse
-* uint32_t MaxNumber:	Maximale Zahl, die zurückgegeben wird.
-*						Für Null wird die Systemeinstellung verwendet
-* uint32_t MinNumber:	Maximale Zahl, die zurückgegeben wird.
-*						Für Null wird die Systemeinstellung verwendet
-* int32_t return:		Gibt die formatierte Zufallszahl im Bereich -2.147.483.648 bis 2.147.483.647 zurück
+* uint32_t MaxNumber:	Maximale Zahl, die zurÃ¼ckgegeben wird.
+*						FÃ¼r Null wird die Systemeinstellung verwendet
+* uint32_t MinNumber:	Maximale Zahl, die zurÃ¼ckgegeben wird.
+*						FÃ¼r Null wird die Systemeinstellung verwendet
+* int32_t return:		Gibt die formatierte Zufallszahl im Bereich -2.147.483.648 bis 2.147.483.647 zurÃ¼ck
 ****************************************/
 int32_t extfunc_RandomNumber(int UseSeed, uint32_t SeedNumber, int32_t MaxNumber, int32_t MinNumber)
 {

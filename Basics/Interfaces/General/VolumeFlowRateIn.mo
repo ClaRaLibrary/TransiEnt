@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Interfaces.General;
 connector VolumeFlowRateIn "Volume flow rate input in m3/s"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -47,6 +47,6 @@ connector VolumeFlowRateIn "Volume flow rate input in m3/s"
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Max Mustermann (mustermann@mustermail.de), Mon Year</p>
+<p>Model created by Carsten Bode (c.bode@tuhh.de), Jul 2018</p>
 </html>"));
 end VolumeFlowRateIn;

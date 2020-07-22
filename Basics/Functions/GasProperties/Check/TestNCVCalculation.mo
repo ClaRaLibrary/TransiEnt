@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Functions.GasProperties.Check;
 model TestNCVCalculation "Tester for adaptive net calorific value calculation"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,7 +37,7 @@ model TestNCVCalculation "Tester for adaptive net calorific value calculation"
     //table for discrete raise of hydrogen content
   TransiEnt.Components.Boundaries.Gas.RealGasCompositionByWtFractions_stepVariation gasCompositionByWtFractions_linearVariation                                          annotation (Placement(transformation(extent={{-34,-10},{-14,10}})));
 protected
-  TILMedia.VLEFluid_pT realGas(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT realGas(
     vleFluidType=simCenter.gasModel1,
     p=p,
     T=T,

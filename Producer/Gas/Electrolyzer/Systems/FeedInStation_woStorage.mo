@@ -2,10 +2,10 @@ within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model FeedInStation_woStorage
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,15 +38,15 @@ model FeedInStation_woStorage
   parameter SI.ActivePower P_el_max=1.68*P_el_n "Maximum power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.ActivePower P_el_min=0.05*P_el_n "Minimal power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.ActivePower P_el_overload=1.0*P_el_n "Power at which overload region begins" annotation (Dialog(tab="General", group="Electrolyzer"));
-  parameter SI.ActivePower P_el_cooldown=P_el_n "Power below which cooldown of electrolyzer starts" annotation(Dialog(group="Electrolyzer"));
+  parameter SI.ActivePower P_el_cooldown=P_el_n "Power below which cooldown of electrolyzer starts" annotation (Dialog(group="Electrolyzer"));
   parameter SI.MassFlowRate m_flow_start=0.0 "Sets initial value for m_flow from a buffer" annotation (Dialog(tab="General", group="Initialization"));
   //parameter SI.Temperature T_Init=283.15 "Sets initial value for T" annotation (Dialog(tab="General", group="Initialization"));
   parameter Modelica.SIunits.Efficiency eta_n(
     min=0,
-    max=1)=0.75 "Nominal efficency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
+    max=1) = 0.75 "Nominal efficency refering to the GCV (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter Modelica.SIunits.Efficiency eta_scale(
     min=0,
-    max=1)=0 "Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
+    max=1) = 0 "Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.AbsolutePressure p_out=35e5 "Hydrogen output pressure from electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.Temperature T_out=283.15 "Hydrogen output temperature from electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter Real specificWaterConsumption=10 "Mass of water per mass of hydrogen" annotation (Dialog(tab="General", group="Electrolyzer"));
@@ -59,17 +59,20 @@ model FeedInStation_woStorage
   parameter Real Ti=1 "Integrator time constant for feed-in control" annotation (Dialog(tab="General", group="Controller"));
   parameter Real Td=0.1 "Derivative time constant for feed-in control" annotation (Dialog(tab="General", group="Controller"));
 
-  replaceable model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200        constrainedby TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerEfficiencyCharline "Calculate the efficiency" annotation (Dialog(tab="General", group="Electrolyzer"), choices(__Dymola_choicesAllMatching=true));
-  replaceable model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder        constrainedby TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerDynamics "Dynamic behavior of electrolyser" annotation (Dialog(tab="General", group="Electrolyzer"), choices(__Dymola_choicesAllMatching=true));
+  replaceable model Charline = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerEfficiencyCharlineSilyzer200 constrainedby TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerEfficiencyCharline "Calculate the efficiency" annotation (Dialog(tab="General", group="Electrolyzer"), choices(__Dymola_choicesAllMatching=true));
+  replaceable model Dynamics = TransiEnt.Producer.Gas.Electrolyzer.Base.ElectrolyzerDynamics0thOrder constrainedby TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerDynamics "Dynamic behavior of electrolyser" annotation (Dialog(tab="General", group="Electrolyzer"), choices(__Dymola_choicesAllMatching=true));
 
   //Statistics
-  replaceable model CostSpecsElectrolyzer = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty
-    constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost configuration electrolyzer" annotation (Dialog(tab="Statistics"), choices(choicesAllMatching=true));
+  replaceable model CostSpecsElectrolyzer = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost configuration electrolyzer" annotation (Dialog(tab="Statistics"), choices(choicesAllMatching=true));
   parameter Real Cspec_demAndRev_other_water=simCenter.Cspec_demAndRev_other_water "Specific demand-related cost per cubic meter water of electrolyzer" annotation (Dialog(tab="Statistics"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el_electrolyzer=simCenter.Cspec_demAndRev_free "Specific demand-related cost per electric energy for electrolyzer" annotation (Dialog(tab="Statistics"));
   parameter Boolean useMassFlowControl=true "choose if output of FeedInStation is limited by m_flow_feedIn - if 'false': m_flow_feedIn has no effect" annotation (Dialog(tab="General"));
 
-
+  parameter Boolean useFluidCoolantPort=false "choose if fluid port for coolant shall be used" annotation (Dialog(enable=not useHeatPort,group="Coolant"));
+  parameter Boolean useHeatPort=false "choose if heat port for coolant shall be used" annotation (Dialog(enable=not useFluidCoolantPort,group="Coolant"));
+  parameter Boolean useVariableCoolantOutputTemperature=false "choose if temperature of cooland output shall be defined by input" annotation (Dialog(enable=useFluidCoolantPort,group="Coolant"));
+  parameter SI.Temperature T_out_coolant_target=500+273.15 "output temperature of coolant - will be limited by temperature which is technically feasible" annotation (Dialog(enable=useFluidCoolantPort,group="Coolant"));
+  parameter Boolean externalMassFlowControl=false "choose if heat port for coolant shall be used" annotation (Dialog(enable=useFluidCoolantPort and (not useVariableCoolantOutputTemperature), group="Coolant"));
 
   // _____________________________________________
   //
@@ -103,10 +106,15 @@ protected
     duration=1,
     startTime=3,
     height=m_flow_start,
-    offset=-m_flow_start)
-                         annotation (Placement(transformation(extent={{-64,-38},{-50,-25}})));
+    offset=-m_flow_start) annotation (Placement(transformation(extent={{-64,-38},{-50,-25}})));
 public
-  replaceable TransiEnt.Producer.Gas.Electrolyzer.PEMElectrolyzer_L1 electrolyzer(
+   TransiEnt.Producer.Gas.Electrolyzer.PEMElectrolyzer_L1 electrolyzer(
+    useFluidCoolantPort=useFluidCoolantPort,
+    useHeatPort=useHeatPort,
+    externalMassFlowControl=externalMassFlowControl,
+    useVariableCoolantOutputTemperature=useVariableCoolantOutputTemperature,
+    T_out_coolant_target=T_out_coolant_target,
+    usePowerPort=usePowerPort,
     final P_el_n=P_el_n,
     final P_el_max=P_el_max,
     final eta_n=eta_n,
@@ -118,14 +126,14 @@ public
     redeclare model CostSpecsGeneral = CostSpecsElectrolyzer,
     specificWaterConsumption=specificWaterConsumption,
     Cspec_demAndRev_other=Cspec_demAndRev_other_water,
-    Cspec_demAndRev_el=Cspec_demAndRev_el_electrolyzer) annotation (Dialog(tab="General", group="General"), Placement(transformation(extent={{-16,-16},{16,16}})));
+    Cspec_demAndRev_el=Cspec_demAndRev_el_electrolyzer) annotation (Placement(transformation(extent={{-16,-16},{16,16}})));
 protected
   TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore valve_pBeforeValveDes(final medium=medium, p_BeforeValveDes=p_out) annotation (Placement(transformation(
         extent={{-8,-4},{8,4}},
         rotation=270,
         origin={20,-12})));
 
-  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(medium=medium, xiNumber=0)         annotation (Placement(transformation(
+  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(medium=medium, xiNumber=0) annotation (Placement(transformation(
         extent={{7,6},{-7,-6}},
         rotation=90,
         origin={6,-49})));
@@ -152,8 +160,7 @@ public
     controllerType=controllerType,
     Ti=Ti,
     Td=Td,
-    P_el_cooldown=P_el_cooldown)
-           annotation (Placement(transformation(extent={{-10,56},{10,76}})));
+    P_el_cooldown=P_el_cooldown) annotation (Placement(transformation(extent={{-10,56},{10,76}})));
 public
   inner Summary summary(
     outline(
@@ -187,8 +194,12 @@ public
       oMCosts=electrolyzer.summary.costs.oMCosts,
       otherCosts=electrolyzer.summary.costs.otherCosts,
       revenues=electrolyzer.summary.costs.revenues)) annotation (Placement(transformation(extent={{-58,-100},{-38,-80}})));
+  Basics.Interfaces.Thermal.FluidPortIn fluidPortIn(Medium=simCenter.fluid1) if useFluidCoolantPort annotation (Placement(transformation(extent={{90,-100},{110,-80}})));
+  Basics.Interfaces.Thermal.FluidPortOut fluidPortOut(Medium=simCenter.fluid1) if useFluidCoolantPort     annotation (Placement(transformation(extent={{90,-50},{110,-30}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat if useHeatPort annotation (Placement(transformation(extent={{90,-76},{110,-56}})));
+  Basics.Interfaces.General.TemperatureIn T_set_coolant_out if useVariableCoolantOutputTemperature annotation (Placement(transformation(extent={{128,16},{88,56}})));
 protected
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=simCenter.gasModel1,
     deactivateTwoPhaseRegion=true,
     h=gasPortOut.h_outflow,
@@ -200,16 +211,20 @@ equation
   //           Characteristic Equations
   // _____________________________________________
 
-  connect(ramp.y,sourceH2.m_flow) annotation (Line(points={{-49.3,-31.5},{-49.3,-31.2},{-45.6,-31.2}},
-                                                                                                  color={0,0,127}));
+  connect(ramp.y, sourceH2.m_flow) annotation (Line(points={{-49.3,-31.5},{-49.3,-31.2},{-45.6,-31.2}}, color={0,0,127}));
+  if usePowerPort then
   connect(electrolyzer.epp, epp) annotation (Line(
       points={{-16,0},{-16,0},{-100,0}},
       color={0,135,135},
       thickness=0.5));
-  connect(controlTotalEly.P_el_ely, electrolyzer.P_el_set) annotation (Line(points={{0,55},{0,38},{0,19.2},{-6.4,19.2}},
-                                                                                                       color={0,0,127},
+  end if;
+  connect(controlTotalEly.P_el_ely, electrolyzer.P_el_set) annotation (Line(
+      points={{0,55},{0,38},{0,19.2},{-6.4,19.2}},
+      color={0,0,127},
       pattern=LinePattern.Dash));
-  connect(P_el_set, controlTotalEly.P_el_set) annotation (Line(points={{0,108},{0,74.8}}, color={0,0,127},
+  connect(P_el_set, controlTotalEly.P_el_set) annotation (Line(
+      points={{0,108},{0,74.8}},
+      color={0,0,127},
       pattern=LinePattern.Dash));
 
   connect(electrolyzer.gasPortOut, valve_pBeforeValveDes.gasPortIn) annotation (Line(
@@ -234,21 +249,40 @@ equation
       thickness=1.5));
   if useMassFlowControl then
     connect(massflowSensor.m_flow, controlTotalEly.m_flow_ely) annotation (Line(
-      points={{6,-56.7},{6,-58},{40,-58},{40,62},{9.2,62}},
-      color={0,0,127},
-      pattern=LinePattern.Dash));
-    connect(m_flow_feedIn, controlTotalEly.m_flow_feedIn) annotation (Line(points={{108,70},{42,70},{9.2,70}}, color={0,0,127},
-      pattern=LinePattern.Dash));
+        points={{6,-56.7},{6,-58},{40,-58},{40,62},{9.2,62}},
+        color={0,0,127},
+        pattern=LinePattern.Dash));
+    connect(m_flow_feedIn, controlTotalEly.m_flow_feedIn) annotation (Line(
+        points={{108,70},{42,70},{9.2,70}},
+        color={0,0,127},
+        pattern=LinePattern.Dash));
   end if;
-  annotation (defaultComponentName="feedInStation",Diagram(graphics,
-                                                           coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
-        Text(
+  if useFluidCoolantPort then
+    connect(electrolyzer.fluidPortIn, fluidPortIn) annotation (Line(
+      points={{16,-14.4},{26,-14.4},{26,-14},{38,-14},{38,-90},{100,-90}},
+      color={175,0,0},
+      thickness=0.5));
+    connect(fluidPortOut, electrolyzer.fluidPortOut) annotation (Line(
+      points={{100,-40},{52,-40},{52,-6.4},{16,-6.4}},
+      color={175,0,0},
+      thickness=0.5));
+  end if;
+  if useHeatPort then
+  connect(heat, electrolyzer.heat) annotation (Line(points={{100,-66},{46,-66},{46,-10.56},{16,-10.56}}, color={191,0,0}));
+  end if;
+  if useVariableCoolantOutputTemperature then
+    connect(electrolyzer.T_set_coolant_out, T_set_coolant_out) annotation (Line(points={{19.2,11.2},{74,11.2},{74,36},{108,36}}, color={0,0,127}));
+  end if;
+  annotation (
+    defaultComponentName="feedInStation",
+    Diagram(          coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={Text(
           extent={{-150,20},{150,-20}},
           lineColor={0,134,134},
           textString="%name",
           origin={0,149},
           rotation=360)}),
-  Documentation(info="<html>
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>This model represents a feed in station where hydrogen is produced with an electrolyzer and fed directly into a natural gas grid. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
@@ -266,7 +300,7 @@ equation
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>For start up, a small hydrogen mass flow for the electrolyzer can be set to allow for simpler initialisation. </p>
-<p>If <span style=\"font-family: Courier New;\">useMassFlowControl</span>=true, the electrical power of the electrolyzer will no more be limited by given m_flow_feed. This simplifies the controller if limitation is not needed</p>
+<p>If <span style=\"font-family: Courier New;\">useMassFlowControl</span>=true, the electrical power of the electrolyzer will no more be limited by given m_flow_feed. This simplifies the controller if limitation is not needed.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">9. References</span></h4>

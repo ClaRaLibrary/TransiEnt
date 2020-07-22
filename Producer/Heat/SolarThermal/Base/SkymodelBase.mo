@@ -1,11 +1,11 @@
-within TransiEnt.Producer.Heat.SolarThermal.Base;
+﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 partial model SkymodelBase "Base model for modeling the influence of orientation of a surface for calculation of irradiance"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -80,17 +80,17 @@ equation
 <p><img src=\"modelica://TransiEnt/Images/equations/equation-UnTavo0A.png\" alt=\" ratio_beam=max(Const.small, cos(angleOfSunIncidence.tilted) /max(cos(angleOfSunIncidence.horizontal),0.01))
 \"/></p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>Model needs outer variables SI.Irradiance&nbsp;direct_measured,&nbsp;diffuse_horizontal,&nbsp;sun_horizontal.</p>
+<p>Model needs outer variables SI.Irradiance direct_measured, diffuse_horizontal, sun_horizontal.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>purely theoretical model</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>Duffie/Beckman&nbsp;(2006):&nbsp;Solar&nbsp;Engineering&nbsp;of&nbsp;Thermal&nbsp;Processes</p>
+<p>Duffie/Beckman (2006): Solar Engineering of Thermal Processes</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Tobias Toerber (tobias.toerber@tuhh.de), Jul 2015</p>
 <p>Edited by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
 <p>Modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), May 2018</p>
 </html>"), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Ellipse(
           extent={{-94,30},{2,2}},

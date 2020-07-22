@@ -2,10 +2,10 @@ within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
 model PVBoundary "PV Bus in TransiEnt"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,6 +43,8 @@ model PVBoundary "PV Bus in TransiEnt"
   parameter Boolean useInputConnectorv = false "Gets parameter v from input connector"
   annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
   parameter Boolean change_sign=false "Change sign on input value";
+
+  final parameter Modelica.SIunits.ActivePower P_el=-P_gen;
 
   // _____________________________________________
   //
@@ -83,10 +85,10 @@ equation
   // _____________________________________________
 
   if not useInputConnectorP then
-    P_internal = if change_sign==false then P_gen else -P_gen;
+    P_internal = if change_sign==false then P_el else -P_el;
   end if;
 
-  epp.P = if change_sign==false then -P_internal else P_internal;
+  epp.P = if change_sign==false then P_internal else -P_internal;
 
 
   if not useInputConnectorv then
@@ -136,9 +138,9 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">ComplexPowerPort</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">P_el_set: input for electric power in [W]</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
-<p>Angle&nbsp;delta_pugen</p>
-<p>Q_gen(start=0)&nbsp;&quot;Reactive&nbsp;Power&nbsp;of&nbsp;Plant,&nbsp;Load&nbsp;Flow&quot;&nbsp;</p>
-<p>f(start=simCenter.f_n)&nbsp;&quot;frequency&quot;&nbsp;</p>
+<p>Angle delta_pugen</p>
+<p>Q_gen(start=0) &quot;Reactive Power of Plant, Load Flow&quot; </p>
+<p>f(start=simCenter.f_n) &quot;frequency&quot; </p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no equations)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>

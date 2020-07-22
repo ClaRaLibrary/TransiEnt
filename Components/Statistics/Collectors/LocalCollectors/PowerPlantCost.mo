@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 model PowerPlantCost "Cost model for conventional thermal or renewable power plants"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -98,8 +98,8 @@ protected
   // _____________________________________________
 
 public
-  SI.ActivePower P_el_is=0 "Electric power generation of plant" annotation(Dialog(group="Variables"));
-  SI.EnthalpyFlowRate Q_flow_fuel_is=0 "Enthalpy rate of consumed fuel" annotation(Dialog(group="Variables"));
+  SI.ActivePower P_el_is=0 "Electric power generation of plant (should be negative)" annotation(Dialog(group="Variables"));
+  SI.EnthalpyFlowRate Q_flow_fuel_is=0 "Enthalpy rate of consumed fuel (should be positive)" annotation(Dialog(group="Variables"));
   SI.MassFlowRate m_flow_CDE_is=Q_flow_fuel_is*costRecordGeneral.m_flow_CDEspec_fuel "Produced CDE mass flow" annotation(Dialog(group="Variables"));
 
   // _____________________________________________
@@ -107,7 +107,7 @@ public
   //   Variables for power plant cost diagnostics
   // _____________________________________________
 
-  TransiEnt.Basics.Units.MonetaryUnitPerEnergy LCOE=C/max(simCenter.E_small, W_el_demand)*3.6e9*A_alloc_power_internal "Levelized cost of electricity";
+  TransiEnt.Basics.Units.MonetaryUnitPerEnergy LCOE=C/max(simCenter.E_small, -W_el_revenue)*3.6e9*A_alloc_power_internal "Levelized cost of electricity";
   TransiEnt.Basics.Units.MonetaryUnit C_fuel(displayUnit="EUR") = H_demand*Cspec_demAndRev_gas_fuel "Fuel costs";
   TransiEnt.Basics.Units.MonetaryUnit C_CO2_Certificates(displayUnit="EUR") = Cspec_CO2*m_CDE_produced "Fuel costs";
 

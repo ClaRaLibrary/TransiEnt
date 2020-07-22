@@ -2,10 +2,10 @@ within TransiEnt.Producer.Electrical.Conventional.Components.Check;
 model CheckFourthOrderPlant
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -29,7 +29,7 @@ model CheckFourthOrderPlant
     startTime=3000,
     height=1600e6*0.9 - 1600e6/2)
     annotation (Placement(transformation(extent={{-64,30},{-44,50}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency grid1(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{40,12},{60,32}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency grid1(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{40,12},{60,32}})));
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   TransiEnt.Producer.Electrical.Conventional.Components.FourthOrderPlant powerPlant_3508_L0_s2_1(P_n=1600e6, Ts=90) annotation (Placement(transformation(extent={{-18,-10},{2,10}})));
   inner TransiEnt.ModelStatistics modelStatistics
@@ -40,7 +40,7 @@ model CheckFourthOrderPlant
     startTime=3000,
     height=1600e6*0.9 - 1600e6/2)
     annotation (Placement(transformation(extent={{-54,-40},{-34,-20}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency grid2(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{50,-58},{70,-38}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency grid2(useInputConnector=false, f_set_const=simCenter.f_n) annotation (Placement(transformation(extent={{50,-58},{70,-38}})));
   TransiEnt.Producer.Electrical.Conventional.Components.FourthOrderPlant powerPlant_3508_L0_s2_2(
     P_n=1600e6,
     Ts=90,

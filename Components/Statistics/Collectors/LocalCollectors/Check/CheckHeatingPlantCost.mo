@@ -2,10 +2,10 @@ within TransiEnt.Components.Statistics.Collectors.LocalCollectors.Check;
 model CheckHeatingPlantCost
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -41,7 +41,7 @@ model CheckHeatingPlantCost
   HeatingPlantCost powerPlantCost(
       redeclare model HeatingPlantCostModel = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.GasBoiler(lifeTime=1),
       Q_flow_n=100e3,
-      Q_flow_is=100e3*time/31622400,
+      Q_flow_is=-100e3*time/31622400,
       Q_flow_fuel_is=105e3*time/31622400)
                                 annotation (Placement(transformation(extent={{-10,-6},{10,14}})));
 

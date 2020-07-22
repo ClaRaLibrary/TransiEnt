@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Electrical.Specifications;
 record SuperCap "Typical parameters of super capacitor"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -23,7 +23,7 @@ record SuperCap "Typical parameters of super capacitor"
      E_start=E_min, E_max=P_max_unload*0.01, E_min=0, P_max_unload=0.1e6, P_grad_max=P_max_unload/10e-3, eta_unload=0.975, eta_load=0.975,selfDischargeRate=0.2/100/3600);
   annotation (Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>Typical&nbsp;parameters&nbsp;of&nbsp;super&nbsp;capacitor.</p>
+<p>Typical parameters of super capacitor.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

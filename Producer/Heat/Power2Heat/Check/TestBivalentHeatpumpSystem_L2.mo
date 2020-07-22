@@ -2,10 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat.Check;
 model TestBivalentHeatpumpSystem_L2 "Model for testing BivalentHeatpumpSystem_L2"
   import TransiEnt;
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,7 +38,7 @@ model TestBivalentHeatpumpSystem_L2 "Model for testing BivalentHeatpumpSystem_L2
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={46,-22})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency electricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{32,62},{52,82}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid(useInputConnector=false) annotation (Placement(transformation(extent={{32,62},{52,82}})));
   TransiEnt.Producer.Heat.Power2Heat.BivalentHeatpumpSystem hps(
     T_out(unitOption=1),
     Heatpump(heatFlowBoundary(change_sign=true)),

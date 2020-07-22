@@ -2,10 +2,10 @@ within TransiEnt.Basics.Adapters.Gas;
 model RealH2_to_RealNG "Adapter that connects real H2 gas with real NG gas (works only in one direction)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -61,19 +61,19 @@ model RealH2_to_RealNG "Adapter that connects real H2 gas with real NG gas (work
   //           Instances of other Classes
   // _____________________________________________
 protected
-  TILMedia.VLEFluid_ph gasIn(
-  vleFluidType=medium_h2,
-  h=inStream(gasPortIn.h_outflow),
-  p=gasPortIn.p,
-  xi=inStream(gasPortIn.xi_outflow),
-  deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-70,-12},{-50,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
+    vleFluidType=medium_h2,
+    h=inStream(gasPortIn.h_outflow),
+    p=gasPortIn.p,
+    xi=inStream(gasPortIn.xi_outflow),
+    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-70,-12},{-50,8}})));
 
-  TILMedia.VLEFluid_pT gasOut(
-  vleFluidType=medium_ng,
-  T=gasIn.T,
-  p=gasPortOut.p,
-  xi=gasPortOut.xi_outflow,
-  deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{50,-12},{70,8}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasOut(
+    vleFluidType=medium_ng,
+    T=gasIn.T,
+    p=gasPortOut.p,
+    xi=gasPortOut.xi_outflow,
+    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{50,-12},{70,8}})));
 
   // _____________________________________________
   //
@@ -90,7 +90,7 @@ equation
   gasPortIn.m_flow+gasPortOut.m_flow=0;
 
   gasPortIn.h_outflow=inStream(gasPortOut.h_outflow);
-  gasPortIn.xi_outflow=ones(medium_h2.nc-1);
+  gasPortIn.xi_outflow=zeros(medium_h2.nc-1);
 
   gasPortOut.h_outflow=gasOut.h;
   gasPortOut.xi_outflow=zeros(medium_ng.nc-1);

@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat;
 model HEX_ideal "Ideal static heat exchanger model"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -65,18 +65,16 @@ model HEX_ideal "Ideal static heat exchanger model"
   //                   Complex Components
   // _____________________________________________
 
-  TILMedia.VLEFluid_ph fluidIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidIn(
     p=waterPortIn.p,
     h=inStream(waterPortIn.h_outflow),
     xi=inStream(waterPortIn.xi_outflow),
-    vleFluidType=water)
-    annotation (Placement(transformation(extent={{-84,8},{-64,-12}})));
-  TILMedia.VLEFluid_ph fluidOut(
+    vleFluidType=water) annotation (Placement(transformation(extent={{-84,8},{-64,-12}})));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidOut(
     p=waterPortIn.p,
     h=waterPortOut.h_outflow,
     xi=waterPortOut.xi_outflow,
-    vleFluidType=water)
-    annotation (Placement(transformation(extent={{66,8},{86,-12}})));
+    vleFluidType=water) annotation (Placement(transformation(extent={{66,8},{86,-12}})));
 
 equation
   // _____________________________________________

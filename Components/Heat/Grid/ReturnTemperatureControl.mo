@@ -2,10 +2,10 @@ within TransiEnt.Components.Heat.Grid;
 model ReturnTemperatureControl "Pump controlled for target return temperature"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -156,9 +156,9 @@ equation
 <p>waterPortOut: fluidPortOut</p>
 <p>waterPortIn: fluidPortIn</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
-<p>T_return&nbsp;=&nbsp;returnTemperatureSensor.T is a temperature in K</p>
+<p>T_return = returnTemperatureSensor.T is a temperature in K</p>
 <p>Delta_p=pump.Delta_p is a pressure difference in Pa</p>
-<p>P_drive_pump&nbsp;=&nbsp;pump.P_drive is a power in W</p>
+<p>P_drive_pump = pump.P_drive is a power in W</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>

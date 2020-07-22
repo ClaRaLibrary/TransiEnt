@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Check;
 model CheckLinearElectricConsumer
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -37,7 +37,7 @@ model CheckLinearElectricConsumer
     P_el=1e9,
     kpf=1.5,
     useInputConnectorP=true) annotation (Placement(transformation(extent={{18,-52},{52,-20}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{-10,-16},{-40,16}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{-10,-16},{-40,16}})));
   Modelica.Blocks.Sources.Sine GridFrequency(
     offset=50,
     amplitude=0.02,

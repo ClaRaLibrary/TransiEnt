@@ -1,10 +1,10 @@
 within TransiEnt.Components.Mechanical.Check;
 model CheckTwoStateInertiaWithClutch "Model for testing the TwoStateInertiaWithClutch model"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -38,7 +38,7 @@ model CheckTwoStateInertiaWithClutch "Model for testing the TwoStateInertiaWithC
   Modelica.Blocks.Sources.BooleanStep disconnect(startTime=50, startValue=true)
     annotation (Placement(transformation(extent={{-36,50},{-16,70}})));
   TransiEnt.Consumer.Electrical.LinearElectricConsumer linearElectricConsumer annotation (Placement(transformation(extent={{60,-74},{80,-54}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{22,-68},{2,-48}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{22,-68},{2,-48}})));
   Modelica.Blocks.Sources.Constant
                                turbineShutOff1(k=1e7)
     annotation (Placement(transformation(extent={{36,-50},{56,-30}})));

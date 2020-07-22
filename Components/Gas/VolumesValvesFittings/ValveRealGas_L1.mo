@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings;
 model ValveRealGas_L1 "Valve for real gas models without phase change with replaceable flow models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -36,9 +36,10 @@ protected
     parameter Boolean showExpertSummary;
     input SI.VolumeFlowRate V_flow "Volume flow rate";
     input SI.PressureDifference Delta_p "Pressure difference p_out - p_in";
-    input Real PR if  showExpertSummary "Pressure ratio p_out/p_in";
-    input Real PR_crit if   showExpertSummary "Critical pressure ratio";
+    input Real PR if  showExpertSummary "Pressure ratio, always <1, i.e. dependent on flow direction";
+    input Real PR_choked if   showExpertSummary "Critical pressure ratio";
     input Real opening_ "Valve opening in p.u.";
+    input Real flowIsChoked "1 if flow is choked, 0 if not";
   end Outline;
 
   model Summary
@@ -48,11 +49,10 @@ protected
     TransiEnt.Basics.Records.FlangeRealGas gasPortOut;
   end Summary;
 public
-  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium in the component"
+  inner parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel1 "Medium in the component"
     annotation (choicesAllMatching, Dialog(group="Fundamental Definitions"));
 
-  replaceable model PressureLoss =
-      ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.QuadraticKV
+  replaceable model PressureLoss =ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.Quadratic_EN60534_compressible
     constrainedby ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.GenericPressureLoss "Pressure loss model at the tubes side"
                                             annotation (Dialog(group=
           "Fundamental Definitions"), choicesAllMatching);
@@ -95,31 +95,32 @@ public
   Basics.Interfaces.Gas.RealGasPortOut gasPortOut(Medium=medium) "Outlet port" annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
 protected
-  TILMedia.VLEFluid_ph gasOut(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     p=gasPortOut.p,
     vleFluidType=medium,
-    h=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then gasPortOut.h_outflow else actualStream(gasPortOut.h_outflow),
-    xi=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then gasPortOut.xi_outflow else actualStream(gasPortOut.xi_outflow),
+    h=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then gasPortOut.h_outflow else noEvent(actualStream(gasPortOut.h_outflow)),
+    xi=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then gasPortOut.xi_outflow else noEvent(actualStream(gasPortOut.xi_outflow)),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{70,-10},{90,10}})));
 protected
   PressureLoss pressureLoss
     annotation (Placement(transformation(extent={{-10,20},{10,40}})));
 protected
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     vleFluidType=medium,
     p=gasPortIn.p,
-    h=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then inStream(gasPortIn.h_outflow) else actualStream(gasPortIn.h_outflow),
-    xi=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then inStream(gasPortIn.xi_outflow) else actualStream(gasPortIn.xi_outflow),
+    h=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then inStream(gasPortIn.h_outflow) else noEvent(actualStream(gasPortIn.h_outflow)),
+    xi=if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then inStream(gasPortIn.xi_outflow) else noEvent(actualStream(gasPortIn.xi_outflow)),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
 public
   Summary summary(
     outline(
       showExpertSummary=showExpertSummary,
       V_flow=gasPortIn.m_flow/iCom.rho_in,
-      Delta_p=pressureLoss.Delta_p,
-      PR=gasPortOut.p/gasPortIn.p,
-      PR_crit=(2/(pressureLoss.gamma + 1))^(pressureLoss.gamma/(max(1e-3, pressureLoss.gamma) - 1)),
-      opening_=iCom.opening_),
+            Delta_p = pressureLoss.Delta_p,
+            PR = noEvent(min(gasPortOut.p,gasPortIn.p)/max(gasPortIn.p,gasPortOut.p)),
+            PR_choked = pressureLoss.PR_choked,
+            flowIsChoked= pressureLoss.flowIsChoked,
+            opening_= iCom.opening_),
     gasPortIn(
       mediumModel=medium,
       xi=gasIn.xi,
@@ -144,27 +145,25 @@ protected
     p_in=gasPortIn.p,
     p_out=gasPortOut.p,
     opening_leak_=opening_leak_,
-    rho_in(start=1)=if (checkValve == true and opening_leak_ <= 0) or opening_ <
-        opening_leak_ then gasIn.d else (if useHomotopy then homotopy(
-        ClaRa.Basics.Functions.Stepsmoother(
-        10,
-        -10,
-        pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
-        -10,
-        10,
-        pressureLoss.Delta_p)*gasOut.d, gasIn.d) else
-        ClaRa.Basics.Functions.Stepsmoother(
-        10,
-        -10,
-        pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
-        -10,
-        10,
-        pressureLoss.Delta_p)*gasOut.d),
-        gamma_in=gasIn.gamma,
+    rho_in(start=1) = if (checkValve == true and opening_leak_ <= 0) or opening_ < opening_leak_ then gasIn.d else (if useHomotopy then homotopy(ClaRa.Basics.Functions.Stepsmoother(
+      10,
+      -10,
+      pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
+      -10,
+      10,
+      pressureLoss.Delta_p)*gasOut.d, gasIn.d) else ClaRa.Basics.Functions.Stepsmoother(
+      10,
+      -10,
+      pressureLoss.Delta_p)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(
+      -10,
+      10,
+      pressureLoss.Delta_p)*gasOut.d),
+    gamma_in=gasIn.gamma,
     gamma_out=gasOut.gamma,
     opening_=opening_,
-    h_in=gasIn.h)    "if (checkValve == true and opening_leak_<=0) or opening_<opening_leak_ then gasIn.d else (if useHomotopy then homotopy(ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, gasPortIn.m_flow)*fluidIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, gasPortIn.m_flow)*gasOut.d, gasIn.d) else ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, gasPortIn.m_flow)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, gasPortIn.m_flow)*gasOut.d)"
-    annotation (Placement(transformation(extent={{-60,-52},{-40,-32}})));
+    h_in=gasIn.h,
+    p_crit=gasIn.crit.p,
+    p_vap_in=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidObjectFunctions.bubblePressure_Txi(max(gasIn.T,gasOut.T),gasIn.xi, gasIn.vleFluidPointer)) "if (checkValve == true and opening_leak_<=0) or opening_<opening_leak_ then gasIn.d else (if useHomotopy then homotopy(ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, gasPortIn.m_flow)*fluidIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, gasPortIn.m_flow)*gasOut.d, gasIn.d) else ClaRa.Basics.Functions.Stepsmoother(1e-5, -1e-5, gasPortIn.m_flow)*gasIn.d + ClaRa.Basics.Functions.Stepsmoother(-1e-5, 1e-5, gasPortIn.m_flow)*gasOut.d)" annotation (Placement(transformation(extent={{-60,-52},{-40,-32}})));
 public
   ClaRa.Basics.Interfaces.EyeOut eye if showData annotation (Placement(transformation(extent={{90,-68},{110,-48}}), iconTransformation(extent={{90,-50},{110,-30}})));
 protected

@@ -1,10 +1,10 @@
 within TransiEnt.Basics.Blocks;
 block BooleanToReal "Convert Boolean to Real signal (no event)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -70,7 +70,7 @@ equation
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Max Mustermann (mustermann@mustermail.com), Apr 2014 : short description of modification</p>
+<p>Model created by Pascal Dubucq (dubucq@tuhh.de), Apr 2015 </p>
 </html>"),
          Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},
             {100,100}}), graphics={

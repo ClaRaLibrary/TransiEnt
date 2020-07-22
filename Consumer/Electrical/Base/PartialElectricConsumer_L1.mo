@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Electrical.Base;
 partial model PartialElectricConsumer_L1 "L1/2 Partial Base class for electric consumer models"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -49,7 +49,7 @@ partial model PartialElectricConsumer_L1 "L1/2 Partial Base class for electric c
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Components.Boundaries.Electrical.Power partialElectricBoundary annotation (choicesAllMatching=true, Placement(transformation(extent={{57,-90},{77,-70}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Power partialElectricBoundary annotation (choicesAllMatching=true, Placement(transformation(extent={{57,-90},{77,-70}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower annotation (Placement(transformation(extent={{-100,100},{-80,80}})));
 
 equation
@@ -81,7 +81,7 @@ equation
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
-<p>L1/2&nbsp;Partial&nbsp;Base&nbsp;class&nbsp;for&nbsp;electric&nbsp;consumer&nbsp;models.</p>
+<p>L1/2 Partial Base class for electric consumer models.</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p>L1/2 (defined in the CodingConventions</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">3. Limits of validity </span></b></p>

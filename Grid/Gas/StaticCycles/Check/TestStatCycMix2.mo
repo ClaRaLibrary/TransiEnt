@@ -2,10 +2,10 @@ within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycMix2
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -24,7 +24,7 @@ model TestStatCycMix2
   extends TransiEnt.Basics.Icons.Checkmodel;
   parameter SI.PressureDifference Delta_p_smooth = 200 "For Delta_p<Delta_p_smooth sqrt in PL model is regularized";
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
     medium=simCenter.gasModel1,
     p_start=linspace(
         Init.pipe1.p_in,
@@ -48,7 +48,7 @@ model TestStatCycMix2
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={-34,0})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
     medium=simCenter.gasModel1,
     N_cv=3,
     h_start=ones(pipe2.N_cv)*Init.pipe2.h_in,
@@ -72,7 +72,7 @@ model TestStatCycMix2
         extent={{-14,-5},{14,5}},
         rotation=270,
         origin={4,-35})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_varXi pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
     medium=simCenter.gasModel1,
     h_start=ones(pipe3.N_cv)*Init.pipe3.h_in,
     p_start=linspace(

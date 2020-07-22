@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Controller;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model FeedInController "Controlling electrolyzer power comparing set power with maximum allowed H2 that can be fed into the grid, limited to min and max electrolyzer power"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -165,6 +165,6 @@ equation
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Lisa Andresen (andresen@tuhh.de) in Sep 2016</p>
-<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in April 2019: added Boolean useMassFlowControl</p>
+<p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) in April 2019: added Boolean useMassFlowControl</p>
 </html>"));
 end FeedInController;

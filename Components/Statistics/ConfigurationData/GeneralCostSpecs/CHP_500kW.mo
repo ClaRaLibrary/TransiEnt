@@ -1,10 +1,10 @@
-within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
+﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model CHP_500kW "CHP plant (500 kW, gas-fired)"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -48,9 +48,9 @@ extends PartialCostSpecs(
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>[1] ASUE Arbeitsgemeinschaft f&uuml;r sparsamen und umweltfreundlichen Energieverbrauch e.V., &quot;BHKW Grundlagen&quot;, 2010</p>
-<p><span style=\"font-family: sans-serif;\">[2] KRIMMLING, J. &quot;Energieeffiziente Nahw&auml;rmesysteme: Grundwissen, Auslegung, Technik f&uuml;r Energieberater und Planer.&quot; Stuttgart: Fraunhofer IRB Verlag, 2011. ISBN978-3-8167-8342-8. </span></p>
-<p>[3] Verein Deutscher Ingenieure (VDI), Richtlinie VDI 2067 Blatt 1, &quot;Wirtschaftlichkeit geb&auml;udetechnischer Anlagen - Grundlagen und Kostenberechnung&quot;, 2012</p>
+<p>[1] ASUE Arbeitsgemeinschaft für sparsamen und umweltfreundlichen Energieverbrauch e.V., &quot;BHKW Grundlagen&quot;, 2010</p>
+<p><span style=\"font-family: sans-serif;\">[2] KRIMMLING, J. &quot;Energieeffiziente Nahwärmesysteme: Grundwissen, Auslegung, Technik für Energieberater und Planer.&quot; Stuttgart: Fraunhofer IRB Verlag, 2011. ISBN978-3-8167-8342-8. </span></p>
+<p>[3] Verein Deutscher Ingenieure (VDI), Richtlinie VDI 2067 Blatt 1, &quot;Wirtschaftlichkeit gebäudetechnischer Anlagen - Grundlagen und Kostenberechnung&quot;, 2012</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 </html>"));
 end CHP_500kW;

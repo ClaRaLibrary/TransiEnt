@@ -2,10 +2,10 @@ within TransiEnt.Basics.Tables;
 model GenericDataTable "Parameterized version of MSL's CombiTimeTable. See Examples.Basics.GenericTable_How_to for explanation"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -68,6 +68,14 @@ model GenericDataTable "Parameterized version of MSL's CombiTimeTable. See Examp
         annotation(Dialog(tab="Advanced", group="table data interpretation"));
   parameter SI.Time startTime=0       annotation(Dialog(tab="Advanced", group="table data interpretation"));
 
+  parameter Modelica.SIunits.Time shiftTime=startTime
+    "Shift time of first table column"
+    annotation (Dialog(group="Table data interpretation"));
+
+  parameter Modelica.Blocks.Types.TimeEvents timeEvents=Modelica.Blocks.Types.TimeEvents.AtDiscontinuities
+    "Time event handling of table interpolation"
+    annotation (Dialog(group="Table data interpretation", enable=smoothness == Modelica.Blocks.Types.Smoothness.LinearSegments));
+
   final parameter String complete_relative_path = Functions.fullPathName(               Modelica.Utilities.System.getEnvironmentVariable(environment_variable_name) + relativepath);
 
   final parameter String genericFileName = if use_absolute_path then absolute_path else complete_relative_path;
@@ -103,7 +111,9 @@ model GenericDataTable "Parameterized version of MSL's CombiTimeTable. See Examp
     columns=columns,
     offset=offset,
     startTime=startTime,
-    tableName=tableName)
+    tableName=tableName,
+    shiftTime=shiftTime,
+    timeEvents=timeEvents)
     annotation (Placement(transformation(extent={{-90,-52},{14,52}})));
   Modelica.Blocks.Math.Gain sign_changer[MSL_combiTimeTable.nout](each k=if change_of_sign then -1*constantfactor else constantfactor)
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
@@ -167,12 +177,12 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(none)</p>
+<p>MSL_combiTimetable from MSL is used. Standard setting for timeEvents is changed from &apos;Always&apos; to &apos;AtDiscontinuities&apos; to avoid unnecessary events.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>(no remarks)</p>
+<p>Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on Feb 2020: changed standard MSL-setting for timeEvents</p>
 </html>"));
 end GenericDataTable;

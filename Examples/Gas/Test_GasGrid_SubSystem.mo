@@ -1,10 +1,10 @@
 within TransiEnt.Examples.Gas;
 model Test_GasGrid_SubSystem
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -19,7 +19,24 @@ model Test_GasGrid_SubSystem
 // and is supported by                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+  // _____________________________________________
+  //
+  //          Imports and Class Hierarchy
+  // _____________________________________________
+
   extends TransiEnt.Basics.Icons.Example;
+  inner TransiEnt.SimCenter simCenter(
+    redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1,
+    redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2 gasModel3,
+    useHomotopy=false,
+    T_ground=282.15) annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
+  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
+
+  // _____________________________________________
+  //
+  //           Instances of other Classes
+  // _____________________________________________
 
   GasGrid_SubSystem gasGrid_Example_Simple_PtG(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
@@ -28,23 +45,24 @@ model Test_GasGrid_SubSystem
     P_el_n=3e6,
     m_flow_start=0.001,
     p_out=simCenter.p_amb_const + 35e5,
-    phi_H2max=0.1)
-           annotation (Placement(transformation(extent={{-40,-82},{68,22}})));
+    phi_H2max=0.1) annotation (Placement(transformation(extent={{-40,-82},{68,22}})));
 public
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(
         extent={{-10,10.5},{10,-10.5}},
         rotation=180,
         origin={-80,-19.5})));
-  inner TransiEnt.SimCenter simCenter(
-    redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1,
-    redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2 gasModel3,
-    useHomotopy=false,
-    T_ground=282.15)                                                                                                          annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
   TransiEnt.Basics.Tables.ElectricGrid.ResidualLoadExample residualLoad(smoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative2, negResidualLoad=true) annotation (Placement(transformation(extent={{-90,-4},{-70,16}})));
-  Modelica.Blocks.Math.Gain gain(k=1)    annotation (Placement(transformation(extent={{-64,2},{-56,10}})));
+  Modelica.Blocks.Math.Gain gain(k=1) annotation (Placement(transformation(extent={{-64,2},{-56,10}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink2(p_nom=0, m_flow_const=0) annotation (Placement(transformation(extent={{94,-52},{74,-32}})));
-  inner TransiEnt.ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
+
+
 equation
+  // _____________________________________________
+  //
+  //           Connect Statements
+  // _____________________________________________
+
+
   connect(gain.y, gasGrid_Example_Simple_PtG.P_el_set) annotation (Line(points={{-55.6,6},{-50,6},{-50,6.4},{-38.92,6.4}}, color={0,0,127}));
   connect(residualLoad.P_el, gain.u) annotation (Line(points={{-69,6},{-69,6},{-64.8,6}}, color={0,0,127}));
   connect(sink2.gasPort, gasGrid_Example_Simple_PtG.gasIn) annotation (Line(
@@ -52,14 +70,12 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(ElectricGrid.epp, gasGrid_Example_Simple_PtG.epp) annotation (Line(
-      points={{-69.9,-19.605},{-56.95,-19.605},{-56.95,-19.6},{-40,-19.6}},
+      points={{-70,-19.5},{-56.95,-19.5},{-56.95,-19.6},{-40,-19.6}},
       color={0,135,135},
       thickness=0.5));
   annotation (
-    Icon(graphics,
-         coordinateSystem(preserveAspectRatio=false)),
-    Diagram(graphics,
-            coordinateSystem(preserveAspectRatio=false)),
+    Icon(graphics, coordinateSystem(preserveAspectRatio=false)),
+    Diagram(graphics, coordinateSystem(preserveAspectRatio=false)),
     experiment(
       StopTime=259200,
       Interval=900,
@@ -70,7 +86,7 @@ equation
       Evaluate=true,
       OutputCPUtime=true,
       OutputFlatModelica=false),
-Documentation(info="<html>
+    Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Tester for closed-loop gas grid subsystem. </p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>

@@ -1,11 +1,11 @@
 within TransiEnt.Components.Statistics.Collectors.LocalCollectors;
 partial model PartialCollectCosts "Partial cost collector"
 
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -58,7 +58,7 @@ partial model PartialCollectCosts "Partial cost collector"
   parameter Real size1=costRecordGeneral.size1 "Size 1 of the component" annotation (Dialog(group="Invest Cost"));
   parameter Real size2=costRecordGeneral.size2 "Size 2 of the component" annotation (Dialog(group="Invest Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnit C_inv_size=costRecordGeneral.C_inv_size "Invest cost depending on the size" annotation (Dialog(group="Invest Cost"));
-  parameter Real factor_OM=costRecordGeneral.factor_OM "Percentage of the invest cost that represents the annual O&M cost" annotation (Dialog(group="O&M Cost"));
+  parameter Real factor_OM=costRecordGeneral.factor_OM "Fraction of the invest cost that represents the annual O&M cost" annotation (Dialog(group="O&M Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_OM_W_el=costRecordGeneral.Cspec_OM_W_el "Specific O&M cost per electric energy" annotation (Dialog(group="O&M Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_OM_Q=costRecordGeneral.Cspec_OM_Q "Specific O&M cost per heating energy" annotation (Dialog(group="O&M Cost"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_OM_H=costRecordGeneral.Cspec_OM_H "Specific O&M cost per gas energy" annotation (Dialog(group="O&M Cost"));

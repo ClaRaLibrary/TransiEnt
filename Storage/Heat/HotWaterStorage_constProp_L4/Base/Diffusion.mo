@@ -3,10 +3,10 @@ model Diffusion "Second order 1D finite difference approximation of heat diffusi
   // Model is bases on the model "Bouyancy in the "Buildings-library (https://github.com/lbl-srg/modelica-buildings.git)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -76,7 +76,7 @@ equation
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>This model&nbsp;is&nbsp;largely based&nbsp;on&nbsp;the&nbsp;model&nbsp;&quot;Bouyancy&quot;&nbsp;in&nbsp;the&nbsp;Modelica Buildings-library&nbsp;(https://github.com/lbl-srg/modelica-buildings.git)</p>
+<p>This model is largely based on the model &quot;Bouyancy&quot; in the Modelica Buildings-library (https://github.com/lbl-srg/modelica-buildings.git)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by <span style=\"font-family: MS Shell Dlg 2;\">Pascal Dubucq (dubucq@tuhh.de) on Wed August 24 2016. </span></p>
 </html>"),Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),

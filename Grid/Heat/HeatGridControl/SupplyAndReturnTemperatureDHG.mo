@@ -2,10 +2,10 @@ within TransiEnt.Grid.Heat.HeatGridControl;
 model SupplyAndReturnTemperatureDHG "Table with supply and return temperatures according to technical connection conditions"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,7 +30,8 @@ model SupplyAndReturnTemperatureDHG "Table with supply and return temperatures a
 //       relativepath="heat/HeatingCurve_DHN_Vattenfall_Hamburg.txt");
 
   parameter TransiEnt.Grid.Heat.HeatGridControl.Base.T_set_DHG.Generic_T_set_DHG T_set_DHG=Base.T_set_DHG.Sample_T_set_DHG() annotation (choicesAllMatching);
-
+  parameter SI.Temp_C T_supply_max_scale=max(T_set_DHG.T_set_DHG[:,2]);
+  parameter SI.Temp_C T_return_min_scale=max(T_set_DHG.T_set_DHG[:,3]);
   // _____________________________________________
   //
   //                  Interfaces
@@ -42,16 +43,21 @@ model SupplyAndReturnTemperatureDHG "Table with supply and return temperatures a
   Modelica.Blocks.Tables.CombiTable1Ds combiTable1Ds(table=T_set_DHG.T_set_DHG, columns={2,3}) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn T_amb annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
   TransiEnt.Basics.Interfaces.General.TemperatureCelsiusOut T_set[size(combiTable1Ds.columns, 1)] annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  Modelica.Blocks.Math.Gain gain(k=T_supply_max_scale/max(T_set_DHG.T_set_DHG[:, 2])) annotation (Placement(transformation(extent={{40,20},{60,40}})));
+  Modelica.Blocks.Math.Gain gain1(k=T_return_min_scale/max(T_set_DHG.T_set_DHG[:, 3])) annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
 equation
   // _____________________________________________
   //
   //           Characteristic Equations
   // _____________________________________________
 
-  T_supply_K=combiTable1Ds.y[1]+273.15;
-  T_return_K=combiTable1Ds.y[2]+273.15;
+  T_supply_K=gain.y+273.15;
+  T_return_K=gain1.y+273.15;
   connect(T_amb, combiTable1Ds.u) annotation (Line(points={{-120,0},{-66,0},{-12,0}}, color={0,0,127}));
-  connect(combiTable1Ds.y, T_set) annotation (Line(points={{11,0},{110,0}}, color={0,0,127}));
+  connect(combiTable1Ds.y[1], gain.u) annotation (Line(points={{11,0},{24,0},{24,30},{38,30}}, color={0,0,127}));
+  connect(combiTable1Ds.y[2], gain1.u) annotation (Line(points={{11,0},{24,0},{24,-30},{38,-30}}, color={0,0,127}));
+  connect(gain.y, T_set[1]) annotation (Line(points={{61,30},{72,30},{72,0},{110,0}}, color={0,0,127}));
+  connect(gain1.y, T_set[2]) annotation (Line(points={{61,-30},{72,-30},{72,0},{110,0}}, color={0,0,127}));
         annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics={
         Rectangle(
@@ -123,6 +129,5 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>(no remarks)</p>
 </html>"),
-    Diagram(graphics,
-            coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end SupplyAndReturnTemperatureDHG;

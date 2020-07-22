@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Combined.SmallScaleCHP;
+﻿within TransiEnt.Producer.Combined.SmallScaleCHP;
 model Documentation "Documentation of a Combined Heat and Power Unit"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -44,7 +44,7 @@ extends ModelicaReference.Icons.Information;
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>&QUOT;DachsHKA&QUOT; parameter set is validated</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>equation for frictional pressure according to Reulein (Simulation des instation&auml;ren Warmlaufverhaltens von Verbrennungsmotoren,1998)</p>
+<p>equation for frictional pressure according to Reulein (Simulation des instationären Warmlaufverhaltens von Verbrennungsmotoren,1998)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Original model created by Arne Koeppen (arne.koeppen@tuhh.de), Jul 2014</p>
 <p>Edited by Jan Braune (jan.braune@tuhh.de), Feb 2015</p>

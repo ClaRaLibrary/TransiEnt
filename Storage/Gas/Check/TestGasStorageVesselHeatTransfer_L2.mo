@@ -1,10 +1,10 @@
 ﻿within TransiEnt.Storage.Gas.Check;
 model TestGasStorageVesselHeatTransfer_L2
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -32,12 +32,14 @@ model TestGasStorageVesselHeatTransfer_L2
   parameter Modelica.SIunits.Pressure p_start_1=415.41e5 "Start pressure in pipe_54, station_tank";
   parameter Modelica.SIunits.Pressure p_start_2=138.01e5 "Start pressure in vehicle_tank, pipe_32";
 
-  parameter Modelica.SIunits.SpecificEnthalpy h_start_1=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(vleFluidType=medium, p=p_start_1, T=T_start_1) "Start enthalpy for pipe_54";
-  parameter Modelica.SIunits.SpecificEnthalpy h_start_2=TILMedia.VLEFluidFunctions.specificEnthalpy_pTxi(vleFluidType=medium, p=p_start_2, T=T_start_1) "Start enthalpy for pipe_32 and its outlet";
+  parameter Modelica.SIunits.SpecificEnthalpy h_start_1=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(vleFluidType=medium, p=p_start_1, T=T_start_1) "Start enthalpy for pipe_54";
+  parameter Modelica.SIunits.SpecificEnthalpy h_start_2=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(vleFluidType=medium, p=p_start_2, T=T_start_1) "Start enthalpy for pipe_32 and its outlet";
 
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,-60},{-70,-40}})));
-  Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipe_54(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe_54(
     medium=medium,
+    constantComposition=true,
+    frictionAtInlet=true,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L4,
     diameter_i=0.008,
     length=15.24,
@@ -46,11 +48,13 @@ model TestGasStorageVesselHeatTransfer_L2
     heatTransfer(alpha_nom=6000),
     initOption=0,
     N_cv=1,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L4) annotation (Placement(transformation(extent={{-70,-4},{-42,6}})));
+    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L4) annotation (Placement(transformation(extent={{-70,-5},{-42,5}})));
                                                                          //length like given in the paper, d_i scaled with 1/10
 
-  Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_constXi pipe_32(
+  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe_32(
     medium=medium,
+    constantComposition=true,
+    frictionAtOutlet=true,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L4,
     diameter_i=0.008,
     length=1.52,
@@ -59,7 +63,7 @@ model TestGasStorageVesselHeatTransfer_L2
     heatTransfer(alpha_nom=6000),
     initOption=0,
     N_cv=1,
-    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L4) annotation (Placement(transformation(extent={{42,-4},{70,6}})));
+    redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L4) annotation (Placement(transformation(extent={{42,-5},{70,5}})));
                                                                       //length like given in the paper, d_i scaled with 1/10
 
   TransiEnt.Storage.Gas.GasStorageVesselHeatTransfer_L2 station_tank(
@@ -71,7 +75,7 @@ model TestGasStorageVesselHeatTransfer_L2
     T_wall_start=T_start_1,
     storage(
       V_geo=0.6,
-      alpha_nom=4,
+      redeclare model HeatTransfer = TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 (alpha_nom=4),
       p_gas_start=p_start_1,
       T_gas_start=T_start_1,
       Cspec_demAndRev_el=simCenter.Cspec_demAndRev_el_70_150_GWh,
@@ -88,7 +92,7 @@ model TestGasStorageVesselHeatTransfer_L2
     T_wall_start=T_start_2,
     storage(
       V_geo=0.108,
-      alpha_nom=60,
+      redeclare model HeatTransfer = TransiEnt.Storage.Gas.Base.ConstantHTOuterTemperature_L2 (alpha_nom=60),
       p_gas_start=p_start_2,
       T_gas_start=T_start_2,
       Cspec_demAndRev_el=simCenter.Cspec_demAndRev_el_70_150_GWh,
@@ -121,10 +125,10 @@ model TestGasStorageVesselHeatTransfer_L2
   Components.Gas.VolumesValvesFittings.ValveDesiredMassFlow valve43(
     medium=medium,
     Delta_p_low=1,
-    Delta_p_high=10) annotation (Placement(transformation(extent={{-10,6},{10,-6}})));
+    Delta_p_high=10) annotation (Placement(transformation(extent={{-10,5},{10,-7}})));
   Components.Sensors.RealGas.TemperatureSensor temp4(medium=medium) annotation (Placement(transformation(extent={{-36,0},{-16,20}})));
   Components.Sensors.RealGas.TemperatureSensor temp3(medium=medium) annotation (Placement(transformation(extent={{16,0},{36,20}})));
-  inner ModelStatistics                                                   modelStatistics annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
+  inner ModelStatistics                                                   modelStatistics annotation (Placement(transformation(extent={{-70,-60},{-50,-40}})));
   ClaRa.Basics.ControlVolumes.SolidVolumes.CylindricalThinWall_L4 wall_pipe_54(
     redeclare model Material = TILMedia.SolidTypes.TILMedia_Steel,
     N_ax=1,
@@ -139,34 +143,36 @@ model TestGasStorageVesselHeatTransfer_L2
     length=pipe_32.length,
     diameter_o=0.0094,
     T_start=T_start_1*ones(wall_pipe_32.N_ax)) annotation (Placement(transformation(extent={{46,18},{66,28}})));
+  Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundary_Txim_flow(medium=medium) annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
+  Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundary_Txim_flow1(medium=medium) annotation (Placement(transformation(extent={{120,-10},{100,10}})));
 equation
 
   connect(ht_pipe_32.T_outer, T_amb.y) annotation (Line(points={{56,60},{56,60},{56,68},{0,68},{0,72},{0,72},{0,75},{-2.22045e-015,75}},           color={0,0,127}));
   connect(ht_pipe_54.T_outer, T_amb.y) annotation (Line(points={{-56,60},{-56,60},{-56,68},{0,68},{0,75},{-1.9984e-015,75}},                    color={0,0,127}));
   connect(vehicle_tank.gasPortIn, pipe_32.gasPortOut) annotation (Line(
-      points={{81.1,4.44089e-016},{81.1,1},{70,1}},
+      points={{81.1,4.44089e-16},{81.1,0},{70,0}},
       color={255,255,0},
       thickness=0.75));
   connect(station_tank.gasPortOut, pipe_54.gasPortIn) annotation (Line(
-      points={{-79.7,-1.77636e-015},{-79.7,1},{-70,1}},
+      points={{-79.7,-1.77636e-15},{-79.7,0},{-70,0}},
       color={255,255,0},
       thickness=0.5));
-  connect(targetMassFlow.y, valve43.m_flowDes) annotation (Line(points={{-29,-20},{-20,-20},{-20,-4.28571},{-10,-4.28571}},
+  connect(targetMassFlow.y, valve43.m_flowDes) annotation (Line(points={{-29,-20},{-20,-20},{-20,-5.28571},{-10,-5.28571}},
                                                                                                                 color={0,0,127}));
   connect(temp4.gasPortIn, pipe_54.gasPortOut) annotation (Line(
-      points={{-36,0},{-40,0},{-40,1},{-42,1}},
+      points={{-36,0},{-42,0}},
       color={255,255,0},
       thickness=1.5));
   connect(temp4.gasPortOut, valve43.gasPortIn) annotation (Line(
-      points={{-16,0},{-10,0},{-10,0.857143}},
+      points={{-16,0},{-10,0},{-10,-0.142857}},
       color={255,255,0},
       thickness=1.5));
   connect(valve43.gasPortOut, temp3.gasPortIn) annotation (Line(
-      points={{10,0.857143},{13,0},{16,0}},
+      points={{10,-0.142857},{13,0},{16,0}},
       color={255,255,0},
       thickness=1.5));
   connect(temp3.gasPortOut, pipe_32.gasPortIn) annotation (Line(
-      points={{36,0},{40,0},{40,1},{42,1}},
+      points={{36,0},{42,0}},
       color={255,255,0},
       thickness=1.5));
   connect(wall_pipe_54.outerPhase[1], ht_pipe_54.heat) annotation (Line(
@@ -174,21 +180,28 @@ equation
       color={167,25,48},
       thickness=0.5));
   connect(wall_pipe_54.innerPhase, pipe_54.heat) annotation (Line(
-      points={{-56,18},{-56,5}},
+      points={{-56,18},{-56,3.33333}},
       color={167,25,48},
       thickness=0.5));
   connect(wall_pipe_32.innerPhase, pipe_32.heat) annotation (Line(
-      points={{56,18},{56,5},{56,5}},
+      points={{56,18},{56,3.33333}},
       color={167,25,48},
       thickness=0.5));
   connect(wall_pipe_32.outerPhase[1], ht_pipe_32.heat) annotation (Line(
       points={{56,28},{56,40}},
       color={167,25,48},
       thickness=0.5));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,-60},{100,100}})),  experiment(StopTime=216, Interval=0.008),
+  connect(boundary_Txim_flow.gasPort, station_tank.gasPortIn) annotation (Line(
+      points={{-100,0},{-90.9,0}},
+      color={255,255,0},
+      thickness=1.5));
+  connect(boundary_Txim_flow1.gasPort, vehicle_tank.gasPortOut) annotation (Line(
+      points={{100,0},{92.3,0}},
+      color={255,255,0},
+      thickness=1.5));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-60},{120,100}})),  experiment(StopTime=216, Interval=0.008),
     Icon(graphics,
-         coordinateSystem(extent={{-100,-60},{100,100}})),
+         coordinateSystem(extent={{-120,-60},{120,100}})),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
 <h4><span style=\"color: #4b8a49\">1. Purpose of model</span></h4>

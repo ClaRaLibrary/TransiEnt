@@ -1,10 +1,10 @@
 within TransiEnt.Storage.Heat.HotWaterStorage_L4.Base;
 model FlowSplit "Splits single input flow according to a vector with size n to n weighted output streams"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -51,15 +51,14 @@ model FlowSplit "Splits single input flow according to a vector with size n to n
 //                   Componenents / submodels
 //______________________________________________________________________________
   //Medium
-    TILMedia.VLEFluid_ph Fluid(
-  vleFluidType = medium,
-  deactivateTwoPhaseRegion=true,
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph Fluid(
+    vleFluidType=medium,
+    deactivateTwoPhaseRegion=true,
     computeVLEAdditionalProperties=false,
     computeVLETransportProperties=false,
-    h= inStream(port_in.h_outflow),
-    p= port_in.p,
-    computeTransportProperties=false)
-    annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
+    h=inStream(port_in.h_outflow),
+    p=port_in.p,
+    computeTransportProperties=false) annotation (Placement(transformation(extent={{-10,-12},{10,8}})));
 
 // _____________________________________________________________________________
 //

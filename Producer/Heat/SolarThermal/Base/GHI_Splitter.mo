@@ -1,10 +1,10 @@
-within TransiEnt.Producer.Heat.SolarThermal.Base;
+﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model GHI_Splitter
-  //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+//________________________________________________________________________________//
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -242,6 +242,6 @@ equation
 <p>[1] Skartveit, Arvid; Olseth, Jan Asle, &quot;A model for the diffuse fraction of hourly global radiation&quot;. In: Solar Energy 38 (4), S. 271&ndash;274. DOI: 10.1016/0038-092X(87)90049-1, 1987.</p>
 <p>[2] PVPerformance Modeling Collaborative, &quot;Piecewise Decomposition Models&quot;, URL: https://pvpmc.sandia.gov/modeling-steps/1-weather-design-inputs/irradiance-and-insolation-2/direct-normal-irradiance/piecewise_decomp-models, 2018.</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p>Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de), May 2018</p>
+<p>Model created by Oliver Schülting (oliver.schuelting@tuhh.de), May 2018</p>
 </html>"));
 end GHI_Splitter;

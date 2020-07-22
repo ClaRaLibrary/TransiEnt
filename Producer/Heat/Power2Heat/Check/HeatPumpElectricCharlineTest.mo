@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Power2Heat.Check;
 model HeatPumpElectricCharlineTest
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -30,13 +30,10 @@ model HeatPumpElectricCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-90,50})));
-  TransiEnt.Producer.Heat.Power2Heat.HeatPumpElectricCharlineHeatPort_L1 heatPump(
-    use_T_source_input_K=true,
-    COP_n=4,
-    usePowerPort=true) annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid annotation (Placement(transformation(extent={{10,-10},{-10,10}},
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
         rotation=180,
-        origin={-20,50})));
+        origin={-16,50})));
   Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-74,46},{-66,54}})));
   Modelica.Blocks.Sources.Sine sine2(
     freqHz=1/86400,
@@ -58,13 +55,8 @@ model HeatPumpElectricCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={20,50})));
-  HeatPumpElectricCharlineHeatPort_L1 heatPump1(
-    use_T_source_input_K=true,
-    COP_n=4,
-    usePowerPort=true,
-    use_Q_flow_input=false) annotation (Placement(transformation(extent={{50,40},{70,60}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid1
-                                                                    annotation (Placement(transformation(extent={{10,-10},{-10,10}},
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid1 annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
         rotation=180,
         origin={90,50})));
   Modelica.Blocks.Sources.Sine sine3(
@@ -83,12 +75,12 @@ model HeatPumpElectricCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-90,-50})));
-  HeatPumpElectricCharlineFluidPorts heatPump2(
+  HeatPumpElectricCharline heatPump2(
     use_T_source_input_K=true,
     COP_n=4,
     usePowerPort=true) annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid2
-                                                                    annotation (Placement(transformation(extent={{10,-10},{-10,10}},
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid2 annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-20,-50})));
   Modelica.Blocks.Math.Gain gain1(k=-1)
@@ -117,13 +109,13 @@ model HeatPumpElectricCharlineTest
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={20,-50})));
-  HeatPumpElectricCharlineFluidPorts heatPump3(
+  HeatPumpElectricCharline heatPump3(
     use_T_source_input_K=true,
     COP_n=4,
     usePowerPort=true,
     use_Q_flow_input=false) annotation (Placement(transformation(extent={{50,-60},{70,-40}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency ElectricGrid3
-                                                                    annotation (Placement(transformation(extent={{10,-10},{-10,10}},
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid3 annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
         rotation=180,
         origin={90,-50})));
   Modelica.Blocks.Sources.Sine sine7(
@@ -143,22 +135,24 @@ model HeatPumpElectricCharlineTest
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={80,-80})));
+  HeatPumpElectricCharline heatPump(
+    use_T_source_input_K=true,
+    useFluidPorts=false,
+    usePowerPort=true) annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
+  HeatPumpElectricCharline heatPump1(
+    use_T_source_input_K=true,
+    useFluidPorts=false,
+    usePowerPort=true) annotation (Placement(transformation(extent={{50,40},{70,60}})));
 equation
-  connect(heatPump.heat, fixedTemperature.port) annotation (Line(points={{-50,40},{-50,32}},
-                                                                                         color={191,0,0}));
   connect(gain.y, heatPump.Q_flow_set) annotation (Line(points={{-65.6,50},{-60,50}}, color={0,0,127}));
   connect(sine.y, gain.u) annotation (Line(points={{-79,50},{-74.8,50}},
                                                                        color={0,0,127}));
-  connect(sine2.y, heatPump.T_source_input_K) annotation (Line(points={{-59,80},{-50,80},{-50,60}},
-                                                                                                 color={0,0,127}));
   connect(heatPump1.heat, fixedTemperature1.port) annotation (Line(points={{60,40},{60,32}}, color={191,0,0}));
-  connect(sine3.y, heatPump1.T_source_input_K) annotation (Line(points={{51,80},{60,80},{60,60}}, color={0,0,127}));
-  connect(sine1.y, heatPump1.P_el_set) annotation (Line(points={{31,50},{50,50}}, color={0,0,127}));
   connect(gain1.y, heatPump2.Q_flow_set) annotation (Line(points={{-65.6,-50},{-60,-50}}, color={0,0,127}));
   connect(sine4.y, gain1.u) annotation (Line(points={{-79,-50},{-74.8,-50}}, color={0,0,127}));
   connect(sine5.y, heatPump2.T_source_input_K) annotation (Line(points={{-59,-20},{-50,-20},{-50,-40}}, color={0,0,127}));
   connect(heatPump.epp, ElectricGrid.epp) annotation (Line(
-      points={{-40,50},{-36,50},{-36,50},{-30,50}},
+      points={{-40,50},{-26,50}},
       color={0,135,135},
       thickness=0.5));
   connect(ElectricGrid1.epp, heatPump1.epp) annotation (Line(
@@ -190,7 +184,18 @@ equation
       points={{40,-70},{40,-60},{56,-60}},
       color={175,0,0},
       thickness=0.5));
-  connect(sine6.y, heatPump3.P_el_set) annotation (Line(points={{31,-50},{50,-50}}, color={0,0,127}));
+  connect(sine6.y, heatPump3.P_el_set) annotation (Line(points={{31,-50},{40,-50},{40,-41.8},{50,-41.8}},
+                                                                                    color={0,0,127}));
+  connect(gain.y, heatPump.Q_flow_set) annotation (Line(points={{-65.6,50},{-60,50}}, color={0,0,127}));
+  connect(heatPump.heat, fixedTemperature.port) annotation (Line(points={{-50,40},{-50,32}}, color={191,0,0}));
+  connect(sine2.y, heatPump.T_source_input_K) annotation (Line(points={{-59,80},{-50,80},{-50,60}}, color={0,0,127}));
+  connect(fixedTemperature1.port, heatPump1.heat) annotation (Line(points={{60,32},{60,40}}, color={191,0,0}));
+  connect(sine1.y, heatPump1.Q_flow_set) annotation (Line(points={{31,50},{50,50}}, color={0,0,127}));
+  connect(ElectricGrid1.epp, heatPump1.epp) annotation (Line(
+      points={{80,50},{70,50}},
+      color={0,135,135},
+      thickness=0.5));
+  connect(sine3.y, heatPump1.T_source_input_K) annotation (Line(points={{51,80},{60,80},{60,60}}, color={0,0,127}));
   annotation (
     Icon(graphics,
          coordinateSystem(preserveAspectRatio=false)),

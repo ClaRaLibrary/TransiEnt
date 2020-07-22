@@ -1,10 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler;
 model TwoFuelBoiler "Abstract model for boilers using two different fuel types"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -40,7 +40,7 @@ model TwoFuelBoiler "Abstract model for boilers using two different fuel types"
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid   medium= simCenter.fluid1 "Medium to be used"
-                         annotation(choicesAllMatching, Dialog(group="Fluid Definition"));
+                         annotation(choicesAllMatching, Dialog(group="Fundamental Definitions"));
 
   // _____________________________________________
   //
@@ -69,8 +69,8 @@ model TwoFuelBoiler "Abstract model for boilers using two different fuel types"
   //           Instances of other Classes
   // _____________________________________________
 
-  replaceable TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base.PartialBoiler boiler1 constrainedby TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base.PartialBoiler annotation (choicesAllMatching=true, Placement(transformation(extent={{-61,-23},{-10,23}})));
-  replaceable TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base.PartialBoiler boiler2 constrainedby TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base.PartialBoiler annotation (choicesAllMatching=true, Placement(transformation(extent={{27,-23},{78,23}})));
+  replaceable SimpleBoiler boiler1 constrainedby TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base.PartialBoiler(final useGasPort=false) "First boiler model" annotation (choicesAllMatching=true, Placement(transformation(extent={{-61,-23},{-10,23}})));
+  replaceable SimpleBoiler boiler2 constrainedby TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.Base.PartialBoiler(final useGasPort=false) "Second boiler model" annotation (choicesAllMatching=true, Placement(transformation(extent={{27,-23},{78,23}})));
 
 equation
 

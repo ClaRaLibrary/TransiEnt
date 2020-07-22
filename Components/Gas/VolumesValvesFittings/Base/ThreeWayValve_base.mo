@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.VolumesValvesFittings.Base;
 partial model ThreeWayValve_base "Three way valve for vle media | base class |"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -43,6 +43,7 @@ partial model ThreeWayValve_base "Three way valve for vle media | base class |"
   parameter Boolean showData=true "|Summary and Visualisation||True, if a data port containing p,T,h,s,m_flow shall be shown, else false";
   parameter Boolean splitRatio_input=false "|Fundamental Definitions|= true, if split ratio is defined by input";
   parameter Real splitRatio_fixed = 0.5 "|Fundamental Definitions|" annotation(Dialog(enable=not splitRatio_input));
+  parameter Boolean useFluidModelsForSummary=false "True, if fluid models shall be used for the summary" annotation(Dialog(tab="Summary and Visualisation"));
 
     // _____________________________________________
     //
@@ -86,21 +87,22 @@ public
     //
     //           Instances of other Classes
     // _____________________________________________
+
 protected
-  TILMedia.VLEFluid_ph gasIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     each vleFluidType=medium,
     h=noEvent(actualStream(gasPortIn.h_outflow)),
     xi=noEvent(actualStream(gasPortIn.xi_outflow)),
     p=gasPortIn.p,
-    deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-90,-12},{-70,8}}, rotation=0)));
-  TILMedia.VLEFluid_ph gasOut2(
+    deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-90,-12},{-70,8}}, rotation=0)));
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut2(
     each vleFluidType=medium,
     h=noEvent(actualStream(gasPortOut2.h_outflow)),
     xi=noEvent(actualStream(gasPortOut2.xi_outflow)),
     p=gasPortOut2.p,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-10,-70},{10,-50}}, rotation=0)));
 protected
-  TILMedia.VLEFluid_ph gasOut1(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut1(
     each vleFluidType=medium,
     h=noEvent(actualStream(gasPortOut1.h_outflow)),
     xi=noEvent(actualStream(gasPortOut1.xi_outflow)),
@@ -212,10 +214,10 @@ annotation(Icon(
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid if changes in density and the two-phase region of the fluid can be neglected.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>TransiEnt.Basics.Interfaces.General.MassFractionIn&nbsp;splitRatio_external(min=0,max=1,value=splitRatio)&nbsp;if&nbsp;splitRatio_input&nbsp;&quot;Controls&nbsp;mass&nbsp;fraction&nbsp;m2/m1&quot;</p>
-<p>TransiEnt.Basics.Interfaces.Gas.RealGasPortIn&nbsp;gasPortIn(Medium=medium)&nbsp;&quot;Inlet&nbsp;port&quot;&nbsp;</p>
-<p>TransiEnt.Basics.Interfaces.Gas.RealGasPortOut&nbsp;gasPortOut1(each&nbsp;Medium=medium)&nbsp;&quot;Outlet&nbsp;port&quot;&nbsp;</p>
-<p>TransiEnt.Basics.Interfaces.Gas.RealGasPortOut&nbsp;gasPortOut2(each&nbsp;Medium=medium)&nbsp;&quot;Outlet&nbsp;port&quot;&nbsp;</p>
+<p>TransiEnt.Basics.Interfaces.General.MassFractionIn splitRatio_external(min=0,max=1,value=splitRatio) if splitRatio_input &quot;Controls mass fraction m2/m1&quot;</p>
+<p>TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) &quot;Inlet port&quot; </p>
+<p>TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut1(each Medium=medium) &quot;Outlet port&quot; </p>
+<p>TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut2(each Medium=medium) &quot;Outlet port&quot; </p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>

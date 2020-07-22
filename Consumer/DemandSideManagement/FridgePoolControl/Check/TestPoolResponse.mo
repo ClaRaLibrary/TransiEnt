@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.FridgePoolControl.Check;
 model TestPoolResponse
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -26,7 +26,7 @@ Modelica.Blocks.Sources.CombiTimeTable f_grid(
     tableOnFile=false,
     startTime=0,
     table=[0,50; 7200,50; 7202.2,50; 7204.4,50; 7206.6,50; 7208.8,50; 7210,50; 7210,50; 7211,49.904; 7213.2,49.72; 7215.4,49.57; 7217.6,49.451; 7219.8,49.359; 7222,49.293; 7224.2,49.248; 7226.4,49.224; 7228.6,49.218; 7230.8,49.229; 7233,49.253; 7235.2,49.291; 7237.4,49.339; 7239.6,49.399; 7241.8,49.462; 7244,49.518; 7246.2,49.569; 7248.4,49.614; 7250.6,49.655; 7252.8,49.691; 7255,49.723; 7257.2,49.752; 7259.4,49.778; 7261.6,49.801; 7263.8,49.815; 7266,49.819; 7268.2,49.82; 7270.4,49.82; 7272.6,49.82; 7274.8,49.82; 7277,49.82; 7279.2,49.82; 7281.4,49.82; 7283.6,49.82; 7285.8,49.82; 7288,49.82; 7290.2,49.82; 7292.4,49.82; 7294.6,49.82; 7296.8,49.82; 7299,49.82; 7301.2,49.82; 7303.4,49.82; 7305.6,49.82; 7307.8,49.82; 7310,49.82; 7310,49.82]) annotation (Placement(transformation(extent={{2,40},{22,60}})));
-  TransiEnt.Components.Boundaries.Electrical.Frequency electricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{36,-10},{56,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency electricGrid(useInputConnector=true) annotation (Placement(transformation(extent={{36,-10},{56,10}})));
   Pool.FridgePool fridgePool(
     dbf=0.4,
     poolSize=100,

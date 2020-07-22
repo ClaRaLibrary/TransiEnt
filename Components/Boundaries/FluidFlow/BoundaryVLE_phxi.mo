@@ -1,10 +1,10 @@
 within TransiEnt.Components.Boundaries.FluidFlow;
 model BoundaryVLE_phxi "A boundary defining pressure, specific enthalpy and mass composition"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -78,12 +78,11 @@ protected
     annotation (Placement(transformation(extent={{65,-72},{66,-73}}),
         iconTransformation(extent={{55,-55},{57,-53}})));
 
-   TILMedia.VLEFluid_ph fluidIn(
+  TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidIn(
     vleFluidType=medium,
     p=fluidPortIn.p,
     xi=xi_in,
-    h=actualStream(fluidPortIn.h_outflow))
-              annotation (Placement(transformation(extent={{30,-82},{50,-62}})));
+    h=actualStream(fluidPortIn.h_outflow)) annotation (Placement(transformation(extent={{30,-82},{50,-62}})));
 equation
   // _____________________________________________
   //

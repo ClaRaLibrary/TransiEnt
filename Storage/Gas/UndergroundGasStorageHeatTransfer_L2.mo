@@ -2,10 +2,10 @@ within TransiEnt.Storage.Gas;
 model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume for constant composition with heat transfer to the cavern walls"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -31,6 +31,7 @@ model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume
   import Modelica.Constants.pi;
 
   extends TransiEnt.Basics.Icons.StorageGenericGas;
+  extends Base.MatchClassGasStorage;
 
   // _____________________________________________
   //
@@ -52,10 +53,11 @@ model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume
   parameter SI.Temperature T_wall_start=317.15 "Initial temperature of the material which takes part in the heat transfer" annotation(Dialog(group="Initialization"));
   parameter Integer stateLocation = 2 "Location of states" annotation(Dialog(group="Numerical Efficiency"), choices(choice=1 "Inner location of states",
                                     choice=2 "Central location of states",  choice=3 "Outer location of states"));
-  parameter Integer initOption=0 "Type of initialization" annotation (Dialog(group="Initialization"), choices(
-      choice=0 "Use guess values",
+  parameter Integer initOption=213 "Type of initialization" annotation (Dialog(group="Initialization"), choices(
+      choice=213 "Fixed temperature",
       choice=1 "Steady state",
-      choice=203 "Steady temperature"));
+      choice=203 "Steady temperature",
+      choice=0 "No init, use T_start as guess values"));
 
   parameter String suppressChattering="True" "Enable to suppress possible chattering in wall" annotation (Dialog(group="Numerical Efficiency"), choices(choice="False" "False (faster if no chattering occurs)",
                                                                                             choice="True" "True (faster if chattering occurs)"));
@@ -88,7 +90,10 @@ model UndergroundGasStorageHeatTransfer_L2 "Model of a simple gas storage volume
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(calculateCost=calculateCost) constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage(medium=medium, final includeHeatTransfer=true) annotation (
+  replaceable TransiEnt.Storage.Gas.GasStorage_constXi_L2 storage(
+    V_geo=500000,                                                 calculateCost=calculateCost,
+    p_gas_start=12000000,
+    T_gas_start=317.15)                                                                        constrainedby TransiEnt.Storage.Gas.Base.PartialGasStorage(medium=medium, final includeHeatTransfer=true) annotation (
     Dialog(group="Fundamental Definitions"),
     choicesAllMatching,
     Placement(transformation(extent={{-10,-10},{10,10}})));
@@ -103,8 +108,8 @@ protected
     diameter_o=storage.diameter + thickness_wall,
     diameter_i=storage.diameter,
     length=storage.height,
-    initOption=initOption,
-    suppressChattering=suppressChattering) annotation (Placement(transformation(
+    suppressChattering=suppressChattering,
+    initOption=initOption) annotation (Placement(transformation(
         extent={{-15,-5},{15,5}},
         rotation=270,
         origin={30,0})));
@@ -115,8 +120,8 @@ protected
     width=pi/2*storage.diameter,
     T_start=T_wall_start*ones(cylindricalWall.N_ax),
     N_ax=1,
-    initOption=initOption,
-    stateLocation=stateLocation) annotation (Placement(transformation(extent={{8,-22},{28,-32}})));
+    stateLocation=stateLocation,
+    initOption=initOption) annotation (Placement(transformation(extent={{8,-22},{28,-32}})));
 
 public
   inner Summary summary(

@@ -1,10 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems.Base;
 model BivalentHeatpumpSystemDSM "Model of a bivalent heat pump system for demand side management scenarios"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -210,7 +210,7 @@ equation
           horizontalAlignment=TextAlignment.Left)}),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Heatpump&nbsp;system&nbsp;with&nbsp;bivalent&nbsp;control,&nbsp;floor&nbsp;heating&nbsp;and&nbsp;lumped&nbsp;heat&nbsp;storage for demand side management scenarios.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Heatpump system with bivalent control, floor heating and lumped heat storage for demand side management scenarios.</span></p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Description)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>

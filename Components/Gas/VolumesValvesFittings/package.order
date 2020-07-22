@@ -1,8 +1,11 @@
 Base
 Check
-PipeFlow_L4_Simple_constXi
-PipeFlow_L4_Simple_varXi
+PipeFlow_L4_Simple
+PipeFlow_L4_Simple_isoth
 RealGasJunction_L2
+RealGasJunction_L2_isoth
+RealGasJunction_L2_nPorts
+RealGasJunction_L2_nPorts_isoth
 ThreeWayValveRealGas_L1_simple
 ValveDesiredMassFlow
 ValveDesiredMassFlow_PT1

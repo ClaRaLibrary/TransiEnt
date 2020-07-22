@@ -2,10 +2,10 @@ within TransiEnt.Components.Gas.Combustion;
 model FullConversion_idealGas "Full conversion, fuel type independent combustion model for emission calculation purpose"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -35,16 +35,16 @@ model FullConversion_idealGas "Full conversion, fuel type independent combustion
   // _____________________________________________
 
   //Air
-  constant SI.MolarMass M_i_air[airType.nc_propertyCalculation]=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(airType, airType.nc_propertyCalculation) "[O2, N2] Air molar masses";
+  final parameter SI.MolarMass M_i_air[airType.nc_propertyCalculation]=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(airType, airType.nc_propertyCalculation) "[O2, N2] Air molar masses";
   //Fuel
-  constant SI.MolarMass M_i_fuel[FuelMedium.nc_propertyCalculation]=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(FuelMedium, FuelMedium.nc_propertyCalculation) "Fuel molar masses";
+  final parameter SI.MolarMass M_i_fuel[FuelMedium.nc_propertyCalculation]=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(FuelMedium, FuelMedium.nc_propertyCalculation) "Fuel molar masses";
   //Exhaust
-  constant SI.MolarMass M_i_exh[ExhaustGas.nc_propertyCalculation]=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(ExhaustGas, ExhaustGas.nc_propertyCalculation) "[H2O, CO2, CO, H2, O2, NO, NO2, SO2, N2] Exhaust molar masses";
+  final parameter SI.MolarMass M_i_exh[ExhaustGas.nc_propertyCalculation]=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(ExhaustGas, ExhaustGas.nc_propertyCalculation) "[H2O, CO2, CO, H2, O2, NO, NO2, SO2, N2] Exhaust molar masses";
 
   parameter TransiEnt.Basics.Records.GasProperties.OxygenDemandCombustion oxygenDemand;
 
-  final parameter TILMedia.GasTypes.MoistAirMixture airType "Air medium type";
-  constant SI.MassFraction[airType.nc-1] xi_air = airType.xi_default "[H2O, N2, O2] Air components mass fraction";
+  final parameter TransiEnt.Basics.Media.Gases.Gas_MoistAir airType "Air medium type";
+  final parameter SI.MassFraction[airType.nc-1] xi_air = airType.xi_default "[H2O, N2, O2] Air components mass fraction";
   parameter Real lambda = 1.2 "Air ratio"  annotation (Dialog(enable=false));
 
   // _____________________________________________

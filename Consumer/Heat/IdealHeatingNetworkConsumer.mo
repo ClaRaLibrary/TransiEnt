@@ -2,10 +2,10 @@ within TransiEnt.Consumer.Heat;
 model IdealHeatingNetworkConsumer "Heating network consumer, ideally hydraulic decoupled"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.2.0                             //
+// Component of the TransiEnt Library, version: 1.3.0                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under Modelica License 2.         //
-// Copyright 2019, Hamburg University of Technology.                              //
+// Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
 // TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
@@ -95,8 +95,8 @@ public
   // _____________________________________________
 
   SI.MassFlowRate m_flow "Mass flow is determined by heat balance";
-  SI.SpecificHeatCapacity cp = TILMedia.VLEFluidFunctions.liquidSpecificHeatCapacity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
-  SI.Density rho = TILMedia.VLEFluidFunctions.liquidDensity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
+  SI.SpecificHeatCapacity cp = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.liquidSpecificHeatCapacity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
+  SI.Density rho = TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.liquidDensity_phxi(medium, fluidPortIn.p, inStream(fluidPortIn.h_outflow), inStream(fluidPortIn.xi_outflow));
 
   Modelica.Blocks.Nonlinear.Limiter m_flow_set(uMax=m_flow_large, uMin=m_flow_small) annotation (Placement(transformation(extent={{6,-38},{-14,-18}})));
 
