@@ -1,9 +1,10 @@
 ﻿within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model HeatInputTable "Table based model which delivers the amount of heat input required by a Large Scale CHP plant to produce a given el. and th. output"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

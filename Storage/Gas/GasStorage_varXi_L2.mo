@@ -2,9 +2,10 @@ within TransiEnt.Storage.Gas;
 model GasStorage_varXi_L2 "L2: Model of a simple gas storage volume for variable composition"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

@@ -2,9 +2,10 @@ within TransiEnt.Grid.Electrical.LumpedPowerGrid;
 model LumpedGridLocalStatistics "Model of generation and load in a lumped grid including load forecast errors (providing realistic frequency series)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

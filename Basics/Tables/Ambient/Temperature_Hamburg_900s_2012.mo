@@ -1,9 +1,10 @@
 ﻿within TransiEnt.Basics.Tables.Ambient;
 model Temperature_Hamburg_900s_2012 "Hamburg 2012, 15 min resolution"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

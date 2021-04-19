@@ -1,9 +1,10 @@
 within TransiEnt.Producer.Heat.Gas2Heat;
 model GHP_L1_idContrMFlow_temp "Model for gas heat pumps with a pump with ideal mass flow control to get a given outlet temperature"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

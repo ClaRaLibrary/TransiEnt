@@ -2,9 +2,10 @@ within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Utilities;
 block FirstOrder_variableDamping "First order transfer function block (= 1 pole) with variable damping"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

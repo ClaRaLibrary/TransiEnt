@@ -2,9 +2,10 @@ within TransiEnt.Grid.Electrical.EconomicDispatch;
 model MeritOrderDispatcherStatePrediction "Forward-looking control (for plant status z as well as load), min, max and gradient constraints"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

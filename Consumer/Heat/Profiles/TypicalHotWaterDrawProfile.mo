@@ -1,9 +1,10 @@
 within TransiEnt.Consumer.Heat.Profiles;
 model TypicalHotWaterDrawProfile "Model of three typical hot water draw profiles taken from EN 15450. Output is in the thermal heat flow rate in W at a mass flow rate of the hydraulic system of 5.5 l/min (see Table E.1 in reference)."
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

@@ -2,9 +2,10 @@ within TransiEnt.Components.Boundaries.Heat.Check;
 model Test_Heatflow_L1_idContrMFlow "Model for testing Heatflow_L1_idContrMFlow_temp"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

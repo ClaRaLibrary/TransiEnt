@@ -2,9 +2,10 @@ within TransiEnt.Producer.Heat.Power2Heat.Components;
 model Heatpump "Heatpump model with on off controller and operating range defined by bivalent point, dynamics are represented only by time relais restriction"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

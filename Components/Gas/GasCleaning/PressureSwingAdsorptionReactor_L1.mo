@@ -2,9 +2,10 @@ within TransiEnt.Components.Gas.GasCleaning;
 model PressureSwingAdsorptionReactor_L1 "Pressure swing adsorption reactor with constant efficiency of hydrogen separation"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

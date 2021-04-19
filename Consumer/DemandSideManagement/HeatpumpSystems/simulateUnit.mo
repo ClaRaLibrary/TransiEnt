@@ -1,9 +1,10 @@
 within TransiEnt.Consumer.DemandSideManagement.HeatpumpSystems;
 model simulateUnit "Simulation of one heat pump system unit, parameterized by a vector of 24 parameters and replaceable system configurations"
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //

@@ -2,9 +2,10 @@ within TransiEnt.Storage.Heat.HotWaterStorage_L2;
 model HotWaterStorage_L2 "Stratified hot water storage without spatial discretisation (based on analytic solution for output temperature at steady state)"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.0                             //
+// Component of the TransiEnt Library, version: 1.3.1                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under Modelica License 2.         //
+// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
+// for the Modelica Association.                                                  //
 // Copyright 2020, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
