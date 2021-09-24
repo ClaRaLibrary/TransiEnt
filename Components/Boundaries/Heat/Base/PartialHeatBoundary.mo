@@ -1,26 +1,30 @@
-within TransiEnt.Components.Boundaries.Heat.Base;
+﻿within TransiEnt.Components.Boundaries.Heat.Base;
 partial model PartialHeatBoundary
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -56,7 +60,7 @@ partial model PartialHeatBoundary
   //                Variables
   // _____________________________________________
 
-  Modelica.SIunits.HeatFlowRate Q_flow_boundary = fluidPortIn.m_flow * (actualStream(fluidPortIn.h_outflow) - actualStream(fluidPortOut.h_outflow));
+  Modelica.Units.SI.HeatFlowRate Q_flow_boundary=fluidPortIn.m_flow*(actualStream(fluidPortIn.h_outflow) - actualStream(fluidPortOut.h_outflow));
 
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics), Documentation(info="<html>

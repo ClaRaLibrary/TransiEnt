@@ -1,26 +1,30 @@
-within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
+﻿within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
 model PVBoundary "PV Bus in TransiEnt"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 // _____________________________________________
 //
@@ -37,15 +41,15 @@ model PVBoundary "PV Bus in TransiEnt"
 //                   Parameters
 // _____________________________________________
 
-  parameter Modelica.SIunits.Voltage v_gen=simCenter.v_n "Voltage of Plant, controlled by generator" annotation (Dialog(enable = not useInputConnectorv));
-  parameter Modelica.SIunits.ActivePower P_gen=180e3 "Active Power of Plant, Load Flow" annotation (Dialog(enable = not useInputConnectorP));
+  parameter Modelica.Units.SI.Voltage v_gen=simCenter.v_n "Voltage of Plant, controlled by generator" annotation (Dialog(enable=not useInputConnectorv));
+  parameter Modelica.Units.SI.ActivePower P_gen=180e3 "Active Power of Plant, Load Flow" annotation (Dialog(enable=not useInputConnectorP));
   parameter Boolean useInputConnectorP = false "Gets parameter P from input connector"
   annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
   parameter Boolean useInputConnectorv = false "Gets parameter v from input connector"
   annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
   parameter Boolean change_sign=false "Change sign on input value";
 
-  final parameter Modelica.SIunits.ActivePower P_el=-P_gen;
+  final parameter Modelica.Units.SI.ActivePower P_el=-P_gen;
 
   // _____________________________________________
   //
@@ -73,9 +77,9 @@ model PVBoundary "PV Bus in TransiEnt"
   //                   Variables
   // _____________________________________________
 
-  Modelica.SIunits.Angle delta_pugen(start=0.08726646259971647) annotation(Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.ReactivePower Q_gen(start=0) "Reactive Power of Plant, Load Flow" annotation(Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Frequency f(start=simCenter.f_n) "frequency" annotation(showStartAttribute=false);
+  Modelica.Units.SI.Angle delta_pugen(start=0.08726646259971647) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.ReactivePower Q_gen(start=0) "Reactive Power of Plant, Load Flow" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Frequency f(start=simCenter.f_n) "frequency" annotation (showStartAttribute=false);
 protected
   TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal "Needed to connect to conditional connector for active power";
   TransiEnt.Basics.Interfaces.Electrical.VoltageIn v_internal "Needed to connect to conditional connector for fixed voltage";

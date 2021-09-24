@@ -1,25 +1,29 @@
-within TransiEnt.Components.Gas.Engines.Mechanics;
+﻿within TransiEnt.Components.Gas.Engines.Mechanics;
 model DynamicEngineMechanics
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Components.Gas.Engines.Mechanics.BasicEngineMechanics;
 
   // _____________________________________________
@@ -27,45 +31,41 @@ model DynamicEngineMechanics
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  final parameter Modelica.SIunits.Pressure p_me_n=Specification.P_el_max/Specification.omega_n/Specification.engineDisplacement*4*Modelica.Constants.pi/Specification.n_cylinder "Nominal mean effective pressure at P_max";
-  final parameter Modelica.SIunits.Pressure p_mf_n=(1/Specification.eta_m - 1)*p_me_n "Nominal friction mean effective pressure at P_max";
-  final parameter Modelica.SIunits.Velocity c_m=Specification.n_n*Specification.pistonStroke/30;
+  final parameter Modelica.Units.SI.Pressure p_me_n=Specification.P_el_max/Specification.omega_n/Specification.engineDisplacement*4*Modelica.Constants.pi/Specification.n_cylinder "Nominal mean effective pressure at P_max";
+  final parameter Modelica.Units.SI.Pressure p_mf_n=(1/Specification.eta_m - 1)*p_me_n "Nominal friction mean effective pressure at P_max";
+  final parameter Modelica.Units.SI.Velocity c_m=Specification.n_n*Specification.pistonStroke/30;
 
   // _____________________________________________
   //
   //            Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Temp_C theta_cylinder_opt=145 "Optimal temperature of cylinder";
-  parameter Modelica.SIunits.SpecificHeatCapacity cp_iron=490 "TILMedia steel";
-  parameter Modelica.SIunits.Temperature T_site=290 "Average outside temperature at plant site"
-    annotation (Dialog(group="Stanby losses"));
+  parameter Modelica.Units.NonSI.Temperature_degC theta_cylinder_opt=145 "Optimal temperature of cylinder";
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp_iron=490 "TILMedia steel";
+  parameter Modelica.Units.SI.Temperature T_site=290 "Average outside temperature at plant site" annotation (Dialog(group="Stanby losses"));
 
   // _____________________________________________
   //
   //                   Variables
   // _____________________________________________
 
-  Modelica.SIunits.Temperature T_cylinderWall "Temperature of cylinder wall";
-  Modelica.SIunits.Temperature T_innerEngine = TemperaturesIn[2];
+  Modelica.Units.SI.Temperature T_cylinderWall "Temperature of cylinder wall";
+  Modelica.Units.SI.Temperature T_innerEngine=TemperaturesIn[2];
 
-  Modelica.SIunits.Temperature T_outerEngine = TemperaturesIn[1];
+  Modelica.Units.SI.Temperature T_outerEngine=TemperaturesIn[1];
 
   Real eta_start;
   // Boolean use_eta_start(start=true);
-  Modelica.SIunits.Pressure p_me "Mean effective pressure";
-  Modelica.SIunits.Pressure p_mf "Friction mean effective pressure";
+  Modelica.Units.SI.Pressure p_me "Mean effective pressure";
+  Modelica.Units.SI.Pressure p_mf "Friction mean effective pressure";
 
   Modelica.Blocks.Logical.Switch ignition
     annotation (Placement(transformation(extent={{-58,43},{-46,55}})));
   Modelica.Blocks.Continuous.SecondOrder secondOrder(w=Specification.reactionTime, D=
         Specification.damping)
     annotation (Placement(transformation(extent={{-34,37},{-10,62}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter(
-    uMax=Specification.P_el_max,
-    limitsAtInit=true,
-    uMin=0)
-    annotation (Placement(transformation(extent={{-10,-10.5},{10,10.5}},
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=Specification.P_el_max, uMin=0) annotation (Placement(transformation(
+        extent={{-10,-10.5},{10,10.5}},
         rotation=0,
         origin={12,49.5})));
   Modelica.Blocks.Logical.Switch clutch

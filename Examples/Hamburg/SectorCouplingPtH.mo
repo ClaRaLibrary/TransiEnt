@@ -1,25 +1,29 @@
-within TransiEnt.Examples.Hamburg;
+﻿within TransiEnt.Examples.Hamburg;
 model SectorCouplingPtH "Example of an electric generation park coupled with a district heating grid and a power-to-heat unit"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -146,7 +150,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     isSecondaryControlActive=true,
     P_el_n=simCenter.generationPark.P_el_n_GUDTS,
     P_el_init=UC.P_init[UC.schedule.GUDTS],
-    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric(k_Q_flow=1/GUDTS.Q_flow_n_CHP, k_P_el=GUDTS.P_el_n),
+    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric(),
     Q_flow_n_CHP=180e6) "Combined cycle plant Tiefstack" annotation (Placement(transformation(extent={{197,-168},{222,-141}})));
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_pTxi massflow_Tm_flow6(variable_p=true) annotation (Placement(transformation(
         extent={{-4,-3},{4,3}},
@@ -209,8 +213,8 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
         extent={{-9,-5},{9,5}},
         rotation=270,
         origin={-8,-123})));
-  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler PtH(Q_flow_n=HKW_Wedel.Q_flow_n_CHP, usePowerPort=true) annotation (Placement(transformation(extent={{-44,-156},{-24,-136}})));
-  TransiEnt.Producer.Heat.Power2Heat.Controller.PtH_limiter ptH_limiter(Q_flow_PtH_max=PtH.Q_flow_n) annotation (Placement(transformation(extent={{-166,-178},{-146,-158}})));
+  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler.ElectricBoiler PtH(Q_flow_n=HKW_Wedel.Q_flow_n_CHP, usePowerPort=true) annotation (Placement(transformation(extent={{-44,-156},{-24,-136}})));
+  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler.Controller.PtH_limiter ptH_limiter(Q_flow_PtH_max=PtH.Q_flow_n) annotation (Placement(transformation(extent={{-166,-178},{-146,-158}})));
   Modelica.Blocks.Sources.RealExpression P_set_Pth(y=min(P_set_Curt.y, PtH.Q_flow_n)) annotation (Placement(transformation(extent={{-194,-178},{-174,-158}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_set_PtH(y=-ptH_limiter.Q_flow_set_PtH) annotation (Placement(transformation(
         extent={{-9,-5},{9,5}},
@@ -393,7 +397,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
     startTime=60,
     P_max_var={Tiefstack_HardCoal.pQDiagram[1].P_max,HKW_Wedel.pQDiagram[1].P_max},
     P_min_var={Tiefstack_HardCoal.pQDiagram[1].P_min,HKW_Wedel.pQDiagram[1].P_min}) annotation (Placement(transformation(extent={{-166,58},{-142,84}})));
-  TransiEnt.Basics.Tables.ElectricGrid.ElectricityDemand_HH_900s_2012 P_Load(startTime=t_start_set.k) annotation (Placement(transformation(extent={{286,76},{266,96}})));
+  TransiEnt.Basics.Tables.ElectricGrid.PowerData.ElectricityDemand_HH_900s_2012 P_Load(startTime=t_start_set.k) annotation (Placement(transformation(extent={{286,76},{266,96}})));
   Modelica.Blocks.Sources.RealExpression P_load_is(y=Demand.epp.P) "Freqeuency dependent load" annotation (Placement(transformation(extent={{296,48},{276,68}})));
   TransiEnt.Basics.Tables.GenericDataTable normalizedWindPredictionError(
     relativepath="electricity/NormalisedWindPredictionError_900s.txt",
@@ -592,14 +596,15 @@ equation
   connect(massflow_Tm_flow4.T, T_return1.y) annotation (Line(points={{114.8,-212},{118,-212},{118,-206},{120.4,-206}}, color={0,0,127}));
   connect(massflow_Tm_flow4.m_flow, m_flow_return5.y) annotation (Line(points={{114.8,-213.8},{118,-213.8},{118,-215},{121.5,-215}}, color={0,0,127}));
   connect(PtH.fluidPortIn, HKW_Wedel.outlet) annotation (Line(
-      points={{-43.8,-146},{-64.8,-146},{-64.8,-150.167}},
+      points={{-44.4,-146},{-64.8,-146},{-64.8,-150.167}},
       color={175,0,0},
       thickness=0.5));
   connect(P_set_Pth.y, ptH_limiter.P_RE_curtail) annotation (Line(points={{-173,-168},{-167,-168}}, color={0,0,127}));
-  connect(PtH.Q_flow_set, Q_flow_set_PtH.y) annotation (Line(points={{-34,-136},{-34,-133.5},{-31,-133.5},{-31,-130.9}}, color={0,0,127}));
+  connect(PtH.Q_flow_set, Q_flow_set_PtH.y) annotation (Line(points={{-44.4,-145},{-44.4,-133.5},{-31,-133.5},{-31,-130.9}},
+                                                                                                                         color={0,0,127}));
   connect(P_set_Curt_after_P2H.y, P_RE_curtailement.u) annotation (Line(points={{153,216},{162,216},{162,226},{171,226},{171,211.58}}, color={0,0,127}));
   connect(PtH.epp, Demand.epp) annotation (Line(
-      points={{-34,-156},{-44,-156},{-44,52},{231.4,52}},
+      points={{-34,-156.2},{-44,-156.2},{-44,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(discretizePrediction.P_predictions, mod.u) annotation (Line(points={{-181,72},{-168.4,72},{-168.4,71}}, color={0,0,127}));
@@ -633,7 +638,7 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(spiVo_Wedel.inlet, PtH.fluidPortOut) annotation (Line(
-      points={{-17.8,-148},{-20,-148},{-20,-146},{-24,-146}},
+      points={{-17.8,-148},{-20,-148},{-20,-146},{-23.8,-146}},
       color={175,0,0},
       thickness=0.5));
   connect(Q_flow_set_Spivo_Wedel.y, spiVo_Wedel.Q_flow_set) annotation (Line(points={{-8,-132.9},{-8,-135.45},{-8,-138}}, color={0,0,127}));
@@ -685,7 +690,7 @@ equation
           lineColor={175,175,175},
           pattern=LinePattern.Dash),
         Rectangle(
-          extent={{-212,40},{192,-50}},
+          extent={{-42,82},{362,-8}},
           lineColor={175,175,175},
           pattern=LinePattern.Dash),
         Rectangle(

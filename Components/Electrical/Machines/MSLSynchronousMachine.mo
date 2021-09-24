@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.Machines;
+﻿within TransiEnt.Components.Electrical.Machines;
 model MSLSynchronousMachine "ApparentPowerPort: Transient MSL synchronous machine model to TransiEnt interfaces"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -42,10 +46,10 @@ model MSLSynchronousMachine "ApparentPowerPort: Transient MSL synchronous machin
   // _____________________________________________
 
   constant Integer m=3 "Number of phases";
-  parameter Modelica.SIunits.Voltage VNominal=100 "Nominal RMS voltage per phase";
-  parameter Modelica.SIunits.Frequency fNominal=50 "Nominal frequency";
-  parameter Modelica.SIunits.AngularVelocity wActual(displayUnit="1/min")=1499*2*Modelica.Constants.pi/60 "Actual speed";
-  parameter Modelica.SIunits.Angle gamma0(displayUnit="deg")=0 "Initial rotor displacement angle";
+  parameter Modelica.Units.SI.Voltage VNominal=100 "Nominal RMS voltage per phase";
+  parameter Modelica.Units.SI.Frequency fNominal=50 "Nominal frequency";
+  parameter Modelica.Units.SI.AngularVelocity wActual(displayUnit="1/min") = 1499*2*Modelica.Constants.pi/60 "Actual speed";
+  parameter Modelica.Units.SI.Angle gamma0(displayUnit="deg") = 0 "Initial rotor displacement angle";
   parameter Modelica.Electrical.Machines.Utilities.SynchronousMachineData smeeData(
     SNominal=30e3,
     VsNominal=100,
@@ -87,10 +91,8 @@ model MSLSynchronousMachine "ApparentPowerPort: Transient MSL synchronous machin
   //           Instances of other Classes
   // _____________________________________________
 
-  Modelica.Electrical.Machines.BasicMachines.SynchronousInductionMachines.SM_ElectricalExcited
-    smee(
-    phiMechanical(start=-(Modelica.Constants.pi + gamma0)/smee.p, fixed=
-          true),
+  Modelica.Electrical.Machines.BasicMachines.SynchronousMachines.SM_ElectricalExcited smee(
+    phiMechanical(start=-(Modelica.Constants.pi + gamma0)/smee.p, fixed=true),
     fsNominal=smeeData.fsNominal,
     Rs=smeeData.Rs,
     TsRef=smeeData.TsRef,
@@ -120,9 +122,7 @@ model MSLSynchronousMachine "ApparentPowerPort: Transient MSL synchronous machin
     TrOperational=293.15,
     alpha20r=smeeData.alpha20r,
     alpha20e=smeeData.alpha20e,
-    TeOperational=293.15)
-    annotation (Placement(transformation(extent={{-20,-50},{0,-30}},
-          rotation=0)));
+    TeOperational=293.15) annotation (Placement(transformation(extent={{-20,-50},{0,-30}}, rotation=0)));
 
   Modelica.Electrical.Analog.Basic.Ground groundExcitation
     annotation (Placement(transformation(
@@ -134,15 +134,11 @@ model MSLSynchronousMachine "ApparentPowerPort: Transient MSL synchronous machin
         origin={0,60},
         extent={{-10,-10},{10,10}},
         rotation=270)));
-  Modelica.Electrical.MultiPhase.Sources.SineVoltage sineVoltage(
+  Modelica.Electrical.Polyphase.Sources.SineVoltage sineVoltage(
     final m=m,
     final V=fill(VNominal*sqrt(2), m),
-    final freqHz=fill(fNominal, m))
-    annotation (Placement(transformation(extent={{-20,80},{-40,100}},
-          rotation=0)));
-  Modelica.Electrical.MultiPhase.Basic.Star star(final m=m)
-    annotation (Placement(transformation(extent={{-50,80},{-70,100}},
-          rotation=0)));
+    final f=fill(fNominal, m)) annotation (Placement(transformation(extent={{-20,80},{-40,100}}, rotation=0)));
+  Modelica.Electrical.Polyphase.Basic.Star star(final m=m) annotation (Placement(transformation(extent={{-50,80},{-70,100}}, rotation=0)));
   Modelica.Electrical.Analog.Basic.Ground ground
     annotation (Placement(transformation(
         origin={-90,90},

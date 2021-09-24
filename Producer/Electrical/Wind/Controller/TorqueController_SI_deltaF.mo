@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Wind.Controller;
+﻿within TransiEnt.Producer.Electrical.Wind.Controller;
 model TorqueController_SI_deltaF "Torque controller for WTG with delta_f Synthetic Inertia"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -46,8 +50,8 @@ model TorqueController_SI_deltaF "Torque controller for WTG with delta_f Synthet
   parameter Real k_turbine "Turbine control constant";
   parameter Real J "Wind turbine moment of inertia";
   parameter Real lambdaOpt "Optimal tip speed ratio";
-  parameter Modelica.SIunits.Density rho "Density";
-  parameter Modelica.SIunits.Length radius "Rotor Radius";
+  parameter Modelica.Units.SI.Density rho "Density";
+  parameter Modelica.Units.SI.Length radius "Rotor Radius";
   parameter Real cp_opt "Optimal capacity factor";
   parameter SI.Torque tau_n;
   parameter SI.Torque tau_start=K_start*tau_n "Start value of torque";
@@ -103,15 +107,12 @@ model TorqueController_SI_deltaF "Torque controller for WTG with delta_f Synthet
     annotation (Placement(transformation(extent={{-38,-90},{-18,-70}})));
   Modelica.Blocks.Nonlinear.Limiter limiter1(
     strict=strict,
-    limitsAtInit=limitsAtInit,
     uMin=0,
     uMax=2*tau_n) annotation (Placement(transformation(extent={{46,10},{66,30}}, rotation=0)));
   Modelica.Blocks.Nonlinear.Limiter limiter(
     strict=strict,
-    limitsAtInit=limitsAtInit,
     uMin=0,
-    uMax=1e8) annotation (Placement(transformation(extent={{-2,-46},{18,-26}},
-          rotation=0)));
+    uMax=1e8) annotation (Placement(transformation(extent={{-2,-46},{18,-26}}, rotation=0)));
   Modelica.Blocks.Sources.RealExpression v_wind_is1(y=v_wind/v_cutIn)
                                                              annotation (Placement(transformation(extent={{-8,56},{8,76}})));
   Modelica.Blocks.Logical.Hysteresis torqueControllerDisabled1(

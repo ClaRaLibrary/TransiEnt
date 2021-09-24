@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.FuelCellSystems.Base;
+﻿within TransiEnt.Components.Electrical.FuelCellSystems.Base;
 model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effiency of fuel cell system including steam reformer"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -75,11 +79,11 @@ model FuelCellSystemEfficiency "Tool to calculate the thermal and electric effie
   //          Variables
   // _____________________________________________
 
-  Modelica.SIunits.Efficiency eta_th = if Q_flow_in_CH4 <= 0 then 0 else Q_gen_total/(Q_flow_in_CH4+Q_flow_in_evaporator+Q_flow_in_preheater);
-  Modelica.SIunits.Efficiency eta_el = if Q_flow_in_CH4 <= 0 then 0 else P_el/(Q_flow_in_CH4+Q_flow_in_evaporator+Q_flow_in_preheater);
-  Modelica.SIunits.Efficiency eta_total = eta_th + eta_el;
-  Modelica.SIunits.HeatFlowRate Q_gen_total = Q_flow_out_cooling+Q_flow_out_exhaustGasLatent+Q_flow_out_exhaustGasChemical;
-  Modelica.SIunits.Power P_gen_total = P_el;
+  Modelica.Units.SI.Efficiency eta_th=if Q_flow_in_CH4 <= 0 then 0 else Q_gen_total/(Q_flow_in_CH4 + Q_flow_in_evaporator + Q_flow_in_preheater);
+  Modelica.Units.SI.Efficiency eta_el=if Q_flow_in_CH4 <= 0 then 0 else P_el/(Q_flow_in_CH4 + Q_flow_in_evaporator + Q_flow_in_preheater);
+  Modelica.Units.SI.Efficiency eta_total=eta_th + eta_el;
+  Modelica.Units.SI.HeatFlowRate Q_gen_total=Q_flow_out_cooling + Q_flow_out_exhaustGasLatent + Q_flow_out_exhaustGasChemical;
+  Modelica.Units.SI.Power P_gen_total=P_el;
 
   annotation (Diagram(graphics,
                       coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),

@@ -1,25 +1,29 @@
-within TransiEnt.Examples.Coupled;
+﻿within TransiEnt.Examples.Coupled;
 model Coupled_SmallScale "Coupled small-scale example"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Example;
 
   inner TransiEnt.SimCenter simCenter(
@@ -41,7 +45,7 @@ model Coupled_SmallScale "Coupled small-scale example"
   //              Gas Sector
   // _____________________________________________
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe1(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     length=500,
@@ -58,7 +62,7 @@ model Coupled_SmallScale "Coupled small-scale example"
         extent={{-14,-5},{14,5}},
         rotation=90,
         origin={6,57})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe2(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4,
@@ -74,7 +78,7 @@ model Coupled_SmallScale "Coupled small-scale example"
     xi_start=Init.pipe2.xi_in,
     m_flow_nom=1,
     Delta_p_nom=200000) annotation (Placement(transformation(extent={{60,94},{32,104}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe4(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     length=1000,
@@ -88,7 +92,7 @@ model Coupled_SmallScale "Coupled small-scale example"
     m_flow_start=ones(pipe4.N_cv + 1)*Init.pipe4.m_flow,
     xi_start=Init.pipe4.xi_in,
     Delta_p_nom=200000) annotation (Placement(transformation(extent={{32,12},{60,22}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe3(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L4,
@@ -105,19 +109,19 @@ model Coupled_SmallScale "Coupled small-scale example"
         extent={{14,-5},{-14,5}},
         rotation=90,
         origin={86,59})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction(
     p(start=Init.split1.p),
     xi(start=Init.split1.xi_in),
     h(start=Init.split1.h_in)) annotation (Placement(transformation(extent={{-4,28},{16,8}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction1(
     p(start=Init.mix1.p),
     xi(start=Init.mix1.xi_out),
     h(start=Init.mix1.h_out)) annotation (Placement(transformation(extent={{16,88},{-4,108}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction2(
     p(start=Init.split2.p),
     xi(start=Init.split2.xi_in),
     h(start=Init.split2.h_in)) annotation (Placement(transformation(extent={{96,88},{76,108}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction3(
     p(start=Init.mix2.p),
     xi(start=Init.mix2.xi_out),
     h(start=Init.mix2.h_out)) annotation (Placement(transformation(extent={{76,26},{96,6}})));
@@ -127,7 +131,7 @@ model Coupled_SmallScale "Coupled small-scale example"
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink1(m_flow_const=2) annotation (Placement(transformation(extent={{128,6},{108,26}})));
   Modelica.Blocks.Sources.Sine m_flow_gas(
     amplitude=0.3,
-    freqHz=2/86400,
+    f=2/86400,
     offset=1) annotation (Placement(transformation(extent={{-62,98},{-48,112}})));
   TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_Storage feedInStation(
     V_geo=50,
@@ -136,7 +140,7 @@ model Coupled_SmallScale "Coupled small-scale example"
     startState=1,
     redeclare model CostSpecsElectrolyzer = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Electrolyzer_2035,
     t_overload=600) annotation (Placement(transformation(extent={{-44,32},{-74,60}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(h(start=-3275)) annotation (Placement(transformation(extent={{-68,28},{-48,8}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction4(h(start=-3275)) annotation (Placement(transformation(extent={{-68,28},{-48,8}})));
 
   Modelica.Blocks.Sources.RealExpression P_ptg(y=max(0, -(consumer.epp.P + windTurbine.epp.P + CHP.epp.P))) annotation (Placement(transformation(extent={{-114,54},{-94,74}})));
   TransiEnt.Grid.Gas.Controller.MaxH2MassFlow_phi maxH2MassFlow annotation (Placement(transformation(extent={{-94,8},{-74,28}})));
@@ -172,7 +176,7 @@ model Coupled_SmallScale "Coupled small-scale example"
     T_start=342.15) annotation (Placement(transformation(extent={{-64,-60},{-84,-40}})));
   TransiEnt.Components.Sensors.TemperatureSensor temperatureSensor annotation (Placement(transformation(extent={{-124,-71},{-104,-91}})));
   Modelica.Blocks.Sources.Sine Q_flow_consumer(
-    freqHz=2/86400,
+    f=2/86400,
     offset=1500e3,
     amplitude=500e3) annotation (Placement(transformation(extent={{-46,-44},{-60,-30}})));
   TransiEnt.Producer.Combined.SmallScaleCHP.Controller.ControllerHeatLed controllerHeatLed(Specification=TransiEnt.Producer.Combined.SmallScaleCHP.Specifications.CHP_2MW()) annotation (Placement(transformation(extent={{78,-108},{58,-88}})));
@@ -193,7 +197,7 @@ model Coupled_SmallScale "Coupled small-scale example"
   Modelica.Blocks.Sources.Sine P_consumer(
     offset=3e6,
     amplitude=2e6,
-    freqHz=6/86400) annotation (Placement(transformation(extent={{12,-6},{-2,8}})));
+    f=6/86400) annotation (Placement(transformation(extent={{12,-6},{-2,8}})));
   TransiEnt.Producer.Electrical.Wind.PowerCurveWindPlant windTurbine(
     height_data=175,
     height_hub=125,

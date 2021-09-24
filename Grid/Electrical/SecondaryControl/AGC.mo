@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Electrical.SecondaryControl;
+﻿within TransiEnt.Grid.Electrical.SecondaryControl;
 model AGC "Automatic generation control model"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -37,7 +41,7 @@ model AGC "Automatic generation control model"
 
   parameter SI.Time samplePeriod=60;
   parameter SI.Time startTime=60;
-  parameter Modelica.SIunits.Power P_respond=simCenter.P_el_small "Minimum absolute set value for response of one power plant (Ansprechempfindlichkeit)";
+  parameter Modelica.Units.SI.Power P_respond=simCenter.P_el_small "Minimum absolute set value for response of one power plant (Ansprechempfindlichkeit)";
 
   parameter Integer nout=simCenter.generationPark.nDispPlants "Number of control provision plants";
 
@@ -102,14 +106,13 @@ public
         rotation=270,
         origin={42,100})));
 
-  Modelica.Blocks.Continuous.LimPID   H_lfr(
+  Modelica.Blocks.Continuous.LimPID H_lfr(
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     k=k,
     Ti=Ti,
     I(initType=Modelica.Blocks.Types.Init.InitialState, y_start=0),
     yMax=P_SB_max,
-    initType=Modelica.Blocks.Types.InitPID.NoInit)
-           annotation (Placement(transformation(extent={{6,-10},{26,10}})));
+    initType=Modelica.Blocks.Types.Init.NoInit) annotation (Placement(transformation(extent={{6,-10},{26,10}})));
   replaceable TransiEnt.Grid.Electrical.SecondaryControl.Activation.MeritOrderActivation_Var1 SecondaryControlActivation(C_var_pos=simCenter.generationPark.C_var, C_var_neg=simCenter.generationPark.C_var,
     P_SB_max=P_SB_max)                                                                                                                                                                                       constrainedby TransiEnt.Grid.Electrical.SecondaryControl.Activation.PartialActivationType(
     final samplePeriod=samplePeriod,

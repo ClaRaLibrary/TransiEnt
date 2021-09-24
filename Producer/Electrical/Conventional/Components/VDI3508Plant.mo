@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Conventional.Components;
+﻿within TransiEnt.Producer.Electrical.Conventional.Components;
 model VDI3508Plant "Transient behaviour according to VDI 3508, three operating states (halt, startup, operation) without primary control"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -184,6 +188,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(Exciter.y, Generator.E_input) annotation (Line(points={{72.5,33.4},{72.5,23.7},{72.155,23.7},{72.155,11.88}}, color={0,0,127}));
+  connect(SteamTurbine_MSP.y, setPointLimiter.P_actual_star) annotation (Line(points={{-5.2,-6},{-4,-6},{-4,-34},{-118,-34},{-118,32}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{100,100}}),
                                graphics={
     Text( lineColor={255,255,0},
@@ -278,5 +283,6 @@ equation
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Ricardo Peniche</p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Robert Flesch (flesch@xrg-simulation.de) in Feb 2021: introduced current power feed back to control (due to interface adaption)</span></p>
 </html>"));
 end VDI3508Plant;

@@ -1,25 +1,29 @@
-within TransiEnt.Basics.Adapters;
+﻿within TransiEnt.Basics.Adapters;
 model QS_to_EPP
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -30,8 +34,7 @@ model QS_to_EPP
   //
   //                  Interfaces
   // _____________________________________________
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.VariableConductor
-    variableConductor annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.VariableConductor variableConductor annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-20,22})));
@@ -45,8 +48,7 @@ model QS_to_EPP
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={12,22})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Sensors.PowerSensor
-    PowerSensorPVPanel annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Sensors.PowerSensor PowerSensorPVPanel annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-84,32})));
@@ -59,13 +61,11 @@ model QS_to_EPP
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={66,46})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Sensors.FrequencySensor
-    FrequencySensor annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Sensors.FrequencySensor FrequencySensor annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-70,76})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Sensors.VoltageSensor
-    VoltageSensor annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Sensors.VoltageSensor VoltageSensor annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-70,-8})));
@@ -74,8 +74,7 @@ model QS_to_EPP
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-2,-8})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.VariableCapacitor VariableCapacitor annotation (Placement(
-        transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.VariableCapacitor VariableCapacitor annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-44,2})));
@@ -89,11 +88,8 @@ model QS_to_EPP
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={14,-60})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground ground1
-    annotation (Placement(transformation(extent={{-80,-62},{-60,-42}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin
-    currentP annotation (Placement(transformation(rotation=0, extent={{-122.5,44},{-93.5,64}}),
-                              iconTransformation(extent={{-110.5,-10},{-90,10}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground ground1 annotation (Placement(transformation(extent={{-80,-62},{-60,-42}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Interfaces.PositivePin currentP annotation (Placement(transformation(rotation=0, extent={{-122.5,44},{-93.5,64}}), iconTransformation(extent={{-110.5,-10},{-90,10}})));
   TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp_IN annotation (Placement(transformation(rotation=0, extent={{103.5,39},{118,53}}), iconTransformation(extent={{89.5,-10},{114,12}})));
 
    // _____________________________________________
@@ -117,19 +113,17 @@ equation
   connect(PowerSensorPVPanel.voltageP, PowerSensorPVPanel.currentP) annotation (
      Line(points={{-84,42},{-84,54},{-94,54},{-94,32}},
         color={85,170,255}));
-  connect(PowerSensorPVPanel.y, complexToReal.u) annotation (Line(points={{-92,21},{-92,21},{-92,16},{-56,16},{-56,62},{-22,62}},
-                                                                   color={85,170,
-          255}));
+  connect(PowerSensorPVPanel.apparentPower, complexToReal.u) annotation (Line(points={{-92,21},{-92,21},{-92,16},{-56,16},{-56,62},{-22,62}}, color={85,170,255}));
   connect(complexToReal.re, feedback.u2) annotation (Line(points={{2,56},{16,56},{42,56},{42,30}},
                                   color={0,0,127}));
   connect(FrequencySensor.pin, PowerSensorPVPanel.currentP) annotation (Line(
         points={{-80,76},{-94,76},{-94,32}},                color={85,170,255}));
-  connect(FrequencySensor.y, Frequency_Voltage.f_set)
+  connect(FrequencySensor.f, Frequency_Voltage.f_set)
     annotation (Line(points={{-59,76},{-59,76},{71.4,76},{71.4,34}},
                  color={0,0,127}));
   connect(VoltageSensor.pin_p, variableConductor.pin_p) annotation (Line(points={{-70,2},{-70,2},{-70,44},{-20,44},{-20,32}},
                                                             color={85,170,255}));
-  connect(VoltageSensor.y, complexToReal1.u) annotation (Line(points={{-59,-8},{-56,-8},{-56,-6},{-56,-8},{-14,-8}},
+  connect(VoltageSensor.v, complexToReal1.u) annotation (Line(points={{-59,-8},{-56,-8},{-56,-6},{-56,-8},{-14,-8}},
                                                               color={85,170,255}));
   connect(complexToReal1.re, Frequency_Voltage.v_set)
     annotation (Line(points={{10,-14},{10,-14},{60,-14},{60,34}},  color={0,0,127}));

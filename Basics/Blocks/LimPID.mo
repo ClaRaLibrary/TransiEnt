@@ -1,27 +1,32 @@
-within TransiEnt.Basics.Blocks;
+﻿within TransiEnt.Basics.Blocks;
 block LimPID "P, PI, PD, and PID controller with limited output, anti-windup compensation and delayed, smooth activation (if wanted)"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
 
-  import Modelica.Blocks.Types.InitPID;
+
+
+
+  import InitPID =
+         Modelica.Blocks.Types.Init;
   import Modelica.Blocks.Types.SimpleController;
 
   output Real controlError = u_s - u_m "Control error (set point - measurement)";
@@ -46,15 +51,10 @@ block LimPID "P, PI, PD, and PID controller with limited output, anti-windup com
 //Time Resononse of the Controller -------
   parameter Real k = 1 "Gain of Proportional block"
                                                    annotation(Dialog(group="Time Response of the Controller"));
-  parameter Modelica.SIunits.Time Tau_i(min=Modelica.Constants.small)=0.5 "1/Ti is gain of integrator block"
-                                      annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
-                                controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Time Response of the Controller"));
- parameter Modelica.SIunits.Time Tau_d(min=0)=0.1 "Gain of derivative block"
-                              annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
-                                controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Time Response of the Controller"));
+  parameter Modelica.Units.SI.Time Tau_i(min=Modelica.Constants.small) = 0.5 "1/Ti is gain of integrator block" annotation (Dialog(enable=controllerType == Modelica.Blocks.Types.SimpleController.PI or controllerType == Modelica.Blocks.Types.SimpleController.PID, group="Time Response of the Controller"));
+  parameter Modelica.Units.SI.Time Tau_d(min=0) = 0.1 "Gain of derivative block" annotation (Dialog(enable=controllerType == Modelica.Blocks.Types.SimpleController.PD or controllerType == Modelica.Blocks.Types.SimpleController.PID, group="Time Response of the Controller"));
 
-  parameter Modelica.SIunits.Time Ni(min=100*Modelica.Constants.eps) = 0.9 "1/Ni is gain of anti-windup compensation"
-                                              annotation (Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or controllerType==Modelica.Blocks.Types.SimpleController.PID, group="Anti-Windup Compensation"));
+  parameter Modelica.Units.SI.Time Ni(min=100*Modelica.Constants.eps) = 0.9 "1/Ni is gain of anti-windup compensation" annotation (Dialog(enable=controllerType == Modelica.Blocks.Types.SimpleController.PI or controllerType == Modelica.Blocks.Types.SimpleController.PID, group="Anti-Windup Compensation"));
   parameter Real Nd = 1 "The smaller Nd, the more ideal the derivative block, setting Nd=0 introduces ideal derivative"
        annotation(Dialog(enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID,group="Derivative Filtering"));
@@ -167,11 +167,7 @@ public
   Modelica.Blocks.Math.Gain gainTrack(k=1/Ni) if   with_I
     annotation (Placement(transformation(extent={{3,-119},{-10,-132}},
                                                                      rotation=0)));
-  Modelica.Blocks.Nonlinear.Limiter limiter(
-    limitsAtInit=limitsAtInit,
-    uMax=if perUnitConversion then y_max/y_ref else y_max,
-    uMin=if perUnitConversion then y_min/y_ref else y_min)
-    annotation (Placement(transformation(extent={{154,-2},{174,18}},rotation=0)));
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=if perUnitConversion then y_max/y_ref else y_max, uMin=if perUnitConversion then y_min/y_ref else y_min) annotation (Placement(transformation(extent={{154,-2},{174,18}}, rotation=0)));
 
 public
   Modelica.Blocks.Sources.Constant Dzero(k=0) if not with_D

@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 model CHPStates_heatled
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   extends TransiEnt.Basics.Icons.Block;
 
@@ -75,7 +79,8 @@ model CHPStates_heatled
 public
   Modelica.StateGraph.InitialStep init(nIn=0, nOut=3) annotation (Placement(transformation(extent={{-94,44},{-74,64}},   rotation=0)));
   Modelica.StateGraph.StepWithSignal
-                                  halt(nIn=3) annotation (Placement(transformation(extent={{-46,22},{-26,42}},   rotation=0)));
+                                  halt(nIn=3, nOut=1)
+                                              annotation (Placement(transformation(extent={{-46,22},{-26,42}},   rotation=0)));
   Modelica.StateGraph.StepWithSignal operating(        nIn=2, nOut=1)
                                                               annotation (Placement(transformation(extent={{52,22},{72,42}}, rotation=0)));
   Modelica.StateGraph.Transition startupSuccess(

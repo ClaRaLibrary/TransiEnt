@@ -1,32 +1,37 @@
-within TransiEnt.Basics.Blocks;
+﻿within TransiEnt.Basics.Blocks;
 block SmoothLimPID "P, PI, PD, and PID controller with smoothed limited output, anti-windup compensation and setpoint weighting"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import Modelica.Blocks.Types.InitPID;
+  import InitPID =
+         Modelica.Blocks.Types.Init;
   import Modelica.Blocks.Types.Init;
   import Modelica.Blocks.Types.SimpleController;
   extends Modelica.Blocks.Interfaces.SVcontrol;
@@ -47,7 +52,7 @@ public
   Modelica.Blocks.Sources.Constant Izero(k=0) if not with_I annotation (
       Placement(transformation(extent={{10,-55},{0,-45}}, rotation=0)));
 
-  constant Modelica.SIunits.Time unitTime=1 annotation (HideResult=true);
+  constant Modelica.Units.SI.Time unitTime=1 annotation (HideResult=true);
 
   // _____________________________________________
   //
@@ -58,14 +63,8 @@ public
          .Modelica.Blocks.Types.SimpleController.PID "Type of controller";
   parameter Real thres = 0.1 "Smooting region of the limiter";
   parameter Real k(min=0, unit="1") = 1 "Gain of controller";
-  parameter Modelica.SIunits.Time Ti(min=Modelica.Constants.small)=0.5 "Time constant of Integrator block"
-                                        annotation (Dialog(enable=
-          controllerType == .Modelica.Blocks.Types.SimpleController.PI or
-          controllerType == .Modelica.Blocks.Types.SimpleController.PID));
-  parameter Modelica.SIunits.Time Td(min=0)=0.1 "Time constant of Derivative block"
-                                        annotation (Dialog(enable=
-          controllerType == .Modelica.Blocks.Types.SimpleController.PD or
-          controllerType == .Modelica.Blocks.Types.SimpleController.PID));
+  parameter Modelica.Units.SI.Time Ti(min=Modelica.Constants.small) = 0.5 "Time constant of Integrator block" annotation (Dialog(enable=controllerType == .Modelica.Blocks.Types.SimpleController.PI or controllerType == .Modelica.Blocks.Types.SimpleController.PID));
+  parameter Modelica.Units.SI.Time Td(min=0) = 0.1 "Time constant of Derivative block" annotation (Dialog(enable=controllerType == .Modelica.Blocks.Types.SimpleController.PD or controllerType == .Modelica.Blocks.Types.SimpleController.PID));
   parameter Real yMax(start=1) "Upper limit of output";
   parameter Real yMin=-yMax "Lower limit of output";
   parameter Real wp(min=0) = 1 "Set-point weight for Proportional block (0..1)";
@@ -78,9 +77,7 @@ public
   parameter Real Nd(min=100*Modelica.Constants.eps) = 10 "The higher Nd, the more ideal the derivative block"
        annotation(Dialog(enable=controllerType==.Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==.Modelica.Blocks.Types.SimpleController.PID));
-  parameter .Modelica.Blocks.Types.InitPID initType= .Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)"
-                                     annotation(Evaluate=true,
-      Dialog(group="Initialization"));
+  parameter .Modelica.Blocks.Types.Init initType=.Modelica.Blocks.Types.Init.InitialState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation (Evaluate=true, Dialog(group="Initialization"));
 //   parameter Boolean limitsAtInit = true
 //     "= false, if limits are ignored during initialization"
 //     annotation(Evaluate=true, Dialog(group="Initialization"));
@@ -93,7 +90,7 @@ public
                          enable=controllerType==.Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==.Modelica.Blocks.Types.SimpleController.PID));
   parameter Real y_start=0 "Initial value of output"
-    annotation(Dialog(enable=initType == .Modelica.Blocks.Types.InitPID.InitialOutput, group=
+    annotation(Dialog(enable=initType == .Modelica.Blocks.Types.Init.InitialOutput,    group=
           "Initialization"));
 //   parameter Boolean strict=false "= true, if strict limits with noEvent(..)"
 //     annotation (Evaluate=true, choices(checkBox=true), Dialog(tab="Advanced"));
@@ -113,16 +110,13 @@ public
   Modelica.Blocks.Continuous.Integrator I(
     k=unitTime/Ti,
     y_start=xi_start,
-    initType=if initType == InitPID.SteadyState then Init.SteadyState else if
-        initType == InitPID.InitialState or initType == InitPID.DoNotUse_InitialIntegratorState
-         then Init.InitialState else Init.NoInit) if with_I annotation (
-      Placement(transformation(extent={{-40,-60},{-20,-40}}, rotation=0)));
+    initType=if initType == InitPID.SteadyState then Init.SteadyState else if initType == InitPID.InitialState or initType == InitPID.InitialState then Init.InitialState else Init.NoInit) if with_I annotation (Placement(transformation(extent={{-40,-60},{-20,-40}}, rotation=0)));
   Modelica.Blocks.Continuous.Derivative D(
     k=Td/unitTime,
     T=max([Td/Nd,1.e-14]),
     x_start=xd_start,
-    initType=if initType == InitPID.SteadyState or initType == InitPID.InitialOutput
-         then Init.SteadyState else if initType == InitPID.InitialState then
+    initType=if initType ==InitPID.SteadyState  or initType ==InitPID.InitialOutput
+         then Init.SteadyState else if initType ==InitPID.InitialState  then
         Init.InitialState else Init.NoInit) if with_D annotation (Placement(
         transformation(extent={{-40,-10},{-20,10}}, rotation=0)));
   Modelica.Blocks.Math.Gain gainPID(k=k) annotation (Placement(transformation(
@@ -155,7 +149,7 @@ initial equation
 equation
   assert(yMax >= yMin, "LimPID: Limits must be consistent. However, yMax (=" + String(yMax) +
                        ") < yMin (=" + String(yMin) + ")");
-  if initType == InitPID.InitialOutput and (y_start < yMin or y_start > yMax) then
+  if initType ==InitPID.InitialOutput  and (y_start < yMin or y_start > yMax) then
       Modelica.Utilities.Streams.error("LimPID: Start value y_start (=" + String(y_start) +
          ") is outside of the limits of yMin (=" + String(yMin) +") and yMax (=" + String(yMax) + ")");
   end if;

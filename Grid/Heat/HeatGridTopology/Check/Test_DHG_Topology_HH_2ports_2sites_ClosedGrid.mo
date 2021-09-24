@@ -1,27 +1,31 @@
-within TransiEnt.Grid.Heat.HeatGridTopology.Check;
+﻿within TransiEnt.Grid.Heat.HeatGridTopology.Check;
 model Test_DHG_Topology_HH_2ports_2sites_ClosedGrid
   import TransiEnt;
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -44,7 +48,7 @@ model Test_DHG_Topology_HH_2ports_2sites_ClosedGrid
     P_el_n=137e6,
     p_nom=20e5,
     m_flow_nom=1100,
-    h_nom=120*4.2) annotation (Placement(transformation(extent={{-334,-112},{-256,-48}})));
+    h_nom=120*4.2) annotation (Placement(transformation(extent={{-352,-190},{-284,-108}})));
     //typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP HKW_Tiefstack(
     P_el_n=200e6,
@@ -67,7 +71,7 @@ model Test_DHG_Topology_HH_2ports_2sites_ClosedGrid
     P_el_n=150e6,
     p_nom=20e5,
     m_flow_nom=1100,
-    h_nom=120*4.2) annotation (Placement(transformation(extent={{-334,-42},{-256,22}})));
+    h_nom=120*4.2) annotation (Placement(transformation(extent={{-338,-60},{-270,22}})));
     //typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration,
   Modelica.Blocks.Sources.RealExpression P_set(y=simpleHeatDispatcher.P_el_WW/2) annotation (Placement(transformation(extent={{-354,32},{-334,52}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_set(y=simpleHeatDispatcher.Q_flow_WW/2) annotation (Placement(transformation(extent={{-318,58},{-298,78}})));
@@ -121,7 +125,7 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
   connect(HKW_Wedel2.epp,constantFrequency_L1_3. epp) annotation (Line(
-      points={{-257.95,-70.4},{-218.975,-70.4},{-218.975,126},{-10,126}},
+      points={{-285.7,-136.7},{-136,-136.7},{-136,126},{-10,126}},
       color={0,135,135},
       thickness=0.5,
       smooth=Smooth.None));
@@ -135,26 +139,31 @@ equation
   connect(HKW_Tiefstack.P_set,simpleHeatDispatcher. P_el_WT) annotation (Line(points={{326.74,10.0667},{326.74,221.32},{-274.9,221.32}},
                                                                                                                                        color={0,0,127}));
   connect(HKW_Wedel1.epp,constantFrequency_L1_3. epp) annotation (Line(
-      points={{-257.95,-0.4},{-236.975,-0.4},{-236.975,126},{-10,126}},
+      points={{-271.7,-6.7},{-232,-6.7},{-232,126},{-10,126}},
       color={0,135,135},
       thickness=0.5));
   connect(HKW_Wedel2.outlet,HKW_Wedel1. inlet) annotation (Line(
-      points={{-255.22,-86.9333},{-236,-86.9333},{-236,-24.4},{-255.22,-24.4}},
+      points={{-283.32,-157.883},{-248,-157.883},{-248,-37.45},{-269.32,-37.45}},
       color={175,0,0},
       thickness=0.5));
   connect(HKW_Wedel1.outlet,dHN_Topology_HH_SimpleGrid_2ports. fluidPortWest) annotation (Line(
-      points={{-255.22,-16.9333},{-152.61,-16.9333},{-152.61,13.7054},{-53.4766,13.7054}},
+      points={{-269.32,-27.8833},{-220,-27.8833},{-220,-8},{-120,-8},{-120,13.7054},{-53.4766,13.7054}},
       color={175,0,0},
       thickness=0.5));
-  connect(P_set.y,HKW_Wedel1. P_set) annotation (Line(points={{-333,42},{-314,42},{-314,14.5333},{-318.79,14.5333}}, color={0,0,127}));
-  connect(P_set.y,HKW_Wedel2. P_set) annotation (Line(points={{-333,42},{-316,42},{-316,-55.4667},{-318.79,-55.4667}}, color={0,0,127}));
-  connect(Q_flow_set.y,HKW_Wedel1. Q_flow_set) annotation (Line(points={{-297,68},{-290,68},{-290,14.5333},{-280.57,14.5333}}, color={0,0,127}));
-  connect(Q_flow_set.y,HKW_Wedel2. Q_flow_set) annotation (Line(points={{-297,68},{-297,4},{-280.57,4},{-280.57,-55.4667}}, color={0,0,127}));
+  connect(P_set.y,HKW_Wedel1. P_set) annotation (Line(points={{-333,42},{-324.74,42},{-324.74,12.4333}},             color={0,0,127}));
+  connect(P_set.y,HKW_Wedel2. P_set) annotation (Line(points={{-333,42},{-328,42},{-328,64},{-364,64},{-364,-96},{-336,-96},{-336,-108},{-338.74,-108},{-338.74,-117.567}},
+                                                                                                                       color={0,0,127}));
+  connect(Q_flow_set.y,HKW_Wedel1. Q_flow_set) annotation (Line(points={{-297,68},{-284,68},{-284,16},{-291.42,16},{-291.42,12.4333}},
+                                                                                                                               color={0,0,127}));
+  connect(Q_flow_set.y,HKW_Wedel2. Q_flow_set) annotation (Line(points={{-297,68},{-284,68},{-284,24},{-348,24},{-348,-92},{-305.42,-92},{-305.42,-117.567}},
+                                                                                                                            color={0,0,127}));
   connect(HKW_Tiefstack.eye,infoBoxLargeCHP. eye) annotation (Line(points={{268.6,-47.1667},{252,-47.1667},{252,-51.7455},{232.7,-51.7455}}, color={28,108,200}));
-  connect(HKW_Wedel1.eye,infoBoxLargeCHP1. eye) annotation (Line(points={{-252.1,-39.3333},{-230,-39.3333},{-230,35.5636},{-214.8,35.5636}}, color={28,108,200}));
-  connect(HKW_Wedel2.eye,infoBoxLargeCHP2. eye) annotation (Line(points={{-252.1,-109.333},{-230,-109.333},{-230,-43.9273},{-213,-43.9273}}, color={28,108,200}));
+  connect(HKW_Wedel1.eye,infoBoxLargeCHP1. eye) annotation (Line(points={{-266.6,-56.5833},{-244,-56.5833},{-244,-12},{-228,-12},{-228,35.5636},{-214.8,35.5636}},
+                                                                                                                                             color={28,108,200}));
+  connect(HKW_Wedel2.eye,infoBoxLargeCHP2. eye) annotation (Line(points={{-280.6,-186.583},{-244,-186.583},{-244,-60},{-228,-60},{-228,-43.9273},{-213,-43.9273}},
+                                                                                                                                             color={28,108,200}));
   connect(dHN_Topology_HH_SimpleGrid_2ports.fluidPortWestReturn, HKW_Wedel2.inlet) annotation (Line(
-      points={{-52.9404,7.59189},{-144,7.59189},{-144,-94},{-255.22,-94},{-255.22,-94.4}},
+      points={{-52.9404,7.59189},{-144,7.59189},{-144,-94},{-283.32,-94},{-283.32,-167.45}},
       color={175,0,0},
       thickness=0.5));
   connect(dHN_Topology_HH_SimpleGrid_2ports.fluidPortEastReturn, HKW_Tiefstack.inlet) annotation (Line(
@@ -165,7 +174,7 @@ equation
                       coordinateSystem(preserveAspectRatio=false, extent={{-360,-260},{360,260}})),
                                           Icon(graphics,
                                                coordinateSystem(extent={{-360,-260},{360,260}})),
-    experiment(StopTime=604800),
+    experiment(StopTime=604800, __Dymola_Algorithm="Esdirk23a"),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

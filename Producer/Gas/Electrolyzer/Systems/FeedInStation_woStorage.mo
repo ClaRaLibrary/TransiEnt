@@ -1,33 +1,37 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Systems;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model FeedInStation_woStorage
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Producer.Gas.Electrolyzer.Base.PartialFeedInStation;
+  extends TransiEnt.Producer.Gas.Electrolyzer.Base.PartialFeedInStation(gasPortOut(Medium=medium_ng));
 
   // _____________________________________________
   //
@@ -35,6 +39,8 @@ model FeedInStation_woStorage
   // _____________________________________________
 
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel3 "Hydrogen model to be used" annotation (Dialog(tab="General", group="General"));
+  parameter Boolean useFluidAdapter=true "true: fluid adapter to natural gas at gasPortOut is used, false: no adapter, then set medium_ng to medium_h2" annotation (Dialog(tab="General", group="General"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_ng=simCenter.gasModel1 "Natural gas with H2 model to be used" annotation (Dialog(tab="General", group="General"));
   parameter SI.ActivePower P_el_n=1e6 "Nominal power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.ActivePower P_el_max=1.68*P_el_n "Maximum power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.ActivePower P_el_min=0.05*P_el_n "Minimal power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
@@ -42,10 +48,10 @@ model FeedInStation_woStorage
   parameter SI.ActivePower P_el_cooldown=P_el_n "Power below which cooldown of electrolyzer starts" annotation (Dialog(group="Electrolyzer"));
   parameter SI.MassFlowRate m_flow_start=0.0 "Sets initial value for m_flow from a buffer" annotation (Dialog(tab="General", group="Initialization"));
   //parameter SI.Temperature T_Init=283.15 "Sets initial value for T" annotation (Dialog(tab="General", group="Initialization"));
-  parameter Modelica.SIunits.Efficiency eta_n(
+  parameter Modelica.Units.SI.Efficiency eta_n(
     min=0,
     max=1) = 0.75 "Nominal efficency refering to the GCV (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
-  parameter Modelica.SIunits.Efficiency eta_scale(
+  parameter Modelica.Units.SI.Efficiency eta_scale(
     min=0,
     max=1) = 0 "Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.AbsolutePressure p_out=35e5 "Hydrogen output pressure from electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
@@ -67,7 +73,7 @@ model FeedInStation_woStorage
   replaceable model CostSpecsElectrolyzer = TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.Empty constrainedby TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs.PartialCostSpecs "Cost configuration electrolyzer" annotation (Dialog(tab="Statistics"), choices(choicesAllMatching=true));
   parameter Real Cspec_demAndRev_other_water=simCenter.Cspec_demAndRev_other_water "Specific demand-related cost per cubic meter water of electrolyzer" annotation (Dialog(tab="Statistics"));
   parameter TransiEnt.Basics.Units.MonetaryUnitPerEnergy Cspec_demAndRev_el_electrolyzer=simCenter.Cspec_demAndRev_free "Specific demand-related cost per electric energy for electrolyzer" annotation (Dialog(tab="Statistics"));
-  parameter Boolean useMassFlowControl=true "choose if output of FeedInStation is limited by m_flow_feedIn - if 'false': m_flow_feedIn has no effect" annotation (Dialog(tab="General"));
+  parameter Boolean useMassFlowControl=true "choose if output of FeedInStation is limited by m_flow_feedIn - if 'false': m_flow_feedIn has no effect" annotation (Dialog(tab="General", group="General"));
 
   parameter Boolean useFluidCoolantPort=false "choose if fluid port for coolant shall be used" annotation (Dialog(enable=not useHeatPort,group="Coolant"));
   parameter Boolean useHeatPort=false "choose if heat port for coolant shall be used" annotation (Dialog(enable=not useFluidCoolantPort,group="Coolant"));
@@ -129,7 +135,7 @@ public
     Cspec_demAndRev_other=Cspec_demAndRev_other_water,
     Cspec_demAndRev_el=Cspec_demAndRev_el_electrolyzer) annotation (Placement(transformation(extent={{-16,-16},{16,16}})));
 protected
-  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore valve_pBeforeValveDes(final medium=medium, p_BeforeValveDes=p_out) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Valves.ValveDesiredPressureBefore valve_pBeforeValveDes(final medium=medium, p_BeforeValveDes=p_out) annotation (Placement(transformation(
         extent={{-8,-4},{8,4}},
         rotation=270,
         origin={20,-12})));
@@ -139,7 +145,7 @@ protected
         rotation=90,
         origin={6,-49})));
 
-  TransiEnt.Basics.Adapters.Gas.RealH2_to_RealNG h2toNG(final medium_h2=medium) annotation (Placement(transformation(
+  TransiEnt.Basics.Adapters.Gas.RealH2_to_RealNG h2toNG(final medium_h2=medium, medium_ng=medium_ng) if useFluidAdapter annotation (Placement(transformation(
         extent={{8,-8},{-8,8}},
         rotation=90,
         origin={0,-68})));
@@ -202,6 +208,8 @@ public
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=simCenter.gasModel1,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     deactivateTwoPhaseRegion=true,
     h=gasPortOut.h_outflow,
     p=gasPortOut.p,
@@ -232,14 +240,21 @@ equation
       points={{16,0},{19.4286,0},{19.4286,-4}},
       color={255,255,0},
       thickness=1.5));
-  connect(gasPortOut, h2toNG.gasPortOut) annotation (Line(
+  if useFluidAdapter then
+    connect(gasPortOut, h2toNG.gasPortOut) annotation (Line(
       points={{0,-96},{0,-96},{0,-76},{-4.996e-016,-76}},
       color={255,255,0},
       thickness=1.5));
-  connect(h2toNG.gasPortIn, massflowSensor.gasPortOut) annotation (Line(
+    connect(h2toNG.gasPortIn, massflowSensor.gasPortOut) annotation (Line(
       points={{4.996e-016,-60},{0,-60},{0,-56},{-2.66454e-015,-56}},
       color={255,255,0},
       thickness=1.5));
+  else
+    connect(massflowSensor.gasPortOut, gasPortOut) annotation (Line(
+      points={{0,-56},{-16,-56},{-16,-96},{0,-96}},
+      color={255,255,0},
+      thickness=1.5));
+  end if;
   connect(sourceH2.gasPort, massflowSensor.gasPortIn) annotation (Line(
       points={{-28,-36},{0,-36},{0,-42}},
       color={255,255,0},

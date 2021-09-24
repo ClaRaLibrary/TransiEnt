@@ -1,26 +1,30 @@
-within TransiEnt.Components.Boundaries.Gas;
+﻿within TransiEnt.Components.Boundaries.Gas;
 model BoundaryRealGas_TxV_flow_stp "A real gas boundary defining temperature, molar composition and volume at STP (1.013 bar, 273.15 K)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -81,13 +85,13 @@ public
 public
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPort(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  TransiEnt.Basics.Interfaces.General.VolumeFlowRateIn V_flow_n(value=V_flow_n_in) if (variable_V_flow_n) "Variable volume flow rate under normal conditions"
+  TransiEnt.Basics.Interfaces.General.VolumeFlowRateIn V_flow_n=V_flow_n_in if (variable_V_flow_n) "Variable volume flow rate under normal conditions"
     annotation (Placement(transformation(extent={{-120,40},{-80,80}}),
         iconTransformation(extent={{-140,40},{-100,80}})));
-  TransiEnt.Basics.Interfaces.General.TemperatureIn T(value=T_in) if (variable_T) "Variable temperature"
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T=T_in if (variable_T) "Variable temperature"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
-  TransiEnt.Basics.Interfaces.General.MoleFractionIn x[medium.nc-1](value=x_in) if (variable_x) "Variable molar composition"
+  TransiEnt.Basics.Interfaces.General.MoleFractionIn x[medium.nc-1]=x_in if (variable_x) "Variable molar composition"
     annotation (Placement(transformation(extent={{-120,-80},{-80,-40}}),
         iconTransformation(extent={{-140,-80},{-100,-40}})));
 
@@ -113,6 +117,8 @@ public
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT normGas_pT(
     vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=1.01325e5,
     T=273.15,
     xi=if V_flow_n_in < 0 then xi_in else inStream(gasPort.xi_outflow),
@@ -120,6 +126,8 @@ protected
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gas_pT(
     vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=gasPort.p,
     T=T_in,
     xi=xi_in,

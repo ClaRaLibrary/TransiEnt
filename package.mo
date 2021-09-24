@@ -1,4 +1,4 @@
-within ;
+﻿within ;
 
 
 
@@ -102,26 +102,30 @@ within ;
 
 
 package TransiEnt "Library for transient simulation of integrated energy networks with a high share of renewable energies"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 
 extends TransiEnt.Basics.Icons.Package;
@@ -131,7 +135,8 @@ import PrimaryEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier;
 
 import PrimaryEnergyCarrierHeat = TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrierHeat;
 
-import SI = Modelica.SIunits "Usage of Modelica Standard library unit package";
+import      Modelica.Units.SI
+                             "Usage of Modelica Standard library unit package";
 // SI = TransiEnt.Base.Units "Usage of own units package";
 
 
@@ -235,16 +240,16 @@ import SI = Modelica.SIunits "Usage of Modelica Standard library unit package";
 
 
 annotation (uses(
-    Modelica(version="3.2.3"),
-    ModelicaReference(version="3.2.3"),
     Modelica_StateGraph2(version="2.0.4"),
     DataFiles(version="1.0.5"),
-    TILMedia(version="1.5.1 ClaRa"),
     Design(version="1.0.7"),
-    Modelica_LinearSystems2(version="2.3.5"),
-    ClaRa(version="1.5.1"),
-    DymolaCommands(version="1.9"),
-    Buildings(version="7.0.0")),               Icon(coordinateSystem(
+    Buildings(version="7.0.0"),
+    Modelica(version="4.0.0"),
+    Modelica_LinearSystems2(version="2.4.0"),
+    ModelicaReference(version="4.0.0"),
+    TILMedia(version="1.7.0 ClaRa"),
+    ClaRa(version="1.7.0"),
+    DymolaCommands(version="1.11")),           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
           Rectangle(
           extent={{-56,-4},{52,-16}},
@@ -274,6 +279,7 @@ annotation (uses(
 <p>Consulting developers:</p>
 <ul>
 <li>Brunnemann, Johannes</li>
+<li>Flesch, Robert</li>
 </ul>
 <p>Other developers:</p>
 <ul>
@@ -282,6 +288,7 @@ annotation (uses(
 <li>Bixel, Tonio</li>
 <li>Braune, Jan</li>
 <li>Denninger, Rebekka</li>
+<li>Djukow, Michael</li>
 <li>Doerschlag, Arne</li>
 <li>Drake, Russell</li>
 <li>Dubucq, Pascal</li>
@@ -291,6 +298,8 @@ annotation (uses(
 <li>Guddusch, Sascha</li>
 <li>Harling, Verena</li>
 <li>Helbig, Christopher</li>
+<li>Heyer, Annika</li>
+<li>Huismann, Philipp</li>
 <li>Kattelmann, Felix</li>
 <li>Kernstock, Paul</li>
 <li>Kirschstein, Arne</li>
@@ -301,7 +310,9 @@ annotation (uses(
 <li>Peniche Garcia, Ricardo</li>
 <li>Ramm, Tobias</li>
 <li>Schroeder, Vitja</li>
+<li>Settgast, Christine</li>
 <li>Toerber, Tobias</li>
+<li>Urbansky, Julian</li>
 <li>Wagner, Philipp</li>
 <li>Webster, John</li>
 <li>Westphal, Jan</li>
@@ -309,11 +320,13 @@ annotation (uses(
 <li>Zaczek, Alexander</li>
 </ul>
 </html>"),
-  version="1.3.1",
+  version="2.0.0",
   conversion(from(version="0.3", to="1.1.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
   from(version="1.0.1", to="1.1.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
   from(version="1.1.0", to="1.2.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.1.0_to_1.2.0.mos"),
-  from(version="1.2.0", to="1.3.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.2.0_to_1.3.0.mos")));
+  from(version="1.2.0", to="1.3.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.2.0_to_1.3.0.mos"),
+  from(version="1.3.0", to="2.0.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.3.1_to_2.0.0.mos"),
+  from(version="1.3.1", to="2.0.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.3.1_to_2.0.0.mos")));
 end TransiEnt;
 
 

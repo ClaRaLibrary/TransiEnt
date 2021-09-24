@@ -2,26 +2,30 @@
 function ADM1_Inhibition_BSM2
   "A Function calculating the inhibition Coefficients using constants from Rosén, C., & Jeppsson, U. (2006). Aspects on ADM1 Implementation within the BSM2 Framework."
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -36,9 +40,9 @@ function ADM1_Inhibition_BSM2
   // _____________________________________________
 
   input Real pH "pH-Value";
-  input Modelica.SIunits.Concentration S_IN "Concentration of Inorganic Nitrogen";
+  input Modelica.Units.SI.Concentration S_IN "Concentration of Inorganic Nitrogen";
   input TransiEnt.Producer.Gas.BiogasPlant.Base.ADM1.ADM1_Units.ConcentrationCOD S_h2 "Concentration of Hydrogen in solution";
-  input Modelica.SIunits.Concentration NH3 "Concentration of free Ammonia in solution";
+  input Modelica.Units.SI.Concentration NH3 "Concentration of free Ammonia in solution";
   input String operationMode "mesophilic or thermophilic conditions";
   output Real[7] I "Inhibition Coefficients";
 
@@ -54,7 +58,7 @@ function ADM1_Inhibition_BSM2
 
   final parameter ADM1_Units.ConcentrationCOD K_I_H2_c4=if operationMode == "thermophilic" then parameters.K_I_H2_c4_therm else parameters.K_I_H2_c4_meso "Inhibition Constant due to high Hydrogen Concentration affecting Valerate and Butyrate Degraders";
   final parameter ADM1_Units.ConcentrationCOD K_I_H2_pro=if operationMode == "thermophilic" then parameters.K_I_H2_pro_therm else parameters.K_I_H2_pro_meso "Inhibition Constant due to high Hydrogen Concentration affecting Propionate Degraders";
-  final parameter Modelica.SIunits.Concentration K_I_NH3=if operationMode == "thermophilic" then parameters.K_I_NH3_therm else parameters.K_I_NH3_meso "Inhibition Constant due to high Ammonia Concentration affecting Acetate Degraders";
+  final parameter Modelica.Units.SI.Concentration K_I_NH3=if operationMode == "thermophilic" then parameters.K_I_NH3_therm else parameters.K_I_NH3_meso "Inhibition Constant due to high Ammonia Concentration affecting Acetate Degraders";
 
   // _____________________________________________
   //

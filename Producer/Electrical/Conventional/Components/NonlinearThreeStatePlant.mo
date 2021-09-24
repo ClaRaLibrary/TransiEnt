@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Producer.Electrical.Conventional.Components;
 model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power limited (shuts down below minimum power), with primary and secondary balancing controller where secondary balancing power is lumped inside"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -31,7 +35,8 @@ model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power li
   extends TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider(
     final P_n=P_el_n,
     final typeOfBalancingPowerResource=typeOfResource,
-    primaryBalancingController(P_n=P_el_n),
+    primaryBalancingController(P_n=P_el_n, useHomotopyVarSlewRateLim=useHomotopyVarSlewRateLim,
+      use_SlewRateLimiter=powerGradLimChoice == TransiEnt.Components.Turbogroups.Base.GradientLimitingChoices.GradLimInCntrl),
     redeclare Base.ControlPower.PrimarySecondaryAndSchedule controlPowerModel(
       P_pr_max=primaryBalancingController.P_pr_max,
       P_el_is=P_el_is,
@@ -79,6 +84,8 @@ model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power li
 
   // **** Expert Settings
 
+  parameter TransiEnt.Components.Turbogroups.Base.GradientLimitingChoices powerGradLimChoice=TransiEnt.Components.Turbogroups.Base.GradientLimitingChoices.GradLimInFirstOrder "options of gradient limitation" annotation(Dialog(tab="Expert Settings"));
+
   parameter Boolean fixedStartValue_w = false "Whether or not the start value of the angular velocity of the plants mechanical components is fixed"
    annotation (Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(tab="Expert Settings"));
 
@@ -109,13 +116,15 @@ model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power li
 
   parameter Integer quantity=1 "amount of power plant blocks into which nominal power is split" annotation (Dialog(group="Physical Constraints"));
 
+  parameter Boolean useHomotopyVarSlewRateLim=simCenter.useHomotopy "true if homotopy shall be used in variableSlewRateLimiter in turbine (true might avoid circular equalities, false might help if 0/0 occurs in power plant)" annotation (Dialog(enable=useSlewRateLimiter, tab="Expert Settings"));
+
 
   // _____________________________________________
   //
   //       Final and protected parameters
   // _____________________________________________
 
-  final parameter Modelica.SIunits.Power P_min=P_min_star*P_el_n;
+  final parameter Modelica.Units.SI.Power P_min=P_min_star*P_el_n;
   final parameter SI.Power P_init(fixed=false) "Start value for P";
   //final parameter Modelica.SIunits.Power P_init_calc( fixed=false);
   //final parameter Modelica.SIunits.Power P_init=if set_P_init then P_init_set else P_init_calc;
@@ -151,6 +160,7 @@ public
 
 public
   replaceable TransiEnt.Components.Turbogroups.FirstOrderThreeStateTurbine Turbine(
+    P_grad_max_star_primCntrl=primaryBalancingController.maxGradientPrCtrl,
     P_turb_init=P_init,
     P_n=P_el_n,
     T_plant=T_plant,
@@ -164,7 +174,8 @@ public
     t_min_operating=t_min_operating,
     smoothShutDown=smoothShutDown,
     thres_hyst=thres_hyst,
-    MinimumDownTime=MinimumDownTime) constrainedby TransiEnt.Components.Turbogroups.Base.PartialTurbine "Choice of turbine model" annotation (
+    MinimumDownTime=MinimumDownTime,
+    useHomotopyVarSlewRateLim=useHomotopyVarSlewRateLim) constrainedby TransiEnt.Components.Turbogroups.Base.PartialTurbine "Choice of turbine model" annotation (
     choicesAllMatching=true,
     Placement(transformation(extent={{-78,-58},{-42,-22}})),
     Dialog(group="Replaceable Components"));
@@ -183,11 +194,11 @@ public
   Modelica.Blocks.Nonlinear.VariableLimiter variableLimiter if  CO2_Deposition_Rate>0                annotation (Placement(transformation(extent={{-5,-5},{5,5}},
         rotation=-90,
         origin={-59,-7})));
-  Modelica.Blocks.Sources.RealExpression P_max_with_CCS(y=-P_max_star) if                                                                                                                                                                           CO2_Deposition_Rate>0 "just for visualisation on diagram layer" annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression P_max_with_CCS(y=-P_max_star)  annotation (Placement(transformation(
         extent={{-3,-3},{3,3}},
         rotation=-90,
         origin={-63,11})));
-  Modelica.Blocks.Sources.RealExpression P_min_with_CCS(y=0) if                  CO2_Deposition_Rate>0 "just for visualisation on diagram layer" annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression P_min_with_CCS(y=0) annotation (Placement(transformation(
         extent={{-3,-3},{3,3}},
         rotation=-90,
         origin={-55,11})));
@@ -297,7 +308,8 @@ end if;
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">If 0/0 occurs at initialization, try setting useHomotopyVarSlewRateLim to false.</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">If circular equalities appear, try setting Evaluate=true in the model.</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
@@ -305,6 +317,7 @@ end if;
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) on Dez 2018: added CCS</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) on Dez 2018: added CCS</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Robert Flesch (flesch@xrg-simulation.de) in Feb 2021: adapted parameter interface to use limiting in firstOrders - this is the new default as it performs much better numerically</span></p>
 </html>"));
 end NonlinearThreeStatePlant;

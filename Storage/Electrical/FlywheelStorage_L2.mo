@@ -1,26 +1,30 @@
-within TransiEnt.Storage.Electrical;
+﻿within TransiEnt.Storage.Electrical;
 model FlywheelStorage_L2 "Physical model of a flywheel storage where configurations can be chosen"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -38,11 +42,11 @@ model FlywheelStorage_L2 "Physical model of a flywheel storage where configurati
   // _____________________________________________
   parameter TransiEnt.Storage.Electrical.Specifications.DetailedFlywheel.GenericFlywheelRecord params "Model to use" annotation (choicesAllMatching);
 
-    parameter SI.Conversions.NonSIunits.Energy_kWh E_start=E_max "Initial Energy";
+  parameter Modelica.Units.NonSI.Energy_kWh E_start=E_max "Initial Energy";
   parameter SI.Energy K=2e6 "Power response per Hz deviation";
-  final parameter Modelica.SIunits.Conversions.NonSIunits.AngularVelocity_rpm n_max=params.n_max "Maximum revolution speed in rpm";
-  final parameter Modelica.SIunits.Conversions.NonSIunits.AngularVelocity_rpm n_min=params.n_min "Minimum revolution speed in rpm";
-  final parameter SI.Conversions.NonSIunits.Energy_kWh E_max=params.E_max "Maximum storable energy in kWh";
+  final parameter Modelica.Units.NonSI.AngularVelocity_rpm n_max=params.n_max "Maximum revolution speed in rpm";
+  final parameter Modelica.Units.NonSI.AngularVelocity_rpm n_min=params.n_min "Minimum revolution speed in rpm";
+  final parameter Modelica.Units.NonSI.Energy_kWh E_max=params.E_max "Maximum storable energy in kWh";
   final parameter SI.Power P_el_max=params.P_el_max "Absolute maximum power";
   final parameter SI.Power P_loss_support=params.P_loss_support "Power needed to uphold operation";
   final parameter Real eta=params.eta_max "Maximum efficiency of a cycle";
@@ -60,7 +64,7 @@ model FlywheelStorage_L2 "Physical model of a flywheel storage where configurati
   // _____________________________________________
 
   //parameter SI.Time tau_test(fixed=false);
-  Modelica.SIunits.Energy E_rot(start=E_rot_min + Modelica.SIunits.Conversions.from_kWh(E_start)) "Rotational energy";
+  Modelica.Units.SI.Energy E_rot(start=E_rot_min + Modelica.Units.Conversions.from_kWh(E_start)) "Rotational energy";
 
   // diagnostic variables
   SI.Frequency f(start=simCenter.f_n) "actual grid frequency"
@@ -86,9 +90,9 @@ model FlywheelStorage_L2 "Physical model of a flywheel storage where configurati
   //             Calculated Parameters
   // _____________________________________________
 
-  final parameter SI.Energy E_stor_max=Modelica.SIunits.Conversions.from_kWh(E_max);
-  final parameter SI.AngularFrequency omega_max=Modelica.SIunits.Conversions.from_rpm(n_max);
-  final parameter SI.AngularFrequency omega_min=Modelica.SIunits.Conversions.from_rpm(n_min);
+  final parameter SI.Energy E_stor_max=Modelica.Units.Conversions.from_kWh(  E_max);
+  final parameter SI.AngularFrequency omega_max=Modelica.Units.Conversions.from_rpm(  n_max);
+  final parameter SI.AngularFrequency omega_min=Modelica.Units.Conversions.from_rpm(  n_min);
   final parameter Real  lossFactor_bear=params.lossFactor_bear;
   final parameter Real  lossFactor_aero=params.lossFactor_aero;
   final parameter SI.Energy E_rot_max=E_stor_max + E_rot_min;

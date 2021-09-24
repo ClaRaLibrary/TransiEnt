@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Producer.Gas.BiogasPlant;
 model StirredTankReactor "Model of a stirred tank reactor"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -50,10 +54,10 @@ model StirredTankReactor "Model of a stirred tank reactor"
   //             Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Time t_res=20*24*3600 "Residence time of fluid in Reactor";
-  parameter Modelica.SIunits.Temperature T_target=310.15 "Temperature that is supposed to be present inside Reactor";
+  parameter Modelica.Units.SI.Time t_res=20*24*3600 "Residence time of fluid in Reactor";
+  parameter Modelica.Units.SI.Temperature T_target=310.15 "Temperature that is supposed to be present inside Reactor";
 
-  parameter Modelica.SIunits.Temperature T_in_min=278.15 "minimal Temperature of inflowing substrate to avoid freezing";
+  parameter Modelica.Units.SI.Temperature T_in_min=278.15 "minimal Temperature of inflowing substrate to avoid freezing";
   parameter Boolean usePowerPort=true "True if power port shall be used";
 
   // _____________________________________________
@@ -61,29 +65,29 @@ model StirredTankReactor "Model of a stirred tank reactor"
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.Temperature T_reac "Temperature inside Reactor";
-  Modelica.SIunits.Temperature T_in=if T_in_min > ambientTemperature then T_in_min else ambientTemperature "Temperature of inflowing substrate";
-  Modelica.SIunits.MassConcentration TSS "Concentration of dry matter in Substrate in kg/m³";
-  Modelica.SIunits.MassConcentration TSS_in "Concentration of dry matter in influent Substrate in kg/m³";
-  Modelica.SIunits.Pressure p "Pressure inside reactor";
-  Modelica.SIunits.Power P_el "Electric power of the reacotr";
+  Modelica.Units.SI.Temperature T_reac "Temperature inside Reactor";
+  Modelica.Units.SI.Temperature T_in=if T_in_min > ambientTemperature then T_in_min else ambientTemperature "Temperature of inflowing substrate";
+  Modelica.Units.SI.MassConcentration TSS "Concentration of dry matter in Substrate in kg/m³";
+  Modelica.Units.SI.MassConcentration TSS_in "Concentration of dry matter in influent Substrate in kg/m³";
+  Modelica.Units.SI.Pressure p "Pressure inside reactor";
+  Modelica.Units.SI.Power P_el "Electric power of the reacotr";
 
-  Modelica.SIunits.VolumeFlowRate V_flow_in "Volume flow rate of inflowing Substrate";
-  Modelica.SIunits.MassFlowRate m_flow_in "Mass flow rate of inflowing Substrate";
-  Modelica.SIunits.VolumeFlowRate V_flow_out "Volume flow rate of outflowing Substrate";
-  Modelica.SIunits.MassFlowRate m_flow_out "Mass flow rate of outflowing Substrate";
-  Modelica.SIunits.VolumeFlowRate V_flow_gas "Volume flow rate of produced Gas";
-  Modelica.SIunits.MassFlowRate m_flow_gas "Mass flow rate of produced Gas";
+  Modelica.Units.SI.VolumeFlowRate V_flow_in "Volume flow rate of inflowing Substrate";
+  Modelica.Units.SI.MassFlowRate m_flow_in "Mass flow rate of inflowing Substrate";
+  Modelica.Units.SI.VolumeFlowRate V_flow_out "Volume flow rate of outflowing Substrate";
+  Modelica.Units.SI.MassFlowRate m_flow_out "Mass flow rate of outflowing Substrate";
+  Modelica.Units.SI.VolumeFlowRate V_flow_gas "Volume flow rate of produced Gas";
+  Modelica.Units.SI.MassFlowRate m_flow_gas "Mass flow rate of produced Gas";
 
-  Modelica.SIunits.Enthalpy H "Enthalpy of liquid and gas inside reactor";
-  Modelica.SIunits.HeatFlowRate derH=der(H) "Derivative of Enthalpy of liquid and gas inside reactor";
-  Modelica.SIunits.HeatFlowRate Q_flow_K;
-  Modelica.SIunits.HeatFlowRate Q_flow_EX;
-  Modelica.SIunits.HeatFlowRate Q_flow_L;
-  Modelica.SIunits.HeatFlowRate Q_flow_R "Heatflows due to convection, heat-exchange and reaction ";
+  Modelica.Units.SI.Enthalpy H "Enthalpy of liquid and gas inside reactor";
+  Modelica.Units.SI.HeatFlowRate derH=der(H) "Derivative of Enthalpy of liquid and gas inside reactor";
+  Modelica.Units.SI.HeatFlowRate Q_flow_K;
+  Modelica.Units.SI.HeatFlowRate Q_flow_EX;
+  Modelica.Units.SI.HeatFlowRate Q_flow_L;
+  Modelica.Units.SI.HeatFlowRate Q_flow_R "Heatflows due to convection, heat-exchange and reaction ";
 
-  Modelica.SIunits.MassFraction xi[biogas.nc - 1] "Mass composition of biogas";
-  Modelica.SIunits.MoleFraction x[biogas.nc - 1] "Molar composition of biogas";
+  Modelica.Units.SI.MassFraction xi[biogas.nc - 1] "Mass composition of biogas";
+  Modelica.Units.SI.MoleFraction x[biogas.nc - 1] "Molar composition of biogas";
 
   // _____________________________________________
   //
@@ -134,7 +138,7 @@ model StirredTankReactor "Model of a stirred tank reactor"
     m_flowInput=true,
     medium=simCenter.fluid1) annotation (Placement(transformation(extent={{-18,-88},{2,-68}})));
 
-  TransiEnt.Components.Heat.PipeFlowVLE_L4_Simple heatPipe(
+  TransiEnt.Components.Heat.VolumesValvesFittings.Pipes.PipeFlowVLE_L4_Simple heatPipe(
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.VLE_HT.NusseltPipe_L4,
     redeclare model MechanicalEquilibrium = ClaRa.Basics.ControlVolumes.Fundamentals.SpacialDistribution.Homogeneous_L4,
     Delta_p_nom=1e4,
@@ -248,6 +252,9 @@ model StirredTankReactor "Model of a stirred tank reactor"
 
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gas(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
+    deactivateTwoPhaseRegion=true,
     vleFluidType=biogas,
     computeTransportProperties=true,
     p=p,

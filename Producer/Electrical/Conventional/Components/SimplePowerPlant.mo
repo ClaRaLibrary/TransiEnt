@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Conventional.Components;
+﻿within TransiEnt.Producer.Electrical.Conventional.Components;
 model SimplePowerPlant "No transient behaviuor, no operating states, constant efficiency (with optional primary balancing controller)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -31,7 +35,7 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
   extends TransiEnt.Producer.Electrical.Base.ControlPower.PartialBalancingPowerProvider(
     final typeOfBalancingPowerResource=typeOfResource,
     final P_n=P_el_n,
-    primaryBalancingController(P_n=P_el_n),
+    primaryBalancingController(P_n=P_el_n, use_SlewRateLimiter=false),
     controlPowerModel(
       P_pr_max=primaryBalancingController.P_pr_max,
       isSecondaryControlActive=false,
@@ -58,6 +62,8 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
 
   parameter SI.Efficiency eta_gen=1 "Generator efficiency" annotation(Dialog(group="Physical constraints"));
 
+  parameter Boolean useFirstOrderPrimaryCntrl = true "use first order block to delay primary control power" annotation(Dialog(group="Expert Settings"));
+
   // _____________________________________________
   //
   //                Complex Components
@@ -80,7 +86,7 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
     nSubgrid=nSubgrid,
     P_n=P_el_n) constrainedby TransiEnt.Components.Mechanical.Base.PartialMechanicalConnection annotation (choicesAllMatching=true, Placement(transformation(extent={{-28,-57},{4,-23}})));
 
-  Modelica.Blocks.Math.MultiSum targetSum(nu=2) annotation (Placement(
+  Modelica.Blocks.Math.Add      targetSum       annotation (Placement(
         transformation(
         extent={{-6,-6},{6,6}},
         rotation=270,
@@ -88,6 +94,29 @@ model SimplePowerPlant "No transient behaviuor, no operating states, constant ef
 
   TransiEnt.Components.Boundaries.Mechanical.Power Turbine annotation (Placement(transformation(extent={{-74,-56},{-42,-26}})));
 
+  TransiEnt.Basics.Blocks.FirstOrderWithGradientLim firstOrderWithGradientLim(
+    Tau=1,
+    initOption=1,
+    evaluate_y_start=true) if useFirstOrderPrimaryCntrl
+                           annotation (Placement(transformation(
+        extent={{10,10},{-10,-10}},
+        rotation=90,
+        origin={-84,36})));
+  Modelica.Blocks.Sources.RealExpression maxGradient(y=primaryBalancingController.maxGradientPrCtrl*primaryBalancingController.P_n) if useFirstOrderPrimaryCntrl
+                                                                                                                                    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-78,74})));
+  Modelica.Blocks.Sources.RealExpression minGrad(y=-primaryBalancingController.maxGradientPrCtrl*primaryBalancingController.P_n) if useFirstOrderPrimaryCntrl
+                                                                                                                                 annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-90,74})));
+  Modelica.Blocks.Math.Gain dummy(k=1) if not useFirstOrderPrimaryCntrl
+                                       annotation (Placement(transformation(
+        extent={{-5,-5},{5,5}},
+        rotation=270,
+        origin={-47,37})));
 equation
   // _____________________________________________
   //
@@ -115,25 +144,23 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
 
-  connect(primaryBalancingController.P_PBP_set, targetSum.u[1]) annotation (Line(
-      points={{-28.6,54},{-58,54},{-58,14},{-57.9,14}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(P_el_set, targetSum.u[2]) annotation (Line(
-      points={{-60,100},{-60,14},{-62.1,14}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(Turbine.mpp, MechanicalConnection.mpp_a) annotation (Line(points={{-42,-41},{-34,-41},{-34,-40},{-28,-40}}, color={95,95,95}));
-  connect(targetSum.y, Turbine.P_mech_set) annotation (Line(points={{-60,0.98},{-58,0.98},{-58,-23.3}},             color={0,0,127}));
+  connect(targetSum.y, Turbine.P_mech_set) annotation (Line(points={{-60,1.4},{-58,1.4},{-58,-23.3}},               color={0,0,127}));
   connect(Exciter.y, Generator.E_input) annotation (Line(points={{62.5,5.4},{62.5,-8.3},{38.945,-8.3},{38.945,-22.18}}, color={0,0,127}));
   connect(Exciter.epp1, epp) annotation (Line(
       points={{62.5,26},{80,26},{80,78},{100,78}},
       color={0,135,135},
       thickness=0.5));
+  connect(firstOrderWithGradientLim.u, primaryBalancingController.P_PBP_set) annotation (Line(points={{-84,48},{-84,54},{-28.6,54}}, color={0,0,127}));
+  connect(maxGradient.y, firstOrderWithGradientLim.maxGrad) annotation (Line(points={{-78,63},{-78,48}}, color={0,0,127}));
+  connect(minGrad.y, firstOrderWithGradientLim.minGrad) annotation (Line(points={{-90,63},{-90,48}}, color={0,0,127}));
+  connect(P_el_set, targetSum.u1) annotation (Line(points={{-60,100},{-60,24},{-56.4,24},{-56.4,15.2}}, color={0,127,127}));
+  connect(firstOrderWithGradientLim.y, targetSum.u2) annotation (Line(points={{-84,25},{-84,18},{-63.6,18},{-63.6,15.2}}, color={0,0,127}));
+  connect(dummy.y, targetSum.u2) annotation (Line(points={{-47,31.5},{-47,26},{-63.6,26},{-63.6,15.2}}, color={0,0,127}));
+  connect(dummy.u, primaryBalancingController.P_PBP_set) annotation (Line(points={{-47,43},{-47,54},{-28.6,54}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics),
-                                 Diagram(graphics,
-                                         coordinateSystem(preserveAspectRatio=false,
+                                 Diagram(coordinateSystem(preserveAspectRatio=false,
                    extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -160,5 +187,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model generalized for different electrical power ports by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2018 </span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Robert Flesch (flesch@xrg-simulation.de) in Feb 2021: introduced firstOrder behavior for primary control power; slewRateLimiter in control can be deactivated and limiting is done in firstOrder as this performs better numerically</span></p>
 </html>"));
 end SimplePowerPlant;

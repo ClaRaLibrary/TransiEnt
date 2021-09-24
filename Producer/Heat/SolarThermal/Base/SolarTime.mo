@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Heat.SolarThermal.Base;
+﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model SolarTime "Calculates the solar time"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -29,7 +33,7 @@ model SolarTime "Calculates the solar time"
 
   extends TransiEnt.Basics.Icons.Model;
   import Const = Modelica.Constants;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
 
   // _____________________________________________
   //
@@ -37,7 +41,8 @@ model SolarTime "Calculates the solar time"
   // _____________________________________________
 
   parameter Real[4] offset(unit={"d","h","m","s"})={0,0,0,0}; //d,h,m,s; Offset=0 means t=0 equals 1.1. 00:00:00
-  parameter SI.Angle longitude_local=SI.Conversions.from_deg(10), longitude_standard=SI.Conversions.from_deg(15) "East positive, west negative, 10 for Hamburg, 15 needed for offset calculation of central european time, 30 for central european summer time";
+  parameter SI.Angle longitude_local=Modelica.Units.Conversions.from_deg(10);
+  parameter SI.Angle longitude_standard=Modelica.Units.Conversions.from_deg(15) "East positive, west negative, 10 for Hamburg, 15 needed for offset calculation of central european time, 30 for central european summer time";
   parameter Real utc=longitude_standard*12/Const.pi "Difference between UTC and zone time; i.e. +1 in Amsterdam/Berlin/Bern/Rome; default works for standard time, beware of summer time !";
 
   // _____________________________________________
@@ -46,8 +51,8 @@ model SolarTime "Calculates the solar time"
   // _____________________________________________
 
 public
-  SI.Conversions.NonSIunits.Time_day dayoftheyear "Day as floating point number. 0.0 at 1.1. 00:00:00, 1.0 at 2.1. 00:00:00 a.s.o.";
-  SI.Conversions.NonSIunits.Time_day totaldays=365 "total days of the year, standard=365, leap year=366";
+  Modelica.Units.NonSI.Time_day dayoftheyear "Day as floating point number. 0.0 at 1.1. 00:00:00, 1.0 at 2.1. 00:00:00 a.s.o.";
+  Modelica.Units.NonSI.Time_day totaldays=365 "total days of the year, standard=365, leap year=366";
   SI.Time solarTime "Local solar time in seconds";
   SI.Time offset_sec; // Offset in seconds
 protected
@@ -60,9 +65,10 @@ equation
   // _____________________________________________
 
   offset_sec=((offset[1]*24+offset[2])*60+offset[3])*60+offset[4];
-  J=SI.Conversions.from_deg((dayoftheyear)*360/totaldays); // +0.5 leads to an average of "1" for day 1, "2" for day 2 etc.
+  J=Modelica.Units.Conversions.from_deg((dayoftheyear)*360/totaldays);
+                                                           // +0.5 leads to an average of "1" for day 1, "2" for day 2 etc.
 
-  equationOfTime=60*(0.0066+7.3525*cos(J+SI.Conversions.from_deg(85.9))+9.9359*cos(2*J+SI.Conversions.from_deg(108.99))+0.3387*cos(3*J+SI.Conversions.from_deg(105.2)));
+  equationOfTime=60*(0.0066 + 7.3525*cos(J + Modelica.Units.Conversions.from_deg(85.9)) + 9.9359*cos(2*J + Modelica.Units.Conversions.from_deg(108.99)) + 0.3387*cos(3*J + Modelica.Units.Conversions.from_deg(105.2)));
 
   dayoftheyear=noEvent(integer((time+offset_sec)/(24*60*60)+1));
   solarTime=time-utc+offset_sec+4*60*longitude_local+equationOfTime;

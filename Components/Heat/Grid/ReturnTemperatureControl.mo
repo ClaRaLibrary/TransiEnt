@@ -1,26 +1,30 @@
-within TransiEnt.Components.Heat.Grid;
+﻿within TransiEnt.Components.Heat.Grid;
 model ReturnTemperatureControl "Pump controlled for target return temperature"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -78,15 +82,14 @@ protected
 protected
   ClaRa.Components.Sensors.SensorVLE_L1_T returnTemperatureSensor(medium=Medium) annotation (Placement(transformation(extent={{-14,-52},{6,-32}})));
   Modelica.Blocks.Continuous.LimPID PID(
-    limitsAtInit=true,
     k=k,
     yMin=P_min,
     y_start=P_min,
-    initType=Modelica.Blocks.Types.InitPID.NoInit,
+    initType=Modelica.Blocks.Types.Init.NoInit,
     controllerType=controllerType,
     Ti=Ti,
     Td=Td,
-    yMax=P_max)                                    annotation (Placement(transformation(
+    yMax=P_max) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={32,-40})));

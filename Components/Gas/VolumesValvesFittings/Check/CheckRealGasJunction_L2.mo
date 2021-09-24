@@ -1,25 +1,29 @@
-within TransiEnt.Components.Gas.VolumesValvesFittings.Check;
+﻿within TransiEnt.Components.Gas.VolumesValvesFittings.Check;
 model CheckRealGasJunction_L2
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   import TILMedia;
@@ -33,14 +37,12 @@ model CheckRealGasJunction_L2
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-80,58})));
-  RealGasJunction_L2 realGasJunction_L2_1(
+  Fittings.RealGasJunction_L2 realGasJunction_L2_1(
     redeclare model PressureLoss1 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
     redeclare model PressureLoss2 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
     redeclare model PressureLoss3 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
-                                          p(
-                                          start = 10e5), h(
-                                                        start = 28.6e3))
-    annotation (Placement(transformation(extent={{-60,48},{-40,68}})));
+    p(start=10e5),
+    h(start=28.6e3)) annotation (Placement(transformation(extent={{-60,48},{-40,68}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink_m_flow(
     variable_m_flow=true,
     T_const=373.15,
@@ -63,12 +65,10 @@ model CheckRealGasJunction_L2
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-80,-32})));
-  RealGasJunction_L2_isoth
-                     realGasJunction_L2_2(
+  Fittings.RealGasJunction_L2_isoth realGasJunction_L2_2(
     redeclare model PressureLoss1 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
     redeclare model PressureLoss2 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
-    redeclare model PressureLoss3 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear)
-    annotation (Placement(transformation(extent={{-60,-42},{-40,-22}})));
+    redeclare model PressureLoss3 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear) annotation (Placement(transformation(extent={{-60,-42},{-40,-22}})));
   Boundaries.Gas.BoundaryRealGas_Txim_flow                      sink_m_flow1(
     variable_m_flow=true,
     T_const=373.15,
@@ -86,9 +86,7 @@ model CheckRealGasJunction_L2
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={20,58})));
-  RealGasJunction_L2_nPorts
-                     realGasJunction_L2_3(p(start=10e5), h(start=28.6e3))
-    annotation (Placement(transformation(extent={{40,48},{60,68}})));
+  Fittings.RealGasJunction_L2_nPorts realGasJunction_L2_3(p(start=10e5), h(start=28.6e3)) annotation (Placement(transformation(extent={{40,48},{60,68}})));
   Boundaries.Gas.BoundaryRealGas_Txim_flow                      sink_m_flow2(
     variable_m_flow=true,
     T_const=373.15,
@@ -106,7 +104,7 @@ model CheckRealGasJunction_L2
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={20,-32})));
-  RealGasJunction_L2_nPorts_isoth realGasJunction_L2_4 annotation (Placement(transformation(extent={{40,-42},{60,-22}})));
+  Fittings.RealGasJunction_L2_nPorts_isoth realGasJunction_L2_4 annotation (Placement(transformation(extent={{40,-42},{60,-22}})));
   Boundaries.Gas.BoundaryRealGas_Txim_flow                      sink_m_flow3(
     variable_m_flow=true,
     T_const=373.15,
@@ -175,7 +173,7 @@ equation
           lineColor={28,108,200},
           textString="checked for split and junction operation
 checked for pressure losses")}),
-    experiment(StopTime=100),
+    experiment(StopTime=100, __Dymola_Algorithm="Radau"),
     __Dymola_experimentSetupOutput,
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

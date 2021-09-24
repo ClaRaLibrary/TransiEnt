@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP;
 model CHP "Recommended model for large scale, combined heat and power plants with second order dynamics, three operating states and optional control power"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -63,7 +67,7 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
 
   //Heating condenser parameters
 
-  parameter Modelica.SIunits.Pressure p_nom(displayUnit="Pa")=1e5 "Nominal pressure" annotation(Dialog(group="Heating condenser parameters", tab="Advanced"));
+  parameter Modelica.Units.SI.Pressure p_nom(displayUnit="Pa") = 1e5 "Nominal pressure" annotation (Dialog(group="Heating condenser parameters", tab="Advanced"));
   parameter SI.MassFlowRate m_flow_nom=10 "Nominal mass flow rate" annotation(Dialog(group="Heating condenser parameters", tab="Advanced"));
   parameter SI.SpecificEnthalpy h_nom=1e5 "Nominal specific enthalpy" annotation(Dialog(group="Heating condenser parameters", tab="Advanced"));
   final parameter SI.SpecificEnthalpy h_start=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
@@ -150,7 +154,7 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
   //             Variable Declarations
   // _____________________________________________
 public
-  Modelica.SIunits.MassFlowRate m_flow_cde_total_set;
+  Modelica.Units.SI.MassFlowRate m_flow_cde_total_set;
 
   TransiEnt.Components.Sensors.RealGas.CO2EmissionSensor cO2EmissionOfIdealCombustion if useGasPort == true annotation (Placement(transformation(extent={{70,70},{50,90}})));
   Modelica.Blocks.Math.Gain m_flow_cde_gain(k=1) annotation (Placement(transformation(extent={{44,84},{36,92}})));

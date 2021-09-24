@@ -1,25 +1,29 @@
-within TransiEnt.Components.Electrical.Machines;
+﻿within TransiEnt.Components.Electrical.Machines;
 model InductionMotorSimple "Induction Motor Model with improved coupling and simple equations"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
  // _____________________________________________
   //
@@ -47,7 +51,7 @@ extends TransiEnt.Basics.Icons.MachineRL;
   //                   Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Frequency f_rot_n=591.3/60;
+  parameter Modelica.Units.SI.Frequency f_rot_n=591.3/60;
   parameter SI.Voltage v_n=simCenter.v_n;
   parameter Real N_pp=5;
   parameter Real slip_n=0.0145 "Nonminal Slip";
@@ -56,11 +60,11 @@ extends TransiEnt.Basics.Icons.MachineRL;
 
   parameter Boolean useConverter=true "True for frequency input";
 
-  parameter Modelica.SIunits.Reactance x_my=140 "Magnetization reactance";
-  parameter Modelica.SIunits.Resistance r_s=0.7 "stator resistance";
-  parameter Modelica.SIunits.Reactance x_s=5.4 "Stator reactance";
-  parameter Modelica.SIunits.Reactance x_R1=5.99 "1st cage rotor reactance";
-  parameter Modelica.SIunits.Resistance r_R1=0.599 "1st cage rotor resistance";
+  parameter Modelica.Units.SI.Reactance x_my=140 "Magnetization reactance";
+  parameter Modelica.Units.SI.Resistance r_s=0.7 "stator resistance";
+  parameter Modelica.Units.SI.Reactance x_s=5.4 "Stator reactance";
+  parameter Modelica.Units.SI.Reactance x_R1=5.99 "1st cage rotor reactance";
+  parameter Modelica.Units.SI.Resistance r_R1=0.599 "1st cage rotor resistance";
 
   // _____________________________________________
   //
@@ -68,18 +72,16 @@ extends TransiEnt.Basics.Icons.MachineRL;
   // _____________________________________________
 
   Real slip(start=slip_n) "slip of asynchronous machine";
-   Modelica.SIunits.AngularFrequency omega_rot(start=2*Modelica.Constants.pi*f_rot_n) "Angular Frequency of rotation"
-                                                                                    annotation (Dialog(group="Initialization", showStartAttribute=true));
-   Modelica.SIunits.Frequency f_rotor(start=f_rot_n)
-                                                   annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.AngularFrequency omega_rot(start=2*Modelica.Constants.pi*f_rot_n) "Angular Frequency of rotation" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Frequency f_rotor(start=f_rot_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-   Modelica.SIunits.Angle delta_asy(start=-0.08726646259971647)=epp.delta annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Angle delta_asy(start=-0.08726646259971647) = epp.delta annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-   Modelica.SIunits.PowerFactor cosphi=abs(S.re)/Modelica.ComplexMath.'abs'(S);
-   Modelica.SIunits.ComplexPower S(re(start=P_n), im(start=0)) annotation (Dialog(group="Initialization", showStartAttribute=true));
-   Modelica.SIunits.Voltage v_grid(start=v_n) = epp.v annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.PowerFactor cosphi=abs(S.re)/Modelica.ComplexMath.abs(S);
+  Modelica.Units.SI.ComplexPower S(re(start=P_n), im(start=0)) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage v_grid(start=v_n) = epp.v annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-   Modelica.SIunits.Power P_mech( start=P_n)= -mpp.tau * omega_rot annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Power P_mech(start=P_n) = -mpp.tau*omega_rot annotation (Dialog(group="Initialization", showStartAttribute=true));
 
   // _____________________________________________
   //
@@ -118,7 +120,7 @@ equation
 
   omega_rot=der(mpp.phi);
 
-  f_rotor=Modelica.SIunits.Conversions.to_Hz(omega_rot);
+  f_rotor=Modelica.Units.Conversions.to_Hz(omega_rot);
 
   //Important equation that links the submodels
   mpp.tau=-((r_R1/slip)*(v_grid)^2)/((r_s+r_R1/slip)^2+(x_s+x_R1)^2)/omega_rot;

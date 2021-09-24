@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.Machines.Base;
+﻿within TransiEnt.Components.Electrical.Machines.Base;
 partial model PartialQuasiStationaryGeneratorComplex "Abstract class for quasistationary generators for ComplexPowerPort"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 
 
@@ -46,14 +50,14 @@ partial model PartialQuasiStationaryGeneratorComplex "Abstract class for quasist
 
 
 
-  parameter Modelica.SIunits.ActivePower P_el_n = 180e3 "Nominal active power" annotation(Dialog(group="General"));
-  parameter Modelica.SIunits.ApparentPower S_n = 225e3 "Nominal apparent power" annotation(Dialog(group="General"));
+  parameter Modelica.Units.SI.ActivePower P_el_n=180e3 "Nominal active power" annotation (Dialog(group="General"));
+  parameter Modelica.Units.SI.ApparentPower S_n=225e3 "Nominal apparent power" annotation (Dialog(group="General"));
   parameter Boolean IsSlack=false "true for Slack bus" annotation(Dialog(group="Type of Bus"));
    parameter SI.Angle angle_slacklsm=0 "Set voltage angle at port or polar wheel angle at slack machine" annotation(Dialog(enable=IsSlack,group="Type of Bus"));
    parameter Boolean OwnFrequency=false "true for own frequency, only possible when IsSlack=false" annotation(Dialog(enable=not IsSlack,group="Type of Bus"));
    parameter Real D_cage=0 "Cage Damping" annotation(Dialog(enable=OwnFrequency,group="Physical constraints"));
-  final parameter Modelica.SIunits.PowerFactor cosphi_n = P_el_n/S_n;
-  final parameter Modelica.SIunits.ReactivePower Q_n= sqrt(S_n^2-P_el_n^2);
+  final parameter Modelica.Units.SI.PowerFactor cosphi_n=P_el_n/S_n;
+  final parameter Modelica.Units.SI.ReactivePower Q_n=sqrt(S_n^2 - P_el_n^2);
 
   // _____________________________________________
   //
@@ -71,7 +75,7 @@ partial model PartialQuasiStationaryGeneratorComplex "Abstract class for quasist
 
   SI.ReactivePower Q_is( start=Q_n) = -epp.Q annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-    Modelica.SIunits.Power P_mech=-mpp.tau*der(mpp.phi);
+  Modelica.Units.SI.Power P_mech=-mpp.tau*der(mpp.phi);
 
     SI.Frequency f_complex(start=simCenter.f_n,fixed=IsSlack);
 
@@ -82,7 +86,7 @@ initial equation
 
   if OwnFrequency==true then
     der(f_complex)=0;
-    omega=Modelica.SIunits.Conversions.from_Hz(simCenter.f_n);
+    omega=Modelica.Units.Conversions.from_Hz(simCenter.f_n);
   end if;
 
 equation
@@ -115,7 +119,7 @@ equation
   end if;
 
   if OwnFrequency==true then
-     der(theta)=Modelica.SIunits.Conversions.from_Hz(f_complex-epp.f);
+     der(theta)=Modelica.Units.Conversions.from_Hz(f_complex - epp.f);
 
     else
     epp.f=f_complex;
@@ -125,7 +129,7 @@ equation
 
   epp.delta=delta_lsm;
 
-  f_complex = Modelica.SIunits.Conversions.to_Hz(der(mpp.phi));
+  f_complex =Modelica.Units.Conversions.to_Hz(der(mpp.phi));
 
   annotation (Diagram(graphics,
                       coordinateSystem(preserveAspectRatio=false, extent={{-100,

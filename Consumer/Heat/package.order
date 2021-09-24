@@ -8,3 +8,4 @@ IdealHeatingNetworkConsumer
 FirstOrderHeatingNetworkConsumer
 ThermalHeatConsumer
 ThermalHeatConsumer_L3
+DomesticHotWater

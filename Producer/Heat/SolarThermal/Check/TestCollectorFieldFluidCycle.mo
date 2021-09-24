@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Heat.SolarThermal.Check;
+﻿within TransiEnt.Producer.Heat.SolarThermal.Check;
 model TestCollectorFieldFluidCycle "Tester for a solar collector field using a fluid cycle"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -28,7 +32,7 @@ model TestCollectorFieldFluidCycle "Tester for a solar collector field using a f
 
   extends TransiEnt.Basics.Icons.Checkmodel;
   import Const = Modelica.Constants;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
 
   // _____________________________________________
   //
@@ -36,7 +40,7 @@ model TestCollectorFieldFluidCycle "Tester for a solar collector field using a f
   // _____________________________________________
 
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixedTemperature(T=293.15)
-                                                                                   annotation (Placement(transformation(extent={{-92,-14},{-72,6}})));
+                                                                                   annotation (Placement(transformation(extent={{-100,-30},{-80,-10}})));
   inner TransiEnt.SimCenter simCenter(redeclare TILMedia.VLEFluidTypes.TILMedia_SplineWater fluid1, ambientConditions(
       redeclare TransiEnt.Basics.Tables.Ambient.GHI_Hamburg_3600s_2012_TMY globalSolarRadiation,
       redeclare TransiEnt.Basics.Tables.Ambient.DNI_Hamburg_3600s_2012_TMY directSolarRadiation,
@@ -45,18 +49,22 @@ model TestCollectorFieldFluidCycle "Tester for a solar collector field using a f
       redeclare TransiEnt.Basics.Tables.Ambient.Wind_Hamburg_Fuhlsbuettel_3600s_2012 wind))         annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
 
   ClaRa.Components.HeatExchangers.IdealShell_L2 tubeBundle_L2_1(
+    redeclare model HeatTransfer = Consumer.Heat.ThermalHeatConsumer_L3.HeatTransfer_EN442 (
+        T_mean_supply=273.15 + 85,
+        Q_flow_nom=12*2e3,
+        T_air_nom=293.15),
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.QuadraticNominalPoint_L2,
     h_nom=84000,
     h_start=84000,
-    m_flow_nom=0.1,
+    m_flow_nom=0.02,
     p_nom=110000,
     p_start=110000,
     initOption=0)                                                                                   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-52,-4})));
+        origin={-44,-20})));
 
-  TransiEnt.Components.Heat.Grid.IdealizedExpansionVessel idealizedExpansionVessel(p=110000) annotation (Placement(transformation(extent={{-62,44},{-42,64}})));
+  TransiEnt.Components.Heat.Grid.IdealizedExpansionVessel idealizedExpansionVessel(p=110000) annotation (Placement(transformation(extent={{-54,28},{-34,48}})));
 
   SolarCollectorField_L1 collectorfield(
     area=2.33,
@@ -77,10 +85,10 @@ model TestCollectorFieldFluidCycle "Tester for a solar collector field using a f
     Q_flow_n=2e3) annotation (Placement(transformation(
         extent={{-44,-19},{44,19}},
         rotation=270,
-        origin={137,-22})));
+        origin={145,-40})));
 
   ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_2(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=1, m_flow_nom=0.001))
-                                                                                        annotation (Placement(transformation(extent={{80,28},{100,40}})));
+                                                                                        annotation (Placement(transformation(extent={{88,12},{108,24}})));
 
   ClaRa.Components.VolumesValvesFittings.Pipes.PipeFlowVLE_L2_Simple pipeFlow_L2_Simple_in_collector(
     p_nom={200000},
@@ -94,7 +102,7 @@ model TestCollectorFieldFluidCycle "Tester for a solar collector field using a f
     initOption=0)      annotation (Placement(transformation(
         extent={{-14,-5},{14,5}},
         rotation=0,
-        origin={18,33})));
+        origin={26,17})));
 
   ClaRa.Components.VolumesValvesFittings.Pipes.PipeFlowVLE_L2_Simple pipeFlow_L2_Simple_out_collector(
     h_nom={200000},
@@ -109,7 +117,7 @@ model TestCollectorFieldFluidCycle "Tester for a solar collector field using a f
     initOption=0)      annotation (Placement(transformation(
         extent={{-14,-5},{14,5}},
         rotation=180,
-        origin={18,-79})));
+        origin={26,-89})));
 
   Control.ControllerPumpSolarCollectorTandG controller(
     G_min=150,
@@ -117,71 +125,73 @@ model TestCollectorFieldFluidCycle "Tester for a solar collector field using a f
     controllerType=Modelica.Blocks.Types.SimpleController.P,
     yMax=1000,
     yMin=0,
-    initType_PID=Modelica.Blocks.Types.InitPID.InitialOutput,
+    initType_PID=Modelica.Blocks.Types.Init.InitialOutput,
     y_start_PID=10,
     m_flow_min=0.05,
     k_PID=10,
     T_set=358.15,
     Delta_p=50000,
-    T_stor=273.15 + 75) annotation (Placement(transformation(extent={{156,40},{186,64}})));
+    T_stor=273.15 + 75) annotation (Placement(transformation(extent={{164,24},{194,48}})));
 
-  ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pumpVLE_L1_simple annotation (Placement(transformation(extent={{-34,24},{-14,44}})));
+  ClaRa.Components.TurboMachines.Pumps.PumpVLE_L1_simple pumpVLE_L1_simple annotation (Placement(transformation(extent={{-26,8},{-6,28}})));
 
   inner ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-90,60},{-70,80}})));
-  Components.Sensors.TemperatureSensor temperatureSensor annotation (Placement(transformation(extent={{102,40},{122,60}})));
+  Components.Sensors.TemperatureSensor temperatureSensor annotation (Placement(transformation(extent={{110,24},{130,44}})));
 equation
   // _____________________________________________
   //
   //               Connect Statements
   // _____________________________________________
 
-  connect(tubeBundle_L2_1.heat, fixedTemperature.port) annotation (Line(
-      points={{-62,-4},{-72,-4}},
-      color={167,25,48},
-      thickness=0.5,
-      smooth=Smooth.None));
-
   connect(tubeBundle_L2_1.outlet,idealizedExpansionVessel.waterPort)  annotation (Line(
-      points={{-52,6},{-52,26},{-52,44}},
+      points={{-44,-10},{-44,28}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(valveVLE_L1_2.inlet, pipeFlow_L2_Simple_in_collector.outlet) annotation (Line(
-      points={{80,34},{44,34},{44,33},{32,33}},
+      points={{88,18},{52,18},{52,17},{40,17}},
       color={0,131,169},
       thickness=0.5));
   connect(tubeBundle_L2_1.inlet, pipeFlow_L2_Simple_out_collector.outlet) annotation (Line(
-      points={{-52,-14},{-52,-14},{-52,-79},{4,-79}},
+      points={{-44,-30},{-44,-89},{12,-89}},
       color={0,131,169},
       thickness=0.5));
   connect(valveVLE_L1_2.outlet, collectorfield.waterIn) annotation (Line(
-      points={{100,34},{137,34},{137,20.8421}},
+      points={{108,18},{145,18},{145,2.84211}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(pumpVLE_L1_simple.outlet, pipeFlow_L2_Simple_in_collector.inlet) annotation (Line(
-      points={{-14,34},{-8,34},{-8,33},{4,33}},
+      points={{-6,18},{0,18},{0,17},{12,17}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(pumpVLE_L1_simple.inlet,idealizedExpansionVessel.waterPort)  annotation (Line(
-      points={{-34,34},{-52,34},{-52,44}},
+      points={{-26,18},{-44,18},{-44,28}},
       color={0,131,169},
       thickness=0.5));
-  connect(collectorfield.T_out, controller.T_out) annotation (Line(points={{154.575,-57.4316},{168,-57.4316},{168,32},{144,32},{144,50},{158,50}}, color={0,0,127}));
-  connect(controller.G_total, collectorfield.G_total) annotation (Line(points={{158,45},{148,45},{148,34},{148,28},{164,28},{164,-52.8},{154.575,-52.8}},
+  connect(collectorfield.T_out, controller.T_out) annotation (Line(points={{162.575,-75.4316},{176,-75.4316},{176,16},{152,16},{152,34},{166,34}}, color={0,0,127}));
+  connect(controller.G_total, collectorfield.G_total) annotation (Line(points={{166,29},{156,29},{156,12},{172,12},{172,-70.8},{162.575,-70.8}},
                                                                                                   color={0,0,127}));
   connect(pipeFlow_L2_Simple_out_collector.inlet, collectorfield.waterOut) annotation (Line(
-      points={{32,-79},{52,-79},{137,-79},{137,-64.8421}},
+      points={{40,-89},{145,-89},{145,-82.8421}},
       color={0,131,169},
       thickness=0.5));
-  connect(controller.P_drive, pumpVLE_L1_simple.P_drive) annotation (Line(points={{158,58},{-24,58},{-24,46}}, color={0,0,127}));
+  connect(controller.P_drive, pumpVLE_L1_simple.P_drive) annotation (Line(points={{166,42},{-16,42},{-16,30}}, color={0,0,127}));
   connect(temperatureSensor.port, valveVLE_L1_2.outlet) annotation (Line(
-      points={{112,40},{100,40},{100,34}},
+      points={{120,24},{108,24},{108,18}},
       color={0,131,169},
       thickness=0.5));
-  connect(temperatureSensor.T, controller.T_in) annotation (Line(points={{123,50},{126,50},{126,52},{134,52},{134,54.4},{158,54.4}}, color={0,0,127}));
-  annotation (Diagram(graphics,
+  connect(temperatureSensor.T, controller.T_in) annotation (Line(points={{131,34},{134,34},{134,36},{142,36},{142,38.4},{166,38.4}}, color={0,0,127}));
+  connect(fixedTemperature.port, tubeBundle_L2_1.heat) annotation (Line(points={{-80,-20},{-54,-20}}, color={191,0,0}));
+  annotation (Diagram(graphics={Text(
+          extent={{128,78},{-20,86}},
+          textColor={28,108,200},
+          fontSize=10,
+          horizontalAlignment=TextAlignment.Left,
+          textString="Look at:
+- solarCollectorField.T_out
+- controller.P_drive")},
                       coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{200,100}})),
     experiment(
       StopTime=3.1536e+007,

@@ -1,34 +1,38 @@
-within TransiEnt.Basics.Interfaces.Thermal;
+﻿within TransiEnt.Basics.Interfaces.Thermal;
 connector FluidPortMSL
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   replaceable package Medium = Modelica.Media.Interfaces.PartialMedium "Medium model"
                    annotation (choicesAllMatching=true);
 
-  flow Modelica.SIunits.MassFlowRate m_flow "Mass flow rate from the connection point into the component";
-  Modelica.SIunits.AbsolutePressure p "Thermodynamic pressure in the connection point";
-  stream Modelica.SIunits.SpecificEnthalpy h_outflow "Specific thermodynamic enthalpy close to the connection point if m_flow < 0";
-  stream Modelica.SIunits.MassFraction Xi_outflow[Medium.nC] "Independent mixture mass fractions m_i/m close to the connection point if m_flow < 0";
+  flow Modelica.Units.SI.MassFlowRate m_flow "Mass flow rate from the connection point into the component";
+  Modelica.Units.SI.AbsolutePressure p "Thermodynamic pressure in the connection point";
+  stream Modelica.Units.SI.SpecificEnthalpy h_outflow "Specific thermodynamic enthalpy close to the connection point if m_flow < 0";
+  stream Modelica.Units.SI.MassFraction Xi_outflow[Medium.nC] "Independent mixture mass fractions m_i/m close to the connection point if m_flow < 0";
 
   annotation (Icon(graphics={Ellipse(
           extent={{80,80},{-80,-80}},

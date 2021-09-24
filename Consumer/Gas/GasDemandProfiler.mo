@@ -1,26 +1,30 @@
-within TransiEnt.Consumer.Gas;
+﻿within TransiEnt.Consumer.Gas;
 model GasDemandProfiler "Gas demand profile (H_flow or m_flow) composed of heat gas demand and base gas demand"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -38,21 +42,21 @@ model GasDemandProfiler "Gas demand profile (H_flow or m_flow) composed of heat 
   //        Constants and Parameters
   // _____________________________________________
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid realGasModel=simCenter.gasModel1 "|General|Real gas model to be used (for calorific value calculation)";
-  parameter Modelica.SIunits.MassFraction[realGasModel.nc - 1] xi_in=realGasModel.xi_default "|General|Mass fractions of gas mixture (for calorific value calculation)";
+  parameter Modelica.Units.SI.MassFraction[realGasModel.nc - 1] xi_in=realGasModel.xi_default "|General|Mass fractions of gas mixture (for calorific value calculation)";
   parameter Boolean mFlowOut=false "|General|Set to true to get gas mass flow instead of enthalpy flow rate as output";
   parameter Boolean variableBaseDemand=false "|General|Set to true for variable base gas demand";
   parameter Real f_gasDemand=1 "|General|Scaling factor for resulting gas demand";
 
   //Heat gas demand
-  parameter Modelica.SIunits.Heat Q_a=0.56*23e9*3.6e6 "|Gas heat demand|Annual heat demand";
-  parameter Modelica.SIunits.Efficiency eta_fuel=0.98 "|Gas heat demand|Average efficiency of combustion";
-  parameter Modelica.SIunits.SpecificEnthalpy NCV_in=46.84e6 "|Gas heat demand|Net calorific value of medium (set to zero for calculation by function)";
-  final parameter Modelica.SIunits.SpecificEnthalpy NCV=TransiEnt.Basics.Functions.GasProperties.getRealGasNCV_xi(
+  parameter Modelica.Units.SI.Heat Q_a=0.56*23e9*3.6e6 "|Gas heat demand|Annual heat demand";
+  parameter Modelica.Units.SI.Efficiency eta_fuel=0.98 "|Gas heat demand|Average efficiency of combustion";
+  parameter Modelica.Units.SI.SpecificEnthalpy NCV_in=46.84e6 "|Gas heat demand|Net calorific value of medium (set to zero for calculation by function)";
+  final parameter Modelica.Units.SI.SpecificEnthalpy NCV=TransiEnt.Basics.Functions.GasProperties.getRealGasNCV_xi(
       realGasType=realGasModel,
       xi_in=xi_in,
       NCVIn=NCV_in) "|Gas heat demand|Net calorific value";
-  parameter Modelica.SIunits.SpecificEnthalpy GCV_in=51.77e6 "|Gas heat demand|Gross calorific value of medium (set to zero for calculation by function)";
-  final parameter Modelica.SIunits.SpecificEnthalpy GCV=TransiEnt.Basics.Functions.GasProperties.getRealGasGCV_xi(
+  parameter Modelica.Units.SI.SpecificEnthalpy GCV_in=51.77e6 "|Gas heat demand|Gross calorific value of medium (set to zero for calculation by function)";
+  final parameter Modelica.Units.SI.SpecificEnthalpy GCV=TransiEnt.Basics.Functions.GasProperties.getRealGasGCV_xi(
       realGasType=realGasModel,
       xi_in=xi_in,
       GCVIn=GCV_in) "|Gas heat demand|Gross calorific value";
@@ -61,21 +65,21 @@ model GasDemandProfiler "Gas demand profile (H_flow or m_flow) composed of heat 
 
   //Heat gas charline
   replaceable parameter TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction.HeatingDemandCharacteristic.CharLineHeatDemandHH HeatCharLine constrainedby TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction.HeatingDemandCharacteristic.CharLineHeatDemand "|Heat demand charline||Choose City's Characteristic Line" annotation (choicesAllMatching);
-  parameter Modelica.SIunits.Heat Q_a_heatCharline=1.41806E+16 "|Heat demand charline||Integrated annual heat demand of heat charline (from weeklyHeatProfile.Q_flow)";
+  parameter Modelica.Units.SI.Heat Q_a_heatCharline=1.41806E+16 "|Heat demand charline||Integrated annual heat demand of heat charline (from weeklyHeatProfile.Q_flow)";
   parameter Real Damping_Weekend=0.95 "|Heat demand charline||Damping ratio for heat load at weekends (between 0 and 1)";
   parameter TransiEnt.Basics.Types.TypeOfWeekday BeginWeekday=2 "|Heat demand charline||Weekday on which simulation begins";
   parameter Real TransitionDuration=5 "|Heat demand charline||";
-  parameter Modelica.SIunits.Time t_start_week=6*86400 "|Heat demand charline||Time between simulation start and first monday (e.g. first day is a sunday)";
-  parameter Modelica.SIunits.Time t_hp_end=12441600 "|Heat demand charline||End of heating period in Hamburg in 2012 according to http://ecowetter.de/ort/heizgradtage/hamburg/2012.html";
-  parameter Modelica.SIunits.Time t_hp_start=22982400 "|Heat demand charline||Start of heating period in Hamburg in 2012 according to http://ecowetter.de/ort/heizgradtage/hamburg/2012.html";
+  parameter Modelica.Units.SI.Time t_start_week=6*86400 "|Heat demand charline||Time between simulation start and first monday (e.g. first day is a sunday)";
+  parameter Modelica.Units.SI.Time t_hp_end=12441600 "|Heat demand charline||End of heating period in Hamburg in 2012 according to http://ecowetter.de/ort/heizgradtage/hamburg/2012.html";
+  parameter Modelica.Units.SI.Time t_hp_start=22982400 "|Heat demand charline||Start of heating period in Hamburg in 2012 according to http://ecowetter.de/ort/heizgradtage/hamburg/2012.html";
 
   //Base gas profile
   parameter Real gasDemand_base_profile=baseGasDemand.offset*365*24*3600 "|Base gas demand||Integrated annual heat demand of the profile";
   parameter Real offset=1 "|Base gas demand||Offset of output signal";
   parameter Real amplitude=0.2 "|Base gas demand||Amplitude of sine wave";
-  parameter Modelica.SIunits.Frequency freqHz=1/86400 "|Base gas demand||Frequency of sine wave";
-  parameter Modelica.SIunits.Angle phase=0 "|Base gas demand||Phase of sine wave";
-  parameter Modelica.SIunits.Time startTime=0 "|Base gas demand||Output = offset for time < startTime";
+  parameter Modelica.Units.SI.Frequency freqHz=1/86400 "|Base gas demand||Frequency of sine wave";
+  parameter Modelica.Units.SI.Angle phase=0 "|Base gas demand||Phase of sine wave";
+  parameter Modelica.Units.SI.Time startTime=0 "|Base gas demand||Output = offset for time < startTime";
 
   // _____________________________________________
   //
@@ -87,8 +91,8 @@ model GasDemandProfiler "Gas demand profile (H_flow or m_flow) composed of heat 
   Real gasDemand_heat "Integrated heat gas demand in defined output";
 
 protected
-  Modelica.SIunits.Heat Q_heatCharline;
-  Modelica.SIunits.Heat Q_heat;
+  Modelica.Units.SI.Heat Q_heatCharline;
+  Modelica.Units.SI.Heat Q_heat;
 
   // _____________________________________________
   //
@@ -132,10 +136,10 @@ protected
         origin={-6,24})));
   Modelica.Blocks.Sources.Sine baseGasDemand(
     amplitude=amplitude,
-    freqHz=freqHz,
+    f=freqHz,
     phase=phase,
     offset=offset,
-    startTime=startTime)    annotation (Placement(transformation(extent={{-46,-58},{-30,-42}})));
+    startTime=startTime) annotation (Placement(transformation(extent={{-46,-58},{-30,-42}})));
   Modelica.Blocks.Math.Add add annotation (Placement(transformation(extent={{60,-6},{72,6}})));
   Modelica.Blocks.Logical.Switch MorHflow annotation (Placement(transformation(extent={{26,32},{46,52}})));
   Modelica.Blocks.Logical.Switch switchBaseDemand annotation (Placement(transformation(extent={{24,-20},{44,-40}})));

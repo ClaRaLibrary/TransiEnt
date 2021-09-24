@@ -1,26 +1,30 @@
-within TransiEnt.Grid.Electrical.EconomicDispatch;
+﻿within TransiEnt.Grid.Electrical.EconomicDispatch;
 model MeritOrderDispatcher "Forward-looking control, min, max and gradient constraints"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -45,10 +49,10 @@ model MeritOrderDispatcher "Forward-looking control, min, max and gradient const
   parameter Integer nout= simCenter.generationPark.nMODPlants "Number of plants";
   parameter Integer ntime=20 "Number of future points in time to be considered";
 
-  parameter Modelica.SIunits.Power P_init[nout]=zeros(nout);
+  parameter Modelica.Units.SI.Power P_init[nout]=zeros(nout);
   parameter Real P_grad_max_star[nout]=simCenter.generationPark.P_grad_max_star_MOD "Specific Power gradient in 1/s";
-  parameter Modelica.SIunits.Power P_min_const[nout]=simCenter.generationPark.P_min_MOD;
-  parameter Modelica.SIunits.Power P_max_const[nout]=P_n;
+  parameter Modelica.Units.SI.Power P_min_const[nout]=simCenter.generationPark.P_min_MOD;
+  parameter Modelica.Units.SI.Power P_max_const[nout]=P_n;
   parameter Boolean useVarLimits = false annotation(Evaluate=true, choices(__Dymola_checkBox=true),Dialog(tab="Time varying operating boundaries"));
   parameter Integer nVarLimits=1 annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
   parameter Integer iVarLimits[nVarLimits]=1:nVarLimits annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
@@ -90,28 +94,28 @@ model MeritOrderDispatcher "Forward-looking control, min, max and gradient const
   // _____________________________________________
 
 
-  Modelica.SIunits.Power P_load[ntime];
+  Modelica.Units.SI.Power P_load[ntime];
   Real[nout] C_varsorted;
   Integer[nout] merit_order;
-  Modelica.SIunits.Power P_0[nout] "Current operating point";
-  Modelica.SIunits.Power P_rcbl_max[nout,ntime] "Max reachable operating point";
-  Modelica.SIunits.Power P_rcbl_min[nout,ntime] "Min reachable operating point";
-  Modelica.SIunits.Power P_rcbl_max_back[nout] "Max operating point to reach next timestep operating point";
-  Modelica.SIunits.Power P_rcbl_min_back[nout] "Min operating point to reach next timestep operating point";
-  Modelica.SIunits.Power P_mustrun_residual "Mustrun power of plants that are more expensive than me";
-  Modelica.SIunits.Power P_set_total = sum(y);
-  Modelica.SIunits.Power P_max_total;
-  Modelica.SIunits.Power P_min_total;
-  Modelica.SIunits.Power P_init_total=sum(P_init);
+  Modelica.Units.SI.Power P_0[nout] "Current operating point";
+  Modelica.Units.SI.Power P_rcbl_max[nout,ntime] "Max reachable operating point";
+  Modelica.Units.SI.Power P_rcbl_min[nout,ntime] "Min reachable operating point";
+  Modelica.Units.SI.Power P_rcbl_max_back[nout] "Max operating point to reach next timestep operating point";
+  Modelica.Units.SI.Power P_rcbl_min_back[nout] "Min operating point to reach next timestep operating point";
+  Modelica.Units.SI.Power P_mustrun_residual "Mustrun power of plants that are more expensive than me";
+  Modelica.Units.SI.Power P_set_total=sum(y);
+  Modelica.Units.SI.Power P_max_total;
+  Modelica.Units.SI.Power P_min_total;
+  Modelica.Units.SI.Power P_init_total=sum(P_init);
 
-  Modelica.SIunits.Power P_max[nout](start=P_max_const, fixed=true);
-  Modelica.SIunits.Power P_min[nout](start=P_min_const, fixed=true);
-  Modelica.SIunits.Power P_max_var[nVarLimits]=P_max[iVarLimits] annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
-  Modelica.SIunits.Power P_min_var[nVarLimits]=P_min[iVarLimits] annotation(Dialog(enable= useVarLimits, tab="Time varying operating boundaries"));
-  Modelica.SIunits.Power P_min_var_total=sum(P_min_var);
-  Modelica.SIunits.Power P_max_var_total=sum(P_max_var);
-  Modelica.SIunits.Power P_rcbl_max_back_total;
-  Modelica.SIunits.Power P_rcbl_min_back_total;
+  Modelica.Units.SI.Power P_max[nout](start=P_max_const, fixed=true);
+  Modelica.Units.SI.Power P_min[nout](start=P_min_const, fixed=true);
+  Modelica.Units.SI.Power P_max_var[nVarLimits]=P_max[iVarLimits] annotation (Dialog(enable=useVarLimits, tab="Time varying operating boundaries"));
+  Modelica.Units.SI.Power P_min_var[nVarLimits]=P_min[iVarLimits] annotation (Dialog(enable=useVarLimits, tab="Time varying operating boundaries"));
+  Modelica.Units.SI.Power P_min_var_total=sum(P_min_var);
+  Modelica.Units.SI.Power P_max_var_total=sum(P_max_var);
+  Modelica.Units.SI.Power P_rcbl_max_back_total;
+  Modelica.Units.SI.Power P_rcbl_min_back_total;
 
   TransiEnt.Basics.Units.MonetaryUnit C_var_total(start=0, fixed=true) "Total cost estimation (specific production cost multiplied by set points";
 

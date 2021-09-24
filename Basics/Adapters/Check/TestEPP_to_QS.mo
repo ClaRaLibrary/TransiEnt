@@ -1,44 +1,45 @@
-within TransiEnt.Basics.Adapters.Check;
+﻿within TransiEnt.Basics.Adapters.Check;
 model TestEPP_to_QS "Model for testing an adapter from epp pin to quasi stationary"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
    extends TransiEnt.Basics.Icons.Checkmodel;
   Components.Boundaries.Electrical.ApparentPower.FrequencyVoltage Grid(
     f_boundary=50,
     v_boundary=230,
     Use_input_connector_v=true,
     Use_input_connector_f=true) annotation (Placement(transformation(extent={{-34,-44},{-54,-24}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Resistor(R_ref=53)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Resistor(R_ref=53) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={38,-44})));
   EPP_to_QS Adapter annotation (Placement(transformation(rotation=0, extent={{-10,-44},{10,-24}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Inductor Inductance(L=0.386)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Inductor Inductance(L=0.386) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={62,-44})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground ground
-    annotation (Placement(transformation(extent={{52,-82},{72,-62}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground ground annotation (Placement(transformation(extent={{52,-82},{72,-62}})));
   Modelica.Blocks.Sources.Step Voltage_step_10_pu(
     height=23,
     offset=230,

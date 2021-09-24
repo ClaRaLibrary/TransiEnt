@@ -1,29 +1,33 @@
-within TransiEnt.Producer.Heat.Gas2Heat.Check;
+﻿within TransiEnt.Producer.Heat.Gas2Heat.Check;
 model Test_idContrMFlow_temp
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
   Modelica.Blocks.Sources.Sine sine3(
     amplitude=1500,
-    freqHz=1/86400,
+    f=1/86400,
     offset=2000) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
@@ -36,11 +40,10 @@ model Test_idContrMFlow_temp
   Modelica.Blocks.Math.Gain gain2(k=-1)
                                        annotation (Placement(transformation(extent={{74,-4},{66,4}})));
   Modelica.Blocks.Sources.Sine sine4(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=15,
     phase=2.0943951023932,
-    offset=60 + 273.15)
-                 annotation (Placement(transformation(
+    offset=60 + 273.15) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=270,
         origin={34,-62})));
@@ -53,20 +56,18 @@ model Test_idContrMFlow_temp
         rotation=90,
         origin={64,-30})));
   Modelica.Blocks.Sources.Sine sine5(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=15,
     phase=1.5707963267949,
-    offset=60 + 273.15)
-                 annotation (Placement(transformation(
+    offset=60 + 273.15) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={30,30})));
   Modelica.Blocks.Sources.Sine sine6(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=15,
     offset=5 + 273.15,
-    phase=3.3161255787892)
-                 annotation (Placement(transformation(
+    phase=3.3161255787892) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={90,30})));
@@ -79,17 +80,16 @@ model Test_idContrMFlow_temp
                                        annotation (Placement(transformation(extent={{-24,-4},{-32,4}})));
   Modelica.Blocks.Sources.Sine sine1(
     amplitude=1500,
-    freqHz=1/86400,
+    f=1/86400,
     offset=2000) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={-6,0})));
   Modelica.Blocks.Sources.Sine sine2(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=15,
     phase=1.5707963267949,
-    offset=60 + 273.15)
-                 annotation (Placement(transformation(
+    offset=60 + 273.15) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=180,
         origin={-76,32})));
@@ -106,14 +106,14 @@ model Test_idContrMFlow_temp
         rotation=90,
         origin={-36,-28})));
   Modelica.Blocks.Sources.Sine sine7(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=15,
     phase=2.0943951023932,
-    offset=60 + 273.15)
-                 annotation (Placement(transformation(
+    offset=60 + 273.15) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=270,
         origin={-66,-54})));
+  inner SimCenter simCenter annotation (Placement(transformation(extent={{70,80},{90,100}})));
 equation
   connect(gain2.y,gHP_L1_idContrMFlow_temp. Q_flow_set) annotation (Line(points={{65.6,0},{60,0}}, color={0,0,127}));
   connect(sine3.y, gain2.u) annotation (Line(points={{79,0},{74.8,0}}, color={0,0,127}));

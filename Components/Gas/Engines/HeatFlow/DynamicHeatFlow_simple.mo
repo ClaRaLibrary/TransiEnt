@@ -1,40 +1,43 @@
-within TransiEnt.Components.Gas.Engines.HeatFlow;
+﻿within TransiEnt.Components.Gas.Engines.HeatFlow;
 model DynamicHeatFlow_simple
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Components.Gas.Engines.HeatFlow.BasicHeatFlow;
-  parameter Modelica.SIunits.Temp_C theta_cylinder_opt=145 "Optimal temperature of cylinder";
-  parameter Modelica.SIunits.SpecificHeatCapacity cp_iron=490 "TILMedia steel";
+  parameter Modelica.Units.NonSI.Temperature_degC theta_cylinder_opt=145 "Optimal temperature of cylinder";
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp_iron=490 "TILMedia steel";
   //defined only for calculation purposes (so that there only has to be one input for total heatflowrate)
-  parameter Modelica.SIunits.Mass m_engine = Specification.m_engine;
-  parameter Modelica.SIunits.ThermalConductance thermalConductivity = Specification.thermalConductivity;
+  parameter Modelica.Units.SI.Mass m_engine=Specification.m_engine;
+  parameter Modelica.Units.SI.ThermalConductance thermalConductivity=Specification.thermalConductivity;
 
 protected
-  Modelica.SIunits.HeatFlowRate Q_flow_fuel = P_el_set/eta_el "energy provision from fuel";
+  Modelica.Units.SI.HeatFlowRate Q_flow_fuel=P_el_set/eta_el "energy provision from fuel";
 public
-  final parameter Modelica.SIunits.CoefficientOfHeatTransfer k=Specification.k "heat transfer coefficient of engine";
-  final parameter Modelica.SIunits.Area A=Specification.width*Specification.height*2 + Specification.length
-      *Specification.height*2 + Specification.width*Specification.length "Surface of engine";
+  final parameter Modelica.Units.SI.CoefficientOfHeatTransfer k=Specification.k "heat transfer coefficient of engine";
+  final parameter Modelica.Units.SI.Area A=Specification.width*Specification.height*2 + Specification.length*Specification.height*2 + Specification.width*Specification.length "Surface of engine";
 
-  final parameter Modelica.SIunits.Temperature T_site = 293;
+  final parameter Modelica.Units.SI.Temperature T_site=293;
 
   Real C_out;
   Real C_loss;
@@ -68,7 +71,7 @@ public
                              annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=90,
-        origin={110,-44})));
+        origin={100,-10})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow exhaustHeat
                               annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -91,6 +94,7 @@ public
         origin={160,52})));
 
   ClaRa.Components.HeatExchangers.IdealShell_L2 idealShell_L2_4(
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L2 (alpha_nom=10e9),
     h_nom=20*4200,
     height=0.1,
     width=0.1,
@@ -169,7 +173,7 @@ equation
       color={191,0,0},
       smooth=Smooth.None));
   connect(coolingHeat.port,innerEngine. port) annotation (Line(
-      points={{110,-54},{70,-54}},
+      points={{100,-20},{102,-20},{102,-56},{70,-56},{70,-54}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(idealShell_L2_4.inlet, waterPortIn) annotation (Line(
@@ -183,14 +187,6 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
 
-  connect(coolingHeat.port,idealShell_L2_4. heat) annotation (Line(
-      points={{110,-54},{150,-54}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(exhaustHeat.port,idealShell_L2_3. heat) annotation (Line(
-      points={{104,52},{150,52}},
-      color={191,0,0},
-      smooth=Smooth.None));
   connect(valveVLE_L1_1.outlet, idealShell_L2_3.inlet) annotation (Line(
       points={{160,12},{160,42}},
       color={0,131,169},
@@ -202,8 +198,10 @@ equation
       color={0,131,169},
       thickness=0.5,
       smooth=Smooth.None));
+  connect(exhaustHeat.port, idealShell_L2_3.heat) annotation (Line(points={{104,52},{150,52}}, color={191,0,0}));
+  connect(coolingHeat.port, idealShell_L2_4.heat) annotation (Line(points={{100,-20},{100,-54},{150,-54}}, color={191,0,0}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-200,
-            -160},{220,160}}), graphics), Icon(graphics,
+            -160},{220,160}})),           Icon(graphics,
                                                coordinateSystem(extent={{
             -200,-160},{220,160}})),
     Documentation(info="<html>

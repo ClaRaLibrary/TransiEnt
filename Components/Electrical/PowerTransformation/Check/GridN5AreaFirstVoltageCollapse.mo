@@ -1,25 +1,29 @@
-within TransiEnt.Components.Electrical.PowerTransformation.Check;
+﻿within TransiEnt.Components.Electrical.PowerTransformation.Check;
 model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for testing OLTC"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 // _____________________________________________
 //
@@ -50,16 +54,10 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
             -98},{-90,-78}})));
 
   TransiEnt.Consumer.Electrical.DynamicExponentialElectricConsumerComplex Lb_DynamicLoad(
-    Tp=60,
-    Tq=30,
-    alpha_s=0.38,
-    alpha_t=2.26,
-    beta_s=2,
-    beta_t=10,
-    v_n(displayUnit="kV") = 220000,
+    v_n(displayUnit="kV") = 110000,
     P_n(displayUnit="MW") = 1522500000,
     Q_n=558.25e6)
-               annotation (Placement(transformation(extent={{102,-30},{122,-10}})));
+               annotation (Placement(transformation(extent={{104,-30},{124,-10}})));
   TransiEnt.Components.Electrical.Grid.PiModelComplex_advanced transmissionLine_Central(
     ChooseVoltageLevel=3,
     p=2,
@@ -139,7 +137,7 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
   TransiEnt.Components.Electrical.PowerTransformation.SimpleTransformerComplex Transformer_L1(
     UseInput=true,
     U_P(displayUnit="kV") = 380000,
-    U_S(displayUnit="kV") = 220000,
+    U_S(displayUnit="kV") = 110000,
     P_p(displayUnit="MW", start=15000000),
     P_n(displayUnit="MW", start=-15000000)) annotation (Placement(
         transformation(
@@ -149,11 +147,11 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
   TransiEnt.Components.Electrical.PowerTransformation.OLTC.TapChangerController OLTC_L1(
     numberTaps=11,
     v_prim_n(displayUnit="kV") = 380000,
-    v_sec_n(displayUnit="kV") = 220000) annotation (Placement(transformation(extent={{-74,-58},{-92,-42}})));
+    v_sec_n(displayUnit="kV") = 110000) annotation (Placement(transformation(extent={{-74,-58},{-92,-42}})));
   TransiEnt.Components.Electrical.PowerTransformation.SimpleTransformerComplex Transformer_L_a(
     UseInput=true,
     U_P(displayUnit="kV") = 380000,
-    U_S(displayUnit="kV") = 220000,
+    U_S(displayUnit="kV") = 110000,
     P_p(displayUnit="MW", start=15000000),
     P_n(displayUnit="MW", start=-15000000)) annotation (Placement(
         transformation(
@@ -163,13 +161,13 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
   TransiEnt.Components.Electrical.PowerTransformation.OLTC.TapChangerController OLTC_L_a(
     numberTaps=11,
     v_prim_n(displayUnit="kV") = 380000,
-    v_sec_n(displayUnit="kV") = 220000,
+    v_sec_n(displayUnit="kV") = 110000,
     T_delay=10,
     currentTap(start=7)) annotation (Placement(transformation(extent={{-10,-28},{-28,-10}})));
   TransiEnt.Components.Electrical.PowerTransformation.SimpleTransformerComplex Transformer_L_b(
     UseInput=true,
     U_P(displayUnit="kV") = 380000,
-    U_S(displayUnit="kV") = 220000,
+    U_S(displayUnit="kV") = 110000,
     P_p(displayUnit="MW", start=15000000),
     P_n(displayUnit="MW", start=-15000000)) annotation (Placement(
         transformation(
@@ -179,11 +177,11 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
   TransiEnt.Components.Electrical.PowerTransformation.OLTC.TapChangerController OLTC_L_b(
     numberTaps=11,
     v_prim_n(displayUnit="kV") = 380000,
-    v_sec_n(displayUnit="kV") = 220000) annotation (Placement(transformation(extent={{82,-30},{64,-12}})));
+    v_sec_n(displayUnit="kV") = 110000) annotation (Placement(transformation(extent={{82,-30},{64,-12}})));
   TransiEnt.Components.Electrical.PowerTransformation.SimpleTransformerComplex Transformer_L_c(
     UseInput=true,
     U_P(displayUnit="kV") = 380000,
-    U_S(displayUnit="kV") = 220000,
+    U_S(displayUnit="kV") = 110000,
     P_p(displayUnit="MW", start=15000000),
     P_n(displayUnit="MW", start=-15000000)) annotation (Placement(
         transformation(
@@ -193,7 +191,7 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
   TransiEnt.Components.Electrical.PowerTransformation.SimpleTransformerComplex Transformer_L2(
     UseInput=true,
     U_P(displayUnit="kV") = 380000,
-    U_S(displayUnit="kV") = 220000,
+    U_S(displayUnit="kV") = 110000,
     P_p(displayUnit="MW", start=15000000),
     P_n(displayUnit="MW", start=-15000000)) annotation (Placement(
         transformation(
@@ -203,12 +201,12 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
   TransiEnt.Components.Electrical.PowerTransformation.OLTC.TapChangerController OLTC_L_c(
     numberTaps=11,
     v_prim_n(displayUnit="kV") = 380000,
-    v_sec_n(displayUnit="kV") = 220000,
+    v_sec_n(displayUnit="kV") = 110000,
     currentTap(start=-11)) annotation (Placement(transformation(extent={{154,-28},{136,-10}})));
   TransiEnt.Components.Electrical.PowerTransformation.OLTC.TapChangerController OLTC_L2(
     numberTaps=11,
     v_prim_n(displayUnit="kV") = 380000,
-    v_sec_n(displayUnit="kV") = 220000) annotation (Placement(transformation(extent={{274,72},{256,88}})));
+    v_sec_n(displayUnit="kV") = 110000) annotation (Placement(transformation(extent={{274,72},{256,88}})));
   TransiEnt.Producer.Electrical.Others.Biomass biomass_G1_Slack(
     primaryBalancingController(maxGradientPrCtrl=0.03/30, maxValuePrCtrl=0.03),
     H=11,
@@ -282,45 +280,21 @@ model GridN5AreaFirstVoltageCollapse "Example model for voltage collapse for tes
   Modelica.Blocks.Logical.Not not1
     annotation (Placement(transformation(extent={{14,94},{26,106}})));
   TransiEnt.Consumer.Electrical.DynamicExponentialElectricConsumerComplex Lc_DynamicLoad(
-    Tp=60,
-    Tq=30,
-    alpha_s=2.26,
-    alpha_t=0.38,
-    beta_s=2.5,
-    beta_t=2,
-    v_n(displayUnit="kV") = 220000,
-    Q_n=50.75e6,
-    P_n(displayUnit="MW") = 101500000) annotation (Placement(transformation(extent={{194,-30},{216,-8}})));
+    v_n(displayUnit="kV") = 110000,
+    Q_n=62.5e6,
+    P_n(displayUnit="MW") = 125000000) annotation (Placement(transformation(extent={{194,-30},{216,-8}})));
   TransiEnt.Consumer.Electrical.DynamicExponentialElectricConsumerComplex La_DynamicLoad(
-    Tp=60,
-    Tq=30,
-    alpha_s=0.38,
-    alpha_t=2.26,
-    beta_s=2,
-    beta_t=2.5,
-    v_n(displayUnit="kV") = 220000,
+    v_n(displayUnit="kV") = 110000,
     P_n(displayUnit="MW") = 101500000,
     Q_n=50.75e6)
               annotation (Placement(transformation(extent={{14,-30},{34,-10}})));
   TransiEnt.Consumer.Electrical.DynamicExponentialElectricConsumerComplex L1_DynamicLoad(
-    Tp=60,
-    Tq=30,
-    alpha_s=0.38,
-    alpha_t=2.26,
-    beta_s=2,
-    beta_t=2.5,
-    v_n(displayUnit="kV") = 220000,
+    v_n(displayUnit="kV") = 110000,
     P_n(displayUnit="MW") = 203000000,
     Q_n=101.5e6)
                annotation (Placement(transformation(extent={{-48,-60},{-28,-40}})));
   TransiEnt.Consumer.Electrical.DynamicExponentialElectricConsumerComplex L2_DynamicLoad(
-    Tp=60,
-    Tq=30,
-    alpha_s=0.38,
-    alpha_t=2.26,
-    beta_s=2,
-    beta_t=2.5,
-    v_n(displayUnit="kV") = 220000,
+    v_n(displayUnit="kV") = 110000,
     P_n(displayUnit="MW") = 126875000,
     Q_n=76.125e6)
               annotation (Placement(transformation(extent={{296,30},{316,50}})));
@@ -403,11 +377,11 @@ equation
       color={28,108,200},
       thickness=0.5));
   connect(Transformer_L_b.epp_n, Lb_DynamicLoad.epp) annotation (Line(
-      points={{90,-2},{90,-20},{102,-20}},
+      points={{90,-2},{90,-20},{104,-20}},
       color={28,108,200},
       thickness=0.5));
   connect(OLTC_L_b.epp, Lb_DynamicLoad.epp) annotation (Line(
-      points={{82,-21},{82,-20},{102,-20}},
+      points={{82,-21},{82,-20},{104,-20}},
       color={28,108,200},
       thickness=0.5));
   connect(OLTC_L_b.RatioOut, Transformer_L_b.ratio_set) annotation (Line(points={{64,-21},{56,-21},{56,14},{78,14}},

@@ -132,3 +132,13 @@ Material
 ADM1
 ADM1Package
 RealGasJunction_L2
+PackedBedThermalStoragePackage
+PackedBedThermalStorage
+GeometryPackage
+Geometry
+HeatTransferPackage
+HeatTransfer
+PressureLossPackage
+HeatConductionPackage
+HeatConduction
+SuperstructureIcon

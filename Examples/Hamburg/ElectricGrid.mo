@@ -1,25 +1,29 @@
-within TransiEnt.Examples.Hamburg;
+﻿within TransiEnt.Examples.Hamburg;
 model ElectricGrid "Example of an electric grid with several generators, frequency control and economic dispatch models"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -296,7 +300,8 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
     constantfactor=1,
     startTime=t_start_set.k) annotation (Placement(transformation(extent={{-228,74},{-208,94}})));
   Modelica.Blocks.Sources.RealExpression e_pv_prediction(y=normalizedPVPredictionError.y1*simCenter.generationPark.P_el_n_PV) annotation (Placement(transformation(extent={{-160,66},{-140,86}})));
-  TransiEnt.Basics.Tables.ElectricGrid.ElectricityDemand_HH_900s_2012 P_Load(startTime=t_start_set.k) annotation (Placement(transformation(extent={{280,-8},{260,12}})));
+  TransiEnt.Basics.Tables.ElectricGrid.PowerData.ElectricityDemand_HH_900s_2012
+                                                                      P_Load(startTime=t_start_set.k) annotation (Placement(transformation(extent={{280,-8},{260,12}})));
   TransiEnt.Producer.Combined.LargeScaleCHP.CHP WT(
     P_el_init=UC.P_init[UC.schedule.WT],
     isSecondaryControlActive=true,
@@ -307,12 +312,12 @@ model ElectricGrid "Example of an electric grid with several generators, frequen
     P_el_init=UC.P_init[UC.schedule.WW1],
     isSecondaryControlActive=true,
     P_el_n=simCenter.generationPark.P_el_n_WW1,
-    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric(k_Q_flow=1/220e6, k_P_el=simCenter.generationPark.P_el_n_WW1)) "CHP Wedel 1" annotation (Placement(transformation(extent={{-95,-225},{-55,-187}})));
+    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric()) "CHP Wedel 1" annotation (Placement(transformation(extent={{-95,-225},{-55,-187}})));
   TransiEnt.Producer.Combined.LargeScaleCHP.CHP GUDTS(
     isSecondaryControlActive=true,
     P_el_n=simCenter.generationPark.P_el_n_GUDTS,
     P_el_init=UC.P_init[UC.schedule.GUDTS],
-    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric(k_Q_flow=1/GUDTS.Q_flow_n_CHP, k_P_el=GUDTS.P_el_n),
+    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric(),
     Q_flow_n_CHP=180e6) "Combined cycle plant Tiefstack" annotation (Placement(transformation(extent={{61,-219},{101,-181}})));
 
   TransiEnt.Components.Boundaries.FluidFlow.BoundaryVLE_hxim_flow massflow_Tm_flow3(boundaryConditions(m_flow_const=1000, h_const=4.2e3*60), variable_m_flow=false) annotation (Placement(transformation(

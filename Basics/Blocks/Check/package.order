@@ -17,3 +17,5 @@ TestWeekendPulse
 TestDelayedBooleanReplicator
 TestSwitchRamp
 TestTimers
+TestHysteresis_inputVariable
+TestSwitchAtTimeOfDay

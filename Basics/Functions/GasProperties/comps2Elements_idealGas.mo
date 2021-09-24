@@ -1,26 +1,30 @@
-within TransiEnt.Basics.Functions.GasProperties;
+﻿within TransiEnt.Basics.Functions.GasProperties;
 function comps2Elements_idealGas "Universal function to calculate the molar flow rates of a medium's elements out the components"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -38,8 +42,8 @@ function comps2Elements_idealGas "Universal function to calculate the molar flow
 
   input TILMedia.GasTypes.BaseGas gasType annotation(choicesAllMatching=true);
 //   input Real lambda;
-  input Modelica.SIunits.MassFraction[:] xi_in;
-  input Modelica.SIunits.MassFlowRate m_flow;
+  input Modelica.Units.SI.MassFraction[:] xi_in;
+  input Modelica.Units.SI.MassFlowRate m_flow;
 
   // _____________________________________________
   //
@@ -50,19 +54,19 @@ protected
   parameter Integer nc = gasType.nc_propertyCalculation "Number of components in fuel gas";
   parameter String[nc] gasCompNames=TransiEnt.Basics.Functions.GasProperties.shortenCompName(gasType.gasNames) "Component names in fuel gas";
   parameter TransiEnt.Basics.Records.GasProperties.StoichiometricCoefficientsCombustion compStoichiometry;
-  constant Modelica.SIunits.MolarMass[nc] M_iC=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(gasType, nc) "Molar masses of the gas components";
+  constant Modelica.Units.SI.MolarMass[nc] M_iC=TransiEnt.Basics.Functions.GasProperties.getMolarMasses_idealGas(gasType, nc) "Molar masses of the gas components";
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.MolarFlowRate[nc] n_flow_components "Molar flowrate of components";
-  Modelica.SIunits.MassFraction[nc] xi;
+  Modelica.Units.SI.MolarFlowRate[nc] n_flow_components "Molar flowrate of components";
+  Modelica.Units.SI.MassFraction[nc] xi;
   Integer foundComp "Component find indexer";
 
 public
-  output Modelica.SIunits.MolarFlowRate[5] n_flow_elements "Molar flowrate of elements";
+  output Modelica.Units.SI.MolarFlowRate[5] n_flow_elements "Molar flowrate of elements";
 
 algorithm
   // _____________________________________________

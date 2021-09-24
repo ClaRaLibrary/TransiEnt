@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Consumer.Gas;
 model TableBasedGasBurningConsumer_VariableGasComposition "Simple model of a consumer burning natural gas for covering heat demand."
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -41,9 +45,9 @@ model TableBasedGasBurningConsumer_VariableGasComposition "Simple model of a con
                                                           annotation (choices(__Dymola_checkBox=true));
   parameter Real constantfactor=1.0 "Multiply output with constant factor";
 
-  parameter Modelica.SIunits.Efficiency eta=0.95 "Efficiency of gas burner (heat loss to ambience)";
+  parameter Modelica.Units.SI.Efficiency eta=0.95 "Efficiency of gas burner (heat loss to ambience)";
 
-  parameter Modelica.SIunits.Temperature T_exhaustgas = 80+273.15 "Temperature of exhaust gas after heat exchanger (defines exhaust gas heat loss)";
+  parameter Modelica.Units.SI.Temperature T_exhaustgas=80 + 273.15 "Temperature of exhaust gas after heat exchanger (defines exhaust gas heat loss)";
 
   parameter Boolean use_Q_flow_input=false "True, if Q_flow defined by variable input";
 
@@ -75,22 +79,19 @@ protected
 public
   replaceable TransiEnt.Basics.Tables.GenericDataTable consumerDataTable if (not use_Q_flow_input) constrainedby TransiEnt.Basics.Tables.GenericDataTable(final change_of_sign=change_of_sign, final constantfactor=constantfactor)  annotation (choicesAllMatching=true, Placement(transformation(extent={{90,-48},{55,-16}})));
 
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massFlowSink(
-    m_flow_nom=0,
-    p_nom=1000,
-    variable_h=false,
-    m_flow_const=1,
-    h_const=-23e3,
+  TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow massFlowSink(
     variable_m_flow=true,
     medium=medium) annotation (Placement(transformation(extent={{-16,10},{-36,30}})));
 
   Modelica.Blocks.Sources.RealExpression
-                            m_flow_set(y=-m_flow_gas_demand) "just for visualisation on diagram layer"
+                            m_flow_set(y=m_flow_gas_demand) "just for visualisation on diagram layer"
     annotation (Placement(transformation(extent={{28,16},{-2,36}})));
 
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasMediumExhaust(
     vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=simCenter.p_amb_const,
     T=T_exhaustgas,
     xi=noEvent(actualStream(gasIn.xi_outflow))) if
@@ -104,13 +105,13 @@ public
   //             Variable Declarations
   // _____________________________________________
 
-   Modelica.SIunits.MassFlowRate m_flow_gas_demand;
+  Modelica.Units.SI.MassFlowRate m_flow_gas_demand;
   TransiEnt.Components.Sensors.RealGas.NCVSensor      vleNCVSensor(medium=medium)
                                                                    annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
-  Modelica.SIunits.MassFlowRate m_flow_cde_total;
+  Modelica.Units.SI.MassFlowRate m_flow_cde_total;
 
 protected
-  Modelica.SIunits.MolarFlowRate[5] ElementCompositionFuel;
+  Modelica.Units.SI.MolarFlowRate[5] ElementCompositionFuel;
    Modelica.Blocks.Sources.RealExpression gasMediumExhaust_h(y=gasMediumExhaust.h) if consider_FlueGas_losses;
    Modelica.Blocks.Math.Gain gasMediumExhaust_h_gain(k=1);
    Modelica.Blocks.Sources.RealExpression Zero(y=0);
@@ -157,7 +158,7 @@ equation
       points={{-100,20},{-60,20}},
       color={255,255,0},
       thickness=1.5));
-  connect(vleNCVSensor.gasPortOut, massFlowSink.steam_a) annotation (Line(
+  connect(vleNCVSensor.gasPortOut, massFlowSink.gasPort) annotation (Line(
       points={{-40,20},{-36,20}},
       color={255,255,0},
       thickness=1.5));

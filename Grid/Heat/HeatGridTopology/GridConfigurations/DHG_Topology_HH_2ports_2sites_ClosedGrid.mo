@@ -1,26 +1,30 @@
-within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
+﻿within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
 model DHG_Topology_HH_2ports_2sites_ClosedGrid
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -66,8 +70,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         simCenter.fluid1.xi_default),
     redeclare model PressureLoss =
         ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (             Delta_p_nom=0.1e5),
-    redeclare model HeatTransfer =
-        ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.IdealHeatTransfer_L2)
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L2 (alpha_nom=10e4))
                    annotation (Placement(transformation(
         extent={{13,14},{-13,-14}},
         rotation=90,
@@ -112,7 +115,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         6.7e5,
         supplyPipeLeft1.N_cv),
     showData=true,
-    frictionAtInlet=false,
+    frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0) annotation (Placement(transformation(extent={{-326,338},{-298,348}})));
   ClaRa.Components.VolumesValvesFittings.Pipes.PipeFlowVLE_L4_Simple supplyPipeLeft2(
@@ -236,7 +239,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Tau_i=10,
     sign=1,
     y_start=2e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-238,372})));
@@ -247,7 +250,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     annotation (Placement(transformation(extent={{-158,162},{-118,176}})));
   ClaRa.Visualisation.Quadruple quadruple11
     annotation (Placement(transformation(extent={{-380,218},{-340,232}})));
-  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi boundaryVLE_pTxi(p_const=21e5, T_const(displayUnit="degC") = 323.15) annotation (Placement(transformation(extent={{-444,226},{-424,246}})));
+  ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi boundaryVLE_pTxi(p_const=21e5, T_const(displayUnit="degC") = 323.15) annotation (Placement(transformation(extent={{-466,226},{-446,246}})));
   ClaRa.Visualisation.Quadruple quadruple14
     annotation (Placement(transformation(extent={{-296,158},{-256,172}})));
   ClaRa.Components.Sensors.SensorVLE_L1_p vlePressureSensor1 annotation (Placement(transformation(
@@ -265,7 +268,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_max=4e6,
     y_start=2e6,
     sign=-1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-428,206})));
@@ -280,7 +283,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_start=1,
     Tau_i=100,
     sign=1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={18,300})));
@@ -299,7 +302,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_start=1,
     Tau_i=100,
     sign=1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={18,194})));
@@ -322,7 +325,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_start=2e6,
     sign=-1,
     y_ref=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-282,114})));
@@ -337,7 +340,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     u_ref=1.9e5,
     y_ref=0.5e6,
     y_start=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-152,114})));
@@ -345,9 +348,9 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-120,128})));
-  Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_2 annotation (Placement(transformation(extent={{150,241},{136,256}})));
-  HeatGridControl.SupplyAndReturnTemperatureDHG                     supplyandReturnTemperature1 annotation (Placement(transformation(extent={{112,244},{102,254}})));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature prescribedTemperature annotation (Placement(transformation(extent={{82,236},{62,256}})));
+  Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_2 annotation (Placement(transformation(extent={{190,241},{176,256}})));
+  HeatGridControl.SupplyAndReturnTemperatureDHG                     supplyandReturnTemperature1 annotation (Placement(transformation(extent={{152,244},{142,254}})));
+  Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature prescribedTemperature annotation (Placement(transformation(extent={{122,236},{102,256}})));
   ClaRa.Visualisation.Quadruple quadruple4
     annotation (Placement(transformation(extent={{434,106},{466,124}})));
   ClaRa.Visualisation.Quadruple quadruple6
@@ -372,7 +375,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         6.7e5,
         supplyPipeLeft1.N_cv),
     showData=true,
-    frictionAtInlet=false,
+    frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0) annotation (Placement(transformation(extent={{260,340},{232,350}})));
   ClaRa.Components.VolumesValvesFittings.Pipes.PipeFlowVLE_L4_Simple supplyPipeRight2(
@@ -498,7 +501,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     Tau_i=10,
     sign=1,
     y_start=2e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={200,374})));
@@ -528,7 +531,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_max=4e6,
     y_start=2e6,
     sign=-1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={428,208})));
@@ -547,7 +550,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     y_start=2e6,
     sign=-1,
     y_ref=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={338,116})));
@@ -562,7 +565,7 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
     u_ref=1.9e5,
     y_ref=0.5e6,
     y_start=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={180,118})));
@@ -570,6 +573,16 @@ model DHG_Topology_HH_2ports_2sites_ClosedGrid
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={142,118})));
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_2(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=1e4, m_flow_nom=m_flow_nom))
+                                                                                                                                                      annotation (Placement(transformation(
+        extent={{6,-6},{-6,6}},
+        rotation=0,
+        origin={-426,236})));
+  ClaRa.Components.VolumesValvesFittings.Valves.GenericValveVLE_L1 valveVLE_L1_3(redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=1e4, m_flow_nom=m_flow_nom))
+                                                                                                                                                      annotation (Placement(transformation(
+        extent={{5,-2},{-5,2}},
+        rotation=0,
+        origin={445,238})));
 equation
   // _____________________________________________
   //
@@ -649,10 +662,6 @@ equation
                                                                                                                          color={190,190,190}));
   connect(quadruple11.eye,pumpLeft. eye) annotation (Line(points={{-380,225},{-384,225},{-384,224},{-392,224},{-392,217}},
                                                                                                                      color={190,190,190}));
-  connect(boundaryVLE_pTxi.steam_a,valveVLE_L1_4. inlet) annotation (Line(
-      points={{-424,236},{-398,236},{-398,248}},
-      color={0,131,169},
-      thickness=0.5));
   connect(quadruple14.eye,pumpLeft2. eye) annotation (Line(points={{-296,165},{-304,165},{-304,150},{-293,150}},color={190,190,190}));
   connect(pumpLeft.inlet,vlePressureSensor1. port) annotation (Line(
       points={{-398,196},{-398,186},{-398,162}},
@@ -707,13 +716,9 @@ equation
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
-  connect(temperatureHH_900s_01012012_0000_31122012_2345_2.y1,supplyandReturnTemperature1. T_amb) annotation (Line(points={{135.3,248.5},{113,248.5},{113,249}},
+  connect(temperatureHH_900s_01012012_0000_31122012_2345_2.y1,supplyandReturnTemperature1. T_amb) annotation (Line(points={{175.3,248.5},{153,248.5},{153,249}},
                                                                                                                                                               color={0,0,127}));
-  connect(HeatConsumer.heat,prescribedTemperature. port) annotation (Line(
-      points={{8,245},{35,245},{35,246},{62,246}},
-      color={167,25,48},
-      thickness=0.5));
-  connect(supplyandReturnTemperature1.T_return_K,prescribedTemperature. T) annotation (Line(points={{101.5,245.6},{100,245.6},{100,246},{84,246}},
+  connect(supplyandReturnTemperature1.T_return_K,prescribedTemperature. T) annotation (Line(points={{141.5,245.6},{140,245.6},{140,246},{124,246}},
                                                                                                                                                 color={0,0,127}));
   connect(pumpRight1.inlet,supplyPipeRight1. outlet) annotation (Line(
       points={{208,344},{222,344},{222,345},{232,345}},
@@ -753,10 +758,6 @@ equation
   connect(valveVLE_L1_1.eye,quadruple24. eye) annotation (Line(points={{462,268},{462,268},{462,269},{472,269}},         color={190,190,190}));
   connect(quadruple25.eye,pumpRight3. eye) annotation (Line(points={{174,173},{170,173},{170,172},{191,172},{191,153}},      color={190,190,190}));
   connect(quadruple27.eye,pumpRight. eye) annotation (Line(points={{476,227},{472,227},{472,226},{464,226},{464,219}},           color={190,190,190}));
-  connect(boundaryVLE_pTxi1.steam_a,valveVLE_L1_1. inlet) annotation (Line(
-      points={{432,238},{458,238},{458,248}},
-      color={0,131,169},
-      thickness=0.5));
   connect(quadruple28.eye,pumpRight2. eye) annotation (Line(points={{316,183},{358,183},{358,153},{349,153}},
                                                                                                     color={190,190,190}));
   connect(pumpRight.inlet,vlePressureSensor7. port) annotation (Line(
@@ -820,6 +821,30 @@ equation
       points={{458,268},{458,288},{534,288},{534,-144},{188,-144}},
       color={0,131,169},
       pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(boundaryVLE_pTxi.steam_a, valveVLE_L1_2.outlet) annotation (Line(
+      points={{-446,236},{-432,236}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(valveVLE_L1_2.inlet, pumpLeft.outlet) annotation (Line(
+      points={{-420,236},{-398,236},{-398,216}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(boundaryVLE_pTxi1.steam_a, valveVLE_L1_3.outlet) annotation (Line(
+      points={{432,238},{440,238}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(valveVLE_L1_3.inlet, pumpRight.outlet) annotation (Line(
+      points={{450,238},{458,238},{458,218}},
+      color={0,131,169},
+      pattern=LinePattern.Solid,
+      thickness=0.5));
+  connect(HeatConsumer.heat, prescribedTemperature.port) annotation (Line(
+      points={{8,245},{40,245},{40,246},{102,246},{102,246}},
+      color={167,25,48},
       thickness=0.5));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-440,-320},{500,420}}), graphics={
         Text(

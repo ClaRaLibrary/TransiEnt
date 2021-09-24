@@ -1,31 +1,36 @@
-within TransiEnt.Components.Gas.Compressor.Check;
+﻿within TransiEnt.Components.Gas.Compressor.Check;
 model TestCompressors "Model for testing compressors"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   inner TransiEnt.SimCenter simCenter(redeclare Basics.Media.Gases.VLE_VDIWA_NG7_H2_SRK_var gasModel1)   annotation (Placement(transformation(extent={{-90,-100},{-70,-80}})));
   CompressorRealGasIsentropicEff_L1_simple                                     compressorRealGasIsentropicEff_L1_simple(
     presetVariableType="m_flow",
+    useMechPowerPort=true,
     P_el_n(displayUnit="MW") = 10000000,
     redeclare model CostSpecsGeneral = Statistics.ConfigurationData.GeneralCostSpecs.IonicCompressor,
     m_flowInput=true,
@@ -66,6 +71,8 @@ model TestCompressors "Model for testing compressors"
   Controller.ControllerCompressor_dp controllerCompressor_dp annotation (Placement(transformation(extent={{-18,-38},{2,-18}})));
   Sensors.RealGas.PressureSensor pressureSensor annotation (Placement(transformation(extent={{14,-60},{34,-40}})));
   Boundaries.Gas.BoundaryRealGas_Txim_flow source3(m_flow_const=1) annotation (Placement(transformation(extent={{-60,-70},{-40,-50}})));
+  Electrical.Machines.MotorComplex motorComplex(eta=0.97) annotation (Placement(transformation(extent={{6,66},{26,86}})));
+  Boundaries.Electrical.ComplexPower.SlackBoundary slackBoundary annotation (Placement(transformation(extent={{36,66},{56,86}})));
 equation
   connect(source1.gasPort, compressorRealGasIsentropicEff_L1_simple.gasPortIn) annotation (Line(
       points={{-40,50},{-40,50},{-10,50}},
@@ -100,6 +107,11 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(controllerCompressor_dp.Delta_p, compressorRealGasIsothermal_L1_simple1.dp_in) annotation (Line(points={{-8,-39},{-8,-46},{6,-46},{6,-49}}, color={0,0,127}));
+  connect(motorComplex.mpp, compressorRealGasIsentropicEff_L1_simple.mpp) annotation (Line(points={{6,76},{0,76},{0,60}}, color={95,95,95}));
+  connect(motorComplex.epp, slackBoundary.epp) annotation (Line(
+      points={{26.1,75.9},{32.05,75.9},{32.05,76},{36,76}},
+      color={28,108,200},
+      thickness=0.5));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
           Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

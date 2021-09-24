@@ -21,8 +21,13 @@ UserDefinedFunction
 UserDefinedFunctionMISO
 FilterPosNeg
 FirstOrder
+FirstOrderWithGradientLim
 LimPID
 SwitchRamp
 TimerResetWhenTrue
 TimerConstWhenFalse
 IntegerEqual
+SwitchLessThresholdNoEvent
+SwitchAtTimeOfDay
+SwitchAtSeason
+Hysteresis_inputVariable

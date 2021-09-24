@@ -1,26 +1,30 @@
-within TransiEnt.Components.Sensors.RealGas;
+﻿within TransiEnt.Components.Sensors.RealGas;
 model GCVSensor "Sensor calculating the gross calorific value of real gas mixtures at 25 C"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -55,7 +59,9 @@ model GCVSensor "Sensor calculating the gross calorific value of real gas mixtur
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.General.SpecificEnthalpyOut GCV(displayUnit="kWh/kg") "Gross calorific value for given composition" annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  Basics.Interfaces.General.SpecificEnthalpyOut GCV(displayUnit="kWh/kg") "Gross calorific value for given composition" annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+  Basics.Interfaces.General.SpecificEnthalpyOut GCV_InToOut(displayUnit="kWh/kg") "Gross calorific value for given composition (in to out)" annotation (Placement(transformation(extent={{100,30},{120,50}}), iconTransformation(extent={{100,30},{120,50}})));
+  Basics.Interfaces.General.SpecificEnthalpyOut GCV_OutToIn(displayUnit="kWh/kg") "Gross calorific value for given composition (out to in)" annotation (Placement(transformation(extent={{100,-50},{120,-30}}), iconTransformation(extent={{100,-50},{120,-30}})));
   Basics.Interfaces.General.EnthalpyFlowRateOut H_flow_GCV(displayUnit="W") "Enthalphy flow rate based on GCV" annotation (Placement(transformation(extent={{-100,-10},{-120,10}})));
 
   // _____________________________________________
@@ -64,7 +70,8 @@ model GCVSensor "Sensor calculating the gross calorific value of real gas mixtur
   // _____________________________________________
 
 protected
-  Basics.Media.RealGasGCV_xi realGasGCV_xi(realGasType=medium, xi_in=xi) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+  Basics.Media.RealGasGCV_xi realGasGCV_InToOut(realGasType=medium, xi_in=inStream(gasPortIn.xi_outflow))  annotation (Placement(transformation(extent={{-12,30},{8,50}})));
+  Basics.Media.RealGasGCV_xi realGasGCV_OutToIn(realGasType=medium, xi_in=gasPortIn.xi_outflow)  annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
 
   // _____________________________________________
   //
@@ -80,7 +87,12 @@ protected
 
 equation
   xi = if flowDefinition==1 then actualStream(gasPortIn.xi_outflow) elseif flowDefinition==2 then noEvent(actualStream(gasPortIn.xi_outflow)) elseif flowDefinition==3 then inStream(gasPortIn.xi_outflow) else inStream(gasPortOut.xi_outflow);
-  GCV = realGasGCV_xi.GCV;
+  GCV_InToOut = realGasGCV_InToOut.GCV;
+  GCV_OutToIn = realGasGCV_OutToIn.GCV;
+  GCV = if flowDefinition==1 then (if gasPortIn.m_flow > 0 then GCV_InToOut else GCV_OutToIn)
+        elseif flowDefinition==2 then (if noEvent(gasPortIn.m_flow > 0) then GCV_InToOut else GCV_OutToIn)
+        elseif flowDefinition==3 then realGasGCV_InToOut.GCV
+        else realGasGCV_OutToIn.GCV;
   H_flow_GCV=gasPortIn.m_flow*GCV;
 
   // _____________________________________________
@@ -144,5 +156,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Lisa Andresen (andresen@tuhh.de) in Jun 2016</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Jul 2019: added enthalpy flow rate</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Carsten Bode (c.bode@tuhh.de), Nov 2020: added GCV in different flow directions</span></p>
 </html>"));
 end GCVSensor;

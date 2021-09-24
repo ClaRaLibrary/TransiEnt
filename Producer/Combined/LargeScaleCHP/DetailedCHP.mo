@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP;
 model DetailedCHP "Example of how a detailed thermodynamic cycle model of a steam turbine combined heat and power plant can be modeled"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -365,7 +369,7 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
   Modelica.Blocks.Continuous.LimPID PID_steamGenerator(
     yMax=1,
     yMin=0,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
+    initType=Modelica.Blocks.Types.Init.InitialOutput,
     y_start=0.5,
     Ti=1,
     Td=0.001,
@@ -380,7 +384,7 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     yMax=800000,
     y_start=600000,
     k=100,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput) annotation (Placement(transformation(extent={{-162,-46},{-142,-66}})));
+    initType=Modelica.Blocks.Types.Init.InitialOutput) annotation (Placement(transformation(extent={{-162,-46},{-142,-66}})));
   ClaRa.Components.Sensors.SensorVLE_L1_p sensorVLE_L1_p annotation (Placement(transformation(extent={{-172,-38},{-152,-18}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_boiler4(y=20e5)
     annotation (Placement(transformation(extent={{-190,-66},{-170,-46}})));
@@ -388,10 +392,10 @@ model DetailedCHP "Example of how a detailed thermodynamic cycle model of a stea
     yMin=0,
     yMax=2,
     y_start=2,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
+    initType=Modelica.Blocks.Types.Init.InitialOutput,
     k=0.000000000001,
     Ti=1,
-    Td=10000)         annotation (Placement(transformation(extent={{-400,-38},{-380,-18}})));
+    Td=10000) annotation (Placement(transformation(extent={{-400,-38},{-380,-18}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_is_input(y=Q_flow_is) annotation (Placement(transformation(extent={{-428,-58},{-408,-38}})));
   Modelica.Blocks.Math.Add add annotation (Placement(transformation(extent={{-360,-54},{-340,-34}})));
   Modelica.Blocks.Nonlinear.Limiter limiter_A5(uMax=1, uMin=0) annotation (Placement(transformation(extent={{-324,-54},{-304,-34}})));

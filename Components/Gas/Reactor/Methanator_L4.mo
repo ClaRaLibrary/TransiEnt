@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Components.Gas.Reactor;
 model Methanator_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed methanator"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // all equations and values taken from Schlereth, D., Kinetic and Reactor Modeling for the Methanation of Carbon Dioxide, TU Muenchen, PhD thesis, 2015
   // mass and energy balances taken from Nandasana, A. D., Ray, A. K., & Gupta, S. K. (2003). Dynamic model of an industrial steam reformer and its use for multiobjective optimization. Industrial & engineering chemistry research, 42(17), 4028-4042.
@@ -60,7 +64,7 @@ model Methanator_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed meth
     xi(
     start =  fill({0.296831,0.0304503,0.666944}, N_cv)));
 
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   import Modelica.Constants.R "universal gas constant 8.413";
   import Modelica.Constants.pi;
 
@@ -223,10 +227,10 @@ protected
   Real K_j[N_cv,3] "adsorption constant. (K_OH, K_H2, K_mix)";
 
   //Partial pressures of components in gasBulk
-  SI.Conversions.NonSIunits.Pressure_bar p_H2[N_cv] "Partial Pressure H2";
-  SI.Conversions.NonSIunits.Pressure_bar p_CO2[N_cv] "Partial Pressure CO2";
-  SI.Conversions.NonSIunits.Pressure_bar p_CH4[N_cv] "Partial Pressure CH4";
-  SI.Conversions.NonSIunits.Pressure_bar p_H2O[N_cv] "Partial Pressure H2O";
+  Modelica.Units.NonSI.Pressure_bar p_H2[N_cv] "Partial Pressure H2";
+  Modelica.Units.NonSI.Pressure_bar p_CO2[N_cv] "Partial Pressure CO2";
+  Modelica.Units.NonSI.Pressure_bar p_CH4[N_cv] "Partial Pressure CH4";
+  Modelica.Units.NonSI.Pressure_bar p_H2O[N_cv] "Partial Pressure H2O";
 
   SI.CoefficientOfHeatTransfer U_A[N_cv] "Heat transfer coefficient through the tube wall";
   SI.CoefficientOfHeatTransfer alpha_eff[N_cv] "Effective heat transfer coefficient inside the tube including heat transfer through the catalyst bed";
@@ -287,10 +291,10 @@ equation
     K_i[n,1]=137*T[n]^(-3.998)*exp(158.7e3/(R*T[n]));
 
     //calculating partial pressures
-    p_CH4[n]=SI.Conversions.to_bar(gasBulk[n].p_i[1]);
-    p_CO2[n]=max(eps, SI.Conversions.to_bar(gasBulk[n].p_i[2]));
-    p_H2O[n]=SI.Conversions.to_bar(gasBulk[n].p_i[3]);
-    p_H2[n]=max(eps, SI.Conversions.to_bar(gasBulk[n].p_i[4]));
+    p_CH4[n]=Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[1]);
+    p_CO2[n]=max(eps, Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[2]));
+    p_H2O[n]=Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[3]);
+    p_H2[n]=max(eps, Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[4]));
 
     //calculating reaction rate
     RR[n,1] = (k_i[n,1] * (p_H2[n]^0.5)*(p_CO2[n]^0.5)*(1-(p_CH4[n]*p_H2O[n]^2)/(p_H2[n]^4*p_CO2[n]*K_i[n,1])))/(1 + K_j[n,1]*p_H2O[n]/p_H2[n]^0.5 + K_j[n,2]*p_H2[n]^0.5 + K_j[n,3]*p_CO2[n]^0.5)^2;

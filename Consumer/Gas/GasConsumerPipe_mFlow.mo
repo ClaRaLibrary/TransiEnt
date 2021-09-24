@@ -1,25 +1,29 @@
-within TransiEnt.Consumer.Gas;
+﻿within TransiEnt.Consumer.Gas;
 model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representing the distance to a consumer within this district"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -63,9 +67,12 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   parameter SI.Pressure p_start[N_cv]=ones(N_cv)*15e5 "Pressure" annotation (Dialog(tab="Pipe Network", group="Initialization"));
   parameter SI.EnthalpyMassSpecific h_start[N_cv]=ones(N_cv)*788440 "Enthalpy" annotation (Dialog(tab="Pipe Network", group="Initialization"));
   parameter SI.MassFlowRate m_flow_start[N_cv + 1]=ones(N_cv + 1)*140 "Mass flow rate" annotation (Dialog(tab="Pipe Network", group="Initialization"));
-  parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
+  parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Pipes"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b"));
   replaceable model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4
     constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(tab="General", group="Pipes"), choices(choicesAllMatching));
+  parameter Integer flowDefinition = 1 "Flow definition for sensors" annotation (Dialog(tab="General", group="General"),choices(choice = 1 "both", choice = 2 "both, noEvent", choice = 3 "in -> out", choice = 4 "out -> in"));
+  parameter Boolean variable_m_flow=true "True, if enthalpy flow defined by variable input" annotation (Dialog(tab="General", group="General"));
+  parameter SI.MassFlowRate m_flow_const=1e6 "Constant mass flow rate flow rate" annotation (Dialog(tab="General", group="General",enable=not variable_m_flow));
 
   // _____________________________________________
   //
@@ -73,7 +80,7 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   // _____________________________________________
 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn fluidPortIn(Medium=medium) annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow "Mass flow rate input" annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow if variable_m_flow "Mass flow rate input" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=180,
         origin={110,0})));
@@ -83,7 +90,7 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe(
     medium=medium,
     length=length,
     diameter_i=diameter,
@@ -101,22 +108,22 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
     frictionAtOutlet=false,
     frictionAtInlet=true,
     massBalance=massBalance,
-    redeclare model PressureLoss = PressureLoss) if not useIsothPipe
-                                                 annotation (Placement(transformation(extent={{-82,-5},{-54,5}})));
+    redeclare model PressureLoss = PressureLoss) if not useIsothPipe annotation (Placement(transformation(extent={{-82,-5},{-54,5}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow sink(
-    medium=simCenter.gasModel1,
+    medium=medium,
+    m_flow_const=m_flow_const,
     T_const=T_const,
     xi_const=xi_const,
-    variable_m_flow=true,
+    variable_m_flow=variable_m_flow,
     m(fixed=true)) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={60,0})));
-  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-44,0},{-24,20}})));
-  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(xiNumber=massflowSensor.medium.nc) annotation (Placement(transformation(extent={{18,0},{38,20}})));
-  TransiEnt.Components.Sensors.RealGas.WobbeGCVSensor vleGCVSensor annotation (Placement(transformation(extent={{-12,0},{8,20}})));
+  TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor(compositionDefinedBy=2,medium=medium,flowDefinition=flowDefinition) annotation (Placement(transformation(extent={{-44,0},{-24,20}})));
+  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massflowSensor(xiNumber=0,                       medium=medium) annotation (Placement(transformation(extent={{18,0},{38,20}})));
+  TransiEnt.Components.Sensors.RealGas.WobbeGCVSensor vleGCVSensor(medium=medium,flowDefinition=flowDefinition) annotation (Placement(transformation(extent={{-12,0},{8,20}})));
 
-  Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_isoth(
+  Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_isoth(
     medium=medium,
     length=length,
     diameter_i=diameter,
@@ -134,8 +141,7 @@ model GasConsumerPipe_mFlow "Sink defining xi, h, m_flow with a pipe representin
     frictionAtOutlet=false,
     frictionAtInlet=true,
     massBalance=massBalance,
-    redeclare model PressureLoss = PressureLoss) if useIsothPipe
-                                                 annotation (Placement(transformation(extent={{-82,-21},{-54,-11}})));
+    redeclare model PressureLoss = PressureLoss) if useIsothPipe annotation (Placement(transformation(extent={{-82,-21},{-54,-11}})));
 equation
 
   // _____________________________________________

@@ -1,25 +1,29 @@
-within TransiEnt.Components.Gas.Combustion.Check;
+﻿within TransiEnt.Components.Gas.Combustion.Check;
 model TestControllerBurner "Model for testing a combustion with a controlled mass flow rate of the air and the fuel"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_SG_O2_var vle_ng7_sg_o2;
@@ -59,13 +63,12 @@ model TestControllerBurner "Model for testing a combustion with a controlled mas
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-26,16})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 realGasJunction_L2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 realGasJunction_L2(
     medium=vle_ng7_sg_o2,
     volume=0.01,
-    xi(
-    start =  {0.0487717,0,0,0,0.720911,0.0162572,0,0,0.21406}),
+    xi(start={0.0487717,0,0,0,0.720911,0.0162572,0,0,0.21406}),
     h(start=583949),
-    p(start=1e5))   annotation (Placement(transformation(extent={{-36,0},{-16,-20}})));
+    p(start=1e5)) annotation (Placement(transformation(extent={{-36,0},{-16,-20}})));
   Sensors.RealGas.MassFlowSensor vleMassflowSensor(medium=vle_ng7_sg_o2) annotation (Placement(transformation(extent={{-62,-10},{-42,10}})));
   TransiEnt.Components.Gas.Combustion.Controller.ControllerAirForBurner controllerAirForBurner annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -78,13 +81,11 @@ model TestControllerBurner "Model for testing a combustion with a controlled mas
         origin={0,20})));
   Sensors.RealGas.TemperatureSensor temperatureTwoPortSensor(medium=vle_ng7_sg_o2) annotation (Placement(transformation(extent={{16,-10},{36,10}})));
 
-  Modelica.SIunits.MassFraction lambdaCheck = if noEvent(burner.summary.gasPortIn.xi[9]-burner.summary.gasPortOut.xi[9]<1e-15) then 1 else burner.summary.gasPortIn.xi[9]/(burner.summary.gasPortIn.xi[9]-burner.summary.gasPortOut.xi[9]);
+  Modelica.Units.SI.MassFraction lambdaCheck=if noEvent(burner.summary.gasPortIn.xi[9] - burner.summary.gasPortOut.xi[9] < 1e-15) then 1 else burner.summary.gasPortIn.xi[9]/(burner.summary.gasPortIn.xi[9] - burner.summary.gasPortOut.xi[9]);
   Controller.ControllerFuelForBurner controllerFuelForBurner(
     k=1,
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
-    initOption=503,
-    T_flueGasDes=573.15,
-    y_start=1.51493)                                                               annotation (Placement(transformation(extent={{-154,64},{-134,84}})));
+    controllerType=Modelica.Blocks.Types.SimpleController.P,
+    T_flueGasDes=573.15)                                                           annotation (Placement(transformation(extent={{-154,64},{-134,84}})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=time < 1500) annotation (Placement(transformation(extent={{-164,36},{-144,56}})));
   Modelica.Blocks.Logical.Switch switch1 annotation (Placement(transformation(extent={{-136,40},{-124,52}})));
   Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(

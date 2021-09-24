@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Base;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Base;
 partial model PartialElectrolyzerEfficiencyCharline "Partial class for electrolyzer efficiency charlines"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -34,11 +38,11 @@ partial model PartialElectrolyzerEfficiencyCharline "Partial class for electroly
   //              Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.ActivePower P_el_n(min=0) "Nominal power input of the electrolyzer (min = 0)" annotation (Dialog(enable=false));
-  parameter Modelica.SIunits.Efficiency eta_n(min=0, max=1) "Nominal efficiency coefficient (min = 0, max = 1)" annotation (Dialog(enable=false));
-  parameter Modelica.SIunits.Efficiency eta_scale(min=0, max=1) "Sets an linear degrading efficency coefficient with increasing input power (min = 0, max = 1)" annotation (Dialog(enable=false));
+  parameter Modelica.Units.SI.ActivePower P_el_n(min=0) "Nominal power input of the electrolyzer (min = 0)" annotation (Dialog(enable=false));
+  parameter Modelica.Units.SI.Efficiency eta_n(min=0, max=1) "Nominal efficiency coefficient (min = 0, max = 1)" annotation (Dialog(enable=false));
+  parameter Modelica.Units.SI.Efficiency eta_scale(min=0, max=1) "Sets an linear degrading efficency coefficient with increasing input power (min = 0, max = 1)" annotation (Dialog(enable=false));
 protected
-  parameter Modelica.SIunits.Efficiency eta_n_cl "Nominal efficency coefficient of the charline";
+  parameter Modelica.Units.SI.Efficiency eta_n_cl "Nominal efficency coefficient of the charline";
 
   // _____________________________________________
   //
@@ -46,10 +50,10 @@ protected
   // _____________________________________________
 
 public
-  Modelica.SIunits.ActivePower P_el "Input power";
-  Modelica.SIunits.Efficiency eta "Output efficency";
+  Modelica.Units.SI.ActivePower P_el "Input power";
+  Modelica.Units.SI.Efficiency eta "Output efficency";
 protected
-  Modelica.SIunits.Efficiency eta_cl;
+  Modelica.Units.SI.Efficiency eta_cl;
 
   annotation (
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={Line(

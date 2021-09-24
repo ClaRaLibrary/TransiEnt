@@ -1,25 +1,29 @@
-within TransiEnt.Examples.Gas;
+﻿within TransiEnt.Examples.Gas;
 model GasGrid_SubSystem "Very simple gas grid featuring the main components"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 
   // _____________________________________________
@@ -29,20 +33,20 @@ model GasGrid_SubSystem "Very simple gas grid featuring the main components"
 
   // feedInStation
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid mediumH2=simCenter.gasModel3 "|General|Hydrogen model to be used";
-  parameter Modelica.SIunits.ActivePower P_el_n=3e6 "|Electrolyzer|Nominal power of electrolyzer" annotation (Evaluate=false);
-  parameter Modelica.SIunits.ActivePower P_el_max=1.68*P_el_n "|Electrolyzer|Maximum power of electrolyzer" annotation (Evaluate=false);
-  parameter Modelica.SIunits.ActivePower P_el_min=0.05*P_el_n "|Electrolyzer|Minimal power of ely, when only 1 stack is working at 2%(?)";
-  parameter Modelica.SIunits.ActivePower P_el_overload=1.0*P_el_n "|Electrolyzer|Power at which overload region begins";
-  parameter Modelica.SIunits.MassFlowRate m_flow_start=0.001 "|Initialization|Sets initial value for m_flow (value needed for init with StatCycle)";
-  parameter Modelica.SIunits.Temperature T_Init=283.15 "|Initialization|Sets initial value for T";
-  parameter Modelica.SIunits.Efficiency eta_n(
+  parameter Modelica.Units.SI.ActivePower P_el_n=3e6 "|Electrolyzer|Nominal power of electrolyzer" annotation (Evaluate=false);
+  parameter Modelica.Units.SI.ActivePower P_el_max=1.68*P_el_n "|Electrolyzer|Maximum power of electrolyzer" annotation (Evaluate=false);
+  parameter Modelica.Units.SI.ActivePower P_el_min=0.05*P_el_n "|Electrolyzer|Minimal power of ely, when only 1 stack is working at 2%(?)";
+  parameter Modelica.Units.SI.ActivePower P_el_overload=1.0*P_el_n "|Electrolyzer|Power at which overload region begins";
+  parameter Modelica.Units.SI.MassFlowRate m_flow_start=0.001 "|Initialization|Sets initial value for m_flow (value needed for init with StatCycle)";
+  parameter Modelica.Units.SI.Temperature T_Init=283.15 "|Initialization|Sets initial value for T";
+  parameter Modelica.Units.SI.Efficiency eta_n(
     min=0,
     max=1) = 0.75 "|Electrolyzer|Nominal efficency coefficient (min = 0, max = 1)";
-  parameter Modelica.SIunits.Efficiency eta_scale(
+  parameter Modelica.Units.SI.Efficiency eta_scale(
     min=0,
     max=1) = 0 "|Electrolyzer|Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)";
-  parameter Modelica.SIunits.AbsolutePressure p_out=35e5 "|Electrolyzer|Hydrogen output pressure from electrolyzer";
-  parameter Modelica.SIunits.Temperature T_out=283.15 "|Electrolyzer|Hydrogen output temperature from electrolyzer";
+  parameter Modelica.Units.SI.AbsolutePressure p_out=35e5 "|Electrolyzer|Hydrogen output pressure from electrolyzer";
+  parameter Modelica.Units.SI.Temperature T_out=283.15 "|Electrolyzer|Hydrogen output temperature from electrolyzer";
   parameter Real t_overload=0.5*3600 "|Electrolyzer|Maximum time the ely can work in overload in seconds";
   parameter Real coolingToHeatingRatio=1 "|Electrolyzer|Defines how much faster electrolyzer cools down than heats up";
   parameter Integer startState=1 "|Electrolyzer|Initial state of the electrolyzer (1: ready to overheat, 2: working in overload, 3: cooling down)";
@@ -178,8 +182,10 @@ protected
 
   // Pipes and Fittings
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction1(
     initOption=0,
+    redeclare model PressureLoss1 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
+    redeclare model PressureLoss3 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
     xi(start=init.junction1.xi_in),
     h(start=init.junction1.h_in),
     volume=1,
@@ -187,7 +193,7 @@ protected
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={-60,-98})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe1(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0,
@@ -204,7 +210,7 @@ protected
         extent={{-20,-10},{20,10}},
         rotation=90,
         origin={-60,-56})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe2(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0,
@@ -221,7 +227,7 @@ protected
         extent={{-20,-10},{20,10}},
         rotation=180,
         origin={0,62})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe3(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0,
@@ -238,7 +244,7 @@ protected
         extent={{-20,-10},{20,10}},
         rotation=270,
         origin={60,22})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe4(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     initOption=0,
@@ -255,7 +261,7 @@ protected
         extent={{-20,-10},{20,10}},
         rotation=0,
         origin={0,-98})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction2(
     initOption=0,
     p(start=init.junction2.p),
     xi(start=init.junction2.xi_out),
@@ -264,7 +270,7 @@ protected
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-60,12})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction3(
     initOption=0,
     xi(start=init.junction3.xi_in),
     h(start=init.junction3.h_in),
@@ -273,7 +279,7 @@ protected
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={60,62})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction4(
     initOption=0,
     p(start=init.junction4.p),
     xi(start=init.junction4.xi_out),
@@ -284,8 +290,10 @@ protected
         origin={60,-48})));
 
 public
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction_feedIn1(
     initOption=0,
+    redeclare model PressureLoss1 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
+    redeclare model PressureLoss3 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
     xi(start=init.junction1.xi_in),
     h(start=init.junction1.h_in),
     volume=0.1,
@@ -294,8 +302,11 @@ public
         rotation=180,
         origin={-110,-98})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor vleCompositionSensor_1(compositionDefinedBy=2) annotation (Placement(transformation(extent={{-94,-98},{-76,-80}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedIn2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction_feedIn2(
     initOption=0,
+    redeclare model PressureLoss1 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
+    redeclare model PressureLoss2 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
+    redeclare model PressureLoss3 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear,
     xi(start=init.junction1.xi_in),
     h(start=init.junction1.h_in),
     volume=0.1,
@@ -396,7 +407,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(feedInStation1.gasPortOut, junction_feedIn1.gasPort2) annotation (Line(
-      points={{-110.15,-52.16},{-110.15,-69.08},{-110,-69.08},{-110,-88}},
+      points={{-111,-51.84},{-111,-69.08},{-110,-69.08},{-110,-88}},
       color={255,255,0},
       thickness=1.5));
   connect(gainFeedIn1.y, feedInStation1.P_el_set) annotation (Line(points={{-112,-2.5},{-111,-2.5},{-111,-19.36}}, color={0,0,127}));
@@ -404,7 +415,7 @@ equation
   connect(feedInStation2.m_flow_feedIn, c_H2_max_2.m_flow_H2_max) annotation (Line(points={{134,128.8},{134,128},{144,128},{144,90},{144,72},{144,71}}, color={0,0,127}));
   connect(gainFeedIn2.y, feedInStation2.P_el_set) annotation (Line(points={{91,138},{117,138},{117,132.64}}, color={0,0,127}));
   connect(junction_feedIn2.gasPort2, feedInStation2.gasPortOut) annotation (Line(
-      points={{116,72},{116.15,72},{116.15,99.84}},
+      points={{116,72},{117,72},{117,100.16}},
       color={255,255,0},
       thickness=1.5));
   connect(feedInStation2.epp, line_L1_PS.epp_1) annotation (Line(

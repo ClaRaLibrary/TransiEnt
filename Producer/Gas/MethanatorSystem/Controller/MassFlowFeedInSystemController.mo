@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Producer.Gas.MethanatorSystem.Controller;
 model MassFlowFeedInSystemController
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -68,15 +72,14 @@ model MassFlowFeedInSystemController
   //           Instances of other Classes
   // _____________________________________________
 
-  replaceable Modelica.Blocks.Continuous.LimPID PID(
+  replaceable TransiEnt.Basics.Blocks.LimPID PID(
+    y_max=30,
     y_start=0,
-    initType=Modelica.Blocks.Types.InitPID.NoInit,
-    yMax=30,
-    yMin=-30,
+    y_min=-30,
     k=2,
-    Td=1000,
+    Tau_d=1000,
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
-    Ti=1e-5) if
+    Tau_i=1e-5) if
                useMassFlowControl                          annotation (Placement(transformation(extent={{-20,80},{0,100}})));
 
 

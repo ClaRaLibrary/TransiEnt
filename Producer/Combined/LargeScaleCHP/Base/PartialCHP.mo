@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
+﻿within TransiEnt.Producer.Combined.LargeScaleCHP.Base;
 partial model PartialCHP "Partial model of a large scale CHP plant with characteristics specified by PQ boundaries and PQ-Heat input table"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -46,11 +50,11 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
   parameter TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.Generic_PQ_Characteristics PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_WW1()
                                                                                                                                                                  "Characteristics of CHP plant" annotation (choicesAllMatching, Dialog(group="Physical Constraints"));
 
-  parameter Modelica.SIunits.Power P_el_n=300e6 "Installed capacity for investment cost calculation" annotation(Dialog(group="Physical Constraints"));
+  parameter Modelica.Units.SI.Power P_el_n=300e6 "Installed capacity for investment cost calculation" annotation (Dialog(group="Physical Constraints"));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_n_CHP=PQCharacteristics.PQboundaries[end,1]/PQCharacteristics.k_Q_flow "Maximum possible heat flow according to PQ diagram" annotation(Dialog(group="Physical Constraints"));
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_n_Peak=0 "Additional thermal capacity (e.g. peak load heaters)" annotation(Dialog(group="Physical Constraints"));
-  final parameter Modelica.SIunits.HeatFlowRate Q_flow_n_total = Q_flow_n_CHP + Q_flow_n_Peak;
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_n_CHP=PQCharacteristics.PQboundaries[end, 1]/PQCharacteristics.k_Q_flow "Maximum possible heat flow according to PQ diagram" annotation (Dialog(group="Physical Constraints"));
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_n_Peak=0 "Additional thermal capacity (e.g. peak load heaters)" annotation (Dialog(group="Physical Constraints"));
+  final parameter Modelica.Units.SI.HeatFlowRate Q_flow_n_total=Q_flow_n_CHP + Q_flow_n_Peak;
 
   parameter SI.ActivePower P_el_init=P_el_n "Initial or guess value of output (= state)" annotation(Dialog(group="Initialization", tab="Advanced"));
   parameter SI.HeatFlowRate Q_flow_init=Q_flow_n_total "Initial or guess value of output (= state)" annotation(Dialog(group="Initialization", tab="Advanced"));
@@ -185,27 +189,36 @@ partial model PartialCHP "Partial model of a large scale CHP plant with characte
   // _____________________________________________
 
 public
-  Modelica.SIunits.Power P_el_is "Actual power generation (>=0)";
-  Modelica.SIunits.Power P_el_CHP_is;
-  Modelica.SIunits.HeatFlowRate Q_flow_is "Actual thermal power generation (>=0)";
-  Modelica.SIunits.HeatFlowRate Q_flow_input;
+  Modelica.Units.SI.Power P_el_is "Actual power generation (>=0)";
+  Modelica.Units.SI.Power P_el_CHP_is;
+  Modelica.Units.SI.HeatFlowRate Q_flow_is "Actual thermal power generation (>=0)";
+  Modelica.Units.SI.HeatFlowRate Q_flow_input;
 
-  Modelica.SIunits.Efficiency eta_el(max=1);
-  Modelica.SIunits.Efficiency eta_el_target(max=1) "Calculated from setpoint and plant characteristic";
-  Modelica.SIunits.Efficiency eta_th(max=1);
-  Modelica.SIunits.Efficiency eta_th_target(max=1) "Calculated from setpoint and plant characteristic";
-  Modelica.SIunits.Efficiency eta_total = eta_el + eta_th;
+  Modelica.Units.SI.Efficiency eta_el(max=1);
+  Modelica.Units.SI.Efficiency eta_el_target(max=1) "Calculated from setpoint and plant characteristic";
+  Modelica.Units.SI.Efficiency eta_th(max=1);
+  Modelica.Units.SI.Efficiency eta_th_target(max=1) "Calculated from setpoint and plant characteristic";
+  Modelica.Units.SI.Efficiency eta_total=eta_el + eta_th;
 
   // Carbon dioxide emissions and allocation
-  Modelica.SIunits.MassFlowRate m_flow_cde_total=Q_flow_input*fuelSpecificEmissions.m_flow_CDE_per_Energy;
-  Modelica.SIunits.MassFlowRate m_flow_cde_heat=m_flow_cde_total*A_cde_alloc_heat;
-  Modelica.SIunits.MassFlowRate m_flow_cde_power=m_flow_cde_total*A_cde_alloc_power;
+  Modelica.Units.SI.MassFlowRate m_flow_cde_total=Q_flow_input*fuelSpecificEmissions.m_flow_CDE_per_Energy;
+  Modelica.Units.SI.MassFlowRate m_flow_cde_heat=m_flow_cde_total*A_cde_alloc_heat;
+  Modelica.Units.SI.MassFlowRate m_flow_cde_power=m_flow_cde_total*A_cde_alloc_power;
   Real A_cde_alloc_heat "Allocation factor of total emissions to heat side";
   Real A_cde_alloc_power "Allocation factor of total emissions to power side";
 
-  Modelica.SIunits.Heat Q_gen(start=0, fixed=true,displayUnit="TWh") "Generated thermal energy" annotation(Dialog(group="Initialization", tab="Advanced"));
-  Modelica.SIunits.Energy W_el(start=0, fixed=true,displayUnit="TWh") "Generated electric energy"  annotation(Dialog(group="Initialization", tab="Advanced"));
-  Modelica.SIunits.Energy W_el_CHP(start=0, fixed=true,displayUnit="TWh") "Generated electric energy in combined heat and power operation"  annotation(Dialog(group="Initialization", tab="Advanced"));
+  Modelica.Units.SI.Heat Q_gen(
+    start=0,
+    fixed=true,
+    displayUnit="TWh") "Generated thermal energy" annotation (Dialog(group="Initialization", tab="Advanced"));
+  Modelica.Units.SI.Energy W_el(
+    start=0,
+    fixed=true,
+    displayUnit="TWh") "Generated electric energy" annotation (Dialog(group="Initialization", tab="Advanced"));
+  Modelica.Units.SI.Energy W_el_CHP(
+    start=0,
+    fixed=true,
+    displayUnit="TWh") "Generated electric energy in combined heat and power operation" annotation (Dialog(group="Initialization", tab="Advanced"));
 
   Real x_CHP=P_el_CHP_is/max(simCenter.P_el_small, P_el_is) "Fraction of actual power generation that is produced in CHP operation";
   Real P_el_star=P_el_is/P_el_n "Power in p.u.";
@@ -224,7 +237,7 @@ public
   Modelica.Blocks.Math.MultiSum multiSum[quantity](each k=ones(quantity),each nu=quantity)  annotation (Placement(transformation(extent={{70,104},{58,116}})));
 
   Modelica.Blocks.Sources.RealExpression Q_flow_set_CHP_max(y=Q_flow_n_CHP_single) annotation (Placement(transformation(extent={{50,122},{40,132}})));
-  Modelica.Blocks.Sources.RealExpression Q_flow_set_CHP_min(y=1e-3) annotation (Placement(transformation(extent={{50,92},{40,102}})));
+  Modelica.Blocks.Sources.RealExpression Q_flow_set_CHP_min(y=0)    annotation (Placement(transformation(extent={{50,92},{40,102}})));
   replaceable TransiEnt.Producer.Combined.LargeScaleCHP.Base.CHPStates_heatled        plantState(
     Q_flow_min_operating=1,
     Q_flow_max_operating=Q_flow_n_CHP,

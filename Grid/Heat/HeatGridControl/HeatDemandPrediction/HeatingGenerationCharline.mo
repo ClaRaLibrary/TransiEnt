@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Grid.Heat.HeatGridControl.HeatDemandPrediction;
 model HeatingGenerationCharline "Characteristic line of the heating load in function of the ambient temperature"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -43,7 +47,7 @@ model HeatingGenerationCharline "Characteristic line of the heating load in func
     Real c=CharLine.c;
     Real a=CharLine.a;
     Real SummerDayProfile;
-    Modelica.SIunits.Heat Q_dem;
+  Modelica.Units.SI.Heat Q_dem;
 
     Real offset;
 
@@ -63,11 +67,11 @@ model HeatingGenerationCharline "Characteristic line of the heating load in func
   //             Components
   // _____________________________________________
 
-  Basics.Tables.GenericDataTable SummerDayTypicalHeatLoad(relativepath="\heat\TypicalHeatLoadDay_AbsoluteValues_MonoIncreasing.txt", extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic,
+  Basics.Tables.GenericDataTable SummerDayTypicalHeatLoad(relativepath="\\heat\\TypicalHeatLoadDay_AbsoluteValues_MonoIncreasing.txt", extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic,
     constantfactor=1/637.6e6*CharLine.a)                                                                                                                                                         annotation (Placement(transformation(extent={{-10,8},{10,28}})));
 
   Basics.Blocks.Sources.WeekendPulse_Trapezoid weekendPulse(BeginningWeekday=BeginWeekday, k_weekend=Damping_Weekend) annotation (Placement(transformation(extent={{-10,42},{10,62}})));
-  Basics.Tables.GenericDataTable OffsetvalueDailyprofile(extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic, relativepath="\heat\TypicalHeatLoad_DHN_Normalized.txt") annotation (Placement(transformation(extent={{-10,-22},{10,-2}})));
+  Basics.Tables.GenericDataTable OffsetvalueDailyprofile(extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic, relativepath="\\heat\\TypicalHeatLoad_DHN_Normalized.txt") annotation (Placement(transformation(extent={{-10,-22},{10,-2}})));
   Modelica.Blocks.Sources.Trapezoid hour_of_day(
     falling=0,
     width=0,

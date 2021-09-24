@@ -1,26 +1,30 @@
-within TransiEnt.Consumer.Electrical;
+﻿within TransiEnt.Consumer.Electrical;
 model SimpleExponentialElectricConsumerComplex "Exponential voltage dependency, based on ComplexPowerPort"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -39,14 +43,19 @@ model SimpleExponentialElectricConsumerComplex "Exponential voltage dependency, 
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Electrical.ComplexPowerPort epp annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ComplexPowerPort epp
+    annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP "active power input at nominal frequency" annotation (Placement(transformation(extent={{-140,60},{-100,100}}, rotation=0), iconTransformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP
+    "active power input at nominal frequency" annotation (Placement(
+        transformation(extent={{-140,60},{-100,100}}, rotation=0),
+        iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,116})));
 protected
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal "Needed to connect to conditional connector for active power";
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal
+    "Needed to connect to conditional connector for active power";
 
   // _____________________________________________
   //
@@ -64,15 +73,28 @@ public
   // _____________________________________________
 
   parameter SI.Voltage v_n=simCenter.v_n "Nominal voltage";
-  parameter Boolean useInputConnectorP = false "Gets parameter from input connector"
-    annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
-  parameter SI.Power P_el_set_const=0 "Used, if not useInputConnectorP" annotation(Dialog(enable = not useInputConnectorP));
-  parameter Boolean useCosPhi=true
-    annotation (choices(__Dymola_checkBox=true));
+  parameter Boolean useInputConnectorP=false
+    "Gets parameter from input connector" annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(__Dymola_checkBox=true));
+  parameter SI.Power P_el_set_const=0 "Used, if not useInputConnectorP"
+    annotation (Dialog(enable=not useInputConnectorP));
+  parameter Boolean useCosPhi=true annotation (choices(__Dymola_checkBox=true));
   parameter SI.ReactivePower Q_el_set=0
-    annotation (Dialog(enable = not useCosPhi));
-  parameter SI.PowerFactor cosphi_set=1
-    annotation (Dialog(enable = useCosPhi));
+    annotation (Dialog(enable=not useCosPhi));
+  parameter SI.PowerFactor cosphi_set=1 annotation (Dialog(enable=useCosPhi));
+
+  parameter Integer behavior=1 annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(
+      __Dymola_radioButtons=true,
+      choice=1 "inductive",
+      choice=-1 "capacitive"),
+    Dialog(enable=useCosPhi));
+  // 1 if inductive, -1 if capacitive
+
   parameter Real alpha=0 "expontent for active power in load model";
   parameter Real beta=0 "exponent for reactive power in load model";
 
@@ -86,7 +108,8 @@ public
   //                 Variables
   // _____________________________________________
 
-  SI.Voltage v_load(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Voltage v_load(start=v_n)
+    annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.Angle delta_load(start=-0.08726646259971647);
   SI.ActivePower P(start=0);
   SI.ReactivePower Q(start=0);
@@ -104,14 +127,15 @@ equation
   end if;
 
   //conection between epp and local variables
-  epp.v=v_load;
-  epp.delta=delta_load;
-  epp.P=P;
-  epp.Q=Q;
+  epp.v = v_load;
+  epp.delta = delta_load;
+  epp.P = P;
+  epp.Q = Q;
 
   //equations for local variables
-  P=P_internal*(v_load/v_n)^alpha;
-  Q=if not useCosPhi then Q_el_set*(v_load/v_n)^beta else P/cosphi_set*sin(acos(cosphi_set));
+  P = P_internal*(v_load/v_n)^alpha;
+  Q = if not useCosPhi then Q_el_set*(v_load/v_n)^beta else abs(P/cosphi_set)*
+    sin(behavior*acos(cosphi_set));
 
   // _____________________________________________
   //
@@ -120,26 +144,27 @@ equation
 
   connect(P_internal, P_el_set);
 
-  annotation (defaultComponentName="load", Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                          Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {100,100}}),                       graphics={
-    Line(points={{-44,-30},{38,-30}},
-                                  color={192,192,192}),
-    Polygon(
-      points={{60,-30},{38,-38},{38,-22},{60,-30}},
-      lineColor={192,192,192},
-      fillColor={192,192,192},
-      fillPattern=FillPattern.Solid),
-    Polygon(
-      points={{-2,54},{-10,32},{6,32},{-2,54}},
-      lineColor={192,192,192},
-      fillColor={192,192,192},
-      fillPattern=FillPattern.Solid),
-    Line(points={{-2,-44},{-2,32}},
-                                  color={192,192,192}),
+  annotation (
+    defaultComponentName="load",
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}})),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+        graphics={
+        Line(points={{-44,-30},{38,-30}}, color={192,192,192}),
+        Polygon(
+          points={{60,-30},{38,-38},{38,-22},{60,-30}},
+          lineColor={192,192,192},
+          fillColor={192,192,192},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-2,54},{-10,32},{6,32},{-2,54}},
+          lineColor={192,192,192},
+          fillColor={192,192,192},
+          fillPattern=FillPattern.Solid),
+        Line(points={{-2,-44},{-2,32}}, color={192,192,192}),
         Line(
-          points={{48,36},{46,28},{42,20},{38,12},{30,0},{22,-8},{16,-14},{8,-22},{0,-26},{-4,-28},{-14,-30},{
-              -26,-30},{-46,-30}},
+          points={{48,36},{46,28},{42,20},{38,12},{30,0},{22,-8},{16,-14},{8,-22},
+              {0,-26},{-4,-28},{-14,-30},{-26,-30},{-46,-30}},
           color={0,134,134},
           smooth=Smooth.None)}),
     Documentation(info="<html>
@@ -163,5 +188,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Jan-Peter Heckel (jan.heckel@tuhh.de) in July 2019, added to TransiEnt Library in December 2019</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Julian Urbansky, Fraunhofer UMSICHT, in August 2021 </span></p>
 </html>"));
 end SimpleExponentialElectricConsumerComplex;

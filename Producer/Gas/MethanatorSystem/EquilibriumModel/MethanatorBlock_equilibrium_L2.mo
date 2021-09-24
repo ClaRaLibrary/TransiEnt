@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Gas.MethanatorSystem.EquilibriumModel;
+﻿within TransiEnt.Producer.Gas.MethanatorSystem.EquilibriumModel;
 model MethanatorBlock_equilibrium_L2 "model of a methanation block"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -35,16 +39,16 @@ model MethanatorBlock_equilibrium_L2 "model of a methanation block"
   // _____________________________________________
   parameter Boolean SteadyState=false "if '=true' no heating up/cooling down of reactor considered";
 
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer alpha_o=25.73 "outer coefficent of heat transfer" annotation(Dialog(group="Parameteres for heat transfer"));
-  parameter Modelica.SIunits.ThermalConductivity lambda=50 "thermal conductivity of reactor wall" annotation(Dialog(group="Parameteres for heat transfer"));
-  parameter Modelica.SIunits.ThermalConductivity lambda_insulation=0.04 "thermal condructivity of insulation layer" annotation(Dialog(group="Parameteres for heat transfer"));
-  parameter Modelica.SIunits.HeatCapacity mCp_Nenn=15E6 "nominal heat capacity for nominal mass flow 1kg/s" annotation(Dialog(group="Parameteres for heat transfer"));
-  parameter Modelica.SIunits.Length delta_insulation=0.1 "thickness of insulation layer" annotation(Dialog(group="Parameteres for heat transfer"));
-  parameter Modelica.SIunits.Temperature T_ambient=283.15 "constant ambient temperature" annotation(Dialog(group="Parameteres for heat transfer"));
-  parameter Modelica.SIunits.Temperature T_reactor_start=T_ambient "average start temperature for reactor mass" annotation(Dialog(group="Parameteres for heat transfer"));
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer alpha_o=25.73 "outer coefficent of heat transfer" annotation (Dialog(group="Parameteres for heat transfer"));
+  parameter Modelica.Units.SI.ThermalConductivity lambda=50 "thermal conductivity of reactor wall" annotation (Dialog(group="Parameteres for heat transfer"));
+  parameter Modelica.Units.SI.ThermalConductivity lambda_insulation=0.04 "thermal condructivity of insulation layer" annotation (Dialog(group="Parameteres for heat transfer"));
+  parameter Modelica.Units.SI.HeatCapacity mCp_Nenn=15E6 "nominal heat capacity for nominal mass flow 1kg/s" annotation (Dialog(group="Parameteres for heat transfer"));
+  parameter Modelica.Units.SI.Length delta_insulation=0.1 "thickness of insulation layer" annotation (Dialog(group="Parameteres for heat transfer"));
+  parameter Modelica.Units.SI.Temperature T_ambient=283.15 "constant ambient temperature" annotation (Dialog(group="Parameteres for heat transfer"));
+  parameter Modelica.Units.SI.Temperature T_reactor_start=T_ambient "average start temperature for reactor mass" annotation (Dialog(group="Parameteres for heat transfer"));
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=12 "nominal mass flow";
-  parameter Modelica.SIunits.AbsolutePressure Delta_p_nominal=0.5e5 "pressure loss for nominal mass flow";
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=12 "nominal mass flow";
+  parameter Modelica.Units.SI.AbsolutePressure Delta_p_nominal=0.5e5 "pressure loss for nominal mass flow";
 
   parameter Boolean useHomotopy=true "True, if homotopy method is used during initialisation";
 
@@ -63,12 +67,16 @@ model MethanatorBlock_equilibrium_L2 "model of a methanation block"
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn_properties(
     vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=gasPortIn.p,
     xi=wt_0_5,
     h=inStream(gasPortIn.h_outflow),
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-86,-4},{-66,-24}})));
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasOut_properties(
     vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=ptotal_1,
     T=T_out,
     xi=wt_1_5,
@@ -87,31 +95,35 @@ model MethanatorBlock_equilibrium_L2 "model of a methanation block"
 
  Real kp1 "equilibrium constant of methanation reaction";
  Real kp2 "equilibrium constant of CO-shift reaction";
- Modelica.SIunits.Length delta;
- Modelica.SIunits.AbsolutePressure ptotal_0 "total pressure";
- Modelica.SIunits.AbsolutePressure ptotal_1 "total pressure";
- Modelica.SIunits.AbsolutePressure Delta_p;
- Modelica.SIunits.MolarFlowRate Ftotal_1(start = 1) "output total molar flow";
- Modelica.SIunits.MolarFlowRate Ftotal_0 "input total molar flow";
- Modelica.SIunits.MolarFlowRate F_0[6](min=0,start={100,100,100,100,100,100}) "input molar flow";
- Modelica.SIunits.MolarFlowRate F_1[6](min=0,start={100,100,100,100,100,100}) "output molar flow";
- Modelica.SIunits.MolarMass M[6] "vector of molar masses";
- Modelica.SIunits.MassFraction wt_1[6](min=0,max=1,start={0.1,0.1,0.1,0.1,0.1,0.1}) "weight fraction of output";//1:H2,2:CO,3:CO2,4:H2O,5:CH4,5:N2
- Modelica.SIunits.MassFraction wt_0[6] "weight fraction of input";
- Modelica.SIunits.MassFraction wt_0_5[5];
- Modelica.SIunits.MassFraction wt_1_5[5];
- Modelica.SIunits.MassFlowRate m_flow_total "total input mass flow";
- Modelica.SIunits.MolarEnergy Enthalpy1 "enthalpy of methanation reaction 1";
- Modelica.SIunits.MolarEnergy Enthalpy2;
- Modelica.SIunits.MolarEnergy Enthalpy3;
- Modelica.SIunits.Energy Q_flow_reaction "energy of complete reaction";
- Modelica.SIunits.Temperature T_out(start=600) "output Temperature";
- Modelica.SIunits.Temperature T_in(start=300,min=273.15) "input Temperature";
- Modelica.SIunits.Temperature T_average(start=650) "average Temperature";
- Modelica.SIunits.Temperature T_reactor(min=0);
- Modelica.SIunits.Temperature T_outer;
- Modelica.SIunits.Temperature T_out_min=200 "minimum outlet temperature"; //T_min=220degC! Deactivation on methanation catalysts Javier Barrientos Brotons
- Modelica.SIunits.HeatCapacity mCp;
+  Modelica.Units.SI.Length delta;
+  Modelica.Units.SI.AbsolutePressure ptotal_0 "total pressure";
+  Modelica.Units.SI.AbsolutePressure ptotal_1 "total pressure";
+  Modelica.Units.SI.AbsolutePressure Delta_p;
+  Modelica.Units.SI.MolarFlowRate Ftotal_1(start=1) "output total molar flow";
+  Modelica.Units.SI.MolarFlowRate Ftotal_0 "input total molar flow";
+  Modelica.Units.SI.MolarFlowRate F_0[6](min=0, start={100,100,100,100,100,100}) "input molar flow";
+  Modelica.Units.SI.MolarFlowRate F_1[6](min=0, start={100,100,100,100,100,100}) "output molar flow";
+  Modelica.Units.SI.MolarMass M[6] "vector of molar masses";
+  Modelica.Units.SI.MassFraction wt_1[6](
+    min=0,
+    max=1,
+    start={0.1,0.1,0.1,0.1,0.1,0.1}) "weight fraction of output";                                               //1:H2,2:CO,3:CO2,4:H2O,5:CH4,5:N2
+  Modelica.Units.SI.MassFraction wt_0[6] "weight fraction of input";
+  Modelica.Units.SI.MassFraction wt_0_5[5];
+  Modelica.Units.SI.MassFraction wt_1_5[5];
+  Modelica.Units.SI.MassFlowRate m_flow_total "total input mass flow";
+  Modelica.Units.SI.MolarEnergy Enthalpy1 "enthalpy of methanation reaction 1";
+  Modelica.Units.SI.MolarEnergy Enthalpy2;
+  Modelica.Units.SI.MolarEnergy Enthalpy3;
+  Modelica.Units.SI.Energy Q_flow_reaction "energy of complete reaction";
+  Modelica.Units.SI.Temperature T_out(start=600) "output Temperature";
+  Modelica.Units.SI.Temperature T_in(start=300, min=273.15) "input Temperature";
+  Modelica.Units.SI.Temperature T_average(start=650) "average Temperature";
+  Modelica.Units.SI.Temperature T_reactor(min=0);
+  Modelica.Units.SI.Temperature T_outer;
+  Modelica.Units.SI.Temperature T_out_min=200 "minimum outlet temperature";
+                                                                          //T_min=220degC! Deactivation on methanation catalysts Javier Barrientos Brotons
+  Modelica.Units.SI.HeatCapacity mCp;
  Real A2[4,6]=[
  {1.925E1,5.213E-2,1.197E-5,-1.132E-8},
  {1.980E1,7.344E-2,-5.602E-5,1.715E-8},
@@ -119,31 +131,31 @@ model MethanatorBlock_equilibrium_L2 "model of a methanation block"
  {2.714E1,9.274E-3,-1.381E-5,7.645E-9},
  {3.087E1,-1.285E-2,2.789E-5,-1.272E-8},
   {28.3,2.537/1000,0.5443/1000^2,0}] "coefficient for calculation of heat capacities";//Methanation catalytic reactor Bouallou
- Modelica.SIunits.MolarHeatCapacity Cp_average(start=32) "average overall heat capacity";
- Modelica.SIunits.MolarHeatCapacity Cp_average_2(start=32);
- Modelica.SIunits.MolarHeatCapacity Cp_0[6];
- Modelica.SIunits.HeatFlowRate Q_flow_transfer(start=0);
- Modelica.SIunits.HeatFlowRate Q_flow_loss(start=0);
- Modelica.SIunits.HeatFlowRate Q_flow_loss_convection(start=0);
- Modelica.SIunits.HeatFlowRate Q_flow_loss_radiation(start=0);
- Modelica.SIunits.HeatFlowRate Q_flow_inner(start=0);
- Modelica.SIunits.Heat Q_stored(start=0);
- Modelica.SIunits.CoefficientOfHeatTransfer alpha_i;
- Modelica.SIunits.Length d_i_ref=2.686;
- Modelica.SIunits.Length d_i;
- Modelica.SIunits.Length d_o;
- Modelica.SIunits.Length d_average;
- Modelica.SIunits.Length L_ref=4.8;
- Modelica.SIunits.Length L;
- Modelica.SIunits.Length s_min;
- Modelica.SIunits.Area A_o;
- Modelica.SIunits.Area A_i;
- Modelica.SIunits.MoleFraction Fshare_1[6];
- Modelica.SIunits.MoleFraction Fshare_0[6];
+  Modelica.Units.SI.MolarHeatCapacity Cp_average(start=32) "average overall heat capacity";
+  Modelica.Units.SI.MolarHeatCapacity Cp_average_2(start=32);
+  Modelica.Units.SI.MolarHeatCapacity Cp_0[6];
+  Modelica.Units.SI.HeatFlowRate Q_flow_transfer(start=0);
+  Modelica.Units.SI.HeatFlowRate Q_flow_loss(start=0);
+  Modelica.Units.SI.HeatFlowRate Q_flow_loss_convection(start=0);
+  Modelica.Units.SI.HeatFlowRate Q_flow_loss_radiation(start=0);
+  Modelica.Units.SI.HeatFlowRate Q_flow_inner(start=0);
+  Modelica.Units.SI.Heat Q_stored(start=0);
+  Modelica.Units.SI.CoefficientOfHeatTransfer alpha_i;
+  Modelica.Units.SI.Length d_i_ref=2.686;
+  Modelica.Units.SI.Length d_i;
+  Modelica.Units.SI.Length d_o;
+  Modelica.Units.SI.Length d_average;
+  Modelica.Units.SI.Length L_ref=4.8;
+  Modelica.Units.SI.Length L;
+  Modelica.Units.SI.Length s_min;
+  Modelica.Units.SI.Area A_o;
+  Modelica.Units.SI.Area A_i;
+  Modelica.Units.SI.MoleFraction Fshare_1[6];
+  Modelica.Units.SI.MoleFraction Fshare_0[6];
  Boolean On;
  Real s1;
  Real s2;
- Modelica.SIunits.Stress sigma_zul;
+  Modelica.Units.SI.Stress sigma_zul;
 initial equation
  if (not SteadyState) then
  // T_out=T_in+1;

@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Combined.SmallScaleCHP.Controller;
+﻿within TransiEnt.Producer.Combined.SmallScaleCHP.Controller;
 model ControllerHeatLed "Controller that gets target temperatures from simCenter and has an input for storage Temperature"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -34,27 +38,23 @@ model ControllerHeatLed "Controller that gets target temperatures from simCenter
   //           Constants and Parameters
   // _____________________________________________
   parameter Integer nDevices=1 "Number of CHP Units";
-  parameter Modelica.SIunits.Temperature T_turnOn=333.15 "Minimal allowed return/storage temperature";
+  parameter Modelica.Units.SI.Temperature T_turnOn=333.15 "Minimal allowed return/storage temperature";
   //   parameter SI.Temperature softlimitTemperature = T_turnOff-10
   //     "Temperature at which CHP will stop charging storage";
-  parameter Modelica.SIunits.Temperature T_turnOff=363.15 "Maximum allowed Storage temperature";
+  parameter Modelica.Units.SI.Temperature T_turnOff=363.15 "Maximum allowed Storage temperature";
 
   parameter Boolean useT_stor=false "if false T_return will be used";
-  parameter Modelica.SIunits.Temperature T_stor_target=363.15 "Target Storage Temperature" annotation (Dialog(enable=useT_stor));
+  parameter Modelica.Units.SI.Temperature T_stor_target=363.15 "Target Storage Temperature" annotation (Dialog(enable=useT_stor));
   parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.PID "Type of controller" annotation(Dialog(tab="Controller"));
   parameter Real k(
     min=0,
     unit="1") = 1 "Gain of controller" annotation(Dialog(tab="Controller"));
-  parameter Modelica.SIunits.Time Ti(
+  parameter Modelica.Units.SI.Time Ti(
     min=Modelica.Constants.small,
-    start=0.5)=0.1 "Time constant of Integrator block" annotation (Dialog(
-        tab="Controller", enable=controllerType == Modelica.Blocks.Types.SimpleController.PI or
-          controllerType == Modelica.Blocks.Types.SimpleController.PID));
-  parameter Modelica.SIunits.Time Td(
+    start=0.5) = 0.1 "Time constant of Integrator block" annotation (Dialog(tab="Controller", enable=controllerType == Modelica.Blocks.Types.SimpleController.PI or controllerType == Modelica.Blocks.Types.SimpleController.PID));
+  parameter Modelica.Units.SI.Time Td(
     min=0,
-    start=0.1)=0 "Time constant of Derivative block" annotation (Dialog(tab=
-         "Controller", enable=controllerType == Modelica.Blocks.Types.SimpleController.PD or
-          controllerType == Modelica.Blocks.Types.SimpleController.PID));
+    start=0.1) = 0 "Time constant of Derivative block" annotation (Dialog(tab="Controller", enable=controllerType == Modelica.Blocks.Types.SimpleController.PD or controllerType == Modelica.Blocks.Types.SimpleController.PID));
   parameter Real yMax(start=1) = nDevices*Specification.P_el_max "Upper limit of output"
                                                                                         annotation(Dialog(tab="Controller"));
   parameter Real yMin=Specification.P_el_min "Lower limit of output" annotation(Dialog(tab="Controller"));
@@ -65,9 +65,7 @@ model ControllerHeatLed "Controller that gets target temperatures from simCenter
                               controllerType==Modelica.Blocks.Types.SimpleController.PID));
   parameter Real Nd(min=100*Modelica.Constants.eps) = 10 "The higher Nd, the more ideal the derivative block" annotation(Dialog(tab="Controller",enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID));
-  parameter Modelica.Blocks.Types.InitPID initType=Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState
-  "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation(Evaluate=true,
-      Dialog(tab="Controller",group="Initialization"));
+  parameter Modelica.Blocks.Types.Init initType=Modelica.Blocks.Types.Init.InitialState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation (Evaluate=true, Dialog(tab="Controller", group="Initialization"));
   parameter Boolean limitsAtInit=true "= false, if limits are ignored during initializiation" annotation(Evaluate=true, Dialog(tab="Controller",group="Initialization",
                        enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or
                               controllerType==Modelica.Blocks.Types.SimpleController.PID));
@@ -77,7 +75,7 @@ model ControllerHeatLed "Controller that gets target temperatures from simCenter
   parameter Real xd_start=0 "Initial or guess value for state of derivative block" annotation (Dialog(tab="Controller",group="Initialization",
                          enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==Modelica.Blocks.Types.SimpleController.PID));
-  parameter Real y_start=Specification.P_el_max "Initial value of output" annotation(Dialog(tab="Controller",enable=initType == Modelica.Blocks.Types.InitPID.InitialOutput, group=
+  parameter Real y_start=Specification.P_el_max "Initial value of output" annotation(Dialog(tab="Controller",enable=initType == Modelica.Blocks.Types.Init.InitialOutput,    group=
           "Initialization"));
 
   // _____________________________________________
@@ -86,7 +84,7 @@ model ControllerHeatLed "Controller that gets target temperatures from simCenter
   // _____________________________________________
   Boolean offCondition;
   Boolean onCondition;
-  Modelica.SIunits.Temperature T_return_target;
+  Modelica.Units.SI.Temperature T_return_target;
 
   // _____________________________________________
   //
@@ -99,14 +97,12 @@ model ControllerHeatLed "Controller that gets target temperatures from simCenter
     k=k,
     xi_start=xi_start,
     y_start=y_start,
-    limitsAtInit=limitsAtInit,
     initType=initType,
     wp=wp,
     Nd=Nd,
     wd=wd,
     yMax=yMax,
-    yMin=yMin)
-    annotation (Placement(transformation(extent={{-12,20},{8,0}})));
+    yMin=yMin) annotation (Placement(transformation(extent={{-12,20},{8,0}})));
 
   // _____________________________________________
   //

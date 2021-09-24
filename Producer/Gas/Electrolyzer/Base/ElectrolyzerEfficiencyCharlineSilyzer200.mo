@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Producer.Gas.Electrolyzer.Base;
 model ElectrolyzerEfficiencyCharlineSilyzer200 "Efficiency charline for Silyzer 200"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   //charline approximated from data from Siemens for P_el_n = 3.75e6 W and eta_nom = 0.636; k_olp = 1.6;
 
@@ -31,7 +35,7 @@ model ElectrolyzerEfficiencyCharlineSilyzer200 "Efficiency charline for Silyzer 
 
   extends TransiEnt.Producer.Gas.Electrolyzer.Base.PartialElectrolyzerEfficiencyCharline(eta_n_cl=0.62903);
 
-  Boolean use_arrayefficiency=false;
+  parameter Boolean use_arrayefficiency=false;
   // _____________________________________________
   //
   //           Characteristic Equations
@@ -39,16 +43,10 @@ model ElectrolyzerEfficiencyCharlineSilyzer200 "Efficiency charline for Silyzer 
 
 equation
   // Calculating the efficency
-  //eta_cl = 0.06655*(P_el/P_el_n)^2 - 0.2741*(P_el/P_el_n) + 0.8709 - 0.03432/max(P_el/P_el_n,1e-5); //division by zero
-  //eta_cl*(P_el/P_el_n) = 0.06655*(P_el/P_el_n)^3 - 0.2741*(P_el/P_el_n)^2 + 0.8709*(P_el/P_el_n) - 0.03432;
-  /*if noEvent(P_el/P_el_n<0.04) then
-    eta_cl=0; //to avoid negative values for eta_cl
-  else
-    eta_cl*(P_el/P_el_n) = 0.06655*(P_el/P_el_n)^3 - 0.2741*(P_el/P_el_n)^2 + 0.8709*(P_el/P_el_n) - 0.03432;
-  end if;*/
+
   if use_arrayefficiency then
-      eta_cl=if noEvent(P_el/P_el_n<0.02) then (0.06655*(0.392739)^2 - 0.2741*(0.392739)^1 + 0.8709 - 0.03432)/(0.392739)*P_el/P_el_n/0.02
-    elseif noEvent(P_el/P_el_n<0.392739) then (0.06655*(0.392739)^2 - 0.2741*(0.392739)^1 + 0.8709 - 0.03432)/(0.392739)
+    eta_cl=if noEvent(P_el/P_el_n<0.02) then (0.06655*(0.392739)^3 - 0.2741*(0.392739)^2 + 0.8709*(0.392739) - 0.03432)/(0.392739)*P_el/P_el_n/0.02
+    elseif noEvent(P_el/P_el_n<0.392739) then (0.06655*(0.392739)^3 - 0.2741*(0.392739)^2 + 0.8709*(0.392739) - 0.03432)/(0.392739)
     else 0.06655*(P_el/P_el_n)^2 - 0.2741*P_el/P_el_n + 0.8709 - 0.03432/(P_el/P_el_n);
   else
     eta_cl=if noEvent(P_el/P_el_n<0.04) then 0 else 0.06655*(P_el/P_el_n)^2 - 0.2741*P_el/P_el_n + 0.8709 - 0.03432/(P_el/P_el_n);

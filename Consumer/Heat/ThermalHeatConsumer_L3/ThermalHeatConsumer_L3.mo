@@ -1,26 +1,30 @@
-within TransiEnt.Consumer.Heat.ThermalHeatConsumer_L3;
+﻿within TransiEnt.Consumer.Heat.ThermalHeatConsumer_L3;
 model ThermalHeatConsumer_L3
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
       // _____________________________________________
       //
@@ -28,7 +32,7 @@ model ThermalHeatConsumer_L3
       // _____________________________________________
   extends TransiEnt.Basics.Icons.Consumer;
   outer TransiEnt.SimCenter simCenter;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
 
       // ____________________________________________
       //
@@ -46,9 +50,8 @@ model ThermalHeatConsumer_L3
                                                                               annotation (Dialog( group="Geometry"));
         parameter Real til[3]={Modelica.Constants.pi/2,Modelica.Constants.pi,Modelica.Constants.pi/2} "Tilt of Walls"
                                                                                                                      annotation (Dialog( group="Geometry"));
-        parameter Modelica.SIunits.Area A_Window[4] = {6.28,3.87,5.816,0} "Total Window Area for Walls Facing South, West, North, East"
-                                                                                                                                       annotation (Dialog( group="Geometry"));
-        final parameter Modelica.SIunits.Area A_Win=A_Window[1]+A_Window[2]+A_Window[3]+A_Window[4];
+  parameter Modelica.Units.SI.Area A_Window[4]={6.28,3.87,5.816,0} "Total Window Area for Walls Facing South, West, North, East" annotation (Dialog(group="Geometry"));
+  final parameter Modelica.Units.SI.Area A_Win=A_Window[1] + A_Window[2] + A_Window[3] + A_Window[4];
 
    // Thermal Properties
         parameter SI.HeatCapacity C=19e6 "Heat Capacity of Inner Walls"
@@ -57,8 +60,8 @@ model ThermalHeatConsumer_L3
                                                                                               annotation (Dialog( group="Thermal Properties"));
         parameter SI.CoefficientOfHeatTransfer h_ext=25 "Exterior Heat Transfer Coefficient"
                                                                                             annotation (Dialog( group="Thermal Properties"));
-        parameter Modelica.SIunits.Temperature T_start=273.15 + 22 "Start Temperature of Room Air" annotation (Dialog(group="Thermal Properties"));
-        constant Modelica.SIunits.Temperature T_start_medium=273.15 + 22 "Start Temperature of Room Air" annotation (Dialog(group="Thermal Properties"));
+  parameter Modelica.Units.SI.Temperature T_start=273.15 + 22 "Start Temperature of Room Air" annotation (Dialog(group="Thermal Properties"));
+  constant Modelica.Units.SI.Temperature T_start_medium=273.15 + 22 "Start Temperature of Room Air" annotation (Dialog(group="Thermal Properties"));
         parameter Real k_Win=3.4 "Total Thermal Transmission Coefficient of Window (incl. outer and interior heat transfer coefficient"
                                                                                                                                        annotation (Dialog( group="Thermal Properties"));
         parameter Real tau_diff=0.6 "Transmittance of Window for Diffuse Radiation"
@@ -72,8 +75,7 @@ model ThermalHeatConsumer_L3
         parameter Real ACR=0.5  "Air Change Rate"
                                                  annotation (Dialog( group="Ventilation"));
         parameter Real HR=0  "Heat Regeneration" annotation (Dialog( group="Ventilation"));
-        parameter Modelica.SIunits.MassFlowRate mA_flow_nominal = V*1.2*6/3600 "Nominal Mass Flow Rate for Numerical Reasons (see Buildings.Examples.Tutorial.Boiler.System1 for more Information)"
-                                                                                                                                                                                                   annotation (Dialog( group="Ventilation"));
+  parameter Modelica.Units.SI.MassFlowRate mA_flow_nominal=V*1.2*6/3600 "Nominal Mass Flow Rate for Numerical Reasons (see Buildings.Examples.Tutorial.Boiler.System1 for more Information)" annotation (Dialog(group="Ventilation"));
 
       // _____________________________________________
       //

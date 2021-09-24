@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Gas.Check;
+﻿within TransiEnt.Grid.Gas.Check;
 model TestGasGridHamburgVarGCVPtG "High pressure gas grid of Hamburg with variable gross calorific value at consumption side"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
@@ -61,7 +65,7 @@ model TestGasGridHamburgVarGCVPtG "High pressure gas grid of Hamburg with variab
       choice=2 "TransiEnt formulation 1a",
       choice=3 "TransiEnt formulation 1b",
       choice=4 "Quasi-Stationary"));
-  replaceable model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable model PressureLoss = Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4                     constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
 
   //Consumers
   parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "|Controller|Type of controller";
@@ -271,7 +275,7 @@ public
         rotation=180,
         origin={47,-66})));
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Leversen(final volume=gasGridHamburg.volume_junction) annotation (Placement(transformation(extent={{96,-76},{116,-56}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Leversen(final volume=gasGridHamburg.volume_junction) annotation (Placement(transformation(extent={{96,-76},{116,-56}})));
   TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_CavernComp FeedIn_Tornesch(
     T_out=simCenter.T_ground,
     p_out=p_ely,
@@ -325,7 +329,7 @@ public
         extent={{-23,23},{23,-23}},
         rotation=180,
         origin={-110.5,-105})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth Mix_Leversen(volume=V_mixNG) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth Mix_Leversen(volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={-108,-160})));
@@ -353,8 +357,8 @@ public
         extent={{23,-23},{-23,23}},
         rotation=180,
         origin={163.5,-145})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth Mix_Tornesch(volume=V_mixNG) annotation (Placement(transformation(extent={{-194,132},{-174,152}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth Mix_Reitbrook(volume=V_mixNG) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth Mix_Tornesch(volume=V_mixNG) annotation (Placement(transformation(extent={{-194,132},{-174,152}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth Mix_Reitbrook(volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={162,-66})));
@@ -459,7 +463,7 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Leversen.gasPort2, FeedIn_Leversen.gasPortOut) annotation (Line(
-      points={{-108,-150},{-108,-128.23},{-109.35,-128.23}},
+      points={{-108,-150},{-108,-127.77},{-110.5,-127.77}},
       color={255,255,0},
       thickness=1.5));
   connect(gainLev.y, FeedIn_Leversen.P_el_set) annotation (Line(
@@ -475,7 +479,7 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Tornesch.gasPort2, FeedIn_Tornesch.gasPortOut) annotation (Line(
-      points={{-184,132},{-184,119.23},{-183.35,119.23}},
+      points={{-184,132},{-184,118.77},{-184.5,118.77}},
       color={255,255,0},
       thickness=1.5));
   connect(maxH2MassFlow_Tor.m_flow_H2_max, FeedIn_Tornesch.m_flow_feedIn) annotation (Line(
@@ -491,7 +495,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(Mix_Reitbrook.gasPort2, FeedIn_Reitbrook.gasPortOut) annotation (Line(
-      points={{162,-76},{162,-121.77},{162.35,-121.77}},
+      points={{162,-76},{162,-122.23},{163.5,-122.23}},
       color={255,255,0},
       thickness=1.5));
   connect(maxH2MassFlow_Lev.gasPortOut, Mix_Leversen.gasPort1) annotation (Line(
@@ -545,7 +549,7 @@ equation
       StopTime=2592000,
       Interval=900,
       Tolerance=1e-06,
-      __Dymola_Algorithm="Radau"),
+      __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput(inputs=false, events=false),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

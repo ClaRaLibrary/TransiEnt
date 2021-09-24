@@ -1,6 +1,7 @@
+TestSolarThermal_L0
 TestCollectorEN12975
 TestCollectorFluidCycle_constProp
 TestCollectorFluidCycle_constProp2
 TestCollectorFieldEN12975
 TestCollectorFieldFluidCycle
-TestSolarThermal_L0
+TestCollector_noFluidPorts

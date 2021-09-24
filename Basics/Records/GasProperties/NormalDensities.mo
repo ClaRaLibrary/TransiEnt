@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
 record NormalDensities "Record containing densities at STP (T=273.15 K, p=1.01325 bar) for components of natural gas in kg/m3"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -34,7 +38,7 @@ record NormalDensities "Record containing densities at STP (T=273.15 K, p=1.0132
   // _____________________________________________
 
   parameter String[:] names =                   {"Methane", "CH4",  "Ethane", "C2H6", "Propane", "C3H8", "Butane", "C4H10", "Nitrogen", "N2",   "Carbon_Dioxide", "CO2",  "Hydrogen", "H2",    "Carbon_Monoxide", "CO",  "Oxygen", "O2"};
-  parameter Modelica.SIunits.Density[:] rho_n = {0.7175,    0.7175, 1.3551,   1.3551, 2.010,     2.010,  2.709,    2.709,   1.2504,     1.2504, 1.9767,           1.9767, 0.08989,    0.08989, 1.2505,            1.2505, 1.4290,  1.4290};
+  parameter Modelica.Units.SI.Density[:] rho_n={0.7175,0.7175,1.3551,1.3551,2.010,2.010,2.709,2.709,1.2504,1.2504,1.9767,1.9767,0.08989,0.08989,1.2505,1.2505,1.4290,1.4290};
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

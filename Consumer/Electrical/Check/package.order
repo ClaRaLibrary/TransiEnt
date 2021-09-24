@@ -5,3 +5,4 @@ CheckSLPElectricConsumer
 CheckTableBasedElectricConsumer
 CheckExponentialElectricConsumer
 CheckExponentialElectricConsumer2
+CheckDynamicExponentialElectricConsumerComplex

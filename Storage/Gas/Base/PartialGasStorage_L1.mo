@@ -1,26 +1,30 @@
-within TransiEnt.Storage.Gas.Base;
+﻿within TransiEnt.Storage.Gas.Base;
 partial model PartialGasStorage_L1
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -87,8 +91,8 @@ equation
   gasPortOut.h_outflow=inStream(gasPortIn.h_outflow);
   gasPortIn.h_outflow=inStream(gasPortOut.h_outflow);
 
-  xi_in=cat(1,actualStream(gasPortIn.xi_outflow),{1-sum(actualStream(gasPortIn.xi_outflow))});
-  xi_out=cat(1,actualStream(gasPortOut.xi_outflow),{1-sum(actualStream(gasPortOut.xi_outflow))});
+  xi_in=cat(1,noEvent(actualStream(gasPortIn.xi_outflow)),{1-sum(noEvent(actualStream(gasPortIn.xi_outflow)))});
+  xi_out=cat(1,noEvent(actualStream(gasPortOut.xi_outflow)),{1-sum(noEvent(actualStream(gasPortOut.xi_outflow)))});
 
   H_flow_in_NCV=gasPortIn.m_flow*sum(NCV*xi_in);
   H_flow_out_NCV=gasPortOut.m_flow*sum(NCV*xi_out);

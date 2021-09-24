@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Producer.Electrical.Controllers;
 model PrimaryBalancingController "Primary balancing controller model based on Weissbach (2009)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -62,13 +66,14 @@ model PrimaryBalancingController "Primary balancing controller model based on We
 
   final parameter SI.Power P_pr_max=k_part*maxValuePrCtrl*P_n "Maximum power provided by this primary controller";
 
+  parameter Boolean useHomotopyVarSlewRateLim=simCenter.useHomotopy "true if homotopy shall be used in variableSlewRateLimiter" annotation (Dialog(tab="Expert Settings", enable=use_SlewRateLimiter));
+
   // _____________________________________________
   //
   //       Final and protected parameters
   // _____________________________________________
 
   final parameter SI.Power P_PBP_max=maxValuePrCtrl*k_part*P_n;
-   parameter Boolean use_SlewRateLimiter=true "True if Gradient of Primary Balancing Power shall be limited";
   parameter Boolean integratePowerNeg=false "True if negative power shall be integrated";
   parameter Boolean integratePowerPos=false "True if positive power shall be integrated";
 protected
@@ -90,7 +95,8 @@ public
     Td=Td_GradientLimiter,
     useThresh=useThresh,
     thres=thres,
-    y_start=0) if use_SlewRateLimiter annotation (Placement(transformation(extent={{41,-10},{61,10}})));
+    y_start=0,
+    final useHomotopy=useHomotopyVarSlewRateLim) if use_SlewRateLimiter annotation (Placement(transformation(extent={{41,-10},{61,10}})));
   Modelica.Blocks.Math.Gain P_PBP_ideal_star(k=1/droop) annotation (Placement(transformation(extent={{-20,-9},{-2,10}})));
   Modelica.Blocks.Math.Gain P_PBP(k=k_part*P_n) annotation (Placement(transformation(extent={{69,-9},{88,9}})));
 
@@ -140,7 +146,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   else
-    connect(P_PBP_limit_star.y, P_PBP_set);
+    connect(P_PBP_limit_star.y, P_PBP.u);
   end if;
    connect(P_PBP.y, P_PBP_set) annotation (Line(
       points={{88.95,0},{106,0}},

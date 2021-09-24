@@ -1,25 +1,29 @@
-within TransiEnt.Components.Gas.Reactor.Check;
+﻿within TransiEnt.Components.Gas.Reactor.Check;
 model TestPrereformer_L1
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_SG_var vle_ng7_sg;
@@ -59,24 +63,24 @@ model TestPrereformer_L1
         rotation=0,
         origin={52,10})));
 protected
-  Modelica.SIunits.MolarFlowRate n_flow_In;
+  Modelica.Units.SI.MolarFlowRate n_flow_In;
 public
-  Modelica.SIunits.MolarFlowRate n_flow_C_In;
-  Modelica.SIunits.MolarFlowRate n_flow_H_In;
-  Modelica.SIunits.MolarFlowRate n_flow_O_In;
-  Modelica.SIunits.MolarFlowRate n_flow_N_In;
+  Modelica.Units.SI.MolarFlowRate n_flow_C_In;
+  Modelica.Units.SI.MolarFlowRate n_flow_H_In;
+  Modelica.Units.SI.MolarFlowRate n_flow_O_In;
+  Modelica.Units.SI.MolarFlowRate n_flow_N_In;
 protected
-  Modelica.SIunits.MolarFlowRate n_flow_Out;
+  Modelica.Units.SI.MolarFlowRate n_flow_Out;
 public
-  Modelica.SIunits.MolarFlowRate n_flow_C_Out;
-  Modelica.SIunits.MolarFlowRate n_flow_H_Out;
-  Modelica.SIunits.MolarFlowRate n_flow_O_Out;
-  Modelica.SIunits.MolarFlowRate n_flow_N_Out;
+  Modelica.Units.SI.MolarFlowRate n_flow_C_Out;
+  Modelica.Units.SI.MolarFlowRate n_flow_H_Out;
+  Modelica.Units.SI.MolarFlowRate n_flow_O_Out;
+  Modelica.Units.SI.MolarFlowRate n_flow_N_Out;
 
-  Modelica.SIunits.MolarFlowRate Delta_n_flow_C=n_flow_C_In-n_flow_C_Out;
-  Modelica.SIunits.MolarFlowRate Delta_n_flow_H=n_flow_H_In-n_flow_H_Out;
-  Modelica.SIunits.MolarFlowRate Delta_n_flow_O=n_flow_O_In-n_flow_O_Out;
-  Modelica.SIunits.MolarFlowRate Delta_n_flow_N=n_flow_N_In-n_flow_N_Out;
+  Modelica.Units.SI.MolarFlowRate Delta_n_flow_C=n_flow_C_In - n_flow_C_Out;
+  Modelica.Units.SI.MolarFlowRate Delta_n_flow_H=n_flow_H_In - n_flow_H_Out;
+  Modelica.Units.SI.MolarFlowRate Delta_n_flow_O=n_flow_O_In - n_flow_O_Out;
+  Modelica.Units.SI.MolarFlowRate Delta_n_flow_N=n_flow_N_In - n_flow_N_Out;
 
   Real rel_Delta_n_flow_C=Delta_n_flow_C/n_flow_C_In;
   Real rel_Delta_n_flow_H=Delta_n_flow_H/n_flow_H_In;

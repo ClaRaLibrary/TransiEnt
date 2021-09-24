@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Gas.MethanatorSystem;
+﻿within TransiEnt.Producer.Gas.MethanatorSystem;
 model MethanatorSystem_L1
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -116,12 +120,16 @@ protected
   // _____________________________________________
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     h=inStream(gasPortIn.h_outflow),
     p=gasPortIn.p,
     xi=inStream(gasPortIn.xi_outflow),
     deactivateTwoPhaseRegion=true,
     vleFluidType=medium) annotation (Placement(transformation(extent={{-100,-40},{-80,-20}})));
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     deactivateTwoPhaseRegion=true,
     vleFluidType=medium,
     p=gasPortOut.p,
@@ -129,13 +137,16 @@ protected
     h=gasPortOut.h_outflow) annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
 
 public
-  parameter Real conversionFactor_H2=0.9889744935 "fraction of hydrogen that is methanated" annotation (Dialog(tab="General", group="General"));
+  parameter Real conversionFactor_H2=if idx_CO2 == 0 then 1 else 0.9889744935 "fraction of hydrogen that is methanated" annotation (Dialog(tab="General", group="General"));
   parameter SI.Temperature T_out_coolant_max_set=700+273.15 "technically feasible limitation for coolant output temperature" annotation (Dialog(enable=useFluidCoolantPort,group="Coolant"));
   final parameter SI.MolarMass M_H2O= 18.01528;
   final parameter SI.MolarMass M_H2= 2.01588;
   final parameter SI.MolarMass M_CO2= 44.0095;
   final parameter SI.MolarMass M_CH4= 16.0425;
-
+  final parameter Integer idx_CH4 = Modelica.Math.BooleanVectors.firstTrueIndex(Modelica.Utilities.Strings.isEqual(fill("Methane",medium.nc),TransiEnt.Basics.Functions.GasProperties.shortenCompName(medium.vleFluidNames)));
+  final parameter Integer idx_H2 = Modelica.Math.BooleanVectors.firstTrueIndex(Modelica.Utilities.Strings.isEqual(fill("Hydrogen",medium.nc),TransiEnt.Basics.Functions.GasProperties.shortenCompName(medium.vleFluidNames)));
+  final parameter Integer idx_CO2 = Modelica.Math.BooleanVectors.firstTrueIndex(Modelica.Utilities.Strings.isEqual(fill("Carbon_Dioxide",medium.nc),TransiEnt.Basics.Functions.GasProperties.shortenCompName(medium.vleFluidNames)));
+  final parameter Integer idx_otherComp[:] = if idx_CO2 == 0 then TransiEnt.Basics.Functions.findSetDifference(1:medium.nc-1, {idx_CH4}) else TransiEnt.Basics.Functions.findSetDifference(1:medium.nc-1, {idx_CH4,idx_CO2});
   // _____________________________________________
   //
   //             Variable Declarations
@@ -150,16 +161,15 @@ public
  SI.MassFlowRate m_flow_methanator_out_H2;
  SI.MassFlowRate m_flow_methanator_out_H2O;
  SI.MassFlowRate m_flow_out;
- SI.MassFraction composition_methanator_out_dried[6];
- SI.MassFraction composition_out[6];
+ SI.MassFraction composition_methanator_out_dried[medium.nc-1];
+ SI.MassFraction composition_out[medium.nc-1];
  SI.VolumeFraction x_H2 "calculated hydrogen volume fraction in output";
 
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi(medium=medium) annotation (Placement(transformation(extent={{-20,-10},{-40,10}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=-m_flow_out)                               annotation (Placement(transformation(extent={{-16,16},{4,36}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow Sink_CO2(
-    medium=medium,
+    medium=medium_CO2,
     variable_m_flow=true,
-    xi_const={0,0,0,0,0,1},
     T_const=493.15) if useCO2Input annotation (Placement(transformation(
         extent={{-6,-6},{6,6}},
         rotation=-90,
@@ -178,9 +188,9 @@ public
     Tau_i=5,
     Tau_d=5,
     initOption=501,
-    y_start=1)
+    y_start=1) if hydrogenFraction_fixed>0
              annotation (Placement(transformation(extent={{-54,68},{-60,74}})));
-  Modelica.Blocks.Sources.RealExpression realExpression3[6](y=composition_out)                 annotation (Placement(transformation(extent={{-16,-34},{4,-14}})));
+  Modelica.Blocks.Sources.RealExpression realExpression3[medium.nc-1](y=composition_out)                 annotation (Placement(transformation(extent={{-16,-34},{4,-14}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundary_Txim_flow1(medium=medium,
     variable_m_flow=true,
     variable_xi=true,                                                                              T_const=T_out_SNG) annotation (Placement(transformation(extent={{20,-10},{40,10}})));
@@ -199,19 +209,39 @@ public
         extent={{-4,-4},{4,4}},
         rotation=-90,
         origin={-44,-52})));
+  Modelica.Blocks.Math.Gain PID_y(final k=1) annotation (Placement(transformation(
+        extent={{-4,4},{4,-4}},
+        rotation=180,
+        origin={-76,71})));
+  Modelica.Blocks.Sources.RealExpression realExpression_one(final y=1) annotation (Placement(transformation(
+        extent={{-4,4},{4,-4}},
+        rotation=180,
+        origin={-56,82})));
 
 equation
+  assert(idx_H2 == medium.nc,"Hydrogen has to be the last component in the fluid model for this model (" + getInstanceName() + ") to work!",AssertionLevel.error);
+
   T_out_coolant_max=T_out_coolant_target;
-  m_flow_methanator_in_H2 = gasPortIn.m_flow*PID.y+Modelica.Constants.eps;
-  m_flow_bypass=gasPortIn.m_flow*(1-PID.y);
+  m_flow_methanator_in_H2 = gasPortIn.m_flow*PID_y.y+Modelica.Constants.eps;
+  m_flow_bypass=gasPortIn.m_flow*(1-PID_y.y);
   m_flow_methanator_out_CH4=max(0,((m_flow_methanator_in_H2) - m_flow_methanator_out_H2)*M_CH4/(4*M_H2));
   m_flow_methanator_out_H2=max(0, (1 - conversionFactor_H2)*(m_flow_methanator_in_H2));
   m_flow_methanator_out_CO2=max(0,m_flow_methanator_out_H2*M_CO2/(4*M_H2));
   m_flow_methanator_out_H2O=max(0,M_H2O/(2*M_H2)*(m_flow_methanator_in_H2));
   m_flow_methanator_out=m_flow_methanator_out_CH4+m_flow_methanator_out_H2+m_flow_methanator_out_CO2+m_flow_methanator_out_H2O;
-  composition_methanator_out_dried={m_flow_methanator_out_CH4/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O)),0,0,0,0,m_flow_methanator_out_CO2/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O))};
+//   composition_methanator_out_dried={min(1,m_flow_methanator_out_CH4/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O))),0,0,0,0,m_flow_methanator_out_CO2/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O))};
+  composition_methanator_out_dried[idx_CH4]=min(1,m_flow_methanator_out_CH4/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O)));
+  composition_methanator_out_dried[idx_otherComp]=zeros(size(idx_otherComp,1));
+  if not idx_CO2 == 0 then
+    composition_methanator_out_dried[idx_CO2]=m_flow_methanator_out_CO2/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O));
+  end if;
   m_flow_out=m_flow_methanator_out-m_flow_methanator_out_H2O+m_flow_bypass;
-  composition_out={m_flow_methanator_out_CH4/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O+m_flow_bypass)),0,0,0,0,m_flow_methanator_out_CO2/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O+m_flow_bypass))};
+//   composition_out={min(1,m_flow_methanator_out_CH4/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O+m_flow_bypass))),0,0,0,0,m_flow_methanator_out_CO2/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O+m_flow_bypass))};
+  composition_out[idx_CH4]=min(1,m_flow_methanator_out_CH4/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O+m_flow_bypass)));
+  composition_out[idx_otherComp]=zeros(size(idx_otherComp,1));
+  if not idx_CO2 == 0 then
+    composition_out[idx_CO2]=m_flow_methanator_out_CO2/max(Modelica.Constants.eps,(m_flow_methanator_out-m_flow_methanator_out_H2O+m_flow_bypass));
+  end if;
   H_flow_in_NCV=gasPortIn.m_flow*sum(NCV*cat(1,gasIn.xi,{1-sum(gasIn.xi)}));
   H_flow_out_NCV=gasPortOut.m_flow*sum(NCV*cat(1,gasOut.xi,{1-sum(gasOut.xi)}));
   H_flow_in_GCV=gasPortIn.m_flow*sum(GCV*cat(1,gasIn.xi,{1-sum(gasIn.xi)}));
@@ -229,7 +259,7 @@ equation
   end if;
 
   //x_H2=(1-sum(composition_out))/rho_H2*gasOut.d;
-  x_H2=moleCompOut_Dried.fraction[7];
+  x_H2=moleCompOut_Dried.fraction[medium.nc];
   connect(moleCompIn.gasPortIn, gasPortIn) annotation (Line(
       points={{-82,0},{-100,0}},
       color={255,255,0},
@@ -265,6 +295,11 @@ equation
   connect(collectCosts.costsCollector, modelStatistics.costsCollector);
 
   connect(realExpression1.y, controllerCO2ForMethanator.m_flow_H2) annotation (Line(points={{-57.3,-33},{-52.65,-33},{-52.65,-38},{-48,-38}}, color={0,0,127}));
+  if hydrogenFraction_fixed>0 then
+    connect(PID_y.u, PID.y) annotation (Line(points={{-71.2,71},{-65.6,71},{-65.6,71},{-60.3,71}}, color={0,0,127}));
+  else
+    connect(realExpression_one.y, PID_y.u) annotation (Line(points={{-60.4,82},{-66,82},{-66,71},{-71.2,71}}, color={0,0,127}));
+  end if;
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Text(
           extent={{50,62},{84,32}},
@@ -329,12 +364,13 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(no elements)</p>
+<p>Hydrogen has to be the last component in the fluid model.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no elements)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Oliver Sch&uuml;lting (oliver.schuelting@tuhh.de) in Jul 2019</p>
+<p>Model modified by Carsten Bode (c.bode@tuhh.de) in Feb 2021 (made model more general so that it works for other fluids as well)</p>
 </html>"));
 end MethanatorSystem_L1;

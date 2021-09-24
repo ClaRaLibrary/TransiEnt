@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Heat.SolarThermal.Base;
+﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model ExtraTerrestrialIrradiance "Calculates the extraterrestrial irradiance of the sun"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -28,7 +32,7 @@ model ExtraTerrestrialIrradiance "Calculates the extraterrestrial irradiance of 
   // _____________________________________________
 
   import Const = Modelica.Constants;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   extends SolarTime;
 
   // _____________________________________________
@@ -38,10 +42,10 @@ model ExtraTerrestrialIrradiance "Calculates the extraterrestrial irradiance of 
 
   constant SI.Irradiance solarConstant=1367;
 
-  parameter SI.Angle latitude=SI.Conversions.from_deg(53.55) "latitude of the position, north posiive, 53,55 N for Hamburg";
-  parameter SI.Angle slope=SI.Conversions.from_deg(30) "slope of the tilted surface, Assumption";
+  parameter SI.Angle latitude=Modelica.Units.Conversions.from_deg(53.55) "latitude of the position, north posiive, 53,55 N for Hamburg";
+  parameter SI.Angle slope=Modelica.Units.Conversions.from_deg(30) "slope of the tilted surface, Assumption";
   parameter SI.Angle surfaceAzimuthAngle=0 "Angle between the local meridian and the projection of the normal of the surface on a horizontal surface, west positive";
-
+  parameter Boolean fixedMounting=true "choose if surface is fix mounted - if 'true' the sun position is ideally tracked";
   // _____________________________________________
   //
   //             Variable Declarations
@@ -61,12 +65,15 @@ equation
   // _____________________________________________
 
   //angle of sun incidence
-  declination=SI.Conversions.from_deg(0.3948 - 23.2559*cos(J + SI.Conversions.from_deg(9.1)) - 0.3915*cos(2*J + SI.Conversions.from_deg(5.4)) - 0.1764*cos(3*J + SI.Conversions.from_deg(26)));
+  declination=Modelica.Units.Conversions.from_deg(0.3948 - 23.2559*cos(J + Modelica.Units.Conversions.from_deg(9.1)) - 0.3915*cos(2*J + Modelica.Units.Conversions.from_deg(5.4)) - 0.1764*cos(3*J + Modelica.Units.Conversions.from_deg(26)));
   hourAngle= -Const.pi+solarTime/(60*60*24)*2*Const.pi; // = -pi at +midnight, = 0 at solar noon = pi at -midnight -> multiple of pi does not harm calculation
 
   angle_horizontal=acos(sin(declination)*sin(latitude)+cos(declination)*cos(latitude)*cos(hourAngle));
-  angle_tilted=acos(sin(declination)*sin(latitude)*cos(slope)-sin(declination)*cos(latitude)*sin(slope)*cos(surfaceAzimuthAngle)+cos(declination)*cos(latitude)*cos(slope)*cos(hourAngle)+cos(declination)*sin(latitude)*sin(slope)*cos(surfaceAzimuthAngle)*cos(hourAngle)+cos(declination)*sin(slope)*sin(surfaceAzimuthAngle)*sin(hourAngle));
-
+  if fixedMounting then
+    angle_tilted=acos(sin(declination)*sin(latitude)*cos(slope)-sin(declination)*cos(latitude)*sin(slope)*cos(surfaceAzimuthAngle)+cos(declination)*cos(latitude)*cos(slope)*cos(hourAngle)+cos(declination)*sin(latitude)*sin(slope)*cos(surfaceAzimuthAngle)*cos(hourAngle)+cos(declination)*sin(slope)*sin(surfaceAzimuthAngle)*sin(hourAngle));
+  else
+    angle_tilted=0;
+  end if;
   //extraterrestrial irradiance
   irradiance_extraterrestrial = cos(angle_horizontal)*solarConstant*(1+0.033*cos(J));
 

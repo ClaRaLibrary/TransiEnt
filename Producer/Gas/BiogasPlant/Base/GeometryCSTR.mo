@@ -1,27 +1,31 @@
-within TransiEnt.Producer.Gas.BiogasPlant.Base;
+﻿within TransiEnt.Producer.Gas.BiogasPlant.Base;
 model GeometryCSTR "Geometry of CSTR"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -35,11 +39,11 @@ model GeometryCSTR "Geometry of CSTR"
   //             Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Diameter D_i=1 "Inner Diameter of CSTR";
-  parameter Modelica.SIunits.Diameter D_o=1.1 "Outer Diameter of CSTR";
-  parameter Modelica.SIunits.Height Height_tankWall=1 "Height of tank wall";
-  parameter Modelica.SIunits.Height Height_tankCenter=1 "Height of tank in center";
-  parameter Modelica.SIunits.Height Height_fluid=0.9 "Height of fluid in CSTR";
+  parameter Modelica.Units.SI.Diameter D_i=1 "Inner Diameter of CSTR";
+  parameter Modelica.Units.SI.Diameter D_o=1.1 "Outer Diameter of CSTR";
+  parameter Modelica.Units.SI.Height Height_tankWall=1 "Height of tank wall";
+  parameter Modelica.Units.SI.Height Height_tankCenter=1 "Height of tank in center";
+  parameter Modelica.Units.SI.Height Height_fluid=0.9 "Height of fluid in CSTR";
 
   parameter Real impellerRatio(
     min=0,
@@ -47,22 +51,22 @@ model GeometryCSTR "Geometry of CSTR"
 
   parameter Real relativeImpellerHeight=1/5 "Ratio of height of impeller blade to impeller diameter";
 
-  parameter Modelica.SIunits.Diameter d=0.1016 "outer diameter of a tube of a coil";
-  parameter Modelica.SIunits.Diameter d_i=0.1016 - 2*0.0030480 "inner diameter of a tube of a coil";
+  parameter Modelica.Units.SI.Diameter d=0.1016 "outer diameter of a tube of a coil";
+  parameter Modelica.Units.SI.Diameter d_i=0.1016 - 2*0.0030480 "inner diameter of a tube of a coil";
 
   // _____________________________________________
   //
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  final parameter Modelica.SIunits.Diameter d_r=impellerRatio*D_i "Diameter of impeller";
-  final parameter Modelica.SIunits.Height height_r=relativeImpellerHeight*d_r "Height of impeller blade";
-  final parameter Modelica.SIunits.Volume V_fluid=pi/4*D_i^2*Height_fluid "Volume of fluid in CSTR";
-  final parameter Modelica.SIunits.Volume V_gas=pi/4*D_i^2*((Height_tankWall - Height_fluid) + 1/3*(Height_tankCenter - Height_tankWall)) "Volume of gas in CSTR assuming cone shaped roof";
-  final parameter Modelica.SIunits.Area A_wallFluid=pi*D_i*Height_fluid "Area of wall in contact with fluid";
-  final parameter Modelica.SIunits.Area A_wallGas=pi*D_i*(Height_tankWall - Height_fluid) "Area of wall in contact with gas";
-  final parameter Modelica.SIunits.Area A_wallTank=pi*D_o*Height_tankWall "Area of external tank Wall";
-  final parameter Modelica.SIunits.Area A_roof=pi*D_i/2*sqrt(D_i^2/4 + (Height_tankCenter - Height_tankWall)^2) "Area of roof assuming cone shape";
+  final parameter Modelica.Units.SI.Diameter d_r=impellerRatio*D_i "Diameter of impeller";
+  final parameter Modelica.Units.SI.Height height_r=relativeImpellerHeight*d_r "Height of impeller blade";
+  final parameter Modelica.Units.SI.Volume V_fluid=pi/4*D_i^2*Height_fluid "Volume of fluid in CSTR";
+  final parameter Modelica.Units.SI.Volume V_gas=pi/4*D_i^2*((Height_tankWall - Height_fluid) + 1/3*(Height_tankCenter - Height_tankWall)) "Volume of gas in CSTR assuming cone shaped roof";
+  final parameter Modelica.Units.SI.Area A_wallFluid=pi*D_i*Height_fluid "Area of wall in contact with fluid";
+  final parameter Modelica.Units.SI.Area A_wallGas=pi*D_i*(Height_tankWall - Height_fluid) "Area of wall in contact with gas";
+  final parameter Modelica.Units.SI.Area A_wallTank=pi*D_o*Height_tankWall "Area of external tank Wall";
+  final parameter Modelica.Units.SI.Area A_roof=pi*D_i/2*sqrt(D_i^2/4 + (Height_tankCenter - Height_tankWall)^2) "Area of roof assuming cone shape";
 
   // _____________________________________________
   //

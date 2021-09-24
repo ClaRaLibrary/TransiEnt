@@ -3,6 +3,7 @@ Solids
 Base
 RealGasGCV_xi
 RealGasNCV_xi
+SolidWithTemperatureVariantHeatCapacity
 IdealGasGCV_xi_Block
 IdealGasNCV_xi_Block
 RealGasGCV_xi_Block

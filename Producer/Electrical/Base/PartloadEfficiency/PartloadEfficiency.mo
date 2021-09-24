@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Base.PartloadEfficiency;
+﻿within TransiEnt.Producer.Electrical.Base.PartloadEfficiency;
 model PartloadEfficiency "Block that calculates the partload efficiency from a charline, the actual power output and the nominal output"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -40,6 +44,7 @@ model PartloadEfficiency "Block that calculates the partload efficiency from a c
   parameter Real CO2_Deposition_Rate=0 "Fraction of CO2 that is deposited via CCS";
   parameter Integer quantity=1 "amount of power plant blocks into which nominal power is split" annotation (Dialog(group="Physical Constraints"));
   parameter Real P_min_star=0.2 "Fraction of nominal power (=20% of nominal power)" annotation(Dialog(group="Physical Constraints"));
+  final parameter Boolean constantEfficiency=(EfficiencyCharLine.CL_eta_P[1,1]==0 and EfficiencyCharLine.CL_eta_P[2,1]==1 and EfficiencyCharLine.CL_eta_P[1,2]==1 and EfficiencyCharLine.CL_eta_P[2,2]==1) "true if contant efficiency charline is used";
   // _____________________________________________
   //
   //                  Interfaces
@@ -84,12 +89,17 @@ model PartloadEfficiency "Block that calculates the partload efficiency from a c
   Modelica.Blocks.Logical.Switch switch1 if  CO2_Deposition_Rate>0 annotation (Placement(transformation(extent={{-22,-62},{-2,-42}})));
   Modelica.Blocks.Sources.RealExpression realExpression1(y=0) if                  CO2_Deposition_Rate>0  annotation (Placement(transformation(extent={{-48,-82},{-26,-60}})));
   Modelica.Blocks.Sources.RealExpression P_el_is_array_lastPowerPlant(y=max(P_min_star, P_needed_lastPowerPlant)) if          quantity>1 annotation (Placement(transformation(extent={{-132,8},{-112,28}})));
-  Modelica.Blocks.Sources.RealExpression eta_is_array_withCCS(y=if UseCCS then (limiter1.y + integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)*(eta_n - CCS_Characteristics.CCS_Absolute_Efficiency_Loss[end, 2]*CCS_Efficiency_Losses_Scaling.y[1]))/(max(0, integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)) + 1) else (limiter1.y + integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)*(eta_n))/(max(0, integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)) + 1)) if
+  Modelica.Blocks.Sources.RealExpression eta_is_array_withCCS(y=
+  if UseCCS and constantEfficiency then nominal.y-CCS_Characteristics.CCS_Absolute_Efficiency_Loss[end,2]*Modelica.Math.Vectors.interpolate(CCS_Characteristics.Deviation_CO2_Absolute_Efficiency_Loss[:,1],CCS_Characteristics.Deviation_CO2_Absolute_Efficiency_Loss[:,2],CO2_Deposition_Rate)
+  elseif not
+            (UseCCS) and constantEfficiency then nominal.y
+  elseif UseCCS then (limiter1.y + integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)*(eta_n - CCS_Characteristics.CCS_Absolute_Efficiency_Loss[end, 2]*CCS_Efficiency_Losses_Scaling.y[1]))/(max(0, integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)) + 1) else (limiter1.y + integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)*(eta_n))/(max(0, integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)) + 1)) if
                                                                                                                                                                                                         CO2_Deposition_Rate>0 and quantity>1 annotation (Placement(transformation(extent={{72,36},{92,56}})));
-  Modelica.Blocks.Sources.RealExpression eta_is_array_withoutCCS(y=(nominal.y + (integer(max(Modelica.Constants.eps, min(1,P_el_is))*quantity))*(eta_n))/(max(0, integer(max(Modelica.Constants.eps, min(1,P_el_is))*quantity)) + 1)) if
+  Modelica.Blocks.Sources.RealExpression eta_is_array_withoutCCS(y=
+  if constantEfficiency then nominal.y else noEvent((nominal.y + (integer(max(Modelica.Constants.eps, min(1,P_el_is))*quantity))*(eta_n))/(max(0, integer(max(Modelica.Constants.eps, min(1,P_el_is))*quantity)) + 1))) if
                                                                                                                                                                    CO2_Deposition_Rate<=0 and quantity>1 annotation (Placement(transformation(extent={{72,22},{92,42}})));
-  Modelica.SIunits.Power P_needed_lastPowerPlant=(max(Modelica.Constants.eps, min(1,P_el_is)) - integer(max(Modelica.Constants.eps, min(1,P_el_is))*quantity)*(1/quantity))*quantity;
-  TransiEnt.Basics.Blocks.FirstOrder firstOrder(Tau=10) if quantity>1 annotation (Placement(transformation(extent={{90,8},{96,14}})));
+  Modelica.Units.SI.Power P_needed_lastPowerPlant=if constantEfficiency then 1 else noEvent((max(Modelica.Constants.eps, min(1, P_el_is)) - integer(max(Modelica.Constants.eps, min(1, P_el_is))*quantity)*(1/quantity))*quantity);
+  TransiEnt.Basics.Blocks.FirstOrder firstOrder(Tau=10) if quantity>1 and not constantEfficiency annotation (Placement(transformation(extent={{90,8},{96,14}})));
 equation
   // _____________________________________________
   //
@@ -124,9 +134,9 @@ equation
     connect(eta_rel.y[1], nominal.u);
   end if;
 
-  if quantity==1 and CO2_Deposition_Rate<=0 then
+  if (quantity==1 or quantity>1 and constantEfficiency) and CO2_Deposition_Rate<=0 then
     connect(nominal.y, eta_is) annotation (Line(points={{33,18},{86,18},{86,0},{106,0}},   color={0,0,127}));
-  elseif quantity==1 and CO2_Deposition_Rate>0 then
+  elseif (quantity==1 or quantity>1 and constantEfficiency) and CO2_Deposition_Rate>0 then
     connect(limiter1.y,eta_is) annotation (Line(points={{83,0},{106,0}},                   color={0,0,127}));
   elseif quantity>1 and CO2_Deposition_Rate>0 then
     connect(firstOrder.y, eta_is);

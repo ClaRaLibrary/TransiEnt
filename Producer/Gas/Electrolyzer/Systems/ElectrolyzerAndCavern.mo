@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Systems;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydrogen cavern (use with: TransiEnt.Producer.Combined.LargeScaleCHP.H2CofiringCHP)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -44,29 +48,29 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
   //Fluid finition
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2() "Medium to be used" annotation (Dialog(tab="Cavern", group="Gas Properties"));
   constant ClaRa.Basics.Units.MassFraction X_const[medium.nc - 1]=zeros(medium.nc- 1) "Constant composition: 100% hydrogen" annotation (Dialog(tab="Cavern", group="Gas Properties"));
-  parameter Modelica.SIunits.Pressure p_cavern_nom=100e5 "Cavern nominal pressure" annotation (Dialog(tab="Cavern", group="Gas Properties"));
-  parameter Modelica.SIunits.Temperature T_cavern=20+273.15 "cavern temperature" annotation (Dialog(tab="Cavern", group="Gas Properties"));
+  parameter Modelica.Units.SI.Pressure p_cavern_nom=100e5 "Cavern nominal pressure" annotation (Dialog(tab="Cavern", group="Gas Properties"));
+  parameter Modelica.Units.SI.Temperature T_cavern=20 + 273.15 "cavern temperature" annotation (Dialog(tab="Cavern", group="Gas Properties"));
 
   //Capacity
-  parameter Modelica.SIunits.Volume V_cavern=500e3 "Cavern volume" annotation (Dialog(tab="Cavern", group="Size and capacity")); //To Test ModelOptCon, remove this value
-  parameter Modelica.SIunits.Volume V_cushion=(1-0.63)*V_cavern annotation (Dialog(tab="Cavern", group="Size and capacity"));
-  parameter Modelica.SIunits.Volume V_initial=V_cushion annotation (Dialog(tab="Cavern", group="Size and capacity"));
-  Modelica.SIunits.Mass m_cushion "cushion / base gas";
+  parameter Modelica.Units.SI.Volume V_cavern=500e3 "Cavern volume" annotation (Dialog(tab="Cavern", group="Size and capacity"));//To Test ModelOptCon, remove this value
+  parameter Modelica.Units.SI.Volume V_cushion=(1 - 0.63)*V_cavern annotation (Dialog(tab="Cavern", group="Size and capacity"));
+  parameter Modelica.Units.SI.Volume V_initial=V_cushion annotation (Dialog(tab="Cavern", group="Size and capacity"));
+  Modelica.Units.SI.Mass m_cushion "cushion / base gas";
 
   //Load/unload massflow limits
-  parameter Modelica.SIunits.MassFlowRate m_flow_max_in=10.5*(1000/3600) "Maximum mass flow into the cavern";
-  parameter Modelica.SIunits.MassFlowRate m_flow_max_out=13.5*(1000/3600) "Maximum mass flow into the cavern";
+  parameter Modelica.Units.SI.MassFlowRate m_flow_max_in=10.5*(1000/3600) "Maximum mass flow into the cavern";
+  parameter Modelica.Units.SI.MassFlowRate m_flow_max_out=13.5*(1000/3600) "Maximum mass flow into the cavern";
 
   //Pressure limits
   //   parameter Modelica.SIunits.Pressure p_min=58e5 "cavern minimum pressure";
   //   parameter Modelica.SIunits.Pressure p_max=175e5 "Cavern maximum pressure";
 
     /////////////////  //Electrolyzer Parameters ////////////////////////////
-    parameter Modelica.SIunits.Power P_nom_ely=400e6 "Nominal power capacity of the electrolyzer" annotation (Dialog(tab="Electrolyzer", group="Size and capacity")); //To Test ModelOptCon, remove this value
+  parameter Modelica.Units.SI.Power P_nom_ely=400e6 "Nominal power capacity of the electrolyzer" annotation (Dialog(tab="Electrolyzer", group="Size and capacity"));  //To Test ModelOptCon, remove this value
     parameter Real eta_ely_nom=0.7 annotation (Dialog(tab="Electrolyzer", group="Size and capacity"));
 
    //////Pipeline parameter
-    parameter Modelica.SIunits.Length L=12e3 annotation (Dialog(tab="Hydrogen pipeline"));
+  parameter Modelica.Units.SI.Length L=12e3 annotation (Dialog(tab="Hydrogen pipeline"));
 
     //Co-firing ratio
    parameter Real k_H2_fraction=simCenter.k_H2_fraction;
@@ -79,36 +83,36 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
   // _____________________________________________
 
    //Fluid properties
-   Modelica.SIunits.Density rho "density of stored gas";
-   Modelica.SIunits.SpecificEnergy LHV=120e6; //in J/kg
+  Modelica.Units.SI.Density rho "density of stored gas";
+  Modelica.Units.SI.SpecificEnergy LHV=120e6; //in J/kg
 
    //Variables for Hydrogen co-firing
-   Modelica.SIunits.HeatFlowRate Q_flow_GuD_H2;
+  Modelica.Units.SI.HeatFlowRate Q_flow_GuD_H2;
 
    //Power
-   Modelica.SIunits.Power P_in_ely;
+  Modelica.Units.SI.Power P_in_ely;
 
    //Energy
-   Modelica.SIunits.Energy E_storage;
-   Modelica.SIunits.Energy E_initial;
-   Modelica.SIunits.Energy E_storage_max;
+  Modelica.Units.SI.Energy E_storage;
+  Modelica.Units.SI.Energy E_initial;
+  Modelica.Units.SI.Energy E_storage_max;
 
   //Mass
-   Modelica.SIunits.Mass m_initial "Initial mass in cavern";
-   Modelica.SIunits.Mass dm_storage "Mass in cavern";
-   Modelica.SIunits.Mass m_storage "Mass in cavern";
-   Modelica.SIunits.Mass m_out "Mass in cavern";
-   Modelica.SIunits.Mass m_in "Mass in cavern";
-   Modelica.SIunits.Mass m_max_cavern "Cavern maximum mass capacity";
+  Modelica.Units.SI.Mass m_initial "Initial mass in cavern";
+  Modelica.Units.SI.Mass dm_storage "Mass in cavern";
+  Modelica.Units.SI.Mass m_storage "Mass in cavern";
+  Modelica.Units.SI.Mass m_out "Mass in cavern";
+  Modelica.Units.SI.Mass m_in "Mass in cavern";
+  Modelica.Units.SI.Mass m_max_cavern "Cavern maximum mass capacity";
    //Mass flows
-   Modelica.SIunits.MassFlowRate m_flow_in "Mass flow into cavern";
-   Modelica.SIunits.MassFlowRate m_flow_out "Mass flow out of cavern";
-   Modelica.SIunits.MassFlowRate m_flow_nom_ely "Nominal mass flow electrolyzer";
-   Modelica.SIunits.MassFlowRate m_flow_ely "Mass flow electrolyzer (limited)";
+  Modelica.Units.SI.MassFlowRate m_flow_in "Mass flow into cavern";
+  Modelica.Units.SI.MassFlowRate m_flow_out "Mass flow out of cavern";
+  Modelica.Units.SI.MassFlowRate m_flow_nom_ely "Nominal mass flow electrolyzer";
+  Modelica.Units.SI.MassFlowRate m_flow_ely "Mass flow electrolyzer (limited)";
 
    //Volume flow
-   Modelica.SIunits.VolumeFlowRate V_flow_ely "Volume flow electrolizer";
-   Modelica.SIunits.VolumeFlowRate V_flow_nom_ely "Volume flow electrolizer";
+  Modelica.Units.SI.VolumeFlowRate V_flow_ely "Volume flow electrolizer";
+  Modelica.Units.SI.VolumeFlowRate V_flow_nom_ely "Volume flow electrolizer";
 
    Real Level;
   // _____________________________________________
@@ -117,6 +121,8 @@ model ElectrolyzerAndCavern "Simple model of an electrolyzer plant and a hydroge
   // _____________________________________________
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluidH2(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=p_cavern_nom,
     T=T_cavern,
     xi=X_const,

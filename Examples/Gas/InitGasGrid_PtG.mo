@@ -1,25 +1,29 @@
-within TransiEnt.Examples.Gas;
+﻿within TransiEnt.Examples.Gas;
 model InitGasGrid_PtG
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -39,33 +43,33 @@ model InitGasGrid_PtG
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid mediumH2=simCenter.gasModel3 "Medium hydrogen";
 
   parameter Boolean quadraticPressureLoss=false "|Pipes|Nominal point pressure loss, set to true for quadratic coefficient";
-  parameter Modelica.SIunits.Pressure pipe1_Delta_p_nom "|Pipes|Nominal pressure loss";
-  parameter Modelica.SIunits.Pressure pipe2_Delta_p_nom "|Pipes|Nominal pressure loss";
-  parameter Modelica.SIunits.Pressure pipe3_Delta_p_nom "|Pipes|Nominal pressure loss";
-  parameter Modelica.SIunits.Pressure pipe4_Delta_p_nom "|Pipes|Nominal pressure loss";
+  parameter Modelica.Units.SI.Pressure pipe1_Delta_p_nom "|Pipes|Nominal pressure loss";
+  parameter Modelica.Units.SI.Pressure pipe2_Delta_p_nom "|Pipes|Nominal pressure loss";
+  parameter Modelica.Units.SI.Pressure pipe3_Delta_p_nom "|Pipes|Nominal pressure loss";
+  parameter Modelica.Units.SI.Pressure pipe4_Delta_p_nom "|Pipes|Nominal pressure loss";
 
-  parameter Modelica.SIunits.MassFlowRate pipe1_m_flow_nom "|Pipes|Nominal mass flow rate";
-  parameter Modelica.SIunits.MassFlowRate pipe2_m_flow_nom "|Pipes|Nominal mass flow rate";
-  parameter Modelica.SIunits.MassFlowRate pipe3_m_flow_nom "|Pipes|Nominal mass flow rate";
-  parameter Modelica.SIunits.MassFlowRate pipe4_m_flow_nom "|Pipes|Nominal mass flow rate";
+  parameter Modelica.Units.SI.MassFlowRate pipe1_m_flow_nom "|Pipes|Nominal mass flow rate";
+  parameter Modelica.Units.SI.MassFlowRate pipe2_m_flow_nom "|Pipes|Nominal mass flow rate";
+  parameter Modelica.Units.SI.MassFlowRate pipe3_m_flow_nom "|Pipes|Nominal mass flow rate";
+  parameter Modelica.Units.SI.MassFlowRate pipe4_m_flow_nom "|Pipes|Nominal mass flow rate";
 
-  parameter Modelica.SIunits.MassFlowRate sink1_m_flow "|Sinks|Mass flow rate at source";
-  parameter Modelica.SIunits.MassFlowRate sink2_m_flow "|Sinks|Mass flow rate at source";
+  parameter Modelica.Units.SI.MassFlowRate sink1_m_flow "|Sinks|Mass flow rate at source";
+  parameter Modelica.Units.SI.MassFlowRate sink2_m_flow "|Sinks|Mass flow rate at source";
 
-  parameter Modelica.SIunits.Pressure source1_p=simCenter.p_eff_2 + simCenter.p_amb_const "|Sources|Pressure at the source";
-  parameter Modelica.SIunits.Temperature source1_T=simCenter.T_ground "|Sources|Temperature at the source";
-  parameter Modelica.SIunits.MassFraction source1_xi[medium.nc - 1]=source1.medium.xi_default "|Sources|Mass specific composition at the source";
-  parameter Modelica.SIunits.Pressure source2_p=simCenter.p_eff_2 + simCenter.p_amb_const "|Sources|Pressure at the source";
-  parameter Modelica.SIunits.Temperature source2_T=simCenter.T_ground "|Sources|Temperature at the source";
-  parameter Modelica.SIunits.MassFraction source2_xi[medium.nc - 1]=source2.medium.xi_default "|Sources|Mass specific composition at the source";
+  parameter Modelica.Units.SI.Pressure source1_p=simCenter.p_eff_2 + simCenter.p_amb_const "|Sources|Pressure at the source";
+  parameter Modelica.Units.SI.Temperature source1_T=simCenter.T_ground "|Sources|Temperature at the source";
+  parameter Modelica.Units.SI.MassFraction source1_xi[medium.nc - 1]=source1.medium.xi_default "|Sources|Mass specific composition at the source";
+  parameter Modelica.Units.SI.Pressure source2_p=simCenter.p_eff_2 + simCenter.p_amb_const "|Sources|Pressure at the source";
+  parameter Modelica.Units.SI.Temperature source2_T=simCenter.T_ground "|Sources|Temperature at the source";
+  parameter Modelica.Units.SI.MassFraction source2_xi[medium.nc - 1]=source2.medium.xi_default "|Sources|Mass specific composition at the source";
 
-  parameter Modelica.SIunits.MassFlowRate feedIn1_m_flow "|Feed-in|Mass flow rate at source";
-  parameter Modelica.SIunits.MassFraction feedIn1_xi[mediumH2.nc - 1]=zeros(feedIn1.medium.nc - 1) "|Feed-in|Mass specific composition at source";
-  parameter Modelica.SIunits.Temperature feedIn1_T=simCenter.T_ground "|Feed-in|Temperature at source";
+  parameter Modelica.Units.SI.MassFlowRate feedIn1_m_flow "|Feed-in|Mass flow rate at source";
+  parameter Modelica.Units.SI.MassFraction feedIn1_xi[mediumH2.nc - 1]=zeros(feedIn1.medium.nc - 1) "|Feed-in|Mass specific composition at source";
+  parameter Modelica.Units.SI.Temperature feedIn1_T=simCenter.T_ground "|Feed-in|Temperature at source";
 
-  parameter Modelica.SIunits.MassFlowRate feedIn2_m_flow "|Feed-in|Mass flow rate at source";
-  parameter Modelica.SIunits.MassFraction feedin2_xi[mediumH2.nc - 1]=zeros(feedIn2.medium.nc - 1) "|Feed-in|Mass specific composition at source";
-  parameter Modelica.SIunits.Temperature feedIn2_T=simCenter.T_ground "|Feed-in|Temperature at source";
+  parameter Modelica.Units.SI.MassFlowRate feedIn2_m_flow "|Feed-in|Mass flow rate at source";
+  parameter Modelica.Units.SI.MassFraction feedin2_xi[mediumH2.nc - 1]=zeros(feedIn2.medium.nc - 1) "|Feed-in|Mass specific composition at source";
+  parameter Modelica.Units.SI.Temperature feedIn2_T=simCenter.T_ground "|Feed-in|Temperature at source";
 
 
   // _____________________________________________

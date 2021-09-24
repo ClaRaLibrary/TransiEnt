@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Gas;
+﻿within TransiEnt.Grid.Gas;
 model GasGridHamburg "High pressure gas grid of Hamburg"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   import TransiEnt;
   extends TransiEnt.Basics.Icons.HPGasGridHamburg;
 
@@ -55,7 +59,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
   parameter Boolean constantComposition=simCenter.useConstCompInGasComp "true if composition of gas in the pipe is constant" annotation (Dialog(group="Fundamental Definitions"));
   parameter Integer variableCompositionEntries[:]=simCenter.variableCompositionEntriesGasPipes "Entries of medium vector which are supposed to be completely variable" annotation (Dialog(group="Fundamental Definitions"));
 
-  replaceable model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4           constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
 
   parameter SI.Temperature T_ground=simCenter.T_ground "Temperature of the surrounding ground" annotation (Dialog(group="Fundamental Definitions"));
 
@@ -65,24 +69,24 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
   //
   //             Variable Declarations
   // _____________________________________________
-  Modelica.SIunits.Velocity[2] w_pipe_Tor={pipe_Tornesch.pipe.summary.outline.w_inlet,pipe_Tornesch.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_pipe_Lev={pipe_Leversen.pipe.summary.outline.w_inlet,pipe_Leversen.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline={Ringline.pipe.summary.outline.w_inlet,Ringline.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline1={Ringline1.pipe.summary.outline.w_inlet,Ringline1.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline2={Ringline2.pipe.summary.outline.w_inlet,Ringline2.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline3={Ringline3.pipe.summary.outline.w_inlet,Ringline3.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline4={Ringline4.pipe.summary.outline.w_inlet,Ringline4.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline5={Ringline5.pipe.summary.outline.w_inlet,Ringline5.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline6={Ringline6.pipe.summary.outline.w_inlet,Ringline6.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline7={Ringline7.pipe.summary.outline.w_inlet,Ringline7.pipe.summary.outline.w_outlet};
-  Modelica.SIunits.Velocity[2] w_Ringline8={Ringline8.pipe.summary.outline.w_inlet,Ringline8.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_pipe_Tor={pipe_Tornesch.pipe.summary.outline.w_inlet,pipe_Tornesch.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_pipe_Lev={pipe_Leversen.pipe.summary.outline.w_inlet,pipe_Leversen.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline={Ringline.pipe.summary.outline.w_inlet,Ringline.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline1={Ringline1.pipe.summary.outline.w_inlet,Ringline1.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline2={Ringline2.pipe.summary.outline.w_inlet,Ringline2.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline3={Ringline3.pipe.summary.outline.w_inlet,Ringline3.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline4={Ringline4.pipe.summary.outline.w_inlet,Ringline4.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline5={Ringline5.pipe.summary.outline.w_inlet,Ringline5.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline6={Ringline6.pipe.summary.outline.w_inlet,Ringline6.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline7={Ringline7.pipe.summary.outline.w_inlet,Ringline7.pipe.summary.outline.w_outlet};
+  Modelica.Units.SI.Velocity[2] w_Ringline8={Ringline8.pipe.summary.outline.w_inlet,Ringline8.pipe.summary.outline.w_outlet};
 
   // _____________________________________________
   //
   //             Instances of other classes
   // _____________________________________________
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_Leversen(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_Leversen(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -101,7 +105,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,5},{14,-5}},
         rotation=90,
         origin={-128,-255})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_Tornesch(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_Tornesch(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -120,7 +124,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,5},{14,-5}},
         rotation=0,
         origin={-230,264})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -139,7 +143,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,5},{14,-5}},
         rotation=90,
         origin={-194,-197})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline1(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -158,7 +162,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,-5},{14,5}},
         rotation=90,
         origin={-98,-197})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline2(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -177,7 +181,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,5},{14,-5}},
         rotation=90,
         origin={-194,-79})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline3(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -196,7 +200,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,-5},{14,5}},
         rotation=270,
         origin={-194,31})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline4(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -215,7 +219,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,-5},{14,5}},
         rotation=270,
         origin={-194,149})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline5(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline5(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -234,7 +238,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,5},{14,-5}},
         rotation=0,
         origin={-82,264})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline6(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline6(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -253,7 +257,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,5},{14,-5}},
         rotation=0,
         origin={100,264})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline7(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline7(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -272,7 +276,7 @@ model GasGridHamburg "High pressure gas grid of Hamburg"
         extent={{-14,-5},{14,5}},
         rotation=90,
         origin={162,49})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth Ringline8(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth Ringline8(
     final constantComposition=constantComposition,
     final variableCompositionEntries=variableCompositionEntries,
     final T_ground=T_ground,
@@ -307,7 +311,7 @@ public
 
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn GTSLev(Medium=medium) annotation (Placement(transformation(extent={{-158,-286},{-138,-266}}), iconTransformation(extent={{-158,-286},{-138,-266}})));
   TransiEnt.Basics.Interfaces.Gas.RealGasPortIn GTSTor(Medium=medium) annotation (Placement(transformation(extent={{-294,254},{-274,274}}), iconTransformation(extent={{-294,254},{-274,274}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Leversen(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Leversen(
     medium=medium,
     T_ground=T_ground,
     final volume=volume_junction,
@@ -315,7 +319,7 @@ public
     variableCompositionEntries=variableCompositionEntries,
     massBalance=massBalance,
     initOption=initOption) annotation (Placement(transformation(extent={{-138,-232},{-118,-212}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_nPorts_isoth junction_Ringline1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_nPorts_isoth junction_Ringline1(
     medium=medium,
     T_ground=T_ground,
     n_ports=4,
@@ -327,7 +331,7 @@ public
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-194,-168})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Ringline2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Ringline2(
     medium=medium,
     T_ground=T_ground,
     final volume=volume_junction,
@@ -338,7 +342,7 @@ public
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-194,-2})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Ringline3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Ringline3(
     medium=medium,
     T_ground=T_ground,
     final volume=volume_junction,
@@ -349,7 +353,7 @@ public
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-194,66})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Ringline4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Ringline4(
     medium=medium,
     T_ground=T_ground,
     final volume=volume_junction,
@@ -360,7 +364,7 @@ public
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-194,264})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Ringline5(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Ringline5(
     medium=medium,
     T_ground=T_ground,
     final volume=volume_junction,
@@ -371,7 +375,7 @@ public
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={4,264})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Ringline6(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Ringline6(
     medium=medium,
     T_ground=T_ground,
     final volume=volume_junction,
@@ -382,7 +386,7 @@ public
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={162,100})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Ringline7(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Ringline7(
     medium=medium,
     T_ground=T_ground,
     final volume=volume_junction,

@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Producer.Combined.LargeScaleCHP;
 model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring (e.g. from power-2-gas technologies)"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -47,7 +51,7 @@ model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring 
 
      //Heating condenser parameters
 
-  parameter Modelica.SIunits.Pressure p_nom(displayUnit="Pa")=1e5 "Nominal pressure" annotation(Dialog(group="Heating condenser parameters"));
+  parameter Modelica.Units.SI.Pressure p_nom(displayUnit="Pa") = 1e5 "Nominal pressure" annotation (Dialog(group="Heating condenser parameters"));
 
   parameter SI.MassFlowRate m_flow_nom=10 "Nominal mass flow rate" annotation(Dialog(group="Heating condenser parameters"));
 
@@ -112,7 +116,7 @@ model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring 
   Modelica.Blocks.Math.Product product1 annotation (Placement(transformation(extent={{-26,-14},{-18,-6}})));
   Components.Boundaries.Electrical.ActivePower.Power terminal(change_sign=true) annotation (Placement(transformation(extent={{82,50},{62,70}})));
 
-  Modelica.SIunits.HeatFlowRate Q_flow_input_basefuel = if h2Available then Q_flow_input * (1 - simCenter.k_H2_fraction) else Q_flow_input;
+  Modelica.Units.SI.HeatFlowRate Q_flow_input_basefuel=if h2Available then Q_flow_input*(1 - simCenter.k_H2_fraction) else Q_flow_input;
   Consumer.Gas.GasConsumer_HFlow_NCV gasConsumer_HFlow_NCV(medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{60,70},{40,90}})));
   Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium_gas) if useGasPort==true annotation (Placement(transformation(extent={{90,92},{110,112}})));
   Components.Sensors.RealGas.CO2EmissionSensor cO2EmissionOfIdealCombustion if useGasPort                                                 ==true annotation (Placement(transformation(extent={{94,80},{74,100}})));
@@ -122,7 +126,7 @@ model H2CofiringCHP "Continuous combined cycle CHP plant with hydrogen cofiring 
   //             Variable Declarations
   // _____________________________________________
 public
-  Modelica.SIunits.MassFlowRate m_flow_cde_total_set;
+  Modelica.Units.SI.MassFlowRate m_flow_cde_total_set;
   SI.Power P_limit_off_set[quantity];
 
   Modelica.Blocks.Math.MultiSum multiSum_Q_flow_SG(nu=quantity)        annotation (Placement(transformation(extent={{-44,80},{-52,72}})));

@@ -1,25 +1,29 @@
-within TransiEnt.Components.Gas.Compressor.Check;
+﻿within TransiEnt.Components.Gas.Compressor.Check;
 model TestValveAndCompressor "Model for testing the valve and compressor models"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   TransiEnt.Storage.Gas.UndergroundGasStorageHeatTransfer_L2 storage(storage(V_geo=1000, p_gas_start=15000000)) annotation (Placement(transformation(
@@ -29,7 +33,7 @@ model TestValveAndCompressor "Model for testing the valve and compressor models"
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source annotation (Placement(transformation(extent={{-80,58},{-60,78}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi sink(variable_p=true)                   annotation (Placement(transformation(extent={{50,58},{30,78}})));
   inner TransiEnt.SimCenter simCenter(redeclare Basics.Media.Gases.VLE_VDIWA_H2_SRK gasModel3)           annotation (Placement(transformation(extent={{-102,100},{-82,120}})));
-  Modelica.Blocks.Sources.Sine sine_m_flowDesired(freqHz=1/3600, offset=1) annotation (Placement(transformation(extent={{-40,88},{-20,108}})));
+  Modelica.Blocks.Sources.Sine sine_m_flowDesired(f=1/3600, offset=1) annotation (Placement(transformation(extent={{-40,88},{-20,108}})));
   Modelica.Blocks.Sources.Ramp ramp_sink_pressure(
     offset=100e5,
     duration=1800,
@@ -45,8 +49,10 @@ model TestValveAndCompressor "Model for testing the valve and compressor models"
         origin={-40,-6})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow source1 annotation (Placement(transformation(extent={{-80,-16},{-60,4}})));
   Boundaries.Gas.BoundaryRealGas_Txim_flow                 sink1(variable_m_flow=true)             annotation (Placement(transformation(extent={{50,-16},{30,4}})));
-  Modelica.Blocks.Sources.Sine sine_dp_desired(freqHz=1/3600, amplitude=50e5,
-    offset=40e5)                                                              annotation (Placement(transformation(extent={{-40,14},{-20,34}})));
+  Modelica.Blocks.Sources.Sine sine_dp_desired(
+    f=1/3600,
+    amplitude=50e5,
+    offset=40e5) annotation (Placement(transformation(extent={{-40,14},{-20,34}})));
   Modelica.Blocks.Sources.Ramp ramp_sink_mflow(
     duration=1800,
     startTime=3600,
@@ -62,8 +68,7 @@ model TestValveAndCompressor "Model for testing the valve and compressor models"
                                                                         annotation (Placement(transformation(extent={{-60,-96},{-40,-76}})));
   Boundaries.Gas.BoundaryRealGas_pTxi                      sink2(medium=simCenter.gasModel3, p_const=3500000)
                                                                                                    annotation (Placement(transformation(extent={{60,-96},{40,-76}})));
-  Modelica.Blocks.Sources.Sine sine_dp_desired1(
-                                               freqHz=1/3600, amplitude=35e5) annotation (Placement(transformation(extent={{-40,-66},{-20,-46}})));
+  Modelica.Blocks.Sources.Sine sine_dp_desired1(f=1/3600, amplitude=35e5) annotation (Placement(transformation(extent={{-40,-66},{-20,-46}})));
   Modelica.Blocks.Sources.Ramp ramp_sink_mflow1(
     duration=1800,
     startTime=3600,

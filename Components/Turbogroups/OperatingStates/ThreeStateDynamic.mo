@@ -1,33 +1,37 @@
 ﻿within TransiEnt.Components.Turbogroups.OperatingStates;
 model ThreeStateDynamic "Three state dynamic model - operating at init"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Components.Turbogroups.OperatingStates.PartialStateDynamic;
+  extends TransiEnt.Components.Turbogroups.OperatingStates.PartialStateDynamic(deactivationSignal(y=turndown.active));
    import TransiEnt.Basics.Types;
 
   // _____________________________________________
@@ -52,7 +56,8 @@ model ThreeStateDynamic "Three state dynamic model - operating at init"
   // _____________________________________________
 
   Modelica.StateGraph.StepWithSignal
-                                  halt(nIn=4) annotation (Placement(transformation(extent={{-42,24},{-26,40}},   rotation=0)));
+                                  halt(nIn=4, nOut=1)
+                                              annotation (Placement(transformation(extent={{-42,24},{-26,40}},   rotation=0)));
   Modelica.StateGraph.StepWithSignal operating_minimum(nOut=2, nIn=3) annotation (Placement(transformation(extent={{34,24},{50,40}}, rotation=0)));
 
   // _____________________________________________
@@ -95,10 +100,11 @@ model ThreeStateDynamic "Three state dynamic model - operating at init"
 
 public
   Modelica.StateGraph.InitialStep init(nIn=0, nOut=3) annotation (Placement(transformation(extent={{-130,80},{-110,100}},rotation=0)));
-  Modelica.Blocks.Logical.Hysteresis hysteresis(uLow=P_min_operating - thres - thres_hyst, uHigh=P_min_operating - thres)
+  Modelica.Blocks.Logical.Hysteresis hysteresis(uLow=max(P_min_operating - thres - thres_hyst, 1e-11), uHigh=max(P_min_operating - thres, 1e-10))
                                                                                                      annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
   Modelica.Blocks.Math.Gain gain(k=-1) annotation (Placement(transformation(extent={{-76,-80},{-56,-60}})));
-  Modelica.StateGraph.StepWithSignal DownTime(nIn=4) annotation (Placement(transformation(extent={{-86,24},{-70,40}}, rotation=0)));
+  Modelica.StateGraph.StepWithSignal DownTime(nIn=4, nOut=1)
+                                                     annotation (Placement(transformation(extent={{-86,24},{-70,40}}, rotation=0)));
   Modelica.StateGraph.Transition minimumDownTimeBlock(enableTimer=true, waitTime=MinimumDownTime)
                                                                                        annotation (Placement(transformation(extent={{-64,24},{-48,40}}, rotation=0)));
   Modelica.StateGraph.Transition startupSuccess1(
@@ -112,7 +118,7 @@ public
                                  turnDownSuccess(enableTimer=true, waitTime=0)
                         annotation (Placement(transformation(extent={{-6,70},{-22,86}},
                                                                                       rotation=0)));
-  Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=if smoothShutDown then P_set_star_lim >= -(P_min_operating + 1e-5) else true)
+  Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=if smoothShutDown then (if useSlewRateLimiter then P_set_star_lim else P_actual_star)  >= -(P_min_operating + 1e-5) else true)
                                                                                                              annotation (Placement(transformation(extent={{-68,64},{-26,74}})));
 equation
   // _____________________________________________
@@ -228,5 +234,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">Hysteresis for halt-startup change added by Carsten Bode (c.bode@tuhh.de) in Nov 2018</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) in Nov 2018: added Minimum Down Time</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) on April 2019: added option to deactivate slewRateLimiter, added minimum operation time</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Robert Flesch (flesch@xrg-simulation.de) in Feb 2021: set output to zero if shutdown is active - check if shutdown is complete by using the power input</span></p>
 </html>"));
 end ThreeStateDynamic;

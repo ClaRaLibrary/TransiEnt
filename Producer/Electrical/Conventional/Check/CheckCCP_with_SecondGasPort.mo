@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Conventional.Check;
+﻿within TransiEnt.Producer.Electrical.Conventional.Check;
 model CheckCCP_with_SecondGasPort
     import TransiEnt;
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Grid.Electrical.Base.ExampleGenerationPark generationPark)
                                       annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
@@ -78,7 +82,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(cCP_with_Gasport.gasPortIn, boundary_pTxi.gasPort) annotation (Line(
-      points={{12,19},{48,19},{48,20},{54,20}},
+      points={{12,20},{48,20},{48,20},{54,20}},
       color={255,255,0},
       thickness=1.5));
   connect(ramp.y, cCP_with_Gasport.P_el_set) annotation (Line(points={{-49,36},{0.5,36},{0.5,33.9}},                    color={0,0,127}));
@@ -92,7 +96,7 @@ equation
       color={0,135,135},
       thickness=0.5));
   connect(gasturbine_with_Gasport.gasPortIn, boundary_pTxi1.gasPort) annotation (Line(
-      points={{6,-95},{38,-95},{38,-94},{44,-94}},
+      points={{6,-94},{38,-94},{38,-94},{44,-94}},
       color={255,255,0},
       thickness=1.5));
   connect(ramp2.y, gasturbine_with_Gasport.P_el_set) annotation (Line(points={{-47,-78},{-5.5,-78},{-5.5,-80.1}}, color={0,0,127}));

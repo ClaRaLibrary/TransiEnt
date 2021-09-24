@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
 record MolarMasses "Record containing the molar masses for components of natural gas in kg/mol"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -33,7 +37,7 @@ record MolarMasses "Record containing the molar masses for components of natural
   // _____________________________________________
 
   parameter String[:]                 names = {"Methane", "CH4",    "Ethane", "C2H6",   "Propane", "C3H8",   "Butane",  "C4H10",   "Nitrogen", "N2",      "Carbon_Dioxide", "CO2",     "Hydrogen", "H2",      "Oxygen", "O2",     "Carbon_Monoxide", "CO",     "Water",   "H2O"};
-  parameter Modelica.SIunits.MolarMass[:] M = {0.016043,  0.016043, 0.030070, 0.030070, 0.044097,  0.044097, 0.058123,  0.058123,  0.0280135,  0.0280135, 0.044010,         0.044010,  0.0020159,  0.0020159, 0.319988, 0.319988, 0.028010,          0.028010, 0.0180153, 0.0180153};
+  parameter Modelica.Units.SI.MolarMass[:] M={0.016043,0.016043,0.030070,0.030070,0.044097,0.044097,0.058123,0.058123,0.0280135,0.0280135,0.044010,0.044010,0.0020159,0.0020159,0.319988,0.319988,0.028010,0.028010,0.0180153,0.0180153};
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

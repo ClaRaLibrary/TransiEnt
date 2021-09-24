@@ -1,33 +1,37 @@
-within TransiEnt.Components.Gas.Reactor.Controller;
+﻿within TransiEnt.Components.Gas.Reactor.Controller;
 model ControllerFeedForReformer "Controller to control the feed mass flow rate for the steam methane reformer"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   extends TransiEnt.Basics.Icons.Controller;
 
   // _____________________________________________
@@ -46,9 +50,7 @@ model ControllerFeedForReformer "Controller to control the feed mass flow rate f
   parameter Real Td=0.1 "Derivative time constant" annotation(Dialog(group="Control Definitions",enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or controllerType==Modelica.Blocks.Types.SimpleController.PID));
   parameter Real t_activation=0.0 "Activation time for the controller" annotation(Dialog(group="Control Definitions"));
 
-  parameter .Modelica.Blocks.Types.InitPID initType= Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)"
-                                     annotation(Evaluate=true,
-      Dialog(group="Initialization"));
+  parameter .Modelica.Blocks.Types.Init initType=Modelica.Blocks.Types.Init.InitialState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation (Evaluate=true, Dialog(group="Initialization"));
   parameter Real xi_start=0 "Initial or guess value value for integrator output (= integrator state)"
     annotation (Dialog(group="Initialization",
                 enable=controllerType==.Modelica.Blocks.Types.SimpleController.PI or
@@ -58,7 +60,7 @@ model ControllerFeedForReformer "Controller to control the feed mass flow rate f
                          enable=controllerType==.Modelica.Blocks.Types.SimpleController.PD or
                                 controllerType==.Modelica.Blocks.Types.SimpleController.PID));
   parameter Real y_start=0 "Initial value of output"
-    annotation(Dialog(enable=initType == .Modelica.Blocks.Types.InitPID.InitialOutput, group=
+    annotation(Dialog(enable=initType == .Modelica.Blocks.Types.Init.InitialOutput,    group=
           "Initialization"));
 
   // _____________________________________________
@@ -99,7 +101,7 @@ model ControllerFeedForReformer "Controller to control the feed mass flow rate f
     Tau_i=Ti,
     Tau_d=Td,
     t_activation=t_activation,
-    initOption=if ((initType) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((initType) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((initType) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((initType) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((initType) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((initType) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((initType) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((initType) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=0,
         origin={40,-50})));

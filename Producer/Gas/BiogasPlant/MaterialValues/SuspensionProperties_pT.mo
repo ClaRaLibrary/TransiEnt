@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Gas.BiogasPlant.MaterialValues;
+﻿within TransiEnt.Producer.Gas.BiogasPlant.MaterialValues;
 model SuspensionProperties_pT "Model calculating material properties of anaerobic sludge"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -36,7 +40,7 @@ model SuspensionProperties_pT "Model calculating material properties of anaerobi
   replaceable parameter TransiEnt.Producer.Gas.BiogasPlant.MaterialValues.Records.ManureParticles solids constrainedby TransiEnt.Producer.Gas.BiogasPlant.MaterialValues.Records.BaseSuspendedSolids "replaceable record of sludge particle properties";
   parameter TILMedia.VLEFluidTypes.BaseVLEFluid fluid=simCenter.fluid1 "water as solvent";
   parameter Boolean useFixedViscosity=false "enable if Apparent Viscosity of sludg shall be set instead of being calculated from Temperature, Stirring Speed and Solids Content";
-  parameter Modelica.SIunits.DynamicViscosity eta_fixed=0.1 "set fixed Apparent Viscosity" annotation (Dialog(enable=useFixedViscosity));
+  parameter Modelica.Units.SI.DynamicViscosity eta_fixed=0.1 "set fixed Apparent Viscosity" annotation (Dialog(enable=useFixedViscosity));
 
   // _____________________________________________
   //
@@ -50,17 +54,17 @@ model SuspensionProperties_pT "Model calculating material properties of anaerobi
   //             Variable Declarations
   // _____________________________________________
 
-  input Modelica.SIunits.Pressure p=101300 "pressure in Suspension" annotation (Dialog(group="Variables"));
-  input Modelica.SIunits.Temperature T=293.15 "Temperature of Suspension" annotation (Dialog(group="Variables"));
-  input Modelica.SIunits.MassConcentration TSS=10 "Total Solids Concentration in g/l" annotation (Dialog(group="Variables"));
-  input Modelica.SIunits.Frequency gamma=2 "Average Shear rate as induced by stirrer" annotation (Dialog(group="Variables"));
+  input Modelica.Units.SI.Pressure p=101300 "pressure in Suspension" annotation (Dialog(group="Variables"));
+  input Modelica.Units.SI.Temperature T=293.15 "Temperature of Suspension" annotation (Dialog(group="Variables"));
+  input Modelica.Units.SI.MassConcentration TSS=10 "Total Solids Concentration in g/l" annotation (Dialog(group="Variables"));
+  input Modelica.Units.SI.Frequency gamma=2 "Average Shear rate as induced by stirrer" annotation (Dialog(group="Variables"));
 
-  Modelica.SIunits.Density rho "Density of Sludge";
-  Modelica.SIunits.SpecificHeatCapacity cp "specific heat capacity of Suspension";
-  Modelica.SIunits.ThermalConductivity lambda "Thermal Conductivity of Suspension";
-  Modelica.SIunits.DynamicViscosity eta "Dynamic Viscosity of Suspension either variable or as input";
-  Modelica.SIunits.DynamicViscosity eta_calc "Calculated Dynamic Viscosity of Suspension";
-  Modelica.SIunits.PrandtlNumber Pr=eta*cp/lambda "Prandtl number of Suspension";
+  Modelica.Units.SI.Density rho "Density of Sludge";
+  Modelica.Units.SI.SpecificHeatCapacity cp "specific heat capacity of Suspension";
+  Modelica.Units.SI.ThermalConductivity lambda "Thermal Conductivity of Suspension";
+  Modelica.Units.SI.DynamicViscosity eta "Dynamic Viscosity of Suspension either variable or as input";
+  Modelica.Units.SI.DynamicViscosity eta_calc "Calculated Dynamic Viscosity of Suspension";
+  Modelica.Units.SI.PrandtlNumber Pr=eta*cp/lambda "Prandtl number of Suspension";
 
   Real W(
     min=0,
@@ -81,6 +85,9 @@ model SuspensionProperties_pT "Model calculating material properties of anaerobi
   // _____________________________________________
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT vleFluid(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
+    deactivateTwoPhaseRegion=true,
     vleFluidType=fluid,
     T=T,
     computeTransportProperties=true,

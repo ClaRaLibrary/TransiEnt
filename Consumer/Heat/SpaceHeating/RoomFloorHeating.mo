@@ -1,25 +1,29 @@
-within TransiEnt.Consumer.Heat.SpaceHeating;
+﻿within TransiEnt.Consumer.Heat.SpaceHeating;
 model RoomFloorHeating "Room model with floor heating system"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -34,11 +38,11 @@ model RoomFloorHeating "Room model with floor heating system"
   // _____________________________________________
 
   // final parameters
-  final parameter Modelica.SIunits.Length l = geometry.a*geometry.b/heatingsystem.distance_pipes "Length of the pipes of the heating floor";
-  final parameter Modelica.SIunits.Volume V_floor=geometry.a*geometry.b*heatingsystem.h_floorFill-Modelica.Constants.pi*heatingsystem.d_pipe^2*l "Volume of floor material with a high temperature";
-  final parameter Modelica.SIunits.HeatCapacity C_eff = 50*3600*geometry.V_room "DIN EN 12831 Appendix NA, p. 32 for medium buildingmass";
-  final parameter Modelica.SIunits.ThermalConductance K_eff = (geometry.A_ext*thermodynamics.U_ext+geometry.A_roof*thermodynamics.U_roof)+0.34*geometry.V_room*thermodynamics.n_min "DIN EN 12831 Appendix NA, p. 32 for medium buildingmass";
-  final parameter Modelica.SIunits.Time tau_eff = C_eff/K_eff "apprximate building time constant";
+  final parameter Modelica.Units.SI.Length l=geometry.a*geometry.b/heatingsystem.distance_pipes "Length of the pipes of the heating floor";
+  final parameter Modelica.Units.SI.Volume V_floor=geometry.a*geometry.b*heatingsystem.h_floorFill - Modelica.Constants.pi*heatingsystem.d_pipe^2*l "Volume of floor material with a high temperature";
+  final parameter Modelica.Units.SI.HeatCapacity C_eff=50*3600*geometry.V_room "DIN EN 12831 Appendix NA, p. 32 for medium buildingmass";
+  final parameter Modelica.Units.SI.ThermalConductance K_eff=(geometry.A_ext*thermodynamics.U_ext + geometry.A_roof*thermodynamics.U_roof) + 0.34*geometry.V_room*thermodynamics.n_min "DIN EN 12831 Appendix NA, p. 32 for medium buildingmass";
+  final parameter Modelica.Units.SI.Time tau_eff=C_eff/K_eff "apprximate building time constant";
 
   // _____________________________________________
   //
@@ -104,34 +108,49 @@ public
   // _____________________________________________
 
   //Energy and Heatflow
-  Modelica.SIunits.HeatFlowRate Q_flow_WaterIn "with ingoing massflow arriving power";
-  Modelica.SIunits.HeatFlowRate Q_flow_WaterOut "with outgoing massflow leaving power";
-  Modelica.SIunits.HeatFlowRate Q_flow_groundsurface_to_room "heat flow from the surface of tho floor to the room";
-  Modelica.SIunits.HeatFlowRate Q_flow_externalWall_to_environement "heat flow from the wall to the environement";
-  Modelica.SIunits.HeatFlowRate Q_flow_room_to_externalWall "heat flow from the room to the external wall";
-  Modelica.SIunits.HeatFlowRate Q_flow_room_to_internalWall "heat flow from the room to the internal walls";
-  Modelica.SIunits.HeatFlowRate Q_flow_loss_vent "lost heat flow due to minimal needed air exchange";
-  Modelica.SIunits.HeatFlowRate Q_flow_intSources "heat flow due to internal heat sources";
+  Modelica.Units.SI.HeatFlowRate Q_flow_WaterIn "with ingoing massflow arriving power";
+  Modelica.Units.SI.HeatFlowRate Q_flow_WaterOut "with outgoing massflow leaving power";
+  Modelica.Units.SI.HeatFlowRate Q_flow_groundsurface_to_room "heat flow from the surface of tho floor to the room";
+  Modelica.Units.SI.HeatFlowRate Q_flow_externalWall_to_environement "heat flow from the wall to the environement";
+  Modelica.Units.SI.HeatFlowRate Q_flow_room_to_externalWall "heat flow from the room to the external wall";
+  Modelica.Units.SI.HeatFlowRate Q_flow_room_to_internalWall "heat flow from the room to the internal walls";
+  Modelica.Units.SI.HeatFlowRate Q_flow_loss_vent "lost heat flow due to minimal needed air exchange";
+  Modelica.Units.SI.HeatFlowRate Q_flow_intSources "heat flow due to internal heat sources";
 
-  Modelica.SIunits.InternalEnergy U_room "internal energy of the air in the room";
-  Modelica.SIunits.InternalEnergy U_floor "internal energy of the floor";
-  Modelica.SIunits.InternalEnergy U_extWall "internal energy of the external Walls";
-  Modelica.SIunits.InternalEnergy U_intWall "internal energy of the internal Walls";
+  Modelica.Units.SI.InternalEnergy U_room "internal energy of the air in the room";
+  Modelica.Units.SI.InternalEnergy U_floor "internal energy of the floor";
+  Modelica.Units.SI.InternalEnergy U_extWall "internal energy of the external Walls";
+  Modelica.Units.SI.InternalEnergy U_intWall "internal energy of the internal Walls";
 
-  Modelica.SIunits.Heat Q_needed(stateSelect=StateSelect.prefer, start=0, fixed=true);
-  Modelica.SIunits.HeatFlowRate Q_flow_needed;
+  Modelica.Units.SI.Heat Q_needed(
+    stateSelect=StateSelect.prefer,
+    start=0,
+    fixed=true);
+  Modelica.Units.SI.HeatFlowRate Q_flow_needed;
   Real need_of_thermal_heat(unit="J/(m2)",displayUnit="kWh/(m2)") "Area specific need for heat";
 
-  Modelica.SIunits.HeatFlowRate Q_flow_heating;
+  Modelica.Units.SI.HeatFlowRate Q_flow_heating;
 
   // Temperatures
-  Modelica.SIunits.Temperature T_room( stateSelect=StateSelect.prefer, start = 273.15+20, fixed = true) annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Temperature T_floor(stateSelect=StateSelect.prefer,  start = 273.15+20, fixed= true) annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Temperature T_waterOut;
-  Modelica.SIunits.Temperature T_wallInside(stateSelect=StateSelect.prefer, start=273.15+20, fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Temperature T_wallOutside;
-  Modelica.SIunits.Temperature T_wallInternal(stateSelect=StateSelect.prefer, start=(273.15+20+273.15+20)/2, fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.TemperatureDifference Delta_T_floorHeating;
+  Modelica.Units.SI.Temperature T_room(
+    stateSelect=StateSelect.prefer,
+    start=273.15 + 20,
+    fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Temperature T_floor(
+    stateSelect=StateSelect.prefer,
+    start=273.15 + 20,
+    fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Temperature T_waterOut;
+  Modelica.Units.SI.Temperature T_wallInside(
+    stateSelect=StateSelect.prefer,
+    start=273.15 + 20,
+    fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Temperature T_wallOutside;
+  Modelica.Units.SI.Temperature T_wallInternal(
+    stateSelect=StateSelect.prefer,
+    start=(273.15 + 20 + 273.15 + 20)/2,
+    fixed=true) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.TemperatureDifference Delta_T_floorHeating;
 
 equation
   // _____________________________________________

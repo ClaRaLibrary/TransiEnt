@@ -1,26 +1,30 @@
-within TransiEnt.Basics.Tables;
+﻿within TransiEnt.Basics.Tables;
 model GenericDataTable "Parameterized version of MSL's CombiTimeTable. See Examples.Basics.GenericTable_How_to for explanation"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -36,19 +40,18 @@ model GenericDataTable "Parameterized version of MSL's CombiTimeTable. See Examp
   parameter String tableName="default" "Table name on file or in function usertab (see docu)"
                                                            annotation(Evaluate=true, HideResult=true, Dialog(group="Basics"));
 
- parameter Boolean multiple_outputs = false "If set true multiple outputs are enabled (but useage of MultiSum block will fail)"
+  parameter Boolean multiple_outputs = false "If set true multiple outputs are enabled (but useage of MultiSum block will fail)"
                                                                                               annotation(Evaluate=true, choices(__Dymola_checkBox=true), Dialog(group="Basics"));
 
   parameter Integer columns[:]=2:size(MSL_combiTimeTable.table, 2) "columns of table to be interpolated (*** has to be modified before usage! ***)"
                                                                                         annotation(Evaluate=true, HideResult=true, Dialog(enable=multiple_outputs, group="Basics"));
 
-  parameter DataPrivacy datasource=DataPrivacy.isPublic "Source of table data"
-                           annotation (
+  parameter DataPrivacy datasource=DataPrivacy.isPublic "Source of table data"   annotation (
     Evaluate=true,
     HideResult=true,
     Dialog(enable=not use_absolute_path, group="Data location"));
 
-  final parameter String environment_variable_name=if datasource ==DataPrivacy.isPublic                  then Types.PUBLIC_DATA else Types.PRIVATE_DATA  annotation(Evaluate=true, HideResult=true, Dialog(enable=not use_absolute_path, group="Data location"));
+  final parameter String environment_variable_name=if datasource ==DataPrivacy.isPublic then Types.PUBLIC_DATA else Types.PRIVATE_DATA  annotation(Evaluate=true, HideResult=true, Dialog(enable=not use_absolute_path, group="Data location"));
 
   parameter String relativepath = "" "Path relative to source directory"
                                                                         annotation(Evaluate=true, HideResult=true, Dialog(enable=not use_absolute_path, group="Data location"));
@@ -69,9 +72,7 @@ model GenericDataTable "Parameterized version of MSL's CombiTimeTable. See Examp
         annotation(Dialog(tab="Advanced", group="table data interpretation"));
   parameter SI.Time startTime=0       annotation(Dialog(tab="Advanced", group="table data interpretation"));
 
-  parameter Modelica.SIunits.Time shiftTime=startTime
-    "Shift time of first table column"
-    annotation (Dialog(group="Table data interpretation"));
+  parameter Modelica.Units.SI.Time shiftTime=startTime "Shift time of first table column" annotation (Dialog(group="Table data interpretation"));
 
   parameter Modelica.Blocks.Types.TimeEvents timeEvents=Modelica.Blocks.Types.TimeEvents.AtDiscontinuities
     "Time event handling of table interpolation"
@@ -138,8 +139,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
 
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                                graphics={

@@ -1,26 +1,30 @@
-within TransiEnt.Grid.Gas.StaticCycles.Check;
+﻿within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCyc2Source4Pipes2Sinks
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Checkmodel;
   parameter SI.Volume V_junction=0.01 "Volume of split and mix junctions";
@@ -58,7 +62,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{-10,-10},{10,10}},
         rotation=180,
         origin={-2,30})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe1(
     medium=simCenter.gasModel1,
     h_start=ones(pipe1.N_cv)*Init.pipe1.h_in,
     m_flow_start=ones(pipe1.N_cv + 1)*Init.pipe1.m_flow,
@@ -80,7 +84,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{-14,-5},{14,5}},
         rotation=90,
         origin={-36,-23})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe2(
     medium=simCenter.gasModel1,
     length=100,
     h_start=ones(pipe2.N_cv)*Init.pipe2.h_in,
@@ -105,7 +109,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{-14,-5},{14,5}},
         rotation=180,
         origin={24,60})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe4(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -130,7 +134,7 @@ model TestStatCyc2Source4Pipes2Sinks
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={48,-80})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe3(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -157,46 +161,34 @@ model TestStatCyc2Source4Pipes2Sinks
         origin={74,13})));
   inner TransiEnt.SimCenter simCenter(redeclare TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var gasModel1, T_ground=282.15)
                                       annotation (Placement(transformation(extent={{-130,100},{-110,120}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split1(
-    h(
-    start = Init.split1.h_in),
-    xi(
-    start =  Init.split1.xi_in),
-    p(
-    start = Init.split1.p),
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 split1(
+    h(start=Init.split1.h_in),
+    xi(start=Init.split1.xi_in),
+    p(start=Init.split1.p),
     volume=V_junction) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={-36,-80})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 mix2(
-    p(
-    start = Init.mix2.p),
-    xi(
-    start =  Init.mix2.xi_out),
-    h(
-    start = Init.mix2.h_out),
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 mix2(
+    p(start=Init.mix2.p),
+    xi(start=Init.mix2.xi_out),
+    h(start=Init.mix2.h_out),
     volume=V_junction) annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=90,
         origin={74,-30})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split2(
-    xi(
-    start =  Init.split2.xi_in),
-    h(
-    start = Init.split2.h_in),
-    p(
-    start = Init.split2.p),
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 split2(
+    xi(start=Init.split2.xi_in),
+    h(start=Init.split2.h_in),
+    p(start=Init.split2.p),
     volume=V_junction) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={74,60})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 mix1(
-    p(
-    start = Init.mix1.p),
-    xi(
-    start =  Init.mix1.xi_out),
-    h(
-    start = Init.mix1.h_out),
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 mix1(
+    p(start=Init.mix1.p),
+    xi(start=Init.mix1.xi_out),
+    h(start=Init.mix1.h_out),
     volume=V_junction) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -238,13 +230,13 @@ model TestStatCyc2Source4Pipes2Sinks
     Delta_p_nom_pipe4=100000,
     quadraticPressureLoss=true) annotation (Placement(transformation(extent={{-140,80},{-120,100}})));
   Modelica.Blocks.Sources.Sine mFlow1(
-    freqHz=1/30/60,
+    f=1/30/60,
     amplitude=4,
-    offset=6)   annotation (Placement(transformation(extent={{38,6},{22,22}})));
+    offset=6) annotation (Placement(transformation(extent={{38,6},{22,22}})));
   Modelica.Blocks.Sources.Sine mFlow2(
-    freqHz=1/30/60,
+    f=1/30/60,
     amplitude=4,
-    offset=6)   annotation (Placement(transformation(extent={{2,-32},{18,-16}})));
+    offset=6) annotation (Placement(transformation(extent={{2,-32},{18,-16}})));
   Modelica.Blocks.Sources.Ramp ramp(
     duration=10,
     height=4,

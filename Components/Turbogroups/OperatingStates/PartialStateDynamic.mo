@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Components.Turbogroups.OperatingStates;
 partial model PartialStateDynamic "State graph model with state-depentend maximum values and gradients"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -51,7 +55,18 @@ partial model PartialStateDynamic "State graph model with state-depentend maximu
      A good starting point is the choice thres = tolerance/1000.";
   parameter SI.Frequency P_grad_operating = 0.02/60 "Maximum Gradient during operation";
   parameter Boolean useSlewRateLimiter=true "choose if slewRateLimiter is activated";
+  parameter Boolean useHomotopyVarSlewRateLim=simCenter.useHomotopy "true if homotopy shall be used in variableSlewRateLimiter" annotation (Dialog(enable=useSlewRateLimiter));
 
+
+  // _____________________________________________
+  //
+  //                  Interfaces
+  // _____________________________________________
+
+  Modelica.Blocks.Interfaces.RealOutput P_grad_star_max_out "Relative maximum gradient in operation"
+                                                                                   annotation (Placement(transformation(extent={{96,-70},{116,-50}})));
+  Modelica.Blocks.Interfaces.RealOutput P_grad_star_min_out "Relative minium gradient in operation"
+                                                                                   annotation (Placement(transformation(extent={{96,-90},{116,-70}})));
 
   // _____________________________________________
   //
@@ -68,13 +83,18 @@ partial model PartialStateDynamic "State graph model with state-depentend maximu
     useConstantLimits=false,
     useThresh=false,
     y_start=-P_star_init,
-    Td=Td) if  useSlewRateLimiter              annotation (Placement(transformation(extent={{56,-44},{82,-18}})));
+    Td=Td,
+    useHomotopy=useHomotopyVarSlewRateLim) if useSlewRateLimiter annotation (Placement(transformation(extent={{56,-44},{82,-18}})));
 
   TransiEnt.Basics.Interfaces.Electrical.ElectricPowerOut P_set_star_lim "Limited output signal" annotation (Placement(transformation(extent={{96,-16},{128,16}}, rotation=0)));
   Modelica.Blocks.Sources.RealExpression P_min_of_state(y=P_min) annotation (Placement(transformation(extent={{-92,-52},{-72,-32}})));
   Modelica.Blocks.Sources.RealExpression P_max_of_state(y=P_max) annotation (Placement(transformation(extent={{-92,-30},{-72,-10}})));
-  Modelica.Blocks.Sources.RealExpression P_grad_min_of_state(y=P_grad_min) if useSlewRateLimiter annotation (Placement(transformation(extent={{20,-52},{40,-32}})));
-  Modelica.Blocks.Sources.RealExpression P_grad_max_of_state(y=P_grad_max) if useSlewRateLimiter annotation (Placement(transformation(extent={{20,-30},{40,-10}})));
+  Modelica.Blocks.Sources.RealExpression P_grad_min_of_state(y=P_grad_min)                       annotation (Placement(transformation(extent={{20,-52},{40,-32}})));
+  Modelica.Blocks.Sources.RealExpression P_grad_max_of_state(y=P_grad_max)                       annotation (Placement(transformation(extent={{20,-30},{40,-10}})));
+
+  Modelica.Blocks.Logical.Switch deactivatePower if
+                                            not useSlewRateLimiter annotation (Placement(transformation(extent={{30,-6},{42,6}})));
+
 
   // _____________________________________________
   //
@@ -83,6 +103,12 @@ partial model PartialStateDynamic "State graph model with state-depentend maximu
 
   Boolean isOperating;
 
+  Basics.Interfaces.Electrical.ElectricPowerIn P_actual_star "Connector of actual power" annotation (Placement(transformation(
+        extent={{-16,-16},{16,16}},
+        rotation=90,
+        origin={0,-100})));
+  Modelica.Blocks.Sources.RealExpression zeroPower(y=0) if not useSlewRateLimiter annotation (Placement(transformation(extent={{0,2},{20,22}})));
+  Modelica.Blocks.Sources.BooleanExpression deactivationSignal(y=false) if not useSlewRateLimiter annotation (Placement(transformation(extent={{-24,-10},{-4,10}})));
 protected
   Real P_min,P_max,P_grad_min,P_grad_max;
 
@@ -104,9 +130,9 @@ equation
       color={0,0,127},
       smooth=Smooth.Bezier));
   if useSlewRateLimiter==false then
-      connect(variableLimiter.y, P_set_star_lim) annotation (Line(points={{-24.7,-31},{-4,-31},{-4,0},{112,0}}, color={0,0,127}));
   else
-      connect(variableSlewRateLimiter.y, P_set_star_lim) annotation (Line(points={{83.3,-31},{112,-31},{112,0}}, color={0,0,127}));
+      connect(variableSlewRateLimiter.y, P_set_star_lim) annotation (Line(points={{83.3,-31},{88,-31},{88,-32},{92,-32},{92,0},{112,0}},
+                                                                                                                 color={0,0,127}));
       connect(variableLimiter.y, variableSlewRateLimiter.u) annotation (Line(points={{-24.7,-31},{53.4,-31}},          color={0,0,127}));
       connect(P_grad_min_of_state.y, variableSlewRateLimiter.minGrad) annotation (Line(
           points={{41,-42},{48,-42},{48,-41.4},{53.4,-41.4}},
@@ -117,6 +143,12 @@ equation
           color={0,0,127},
           smooth=Smooth.Bezier));
   end if;
+  connect(P_grad_min_of_state.y, P_grad_star_min_out) annotation (Line(points={{41,-42},{44,-42},{44,-80},{106,-80}}, color={0,0,127}));
+  connect(P_grad_max_of_state.y, P_grad_star_max_out) annotation (Line(points={{41,-20},{46,-20},{46,-60},{106,-60}}, color={0,0,127}));
+  connect(variableLimiter.y, deactivatePower.u3) annotation (Line(points={{-24.7,-31},{-24.7,-32},{2,-32},{2,-4.8},{28.8,-4.8}}, color={0,0,127}));
+  connect(deactivatePower.y, P_set_star_lim) annotation (Line(points={{42.6,0},{112,0}}, color={0,0,127}));
+  connect(zeroPower.y, deactivatePower.u1) annotation (Line(points={{21,12},{28.8,12},{28.8,4.8}}, color={0,0,127}));
+  connect(deactivationSignal.y, deactivatePower.u2) annotation (Line(points={{-3,0},{28.8,0}}, color={255,0,255}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})), Icon(graphics={
       Rectangle(
         origin={-70,0},
@@ -172,5 +204,6 @@ equation
 <p>Model created by Pascal Dubucq (dubucq@tuhh.de) <span style=\"font-family: MS Shell Dlg 2;\">on 01.10.2014</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Quality check (Code conventions) by Rebekka Denninger on 01.10.2016</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Oliver Schülting (oliver.schuelting@tuhh.de) on April 2019: added option to deactivate slewRateLimiter</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Robert Flesch (flesch@xrg-simulation.de) in Feb 2021: added input for actual power and switch to apply zero to value of power set</span></p>
 </html>"));
 end PartialStateDynamic;

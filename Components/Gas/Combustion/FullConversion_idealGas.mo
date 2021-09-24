@@ -1,26 +1,30 @@
-within TransiEnt.Components.Gas.Combustion;
+﻿within TransiEnt.Components.Gas.Combustion;
 model FullConversion_idealGas "Full conversion, fuel type independent combustion model for emission calculation purpose"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -58,24 +62,24 @@ protected
   SI.MassFraction xi_fuel[FuelMedium.nc-1](start=FuelMedium.xi_default) "Mass fraction of fuel components";
   SI.MassFraction xi_exh[ExhaustGas.nc-1](start=zeros(ExhaustGas.nc-1)) "[H2O, CO2, CO, H2, O2, NO, NO2, SO2, N2] Mass fraction of flue components";
 
-  Modelica.SIunits.MolarFlowRate[5] n_flow_fuel_elements "Molar flow rate of the fuel containing elements [C,H,O,N,S]";
+  Modelica.Units.SI.MolarFlowRate[5] n_flow_fuel_elements "Molar flow rate of the fuel containing elements [C,H,O,N,S]";
 
-  Modelica.SIunits.MolarFlowRate n_flow_flue_H2O;
-  Modelica.SIunits.MolarFlowRate n_flow_flue_CO2;
-  Modelica.SIunits.MolarFlowRate n_flow_flue_O2;
-  Modelica.SIunits.MolarFlowRate n_flow_flue_N2;
+  Modelica.Units.SI.MolarFlowRate n_flow_flue_H2O;
+  Modelica.Units.SI.MolarFlowRate n_flow_flue_CO2;
+  Modelica.Units.SI.MolarFlowRate n_flow_flue_O2;
+  Modelica.Units.SI.MolarFlowRate n_flow_flue_N2;
 
 public
-  Modelica.SIunits.MassFlowRate m_flow_air;
+  Modelica.Units.SI.MassFlowRate m_flow_air;
 protected
-  Modelica.SIunits.MolarFlowRate n_flow_air_H2O;
-  Modelica.SIunits.MolarFlowRate n_flow_air_N2;
-  Modelica.SIunits.MolarFlowRate n_flow_air_O2;
+  Modelica.Units.SI.MolarFlowRate n_flow_air_H2O;
+  Modelica.Units.SI.MolarFlowRate n_flow_air_N2;
+  Modelica.Units.SI.MolarFlowRate n_flow_air_O2;
 
   //Required flow rates for stochiometric combustion
-  Modelica.SIunits.MolarFlowRate n_flow_O2_req;
-  Modelica.SIunits.MassFlowRate m_flow_O2_req;
-  Modelica.SIunits.MassFlowRate m_flow_air_req;
+  Modelica.Units.SI.MolarFlowRate n_flow_O2_req;
+  Modelica.Units.SI.MassFlowRate m_flow_O2_req;
+  Modelica.Units.SI.MassFlowRate m_flow_air_req;
 
 equation
   // _____________________________________________

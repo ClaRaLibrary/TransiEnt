@@ -1,44 +1,88 @@
-within TransiEnt.Basics.Media.Gases.Check;
+﻿within TransiEnt.Basics.Media.Gases.Check;
 model TestRhoCalculationH2NG7
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
-  parameter Modelica.SIunits.Temperature T_start=283.15;
-  parameter Modelica.SIunits.Pressure p_start=1.013e5+16e5;
-  Modelica.SIunits.Temperature T;
-  Modelica.SIunits.Pressure p;
+  parameter Modelica.Units.SI.Temperature T_start=283.15;
+  parameter Modelica.Units.SI.Pressure p_start=1.013e5 + 16e5;
+  Modelica.Units.SI.Temperature T;
+  Modelica.Units.SI.Pressure p;
 
   TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2 H2;
   TransiEnt.Basics.Media.Gases.VLE_VDIWA_NG7_H2_var NG7;
 
-  parameter Modelica.SIunits.Density rho_H2_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(H2,p_start,0,H2.xi_default);
-  parameter Modelica.SIunits.Temperature T_H2_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.temperature_phxi(H2,p_start,0,H2.xi_default);
-  Modelica.SIunits.Density rho_H2_ph_var=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(H2,p,vleFluid_H2_pT.h,H2.xi_default);
-  parameter Modelica.SIunits.Density rho_H2_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_pTxi(H2,p_start,T_start,H2.xi_default);
-  parameter Modelica.SIunits.SpecificEnthalpy h_H2_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(H2,p_start,T_start,H2.xi_default);
-  parameter Modelica.SIunits.Density rho_NG7_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(NG7,p_start,0,NG7.xi_default);
-  parameter Modelica.SIunits.Temperature T_NG7_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.temperature_phxi(NG7,p_start,0,NG7.xi_default);
-  Modelica.SIunits.Density rho_NG7_ph_var=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(NG7,p,vleFluid_NG7_pT.h,NG7.xi_default);
-  parameter Modelica.SIunits.Density rho_NG7_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_pTxi(NG7,p_start,T_start,NG7.xi_default);
-  parameter Modelica.SIunits.SpecificEnthalpy h_NG7_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(NG7,p_start,T_start,NG7.xi_default);
+  parameter Modelica.Units.SI.Density rho_H2_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
+      H2,
+      p_start,
+      0,
+      H2.xi_default);
+  parameter Modelica.Units.SI.Temperature T_H2_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.temperature_phxi(
+      H2,
+      p_start,
+      0,
+      H2.xi_default);
+  Modelica.Units.SI.Density rho_H2_ph_var=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
+      H2,
+      p,
+      vleFluid_H2_pT.h,
+      H2.xi_default);
+  parameter Modelica.Units.SI.Density rho_H2_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_pTxi(
+      H2,
+      p_start,
+      T_start,
+      H2.xi_default);
+  parameter Modelica.Units.SI.SpecificEnthalpy h_H2_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
+      H2,
+      p_start,
+      T_start,
+      H2.xi_default);
+  parameter Modelica.Units.SI.Density rho_NG7_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
+      NG7,
+      p_start,
+      0,
+      NG7.xi_default);
+  parameter Modelica.Units.SI.Temperature T_NG7_ph=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.temperature_phxi(
+      NG7,
+      p_start,
+      0,
+      NG7.xi_default);
+  Modelica.Units.SI.Density rho_NG7_ph_var=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_phxi(
+      NG7,
+      p,
+      vleFluid_NG7_pT.h,
+      NG7.xi_default);
+  parameter Modelica.Units.SI.Density rho_NG7_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.density_pTxi(
+      NG7,
+      p_start,
+      T_start,
+      NG7.xi_default);
+  parameter Modelica.Units.SI.SpecificEnthalpy h_NG7_pT=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
+      NG7,
+      p_start,
+      T_start,
+      NG7.xi_default);
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph vleFluid_H2_ph(
     deactivateTwoPhaseRegion=true,

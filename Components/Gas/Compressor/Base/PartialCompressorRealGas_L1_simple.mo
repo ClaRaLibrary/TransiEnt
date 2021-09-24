@@ -1,33 +1,37 @@
-within TransiEnt.Components.Gas.Compressor.Base;
+﻿within TransiEnt.Components.Gas.Compressor.Base;
 partial model PartialCompressorRealGas_L1_simple "Partial compressor model for real gases with constant efficiency"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   // _____________________________________________
   //
   //        Constants and Hidden Parameters
@@ -46,11 +50,13 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   parameter SI.Efficiency eta_mech = 0.95 "Mechanical efficiency" annotation (Dialog(group="Fundamental Definitions"));
   parameter SI.Efficiency eta_el = 0.97 "Electrical efficiency" annotation (Dialog(group="Fundamental Definitions"));
 
-  parameter ClaRa.Components.TurboMachines.Compressors.Fundamentals.PresetVariableType presetVariableType="V_flow" "Specifies which variable is preset"
-                                                                                            annotation (Dialog(group="Fundamental Definitions"));
+  parameter PresetVariableType presetVariableType="V_flow" "Specifies which variable is preset" annotation (Dialog(group="Fundamental Definitions"));
+  parameter Boolean useMechPowerPort=false "true if mechanical power port shall be visible" annotation(Dialog(group="Fundamental Definitions"));
 
-  parameter Boolean use_P_elInput=false "= true, if P_el defined by input" annotation(Dialog(enable=(presetVariableType=="P_shaft"), group="Electrical power"));
-  parameter SI.Power P_el_fixed = 5e3 "Fixed value for electrical power" annotation(Dialog(enable=(not use_P_elInput and presetVariableType=="P_shaft"),group="Electrical power"));
+  parameter Boolean use_P_elInput=false "= true, if P_el defined by input" annotation(Dialog(enable=(presetVariableType=="P_el"), group="Electrical power"));
+  parameter SI.Power P_el_fixed = 5e3 "Fixed value for electrical power" annotation(Dialog(enable=(not use_P_elInput and presetVariableType=="P_el"),group="Electrical power"));
+  parameter Boolean use_P_shaftInput=false "= true, if P_shaft defined by input" annotation(Dialog(enable=(presetVariableType=="P_shaft"), group="Shaft power"));
+  parameter SI.Power P_shaft_fixed = 5e3 "Fixed value for shaft power" annotation(Dialog(enable=(not use_P_shaftInput and presetVariableType=="P_shaft"),group="Shaft power"));
   parameter Boolean use_Delta_p_input=false "= true, if Delta_p defined by input" annotation(Dialog(enable=(presetVariableType=="dp"), group="Pressure Increase"));
   parameter SI.Pressure Delta_p_fixed = 0.1e5 "Fixed value for pressure increase" annotation(Dialog(enable=(not use_Delta_p_input and presetVariableType=="dp"),group="Pressure Increase"));
   parameter Boolean m_flowInput=false "= true, if m_flow defined by input" annotation(Dialog(enable=(presetVariableType=="m_flow"), group="Mass Flow Rate"));
@@ -71,6 +77,7 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
   //
   //             Variable Declarations
   // _____________________________________________
+
   Real hOut;
   SI.Pressure Delta_p(start=Delta_p_start) "pressure increase";
   SI.Power P_hyd "Hydraulic power";
@@ -105,12 +112,12 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
         rotation=270,
         origin={80,110})));
   TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_in if use_P_elInput "Prescribed electric power" annotation (Placement(transformation(extent={{-10,-10},{10,10}},  rotation=270,
-        origin={34,110}),
+        origin={40,110}),
                 iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={30,110})));
   TransiEnt.Basics.Interfaces.General.VolumeFlowRateIn V_flow_in if  V_flowInput "Prescribed volume flow rate" annotation (Placement(transformation(extent={{-10,-10},{10,10}},   rotation=270,
-        origin={-32,110}),
+        origin={-40,110}),
                iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-30,110})));
@@ -120,6 +127,13 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
                        iconTransformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-80,110})));
+  TransiEnt.Basics.Interfaces.General.MechanicalPowerIn P_shaft_in if use_P_shaftInput "Prescribed shaft power" annotation (Placement(transformation(extent={{-10,-10},{10,10}},   rotation=270,
+        origin={0,110}),
+               iconTransformation(extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-30,110})));
+
+  Basics.Interfaces.General.MechanicalPowerPort mpp if useMechPowerPort annotation (Placement(transformation(extent={{-10,-110},{10,-90}})));
 
   // _____________________________________________
   //
@@ -128,18 +142,22 @@ partial model PartialCompressorRealGas_L1_simple "Partial compressor model for r
 
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=gasPortIn.p,
     h=inStream(gasPortIn.h_outflow),
     xi=inStream(gasPortIn.xi_outflow),
     vleFluidType=medium,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{-90,-12},{-70,8}})));
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     h=hOut,
     p=gasPortOut.p,
     xi=gasIn.xi,
     vleFluidType=medium,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{70,-12},{90,8}})));
-  ClaRa.Components.TurboMachines.Compressors.Fundamentals.GetInputsHydraulic getInputs annotation (Placement(transformation(
+  GetInputsHydraulic getInputs annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={0,40})));
@@ -147,6 +165,7 @@ protected
   Modelica.Blocks.Sources.Constant m_flow_in_(k=0) if not m_flowInput;
   Modelica.Blocks.Sources.Constant V_flow_in_(k=0) if not V_flowInput;
   Modelica.Blocks.Sources.Constant P_el_in_(k=0) if not use_P_elInput;
+  Modelica.Blocks.Sources.Constant P_shaft_in_(k=0) if not use_P_shaftInput;
 public
   inner Summary summary(
     outline(
@@ -183,7 +202,11 @@ public
       oMCosts=collectCosts.costsCollector.OMCosts,
       otherCosts=collectCosts.costsCollector.OtherCosts,
       revenues=collectCosts.costsCollector.Revenues)) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
-
+  Boundaries.Mechanical.Power power if useMechPowerPort annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=-90,
+        origin={0,-70})));
+  Modelica.Blocks.Sources.RealExpression realExpression(y=P_shaft) if useMechPowerPort annotation (Placement(transformation(extent={{40,-80},{20,-60}})));
 protected
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=typeOfResource, integrateElPower=integrateElPower)
                                                                                                                                       annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
@@ -230,6 +253,7 @@ protected
 
 
 equation
+  assert(not useMechPowerPort or not use_P_elInput,"useMechPowerPort and use_P_elInput in " + getInstanceName(),AssertionLevel.error);
   //____________________ Boundary equations _________________
 
   if presetVariableType == "dp" then
@@ -250,9 +274,15 @@ equation
     else
       V_flow = V_flow_fixed;
     end if;
+  elseif presetVariableType == "P_shaft" then
+    if use_P_shaftInput then
+      P_shaft = getInputs.P_shaft_in;
+    else
+      P_shaft = P_shaft_fixed;
+    end if;
   else
     if use_P_elInput then
-      P_el = getInputs.P_shaft_in;
+      P_el = getInputs.P_el_in;
     else
       P_el = P_el_fixed;
     end if;
@@ -267,7 +297,11 @@ equation
   gasPortOut.h_outflow = gasOut.h;
   gasPortIn.h_outflow = actualStream(gasPortOut.h_outflow);
   P_hyd/eta_mech = P_shaft;
-  P_shaft/eta_el = P_el;
+  if not useMechPowerPort then
+    P_shaft/eta_el = P_el;
+  else
+    P_el = 0;
+  end if;
 
   //collectors
   collectElectricPower.powerCollector.P=P_el;
@@ -282,17 +316,14 @@ equation
   connect(Delta_p_in_.y, getInputs.dp_in);
   connect(V_flow_in_.y, getInputs.V_flow_in);
   connect(m_flow_in_.y, getInputs.m_flow_in);
-  connect(P_el_in_.y, getInputs.P_shaft_in);
+  connect(P_shaft_in_.y, getInputs.P_shaft_in);
+  connect(P_el_in_.y, getInputs.P_el_in);
   connect(m_flow_in, getInputs.m_flow_in) annotation (Line(
       points={{-80,110},{-80,76},{-8,76},{-8,52}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(V_flow_in, getInputs.V_flow_in) annotation (Line(
-      points={{-32,110},{-32,88},{-2,88},{-2,52}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(P_el_in, getInputs.P_shaft_in) annotation (Line(
-      points={{34,110},{34,88},{2,88},{2,52}},
+      points={{-40,110},{-40,88},{-4,88},{-4,52}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(dp_in, getInputs.dp_in) annotation (Line(
@@ -300,9 +331,12 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
 
+  connect(P_el_in, getInputs.P_el_in) annotation (Line(points={{40,110},{40,88},{4,88},{4,52}}, color={0,127,127}));
+  connect(P_shaft_in, getInputs.P_shaft_in) annotation (Line(points={{0,110},{0,52}}, color={0,0,127}));
+  connect(power.mpp, mpp) annotation (Line(points={{0,-80},{0,-100}}, color={95,95,95}));
+  connect(realExpression.y, power.P_mech_set) annotation (Line(points={{19,-70},{11.8,-70}}, color={0,0,127}));
                                                 annotation (
-              Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-100,
+              Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),  Icon(coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}}),
                                       graphics={
@@ -349,7 +383,9 @@ equation
 <p>m_flow_in: input for mass flow rate in kg/s</p>
 <p>V_flow_in: input for volume flow rate in m3/s</p>
 <p>P_el_in: input for electrical power in W</p>
+<p>P_shaft_in: input for shaft power in W</p>
 <p>dp_in: input for pressure difference in Pa</p>
+<p>mpp: mechanical power port (if useMechPowerPort)</p>
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p>Delta_p &quot;pressure increase&quot;</p>
 <p>P_hyd &quot;Hydraulic power&quot;</p>
@@ -359,12 +395,13 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(no remarks)</p>
+<p><span style=\"font-family: Courier New;\">useMechPowerPort&nbsp;</span>and<span style=\"font-family: Courier New;\">&nbsp;use_P_elInput </span>cannot be true at the same time since the electric power is then calculated outside of the compressor.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(no remarks) </p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
-<p><br>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Sep 20 2016</p>
+<p>Model created by Carsten Bode (c.bode@tuhh.de) on Tue Sep 20 2016</p>
+<p>Modified by Carsten Bode (c.bode@tuhh.de) in Nov 2020 (added shaft power and mechanical power port)</p>
 </html>"));
 end PartialCompressorRealGas_L1_simple;

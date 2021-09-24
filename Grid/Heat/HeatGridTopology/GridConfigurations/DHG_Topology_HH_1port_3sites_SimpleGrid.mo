@@ -1,26 +1,30 @@
-within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
+﻿within TransiEnt.Grid.Heat.HeatGridTopology.GridConfigurations;
 model DHG_Topology_HH_1port_3sites_SimpleGrid
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -34,9 +38,9 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
   //             Visible Parameters
   // _____________________________________________
 
-  Modelica.SIunits.HeatFlowRate Q_flow_dem;
-  Modelica.SIunits.Heat Q_dem;
-  parameter Modelica.SIunits.MassFlowRate m_flow_nom=1100;
+  Modelica.Units.SI.HeatFlowRate Q_flow_dem;
+  Modelica.Units.SI.Heat Q_dem;
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nom=1100;
 
   // _____________________________________________
   //
@@ -319,12 +323,13 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
         273.15 + 50,
         simCenter.fluid1.xi_default),
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (Delta_p_nom=0.1e5),
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.IdealHeatTransfer_L2) annotation (Placement(transformation(
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L2 (alpha_nom=10e4))
+                                                                                                                           annotation (Placement(transformation(
         extent={{13,14},{-13,-14}},
         rotation=90,
-        origin={-108,-51})));
+        origin={-148,-53})));
   ClaRa.Visualisation.Quadruple quadruple15
-    annotation (Placement(transformation(extent={{-178,-80},{-140,-64}})));
+    annotation (Placement(transformation(extent={{-218,-82},{-180,-66}})));
   Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_2 annotation (Placement(transformation(extent={{-50,-47},{-36,-32}})));
   HeatGridControl.SupplyAndReturnTemperatureDHG                     supplyandReturnTemperature1 annotation (Placement(transformation(extent={{-28,-48},{-18,-38}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature prescribedTemperature annotation (Placement(transformation(extent={{-66,-62},{-86,-42}})));
@@ -337,7 +342,7 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
         extent={{-8.5,-9},{8.5,9}},
         rotation=90,
         origin={43,217.5})));
-  Components.Visualization.Quadruple quadruple9 annotation (Placement(transformation(extent={{54,224},{74,234}})));
+  Components.Visualization.Quadruple quadruple9 annotation (Placement(transformation(extent={{92,224},{112,234}})));
   ClaRa.Components.HeatExchangers.TubeBundle_L2 HeatConsumerNorth(
     diameter=0.05,
     N_passes=5,
@@ -357,16 +362,17 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
         273.15 + 50,
         simCenter.fluid1.xi_default),
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (Delta_p_nom=0.1e5),
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.IdealHeatTransfer_L2) annotation (Placement(transformation(
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L2 (alpha_nom=10e4))
+                                                                                                                           annotation (Placement(transformation(
         extent={{13,14},{-13,-14}},
         rotation=90,
         origin={42,265})));
   ClaRa.Visualisation.Quadruple quadruple10
     annotation (Placement(transformation(extent={{-28,236},{10,252}})));
-  Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_1 annotation (Placement(transformation(extent={{92,279},{106,294}})));
-  HeatGridControl.SupplyAndReturnTemperatureDHG                     supplyandReturnTemperature2 annotation (Placement(transformation(extent={{118,268},{128,278}})));
+  Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_1 annotation (Placement(transformation(extent={{130,279},{144,294}})));
+  HeatGridControl.SupplyAndReturnTemperatureDHG                     supplyandReturnTemperature2 annotation (Placement(transformation(extent={{156,268},{166,278}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature prescribedTemperature1
-                                                                                    annotation (Placement(transformation(extent={{84,256},{64,276}})));
+                                                                                    annotation (Placement(transformation(extent={{122,256},{102,276}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_pTxi pressureSink_WestDemand2(
     medium=simCenter.fluid1,
     T_const=50 + 273.15,
@@ -396,14 +402,15 @@ model DHG_Topology_HH_1port_3sites_SimpleGrid
         273.15 + 50,
         simCenter.fluid1.xi_default),
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L2 (Delta_p_nom=0.1e5),
-    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.IdealHeatTransfer_L2) annotation (Placement(transformation(
+    redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L2 (alpha_nom=10e4))
+                                                                                                                           annotation (Placement(transformation(
         extent={{13,14},{-13,-14}},
         rotation=90,
         origin={256,71})));
-  Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_3 annotation (Placement(transformation(extent={{306,85},{320,100}})));
-  HeatGridControl.SupplyAndReturnTemperatureDHG                     supplyandReturnTemperature3 annotation (Placement(transformation(extent={{332,74},{342,84}})));
+  Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_3 annotation (Placement(transformation(extent={{328,85},{342,100}})));
+  HeatGridControl.SupplyAndReturnTemperatureDHG                     supplyandReturnTemperature3 annotation (Placement(transformation(extent={{354,74},{364,84}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature prescribedTemperature2
-                                                                                    annotation (Placement(transformation(extent={{298,62},{278,82}})));
+                                                                                    annotation (Placement(transformation(extent={{320,62},{300,82}})));
 
 equation
   // _____________________________________________
@@ -527,40 +534,33 @@ equation
   connect(join_L2_Y1.eye, quadruple5.eye) annotation (Line(points={{102,32},{88,32},{88,33},{72,33}}, color={190,190,190}));
   connect(pressureSink_WestDemand.eye, quadruple6.eye) annotation (Line(points={{-99.8,-90},{-82,-90},{-82,-88},{-80,-88},{-80,-87},{-76,-87}},
                                                                                                                                     color={190,190,190}));
-  connect(HeatConsumerWest.eye, quadruple15.eye) annotation (Line(points={{-119.2,-64},{-119.2,-72},{-178,-72}}, color={190,190,190}));
+  connect(HeatConsumerWest.eye, quadruple15.eye) annotation (Line(points={{-159.2,-66},{-159.2,-74},{-218,-74}}, color={190,190,190}));
   connect(temperatureHH_900s_01012012_0000_31122012_2345_2.y1,supplyandReturnTemperature1. T_amb) annotation (Line(points={{-35.3,-39.5},{-29,-39.5},{-29,-43}},
                                                                                                                                                               color={0,0,127}));
-  connect(HeatConsumerWest.heat, prescribedTemperature.port) annotation (Line(
-      points={{-94,-51},{-87,-51},{-87,-52},{-86,-52}},
-      color={167,25,48},
-      thickness=0.5));
   connect(supplyandReturnTemperature1.T_return_K,prescribedTemperature. T) annotation (Line(points={{-17.5,-46.4},{-10,-46.4},{-10,-52},{-64,-52}},
                                                                                                                                                 color={0,0,127}));
   connect(HeatConsumerWest.outlet, pressureSink_WestDemand.steam_a) annotation (Line(
-      points={{-108,-64},{-108,-64},{-108,-90},{-107,-90}},
+      points={{-148,-66},{-148,-80},{-107,-80},{-107,-90}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
   connect(HeatConsumerWest.inlet, join_L2_Y2.outlet) annotation (Line(
-      points={{-108,-38},{-102,-38},{-102,-2},{-36,-2}},
+      points={{-148,-40},{-148,-24},{-40,-24},{-40,-8},{-36,-8},{-36,-2}},
       color={0,131,169},
       thickness=0.5));
   connect(pressureSink_WestDemand.T, prescribedTemperature.T) annotation (Line(points={{-107,-107},{-52,-107},{-52,-90},{-52,-52},{-64,-52}},                color={0,0,127}));
-  connect(pressureSink_WestDemand1.eye, quadruple9.eye) annotation (Line(points={{50.2,226},{50,226},{50,228},{50,229},{54,229}}, color={190,190,190}));
+  connect(pressureSink_WestDemand1.eye, quadruple9.eye) annotation (Line(points={{50.2,226},{48,226},{48,236},{76,236},{76,229},{92,229}},
+                                                                                                                                  color={190,190,190}));
   connect(HeatConsumerNorth.eye, quadruple10.eye) annotation (Line(points={{30.8,252},{30.8,244},{-28,244}}, color={190,190,190}));
-  connect(temperatureHH_900s_01012012_0000_31122012_2345_1.y1,supplyandReturnTemperature2. T_amb) annotation (Line(points={{106.7,286.5},{117,286.5},{117,273}},
+  connect(temperatureHH_900s_01012012_0000_31122012_2345_1.y1,supplyandReturnTemperature2. T_amb) annotation (Line(points={{144.7,286.5},{155,286.5},{155,273}},
                                                                                                                                                               color={0,0,127}));
-  connect(HeatConsumerNorth.heat, prescribedTemperature1.port) annotation (Line(
-      points={{56,265},{60,265},{60,266},{62,266},{64,266}},
-      color={167,25,48},
-      thickness=0.5));
-  connect(supplyandReturnTemperature2.T_return_K, prescribedTemperature1.T) annotation (Line(points={{128.5,269.6},{132,269.6},{132,266},{86,266}}, color={0,0,127}));
+  connect(supplyandReturnTemperature2.T_return_K, prescribedTemperature1.T) annotation (Line(points={{166.5,269.6},{170,269.6},{170,266},{124,266}},color={0,0,127}));
   connect(HeatConsumerNorth.outlet, pressureSink_WestDemand1.steam_a) annotation (Line(
       points={{42,252},{42,252},{42,226},{43,226}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
-  connect(pressureSink_WestDemand1.T, prescribedTemperature1.T) annotation (Line(points={{43,209},{92,209},{92,208},{92,266},{86,266}}, color={0,0,127}));
+  connect(pressureSink_WestDemand1.T, prescribedTemperature1.T) annotation (Line(points={{43,209},{130,209},{130,266},{124,266}},       color={0,0,127}));
   connect(join_L2_Y3.outlet, HeatConsumerNorth.inlet) annotation (Line(
       points={{8,158},{20,158},{20,280},{42,280},{42,278}},
       color={0,131,169},
@@ -568,23 +568,31 @@ equation
       thickness=0.5,
       smooth=Smooth.Bezier));
   connect(pressureSink_WestDemand2.eye,quadruple7. eye) annotation (Line(points={{264.2,32},{294,32},{294,24},{294,31}},          color={190,190,190}));
-  connect(temperatureHH_900s_01012012_0000_31122012_2345_3.y1,supplyandReturnTemperature3. T_amb) annotation (Line(points={{320.7,92.5},{331,92.5},{331,79}}, color={0,0,127}));
-  connect(HeatConsumerEast.heat, prescribedTemperature2.port) annotation (Line(
-      points={{270,71},{274,71},{274,72},{278,72}},
-      color={167,25,48},
-      thickness=0.5));
-  connect(supplyandReturnTemperature3.T_return_K,prescribedTemperature2. T) annotation (Line(points={{342.5,75.6},{346,75.6},{346,72},{300,72}},    color={0,0,127}));
+  connect(temperatureHH_900s_01012012_0000_31122012_2345_3.y1,supplyandReturnTemperature3. T_amb) annotation (Line(points={{342.7,92.5},{353,92.5},{353,79}}, color={0,0,127}));
+  connect(supplyandReturnTemperature3.T_return_K,prescribedTemperature2. T) annotation (Line(points={{364.5,75.6},{368,75.6},{368,72},{322,72}},    color={0,0,127}));
   connect(HeatConsumerEast.outlet, pressureSink_WestDemand2.steam_a) annotation (Line(
       points={{256,58},{256,58},{256,32},{257,32}},
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
-  connect(pressureSink_WestDemand2.T,prescribedTemperature2. T) annotation (Line(points={{257,15},{322,15},{322,20},{322,72},{300,72}}, color={0,0,127}));
+  connect(pressureSink_WestDemand2.T,prescribedTemperature2. T) annotation (Line(points={{257,15},{344,15},{344,72},{322,72}},          color={0,0,127}));
   connect(HeatConsumerEast.inlet, join_L2_Y1.outlet) annotation (Line(
       points={{256,84},{110,84},{110,32}},
       color={0,131,169},
       thickness=0.5,
       smooth=Smooth.Bezier));
+  connect(HeatConsumerNorth.heat, prescribedTemperature1.port) annotation (Line(
+      points={{56,265},{68,265},{68,266},{102,266}},
+      color={167,25,48},
+      thickness=0.5));
+  connect(HeatConsumerEast.heat, prescribedTemperature2.port) annotation (Line(
+      points={{270,71},{276,71},{276,72},{300,72}},
+      color={167,25,48},
+      thickness=0.5));
+  connect(HeatConsumerWest.heat, prescribedTemperature.port) annotation (Line(
+      points={{-134,-53},{-86,-53},{-86,-52}},
+      color={167,25,48},
+      thickness=0.5));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-440,-320},{500,420}})),           Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Models the heat demand of the district heating grid in Hamburg as open loop grid with 3 heat ports to the outside (heat producers)</span></p>

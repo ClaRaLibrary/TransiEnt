@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Gas.MethanatorSystem;
+﻿within TransiEnt.Producer.Gas.MethanatorSystem;
 model MethanatorSystem_L4
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -86,13 +90,12 @@ model MethanatorSystem_L4
   Modelica.Blocks.Sources.RealExpression realExpression(y=225 + 273.15)
                                                                     annotation (Placement(transformation(extent={{-56,58},{-46,68}})));
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore valve_pBeforeValveDes1(final medium=vle_sg4, p_BeforeValveDes=p_nom[N_cv])
-                                                                                                                                               annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Valves.ValveDesiredPressureBefore valve_pBeforeValveDes1(final medium=vle_sg4, p_BeforeValveDes=p_nom[N_cv]) annotation (Placement(transformation(
         extent={{4.5,-4.5},{-4.5,4.5}},
         rotation=90,
         origin={99.5,31.5})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow Sink_CO2(
-    medium=medium,
+    medium=medium_CO2,
     variable_m_flow=true,
     xi_const={0,0,0,0,0,1},
     T_const=493.15) if useCO2Input annotation (Placement(transformation(
@@ -137,12 +140,11 @@ model MethanatorSystem_L4
         extent={{6,-6},{-6,6}},
         rotation=0,
         origin={-64,46})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.ThreeWayValveRealGas_L1_simple TWV(medium=vle_sg4, splitRatio_input=true)
-                                                                                                           annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Valves.ThreeWayValveRealGas_L1_simple TWV(medium=vle_sg4, splitRatio_input=true) annotation (Placement(transformation(
         extent={{5,4.5},{-5,-4.5}},
         rotation=180,
         origin={-77,39.5})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction(
     initOption=0,
     medium=vle_sg4,
     redeclare model PressureLoss3 = ClaRa.Components.VolumesValvesFittings.Fittings.Fundamentals.Linear (m_flow_nom=m_flow_n_CH4, dp_nom=1e4),
@@ -265,12 +267,16 @@ protected
   end Summary;
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     h=inStream(gasPortIn.h_outflow),
     p=gasPortIn.p,
     xi=inStream(gasPortIn.xi_outflow),
     deactivateTwoPhaseRegion=true,
     vleFluidType=medium) annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     deactivateTwoPhaseRegion=true,
     vleFluidType=medium,
     p=realSG4_var_to_RealNG7_SG.gasPortOut.p,

@@ -1,25 +1,29 @@
-within TransiEnt.Components.Electrical.Grid.Check;
+﻿within TransiEnt.Components.Electrical.Grid.Check;
 model TestPIModelQS_GridExample "Model for testing a quasi stationary PiModel with an example grid"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
      extends TransiEnt.Basics.Icons.Checkmodel;
 
@@ -36,13 +40,11 @@ model TestPIModelQS_GridExample "Model for testing a quasi stationary PiModel wi
   TransiEnt.Components.Electrical.Grid.PiModelQS Cable1(l=41,
     CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4) annotation (Placement(transformation(rotation=0, extent={{-48,40},{-28,60}})));
 
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load1(R_ref=1e3)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Load1(R_ref=1e3) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={24,50})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground1
-    annotation (Placement(transformation(extent={{40,30},{60,50}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground Ground1 annotation (Placement(transformation(extent={{40,30},{60,50}})));
 
   TransiEnt.Components.Electrical.Grid.PiModelQS Cable16(
     CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4, l=24) annotation (Placement(transformation(
@@ -51,34 +53,28 @@ model TestPIModelQS_GridExample "Model for testing a quasi stationary PiModel wi
         origin={-14,34})));
   TransiEnt.Components.Electrical.Grid.PiModelQS Cable17(l=86,
     CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K13) annotation (Placement(transformation(rotation=0, extent={{12,8},{32,28}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load2(R_ref=1e3)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Load2(R_ref=1e3) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={52,18})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground2
-    annotation (Placement(transformation(extent={{64,-2},{84,18}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground Ground2 annotation (Placement(transformation(extent={{64,-2},{84,18}})));
   TransiEnt.Components.Electrical.Grid.PiModelQS Cable23(
     CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4, l=191) annotation (Placement(transformation(
         rotation=270,
         extent={{-10,-10},{10,10}},
         origin={-14,-6})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load3(R_ref=1e3)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Load3(R_ref=1e3) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={26,-6})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground3
-    annotation (Placement(transformation(extent={{38,-26},{58,-6}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground Ground3 annotation (Placement(transformation(extent={{38,-26},{58,-6}})));
   TransiEnt.Components.Electrical.Grid.PiModelQS Cable29(l=66,
     CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K13) annotation (Placement(transformation(rotation=0, extent={{18,-40},{38,-20}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load4(R_ref=1e3)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Load4(R_ref=1e3) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={66,-30})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground4
-    annotation (Placement(transformation(extent={{78,-50},{98,-30}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground Ground4 annotation (Placement(transformation(extent={{78,-50},{98,-30}})));
   TransiEnt.Components.Electrical.Grid.PiModelQS Cable30(
     CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K4,l=65) annotation (Placement(transformation(
         rotation=270,
@@ -91,20 +87,16 @@ model TestPIModelQS_GridExample "Model for testing a quasi stationary PiModel wi
         origin={-14,-74})));
   TransiEnt.Components.Electrical.Grid.PiModelQS Cable32(l=89,
     CableType=TransiEnt.Components.Electrical.Grid.Characteristics.LVCabletypes.K14) annotation (Placement(transformation(rotation=0, extent={{12,-66},{32,-46}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load5(R_ref=1e3)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Load5(R_ref=1e3) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={52,-56})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground5
-    annotation (Placement(transformation(extent={{62,-76},{82,-56}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Load6(R_ref=1e3)
-    annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground Ground5 annotation (Placement(transformation(extent={{62,-76},{82,-56}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Load6(R_ref=1e3) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={22,-84})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground Ground6
-    annotation (Placement(transformation(extent={{32,-104},{52,-84}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground Ground6 annotation (Placement(transformation(extent={{32,-104},{52,-84}})));
 equation
   connect(Adapter.voltageP, Cable1.pin_p1)
     annotation (Line(points={{-56,50},{-56,50},{-48,50}}, color={85,170,255}));

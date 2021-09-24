@@ -1,26 +1,30 @@
-within TransiEnt.Components.Gas.VolumesValvesFittings.Base;
+﻿within TransiEnt.Components.Gas.VolumesValvesFittings.Base;
 model VolumeRealGas_L4 "A 1D tube-shaped control volume considering one-phase heat transfer in a straight pipe with static momentum balance and simple energy balance"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 // Modified component of the ClaRa library, version: 1.3.0
 // Path: ClaRa.Basics.ControlVolumes.FluidVolumes.VolumeVLE_L4
 // Modifications: simCenter, media models, connectors changed to TransiEnt instances
@@ -78,21 +82,21 @@ model VolumeRealGas_L4 "A 1D tube-shaped control volume considering one-phase he
     extends ClaRa.Basics.Records.FlangeVLE;
     parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium "Medium" annotation (Dialog);
     input ClaRa.Basics.Units.MassFraction xi[medium.nc-1] "Mass composition at the inlet" annotation (Dialog);
-    input Modelica.SIunits.MoleFraction x[medium.nc-1] "Molar composition at the inlet" annotation (Dialog);
+    input Modelica.Units.SI.MoleFraction x[medium.nc - 1] "Molar composition at the inlet" annotation (Dialog);
   end Inlet;
 
   model Outlet
     extends ClaRa.Basics.Records.FlangeVLE;
     parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium "Medium" annotation (Dialog);
     input ClaRa.Basics.Units.MassFraction xi[medium.nc-1] "Mass composition at the outlet" annotation (Dialog);
-    input Modelica.SIunits.MoleFraction x[medium.nc-1] "Molar composition at the outlet" annotation (Dialog);
+    input Modelica.Units.SI.MoleFraction x[medium.nc - 1] "Molar composition at the outlet" annotation (Dialog);
   end Outlet;
 
   model Fluid
     extends ClaRa.Basics.Records.FluidVLE_L34;
     parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium "Medium" annotation (Dialog);
     input ClaRa.Basics.Units.MassFraction xi[N_cv, medium.nc-1] "Mass composition of the fluid" annotation (Dialog);
-    input Modelica.SIunits.MoleFraction x[N_cv, medium.nc-1] "Molar composition of the fluid" annotation (Dialog);
+    input Modelica.Units.SI.MoleFraction x[N_cv,medium.nc - 1] "Molar composition of the fluid" annotation (Dialog);
   end Fluid;
 
   model Summary
@@ -114,6 +118,8 @@ public
  parameter Integer variableCompositionEntries[:](min=0,max=medium.nc)={0} "Entries of medium vector which are supposed to be completely variable" annotation(Dialog(group="Fundamental Definitions",enable=not constantComposition));
  final parameter Integer dependentCompositionEntries[:]=if variableCompositionEntries[1] == 0 then 1:medium.nc else findSetDifference(1:medium.nc, variableCompositionEntries) "Entries of medium vector which are supposed to be dependent on the variable entries";
  parameter Integer massBalance=1 "Mass balance and species balance fomulation" annotation(Dialog(group="Fundamental Definitions"),choices(choice=1 "ClaRa formulation", choice=2 "TransiEnt formulation 1a", choice=3 "TransiEnt formulation 1b", choice=4 "Quasi stationary"));
+ parameter SI.Pressure p_min_assert=0 "Minimum pressure in component and ports below which the simulation terminates" annotation(Dialog(group="Fundamental Definitions"));
+ parameter SI.Pressure p_max_assert=1000e5 "Maximum pressure in component and ports above which the simulation terminates" annotation(Dialog(group="Fundamental Definitions"));
 
 //____Physical Effects_____________________________________________________________________________________
 
@@ -161,7 +167,7 @@ public
   parameter ClaRa.Basics.Units.MassFraction xi_start[medium.nc - 1]=xi_nom "Initial composition for single tube"
                                                                                                                 annotation(Dialog(tab="Initialisation"));
   parameter ClaRa.Basics.Units.MassFlowRate m_flow_start[geo.N_cv+1]=m_flow_nom*ones(geo.N_cv+1) "Initial mass flow rate" annotation(Dialog(tab="Initialisation"));
-  parameter Modelica.SIunits.Temperature T_start[geo.N_cv]=ones(geo.N_cv)*simCenter.T_ground "Initial temperature for single tube (used in calculation of h_start)" annotation(Dialog(tab="Initialisation"));
+  parameter Modelica.Units.SI.Temperature T_start[geo.N_cv]=ones(geo.N_cv)*simCenter.T_ground "Initial temperature for single tube (used in calculation of h_start)" annotation (Dialog(tab="Initialisation"));
 protected
   parameter ClaRa.Basics.Units.Pressure p_start_internal[geo.N_cv]=if size(p_start, 1) == 2 then linspace(
       p_start[1],
@@ -248,10 +254,11 @@ public
 
 //____Energy / Enthalpy_________________________________________________________________________________________
   ClaRa.Basics.Units.EnthalpyMassSpecific h[geo.N_cv](start=h_start, each stateSelect=StateSelect.prefer) "Cell enthalpy";
+  ClaRa.Basics.Units.Temperature T[geo.N_cv] "Cell temperature";
 
   //____Pressure__________________________________________________________________________________________________
 protected
-  ClaRa.Basics.Units.Pressure p[geo.N_cv](start=p_start_internal, each stateSelect=if massBalance==4 then StateSelect.never else StateSelect.always) "Cell pressure";
+  ClaRa.Basics.Units.Pressure p[geo.N_cv](start=p_start_internal, each stateSelect=if massBalance==4 then StateSelect.never else StateSelect.prefer) "Cell pressure";
   ClaRa.Basics.Units.PressureDifference Delta_p_fric[geo.N_cv + 1] "Pressure difference due to friction";
   ClaRa.Basics.Units.PressureDifference Delta_p_grav[geo.N_cv + 1] "pressure drop due to gravity";
 
@@ -272,14 +279,14 @@ protected
   ClaRa.Basics.Units.MassFraction steamQuality_outlet "Steam fraction";
 
   //____Mass Fractions____________________________________________________________________________________________
-  Modelica.SIunits.MassFraction xi[geo.N_cv,medium.nc - 1](stateSelect={if find(j, dependentCompositionEntries) == 0 then StateSelect.always else StateSelect.never for j in 1:medium.nc - 1,i in 1:geo.N_cv}) "Mass fraction";
-  Modelica.SIunits.MassFraction xi_end[geo.N_cv]=ones(geo.N_cv)-sum(xi[:,i] for i in 1:medium.nc-1) "Last entry of mass fraction";
+  Modelica.Units.SI.MassFraction xi[geo.N_cv,medium.nc - 1](stateSelect={if not constantComposition and find(j, dependentCompositionEntries) == 0 then StateSelect.always else StateSelect.never for j in 1:medium.nc - 1,i in 1:geo.N_cv}) "Mass fraction";
+  Modelica.Units.SI.MassFraction xi_end[geo.N_cv]=ones(geo.N_cv) - sum(xi[:, i] for i in 1:medium.nc - 1) "Last entry of mass fraction";
   Real[geo.N_cv + 1, medium.nc - 1] Xi_flow "Mass flow rate of fraction";
   Real[geo.N_cv + 1] Xi_flow_end "Mass flow rate of last fraction";
-  Modelica.SIunits.MassFraction xi_inlet[medium.nc - 1] "Inlet mass fraction of component";
-  Modelica.SIunits.MassFraction xi_inlet_end=1-sum(xi_inlet) "Inlet mass fraction of last component";
-  Modelica.SIunits.MassFraction xi_outlet[medium.nc - 1] "Outlet mass fraction of component";
-  Modelica.SIunits.MassFraction xi_outlet_end=1-sum(xi_outlet) "Outlet mass fraction of last component";
+  Modelica.Units.SI.MassFraction xi_inlet[medium.nc - 1] "Inlet mass fraction of component";
+  Modelica.Units.SI.MassFraction xi_inlet_end=1 - sum(xi_inlet) "Inlet mass fraction of last component";
+  Modelica.Units.SI.MassFraction xi_outlet[medium.nc - 1] "Outlet mass fraction of component";
+  Modelica.Units.SI.MassFraction xi_outlet_end=1 - sum(xi_outlet) "Outlet mass fraction of last component";
   //____Flows and Velocities______________________________________________________________________________________
   ClaRa.Basics.Units.Power H_flow[geo.N_cv + 1] "Enthalpy flow rate at cell borders";
   ClaRa.Basics.Units.MassFlowRate m_flow[geo.N_cv + 1](start=m_flow_start);
@@ -306,10 +313,10 @@ public
   MechanicalEquilibrium mechanicalEquilibrium(final h_start=h_start) "Mechanical equilibrium model" annotation (Placement(transformation(extent={{40,0},{60,20}})));
 
 protected
-  inner TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasBulk[geo.N_cv](
+  inner TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasBulk[geo.N_cv](
     each computeSurfaceTension=false,
     p=p,
-    h=h,
+    T=T,
     each vleFluidType=medium,
     each computeTransportProperties=true,
     each deactivateTwoPhaseRegion=true,
@@ -317,6 +324,7 @@ protected
 
   inner TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=gasPortIn.p,
     vleFluidType=medium,
     h=noEvent(actualStream(gasPortIn.h_outflow)),
@@ -326,6 +334,7 @@ protected
 
   inner TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     p=gasPortOut.p,
     vleFluidType=medium,
     h=noEvent(actualStream(gasPortOut.h_outflow)),
@@ -333,7 +342,7 @@ protected
     deactivateTwoPhaseRegion=true,
     xi=xi_outlet) annotation (Placement(transformation(extent={{70,-30},{90,-10}}, rotation=0)));
 
-  inner ClaRa.Basics.Records.IComVLE_L3_OnePort iCom(
+  inner IComVLE_L3_OnePort_extended iCom(
     mediumModel=medium,
     N_cv=geo.N_cv,
     xi=xi,
@@ -342,12 +351,20 @@ protected
     T_in={gasIn.T},
     m_flow_in={gasPortIn.m_flow},
     h_in={gasIn.h},
+    h_in_outflow={gasPortIn.h_outflow},
+    h_in_inflow={inStream(gasPortIn.h_outflow)},
     xi_in={gasIn.xi},
+    xi_in_inflow={inStream(gasPortIn.xi_outflow)},
+    xi_in_outflow={gasPortIn.xi_outflow},
     p_out={gasPortOut.p},
     T_out={gasOut.T},
     m_flow_out={gasPortOut.m_flow},
     h_out={gasOut.h},
+    h_out_inflow={inStream(gasPortOut.h_outflow)},
+    h_out_outflow={gasPortOut.h_outflow},
     xi_out={gasOut.xi},
+    xi_out_inflow={inStream(gasPortOut.xi_outflow)},
+    xi_out_outflow={gasPortOut.xi_outflow},
     p_nom=p_nom[1],
     Delta_p_nom=Delta_p_nom,
     m_flow_nom=m_flow_nom,
@@ -399,6 +416,14 @@ initial equation
     end if;
   end if;
 equation
+  assert(min(p) > p_min_assert,"Pressure in component " + getInstanceName() + " is too low! (below " + String(p_min_assert/1e5) + " bar)",AssertionLevel.error);
+  assert(max(p) < p_max_assert,"Pressure in component " + getInstanceName() + " is too high! (above " + String(p_max_assert/1e5) + " bar)",AssertionLevel.error);
+  assert(gasPortIn.p > p_min_assert,"Pressure in component " + getInstanceName() + " is too low! (below " + String(p_min_assert/1e5) + " bar)",AssertionLevel.error);
+  assert(gasPortIn.p < p_max_assert,"Pressure in component " + getInstanceName() + " is too high! (above " + String(p_max_assert/1e5) + " bar)",AssertionLevel.error);
+  assert(gasPortOut.p > p_min_assert,"Pressure in component " + getInstanceName() + " is too low! (below " + String(p_min_assert/1e5) + " bar)",AssertionLevel.error);
+  assert(gasPortOut.p < p_max_assert,"Pressure in component " + getInstanceName() + " is too high! (above " + String(p_max_assert/1e5) + " bar)",AssertionLevel.error);
+
+  h = gasBulk.h;
 
   connect(heat, heatTransfer.heat) annotation (Line(
       points={{0,40},{0,28},{-61,28},{-61,19}},
@@ -754,17 +779,17 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">5. Nomenclature</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks) </span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
-<p><b>Velocity at inlet and outlet: </b></p>
+<h4>Velocity at inlet and outlet: </h4>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-lk3fBRGh.png\" alt=\"w_inlet=m_flow/(A_cross_FM*rho_inlet)\"/></p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-Xu4fGSXc.png\" alt=\"w_outlet=m_flow/(A_cross_FM*rho_outlet)\"/></p>
 <p>flow velocity in energy cells:</p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-6hdUP7aO.png\" alt=\"w[i]=(m_flow[i]+m_flow[i+1])/(2*rho*A_cross)\"/>, for&nbsp;i&nbsp;in&nbsp;1:N_cv (number of control volumes)</p>
-<p><b>Density in flow model:</b></p>
+<h4>Density in flow model:</h4>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-lr3r9kkw.png\" alt=\"rho_FM[i]=(rho[i]+rho[i-1])/2\"/>,for i in 2:N_cv</p>
 <p>and the density in the first and last momentum cell:</p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-SdWVxCFe.png\" alt=\"rho_FM[1]=(rho_in+rho[1])/2\"/></p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-MNE1D0m6.png\" alt=\"rho_FM[N_cv+1]=(rho_out+rho[N_cv])/2\"/></p>
-<p><b>Pressure drop due to friction and gravity: </b></p>
+<h4>Pressure drop due to friction and gravity: </h4>
 <p><br><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-sUaB12zf.png\" alt=\"Delta_p_grav[i] =(rho[i]*Delta_x[i] +rho[i-1]*Delta_x[i - 1])/(Delta_x[i - 1] + Delta_x[i])*g_n*(z[i] - z[i - 1])\"/>, for i in 3: N_cv-1</p>
 <p>If there is friction at the inlet:</p>
 <p><br><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-2yHwORzo.png\" alt=\"Delta_p_grav[1] =rho[1]*g_n*(z[1] - z_in)
@@ -779,14 +804,14 @@ equation
 <p>If there is no friction at the outlet:</p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-wtsOsr8g.png\" alt=\"Delta_p_grav[N_cv+1] = 0\"/></p>
 <p><br><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-nbrkl7Re.png\" alt=\"Delta_p_grav[N_cv] =(rho[N_cv-1]*Delta_x[N_cv - 1]/2 + rho[N_cv]*Delta_x[N_cv])/(Delta_x[N_cv - 1]/2 + Delta_x[N_cv])*g_n*(z_out - z[N_cv - 1])\"/></p>
-<p><b>Fluid mass:</b></p>
+<h4>Fluid mass:</h4>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-tHmriWOx.png\" alt=\"m = V* rho_mix\"/></p>
-<p><b>Equations for calculating the cell states:</b></p>
+<h4>Equations for calculating the cell states:</h4>
 <p>The model differentiates between four different kind of mass balances and a constant or variable composition. </p>
-<p><b>Quasi-stationary:</b></p>
+<h4>Quasi-stationary:</h4>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-86155oZs.png\" alt=\"0=der(rho[i])\"/>, for i in 1:N_cv</p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-ehaC3cjj.png\" alt=\"0=m_flow[i]-m_flow[i+1]\"/>, for&nbsp;i&nbsp;in&nbsp;1:N_cv</p>
-<p><b>Dynamic:</b></p>
+<h4>Dynamic:</h4>
 <p>Here, you can pick three different mathematically identical equations which are treated differently numerically. In the following, only the mathematical notation of the general equations is shown.</p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-JSjwXV28.png\" alt=\"der(rho[i])*V[i]=m_flow[i]-m_flow[i+1]\"/>, for&nbsp;i&nbsp;in&nbsp;1:N_cv</p>
 <p>For all components considered fully variable:</p>
@@ -795,7 +820,7 @@ equation
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-QWUBxrTR.png\" alt=\"xi[i, j] = (1 - (sum(xi[i, k] for k in variableCompositionEntries[1:end - 1]) + xi_end[i]))/(1 - (sum(xi_nom[k] for k in variableCompositionEntries[1:end - 1]) + 1 - sum(xi_nom)))*xi_nom[j]\"/>, for&nbsp;j&nbsp;in&nbsp;dependentCompositionEntries[1:end&nbsp;-&nbsp;1]<span style=\"font-family: Courier New;\"> </span>and for&nbsp;i&nbsp;in&nbsp;1:geo.N_cv<span style=\"font-family: Courier New;\"> </span></p>
 <p>For constant composition:</p>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-ufdzjjtt.png\" alt=\"xi[i, j] = xi[j,nom]\"/>, for i in 1:N_cv and for j in 1:nc-1</p>
-<p><b>Static&nbsp;momentum&nbsp;balance in the momentum cells:</b></p>
+<h4>Static&nbsp;momentum&nbsp;balance in the momentum cells:</h4>
 <p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-4kjShBEy.png\" alt=\" 0 = p[i - 1] - p[i] - Delta_p_fric[i] - Delta_p_grav[i]\"/> , for i in 2:N_cv</p>
 <p>and for the first and last momentum cell</p>
 <p><br><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-Mu3mP7U9.png\" alt=\"0 =p_in - p[1] - Delta_p_fric[1] - Delta_p_grav[1]\"/></p>
@@ -814,5 +839,6 @@ equation
 <p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Carsten Bode (c.bode@tuhh.de), Feb 2019 (added temperature start value)</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Carsten Bode (c.bode@tuhh.de), Sep 2019 (merged constXi and varXi models)</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Carsten Bode (c.bode@tuhh.de), May 2020 (added quasi-stationary equations and simplified equations for only dependent mass fractions)</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Modified by Robert Flesch (flesch@xrg-simulation.de), Sep 2020 (included new ICom, exchanged ph fluid models to pT, turned of density derivative calculation)</span></p>
 </html>"));
 end VolumeRealGas_L4;

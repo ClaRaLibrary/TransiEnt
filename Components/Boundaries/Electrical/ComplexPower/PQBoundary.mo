@@ -1,34 +1,39 @@
-within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
+﻿within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
 model PQBoundary "L2 Active and reactive power by parameter or inputs, based on ComplexPowerPort"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary(redeclare TransiEnt.Basics.Interfaces.Electrical.ComplexPowerPort epp);
-    extends TransiEnt.Basics.Icons.ElectricSink;
+  extends TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary(
+      redeclare TransiEnt.Basics.Interfaces.Electrical.ComplexPowerPort epp);
+  extends TransiEnt.Basics.Icons.ElectricSink;
 
   outer TransiEnt.SimCenter simCenter;
 
@@ -37,42 +42,64 @@ model PQBoundary "L2 Active and reactive power by parameter or inputs, based on 
   //                   Parameters
   // _____________________________________________
 
-  parameter Boolean useInputConnectorP = true "Gets parameter from input connector"
-  annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Boundary"));
+  parameter Boolean useInputConnectorP=true
+    "Gets parameter from input connector" annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(__Dymola_checkBox=true),
+    Dialog(group="Boundary"));
 
   parameter SI.Power P_el_set_const=0 "Constant boundary"
-  annotation (Dialog(group="Boundary", enable = not useInputConnectorP));
+    annotation (Dialog(group="Boundary", enable=not useInputConnectorP));
 
-  parameter Boolean useInputConnectorQ = true "Gets parameter from input connector"
-   annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Boundary"));
+  parameter Boolean useInputConnectorQ=true
+    "Gets parameter from input connector" annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(__Dymola_checkBox=true),
+    Dialog(group="Boundary"));
 
-  parameter SI.ReactivePower Q_el_set_const=0 annotation (Dialog(group="Boundary", enable =  not useInputConnectorQ and not useCosPhi));
+  parameter SI.ReactivePower Q_el_set_const=0 annotation (Dialog(group="Boundary",
+        enable=not useInputConnectorQ and not useCosPhi));
 
-   parameter Boolean useCosPhi = true
-   annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Boundary", enable = not useInputConnectorQ));
+  parameter Boolean useCosPhi=true annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(__Dymola_checkBox=true),
+    Dialog(group="Boundary", enable=not useInputConnectorQ));
 
-   parameter SI.PowerFactor cosphi_boundary=1 annotation (Dialog(group="Boundary", enable = useCosPhi and not useInputConnectorQ));
+  parameter SI.PowerFactor cosphi_boundary=1 annotation (Dialog(group="Boundary",
+        enable=useCosPhi and not useInputConnectorQ));
 
-   parameter SI.Voltage v_n=simCenter.v_n;
+  parameter Integer behavior=1 annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(
+      __Dymola_radioButtons=true,
+      choice=1 "inductive",
+      choice=-1 "capacitive"),
+    Dialog(group="Boundary", enable=useCosPhi and not useInputConnectorQ));
+  // 1 if inductive, -1 if capacitive
 
-   parameter Boolean change_sign=false "Change sign on input value";
+  parameter SI.Voltage v_n=simCenter.v_n;
+
+  parameter Boolean change_sign=false "Change sign on input value";
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP "Active power input"
-                                                                 annotation (Placement(transformation(extent={{-140,60},{-100,100}},
-          rotation=0), iconTransformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP
+    "Active power input" annotation (Placement(transformation(extent={{-140,60},
+            {-100,100}}, rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={-60,120})));
 
-  TransiEnt.Basics.Interfaces.Electrical.ReactivePowerIn Q_el_set if              useInputConnectorQ "Reactive power input"
-                                                                 annotation (Placement(transformation(extent={{-140,22},
-            {-100,62}},
-          rotation=0), iconTransformation(
+  TransiEnt.Basics.Interfaces.Electrical.ReactivePowerIn Q_el_set if              useInputConnectorQ
+    "Reactive power input" annotation (Placement(transformation(extent={{-140,22},
+            {-100,62}}, rotation=0), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={60,120})));
@@ -81,19 +108,22 @@ model PQBoundary "L2 Active and reactive power by parameter or inputs, based on 
   //                    Variables
   // _____________________________________________
 
-     Modelica.SIunits.ActivePower Q = epp.Q;
-     Modelica.SIunits.ApparentPower S;
-     Modelica.SIunits.Angle delta_cp(start=-0.08726646259971647) annotation (Dialog(group="Initialization", showStartAttribute=true));
-     Modelica.SIunits.Voltage v_cp(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.ReactivePower Q=epp.Q;
+  SI.ApparentPower S;
+  SI.Angle delta_cp(start=-0.08726646259971647)
+    annotation (Dialog(group="Initialization", showStartAttribute=true));
+  SI.Voltage v_cp(start=v_n)
+    annotation (Dialog(group="Initialization", showStartAttribute=true));
 
   // _____________________________________________
   //
   //                Complex Components
   // _____________________________________________
 protected
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal "Needed to connect to conditional connector for active power";
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal
+    "Needed to connect to conditional connector for active power";
   TransiEnt.Basics.Interfaces.Electrical.ReactivePowerIn Q_internal
-                                                                   "Needed to connect to conditional connector for reactive power";
+    "Needed to connect to conditional connector for reactive power";
 
 equation
   // _____________________________________________
@@ -102,25 +132,32 @@ equation
   // _____________________________________________
 
   if not useInputConnectorP then
-    P_internal = if change_sign==false then P_el_set_const else -P_el_set_const;
+    P_internal = if change_sign == false then P_el_set_const else -
+      P_el_set_const;
   end if;
 
-  epp.P = if change_sign==false then P_internal else -P_internal;
-
-  if not useInputConnectorQ then
-    Q_internal = if change_sign==false then Q_el_set_const else -Q_el_set_const;
-  end if;
-
+  epp.P = if change_sign == false then P_internal else -P_internal;
+  epp.Q = if change_sign == false then Q_internal else -Q_internal;
   S = sqrt(P_internal^2 + Q_internal^2);
 
-  if useCosPhi and not useInputConnectorQ then
-    epp.Q = epp.P * tan(acos(cosphi_boundary));
-  else
-    epp.Q = if change_sign==false then Q_internal else -Q_internal;
+  if not useInputConnectorQ then
+    if not useCosPhi then
+      Q_internal = if change_sign == false then Q_el_set_const else -
+        Q_el_set_const;
+    else
+      if not change_sign then
+        Q_internal = abs(P_internal/cosphi_boundary)*sin(behavior*acos(
+          cosphi_boundary));
+      else
+        Q_internal = -(abs(P_internal/cosphi_boundary)*sin(behavior*acos(
+          cosphi_boundary)));
+      end if;
+    end if;
   end if;
 
-  epp.v=v_cp;
-  epp.delta=delta_cp;
+
+  epp.v = v_cp;
+  epp.delta = delta_cp;
 
   // _____________________________________________
   //
@@ -130,17 +167,17 @@ equation
   connect(P_internal, P_el_set);
   connect(Q_internal, Q_el_set);
 
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}), graphics), Icon(coordinateSystem(
-          preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
-        Text(
+  annotation (
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
+            100}}), graphics),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+        graphics={Text(
           visible=useInputConnectorP,
           extent={{-96,128},{-74,108}},
           lineColor={0,0,255},
           fillColor={215,215,215},
           fillPattern=FillPattern.Solid,
-          textString="P"),
-        Text(
+          textString="P"), Text(
           visible=useInputConnectorQ,
           extent={{24,130},{46,110}},
           lineColor={0,0,255},
@@ -174,5 +211,6 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Jan-Peter Heckel (jan.heckel@tuhh.de) in January 2018</span></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Based on a modell by Pascal Dubucq (dubucq@tuhh.de) from October 2014</span> </p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Julian Urbansky, Fraunhofer UMSICHT, in August 2021 </span></p>
 </html>"));
 end PQBoundary;

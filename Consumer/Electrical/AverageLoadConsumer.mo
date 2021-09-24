@@ -1,26 +1,30 @@
-within TransiEnt.Consumer.Electrical;
+﻿within TransiEnt.Consumer.Electrical;
 model AverageLoadConsumer "Constant current for active power and constant impedance for reactive power"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -43,27 +47,48 @@ model AverageLoadConsumer "Constant current for active power and constant impeda
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  parameter Boolean useInputConnectorP = false "Gets parameter from input connector"
-  annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
-  parameter SI.Power P_el_set_const=0 "Used, if not useInputConnectorP" annotation(Dialog(enable = not useInputConnectorP));
-  parameter Boolean useCosPhi=true
-    annotation (choices(__Dymola_checkBox=true));
+  parameter Boolean useInputConnectorP=false
+    "Gets parameter from input connector" annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(__Dymola_checkBox=true));
+
+  parameter SI.Power P_el_set_const=0 "Used, if not useInputConnectorP"
+    annotation (Dialog(enable=not useInputConnectorP));
+
+  parameter Boolean useCosPhi=true annotation (choices(__Dymola_checkBox=true));
+
   parameter SI.ReactivePower Q_el_set=0
-    annotation (Dialog(enable = not useCosPhi));
-  parameter SI.PowerFactor cosphi_set=1
-    annotation (Dialog(enable = useCosPhi));
+    annotation (Dialog(enable=not useCosPhi));
+
+  parameter SI.PowerFactor cosphi_set=1 annotation (Dialog(enable=useCosPhi));
+
+  parameter Integer behavior=1 annotation (
+    Evaluate=true,
+    HideResult=true,
+    choices(
+      __Dymola_radioButtons=true,
+      choice=1 "inductive",
+      choice=-1 "capacitive"),
+    Dialog(enable=useCosPhi));
+  // 1 if inductive, -1 if capacitive
 
   // _____________________________________________
   //
   //                  Interfaces
   // _____________________________________________
 
-  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP "active power input at nominal frequency" annotation (Placement(transformation(extent={{-140,60},{-100,100}}, rotation=0), iconTransformation(
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_el_set if              useInputConnectorP
+    "active power input at nominal frequency" annotation (Placement(
+        transformation(extent={{-140,60},{-100,100}}, rotation=0),
+        iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
         origin={0,116})));
+
 protected
- TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal "Needed to connect to conditional connector for active power";
+  TransiEnt.Basics.Interfaces.Electrical.ElectricPowerIn P_internal
+    "Needed to connect to conditional connector for active power";
 
   // _____________________________________________
   //
@@ -84,44 +109,52 @@ public
   //           Instances of other Classes
   // _____________________________________________
 
-  TransiEnt.Components.Sensors.ElectricFrequencyVoltage electricFrequency_L1_1(isDeltaMeasurement=false) annotation (Placement(transformation(extent={{-80,10},{-60,-10}})));
-  TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp annotation (Placement(transformation(extent={{-106,-10},{-86,10}}), iconTransformation(extent={{-108,-10},{-88,10}})));
-  TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower boundary annotation (choicesAllMatching=true, Placement(transformation(extent={{42,-64},{62,-44}})));
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Consumer) annotation (Placement(transformation(extent={{-98,100},{-78,80}})));
+  TransiEnt.Components.Sensors.ElectricFrequencyVoltage electricFrequency_L1_1(
+      isDeltaMeasurement=false)
+    annotation (Placement(transformation(extent={{-80,10},{-60,-10}})));
+  TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort epp annotation (
+      Placement(transformation(extent={{-106,-10},{-86,10}}),
+        iconTransformation(extent={{-108,-10},{-88,10}})));
+  TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower
+    boundary annotation (choicesAllMatching=true, Placement(transformation(
+          extent={{42,-64},{62,-44}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower
+    collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Consumer)
+    annotation (Placement(transformation(extent={{-98,100},{-78,80}})));
 
   // _____________________________________________
   //
   //                 Variables
   // _____________________________________________
 
-  SI.PowerFactor cosphi_is = cos(epp.P/sqrt(max(1.0*simCenter.P_el_small, epp.Q^2+epp.P^2)));
+  SI.PowerFactor cosphi_is=cos(epp.P/sqrt(max(1.0*simCenter.P_el_small, epp.Q^2 +
+      epp.P^2)));
 
-  Modelica.Blocks.Math.Product  ActiveSum       annotation (Placement(
-        transformation(
+  Modelica.Blocks.Math.Product ActiveSum annotation (Placement(transformation(
         extent={{-6,-6},{6,6}},
         rotation=270,
         origin={46,-28})));
-  Modelica.Blocks.Sources.RealExpression P_el_n(y=P_internal) annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression P_el_n(y=P_internal) annotation (
+      Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={24,-16})));
-  Modelica.Blocks.Sources.RealExpression Q_el_n(y=if not useCosPhi then Q_el_set else P_internal/cosphi_set*sin(acos(cosphi_set))) annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression Q_el_n(y=if not useCosPhi then
+        Q_el_set else abs(P_internal/cosphi_set)*sin(behavior*acos(cosphi_set)))
+    annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={86,8})));
-  Modelica.Blocks.Math.Product  ReactiveSum      annotation (Placement(
-        transformation(
+  Modelica.Blocks.Math.Product ReactiveSum annotation (Placement(transformation(
         extent={{-6,-6},{6,6}},
         rotation=270,
         origin={68,-10})));
-  Modelica.Blocks.Sources.RealExpression
-                                   v_star_square(y=regPow(v_star.y, 2))
-                                                     annotation (Placement(
-        transformation(
+  Modelica.Blocks.Sources.RealExpression v_star_square(y=regPow(v_star.y, 2))
+    annotation (Placement(transformation(
         extent={{-16,-12},{16,12}},
         rotation=0,
         origin={36,10})));
-  Modelica.Blocks.Math.Gain        v_star(k=1/v_n)   annotation (Placement(
+  Modelica.Blocks.Math.Gain v_star(k=1/v_n) annotation (Placement(
         transformation(
         extent={{-7,-7},{7,7}},
         rotation=0,
@@ -137,7 +170,7 @@ equation
     P_internal = P_el_set_const;
   end if;
 
-  collectElectricPower.powerCollector.P=epp.P;
+  collectElectricPower.powerCollector.P = epp.P;
 
   // _____________________________________________
   //
@@ -146,12 +179,17 @@ equation
 
   connect(P_internal, P_el_set);
 
-    connect(modelStatistics.powerCollector[EnergyResource.Consumer],collectElectricPower.powerCollector);
+  connect(modelStatistics.powerCollector[EnergyResource.Consumer],
+    collectElectricPower.powerCollector);
 
-  connect(P_el_n.y, ActiveSum.u2) annotation (Line(points={{35,-16},{42.4,-16},{42.4,-20.8}}, color={0,0,127}));
-  connect(ActiveSum.y, boundary.P_el_set) annotation (Line(points={{46,-34.6},{46,-42}},                   color={0,0,127}));
-  connect(Q_el_n.y, ReactiveSum.u1) annotation (Line(points={{75,8},{71.6,8},{71.6,-2.8}}, color={0,0,127}));
-  connect(ReactiveSum.y, boundary.Q_el_set) annotation (Line(points={{68,-16.6},{70,-16.6},{70,-26},{70,-32},{58,-32},{58,-42}}, color={0,0,127}));
+  connect(P_el_n.y, ActiveSum.u2) annotation (Line(points={{35,-16},{42.4,-16},{
+          42.4,-20.8}}, color={0,0,127}));
+  connect(ActiveSum.y, boundary.P_el_set)
+    annotation (Line(points={{46,-34.6},{46,-42}}, color={0,0,127}));
+  connect(Q_el_n.y, ReactiveSum.u1)
+    annotation (Line(points={{75,8},{71.6,8},{71.6,-2.8}}, color={0,0,127}));
+  connect(ReactiveSum.y, boundary.Q_el_set) annotation (Line(points={{68,-16.6},
+          {70,-16.6},{70,-26},{70,-32},{58,-32},{58,-42}}, color={0,0,127}));
   connect(epp, electricFrequency_L1_1.epp) annotation (Line(
       points={{-96,0},{-80,0},{-80,-0.2}},
       color={0,127,0},
@@ -160,30 +198,33 @@ equation
       points={{42,-54},{42,-54},{-96,-54},{-96,0}},
       color={0,127,0},
       thickness=0.5));
-  connect(electricFrequency_L1_1.v, v_star.u) annotation (Line(points={{-60,-6},{-47.4,-6},{-47.4,-5}}, color={0,0,127}));
-  connect(v_star.y, ActiveSum.u1) annotation (Line(points={{-31.3,-5},{49.6,-5},{49.6,-20.8}}, color={0,0,127}));
-  connect(v_star_square.y, ReactiveSum.u2) annotation (Line(points={{53.6,10},{58,10},{64.4,10},{64.4,-2.8}}, color={0,0,127}));
-  annotation (defaultComponentName="load", Diagram(graphics,
-                                                   coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-                                          Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {100,100}}),                       graphics={
-    Line(points={{-44,-30},{38,-30}},
-                                  color={192,192,192}),
-    Polygon(
-      points={{60,-30},{38,-38},{38,-22},{60,-30}},
-      lineColor={192,192,192},
-      fillColor={192,192,192},
-      fillPattern=FillPattern.Solid),
-    Polygon(
-      points={{-2,54},{-10,32},{6,32},{-2,54}},
-      lineColor={192,192,192},
-      fillColor={192,192,192},
-      fillPattern=FillPattern.Solid),
-    Line(points={{-2,-44},{-2,32}},
-                                  color={192,192,192}),
+  connect(electricFrequency_L1_1.v, v_star.u) annotation (Line(points={{-60,-6},
+          {-47.4,-6},{-47.4,-5}}, color={0,0,127}));
+  connect(v_star.y, ActiveSum.u1) annotation (Line(points={{-31.3,-5},{49.6,-5},
+          {49.6,-20.8}}, color={0,0,127}));
+  connect(v_star_square.y, ReactiveSum.u2) annotation (Line(points={{53.6,10},{58,
+          10},{64.4,10},{64.4,-2.8}}, color={0,0,127}));
+  annotation (
+    defaultComponentName="load",
+    Diagram(graphics, coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}})),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+        graphics={
+        Line(points={{-44,-30},{38,-30}}, color={192,192,192}),
+        Polygon(
+          points={{60,-30},{38,-38},{38,-22},{60,-30}},
+          lineColor={192,192,192},
+          fillColor={192,192,192},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-2,54},{-10,32},{6,32},{-2,54}},
+          lineColor={192,192,192},
+          fillColor={192,192,192},
+          fillPattern=FillPattern.Solid),
+        Line(points={{-2,-44},{-2,32}}, color={192,192,192}),
         Line(
-          points={{48,36},{46,28},{42,20},{38,12},{30,0},{22,-8},{16,-14},{8,-22},{0,-26},{-4,-28},{-14,-30},{
-              -26,-30},{-46,-30}},
+          points={{48,36},{46,28},{42,20},{38,12},{30,0},{22,-8},{16,-14},{8,-22},
+              {0,-26},{-4,-28},{-14,-30},{-26,-30},{-46,-30}},
           color={0,134,134},
           smooth=Smooth.None)}),
     Documentation(info="<html>
@@ -209,5 +250,6 @@ equation
 <p>IEEE Task Force on Load Representation for Dynamic Performance: Load representation for dynamic performance analysis (of power systems). In: <i>IEEE Transactions on Power Systems</i> Bd. 8 (1993), Nr. 2, S. 472&ndash;482</p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Pascal Dubucq (dubucq@tuhh.de) on 21.04.2017</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model modified by Julian Urbansky, Fraunhofer UMSICHT, in August 2021 </span></p>
 </html>"));
 end AverageLoadConsumer;

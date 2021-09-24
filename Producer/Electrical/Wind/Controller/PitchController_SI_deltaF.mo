@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Wind.Controller;
+﻿within TransiEnt.Producer.Electrical.Wind.Controller;
 model PitchController_SI_deltaF "Pitch Controller for WTG with delta_f synthetic inertia control"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -134,9 +138,7 @@ Modelica.Blocks.Logical.Switch switchToFullLoad annotation (Placement(transforma
     Td=Td,
     k=k,
     y_start=beta_start,
-    initType=Modelica.Blocks.Types.InitPID.NoInit)
-                                               annotation (Placement(transformation(extent={{-38,-60},
-            {-18,-40}})));
+    initType=Modelica.Blocks.Types.Init.NoInit) annotation (Placement(transformation(extent={{-38,-60},{-18,-40}})));
   Modelica.Blocks.Interfaces.RealInput
             u_s "Connector of setpoint input signal" annotation (Placement(
         transformation(extent={{-116,-104},{-84,-72}},rotation=0)));
@@ -172,13 +174,10 @@ Modelica.Blocks.Logical.Switch switchToHalt1
         origin={-60,-124})));
   Modelica.Blocks.Math.MultiProduct MultiProduct(nu=2)
     annotation (Placement(transformation(extent={{4,-138},{24,-118}})));
-  Modelica.Blocks.Nonlinear.Limiter
-                           limiter(                      strict=strict, limitsAtInit=limitsAtInit,
+  Modelica.Blocks.Nonlinear.Limiter limiter(
+    strict=strict,
     uMin=0,
-    uMax=0.1*P_el_n)
-    annotation (Placement(transformation(extent={{34,-138},{54,-118}},
-                                                                    rotation=
-            0)));
+    uMax=0.1*P_el_n) annotation (Placement(transformation(extent={{34,-138},{54,-118}}, rotation=0)));
   Modelica.Blocks.Math.Gain gain(k=1)
     annotation (Placement(transformation(extent={{-32,-142},{-12,-122}})));
   Modelica.Blocks.Math.Add add

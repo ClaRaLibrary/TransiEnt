@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Gas.MethanatorSystem.EquilibriumModel;
+﻿within TransiEnt.Producer.Gas.MethanatorSystem.EquilibriumModel;
 model MethanationThreeStages "three staged methanation reactor with intermediate cooling"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   import TransiEnt;
 
   // _____________________________________________
@@ -28,7 +32,7 @@ model MethanationThreeStages "three staged methanation reactor with intermediate
   //          Imports and Class Hierarchy
   // _____________________________________________
   extends TransiEnt.Basics.Icons.MethanationThreeStages;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   outer TransiEnt.SimCenter simCenter;
 
   // _____________________________________________
@@ -38,13 +42,13 @@ model MethanationThreeStages "three staged methanation reactor with intermediate
 
   parameter Boolean SteadyState=true;
   parameter Real RecycleRate;
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal "nominal mass flow";
-  parameter Modelica.SIunits.Pressure Delta_p_nominal_reactor_block "pressure loss in reactor block for nominal mass flow";
-  parameter Modelica.SIunits.Pressure Delta_p_nominal_HEX=5e-6 "pressure loss in heat exchanger for nominal mass flow";
-  parameter Modelica.SIunits.Temperature T_ambient=300 "constant ambient temperature";
-  parameter Modelica.SIunits.HeatCapacity mCp_Nenn=1.75e6 "nominal heat capacity of reactor block for nominal mass flow 1kg/s";
-  parameter Modelica.SIunits.Temperature T_HEX_out=573.15;
-  parameter Modelica.SIunits.Temperature T_reactor_start;
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal "nominal mass flow";
+  parameter Modelica.Units.SI.Pressure Delta_p_nominal_reactor_block "pressure loss in reactor block for nominal mass flow";
+  parameter Modelica.Units.SI.Pressure Delta_p_nominal_HEX=5e-6 "pressure loss in heat exchanger for nominal mass flow";
+  parameter Modelica.Units.SI.Temperature T_ambient=300 "constant ambient temperature";
+  parameter Modelica.Units.SI.HeatCapacity mCp_Nenn=1.75e6 "nominal heat capacity of reactor block for nominal mass flow 1kg/s";
+  parameter Modelica.Units.SI.Temperature T_HEX_out=573.15;
+  parameter Modelica.Units.SI.Temperature T_reactor_start;
   parameter Boolean useHomotopy=true "True, if homotopy method is used during initialisation";
   parameter Boolean deactivateTwoPhaseRegionForRealGas=true "Deactivate calculation of two phase region - needs to be 'false', if condensate heat of product gas calculation is important for coolant calculation" annotation (Evaluate=true);
 
@@ -107,8 +111,7 @@ model MethanationThreeStages "three staged methanation reactor with intermediate
     T_out_fixed=293.15,
     deactivateTwoPhaseRegionForRealGas=deactivateTwoPhaseRegionForRealGas)
                            annotation (Placement(transformation(extent={{64,6},{76,-6}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.ThreeWayValveRealGas_L1_simple threeWayValveRealGas_L1_simple(medium=Medium, splitRatio_fixed=RecycleRate/(1 + RecycleRate))
-                                                                                                                              annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Valves.ThreeWayValveRealGas_L1_simple threeWayValveRealGas_L1_simple(medium=Medium, splitRatio_fixed=RecycleRate/(1 + RecycleRate)) annotation (Placement(transformation(
         extent={{-3,3},{3,-3}},
         rotation=-90,
         origin={-31,1})));
@@ -117,6 +120,8 @@ model MethanationThreeStages "three staged methanation reactor with intermediate
     p=gasPortOut.p,
     T=hEXIdealVLETwoFluids_L1_4.T_out_fixed,
     xi=gasPortOut.xi_outflow,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     deactivateTwoPhaseRegion=true) annotation (Placement(transformation(extent={{76,-44},{90,-30}})));
   TransiEnt.Components.Gas.GasCleaning.Dryer_L1
               dryer_L1_1(medium_gas=Medium, medium_water=coolingFluid)
@@ -124,11 +129,15 @@ model MethanationThreeStages "three staged methanation reactor with intermediate
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasOut_properties_norm(
     vleFluidType=Medium,
     xi=gasPortOut.xi_outflow,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     deactivateTwoPhaseRegion=true,
     p=101325,
     T=273.15) annotation (Placement(transformation(extent={{74,-64},{88,-50}})));
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_pT gasIn_properties_norm1(
     vleFluidType=Medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     deactivateTwoPhaseRegion=true,
     xi=inStream(gasPortIn.xi_outflow),
     p=101325,

@@ -1,31 +1,35 @@
-within TransiEnt.Components.Gas.VolumesValvesFittings.Check;
+﻿within TransiEnt.Components.Gas.VolumesValvesFittings.Check;
 model TestPressureLosses
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
-  PipeFlow_L4_Simple_isoth                                                pipe_physPL(
+  Pipes.PipeFlow_L4_Simple_isoth pipe_physPL(
     frictionAtInlet=false,
     frictionAtOutlet=false,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc (k=0.1e-3),
+    redeclare model PressureLoss = Base.PhysicalPL_L4 (k=0.1e-3),
     p_nom={16.6991,16.0588,15.3918}*1e5,
     h_nom=pipe_physPL.h_start,
     m_flow_nom=25,
@@ -45,7 +49,7 @@ model TestPressureLosses
     duration=86400 - 3600*2,
     offset=25,
     startTime=3600) annotation (Placement(transformation(extent={{92,6},{72,26}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_linPL(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_linPL(
     frictionAtInlet=false,
     frictionAtOutlet=false,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.LinearPressureLoss_L4,
@@ -61,7 +65,7 @@ model TestPressureLosses
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_Txim_flow boundary_Txim_flow1(variable_m_flow=true, m_flow_const=25)
                                                                                                       annotation (Placement(transformation(extent={{60,0},{40,20}})));
   TransiEnt.Components.Boundaries.Gas.BoundaryRealGas_pTxi boundary_pTxi2      annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_quadVLEPL(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_quadVLEPL(
     frictionAtInlet=false,
     frictionAtOutlet=false,
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.VLE_PL.QuadraticNominalPoint_L4,
@@ -122,5 +126,27 @@ equation
       StopTime=86400,
       Interval=900,
       Tolerance=1e-06,
-      __Dymola_Algorithm="Sdirk34hw"));
+      __Dymola_Algorithm="Sdirk34hw"),
+    Documentation(info="<html>
+<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p>Test model for the pressure loss models.</p>
+<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p>(no elements)</p>
+<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p>(no equations)</p>
+<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p>(no validation or testing necessary)</p>
+<h4><span style=\"color: #008000\">9. References</span></h4>
+<p>(no remarks)</p>
+<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p>Model created by Carsten Bode (c.bode@tuhh.de), Sep 2019</p>
+</html>"));
 end TestPressureLosses;

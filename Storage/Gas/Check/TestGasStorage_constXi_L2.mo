@@ -1,46 +1,56 @@
 ﻿within TransiEnt.Storage.Gas.Check;
 model TestGasStorage_constXi_L2
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   //values from Olmos, Fernando ; Manousiouthakis, Vasilios I.: Hydrogen car fill-up process modeling and simulation. In: International Journal of Hydrogen Energy 38 (2013), Nr. 8, S. 3401–3418.
 
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_H2 medium;
 
-  parameter Modelica.SIunits.SpecificHeatCapacity cp_steel316=468 "Heat capacity of steel 316 (station tank and pipes)";
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp_steel316=468 "Heat capacity of steel 316 (station tank and pipes)";
 
-  parameter Modelica.SIunits.ThermodynamicTemperature T_start_1=300.15 "Start temperature in pipe_54, at outlet of pipe_32, pipe_32 and its wall, station_tank and its wall";
-  parameter Modelica.SIunits.ThermodynamicTemperature T_start_2=286.64 "Start temperature in vehicle_tank and its wall";
-  parameter Modelica.SIunits.Pressure p_start_1=415.41e5 "Start pressure in pipe_54, station_tank";
-  parameter Modelica.SIunits.Pressure p_start_2=138.01e5 "Start pressure in vehicle_tank, pipe_32";
+  parameter Modelica.Units.SI.ThermodynamicTemperature T_start_1=300.15 "Start temperature in pipe_54, at outlet of pipe_32, pipe_32 and its wall, station_tank and its wall";
+  parameter Modelica.Units.SI.ThermodynamicTemperature T_start_2=286.64 "Start temperature in vehicle_tank and its wall";
+  parameter Modelica.Units.SI.Pressure p_start_1=415.41e5 "Start pressure in pipe_54, station_tank";
+  parameter Modelica.Units.SI.Pressure p_start_2=138.01e5 "Start pressure in vehicle_tank, pipe_32";
 
-  parameter Modelica.SIunits.SpecificEnthalpy h_start_1=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(vleFluidType=medium, p=p_start_1, T=T_start_1) "Start enthalpy for pipe_54";
-  parameter Modelica.SIunits.SpecificEnthalpy h_start_2=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(vleFluidType=medium, p=p_start_2, T=T_start_1) "Start enthalpy for pipe_32 and its outlet";
+  parameter Modelica.Units.SI.SpecificEnthalpy h_start_1=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
+      vleFluidType=medium,
+      p=p_start_1,
+      T=T_start_1) "Start enthalpy for pipe_54";
+  parameter Modelica.Units.SI.SpecificEnthalpy h_start_2=TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluidFunctions.specificEnthalpy_pTxi(
+      vleFluidType=medium,
+      p=p_start_2,
+      T=T_start_1) "Start enthalpy for pipe_32 and its outlet";
 
   inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-90,-60},{-70,-40}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe_54(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe_54(
     medium=medium,
     constantComposition=true,
-    frictionAtInlet=true,
+    frictionAtInlet=false,
     frictionAtOutlet=true,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L4,
     diameter_i=0.008,
@@ -53,11 +63,11 @@ model TestGasStorage_constXi_L2
     redeclare model PressureLoss = ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.Generic_PL.NoFriction_L4) annotation (Placement(transformation(extent={{-70,-5},{-42,5}})));
                                                                          //length like given in the paper, d_i scaled with 1/10
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe_32(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe_32(
     medium=medium,
     constantComposition=true,
     frictionAtInlet=true,
-    frictionAtOutlet=true,
+    frictionAtOutlet=false,
     redeclare model HeatTransfer = ClaRa.Basics.ControlVolumes.Fundamentals.HeatTransport.Generic_HT.Constant_L4,
     diameter_i=0.008,
     length=1.52,
@@ -153,7 +163,7 @@ model TestGasStorage_constXi_L2
         rotation=-90,
         origin={0,86})));
   Modelica.Blocks.Sources.RealExpression targetMassFlow(y=-1.14202018176808e-9*time^3 + 3.4731974604687e-7*time^2 - 3.28191649003198e-5*time + 0.006168056759338) annotation (Placement(transformation(extent={{-50,-30},{-30,-10}})));
-  Components.Gas.VolumesValvesFittings.ValveDesiredMassFlow valve43(
+  Components.Gas.VolumesValvesFittings.Valves.ValveDesiredMassFlow valve43(
     medium=medium,
     Delta_p_low=1,
     Delta_p_high=10) annotation (Placement(transformation(extent={{-10,5},{10,-7}})));

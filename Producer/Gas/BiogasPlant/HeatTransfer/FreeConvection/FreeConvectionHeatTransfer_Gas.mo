@@ -1,27 +1,31 @@
-within TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer.FreeConvection;
+﻿within TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer.FreeConvection;
 partial model FreeConvectionHeatTransfer_Gas "Heat Transfer due to natural Convection"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -31,35 +35,35 @@ partial model FreeConvectionHeatTransfer_Gas "Heat Transfer due to natural Conve
   replaceable parameter TILMedia.GasTypes.BaseGas medium constrainedby TILMedia.GasTypes.BaseGas "type record of the gas or gas mixture" annotation (choicesAllMatching=true);
 
   parameter Boolean useMassFractionDefault=false;
-  parameter Modelica.SIunits.Pressure p=101300 "pressure of fluid";
-  parameter Modelica.SIunits.Area A "Area through which heat is transported by Convection";
-  parameter Modelica.SIunits.Length L "specific lenght of geometry";
+  parameter Modelica.Units.SI.Pressure p=101300 "pressure of fluid";
+  parameter Modelica.Units.SI.Area A "Area through which heat is transported by Convection";
+  parameter Modelica.Units.SI.Length L "specific lenght of geometry";
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.ThermalConductivity lamda=gas.transp.lambda "Thermal conductivity of fluid at T_m";
-  Modelica.SIunits.Density rho=gas.d "Density of fluid at T_m";
-  Modelica.SIunits.PrandtlNumber Pr=gas.transp.Pr "Prandtl number of the fluid";
-  Modelica.SIunits.KinematicViscosity nue=gas.transp.eta/gas.d;
-  Modelica.SIunits.DynamicViscosity eta=gas.transp.eta;
+  Modelica.Units.SI.ThermalConductivity lamda=gas.transp.lambda "Thermal conductivity of fluid at T_m";
+  Modelica.Units.SI.Density rho=gas.d "Density of fluid at T_m";
+  Modelica.Units.SI.PrandtlNumber Pr=gas.transp.Pr "Prandtl number of the fluid";
+  Modelica.Units.SI.KinematicViscosity nue=gas.transp.eta/gas.d;
+  Modelica.Units.SI.DynamicViscosity eta=gas.transp.eta;
 
-  Modelica.SIunits.LinearExpansionCoefficient beta=gas.beta "Isobaric thermal expansion coefficient at given conditions";
-  Modelica.SIunits.CoefficientOfHeatTransfer alpha=Nu*gas.transp.lambda/L "heat transfer coefficient of convection";
-  Modelica.SIunits.SpecificHeatCapacityAtConstantPressure cp=gas.cp "specific heat capacity of fluid at given conditions";
-  Modelica.SIunits.RayleighNumber Ra=RayleighNumber(
+  Modelica.Units.SI.LinearExpansionCoefficient beta=gas.beta "Isobaric thermal expansion coefficient at given conditions";
+  Modelica.Units.SI.CoefficientOfHeatTransfer alpha=Nu*gas.transp.lambda/L "heat transfer coefficient of convection";
+  Modelica.Units.SI.SpecificHeatCapacityAtConstantPressure cp=gas.cp "specific heat capacity of fluid at given conditions";
+  Modelica.Units.SI.RayleighNumber Ra=RayleighNumber(
       l=L,
       beta=beta,
       dT=dT,
       Pr=gas.transp.Pr,
       nue=gas.transp.eta/gas.d);
-  Modelica.SIunits.NusseltNumber Nu "Nusselt Number ";
-  Modelica.SIunits.MassFraction xi[medium.nc - 1]=gas.gasType.xi_default "Mass Fraction" annotation (Dialog(group="Variables", enable=not (useMassFractioDefault)));
-  Modelica.SIunits.HeatFlowRate Q_flow "Heat flow rate from solid -> fluid";
-  Modelica.SIunits.TemperatureDifference dT "= solid.T - fluid.T";
-  Modelica.SIunits.Temperature T_m=(heat_solid.T + heat_fluid.T)/2;
+  Modelica.Units.SI.NusseltNumber Nu "Nusselt Number ";
+  Modelica.Units.SI.MassFraction xi[medium.nc - 1]=gas.gasType.xi_default "Mass Fraction" annotation (Dialog(group="Variables", enable=not (useMassFractioDefault)));
+  Modelica.Units.SI.HeatFlowRate Q_flow "Heat flow rate from solid -> fluid";
+  Modelica.Units.SI.TemperatureDifference dT "= solid.T - fluid.T";
+  Modelica.Units.SI.Temperature T_m=(heat_solid.T + heat_fluid.T)/2;
 
   // _____________________________________________
   //

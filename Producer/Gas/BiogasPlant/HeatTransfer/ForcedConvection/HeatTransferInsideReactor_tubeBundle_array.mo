@@ -1,43 +1,47 @@
-within TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer.ForcedConvection;
+﻿within TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer.ForcedConvection;
 model HeatTransferInsideReactor_tubeBundle_array "Model calculating the heat transfered between fluid and heating system"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  final parameter Modelica.SIunits.Area A=Modelica.Constants.pi*d*l "Area through which heat is transported by Convection";
+  final parameter Modelica.Units.SI.Area A=Modelica.Constants.pi*d*l "Area through which heat is transported by Convection";
 
   // _____________________________________________
   //
   //              Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Diameter D=1 "inner Diameter of reactor";
-  parameter Modelica.SIunits.Diameter d=0.1 "tube diameter";
-  parameter Modelica.SIunits.Length l=Modelica.Constants.pi * (D-d);
+  parameter Modelica.Units.SI.Diameter D=1 "inner Diameter of reactor";
+  parameter Modelica.Units.SI.Diameter d=0.1 "tube diameter";
+  parameter Modelica.Units.SI.Length l=Modelica.Constants.pi*(D - d);
   parameter Real n = 8 "number of turns of tube";
   parameter Integer N_cv = 8 "Number of control volumes";
 
@@ -69,30 +73,29 @@ model HeatTransferInsideReactor_tubeBundle_array "Model calculating the heat tra
     redeclare TILMedia.VLEFluidTypes.TILMedia_InterpolatedWater vleFluidType,
     p=101300) annotation (Placement(transformation(extent={{44,-10},{64,10}})));
 
-  Modelica.SIunits.NusseltNumber Nu=
-      TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer.ForcedConvection.NusseltCSTR_Coil(
-          Re=Re,
-          Pr=fluidProperties.Pr,
-          eta=fluidProperties.eta,
-          eta_w=eta_w,
-          C2=C2,
-          D=D,
-          d=d) "Nusselt Number ";
+  Modelica.Units.SI.NusseltNumber Nu=TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer.ForcedConvection.NusseltCSTR_Coil(
+      Re=Re,
+      Pr=fluidProperties.Pr,
+      eta=fluidProperties.eta,
+      eta_w=eta_w,
+      C2=C2,
+      D=D,
+      d=d) "Nusselt Number ";
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
 
-  input Modelica.SIunits.ReynoldsNumber Re annotation(Dialog(group="Variables"));
+  input Modelica.Units.SI.ReynoldsNumber Re annotation (Dialog(group="Variables"));
   input Real C2 annotation(Dialog(group="Variables"));
 
-  Modelica.SIunits.HeatFlowRate Q_flow[N_cv] "Heat flow rate from solid -> fluid";
-  Modelica.SIunits.TemperatureDifference dT[N_cv] "= solid.T - fluid.T";
+  Modelica.Units.SI.HeatFlowRate Q_flow[N_cv] "Heat flow rate from solid -> fluid";
+  Modelica.Units.SI.TemperatureDifference dT[N_cv] "= solid.T - fluid.T";
 
-  Modelica.SIunits.CoefficientOfHeatTransfer alpha = Nu * fluidProperties.lambda / D  "heat transfer coefficient of convection";
+  Modelica.Units.SI.CoefficientOfHeatTransfer alpha=Nu*fluidProperties.lambda/D "heat transfer coefficient of convection";
 
-  Modelica.SIunits.DynamicViscosity eta_w "Dynamic Viscosity of fluid at wall temperature";
+  Modelica.Units.SI.DynamicViscosity eta_w "Dynamic Viscosity of fluid at wall temperature";
 
   // _____________________________________________
   //

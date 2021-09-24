@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Photovoltaics;
+﻿within TransiEnt.Producer.Electrical.Photovoltaics;
 model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -76,7 +80,7 @@ model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
     Placement(transformation(extent={{86,-9},{68,9}})));
   Modelica.Blocks.Math.MultiProduct Efficiency(nu=2)
     annotation (Placement(transformation(extent={{12,-7},{26,7}})));
-  Modelica.Blocks.Math.Gain SurfacePower(k(unit="m2", value=A_module))
+  Modelica.Blocks.Math.Gain SurfacePower(k(unit="m2")=A_module)
     annotation (Placement(transformation(extent={{35,-7},{49,7}})));
 equation
   // _____________________________________________

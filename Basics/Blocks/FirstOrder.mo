@@ -1,33 +1,38 @@
-within TransiEnt.Basics.Blocks;
+﻿within TransiEnt.Basics.Blocks;
 block FirstOrder "First order transfer function block (= 1 pole, allows Tau = 0 and a gain)"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   extends Modelica.Blocks.Interfaces.SISO;
 
   parameter Real k(unit="1")=1 "Gain";
-  parameter Modelica.SIunits.Time Tau=0 "Time Constant, set Tau=0 for no signal smoothing";
+  parameter Modelica.Units.SI.Time Tau=0 "Time Constant, set Tau=0 for no signal smoothing";
   parameter Integer initOption = 1 "Initialisation option" annotation(choices(choice=1 "y = u", choice=2 "y = y_start", choice=3 "der(y) = 0",
                                                                                             choice=4 "no init"));
-  parameter Real y_start=1 "Start value at output" annotation(Dialog(enable = Tau>0 and initOption==2));
+  parameter Real y_start=1 "Start value at output" annotation(Dialog(enable = Tau>0 and initOption==2),Evaluate=evaluate_y_start);
+  parameter Boolean evaluate_y_start = false "true for Evaluate=true for y_start";
 protected
   Real y_aux(stateSelect=if Tau==0 then StateSelect.never else StateSelect.always);
 initial equation
@@ -68,13 +73,14 @@ equation
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>(no equations)</p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
-<p>(none)</p>
+<p><span style=\"font-family: Courier New;\">evaluate_y_start = true </span>might help avoiding circular equalities.</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no validation or testing necessary)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
 <p>(none)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Carsten Bode (c.bode@tuhh.de), Nov 2018</p>
+<p>Model modified by Carsten Bode (c.bode@tuhh.de), Feb 2021 (added parameter <span style=\"font-family: Courier New;\">evaluate_y_start</span>)</p>
 </html>"),
     Icon(coordinateSystem(
         preserveAspectRatio=true,

@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model OverloadControllerAdvanced "Control operation of electrolyzer with overload behaviour"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -46,10 +50,10 @@ model OverloadControllerAdvanced "Control operation of electrolyzer with overloa
   parameter Real P_rel_2=1.75 "Relative load point 2 for definition of overheating characteristic";
   parameter Real P_rel_3=2.25 "Relative load point 3 (maximum possible load) for definition of overheating characteristic";
   parameter Real P_rel_cooldown=1 "Maximum possible relative load if electrolyseur must be cooled down";
-  parameter Modelica.SIunits.Time t_1(displayUnit="h")=360000 "Maximum possible duration in overload operation with relative load P_rel_1";
-  parameter Modelica.SIunits.Time t_2(displayUnit="h")=10800 "Maximum possible duration in overload operation with relative load P_rel_2";
-  parameter Modelica.SIunits.Time t_3(displayUnit="h")=900 "Maximum possible duration in overload operation with relative load P_rel_3";
-  parameter Modelica.SIunits.Time t_cooldown(displayUnit="h")=3600 "Time needed for cooling down if electrolyzer was overheated";
+  parameter Modelica.Units.SI.Time t_1(displayUnit="h") = 360000 "Maximum possible duration in overload operation with relative load P_rel_1";
+  parameter Modelica.Units.SI.Time t_2(displayUnit="h") = 10800 "Maximum possible duration in overload operation with relative load P_rel_2";
+  parameter Modelica.Units.SI.Time t_3(displayUnit="h") = 900 "Maximum possible duration in overload operation with relative load P_rel_3";
+  parameter Modelica.Units.SI.Time t_cooldown(displayUnit="h") = 3600 "Time needed for cooling down if electrolyzer was overheated";
   // _____________________________________________
   //
   //                 Outer Models

@@ -1,32 +1,6 @@
 within TransiEnt.Basics.Interfaces.General;
-connector EnthalpyFlowRateOut "Mass flow rate output in kg/s"
-//________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
-//                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
-//________________________________________________________________________________//
-//                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
-// The TransiEnt Library research team consists of the following project partners://
-// Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
-// Institute of Energy Systems (Hamburg University of Technology),                //
-// Institute of Electrical Power and Energy Technology                            //
-// (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
-// XRG Simulation GmbH (Hamburg, Germany).                                        //
-//________________________________________________________________________________//
-
-  // _____________________________________________
-  //
-  //          Imports and Class Hierarchy
-  // _____________________________________________
-
-  extends Modelica.Blocks.Interfaces.RealOutput(final quantity="EnthalpyFlowRate", final unit="W", displayUnit="W");
+connector EnthalpyFlowRateOut=Modelica.Blocks.Interfaces.RealOutput(final quantity="EnthalpyFlowRate", final unit="W", displayUnit="W")
+  "Enthalpy flow rate output in W"
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Extends the MSL RealOutput Connector by defining the quantity, unit and display unit.</p>
@@ -49,4 +23,3 @@ connector EnthalpyFlowRateOut "Mass flow rate output in kg/s"
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Pascal Dubucq (dubucq@tu-harburg.de), Apr 2014</p>
 </html>"));
-end EnthalpyFlowRateOut;

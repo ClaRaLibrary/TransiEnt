@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Electrical.Conventional;
+﻿within TransiEnt.Producer.Electrical.Conventional;
 model Gasturbine_with_Gasport
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -51,19 +55,19 @@ model Gasturbine_with_Gasport
   //             Visible Parameters
   // _____________________________________________
   parameter Boolean useConstantHoC = false "if ticked, a constant heat of combustion for the fuel can be defined" annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true),Dialog(group="Fuel properties"));
-  parameter Modelica.SIunits.SpecificEnthalpy HoC_gas=40e6 "heat of combustion of natural gas"  annotation(Dialog(enable = if useConstantHoC== false then false else true,group="Fuel properties"));
+  parameter Modelica.Units.SI.SpecificEnthalpy HoC_gas=40e6 "heat of combustion of natural gas" annotation (Dialog(enable=if useConstantHoC == false then false else true, group="Fuel properties"));
   parameter Boolean useLeakageMassFlow=false "Constant leakage gas mass flow of 'm_flow_small' to avoid zero mass flow"  annotation(Dialog(group="Numerical Stability"));
-  parameter Modelica.SIunits.MassFlowRate m_flow_small=simCenter.m_flow_small "leakage mass flow if useLeakageMassFlow=true" annotation(Dialog(group="Numerical Stability",enable=useLeakageMassFlow));
+  parameter Modelica.Units.SI.MassFlowRate m_flow_small=simCenter.m_flow_small "leakage mass flow if useLeakageMassFlow=true" annotation (Dialog(group="Numerical Stability", enable=useLeakageMassFlow));
   // _____________________________________________
   //
   //                Variables
   // _____________________________________________
 
-  Modelica.SIunits.MassFlowRate m_flow_CDE_calculatedByInput;
-  Modelica.SIunits.MassFlowRate m_flow_small_intern;
-  Modelica.SIunits.SpecificEnthalpy HoC_gas_actual;
+  Modelica.Units.SI.MassFlowRate m_flow_CDE_calculatedByInput;
+  Modelica.Units.SI.MassFlowRate m_flow_small_intern;
+  Modelica.Units.SI.SpecificEnthalpy HoC_gas_actual;
 protected
-  Modelica.SIunits.MolarFlowRate[5] ElementCompositionFuel;
+  Modelica.Units.SI.MolarFlowRate[5] ElementCompositionFuel;
   // _____________________________________________
   //
   //                  Interfaces

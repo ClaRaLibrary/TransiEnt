@@ -1,25 +1,29 @@
-within TransiEnt.Components.Visualization.Check;
+﻿within TransiEnt.Components.Visualization.Check;
 model Test_PQDiagram_Display
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   TransiEnt.Producer.Combined.LargeScaleCHP.ContinuousCHP largeScaleCHP_L1_TimeConstant(
@@ -58,7 +62,7 @@ model Test_PQDiagram_Display
   ClaRa.Visualisation.Quadruple quadruple2
                                           annotation (Placement(transformation(extent={{32,18},{52,28}})));
   TransiEnt.Components.Visualization.InfoBoxLargeCHP infoBoxLargeCHP annotation (Placement(transformation(extent={{38,-50},{58,-28}})));
-  TransiEnt.Components.Heat.Valve valve(opening_const_=1, redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=10e5 - 4.6e5)) annotation (Placement(transformation(extent={{34,-6},{54,6}})));
+  TransiEnt.Components.Heat.VolumesValvesFittings.Valve valve(opening_const_=1, redeclare model PressureLoss = ClaRa.Components.VolumesValvesFittings.Valves.Fundamentals.LinearNominalPoint (Delta_p_nom=10e5 - 4.6e5)) annotation (Placement(transformation(extent={{34,-6},{54,6}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_set1(y=-gain.y/200e6*580)
                                                             annotation (
       Placement(transformation(

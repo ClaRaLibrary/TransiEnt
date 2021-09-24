@@ -19,3 +19,7 @@ inverseXRegularized
 getNumberOfOccurences
 findAll
 findSetDifference
+real2integer
+boolean2integer
+getIndex
+calc_true_booleans

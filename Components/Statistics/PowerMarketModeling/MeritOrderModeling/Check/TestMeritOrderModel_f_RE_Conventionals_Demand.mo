@@ -1,25 +1,29 @@
-within TransiEnt.Components.Statistics.PowerMarketModeling.MeritOrderModeling.Check;
+﻿within TransiEnt.Components.Statistics.PowerMarketModeling.MeritOrderModeling.Check;
 model TestMeritOrderModel_f_RE_Conventionals_Demand "With real genration and demand data"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -35,11 +39,11 @@ model TestMeritOrderModel_f_RE_Conventionals_Demand "With real genration and dem
 
   MeritOrderModel_f_RE_Conventionals_Demand meritOrderModel(nuclearOffer=0, LigniteOffer=0) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Producer.Electrical.Wind.WindProfiles.WindProfileLoader windproduction_HH_900s_2012_1(REProfile=TransiEnt.Producer.Electrical.Wind.WindProfiles.WindData.Wind2012_Gesamt_900s, P_el_n=4e9) annotation (Placement(transformation(extent={{-88,48},{-68,68}})));
-  Basics.Tables.ElectricGrid.ElectricityDemand_HH_900s_2012 electricityDemandHH_900s_010120120_010120130_1 annotation (Placement(transformation(extent={{-86,-44},{-66,-24}})));
+  Basics.Tables.ElectricGrid.PowerData.ElectricityDemand_HH_900s_2012 electricityDemandHH_900s_010120120_010120130_1 annotation (Placement(transformation(extent={{-86,-44},{-66,-24}})));
   Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345_1 annotation (Placement(transformation(extent={{-94,-90},{-81,-77}})));
   Grid.Heat.HeatGridControl.Controllers.DHG_FeedForward_Controller dhnControl annotation (Placement(transformation(extent={{-76,-90},{-58,-77}})));
   Basics.Blocks.HoldBlock holdBlock annotation (Placement(transformation(extent={{-50,-63},{-46,-57}})));
-  Basics.Tables.ElectricGrid.SpotPriceElectricity_Phelix_3600s_2012 spotPriceElectricity_Phelix_3600s_2012_2 annotation (Placement(transformation(extent={{-74,-62},{-68,-56}})));
+  Basics.Tables.ElectricGrid.ElectricityPrices.SpotPriceElectricity_Phelix_3600s_2012 spotPriceElectricity_Phelix_3600s_2012_2 annotation (Placement(transformation(extent={{-74,-62},{-68,-56}})));
   Grid.Heat.HeatGridControl.Controllers.DHNPowerScheduler_L0 dHNPowerScheduler_L0_1(MarginalCost_Coal=29) annotation (Placement(transformation(extent={{-46,-84},{-37,-77}})));
   Basics.Blocks.Sources.PowerExpression powerExpression(y=dHNPowerScheduler_L0_1.P_out_WW1 + dHNPowerScheduler_L0_1.P_out_WW2 + dHNPowerScheduler_L0_1.P_out_WT) annotation (Placement(transformation(extent={{-86,16},{-66,36}})));
   Basics.Blocks.Sources.PowerExpression powerExpression1(y=dHNPowerScheduler_L0_1.GasKW) annotation (Placement(transformation(extent={{-84,-18},{-64,2}})));

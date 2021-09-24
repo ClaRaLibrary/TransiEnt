@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Heat.HeatGridAnalysis;
+﻿within TransiEnt.Grid.Heat.HeatGridAnalysis;
 model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure controlled, variable heat flows, constant mass flow\""
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -280,7 +284,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     Tau_i=10,
     sign=1,
     y_start=2e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-232,152})));
@@ -309,7 +313,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     y_max=4e6,
     y_start=2e6,
     sign=-1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-422,-14})));
@@ -324,7 +328,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     y_start=1,
     Tau_i=100,
     sign=1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={24,80})));
@@ -343,7 +347,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     y_start=1,
     Tau_i=100,
     sign=1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={24,-26})));
@@ -366,7 +370,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     y_start=2e6,
     sign=-1,
     y_ref=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-276,-106})));
@@ -381,7 +385,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     u_ref=1.9e5,
     y_ref=0.5e6,
     y_start=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-146,-106})));
@@ -592,7 +596,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     Tau_i=10,
     sign=1,
     y_start=2e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={206,154})));
@@ -622,7 +626,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     y_max=4e6,
     y_start=2e6,
     sign=-1,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={434,-12})));
@@ -641,7 +645,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     y_start=2e6,
     sign=-1,
     y_ref=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={344,-104})));
@@ -656,7 +660,7 @@ model TwoClosedLoops_PressureControlled "\"Two district heating loops, pressure 
     u_ref=1.9e5,
     y_ref=0.5e6,
     y_start=1e6,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={186,-102})));

@@ -1,26 +1,30 @@
-within TransiEnt.Components.Gas.VolumesValvesFittings.Base;
+﻿within TransiEnt.Components.Gas.VolumesValvesFittings.Base;
 partial model ThreeWayValve_base "Three way valve for vle media | base class |"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // modified component of the ClaRa library, version 1.3.0                    //
   // Path: ClaRa.Components.VolumesValvesFittings.Valves.ThreeWayValve_base    //
@@ -31,7 +35,7 @@ partial model ThreeWayValve_base "Three way valve for vle media | base class |"
     //
     //          Imports and Class Hierarchy
     // _____________________________________________
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
 
     // _____________________________________________
     //
@@ -58,7 +62,7 @@ partial model ThreeWayValve_base "Three way valve for vle media | base class |"
     //                  Interfaces
     // _____________________________________________
 public
-  TransiEnt.Basics.Interfaces.General.MassFractionIn splitRatio_external(min=0,max=1,value=splitRatio) if splitRatio_input "Controls mass fraction m2/m1"
+  TransiEnt.Basics.Interfaces.General.MassFractionIn splitRatio_external(min=0,max=1)=splitRatio if splitRatio_input "Controls mass fraction m2/m1"
     annotation (Placement(transformation(
         extent={{20,-20},{-20,20}},
         rotation=90,
@@ -92,12 +96,16 @@ public
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasIn(
     each vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     h=noEvent(actualStream(gasPortIn.h_outflow)),
     xi=noEvent(actualStream(gasPortIn.xi_outflow)),
     p=gasPortIn.p,
     deactivateTwoPhaseRegion=true) if useFluidModelsForSummary annotation (Placement(transformation(extent={{-90,-12},{-70,8}}, rotation=0)));
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut2(
     each vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     h=noEvent(actualStream(gasPortOut2.h_outflow)),
     xi=noEvent(actualStream(gasPortOut2.xi_outflow)),
     p=gasPortOut2.p,
@@ -105,6 +113,8 @@ protected
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut1(
     each vleFluidType=medium,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     h=noEvent(actualStream(gasPortOut1.h_outflow)),
     xi=noEvent(actualStream(gasPortOut1.xi_outflow)),
     p=gasPortOut1.p,
@@ -215,7 +225,7 @@ annotation(Icon(
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
 <p>Only valid if changes in density and the two-phase region of the fluid can be neglected.</p>
 <h4><span style=\"color: #008000\">4. Interfaces</span></h4>
-<p>TransiEnt.Basics.Interfaces.General.MassFractionIn splitRatio_external(min=0,max=1,value=splitRatio) if splitRatio_input &quot;Controls mass fraction m2/m1&quot;</p>
+<p>TransiEnt.Basics.Interfaces.General.MassFractionIn splitRatio_external(min=0,max=1)=splitRatio if splitRatio_input &quot;Controls mass fraction m2/m1&quot;</p>
 <p>TransiEnt.Basics.Interfaces.Gas.RealGasPortIn gasPortIn(Medium=medium) &quot;Inlet port&quot; </p>
 <p>TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut1(each Medium=medium) &quot;Outlet port&quot; </p>
 <p>TransiEnt.Basics.Interfaces.Gas.RealGasPortOut gasPortOut2(each Medium=medium) &quot;Outlet port&quot; </p>

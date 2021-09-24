@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model IAM "Calculates the incidence angle modifier"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -29,7 +33,7 @@ model IAM "Calculates the incidence angle modifier"
 
   extends TransiEnt.Basics.Icons.Model;
   import Const = Modelica.Constants;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
 
   // _____________________________________________
   //
@@ -42,7 +46,7 @@ model IAM "Calculates the incidence angle modifier"
   parameter Real constant_iam_ground=1 "If a constant IAM is assumed";
   parameter Real b0=1 "assumption: constant b0-value for IAM=1-b0*(1/cos(theta)-1)";
   parameter Real[8] iam_SRCC={1,1,1,1,1,1,1,1} "IAM for theta = 0, 10, 20, ..., 70";
-  parameter SI.Conversions.NonSIunits.Angle_deg[8] theta={0,10,20,30,40,50,60,70} "angles of incidence";
+  parameter Modelica.Units.NonSI.Angle_deg[8] theta={0,10,20,30,40,50,60,70} "angles of incidence";
 
   // _____________________________________________
   //
@@ -80,13 +84,13 @@ equation
      iam_ground= 1-b0*(1/cos(irradiance.angle_ground_tilted)-1);
      b0_interpolated=0;
 
-   elseif kind == 3 and abs(SI.Conversions.to_deg(irradiance.angle_direct_tilted))<=70 then
-     iam_dir= iam_SRCC[integer(SI.Conversions.to_deg(irradiance.angle_direct_tilted)/10)+1]+(iam_SRCC[integer(SI.Conversions.to_deg(irradiance.angle_direct_tilted)/10)+2]-iam_SRCC[integer(SI.Conversions.to_deg(irradiance.angle_direct_tilted)/10)+1])*(SI.Conversions.to_deg(irradiance.angle_direct_tilted)-theta[integer(SI.Conversions.to_deg(irradiance.angle_direct_tilted)/10)+1])/10;
+  elseif kind == 3 and abs(Modelica.Units.Conversions.to_deg(irradiance.angle_direct_tilted)) <= 70 then
+     iam_dir=iam_SRCC[integer(Modelica.Units.Conversions.to_deg(irradiance.angle_direct_tilted)/10) + 1] + (iam_SRCC[integer(Modelica.Units.Conversions.to_deg(irradiance.angle_direct_tilted)/10) + 2] - iam_SRCC[integer(Modelica.Units.Conversions.to_deg(irradiance.angle_direct_tilted)/10) + 1])*(Modelica.Units.Conversions.to_deg(irradiance.angle_direct_tilted) - theta[integer(Modelica.Units.Conversions.to_deg(irradiance.angle_direct_tilted)/10) + 1])/10;
      iam_dir= 1-b0_interpolated*(1/cos(irradiance.angle_direct_tilted)-1);
      iam_diff= 1-b0_interpolated*(1/cos(irradiance.angle_diffuse_tilted)-1);
      iam_ground= 1-b0_interpolated*(1/cos(irradiance.angle_ground_tilted)-1);
 
-   elseif kind == 3 and abs(SI.Conversions.to_deg(irradiance.angle_direct_tilted))>70 then
+  elseif kind == 3 and abs(Modelica.Units.Conversions.to_deg(irradiance.angle_direct_tilted)) > 70 then
      iam_dir=0;
      iam_diff=0;
      iam_ground=0;

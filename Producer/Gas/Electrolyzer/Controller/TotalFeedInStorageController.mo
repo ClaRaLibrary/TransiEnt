@@ -1,33 +1,37 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Controller;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model TotalFeedInStorageController "Controller to control the electrolyzer and storage system for feeding into a natural gas grid"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   extends TransiEnt.Basics.Icons.Controller;
 
   // _____________________________________________
@@ -45,14 +49,13 @@ model TotalFeedInStorageController "Controller to control the electrolyzer and s
   parameter SI.ActivePower P_el_max=3*P_el_n "Maximum power of the electrolyzer" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.ActivePower P_el_overload=1.5*P_el_n "Power at which the overload region of the electrolyzer begins" annotation(Dialog(group="Fundamental Definitions"));
   parameter SI.ActivePower P_el_cooldown=P_el_n "Power below which cooldown starts" annotation(Dialog(group="Fundamental Definitions"));
-  parameter Modelica.SIunits.Efficiency eta_n(
+  parameter Modelica.Units.SI.Efficiency eta_n(
     min=0,
-    max=1)=0.75 "Nominal efficiency coefficient (min = 0, max = 1)" annotation(Dialog(group="Fundamental Definitions"));
+    max=1) = 0.75 "Nominal efficiency coefficient (min = 0, max = 1)" annotation (Dialog(group="Fundamental Definitions"));
 
-  parameter Modelica.SIunits.Efficiency eta_scale(
+  parameter Modelica.Units.SI.Efficiency eta_scale(
     min=0,
-    max=1)=0 "Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)"
-                                                                                                    annotation(Dialog(group="Fundamental Definitions"));
+    max=1) = 0 "Sets a with increasing input power linear degrading efficiency coefficient (min = 0, max = 1)" annotation (Dialog(group="Fundamental Definitions"));
   parameter SI.Time t_overload=5*3600 "Maximum time in seconds that the electrolyzer can work in overload" annotation(Dialog(group="Fundamental Definitions"));
   parameter Real coolingToHeatingRatio=2 "Ratio of how much faster the electrolyzer cools down than it heats up" annotation(Dialog(group="Fundamental Definitions"));
   parameter Integer startState=1 "Initial state of the electrolyzer (1: ready to overheat, 2: working in overload, 3: cooling down)" annotation(Dialog(group="Fundamental Definitions"));

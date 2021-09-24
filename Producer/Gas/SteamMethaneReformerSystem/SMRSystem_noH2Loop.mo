@@ -1,33 +1,37 @@
-within TransiEnt.Producer.Gas.SteamMethaneReformerSystem;
+﻿within TransiEnt.Producer.Gas.SteamMethaneReformerSystem;
 model SMRSystem_noH2Loop "Steam methane reformer system with sufficient H2 in feed containing prereformer, SMR, WGS, dryer, PSA and heat exchangers"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
 
   // _____________________________________________
   //
@@ -191,18 +195,18 @@ protected
     conversion=conversionRate_WGS,
     useFluidModelsForSummary=useFluidModelsForSummary) annotation (Placement(transformation(extent={{84,-10},{104,10}})));
   TransiEnt.Components.Sensors.RealGas.CompositionSensor massComp_feed(medium=realGas_ng7_sg, compositionDefinedBy=1) annotation (Placement(transformation(extent={{-180,0},{-160,20}})));
-  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlow_feed(medium=realGas_ng7_sg) annotation (Placement(transformation(extent={{-156,0},{-136,20}})));
+  TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlow_feed(medium=realGas_ng7_sg, xiNumber=0) annotation (Placement(transformation(extent={{-156,0},{-136,20}})));
   ControllerH2OForReformer controllerH2OForReformer annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-138,-34})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction_feedH2O(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction_feedH2O(
     medium=realGas_ng7_sg,
     volume=volume_junction,
     initOption=initOption_junction,
     xi(start=xi_start_junction),
     h(start=h_start_junction),
-    p(start=p_start_junction))    annotation (Placement(transformation(extent={{-132,10},{-112,-10}})));
+    p(start=p_start_junction)) annotation (Placement(transformation(extent={{-132,10},{-112,-10}})));
   TransiEnt.Components.Gas.Reactor.Prereformer_L1 prereformer(pressureLoss=Delta_p_prereformer) annotation (Placement(transformation(extent={{-84,-10},{-64,10}})));
   TransiEnt.Basics.Adapters.Gas.RealNG7_SG_to_RealSG6 realNG7_SG_to_RealSG6_1(medium_ng7_sg=realGas_ng7_sg, medium_sg6=realGas_sg6) annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   TransiEnt.Components.Gas.HeatExchanger.HEXOneRealGasOneFluidIdeal_L1 heatExchanger_SynGasH2O(

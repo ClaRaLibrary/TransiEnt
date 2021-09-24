@@ -1,25 +1,29 @@
-within TransiEnt.Examples.Coupled;
+﻿within TransiEnt.Examples.Coupled;
 model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electric power grid"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Example;
 
  inner TransiEnt.SimCenter simCenter(
@@ -81,10 +85,10 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
  Modelica.Blocks.Sources.Constant pipeDiameter(k=0.32) annotation (Placement(transformation(extent={{-34,140},{-14,160}})));
   Modelica.Blocks.Sources.Constant scaleFactorPipeLength(k=1) annotation (Placement(transformation(extent={{-2,140},{18,160}})));
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_e(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_e(
     frictionAtInlet=true,
     frictionAtOutlet=true,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     m_flow_nom=1,
     diameter_i=pipeDiameter.k,
     p_start=ones(pipe_e.N_cv)*(simCenter.p_amb_const + simCenter.p_eff_2),
@@ -95,10 +99,10 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
         extent={{-14,-5},{14,5}},
         rotation=90,
         origin={20,81})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_n(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_n(
     frictionAtInlet=true,
     frictionAtOutlet=true,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     diameter_i=pipeDiameter.k,
     p_start=ones(pipe_n.N_cv)*(simCenter.p_amb_const + simCenter.p_eff_2),
     showExpertSummary=true,
@@ -107,7 +111,7 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
     h_nom=ones(pipe_n.N_cv)*(-4667),
     m_flow_nom=1,
     Delta_p_nom=2000) annotation (Placement(transformation(extent={{-26,119},{2,129}})));
- TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_w(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_w(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     m_flow_nom=1,
@@ -116,12 +120,12 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
     showExpertSummary=true,
     length=8000*scaleFactorPipeLength.k,
     N_cv=1,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     Delta_p_nom=1000) annotation (Placement(transformation(
         extent={{-14,-5},{14,5}},
         rotation=90,
         origin={-50,81})));
- TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_sw(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_sw(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     m_flow_nom=1,
@@ -130,9 +134,9 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
     showExpertSummary=true,
     length=8000*scaleFactorPipeLength.k,
     N_cv=1,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     Delta_p_nom=2000) annotation (Placement(transformation(extent={{-98,36},{-70,46}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_s(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_s(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     m_flow_nom=1,
@@ -141,9 +145,9 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
     showExpertSummary=true,
     length=7000*scaleFactorPipeLength.k,
     N_cv=1,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     Delta_p_nom=2000) annotation (Placement(transformation(extent={{-24,36},{4,46}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_se(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_se(
     frictionAtInlet=true,
     frictionAtOutlet=true,
     m_flow_nom=1,
@@ -152,12 +156,12 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
     showExpertSummary=true,
     length=5000*scaleFactorPipeLength.k,
     N_cv=1,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     Delta_p_nom=1000) annotation (Placement(transformation(
         extent={{-14,-5},{14,5}},
         rotation=0,
         origin={54,41})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_ne(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_ne(
     frictionAtInlet=true,
     frictionAtOutlet=false,
     m_flow_nom=1,
@@ -166,12 +170,12 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
     showExpertSummary=true,
     length=1000*scaleFactorPipeLength.k,
     N_cv=1,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     Delta_p_nom=1000) annotation (Placement(transformation(
         extent={{-14,-5},{14,5}},
         rotation=0,
         origin={52,124})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple_isoth pipe_nw(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple_isoth pipe_nw(
     frictionAtInlet=true,
     frictionAtOutlet=false,
     m_flow_nom=1,
@@ -180,18 +184,18 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
     showExpertSummary=true,
     length=3000*scaleFactorPipeLength.k,
     N_cv=1,
-    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc,
+    redeclare model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4,
     Delta_p_nom=1000) annotation (Placement(transformation(
         extent={{-14,-5},{14,5}},
         rotation=180,
         origin={-80,124})));
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_FIS(volume=0.5) annotation (Placement(transformation(extent={{-144,51},{-124,31}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_ne(volume=0.5) annotation (Placement(transformation(extent={{30,114},{10,134}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_se(volume=0.5) annotation (Placement(transformation(extent={{10,51},{30,31}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_nw(volume=0.5) annotation (Placement(transformation(extent={{-40,114},{-60,134}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_sw(volume=0.5) annotation (Placement(transformation(extent={{-60,51},{-40,31}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_seAtCHP(volume=0.5) annotation (Placement(transformation(extent={{73,36},{83,46}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_FIS(volume=0.5) annotation (Placement(transformation(extent={{-144,51},{-124,31}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_ne(volume=0.5) annotation (Placement(transformation(extent={{30,114},{10,134}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_se(volume=0.5) annotation (Placement(transformation(extent={{10,51},{30,31}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_nw(volume=0.5) annotation (Placement(transformation(extent={{-40,114},{-60,134}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_sw(volume=0.5) annotation (Placement(transformation(extent={{-60,51},{-40,31}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_seAtCHP(volume=0.5) annotation (Placement(transformation(extent={{73,36},{83,46}})));
 
   // Consumer
   TransiEnt.Consumer.Gas.GasConsumer_HFlow gasConsumer_nw annotation (Placement(transformation(
@@ -436,14 +440,14 @@ model Coupled_LargeScale "Coupled small-scale example with CPP and meshed electr
   Modelica.Blocks.Sources.RealExpression P_el_PES(y=PES.epp.P) annotation (Placement(transformation(extent={{-556,12},{-534,36}})));
 
   // Variables
-     Modelica.SIunits.Power P_load;
-     Modelica.SIunits.Power P_gen_KW;
-     Modelica.SIunits.Power P_gen_ren;
-     Modelica.SIunits.Power P_gen_tot;
+  Modelica.Units.SI.Power P_load;
+  Modelica.Units.SI.Power P_gen_KW;
+  Modelica.Units.SI.Power P_gen_ren;
+  Modelica.Units.SI.Power P_gen_tot;
 
-     Modelica.SIunits.Energy E_gen_tot;
-     Modelica.SIunits.Energy E_gen_ren;
-     Modelica.SIunits.Energy E_load;
+  Modelica.Units.SI.Energy E_gen_tot;
+  Modelica.Units.SI.Energy E_gen_ren;
+  Modelica.Units.SI.Energy E_load;
 
   // _____________________________________________
   //
@@ -987,7 +991,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(feedInStation.gasPortOut, junction_FIS.gasPort2) annotation (Line(
-      points={{-133.75,65.86},{-133.75,74},{-132,74},{-132,51},{-134,51}},
+      points={{-133,66.14},{-133,74},{-132,74},{-132,51},{-134,51}},
       color={255,255,0},
       thickness=1.5));
   connect(maxH2MassFlow.gasPortOut, junction_FIS.gasPort1) annotation (Line(

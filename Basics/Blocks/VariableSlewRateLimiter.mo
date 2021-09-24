@@ -1,26 +1,30 @@
-within TransiEnt.Basics.Blocks;
+﻿within TransiEnt.Basics.Blocks;
 block VariableSlewRateLimiter "Limits the signal with upper and lower boundary based on ClaRa VariableGradientLimiter"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -55,6 +59,7 @@ block VariableSlewRateLimiter "Limits the signal with upper and lower boundary b
   parameter Real minGrad_const(final unit="1/s")=-maxGrad_const annotation (Dialog(enable = useConstantLimits));
   parameter Real Td(final unit="s")=0.1 "The lower Td, the closer y follows u";
   parameter Real y_start=0;
+  parameter Boolean useHomotopy=simCenter.useHomotopy;
 
   // _____________________________________________
   //
@@ -68,10 +73,10 @@ block VariableSlewRateLimiter "Limits the signal with upper and lower boundary b
   //                  Interfaces
   // _____________________________________________
 
-  Modelica.Blocks.Interfaces.RealInput maxGrad(value=maxGrad_) if not useConstantLimits "Maximum gradient allowed"
+  Modelica.Blocks.Interfaces.RealInput maxGrad=maxGrad_ if not useConstantLimits "Maximum gradient allowed"
                               annotation (Placement(transformation(extent={{
             -140,60},{-100,100}}, rotation=0)));
-  Modelica.Blocks.Interfaces.RealInput minGrad(value=minGrad_) if not useConstantLimits "Minimum gradient allowed"
+  Modelica.Blocks.Interfaces.RealInput minGrad=minGrad_ if not useConstantLimits "Minimum gradient allowed"
                               annotation (Placement(transformation(extent={{
             -140,-100},{-100,-60}}, rotation=0)));
 
@@ -99,8 +104,8 @@ equation
 
 
      if useThresh then
-      y= if simCenter.useHomotopy then homotopy(actual=Stepsmoother(1, 0.1, abs(der(y_aux))/thres)*y_aux + (1-Stepsmoother(1, 0.1, abs(der(y_aux))/thres))*u, simplified=y_start) else homotopy(actual=y_aux,simplified=y_start);
-     else  y= if simCenter.useHomotopy then homotopy(actual=y_aux, simplified= 0) else y_aux;
+      y= if useHomotopy then homotopy(actual=Stepsmoother(1, 0.1, abs(der(y_aux))/thres)*y_aux + (1-Stepsmoother(1, 0.1, abs(der(y_aux))/thres))*u, simplified=y_start) else homotopy(actual=y_aux,simplified=y_start);
+     else  y= if useHomotopy then homotopy(actual=y_aux, simplified= 0) else y_aux;
      end if;
 
 

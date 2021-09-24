@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Electrical.EconomicDispatch.Check;
+﻿within TransiEnt.Grid.Electrical.EconomicDispatch.Check;
 model TestMeritOrderDispatcherStatePrediction
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
     extends TransiEnt.Basics.Icons.Checkmodel;
 
   MeritOrderDispatcherStatePrediction
@@ -42,17 +46,15 @@ model TestMeritOrderDispatcherStatePrediction
                             annotation (Placement(transformation(extent={{-110,80},{-90,100}})));
   inner ModelStatistics modelStatistics annotation (Placement(transformation(extent={{-90,100},{-70,80}})));
   Modelica.Blocks.Sources.Cosine P_load_is(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=2e8,
     offset=2.3e9,
-    phase(displayUnit="rad") = 3.14)
-                  annotation (Placement(transformation(extent={{-76,-10},{-56,10}})));
+    phase(displayUnit="rad") = 3.14) annotation (Placement(transformation(extent={{-76,-10},{-56,10}})));
   Modelica.Blocks.Sources.Cosine P_load_pred_1h(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=2e8,
     offset=2.3e9,
-    phase=3.14 + 1/24*2*3.14)
-                  annotation (Placement(transformation(extent={{-74,20},{-54,40}})));
+    phase=3.14 + 1/24*2*3.14) annotation (Placement(transformation(extent={{-74,20},{-54,40}})));
   Basics.Blocks.Sources.ConstantVectorSource P_sec_pos(nout=simCenter.generationPark.nDispPlants, k=fill(0, P_sec_pos.nout)) annotation (Placement(transformation(extent={{-18,34},{2,54}})));
   Modelica.Blocks.Sources.Constant P_min_total(k=sum(simCenter.generationPark.P_min)) annotation (Placement(transformation(extent={{68,54},{88,74}})));
   Modelica.Blocks.Sources.Constant P_max_total(k=sum(simCenter.generationPark.P_max)) annotation (Placement(transformation(extent={{66,18},{86,38}})));

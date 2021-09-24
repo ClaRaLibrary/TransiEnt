@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of solar irradiance and different models for calculating the solar irradiance on a tilted surface"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -28,7 +32,7 @@ model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of
 
   extends TransiEnt.Basics.Icons.Model;
   import Const = Modelica.Constants;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   outer TransiEnt.SimCenter simCenter;
 
 
@@ -42,8 +46,8 @@ model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of
   //
   //                  Interfaces
   // _____________________________________________
-  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_direct_measured_input(value=irradiance_direct_measured) annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
-  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_diffuse_horizontal_input(value=irradiance_diffuse_horizontal) annotation (Placement(transformation(extent={{-140,-60},{-100,-20}})));
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_direct_measured_input=irradiance_direct_measured annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
+  TransiEnt.Basics.Interfaces.Ambient.IrradianceIn irradiance_diffuse_horizontal_input=irradiance_diffuse_horizontal annotation (Placement(transformation(extent={{-140,-60},{-100,-20}})));
 
   // _____________________________________________
   //
@@ -80,10 +84,10 @@ equation
   angle_direct_tilted=skymodel.angle_tilted;
 
   irradiance_diffuse_tilted=skymodel.irradiance_diffuse_tilted;
-  angle_diffuse_tilted=SI.Conversions.from_deg(59.7-0.1388*SI.Conversions.to_deg(skymodel.slope)+0.001497*SI.Conversions.to_deg(skymodel.slope)^2);
+  angle_diffuse_tilted=Modelica.Units.Conversions.from_deg(59.7 - 0.1388*Modelica.Units.Conversions.to_deg(skymodel.slope) + 0.001497*Modelica.Units.Conversions.to_deg(skymodel.slope)^2);
 
   irradiance_ground_tilted=skymodel.irradiance_ground_tilted;
-  angle_ground_tilted= SI.Conversions.from_deg(90 - 0.5788*SI.Conversions.to_deg(skymodel.slope) + 0.002693*SI.Conversions.to_deg(skymodel.slope)^2);
+  angle_ground_tilted=Modelica.Units.Conversions.from_deg(90 - 0.5788*Modelica.Units.Conversions.to_deg(skymodel.slope) + 0.002693*Modelica.Units.Conversions.to_deg(skymodel.slope)^2);
 
     annotation(choicesAllMatching,
               Documentation(info="<html>

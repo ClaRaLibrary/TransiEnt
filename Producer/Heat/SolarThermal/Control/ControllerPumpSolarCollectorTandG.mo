@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Heat.SolarThermal.Control;
+﻿within TransiEnt.Producer.Heat.SolarThermal.Control;
 model ControllerPumpSolarCollectorTandG "Model for controlling the pump drive supplying of the collector field"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 // _____________________________________________
 //
@@ -28,7 +32,7 @@ model ControllerPumpSolarCollectorTandG "Model for controlling the pump drive su
 // _____________________________________________
 
 extends TransiEnt.Basics.Icons.Controller;
-import SI = Modelica.SIunits;
+import      Modelica.Units.SI;
 
 // _____________________________________________
 //
@@ -66,11 +70,11 @@ parameter Real Ni(min=100*Modelica.Constants.eps) = 0.9 "Ni*Ti is time constant 
 parameter Real Nd(min=100*Modelica.Constants.eps) = 10 "The higher Nd, the more ideal the derivative block" annotation (Dialog(tab="PID", group="Parameters"));
 
 //PID Initialization
-parameter Modelica.Blocks.Types.InitPID initType_PID= Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation(Evaluate=true, Dialog(tab="PID", group="Initialization"));
+  parameter Modelica.Blocks.Types.Init initType_PID=Modelica.Blocks.Types.Init.InitialState "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)" annotation (Evaluate=true, Dialog(tab="PID", group="Initialization"));
 parameter Boolean limitsAtInit = true "= false, if limits are ignored during initialization" annotation(Evaluate=true, Dialog(tab="PID",group="Initialization"));
 parameter Real xi_start=0 "Initial or guess value value for integrator output (= integrator state)" annotation (Dialog(tab="PID", group="Initialization", enable=controllerType==Modelica.Blocks.Types.SimpleController.PI or controllerType==Modelica.Blocks.Types.SimpleController.PID));
 parameter Real xd_start=0 "Initial or guess value for state of derivative block" annotation (Dialog(tab="PID", group="Initialization", enable=controllerType==Modelica.Blocks.Types.SimpleController.PD or controllerType==Modelica.Blocks.Types.SimpleController.PID));
-parameter Real y_start_PID=0 "Initial value of output" annotation(Dialog(tab="PID", enable=initType == Modelica.Blocks.Types.InitPID.InitialOutput, group= "Initialization"));
+parameter Real y_start_PID=0 "Initial value of output" annotation(Dialog(tab="PID", enable=initType == Modelica.Blocks.Types.Init.InitialOutput,    group= "Initialization"));
 parameter Boolean strict=false "= true, if strict limits with noEvent(..)" annotation (Evaluate=true, choices(checkBox=true), Dialog(tab="PID", group="Advanced"));
 
 //numerical stablity
@@ -93,12 +97,10 @@ parameter Real eps=1e-6 "smallest output" annotation (Dialog(tab="Expert Setting
     yMax=yMax,
     yMin=yMin,
     initType=initType_PID,
-    limitsAtInit=limitsAtInit,
     xi_start=xi_start,
     xd_start=xd_start,
     y_start=y_start_PID,
-    strict=strict)
-           annotation (Placement(transformation(extent={{30,-2},{50,18}})));
+    strict=strict) annotation (Placement(transformation(extent={{30,-2},{50,18}})));
   Modelica.Blocks.Sources.Constant set_point_temp(k=T_set) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,

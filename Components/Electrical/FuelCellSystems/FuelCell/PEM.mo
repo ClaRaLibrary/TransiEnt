@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell;
+﻿within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell;
 model PEM "Model of PEM-Cell stack"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -43,11 +47,11 @@ model PEM "Model of PEM-Cell stack"
 
   parameter Integer no_Cells = 30 "Number of cells connected in series";
 
-  parameter Modelica.SIunits.CurrentDensity i_0 = 0.000006 "Reactive current (empiric)";
+  parameter Modelica.Units.SI.CurrentDensity i_0=0.000006 "Reactive current (empiric)";
 
-  parameter Modelica.SIunits.CurrentDensity i_L = 6 "Limiting current";
+  parameter Modelica.Units.SI.CurrentDensity i_L=6 "Limiting current";
 
-  parameter Modelica.SIunits.CurrentDensity i_Loss = 6 "Leakage current";
+  parameter Modelica.Units.SI.CurrentDensity i_Loss=6 "Leakage current";
 
   parameter Real Ri = 0.15e-4 "Internal resistance according to Barbir in Ohm";
 
@@ -55,12 +59,11 @@ model PEM "Model of PEM-Cell stack"
 
   parameter Real z = 2 "Quantity of transfered electrons";
 
-  parameter Modelica.SIunits.Area A_cell = 361e-4 "Area of one cell";
+  parameter Modelica.Units.SI.Area A_cell=361e-4 "Area of one cell";
 
-  parameter Modelica.SIunits.Pressure p_Anode=150000  "Pressure at the anode";
+  parameter Modelica.Units.SI.Pressure p_Anode=150000 "Pressure at the anode";
 
-  parameter Modelica.SIunits.Pressure p_Kathode=100000
-                                                      "Pressure at the cathode";
+  parameter Modelica.Units.SI.Pressure p_Kathode=100000 "Pressure at the cathode";
 
   parameter TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG7_var Syngas=TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG7_var() "Medium model of Syngas" annotation (choicesAllMatching);
 
@@ -68,17 +71,17 @@ model PEM "Model of PEM-Cell stack"
 
   parameter Real cp_tab[3,3] = [28.91404, -0.00084, 2.01e-6; 25.84512, 0.012987, -3.9e-6; 30.62644, 0.009621, 1.18e-6] "Empiric parameter for calculating the Gibbs free energy according to Barbir";
 
-  parameter Modelica.SIunits.Current I_shutdown = 10 "If load controller requests currents below this value, stack will shut down";
+  parameter Modelica.Units.SI.Current I_shutdown=10 "If load controller requests currents below this value, stack will shut down";
 
-  parameter Modelica.SIunits.Mass m = 5 "Mass of the stack";
+  parameter Modelica.Units.SI.Mass m=5 "Mass of the stack";
 
-  parameter Modelica.SIunits.SpecificHeatCapacity cp = 1000 "Specific heat capacity of the stack";
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp=1000 "Specific heat capacity of the stack";
 
   parameter Real eta_Q = 0.7 "Efficiency of the heat transfer";
 
-  parameter Modelica.SIunits.Temperature T_nom = 820+273.15 "Temperature in nominal point (i.e. minimum temperature for heat)";
+  parameter Modelica.Units.SI.Temperature T_nom=820 + 273.15 "Temperature in nominal point (i.e. minimum temperature for heat)";
 
-  parameter Modelica.SIunits.ThermalConductance ka = 0.5 "Thermal conductance of the wall";
+  parameter Modelica.Units.SI.ThermalConductance ka=0.5 "Thermal conductance of the wall";
 
   parameter SI.Voltage v_n=simCenter.v_n "Nominal Voltage for grid";
 
@@ -89,51 +92,51 @@ model PEM "Model of PEM-Cell stack"
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.Temp_K T_cell = T_stack "Temperature of one cell";
-  Modelica.SIunits.Temp_K T_stack( start = 25+273.15) "Temperature of the stack" annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Temp_K T_syng_ein "Temperature of the syngas";
-  Modelica.SIunits.Temp_K T_air_ein "Temperature of the air";
+  Modelica.Units.SI.Temperature T_cell=T_stack "Temperature of one cell";
+  Modelica.Units.SI.Temperature T_stack(start=25 + 273.15) "Temperature of the stack" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Temperature T_syng_ein "Temperature of the syngas";
+  Modelica.Units.SI.Temperature T_air_ein "Temperature of the air";
 //   Modelica.SIunits.Temperature T_heatdemand = 60+273.15;
-  Modelica.SIunits.CurrentDensity i_cell "Current in one cell";
+  Modelica.Units.SI.CurrentDensity i_cell "Current in one cell";
   // Real Ri = -1.667e-4*T_cell + 0.2289 "Internal resistance in Ohm";
-  Modelica.SIunits.Pressure P_O2 = air.p_i[3]/air.p "Partial pressure of oxygen at the cathode";
-  Modelica.SIunits.Pressure P_H2 = syng.p_i[5]/syng.p "Partial pressure of hydrogen at the anode";
+  Modelica.Units.SI.Pressure P_O2=air.p_i[3]/air.p "Partial pressure of oxygen at the cathode";
+  Modelica.Units.SI.Pressure P_H2=syng.p_i[5]/syng.p "Partial pressure of hydrogen at the anode";
 
-  Modelica.SIunits.Voltage E_cell "Voltage of one cell";
-  Modelica.SIunits.Voltage E_stack "Voltage of the stack";
-  Modelica.SIunits.Voltage V1 "Voltage loss 1";
-  Modelica.SIunits.Voltage V2 "Voltage loss 2";
-  Modelica.SIunits.Voltage V3 "Voltage loss 3";
-  Modelica.SIunits.Voltage Er "Reversible electric potential without the other losses";
+  Modelica.Units.SI.Voltage E_cell "Voltage of one cell";
+  Modelica.Units.SI.Voltage E_stack "Voltage of the stack";
+  Modelica.Units.SI.Voltage V1 "Voltage loss 1";
+  Modelica.Units.SI.Voltage V2 "Voltage loss 2";
+  Modelica.Units.SI.Voltage V3 "Voltage loss 3";
+  Modelica.Units.SI.Voltage Er "Reversible electric potential without the other losses";
   Real da= cp_tab[3,1] - cp_tab[1,1] - 0.5* cp_tab[2,1] "Empiric parameter for calculating Gibbs free energy according to Barbir";
   Real db= cp_tab[3,2] - cp_tab[1,2] - 0.5* cp_tab[2,2] "Empiric parameter for calculating Gibbs free energy according to Barbir";
   Real dc= cp_tab[3,3] - cp_tab[1,3] - 0.5* cp_tab[2,3] "Empiric parameter for calculating Gibbs free energy according to Barbir";
   Real Delta_H_T = -241.98*1000 + da*(T_cell-298.15) + db * ((T_cell^2) - 298.15^2)/2 + dc * ((T_cell^3) - 298.15^3)/3 "Empiric equation for calculating the enthalpy of formation according to Barbir";
   Real Delta_S_T = -0.0444*1000 + da*log(T_cell/298.15) + db * (T_cell - 298.15) + dc * ((T_cell^2) - 298.15^2)/2 "Empiric equation for calculating the entropy according to Barbir";
 
-  Modelica.SIunits.MolarFlowRate N_dot_e "Molar flow rate of the electrons";
+  Modelica.Units.SI.MolarFlowRate N_dot_e "Molar flow rate of the electrons";
   //   Modelica.SIunits.Current I "Electric current of the stack/ electric current of one cell";
-  Modelica.SIunits.MassFlowRate m_dot_H2_react_stack "Required H2 mass flow rate of one cell";
-  Modelica.SIunits.MassFlowRate m_dot_O2_react_stack "Required O2 mass flow rate of one cell";
-  Modelica.SIunits.MassFlowRate m_dot_H2O_gen_stack "Generated H2O mass flow rate of one cell";
-  Modelica.SIunits.MassFlowRate m_dot_air_react_stack "Required air mass flow rate of one cell";
+  Modelica.Units.SI.MassFlowRate m_dot_H2_react_stack "Required H2 mass flow rate of one cell";
+  Modelica.Units.SI.MassFlowRate m_dot_O2_react_stack "Required O2 mass flow rate of one cell";
+  Modelica.Units.SI.MassFlowRate m_dot_H2O_gen_stack "Generated H2O mass flow rate of one cell";
+  Modelica.Units.SI.MassFlowRate m_dot_air_react_stack "Required air mass flow rate of one cell";
   //Modelica.SIunits.MassFlowRate m_dot_H2_in_stack "Wasserstoffmassenstrom in das Stack";
-  Modelica.SIunits.MolarMass M_H2 = syng.M_i[5] "Molar mass H2";
-  Modelica.SIunits.MolarMass M_O2 = syng.M_i[2] "Molar mass O2";
+  Modelica.Units.SI.MolarMass M_H2=syng.M_i[5] "Molar mass H2";
+  Modelica.Units.SI.MolarMass M_O2=syng.M_i[2] "Molar mass O2";
   //   Modelica.SIunits.MolarMass M_air = air.M "Molar mass air";
  // Real lambda_H "Stoichiometric ratio";
 //   Real lambda_O "Stoichiometric ratio";
-  Modelica.SIunits.MassFraction xi_O2 "Mass fraction of O2 in the air";
-  Modelica.SIunits.SpecificEnthalpy h_hein = syng.h;
-  Modelica.SIunits.SpecificEnthalpy h_haus = synga.h;
-  Modelica.SIunits.SpecificEnthalpy h_aein = air.h;
-  Modelica.SIunits.SpecificEnthalpy h_aaus = aira.h;
+  Modelica.Units.SI.MassFraction xi_O2 "Mass fraction of O2 in the air";
+  Modelica.Units.SI.SpecificEnthalpy h_hein=syng.h;
+  Modelica.Units.SI.SpecificEnthalpy h_haus=synga.h;
+  Modelica.Units.SI.SpecificEnthalpy h_aein=air.h;
+  Modelica.Units.SI.SpecificEnthalpy h_aaus=aira.h;
   SI.HeatFlowRate Q_flow_reac "Heat flow due to reaction";
 //   Modelica.SIunits.HeatFlowRate Q_heater "Reaction heat";
   SI.HeatFlowRate Q_flow_gas "Heat flow to/from syngas and air";
 
-  Modelica.SIunits.Current I;
-  Modelica.SIunits.Current I_is;
+  Modelica.Units.SI.Current I;
+  Modelica.Units.SI.Current I_is;
 
   // for heating up states:
   Boolean is_T_reac_min_reached(start=false) "true, if minimum temperature for FC reaction reached";

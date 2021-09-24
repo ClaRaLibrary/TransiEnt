@@ -1,33 +1,37 @@
-within TransiEnt.Producer.Gas.Electrolyzer.Systems;
+﻿within TransiEnt.Producer.Gas.Electrolyzer.Systems;
 model FeedInStation_Storage
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Producer.Gas.Electrolyzer.Base.PartialFeedInStation;
+  extends TransiEnt.Producer.Gas.Electrolyzer.Base.PartialFeedInStation(gasPortOut(Medium=medium_ng));
 
   // _____________________________________________
   //
@@ -35,6 +39,8 @@ model FeedInStation_Storage
   // _____________________________________________
 
 parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium=simCenter.gasModel3 "Hydrogen model to be used" annotation (Dialog(tab="General", group="General"));
+  parameter Boolean useFluidAdapter=true "true: fluid adapter to natural gas at gasPortOut is used, false: no adapter, then set medium_ng to medium_h2" annotation (Dialog(tab="General", group="General"));
+  parameter TILMedia.VLEFluidTypes.BaseVLEFluid medium_ng=simCenter.gasModel1 "Natural gas with H2 model to be used" annotation (Dialog(tab="General", group="General"));
   parameter SI.ActivePower P_el_n=1e6 "nominal power of electrolyser" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.ActivePower P_el_max=1.68*P_el_n "Maximum power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
   parameter SI.ActivePower P_el_min=0.05*P_el_n "Minimal power of electrolyzer" annotation (Dialog(tab="General", group="Electrolyzer"));
@@ -186,7 +192,7 @@ public
     Cspec_demAndRev_other=Cspec_demAndRev_other_water,
     Cspec_demAndRev_el=Cspec_demAndRev_el_electrolyzer)   annotation (Placement(transformation(extent={{-84,-16},{-54,16}})));
 protected
-  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredPressureBefore valve_pBeforeValveDes(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Valves.ValveDesiredPressureBefore valve_pBeforeValveDes(
     final medium=medium,
     p_BeforeValveDes=p_out,
     useFluidModelsForSummary=useFluidModelsForSummary) annotation (Placement(transformation(
@@ -198,7 +204,7 @@ protected
         rotation=90,
         origin={14,-37})));
 
-  TransiEnt.Basics.Adapters.Gas.RealH2_to_RealNG h2toNG(final medium_h2=medium) annotation (Placement(transformation(
+  TransiEnt.Basics.Adapters.Gas.RealH2_to_RealNG h2toNG(final medium_h2=medium, medium_ng=medium_ng) if useFluidAdapter annotation (Placement(transformation(
         extent={{8,-8},{-8,8}},
         rotation=90,
         origin={0,-72})));
@@ -220,21 +226,18 @@ public
         rotation=0,
         origin={40,-17})));
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 mix_H2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 mix_H2(
     redeclare model PressureLoss1 = PressureLossAtOutlet,
-    h(
-    start = h_start_junction),
-    p(
-    start = p_start_junction),
+    h(start=h_start_junction),
+    p(start=p_start_junction),
     medium=medium,
     volume=volume_junction,
-    initOption=initOption) if not useIsothMix
-                         annotation (Placement(transformation(
+    initOption=initOption) if not useIsothMix annotation (Placement(transformation(
         extent={{-8,8},{8,-8}},
         rotation=0,
         origin={8,-56})));
 protected
-  TransiEnt.Components.Gas.VolumesValvesFittings.ThreeWayValveRealGas_L1_simple threeWayValve(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Valves.ThreeWayValveRealGas_L1_simple threeWayValve(
     splitRatio_input=true,
     medium=medium,
     showExpertSummary=false,
@@ -269,7 +272,7 @@ public
     Ti=Ti,
     Td=Td)                                                   annotation (Placement(transformation(extent={{-2,55},{18,75}})));
 protected
-  TransiEnt.Components.Gas.VolumesValvesFittings.ValveDesiredMassFlow valve_mFlowDes(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Valves.ValveDesiredMassFlow valve_mFlowDes(
     medium=medium,
     Delta_p_low=dp_Low,
     Delta_p_high=dp_High) annotation (Placement(transformation(
@@ -372,7 +375,7 @@ Components.Boundaries.Gas.BoundaryRealGas_Txim_flow           boundary_Txim_flow
   Modelica.Blocks.Sources.RealExpression realExpression(y=if storage.p_gas >= p_minLow_constantDemand then m_flow_hydrogenDemand_constant else 0) annotation (Placement(transformation(extent={{11,-8},{-11,8}},
         rotation=-90,
         origin={59,-76})));
-  Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth mix_H2_isoth(
+  Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth mix_H2_isoth(
     p_start=p_start_junction,
     redeclare model PressureLoss1 = PressureLossAtOutlet,
     medium=medium,
@@ -384,6 +387,8 @@ Components.Boundaries.Gas.BoundaryRealGas_Txim_flow           boundary_Txim_flow
 protected
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph gasOut(
     vleFluidType=simCenter.gasModel1,
+    computeSurfaceTension=false,
+    deactivateDensityDerivatives=true,
     deactivateTwoPhaseRegion=true,
     h=gasPortOut.h_outflow,
     p=gasPortOut.p,
@@ -430,10 +435,12 @@ end if;
       points={{0,108},{0,82},{-12,82},{-12,69},{-2,69}},
       color={0,0,127},
       pattern=LinePattern.Dash));
-  connect(h2toNG.gasPortOut, gasPortOut) annotation (Line(
+  if useFluidAdapter then
+    connect(h2toNG.gasPortOut, gasPortOut) annotation (Line(
       points={{0,-80},{0,-96},{0,-96}},
       color={255,255,0},
       thickness=1.5));
+  end if;
   connect(storage.p_gas, controlTotalElyStorage.p_storage) annotation (Line(
       points={{47,-17},{72,-17},{72,65},{18,65}},
       color={0,0,127},
@@ -443,10 +450,17 @@ end if;
       color={255,255,0},
       thickness=1.5));
   if not useIsothMix then
-    connect(mix_H2.gasPort1, h2toNG.gasPortIn) annotation (Line(
+    if useFluidAdapter then
+      connect(mix_H2.gasPort1, h2toNG.gasPortIn) annotation (Line(
         points={{0,-56},{0,-60},{0,-64}},
         color={255,255,0},
         thickness=1.5));
+    else
+      connect(mix_H2.gasPort1, gasPortOut) annotation (Line(
+        points={{0,-56},{-30,-56},{-30,-96},{0,-96}},
+        color={255,255,0},
+        thickness=1.5));
+    end if;
     connect(valve_mFlowDes.gasPortOut, mix_H2.gasPort3) annotation (Line(
         points={{39.4286,-54},{39.4286,-56},{16,-56}},
         color={255,255,0},
@@ -456,10 +470,17 @@ end if;
         color={255,255,0},
         thickness=1.5));
   else
-    connect(mix_H2_isoth.gasPort1, h2toNG.gasPortIn) annotation (Line(
+    if useFluidAdapter then
+      connect(mix_H2_isoth.gasPort1, h2toNG.gasPortIn) annotation (Line(
         points={{-18,-50},{-18,-64},{0,-64}},
         color={255,255,0},
         thickness=1.5));
+    else
+      connect(mix_H2_isoth.gasPort1, gasPortOut) annotation (Line(
+        points={{-18,-50},{-24,-50},{-24,-96},{0,-96}},
+        color={255,255,0},
+        thickness=1.5));
+    end if;
     connect(valve_mFlowDes.gasPortOut, mix_H2_isoth.gasPort3) annotation (Line(
         points={{39.4286,-54},{39.4286,-50},{-2,-50}},
         color={255,255,0},

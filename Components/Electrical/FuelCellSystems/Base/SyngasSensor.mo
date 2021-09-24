@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Components.Electrical.FuelCellSystems.Base;
 model SyngasSensor "Sensor measuring fuel cell performance (including a simple gas burner model for burning of remainding H2 in flue gas)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -39,9 +43,9 @@ model SyngasSensor "Sensor measuring fuel cell performance (including a simple g
   parameter TransiEnt.Basics.Media.Gases.Gas_MoistAir Air=TransiEnt.Basics.Media.Gases.Gas_MoistAir() "Medium model of Air_AmbientCondition" annotation (choicesAllMatching);
 
   parameter Real eta_preheater = 1 "Efficiency of pre heater";
-  parameter Modelica.SIunits.Temperature T_ambient = simCenter.T_amb_const "Ambient temperature";
-  parameter Modelica.SIunits.SpecificEnthalpy H_UCH4 = 50.013e6 "Heating value of methane";
-    parameter Modelica.SIunits.SpecificEnthalpy H_UH2 = 120.9e6 "Heating value of hydrogen";
+  parameter Modelica.Units.SI.Temperature T_ambient=simCenter.T_amb_const "Ambient temperature";
+  parameter Modelica.Units.SI.SpecificEnthalpy H_UCH4=50.013e6 "Heating value of methane";
+  parameter Modelica.Units.SI.SpecificEnthalpy H_UH2=120.9e6 "Heating value of hydrogen";
 
   // _____________________________________________
   //
@@ -88,13 +92,13 @@ model SyngasSensor "Sensor measuring fuel cell performance (including a simple g
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.HeatFlowRate Q_flow_in_CH4  "CH4 heat flow rate";
-  Modelica.SIunits.HeatFlowRate Q_flow_exhaustGasChemical "Heat flow rate of the exhaust (GasChemical)";
-  Modelica.SIunits.HeatFlowRate Q_flow_in_evaporator "Heat flow rate of the evaporator";
-  Modelica.SIunits.HeatFlowRate Q_flow_exhaustGasLatent "Heat flow rate of the exhaust (GasLatent)";
-  Modelica.SIunits.HeatFlowRate Q_flow_in_preheater "Heat flow rate of the preheater";
-  Modelica.SIunits.HeatFlowRate Q_flow_in_CH4_preheat "Heat flow rate of the preheated CH4";
-  Modelica.SIunits.HeatFlowRate Q_flow_in_air_preheat "Heat flow rate of the preheated air";
+  Modelica.Units.SI.HeatFlowRate Q_flow_in_CH4 "CH4 heat flow rate";
+  Modelica.Units.SI.HeatFlowRate Q_flow_exhaustGasChemical "Heat flow rate of the exhaust (GasChemical)";
+  Modelica.Units.SI.HeatFlowRate Q_flow_in_evaporator "Heat flow rate of the evaporator";
+  Modelica.Units.SI.HeatFlowRate Q_flow_exhaustGasLatent "Heat flow rate of the exhaust (GasLatent)";
+  Modelica.Units.SI.HeatFlowRate Q_flow_in_preheater "Heat flow rate of the preheater";
+  Modelica.Units.SI.HeatFlowRate Q_flow_in_CH4_preheat "Heat flow rate of the preheated CH4";
+  Modelica.Units.SI.HeatFlowRate Q_flow_in_air_preheat "Heat flow rate of the preheated air";
 equation
   // _____________________________________________
   //

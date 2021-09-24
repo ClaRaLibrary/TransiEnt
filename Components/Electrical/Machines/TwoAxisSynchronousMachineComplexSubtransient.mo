@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.Machines;
+﻿within TransiEnt.Components.Electrical.Machines;
 model TwoAxisSynchronousMachineComplexSubtransient "ComplexPowerPort: Subtransient Two-Axis SM model with excitation voltage input"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -39,40 +43,36 @@ model TwoAxisSynchronousMachineComplexSubtransient "ComplexPowerPort: Subtransie
   parameter SI.Resistance R_a=0.3 "Resistance for losses"               annotation(Dialog(group="Physical constraints"));
   parameter SI.Reactance X_d_trans=0.25 "Transient reactance d-component"               annotation(Dialog(group="Physical constraints"));
   parameter SI.Reactance X_q_trans=0.3 "Transient reactance q-component"               annotation(Dialog(group="Physical constraints"));
-  parameter Modelica.SIunits.Time T_d0_trans=0.2 "Time constant d-component" annotation(Dialog(group="Physical constraints"));
-  parameter Modelica.SIunits.Time T_q0_trans=0.2 "Time constant q=component" annotation(Dialog(group="Physical constraints"));
+  parameter Modelica.Units.SI.Time T_d0_trans=0.2 "Time constant d-component" annotation (Dialog(group="Physical constraints"));
+  parameter Modelica.Units.SI.Time T_q0_trans=0.2 "Time constant q=component" annotation (Dialog(group="Physical constraints"));
 
   parameter SI.Reactance X_d_subtrans=0.5 "Subtransient reactance d-component"               annotation(Dialog(group="Physical constraints"));
   parameter SI.Reactance X_q_subtrans=0.25 "Subtransient reactance q-component"               annotation(Dialog(group="Physical constraints"));
-  parameter Modelica.SIunits.Time T_d0_subtrans=0.11 "Time constant d-component, subtransient part" annotation(Dialog(group="Physical constraints"));
-  parameter Modelica.SIunits.Time T_q0_subtrans=0.08 "Time constant q-component, subtransient part" annotation(Dialog(group="Physical constraints"));
+  parameter Modelica.Units.SI.Time T_d0_subtrans=0.11 "Time constant d-component, subtransient part" annotation (Dialog(group="Physical constraints"));
+  parameter Modelica.Units.SI.Time T_q0_subtrans=0.08 "Time constant q-component, subtransient part" annotation (Dialog(group="Physical constraints"));
 
   // _____________________________________________
   //
   //                    Variables
   // _____________________________________________
 
-  Modelica.SIunits.ComplexPower S_c;
+  Modelica.Units.SI.ComplexPower S_c;
 
-  Modelica.SIunits.Voltage v_d( start=0) annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Voltage v_q(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage v_d(start=0) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage v_q(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-  Modelica.SIunits.Current i_d(start=0)
-                                       annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Current i_q(start=0)
-                                       annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Current i_d(start=0) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Current i_q(start=0) annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-  Modelica.SIunits.Voltage e_FD;
+  Modelica.Units.SI.Voltage e_FD;
 
-  Modelica.SIunits.Voltage e_d_trans(start=0)
-                                             annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Voltage e_q_trans(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage e_d_trans(start=0) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage e_q_trans(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-  Modelica.SIunits.Voltage e_d_subtrans(start=0)
-                                                annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Voltage e_q_subtrans(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage e_d_subtrans(start=0) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage e_q_subtrans(start=v_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
 
-Modelica.SIunits.Angle theta_absolut(start=0.17453292519943295) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Angle theta_absolut(start=0.17453292519943295) annotation (Dialog(group="Initialization", showStartAttribute=true));
 
   // _____________________________________________
   //

@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Base;
+﻿within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Base;
 partial model PartialGasboiler "Full modulating gasboiler, partial model with splitted combustion and heat-transfer"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -98,13 +102,11 @@ partial model PartialGasboiler "Full modulating gasboiler, partial model with sp
   //
   //                   Interfaces
   // _____________________________________________
-  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set(value=Q_flow_set_internal) if (not holdTemperature) "Heat duty" annotation (Placement(transformation(extent={{-136,76},{-112,100}}),
+  TransiEnt.Basics.Interfaces.Thermal.HeatFlowRateIn Q_flow_set=Q_flow_set_internal if (not holdTemperature) "Heat duty" annotation (Placement(transformation(extent={{-136,76},{-112,100}}),
         iconTransformation(extent={{-106,76},{-82,100}})));
-  TransiEnt.Basics.Interfaces.General.TemperatureIn T_supply_set(
-    value=T_supply_set_internal,
-    min=273.15) if fixedSupplyTemperature "Supply temperature set value" annotation (Placement(transformation(extent={{-136,38},{-112,62}}), iconTransformation(extent={{-106,38},{-82,62}})));
-  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_HC_req(value=
-       m_flow_HC_req_internal) if fixedSupplyTemperature and (not holdTemperature) "Required heat carrier mass flow -> Usage not recommended, may lead to numerical instability!"  annotation (Placement(transformation(
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T_supply_set(min=273.15)=T_supply_set_internal if fixedSupplyTemperature "Supply temperature set value" annotation (Placement(transformation(extent={{-136,38},{-112,62}}), iconTransformation(extent={{-106,38},{-82,62}})));
+  TransiEnt.Basics.Interfaces.General.MassFlowRateOut m_flow_HC_req=
+       m_flow_HC_req_internal if fixedSupplyTemperature and (not holdTemperature) "Required heat carrier mass flow -> Usage not recommended, may lead to numerical instability!"  annotation (Placement(transformation(
         extent={{12,-12},{-12,12}},
         rotation=90,
         origin={-90,-124}), iconTransformation(
@@ -122,20 +124,18 @@ partial model PartialGasboiler "Full modulating gasboiler, partial model with sp
   // _____________________________________________
 protected
   Modelica.Blocks.Sources.RealExpression Q_flow_set_value(y=Q_flow_set_internal)  annotation (Placement(transformation(extent={{-102,80},{-82,100}})));
-  Modelica.Blocks.Logical.Switch boilerswitch(u2(value=switch)) annotation (Placement(transformation(extent={{-68,84},{-56,96}})));
+  Modelica.Blocks.Logical.Switch boilerswitch(u2=switch) annotation (Placement(transformation(extent={{-68,84},{-56,96}})));
   Modelica.Blocks.Sources.RealExpression offValue(y=0) annotation (Placement(transformation(extent={{-102,68},{-82,88}})));
-  Modelica.Blocks.Math.Abs abs1 annotation (Placement(transformation(extent={{-48,84},{-36,96}})));
-  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=Q_flow_n, uMin=0,
-    limitsAtInit=true)  annotation (
-      Placement(transformation(
+  Modelica.Blocks.Math.Abs abs1 annotation (Placement(transformation(extent={{-20,84},{-8,96}})));
+  Modelica.Blocks.Nonlinear.Limiter limiter(uMax=Q_flow_n, uMin=0) annotation (Placement(transformation(
         extent={{-6,-6},{6,6}},
         rotation=0,
-        origin={-24,90})));
-  Utilities.RT2EfficiencyCharline rT2EfficiencyCharline(condensing=condensing, referenceNCV=referenceNCV) annotation (Placement(transformation(extent={{10,40},{30,60}})));
+        origin={8,90})));
+  Utilities.RT2EfficiencyCharline rT2EfficiencyCharline(condensing=condensing, referenceNCV=referenceNCV) annotation (Placement(transformation(extent={{20,40},{40,60}})));
   Utilities.Duty2EfficiencyCharline duty2EfficiencyCharline(
     Q_flow_n=Q_flow_n,
     condensing=condensing,
-    referenceNCV=referenceNCV) annotation (Placement(transformation(extent={{10,80},{30,100}})));
+    referenceNCV=referenceNCV) annotation (Placement(transformation(extent={{20,80},{40,100}})));
   Modelica.Blocks.Math.Product product  annotation (Placement(transformation(extent={{56,66},{64,74}})));
   TransiEnt.Components.Gas.Combustion.FullConversion_idealGas combustion(lambda=lambda) annotation (Placement(transformation(extent={{64,16},{96,48}})));
   TransiEnt.Components.Sensors.TemperatureSensor temperatureWaterOut(medium=WaterMedium) annotation (Placement(transformation(
@@ -146,7 +146,15 @@ protected
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={-64,-110})));
+
 public
+ Modelica.Blocks.Logical.Switch boilerswitch2 "off-switch, when supply temperature is lower than return temperature"
+                                                                annotation (Placement(transformation(extent={{-42,78},{-28,92}})));
+  Modelica.Blocks.Logical.Greater greater annotation (Placement(transformation(extent={{-66,48},{-54,60}})));
+
+  Modelica.Blocks.Sources.RealExpression t_return(y=T_return) annotation (Placement(transformation(extent={{-98,36},{-78,56}})));
+  Modelica.Blocks.Sources.RealExpression t_max(y=T_supply_set_internal) annotation (Placement(transformation(extent={{-98,50},{-78,70}})));
+
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower(typeOfResource=TypeOfResource, is_setter=true) annotation (Placement(transformation(extent={{80,100},{100,120}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsHeat collectGwpEmissions(typeOfEnergyCarrierHeat=TypeOfEnergyCarrierHeat) annotation (Placement(transformation(extent={{100,100},{120,120}})));
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectCostsGeneral collectCosts(
@@ -224,11 +232,11 @@ equation
   connect(modelStatistics.costsCollector, collectCosts.costsCollector);
 
   connect(temperatureWaterIn.T, rT2EfficiencyCharline.T_return) annotation (Line(
-      points={{-75,-110},{-80,-110},{-80,50},{9.6,50}},
+      points={{-75,-110},{-82,-110},{-82,-48},{-20,-48},{-20,50},{19.6,50}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(abs1.y, limiter.u) annotation (Line(
-      points={{-35.4,90},{-31.2,90}},
+      points={{-7.4,90},{0.8,90}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(waterPortIn, temperatureWaterIn.port) annotation (Line(
@@ -249,10 +257,6 @@ equation
       points={{-81,78},{-76,78},{-76,85.2},{-69.2,85.2}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(boilerswitch.y, abs1.u) annotation (Line(
-      points={{-55.4,90},{-49.2,90}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(gasPortIn, combustion.gasPortIn) annotation (Line(
       points={{-120,0},{52,0},{52,32},{64,32}},
       color={255,213,170},
@@ -264,18 +268,24 @@ equation
       thickness=0.5,
       smooth=Smooth.None));
   connect(rT2EfficiencyCharline.eta, product.u2) annotation (Line(
-      points={{30.2,50},{40,50},{40,67.6},{55.2,67.6}},
+      points={{40.2,50},{48,50},{48,67.6},{55.2,67.6}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(limiter.y, duty2EfficiencyCharline.Q_flow_set) annotation (Line(
-      points={{-17.4,90},{9.6,90}},
+      points={{14.6,90},{19.6,90}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(duty2EfficiencyCharline.eta, product.u1) annotation (Line(
-      points={{30.6,90},{40,90},{40,72.4},{55.2,72.4}},
+      points={{40.6,90},{48,90},{48,72.4},{55.2,72.4}},
       color={0,0,127},
       smooth=Smooth.None));
 
+  connect(t_max.y, greater.u1) annotation (Line(points={{-77,60},{-76,60},{-76,54},{-67.2,54}}, color={0,0,127}));
+  connect(t_return.y, greater.u2) annotation (Line(points={{-77,46},{-77,49.2},{-67.2,49.2}}, color={0,0,127}));
+  connect(greater.y, boilerswitch2.u2) annotation (Line(points={{-53.4,54},{-48,54},{-48,85},{-43.4,85}}, color={255,0,255}));
+  connect(offValue.y, boilerswitch2.u3) annotation (Line(points={{-81,78},{-48,78},{-48,79.4},{-43.4,79.4}}, color={0,0,127}));
+  connect(boilerswitch.y, boilerswitch2.u1) annotation (Line(points={{-55.4,90},{-43.4,90},{-43.4,90.6}}, color={0,0,127}));
+  connect(boilerswitch2.y, abs1.u) annotation (Line(points={{-27.3,85},{-24,85},{-24,90},{-21.2,90}}, color={0,0,127}));
   annotation (defaultComponentName="GasBoiler",
   Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-120,
             -120},{120,120}}),
@@ -291,13 +301,13 @@ equation
           textString="m_flow_fuel")}),
     Icon(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}}),
         graphics),Documentation(info="<html>
-<h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
+<p><b><span style=\"color: #008000;\">1. Purpose of model</span></b></p>
 <p>Partial model for small gas boilers.</p>
-<h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
+<p><b><span style=\"color: #008000;\">2. Level of detail, physical effects considered, and physical insight</span></b></p>
 <p>(Purely technical component without physical modeling.)</p>
-<h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
+<p><b><span style=\"color: #008000;\">3. Limits of validity </span></b></p>
 <p>(Purely technical component without physical modeling.)</p>
-<h4><span style=\"color: #008000\">4. Interfaces</span></h4>
+<p><b><span style=\"color: #008000;\">4. Interfaces</span></b></p>
 <p>waterPortIn: fluidPortIn</p>
 <p>waterPorOut: fluidPortOut</p>
 <p>Q_flow_set: heat flow rate in [W]</p>
@@ -305,18 +315,19 @@ equation
 <p>gasPortOut: outlet for ideal gas</p>
 <p>T_supply_set: input for supply temperature in [K]</p>
 <p>m_flow_HC_rec: output for mass flow rate in [kg/s] (Required heat carrier mass flow -&gt; Usage not recommended, may lead to numerical instability!)</p>
-<h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
+<p><b><span style=\"color: #008000;\">5. Nomenclature</span></b></p>
 <p>(no elements)</p>
-<h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
+<p><b><span style=\"color: #008000;\">6. Governing Equations</span></b></p>
 <p>(no equations)</p>
-<h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
+<p><b><span style=\"color: #008000;\">7. Remarks for Usage</span></b></p>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">8. Validation</span></h4>
+<p><b><span style=\"color: #008000;\">8. Validation</span></b></p>
 <p>(no validation or testing necessary)</p>
-<h4><span style=\"color: #008000\">9. References</span></h4>
+<p><b><span style=\"color: #008000;\">9. References</span></b></p>
 <p>(no remarks)</p>
-<h4><span style=\"color: #008000\">10. Version History</span></h4>
+<p><b><span style=\"color: #008000;\">10. Version History</span></b></p>
 <p>Model created by Paul Kernstock (paul.kernstock@tu-harburg.de) July 2015 </p>
 <p>Revised by Lisa Andresen (andresen@tuhh.de), Aug 2015</p>
+<p>Modified by Anne Hagemeier (anne.hagemeier@umsicht.fraunhofer.de), July 2021 (added switch to prevent that boiler generates heat when T_return &gt; T_max )</p>
 </html>"));
 end PartialGasboiler;

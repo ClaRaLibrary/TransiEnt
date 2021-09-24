@@ -1,25 +1,29 @@
-within TransiEnt.Components.Electrical.Machines.Base;
+﻿within TransiEnt.Components.Electrical.Machines.Base;
 partial model PartialInductionMotor "Partial Model for the induction machines"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
  // _____________________________________________
   //
@@ -48,11 +52,11 @@ constant Complex j_comp(re=0,im=1);
   // _____________________________________________
 
   parameter SI.Frequency f_n=simCenter.f_n;
-  parameter Modelica.SIunits.Frequency f_rot_n=591.3/60;
+  parameter Modelica.Units.SI.Frequency f_rot_n=591.3/60;
   parameter SI.Voltage v_n=simCenter.v_n;
   parameter Real N_pp=5;
 
-  parameter Modelica.SIunits.Torque tau_bd=20000;
+  parameter Modelica.Units.SI.Torque tau_bd=20000;
   parameter Real slip_bd=0.0445;
   parameter Real slip_n=0.0145;
 
@@ -71,18 +75,16 @@ constant Complex j_comp(re=0,im=1);
 
   //Modelica.SIunits.Frequency f_internal=switch1.y "frequency of rotor";
   Real slip(start=slip_n) "slip of asynchronous machine";
-  Modelica.SIunits.AngularFrequency omega_rot(start=2*Modelica.Constants.pi*f_rot_n)
-                                                                                   annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Frequency f_rotor(start=f_rot_n)
-                                                  annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Torque tau_m "mechanical torque";
-  Modelica.SIunits.Angle delta_asy(start=-0.08726646259971647)=epp.delta annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.AngularFrequency omega_rot(start=2*Modelica.Constants.pi*f_rot_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Frequency f_rotor(start=f_rot_n) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Torque tau_m "mechanical torque";
+  Modelica.Units.SI.Angle delta_asy(start=-0.08726646259971647) = epp.delta annotation (Dialog(group="Initialization", showStartAttribute=true));
 
- Modelica.SIunits.PowerFactor cosphi=abs(S.re)/Modelica.ComplexMath.'abs'(S);
-  Modelica.SIunits.ComplexPower S(re(start=P_n), im(start=0)) annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Voltage v_grid(start=v_n) = epp.v annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.PowerFactor cosphi=abs(S.re)/Modelica.ComplexMath.abs(S);
+  Modelica.Units.SI.ComplexPower S(re(start=P_n), im(start=0)) annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Voltage v_grid(start=v_n) = epp.v annotation (Dialog(group="Initialization", showStartAttribute=true));
 
- Modelica.SIunits.Power P_mech=-(mpp.tau * omega_rot);
+  Modelica.Units.SI.Power P_mech=-(mpp.tau*omega_rot);
 
   // _____________________________________________
   //
@@ -119,7 +121,7 @@ equation
 
    tau_m=-mpp.tau;
 
-  f_rotor=Modelica.SIunits.Conversions.to_Hz(omega_rot);
+  f_rotor=Modelica.Units.Conversions.to_Hz(omega_rot);
 
   omega_rot=der(mpp.phi);
 

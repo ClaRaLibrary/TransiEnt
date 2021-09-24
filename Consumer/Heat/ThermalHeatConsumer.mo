@@ -1,26 +1,30 @@
-within TransiEnt.Consumer.Heat;
+﻿within TransiEnt.Consumer.Heat;
 model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity and heat losses"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -33,13 +37,13 @@ model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity a
   //                 Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Temperature T_set=20+273.15 "Setpoint for consumer (room) temperature";
-  parameter Modelica.SIunits.Temperature T_start=T_set "Start value for consumer (room) temperature";
+  parameter Modelica.Units.SI.Temperature T_set=20 + 273.15 "Setpoint for consumer (room) temperature";
+  parameter Modelica.Units.SI.Temperature T_start=T_set "Start value for consumer (room) temperature";
   parameter String T_amb_path="/ambientcsv/TemperatureHH_900s_01012012_0000_31122012_2345.txt" "Path relative to source directory";
 
- parameter Modelica.SIunits.CoefficientOfHeatTransfer kc_nom=1.75e7 "Constant heat transfer coefficient of radiator";
-  parameter Modelica.SIunits.ThermalConductance G=4e7 "Constant thermal conductance of consumer";
-  parameter Modelica.SIunits.HeatCapacity C=2.48e12 "Heat capacity of consumer (= cp*m)";
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer kc_nom=1.75e7 "Constant heat transfer coefficient of radiator";
+  parameter Modelica.Units.SI.ThermalConductance G=4e7 "Constant thermal conductance of consumer";
+  parameter Modelica.Units.SI.HeatCapacity C=2.48e12 "Heat capacity of consumer (= cp*m)";
 
   parameter ClaRa.Basics.Units.MassFlowRate m_flow_nom=3860 "Nominal mass flow rate";
   parameter ClaRa.Basics.Units.Pressure Delta_p_nom=0.4e5 "Valve Nominal pressure loss";
@@ -49,13 +53,13 @@ model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity a
   parameter Real y_start=1 "Initial value of output";
   parameter ClaRa.Basics.Units.Length d_i=1.6;
 
-  parameter Modelica.SIunits.Pressure dp_HX_nom=0 "Nominal pressure loss in heat exchanger";
-  parameter Modelica.SIunits.SpecificEnthalpy h_nom=1e5 "Nominal specific enthalpy in heat exchanger";
-  parameter Modelica.SIunits.Length d_t=0.1 "Outer diameter of HX pipes";
-  parameter Modelica.SIunits.Length L=1 "Length of heat exchanger pipes";
+  parameter Modelica.Units.SI.Pressure dp_HX_nom=0 "Nominal pressure loss in heat exchanger";
+  parameter Modelica.Units.SI.SpecificEnthalpy h_nom=1e5 "Nominal specific enthalpy in heat exchanger";
+  parameter Modelica.Units.SI.Length d_t=0.1 "Outer diameter of HX pipes";
+  parameter Modelica.Units.SI.Length L=1 "Length of heat exchanger pipes";
   parameter Integer Nt=1 "Number of heat exchanger tubes";
 
-  parameter Modelica.SIunits.Time Ti_ctrl=0.5;
+  parameter Modelica.Units.SI.Time Ti_ctrl=0.5;
   parameter Real k_ctrl=1 "Gain of Proportional block";
   parameter Real yMax=1 "Upper limit of output";
   parameter Real yMin=-CTRL_T_room.y_max "Lower limit of output";
@@ -114,7 +118,7 @@ model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity a
     y_max=yMax,
     y_min=yMin,
     y_inactive=y_inactive,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(extent={{30,42},{50,62}})));
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(extent={{30,42},{50,62}})));
 
   Modelica.Thermal.HeatTransfer.Celsius.FromKelvin                        to_DegC                                                                            annotation (Placement(transformation(extent={{0,42},{20,62}})));
 
@@ -138,12 +142,12 @@ model ThermalHeatConsumer "Thermal Heat Consumer based on a room with capacity a
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.HeatFlowRate Q_flow_cons=fluidPortIn.m_flow*(actualStream(fluidPortIn.h_outflow)-actualStream(fluidPortOut.h_outflow));
-  Modelica.SIunits.Pressure dp=fluidPortOut.p-fluidPortIn.p;
-  Modelica.SIunits.Temperature deltaT_water(displayUnit="K")=HX_Consumer.summary.inlet.T-HX_Consumer.summary.outlet.T;
-  Modelica.SIunits.ThermalConductance G_eff_water = Q_flow_cons/deltaT_water;
-  Modelica.SIunits.Temperature deltaT_room(displayUnit="K")=T_Room.T-tamb.y1;
-  Modelica.SIunits.ThermalConductance G_eff_room = Q_flow_cons/deltaT_room;
+  Modelica.Units.SI.HeatFlowRate Q_flow_cons=fluidPortIn.m_flow*(actualStream(fluidPortIn.h_outflow) - actualStream(fluidPortOut.h_outflow));
+  Modelica.Units.SI.Pressure dp=fluidPortOut.p - fluidPortIn.p;
+  Modelica.Units.SI.Temperature deltaT_water(displayUnit="K") = HX_Consumer.summary.inlet.T - HX_Consumer.summary.outlet.T;
+  Modelica.Units.SI.ThermalConductance G_eff_water=Q_flow_cons/deltaT_water;
+  Modelica.Units.SI.Temperature deltaT_room(displayUnit="K") = T_Room.T - tamb.y1;
+  Modelica.Units.SI.ThermalConductance G_eff_room=Q_flow_cons/deltaT_room;
 
   parameter Real y_inactive=1 "Reference value for actuated variable (used before controller is activated)";
 equation

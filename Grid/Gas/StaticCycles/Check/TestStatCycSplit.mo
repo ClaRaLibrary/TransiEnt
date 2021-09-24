@@ -1,30 +1,34 @@
-within TransiEnt.Grid.Gas.StaticCycles.Check;
+﻿within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycSplit
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe1(
     medium=simCenter.gasModel1,
     N_cv=3,
     p_start=linspace(
@@ -48,7 +52,7 @@ model TestStatCycSplit
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={-34,0})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe2(
     medium=simCenter.gasModel1,
     N_cv=3,
     h_start=ones(pipe2.N_cv)*Init.pipe2.h_in,
@@ -71,7 +75,7 @@ model TestStatCycSplit
         extent={{-14,-5},{14,5}},
         rotation=270,
         origin={4,-35})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe3(
     medium=simCenter.gasModel1,
     N_cv=3,
     h_start=ones(pipe3.N_cv)*Init.pipe3.h_in,
@@ -110,9 +114,7 @@ model TestStatCycSplit
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-72,0})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(volume=0.01, p(
-                                                                                                                       start = Init.split.p))
-                                                                                                                                             annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(volume=0.01, p(start=Init.split.p)) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={4,0})));

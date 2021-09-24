@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer;
+﻿within TransiEnt.Producer.Gas.BiogasPlant.HeatTransfer;
 model HeatTransferThroughCylinderWall "heat model for stirred tank reactor"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -35,17 +39,17 @@ model HeatTransferThroughCylinderWall "heat model for stirred tank reactor"
   //        Constants and Hidden Parameters
   // _____________________________________________
 
-  final parameter Modelica.SIunits.Diameter D_i=geometryCSTR.D_i "Inner Diameter of CSTR";
-  final parameter Modelica.SIunits.Diameter D_o=geometryCSTR.D_o "Outer Diameter of CSTR";
-  final parameter Modelica.SIunits.Height height_fluid=geometryCSTR.Height_fluid "Height of fluid in CSTR";
-  final parameter Modelica.SIunits.Height height_cylinder=geometryCSTR.Height_tankWall "Height of tank wall";
+  final parameter Modelica.Units.SI.Diameter D_i=geometryCSTR.D_i "Inner Diameter of CSTR";
+  final parameter Modelica.Units.SI.Diameter D_o=geometryCSTR.D_o "Outer Diameter of CSTR";
+  final parameter Modelica.Units.SI.Height height_fluid=geometryCSTR.Height_fluid "Height of fluid in CSTR";
+  final parameter Modelica.Units.SI.Height height_cylinder=geometryCSTR.Height_tankWall "Height of tank wall";
 
   // _____________________________________________
   //
   //              Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Thickness thickness_topCover "Thickness of the top cover";
+  parameter Modelica.Units.SI.Thickness thickness_topCover "Thickness of the top cover";
   replaceable parameter TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG4_var medium "Medium to be used";
 
   // _____________________________________________
@@ -61,9 +65,9 @@ model HeatTransferThroughCylinderWall "heat model for stirred tank reactor"
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.HeatFlowRate Q_flow_loss "Entire heat flow loss to the environment";
-  input Modelica.SIunits.ReynoldsNumber Re "Reynolds number" annotation (Dialog(group="Variables"));
-  input Modelica.SIunits.MassFraction xi[medium.nc - 1] "Mass fraction of the medium" annotation (Dialog(group="Variables"));
+  Modelica.Units.SI.HeatFlowRate Q_flow_loss "Entire heat flow loss to the environment";
+  input Modelica.Units.SI.ReynoldsNumber Re "Reynolds number" annotation (Dialog(group="Variables"));
+  input Modelica.Units.SI.MassFraction xi[medium.nc - 1] "Mass fraction of the medium" annotation (Dialog(group="Variables"));
   input Real C1 "Geometrical Coefficient in Nusselt-Equation" annotation (Dialog(group="Variables"));
 
   // _____________________________________________

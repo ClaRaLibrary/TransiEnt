@@ -1,32 +1,36 @@
-within TransiEnt.Producer.Heat.Gas2Heat;
+﻿within TransiEnt.Producer.Heat.Gas2Heat;
 model GB_L1_idContrMFlow_temp "Model for gas boilers with a pump with ideal mass flow control to get a given outlet temperature"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit;
+  extends TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit(final useSecondGasPort=false);
   extends TransiEnt.Producer.Heat.Base.XtH_L1_idContrMFlow_temp_base;
 
 
@@ -37,6 +41,11 @@ model GB_L1_idContrMFlow_temp "Model for gas boilers with a pump with ideal mass
 
   parameter Real eta = 0.95 "Coefficient of performance at nominal conditions according to EN14511" annotation(Dialog(group="Technical Specifications"));
 
+  parameter SI.SpecificEnthalpy HoC_fuel=40e6 "Heat of combustion of fuel, will be used if gasport is deactivated in model" annotation (Dialog(group="Fundamental Definitions", enable=useConstantHoC), choices(
+      choice=simCenter.HeatingValue_natGas "Natural gas",
+      choice=simCenter.HeatingValue_LightOil "Oil",
+      choice=simCenter.HeatingValue_Wood "Wood pellets"));
+
   // _____________________________________________
   //
   //             Variable Declarations
@@ -45,7 +54,7 @@ model GB_L1_idContrMFlow_temp "Model for gas boilers with a pump with ideal mass
 public
   SI.EnthalpyFlowRate H_flow "Consumed gas enthalpy flow rate";
 
-  Modelica.Blocks.Math.Division division if useGasPort annotation (Placement(transformation(extent={{-68,78},{-48,98}})));
+  Modelica.Blocks.Math.Division division annotation (Placement(transformation(extent={{-68,78},{-48,98}})));
 
    Modelica.Blocks.Sources.RealExpression realExpression1(y=H_flow) annotation (Placement(transformation(extent={{-96,84},{-76,104}})));
 
@@ -55,15 +64,17 @@ public
   // _____________________________________________
 
 
+  Modelica.Blocks.Sources.RealExpression HoC_constant(y=HoC_fuel) if not useGasPort annotation (Placement(transformation(extent={{-98,52},{-78,72}})));
 
 equation
   H_flow=-Q_flow/eta;
 
   if useGasPort then
-  connect(vleNCVSensor.NCV,division. u2) annotation (Line(points={{53,92},{44,92},{44,110},{-100,110},{-100,82},{-70,82}}, color={0,0,127}));
-  connect(m_flow_gas,division. y) annotation (Line(points={{8,88},{-47,88}},   color={0,0,127}));
+    connect(vleNCVSensor.NCV,division. u2) annotation (Line(points={{53,92},{44,92},{44,110},{-100,110},{-100,82},{-70,82}}, color={0,0,127}));
+    connect(m_flow_gas,division. y) annotation (Line(points={{8,88},{-47,88}},   color={0,0,127}));
   end if;
   connect(division.u1, realExpression1.y) annotation (Line(points={{-70,94},{-75,94}}, color={0,0,127}));
+  connect(HoC_constant.y, division.u2) annotation (Line(points={{-77,62},{-70,62},{-70,72},{-74,72},{-74,82},{-70,82}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{22,18},{58,-18}},

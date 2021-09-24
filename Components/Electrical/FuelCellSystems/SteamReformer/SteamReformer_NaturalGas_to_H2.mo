@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer;
+﻿within TransiEnt.Components.Electrical.FuelCellSystems.SteamReformer;
 model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction kinetics depending on input gascomposition, including mass fraction balance and reaction volume (input natural gas, output H2 rich syngas)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -35,11 +39,11 @@ model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction
   //             Visible Parameters
   // _____________________________________________
 
-  parameter Modelica.SIunits.Pressure p_reformer = 1.013e5 "Pressure in the reformer";
-  parameter Modelica.SIunits.Density d_kat = 1900 "Density of catalyst";
+  parameter Modelica.Units.SI.Pressure p_reformer=1.013e5 "Pressure in the reformer";
+  parameter Modelica.Units.SI.Density d_kat=1900 "Density of catalyst";
   parameter Real scale_kat = 1 "Influencing factor of the reaction heat under the assumption that more reactions occur than through concentration changes observed";
   parameter Real eps = 1e-6 "Accuracy of the calculation";
-  parameter Modelica.SIunits.Volume V_reac = 0.001 "Volume of the reactor";
+  parameter Modelica.Units.SI.Volume V_reac=0.001 "Volume of the reactor";
   parameter Real eps_kat = 0.4 "Porosity of the catalyst";
 
   // === Order of components in vectors: {CH4 , CO , H2 , H2O} ===
@@ -61,10 +65,10 @@ model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction
   parameter TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG7_var Syngas=TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG7_var() "Medium model of Syngas" annotation (choicesAllMatching);
 
   // parameters
-  parameter Modelica.SIunits.SpecificHeatCapacity cp = 850;
-  parameter Modelica.SIunits.Mass m = V_reac*d_kat*(1-eps_kat);
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp=850;
+  parameter Modelica.Units.SI.Mass m=V_reac*d_kat*(1 - eps_kat);
 
-  parameter Modelica.SIunits.Temperature T_reformer_min = 500+273.15;
+  parameter Modelica.Units.SI.Temperature T_reformer_min=500 + 273.15;
 
   // _____________________________________________
   //
@@ -107,23 +111,23 @@ model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction
   Real K_i[4] "Adsorption coefficient constant of the component i {CH4, CO, H2, H2O}";
   Real x_i[7]( start= {0.35,0.1,0,0.45,0.00001,0,0.1}) "Mole fraction of the gas mixture in the reformer during the reaction "
                                                                                                                               annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.MassFraction xi_ch4 "Mass fraction CH4";
-  Modelica.SIunits.MassFraction xi_o2 "Mass fraction O2";
-  Modelica.SIunits.MassFraction xi_co2 "Mass fraction CO2";
-  Modelica.SIunits.MassFraction xi_h2o "Mass fraction H2O";
-  Modelica.SIunits.MassFraction xi_h2 "Mass fraction H2";
-  Modelica.SIunits.MassFraction xi_co "Mass fraction CO";
-  Modelica.SIunits.MoleFraction x_n2 "Mole fraction N2";
-  Modelica.SIunits.Pressure p_ch4 = sg.p_i[1]/1e5 "Mass fraction CH4";
-  Modelica.SIunits.Pressure p_o2 = sg.p_i[2]/1e5 "Mass fraction 02";
-  Modelica.SIunits.Pressure p_co2 = sg.p_i[3]/1e5 "Mass fraction CO2";
-  Modelica.SIunits.Pressure p_h2o = sg.p_i[4]/1e5 "Mass fraction H2O";
-  Modelica.SIunits.Pressure p_h2 = sg.p_i[5]/1e5 "Mass fraction H2";
-  Modelica.SIunits.Pressure p_co = sg.p_i[6]/1e5 "Mass fraction CO";
+  Modelica.Units.SI.MassFraction xi_ch4 "Mass fraction CH4";
+  Modelica.Units.SI.MassFraction xi_o2 "Mass fraction O2";
+  Modelica.Units.SI.MassFraction xi_co2 "Mass fraction CO2";
+  Modelica.Units.SI.MassFraction xi_h2o "Mass fraction H2O";
+  Modelica.Units.SI.MassFraction xi_h2 "Mass fraction H2";
+  Modelica.Units.SI.MassFraction xi_co "Mass fraction CO";
+  Modelica.Units.SI.MoleFraction x_n2 "Mole fraction N2";
+  Modelica.Units.SI.Pressure p_ch4=sg.p_i[1]/1e5 "Mass fraction CH4";
+  Modelica.Units.SI.Pressure p_o2=sg.p_i[2]/1e5 "Mass fraction 02";
+  Modelica.Units.SI.Pressure p_co2=sg.p_i[3]/1e5 "Mass fraction CO2";
+  Modelica.Units.SI.Pressure p_h2o=sg.p_i[4]/1e5 "Mass fraction H2O";
+  Modelica.Units.SI.Pressure p_h2=sg.p_i[5]/1e5 "Mass fraction H2";
+  Modelica.Units.SI.Pressure p_co=sg.p_i[6]/1e5 "Mass fraction CO";
   Real m_ges;
-  Modelica.SIunits.Temperature T_reformer(start = simCenter.T_amb_const) "Temperature of the reformer section" annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Temperature T_gas = (T_reformer + START.T)/2 "Assumption of the average temperature between reformer temperature and inlet temperature";
-  Modelica.SIunits.MassFlowRate m_flow = feed.m_flow "Mass flow rate of the gas mixture through the reformer";
+  Modelica.Units.SI.Temperature T_reformer(start=simCenter.T_amb_const) "Temperature of the reformer section" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Temperature T_gas=(T_reformer + START.T)/2 "Assumption of the average temperature between reformer temperature and inlet temperature";
+  Modelica.Units.SI.MassFlowRate m_flow=feed.m_flow "Mass flow rate of the gas mixture through the reformer";
   SI.HeatFlowRate Q_flow_reac "Heat flow due to reactions";
 
   TILMedia.Gas_pT sg(

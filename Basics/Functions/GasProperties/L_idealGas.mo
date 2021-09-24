@@ -1,26 +1,30 @@
-within TransiEnt.Basics.Functions.GasProperties;
+﻿within TransiEnt.Basics.Functions.GasProperties;
 function L_idealGas "Calculates mass of air required for combustion with a given lamba"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -37,7 +41,7 @@ function L_idealGas "Calculates mass of air required for combustion with a given
 
   input TILMedia.GasTypes.BaseGas FuelMedium "fuel medium record used";
   input Real lambda "air ratio";
-  input Modelica.SIunits.MassFraction[:] xi_in "composition of fuel as massfraction";
+  input Modelica.Units.SI.MassFraction[:] xi_in "composition of fuel as massfraction";
   output Real L "massflowrate of air required for combustion of given fuel at given lambda";
 
   // _____________________________________________
@@ -46,17 +50,15 @@ function L_idealGas "Calculates mass of air required for combustion with a given
   // _____________________________________________
 
 protected
-  TILMedia.GasObjectFunctions.GasPointerExternalObject FuelPointer = TILMedia.GasObjectFunctions.GasPointerExternalObject(mediumName=FuelMedium.concatGasName, flags=7, xi=xi_in, nc=FuelMedium.nc_propertyCalculation, condensingIndex=FuelMedium.condensingIndex, instanceName="FuelPointer");
-
   parameter String[ncF] CompsF=TransiEnt.Basics.Functions.GasProperties.shortenCompName(FuelMedium.gasNames) "Component names in fuel gas";
   parameter Integer ncF = FuelMedium.nc_propertyCalculation "Number of components in fuel gas";
   parameter TransiEnt.Basics.Records.GasProperties.OxygenDemand OxygenDemand "record containing Oxygen demand for full conversion of elements";
 
-  Modelica.SIunits.MolarMass M_F[ncF] "molar masses of the fuels components";
-  Modelica.SIunits.AmountOfSubstance[ncF] n_dot_F "molar flowrate of components in fuelport per kg fuelstream";
-  Modelica.SIunits.AmountOfSubstance[5] n_flow_elements "molar flowrate of elements per kilogram fuel stream";
-  Modelica.SIunits.AmountOfSubstance[5] omin "minimum Oxygen demand for lambda=1. vector only for connection purposes";
-  Modelica.SIunits.MassFraction[ncF] xi;
+  Modelica.Units.SI.MolarMass M_F[ncF] "molar masses of the fuels components";
+  Modelica.Units.SI.AmountOfSubstance[ncF] n_dot_F "molar flowrate of components in fuelport per kg fuelstream";
+  Modelica.Units.SI.AmountOfSubstance[5] n_flow_elements "molar flowrate of elements per kilogram fuel stream";
+  Modelica.Units.SI.AmountOfSubstance[5] omin "minimum Oxygen demand for lambda=1. vector only for connection purposes";
+  Modelica.Units.SI.MassFraction[ncF] xi;
 
 algorithm
   // _____________________________________________
@@ -76,7 +78,7 @@ algorithm
 
   //get molar masses of fuel's components
   for i in 1:ncF loop
-     M_F[i] :=TILMedia.GasObjectFunctions.molarMass_n(i - 1, FuelPointer);
+     M_F[i] :=TILMedia.GasFunctions.molarMass_n(FuelMedium,i - 1);
   end for;
 
   //calculate moleflowrates in fuelport

@@ -5,7 +5,11 @@ Check
 Line
 Line_PS
 SeparableLine
+Line_RL
 PiModel
 PiModelQS
 PiModelComplex
 PiModelComplex_advanced
+IdealCoupling
+ElectricBusbarComplex
+IdealPhaseShifter

@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.Machines;
+﻿within TransiEnt.Components.Electrical.Machines;
 model SynchronousMachineComplex "ComplexPowerPort: SM model with electric circuit, excitation voltage input"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -43,8 +47,8 @@ public
   // _____________________________________________
 
 
-  parameter Modelica.SIunits.Reactance X_d=1.1 "Synchronous inductance of machine" annotation(Dialog(group="Physical constraints"));
-  parameter Modelica.SIunits.Resistance R_a=0.3 "Resistance for losses" annotation(Dialog(group="Physical constraints"));
+  parameter Modelica.Units.SI.Reactance X_d=1.1 "Synchronous inductance of machine" annotation (Dialog(group="Physical constraints"));
+  parameter Modelica.Units.SI.Resistance R_a=0.3 "Resistance for losses" annotation (Dialog(group="Physical constraints"));
 
 
 
@@ -59,11 +63,11 @@ public
   SI.ComplexCurrent i(re(start=0), im(start=0))             annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.ComplexVoltage v(re(start=v_n), im(start=0))               annotation (Dialog(group="Initialization", showStartAttribute=true));
   SI.ComplexVoltage e;
-  Modelica.SIunits.ComplexPower S_c;
-  Modelica.SIunits.ComplexImpedance Z "Complex impedance modeled by just an inductance (no ohmic resistance)";
+  Modelica.Units.SI.ComplexPower S_c;
+  Modelica.Units.SI.ComplexImpedance Z "Complex impedance modeled by just an inductance (no ohmic resistance)";
 
 
-  Modelica.SIunits.ComplexPower S_rotor;
+  Modelica.Units.SI.ComplexPower S_rotor;
 
 
   // _____________________________________________
@@ -89,7 +93,7 @@ end if;
 
   //voltage connection to epp
 
-  epp.v = Modelica.ComplexMath.'abs'(v);
+  epp.v =Modelica.ComplexMath.abs(v);
   Modelica.ComplexMath.arg(v)=delta_lsm;
 
 
@@ -101,7 +105,7 @@ end if;
 
   //Link to E_input
 
-  Modelica.ComplexMath.'abs'(e) = E_input "Induced voltage depending on excitation";
+  Modelica.ComplexMath.abs(e) = E_input "Induced voltage depending on excitation";
 
   //electric power in and out
 

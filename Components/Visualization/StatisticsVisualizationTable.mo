@@ -1,34 +1,38 @@
-within TransiEnt.Components.Visualization;
+﻿within TransiEnt.Components.Visualization;
 model StatisticsVisualizationTable
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
-  Modelica.SIunits.Energy E_cons;
-  Modelica.SIunits.Energy E_prod;
+
+
+
+  Modelica.Units.SI.Energy E_cons;
+  Modelica.Units.SI.Energy E_prod;
   TransiEnt.Basics.Units.MonetaryUnit Costs;
-  Modelica.SIunits.Mass m_CO2;
+  Modelica.Units.SI.Mass m_CO2;
   parameter Real decimalSpaces=0;
   Real x1;
   outer TransiEnt.ModelStatistics modelStatistics;
-  Modelica.SIunits.Heat Q_prod;
-  Modelica.SIunits.Heat Q_cons;
+  Modelica.Units.SI.Heat Q_prod;
+  Modelica.Units.SI.Heat Q_cons;
 
 equation
   E_cons=modelStatistics.electricPower.E_consumer;

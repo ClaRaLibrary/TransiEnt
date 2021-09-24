@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Gas.Check;
+﻿within TransiEnt.Grid.Gas.Check;
 model TestGasGridHamburg "High pressure gas grid of Hamburg with constant gross calorific value at consumption side"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   extends TransiEnt.Basics.Icons.Checkmodel;
 
@@ -39,7 +43,7 @@ model TestGasGridHamburg "High pressure gas grid of Hamburg with constant gross 
       choice=2 "TransiEnt formulation 1a",
       choice=3 "TransiEnt formulation 1b",
       choice=4 "Quasi-Stationary"));
-  replaceable model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable model PressureLoss = Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4                     constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
 
   // Variable declarations
   SI.Mass m_demand(
@@ -207,7 +211,7 @@ public
         rotation=180,
         origin={47,-66})));
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Leversen(final volume=gasGridHamburg.volume_junction) annotation (Placement(transformation(extent={{96,-76},{116,-56}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Leversen(final volume=gasGridHamburg.volume_junction) annotation (Placement(transformation(extent={{96,-76},{116,-56}})));
 equation
   der(m_demand) = V_flow_demand_stp.y1;
   der(m_H2_max) = maxH2MassFlow_Rei.m_flow_H2_max + maxH2MassFlow_Lev.m_flow_H2_max + maxH2MassFlow_Tor.m_flow_H2_max;
@@ -323,7 +327,7 @@ equation
       StopTime=2592000,
       Interval=900,
       Tolerance=1e-06,
-      __Dymola_Algorithm="Radau"),
+      __Dymola_Algorithm="Dassl"),
     __Dymola_experimentSetupOutput(inputs=false, events=false),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

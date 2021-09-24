@@ -1,25 +1,29 @@
-within TransiEnt.Storage.Electrical.Specifications;
+﻿within TransiEnt.Storage.Electrical.Specifications;
 record LeadAcidBattery "Typical parameters of lead acid battery"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Storage.Base.GenericStorageParameters(
      E_start=E_min, E_max=P_max_unload*24*3600, E_min=0.3*E_max, P_max_unload=420, P_grad_max=P_max_unload/0.1, eta_unload=0.9, eta_load=0.9,selfDischargeRate=0.01/100/3600,
      P_max_load_over_SOC=[0, 1; 0.01, 1; 0.02, 1; 0.03, 1; 0.04, 1; 0.05, 1; 0.06, 1; 0.07, 1; 0.08, 1; 0.09, 1; 0.1, 1; 0.11, 1; 0.12, 1; 0.13, 1; 0.14, 1; 0.15, 1; 0.16, 1; 0.17, 1; 0.18, 1; 0.19, 1; 0.2, 1; 0.21, 1; 0.22, 1; 0.23, 1; 0.24, 1; 0.25, 1; 0.26, 1; 0.27, 1; 0.28, 1; 0.29, 1; 0.3, 1; 0.31, 1; 0.32, 1; 0.33, 1; 0.34, 1; 0.35, 1; 0.36, 1; 0.37, 1; 0.38, 1; 0.39, 1; 0.4, 1; 0.41, 1; 0.42, 1; 0.43, 1; 0.44, 1; 0.45, 0.998114352; 0.46, 0.996685646; 0.47, 0.994712346; 0.48, 0.992191161; 0.49, 0.989118773; 0.5, 0.985491839; 0.51, 0.981306986; 0.52, 0.976560817; 0.53, 0.971249905; 0.54, 0.965370795; 0.55, 0.958920006; 0.56, 0.951894026; 0.57, 0.944289315; 0.58, 0.936102305; 0.59, 0.927329398; 0.6, 0.917966964; 0.61, 0.908011347; 0.62, 0.897458858; 0.63, 0.886305777; 0.64, 0.874548355; 0.65, 0.862182811; 0.66, 0.849205331; 0.67, 0.835612071; 0.68, 0.821399154; 0.69, 0.806562671; 0.7, 0.791098677; 0.71, 0.775003198; 0.72, 0.758272224; 0.73, 0.740901711; 0.74, 0.722887581; 0.75, 0.704225722; 0.76, 0.684911985; 0.77, 0.664942187; 0.78, 0.644312109; 0.79, 0.623017495; 0.8, 0.601054054; 0.81, 0.578417455; 0.82, 0.555103333; 0.83, 0.531107283; 0.84, 0.506424861; 0.85, 0.481051587; 0.86, 0.454982941; 0.87, 0.428214361; 0.88, 0.400741249; 0.89, 0.372558963; 0.9, 0.343662822; 0.91, 0.314048104; 0.92, 0.283710045; 0.93, 0.252643838; 0.94, 0.220844633; 0.95, 0.188307539; 0.96, 0.15502762; 0.97, 0.120999894; 0.98, 0.086219339; 0.99, 0.050680883; 1, 0.01; 1.0001, 0],

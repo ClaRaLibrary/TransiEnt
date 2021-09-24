@@ -1,25 +1,29 @@
-within TransiEnt.Components.Gas.GasCleaning.Check;
+﻿within TransiEnt.Components.Gas.GasCleaning.Check;
 model TestPressureSwingAdsorptionReactor_L1
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   parameter TransiEnt.Basics.Media.Gases.VLE_VDIWA_SG6_var vle_sg;
@@ -64,18 +68,18 @@ model TestPressureSwingAdsorptionReactor_L1
     height=-4e5,
     offset=5e5)    annotation (Placement(transformation(extent={{46,34},{26,54}})));
 
-  Modelica.SIunits.MassFlowRate m_flow_CH4_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[1]);
-  Modelica.SIunits.MassFlowRate m_flow_CH4_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[1] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[1]);
-  Modelica.SIunits.MassFlowRate m_flow_CO2_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[2]);
-  Modelica.SIunits.MassFlowRate m_flow_CO2_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[2] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[2]);
-  Modelica.SIunits.MassFlowRate m_flow_H2O_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[3]);
-  Modelica.SIunits.MassFlowRate m_flow_H2O_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[3] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[3]);
-  Modelica.SIunits.MassFlowRate m_flow_H2_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[4]);
-  Modelica.SIunits.MassFlowRate m_flow_H2_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[4] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[4]);
-  Modelica.SIunits.MassFlowRate m_flow_CO_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[5]);
-  Modelica.SIunits.MassFlowRate m_flow_CO_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[5] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[5]);
-  Modelica.SIunits.MassFlowRate m_flow_N2_in=pSA.gasPortIn.m_flow*(1-sum(inStream(pSA.gasPortIn.xi_outflow)));
-  Modelica.SIunits.MassFlowRate m_flow_N2_out=-(pSA.gasPortOut_hydrogen.m_flow*(1 - sum(pSA.gasPortOut_hydrogen.xi_outflow)) + pSA.gasPortOut_offGas.m_flow*(1 - sum(pSA.gasPortOut_offGas.xi_outflow)));
+  Modelica.Units.SI.MassFlowRate m_flow_CH4_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[1]);
+  Modelica.Units.SI.MassFlowRate m_flow_CH4_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[1] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[1]);
+  Modelica.Units.SI.MassFlowRate m_flow_CO2_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[2]);
+  Modelica.Units.SI.MassFlowRate m_flow_CO2_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[2] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[2]);
+  Modelica.Units.SI.MassFlowRate m_flow_H2O_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[3]);
+  Modelica.Units.SI.MassFlowRate m_flow_H2O_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[3] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[3]);
+  Modelica.Units.SI.MassFlowRate m_flow_H2_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[4]);
+  Modelica.Units.SI.MassFlowRate m_flow_H2_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[4] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[4]);
+  Modelica.Units.SI.MassFlowRate m_flow_CO_in=pSA.gasPortIn.m_flow*inStream(pSA.gasPortIn.xi_outflow[5]);
+  Modelica.Units.SI.MassFlowRate m_flow_CO_out=-(pSA.gasPortOut_hydrogen.m_flow*pSA.gasPortOut_hydrogen.xi_outflow[5] + pSA.gasPortOut_offGas.m_flow*pSA.gasPortOut_offGas.xi_outflow[5]);
+  Modelica.Units.SI.MassFlowRate m_flow_N2_in=pSA.gasPortIn.m_flow*(1 - sum(inStream(pSA.gasPortIn.xi_outflow)));
+  Modelica.Units.SI.MassFlowRate m_flow_N2_out=-(pSA.gasPortOut_hydrogen.m_flow*(1 - sum(pSA.gasPortOut_hydrogen.xi_outflow)) + pSA.gasPortOut_offGas.m_flow*(1 - sum(pSA.gasPortOut_offGas.xi_outflow)));
 
 equation
   connect(combiTimeTable.y, source.xi) annotation (Line(points={{-47,-6},{-47,-6},{-38,-6}}, color={0,0,127}));

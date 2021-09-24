@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Wind.Controller;
+﻿within TransiEnt.Producer.Electrical.Wind.Controller;
 model PitchController_SI_dt_df "Pitch Controller for WTG with df/dt synthetic inertia control"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -47,8 +51,8 @@ model PitchController_SI_dt_df "Pitch Controller for WTG with df/dt synthetic in
   parameter Boolean strict=false "= true, if strict limits with noEvent(..)"
     annotation (Evaluate=true, choices(checkBox=true), Dialog(tab="Advanced"));
   parameter Real lambdaOpt "Optimal tip speed ratio";
-  parameter Modelica.SIunits.Density rho "Density";
-  parameter Modelica.SIunits.Length radius "Rotor Radius";
+  parameter Modelica.Units.SI.Density rho "Density";
+  parameter Modelica.Units.SI.Length radius "Rotor Radius";
   parameter Real cp_opt "Optimal capacity factor";
   parameter Real J "Wind turbine moment ofinertia";
   parameter Real P_el_n "Nominal electrical Power";
@@ -137,12 +141,9 @@ Modelica.Blocks.Logical.Switch switchToFullLoad annotation (Placement(transforma
     controllerType=controllerTypePitchCtrl,
     Td=Td,
     k=k,
-    limitsAtInit=true,
     xi_start=beta_start,
     y_start=beta_start,
-    initType=Modelica.Blocks.Types.InitPID.NoInit)
-                                               annotation (Placement(transformation(extent={{-38,-60},
-            {-18,-40}})));
+    initType=Modelica.Blocks.Types.Init.NoInit) annotation (Placement(transformation(extent={{-38,-60},{-18,-40}})));
   Modelica.Blocks.Interfaces.RealInput
             u_s "Connector of setpoint input signal" annotation (Placement(
         transformation(extent={{-116,-104},{-84,-72}},rotation=0)));
@@ -183,13 +184,10 @@ Modelica.Blocks.Logical.Switch switchToHalt1
     annotation (Placement(transformation(extent={{-66,-74},{-46,-54}})));
   Modelica.Blocks.Sources.RealExpression P_inertia(y=-2*H_e*der_f_grid*u_m)
     annotation (Placement(transformation(extent={{-74,-116},{-22,-84}})));
-  Modelica.Blocks.Nonlinear.Limiter
-                           limiter1(                     strict=strict, limitsAtInit=limitsAtInit,
+  Modelica.Blocks.Nonlinear.Limiter limiter1(
+    strict=strict,
     uMax=P_el_n*0.1,
-    uMin=0)
-    annotation (Placement(transformation(extent={{-8,-110},{12,-90}},
-                                                                    rotation=
-            0)));
+    uMin=0) annotation (Placement(transformation(extent={{-8,-110},{12,-90}}, rotation=0)));
   TransiEnt.Basics.Interfaces.General.AngularVelocityIn omega_is "Connector of setpoint input signal"
                                          annotation (Placement(transformation(
         extent={{-16,-16},{16,16}},

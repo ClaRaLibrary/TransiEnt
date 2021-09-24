@@ -1,33 +1,37 @@
-within TransiEnt.Components.Gas.Compressor;
+﻿within TransiEnt.Components.Gas.Compressor;
 model ValveAndCompressor_dp
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
   extends TransiEnt.Basics.Icons.Model;
 
   // _____________________________________________
@@ -196,29 +200,29 @@ public
       revenues=compressor.summary.costs.revenues)) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
 protected
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 junction(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 junction(
     medium=medium,
     volume=volumeJunction,
     initOption=initOptionJunction,
     p_start=p_startJunction,
     h_start=h_startJunction,
     xi_start=xi_startJunction,
-    T_start=T_startJunction)      annotation (Placement(transformation(extent={{20,-10},{40,10}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 split(
+    T_start=T_startJunction) annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 split(
     medium=medium,
     volume=volumeSplit,
     initOption=initOptionSplit,
     p_start=p_startSplit,
     h_start=h_startSplit,
     xi_start=xi_startSplit,
-    T_start=T_startSplit)      annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+    T_start=T_startSplit) annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Controller.ControllerValveAndCompressor_dp                                     controllerValveOrCompressor annotation (Placement(transformation(extent={{-10,32},{10,52}})));
 
   Compressor compressor(
     medium=medium,
     presetVariableType="dp",
     use_Delta_p_input=true) annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  VolumesValvesFittings.ValveDesiredMassFlow valve(medium=medium, useFluidModelsForSummary=useFluidModelsForSummary) annotation (Placement(transformation(extent={{-10,-36},{10,-24}})));
+  VolumesValvesFittings.Valves.ValveDesiredMassFlow valve(medium=medium, useFluidModelsForSummary=useFluidModelsForSummary) annotation (Placement(transformation(extent={{-10,-36},{10,-24}})));
   TransiEnt.Components.Sensors.RealGas.MassFlowSensor massFlowSensoreBefore(medium=medium) annotation (Placement(transformation(extent={{-70,0},{-50,20}})));
 
 

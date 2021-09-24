@@ -1,0 +1,13 @@
+PowerPlantType
+PowerPlantSystem
+ElectricalStorageType
+ElectricalStorageSystem
+PowerToGasType
+PowerToGasSystem
+GasStorageType
+GasStorageSystem
+LocalDemand
+LocalRenewableProduction
+CO2System
+HeatingGrid
+Records

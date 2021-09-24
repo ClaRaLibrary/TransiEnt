@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Heat.HeatGridControl.Check;
+﻿within TransiEnt.Grid.Heat.HeatGridControl.Check;
 model TestDemandInDifferentCities "Test to check resulting heating demand profiles in different cities"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -32,19 +36,19 @@ model TestDemandInDifferentCities "Test to check resulting heating demand profil
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.Heat Q_BER;
-  Modelica.SIunits.Heat Q_HH;
-  Modelica.SIunits.Energy E_BER;
-  Modelica.SIunits.Energy E_HH;
+  Modelica.Units.SI.Heat Q_BER;
+  Modelica.Units.SI.Heat Q_HH;
+  Modelica.Units.SI.Energy E_BER;
+  Modelica.Units.SI.Energy E_HH;
   // _____________________________________________
   //
   //           Instances of other Classes
   // _____________________________________________
 
     inner TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-200,120},{-180,140}})));
-  TransiEnt.Basics.Tables.ElectricGrid.ElectricityDemand_HH_900s_2012 Electricity_Demand_HH annotation (Placement(transformation(extent={{-14,72},{6,92}})));
+  TransiEnt.Basics.Tables.ElectricGrid.PowerData.ElectricityDemand_HH_900s_2012 Electricity_Demand_HH annotation (Placement(transformation(extent={{-14,72},{6,92}})));
   TransiEnt.Basics.Tables.Ambient.Temperature_Hamburg_900s_2012 temperatureHH_900s_01012012_0000_31122012_2345 annotation (Placement(transformation(extent={{-14,32},{6,52}})));
-  TransiEnt.Basics.Tables.ElectricGrid.ElectricityDemand_Berlin_900s_2012 Electricity_Demand_BER annotation (Placement(transformation(extent={{-16,-66},{4,-46}})));
+  TransiEnt.Basics.Tables.ElectricGrid.PowerData.ElectricityDemand_Berlin_900s_2012 Electricity_Demand_BER annotation (Placement(transformation(extent={{-16,-66},{4,-46}})));
   TransiEnt.Basics.Tables.Ambient.Temperature_Berlin_3600s_2012 temperature_BER_3600s_01012012_31122012 annotation (Placement(transformation(extent={{-14,-108},{6,-88}})));
   HeatDemandPrediction.HeatingGenerationCharline CharLineHeatHamburg(CharLine=HeatDemandPrediction.HeatingDemandCharacteristic.CharLineHeatDemandHH()) annotation (Placement(transformation(extent={{24,32},{44,52}})));
   HeatDemandPrediction.HeatingGenerationCharline CharLineHeatBerlin(CharLine=HeatDemandPrediction.HeatingDemandCharacteristic.CharLineHeatDemandBER()) annotation (Placement(transformation(extent={{24,-108},{44,-88}})));

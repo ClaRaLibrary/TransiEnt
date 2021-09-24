@@ -1,25 +1,29 @@
-within TransiEnt.Producer.Electrical.Conventional.Components;
+﻿within TransiEnt.Producer.Electrical.Conventional.Components;
 model DetailedSteamPowerPlant "A closed steam cycle including single reheat, feedwater tank, LP and HP preheaters"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -36,23 +40,23 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
   //
   //             Visible Parameters
   // _____________________________________________
-  parameter Modelica.SIunits.Power P_n=577e6 "Nominal Power. Possible values: from 900MW to 500MW";
-  parameter Modelica.SIunits.Power P_min=0.25*P_n "Minimum possible load";
+  parameter Modelica.Units.SI.Power P_n=577e6 "Nominal Power. Possible values: from 900MW to 500MW";
+  parameter Modelica.Units.SI.Power P_min=0.25*P_n "Minimum possible load";
   parameter Real k_PID=0.5;//1.305 "Gain of controller";
-  parameter Modelica.SIunits.Time Ti_PID=650 "Time constant of Integrator block";
+  parameter Modelica.Units.SI.Time Ti_PID=650 "Time constant of Integrator block";
                                             //216.667
-  parameter Modelica.SIunits.Time startTime=2000;
+  parameter Modelica.Units.SI.Time startTime=2000;
   //Real Target;
-  parameter Modelica.SIunits.Time Tu=127.469 "equivalent dead time of steam generation";
+  parameter Modelica.Units.SI.Time Tu=127.469 "equivalent dead time of steam generation";
                                         //127.469
-  parameter Modelica.SIunits.Time Tg=204.966 "balancing time of steam generation";
-  parameter Modelica.SIunits.Time Ts=60.2459 "Integration time of steam storage";
+  parameter Modelica.Units.SI.Time Tg=204.966 "balancing time of steam generation";
+  parameter Modelica.Units.SI.Time Ts=60.2459 "Integration time of steam storage";
   parameter Boolean SetValueMinimumLoad=false "If P_set<P_min: If 'true', power plant is shut down - if 'false', power plant operates with minimum load";
   // _____________________________________________
   //
   //                Variables
   // _____________________________________________
-  Modelica.SIunits.Power P_output;
+  Modelica.Units.SI.Power P_output;
   Real efficiency;
   // _____________________________________________
   //
@@ -208,7 +212,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     y_max=NOM.Pump_cond.P_pump*10,
     y_min=NOM.Pump_cond.P_pump/200,
     y_start=INIT.Pump_cond.P_pump,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(extent={{232,-162},{212,-142}})));
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(extent={{232,-162},{212,-142}})));
   ClaRa.Visualisation.Quadruple quadruple6
     annotation (Placement(transformation(extent={{-14,-172},{46,-152}})));
   ClaRa.Components.VolumesValvesFittings.Fittings.SplitVLE_L2_Y join_IP(
@@ -388,11 +392,10 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     yMax=1,
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     k=100,
-    initType=Modelica.Blocks.Types.InitPID.InitialOutput,
+    initType=Modelica.Blocks.Types.Init.InitialOutput,
     y_start=1,
     yMin=0.01,
-    Ti=10000)
-    annotation (Placement(transformation(extent={{-188,-72},{-168,-52}})));
+    Ti=10000) annotation (Placement(transformation(extent={{-188,-72},{-168,-52}})));
 
   Modelica.Blocks.Continuous.FirstOrder measurement(
     initType=Modelica.Blocks.Types.Init.InitialOutput,
@@ -458,7 +461,7 @@ model DetailedSteamPowerPlant "A closed steam cycle including single reheat, fee
     controllerType=Modelica.Blocks.Types.SimpleController.PI,
     k=200,
     Tau_i=200,
-    initOption=if ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.SteadyState) then 798 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.InitialState) then 797 elseif ((Modelica.Blocks.Types.InitPID.InitialOutput) == Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState) then 795 else 501) annotation (Placement(transformation(extent={{122,-202},{102,-182}})));
+    initOption=if ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.SteadyState) then 798 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialOutput) then 796 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 797 elseif ((Modelica.Blocks.Types.Init.InitialOutput) == Modelica.Blocks.Types.Init.InitialState) then 795 else 501) annotation (Placement(transformation(extent={{122,-202},{102,-182}})));
   ClaRa.Visualisation.Quadruple quadruple8
     annotation (Placement(transformation(extent={{-27,-8},{27,8}},
         rotation=0,

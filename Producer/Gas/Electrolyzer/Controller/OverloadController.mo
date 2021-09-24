@@ -1,26 +1,30 @@
 ﻿within TransiEnt.Producer.Gas.Electrolyzer.Controller;
 model OverloadController "Control overload operation of electrolyzer"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -84,7 +88,7 @@ model OverloadController "Control overload operation of electrolyzer"
   Modelica.Blocks.Logical.Hysteresis hysteresis_coolingDown(
     uLow=0,
     pre_y_start=false,
-    uHigh=t_overload)
+    uHigh=if t_overload>0 then t_overload else 1)
                annotation (Placement(transformation(extent={{10,-10},{30,10}})));
   Modelica.Blocks.Sources.RealExpression Input_overload_hysteresis(y=overloadLevel) annotation (Placement(transformation(extent={{-36,-10},{-16,10}})));
 equation
@@ -100,31 +104,35 @@ equation
 
 algorithm
   //when (P_el_set>P_el_overload and state==1) or (overloadLevel<=t_overload and P_el_set>P_el_overload and state==3) then
-  when (P_el_set>P_el_overload and (state==1 or state==4)) or (overloadLevel<=t_overload and P_el_set>P_el_overload and state==3 and hysteresis_coolingDown.y==false) then
+  when t_overload>0 and ((P_el_set>P_el_overload and (state==1 or state==4)) or (overloadLevel<=t_overload and P_el_set>P_el_overload and state==3 and hysteresis_coolingDown.y==false)) then
     state :=2;
   end when;
 
-  when P_el_set<P_el_overload and P_el_set>P_el_cooldown and (state==2 or state==1 or (state==3 and hysteresis_coolingDown.y==false)) then
+  when t_overload>0 and (P_el_set<P_el_overload and P_el_set>P_el_cooldown and (state==2 or state==1 or (state==3 and hysteresis_coolingDown.y==false))) then
     state:=4;
   end when;
 
-  when (overloadLevel>=t_overload or P_el_set<=P_el_cooldown) and (state==2 or state==4) then
+  when t_overload>0 and ((overloadLevel>=t_overload or P_el_set<=P_el_cooldown) and (state==2 or state==4)) then
     state:=3;
   end when;
 
-  when overloadLevel<=0 and state==3 then
+  when t_overload>0 and (overloadLevel<=0 and state==3) then
     state:=1;
   end when;
 
 equation
-  der(overloadLevel) = if state==2 then +1 elseif state==3 then -coolingToHeatingRatio else 0;
+  if t_overload>0 then
+    der(overloadLevel) = if state==2 then +1 elseif state==3 then -coolingToHeatingRatio else 0;
+  else
+    overloadLevel = 0;
+  end if;
 
   if state==1 or state==2 or state==4 then
     P_el_ely=P_el_set;
   elseif state==3 then
     P_el_ely=min(P_el_set, P_el_cooldown);
   else
-    P_el_ely=1e99; // if-statement must have "else" so it acts like an error state. Normally it should always have state 1-3
+    P_el_ely=1e99; // if-statement must have "else" so it acts like an error state. Normally it should always have state 1-4
   end if;
 
   connect(Input_overload_hysteresis.y,hysteresis_coolingDown. u) annotation (Line(points={{-15,0},{-15,0},{8,0}}, color={0,0,127}));

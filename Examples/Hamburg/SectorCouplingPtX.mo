@@ -1,25 +1,29 @@
-within TransiEnt.Examples.Hamburg;
+﻿within TransiEnt.Examples.Hamburg;
 model SectorCouplingPtX "Coupled electric, district heating and gas grids for Hamburg with PtX 2035"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -72,7 +76,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
       choice=2 "TransiEnt formulation 1a",
       choice=3 "TransiEnt formulation 1b",
       choice=4 "Quasi-Stationary"));
-  replaceable model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4_constVisc constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
+  replaceable model PressureLoss = TransiEnt.Components.Gas.VolumesValvesFittings.Base.PhysicalPL_L4           constrainedby ClaRa.Basics.ControlVolumes.Fundamentals.PressureLoss.PressureLossBaseVLE_L4 "Pressure loss model" annotation (Dialog(group="Fundamental Definitions"), choicesAllMatching);
 
   //Consumers
   parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.P "|Controller|Type of controller";
@@ -202,7 +206,7 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
     isSecondaryControlActive=true,
     P_el_n=simCenter.generationPark.P_el_n_GUDTS,
     P_el_init=UC.P_init[UC.schedule.GUDTS],
-    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric(k_Q_flow=1/GUDTS.Q_flow_n_CHP, k_P_el=GUDTS.P_el_n),
+    PQCharacteristics=TransiEnt.Producer.Combined.LargeScaleCHP.Base.Characteristics.PQ_Characteristics_CCPGeneric(),
     Q_flow_n_CHP=180e6) "Combined cycle plant Tiefstack" annotation (Placement(transformation(extent={{199,-162},{224,-135}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_hxim_flow massflow_Tm_flow5(m_flow_const=1000, h_const=4.2e3*60) annotation (Placement(transformation(
         extent={{-4,-3},{4,3}},
@@ -267,8 +271,9 @@ model SectorCouplingPtX "Coupled electric, district heating and gas grids for Ha
         extent={{-9,-5},{9,5}},
         rotation=270,
         origin={-6,-105})));
-  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler PtH(Q_flow_n=HKW_Wedel.Q_flow_n_CHP, usePowerPort=true) annotation (Placement(transformation(extent={{-42,-158},{-22,-138}})));
-  TransiEnt.Producer.Heat.Power2Heat.Controller.PtH_limiter ptH_limiter(Q_flow_PtH_max=PtH.Q_flow_n) annotation (Placement(transformation(extent={{-166,-178},{-146,-158}})));
+  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler.ElectricBoiler PtH(
+   Q_flow_n=HKW_Wedel.Q_flow_n_CHP, usePowerPort=true) annotation (Placement(transformation(extent={{-42,-158},{-22,-138}})));
+  TransiEnt.Producer.Heat.Power2Heat.ElectricBoiler.Controller.PtH_limiter ptH_limiter(Q_flow_PtH_max=PtH.Q_flow_n) annotation (Placement(transformation(extent={{-166,-178},{-146,-158}})));
   Modelica.Blocks.Sources.RealExpression P_set_Pth(y=min(P_set_Curt.y, PtH.Q_flow_n)) annotation (Placement(transformation(extent={{-194,-178},{-174,-158}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_set_PtH(y=-ptH_limiter.Q_flow_set_PtH) annotation (Placement(transformation(
         extent={{-9,-5},{9,5}},
@@ -629,8 +634,8 @@ public
         extent={{7,-7},{-7,7}},
         rotation=180,
         origin={69,-516})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth junction_Leversen(final volume=gasGridHamburg.volume_junction) annotation (Placement(transformation(extent={{118,-526},{138,-506}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth JunctionHHMitte(volume=1) annotation (Placement(transformation(extent={{100,-453},{80,-473}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth junction_Leversen(final volume=gasGridHamburg.volume_junction) annotation (Placement(transformation(extent={{118,-526},{138,-506}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth JunctionHHMitte(volume=1) annotation (Placement(transformation(extent={{100,-453},{80,-473}})));
   TransiEnt.Producer.Gas.Electrolyzer.Systems.FeedInStation_CavernComp FeedIn_Tornesch(
     T_out=simCenter.T_ground,
     p_out=p_ely,
@@ -679,7 +684,7 @@ public
         extent={{-23,23},{23,-23}},
         rotation=180,
         origin={-88.5,-555})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth Mix_Leversen(volume=V_mixNG) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth Mix_Leversen(volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={-86,-610})));
@@ -707,8 +712,8 @@ public
         extent={{23,-23},{-23,23}},
         rotation=180,
         origin={185.5,-595})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth Mix_Tornesch(volume=V_mixNG) annotation (Placement(transformation(extent={{-172,-318},{-152,-298}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2_isoth Mix_Reitbrook(volume=V_mixNG) annotation (Placement(transformation(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth Mix_Tornesch(volume=V_mixNG) annotation (Placement(transformation(extent={{-172,-318},{-152,-298}})));
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2_isoth Mix_Reitbrook(volume=V_mixNG) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={184,-516})));
@@ -903,14 +908,15 @@ equation
   connect(massflow_Tm_flow4.T, T_return1.y) annotation (Line(points={{114.8,-212},{118,-212},{118,-206},{120.4,-206}}, color={0,0,127}));
   connect(massflow_Tm_flow4.m_flow, m_flow_return5.y) annotation (Line(points={{114.8,-213.8},{118,-213.8},{118,-215},{121.5,-215}}, color={0,0,127}));
   connect(PtH.fluidPortIn, HKW_Wedel.outlet) annotation (Line(
-      points={{-41.8,-148},{-64.8,-148},{-64.8,-150.167}},
+      points={{-42.4,-148},{-64.8,-148},{-64.8,-150.167}},
       color={175,0,0},
       thickness=0.5));
   connect(P_set_Pth.y, ptH_limiter.P_RE_curtail) annotation (Line(points={{-173,-168},{-167,-168}}, color={0,0,127}));
-  connect(PtH.Q_flow_set, Q_flow_set_PtH.y) annotation (Line(points={{-32,-138},{-32,-133.5},{-31,-133.5},{-31,-130.9}}, color={0,0,127}));
+  connect(PtH.Q_flow_set, Q_flow_set_PtH.y) annotation (Line(points={{-42.4,-147},{-42.4,-133.5},{-31,-133.5},{-31,-130.9}},
+                                                                                                                         color={0,0,127}));
   connect(P_set_Curt_after_P2X.y, P_RE_curtailement.u) annotation (Line(points={{153,216},{162,216},{162,226},{171,226},{171,211.58}}, color={0,0,127}));
   connect(PtH.epp, Demand.epp) annotation (Line(
-      points={{-32,-158},{-44,-158},{-44,-90},{-44,-90},{-44,52},{231.4,52}},
+      points={{-32,-158.2},{-44,-158.2},{-44,-90},{-44,-90},{-44,52},{231.4,52}},
       color={0,135,135},
       thickness=0.5));
   connect(discretizePrediction.P_predictions, mod.u) annotation (Line(points={{-181,86},{-168.4,86},{-168.4,85}}, color={0,0,127}));
@@ -949,7 +955,7 @@ equation
       color={175,0,0},
       thickness=0.5));
   connect(spiVo_Wedel.inlet, PtH.fluidPortOut) annotation (Line(
-      points={{-17.8,-148},{-19.9,-148},{-22,-148}},
+      points={{-17.8,-148},{-21.8,-148},{-21.8,-148}},
       color={175,0,0},
       thickness=0.5));
   connect(spiVo_Wedel.Q_flow_set, spiVoWedel.Q_flow_set) annotation (Line(points={{-8,-138},{-8,-138},{-8,-126.08},{-6,-126.08}}, color={0,0,127}));
@@ -1076,7 +1082,7 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Leversen.gasPort2, FeedIn_Leversen.gasPortOut) annotation (Line(
-      points={{-86,-600},{-86,-578.23},{-87.35,-578.23}},
+      points={{-86,-600},{-86,-577.77},{-88.5,-577.77}},
       color={255,255,0},
       thickness=1.5));
   connect(gainLev.y, FeedIn_Leversen.P_el_set) annotation (Line(
@@ -1092,7 +1098,7 @@ equation
       color={0,0,127},
       pattern=LinePattern.Dash));
   connect(Mix_Tornesch.gasPort2, FeedIn_Tornesch.gasPortOut) annotation (Line(
-      points={{-162,-318},{-162,-330.77},{-161.35,-330.77}},
+      points={{-162,-318},{-162,-331.23},{-162.5,-331.23}},
       color={255,255,0},
       thickness=1.5));
   connect(maxH2MassFlow_Tor.m_flow_H2_max, FeedIn_Tornesch.m_flow_feedIn) annotation (Line(
@@ -1108,7 +1114,7 @@ equation
       color={255,255,0},
       thickness=1.5));
   connect(Mix_Reitbrook.gasPort2, FeedIn_Reitbrook.gasPortOut) annotation (Line(
-      points={{184,-526},{184,-571.77},{184.35,-571.77}},
+      points={{184,-526},{184,-572.23},{185.5,-572.23}},
       color={255,255,0},
       thickness=1.5));
   connect(maxH2MassFlow_Lev.gasPortOut, Mix_Leversen.gasPort1) annotation (Line(

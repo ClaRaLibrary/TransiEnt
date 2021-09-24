@@ -1,25 +1,29 @@
 ﻿within TransiEnt.Grid.Heat.HeatGridAnalysis;
 model OpenLoop_MassFlow_and_Pressure_Controlled
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -89,7 +93,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
     varname="T_supply display",
     x1=HeatingCondenser.summary.outlet.T - 273.15) annotation (Placement(transformation(extent={{-56,-154},{-10,-134}})));
 
-  Components.Heat.PipeFlowVLE_L4_Simple supplyPipe(
+  Components.Heat.VolumesValvesFittings.Pipes.PipeFlowVLE_L4_Simple supplyPipe(
     length=20e3,
     diameter_i=0.7,
     z_in=0,
@@ -180,7 +184,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
     annotation (Placement(transformation(extent={{144,-48},{176,-30}})));
   Modelica.Blocks.Math.Gain gain(k=1/100)
     annotation (Placement(transformation(extent={{-200,-14},{-192,-6}})));
-  Components.Heat.PipeFlowVLE_L4_Simple returnPipe2(
+  Components.Heat.VolumesValvesFittings.Pipes.PipeFlowVLE_L4_Simple returnPipe2(
     diameter_i=0.7,
     z_in=0,
     z_out=0,
@@ -255,7 +259,7 @@ model OpenLoop_MassFlow_and_Pressure_Controlled
     T=8,
     k=0.9)
     annotation (Placement(transformation(extent={{-168,6},{-154,20}})));
-  Components.Heat.PipeFlowVLE_L4_Simple returnPipe1(
+  Components.Heat.VolumesValvesFittings.Pipes.PipeFlowVLE_L4_Simple returnPipe1(
     z_in=0,
     z_out=0,
     showData=true,

@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.Grid;
+﻿within TransiEnt.Components.Electrical.Grid;
 model PiModelQS "PiModell using quasistationary interfaces"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -55,44 +59,33 @@ protected
   //                  Interfaces
   // _____________________________________________
 public
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Resistor Resistor(R_ref=l*r)
-                        annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Resistor Resistor(R_ref=l*r) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
         origin={-46,0})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.VariableInductor
-    Inductor annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.VariableInductor Inductor annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={48,0})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Capacitor
-    Capacitor1(C=0.5*l*c)
-               annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Capacitor Capacitor1(C=0.5*l*c) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={-56,-28})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Capacitor
-    Capacitor2(C=0.5*l*c)
-               annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Capacitor Capacitor2(C=0.5*l*c) annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={74,-28})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin pin_p2 "end of line"
-                  annotation (Placement(transformation(rotation=0, extent={{92,-10},{112,10}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin pin_p1 "beginning of line"
-    annotation (Placement(transformation(rotation=0, extent={{-110,-10},{-90,10}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Interfaces.PositivePin pin_p2 "end of line" annotation (Placement(transformation(rotation=0, extent={{92,-10},{112,10}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Interfaces.PositivePin pin_p1 "beginning of line" annotation (Placement(transformation(rotation=0, extent={{-110,-10},{-90,10}})));
 
-  Modelica.Electrical.QuasiStationary.SinglePhase.Sensors.FrequencySensor
-    frequencySensor
-    annotation (Placement(transformation(extent={{-56,50},{-36,70}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Sensors.FrequencySensor frequencySensor annotation (Placement(transformation(extent={{-56,50},{-36,70}})));
   Modelica.Blocks.Math.Gain omega(k=2*Modelica.Constants.pi)
     annotation (Placement(transformation(extent={{-24,50},{-4,70}})));
   Modelica.Blocks.Math.Division division
     annotation (Placement(transformation(extent={{20,16},{40,36}})));
   Modelica.Blocks.Sources.Constant X(k=l*x)
     annotation (Placement(transformation(extent={{-46,22},{-26,42}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground ground
-    annotation (Placement(transformation(extent={{-12,-100},{8,-80}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground ground annotation (Placement(transformation(extent={{-12,-100},{8,-80}})));
 equation
   // _____________________________________________
   //
@@ -119,7 +112,7 @@ equation
                        color={85,170,255}));
   connect(frequencySensor.pin, pin_p1) annotation (Line(points={{-56,60},{-56,0},{-100,0}},
                       color={85,170,255}));
-  connect(frequencySensor.y, omega.u)
+  connect(frequencySensor.f, omega.u)
     annotation (Line(points={{-35,60},{-26,60}}, color={0,0,127}));
   connect(division.y, Inductor.L)
     annotation (Line(points={{41,26},{48,26},{48,10.8}},color={0,0,127}));

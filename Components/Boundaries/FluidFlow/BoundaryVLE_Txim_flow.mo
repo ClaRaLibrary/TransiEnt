@@ -1,25 +1,29 @@
-within TransiEnt.Components.Boundaries.FluidFlow;
+﻿within TransiEnt.Components.Boundaries.FluidFlow;
 model BoundaryVLE_Txim_flow "A boundary defining temperature, mass composition and mass flow"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -60,21 +64,21 @@ model BoundaryVLE_Txim_flow "A boundary defining temperature, mass composition a
   Basics.Interfaces.Thermal.FluidPortOut fluidPortOut(Medium=medium) annotation (Placement(transformation(extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
   Modelica.Blocks.Math.Gain sign(k=if changeSign then -1 else 1) if variable_m_flow annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
 
-  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow(value=m_flow_in) if variable_m_flow "Variable mass flow rate"
+  TransiEnt.Basics.Interfaces.General.MassFlowRateIn m_flow=m_flow_in if variable_m_flow "Variable mass flow rate"
     annotation (Placement(transformation(extent={{-120,40},{-80,80}}),
         iconTransformation(extent={{-140,40},{-100,80}})));
-  TransiEnt.Basics.Interfaces.General.TemperatureIn T(value=T_in) if (variable_T) "Variable temperature in K"
+  TransiEnt.Basics.Interfaces.General.TemperatureIn T=T_in if (variable_T) "Variable temperature in K"
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
-  TransiEnt.Basics.Interfaces.General.MassFractionIn xi[medium.nc-1](value=xi_in) if
+  TransiEnt.Basics.Interfaces.General.MassFractionIn xi[medium.nc-1]=xi_in if
        (variable_xi) "Variable mass composition"
     annotation (Placement(transformation(extent={{-120,-80},{-80,-40}}),
         iconTransformation(extent={{-140,-80},{-100,-40}})));
 
 protected
-  Modelica.SIunits.MassFlowRate m_flow_in;
+  Modelica.Units.SI.MassFlowRate m_flow_in;
   SI.Temperature T_in;
-  Modelica.SIunits.MassFraction xi_in[medium.nc-1];
+  Modelica.Units.SI.MassFraction xi_in[medium.nc - 1];
 
   TILMedia.Internals.VLEFluidConfigurations.FullyMixtureCompatible.VLEFluid_ph fluidIn(
     vleFluidType=medium,

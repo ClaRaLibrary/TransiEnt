@@ -1,26 +1,30 @@
-within TransiEnt.Storage.Heat.HotWaterStorage_L2;
+﻿within TransiEnt.Storage.Heat.HotWaterStorage_L2;
 model HotWaterStorage_L2 "Stratified hot water storage without spatial discretisation (based on analytic solution for output temperature at steady state)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 // _____________________________________________
 //
@@ -37,76 +41,75 @@ model HotWaterStorage_L2 "Stratified hot water storage without spatial discretis
 
 parameter TILMedia.VLEFluidTypes.BaseVLEFluid   Medium= simCenter.fluid1;
 
-parameter Modelica.SIunits.Pressure dp= 0.02e5 "Pressure drop on generator and consumer side";
+  parameter Modelica.Units.SI.Pressure dp=0.02e5 "Pressure drop on generator and consumer side";
 
-parameter Modelica.SIunits.Temperature T_max=383.15 "Maximum allowed temperature in Storage";
-parameter Modelica.SIunits.Temperature T_start=273.15+30 "Initial Temperature of heat storage";
-parameter Modelica.SIunits.Temperature T_amb=273.15+18 "Assumed constant ambient temperature";
+  parameter Modelica.Units.SI.Temperature T_max=383.15 "Maximum allowed temperature in Storage";
+  parameter Modelica.Units.SI.Temperature T_start=273.15 + 30 "Initial Temperature of heat storage";
+  parameter Modelica.Units.SI.Temperature T_amb=273.15 + 18 "Assumed constant ambient temperature";
 
 //tank geometry
-parameter Modelica.SIunits.Height height=1.0 "Heigh of heat storage";
-parameter Modelica.SIunits.Diameter d_tank=0.8 "Diameter of heat storage";
+  parameter Modelica.Units.SI.Height height=1.0 "Heigh of heat storage";
+  parameter Modelica.Units.SI.Diameter d_tank=0.8 "Diameter of heat storage";
 
 //pipe geometry
-parameter Modelica.SIunits.Diameter d_pipe_gen=0.01 "Diameter of pipe from the generator side";
-parameter Modelica.SIunits.Length l_pipe_gen = 9 "length of pipe from the generator side in the storage tank for heat transfer";
-parameter Modelica.SIunits.Diameter d_pipe_con=0.01 "Diameter of pipe from the consumer side";
-parameter Modelica.SIunits.Length l_pipe_con = 14.2 "length of pipe from the consumer side in the storage tank for heat transfer";
+  parameter Modelica.Units.SI.Diameter d_pipe_gen=0.01 "Diameter of pipe from the generator side";
+  parameter Modelica.Units.SI.Length l_pipe_gen=9 "length of pipe from the generator side in the storage tank for heat transfer";
+  parameter Modelica.Units.SI.Diameter d_pipe_con=0.01 "Diameter of pipe from the consumer side";
+  parameter Modelica.Units.SI.Length l_pipe_con=14.2 "length of pipe from the consumer side in the storage tank for heat transfer";
 
-parameter Modelica.SIunits.SurfaceCoefficientOfHeatTransfer k=0.08 "Coefficient of heat Transfer from storage to room";
-parameter Modelica.SIunits.ThermalConductivity lambda_pipe=236 "thermal conductivity of aluminium pipe";
+  parameter Modelica.Units.SI.SurfaceCoefficientOfHeatTransfer k=0.08 "Coefficient of heat Transfer from storage to room";
+  parameter Modelica.Units.SI.ThermalConductivity lambda_pipe=236 "thermal conductivity of aluminium pipe";
 
 protected
-parameter Modelica.SIunits.Volume Volume=d_tank^2/4*Modelica.Constants.pi*height;
-parameter Modelica.SIunits.Area A=d_tank*Modelica.Constants.pi*height + 2*d_tank^2/4*
-      Modelica.Constants.pi;
-parameter Modelica.SIunits.Area A_crossSectionalGenPipe = d_pipe_gen^2*Modelica.Constants.pi/4;
-parameter Modelica.SIunits.Area A_heatTransferGen = d_pipe_gen*Modelica.Constants.pi*l_pipe_gen;
-parameter Modelica.SIunits.Area A_crossSectionalConPipe = d_pipe_con^2*Modelica.Constants.pi/4;
-parameter Modelica.SIunits.Area A_heatTransferCon = d_pipe_con*Modelica.Constants.pi*l_pipe_con;
+  parameter Modelica.Units.SI.Volume Volume=d_tank^2/4*Modelica.Constants.pi*height;
+  parameter Modelica.Units.SI.Area A=d_tank*Modelica.Constants.pi*height + 2*d_tank^2/4*Modelica.Constants.pi;
+  parameter Modelica.Units.SI.Area A_crossSectionalGenPipe=d_pipe_gen^2*Modelica.Constants.pi/4;
+  parameter Modelica.Units.SI.Area A_heatTransferGen=d_pipe_gen*Modelica.Constants.pi*l_pipe_gen;
+  parameter Modelica.Units.SI.Area A_crossSectionalConPipe=d_pipe_con^2*Modelica.Constants.pi/4;
+  parameter Modelica.Units.SI.Area A_heatTransferCon=d_pipe_con*Modelica.Constants.pi*l_pipe_con;
 
-constant Modelica.SIunits.KinematicViscosity nu= 5.53e-7 "kinematic viscosity of water for calculation of alpha from water to pipe";
-constant Modelica.SIunits.ThermalConductivity lambda_water= 0.597 "thermal conductivity of water for calculation of alpha from water to pipe";
+  constant Modelica.Units.SI.KinematicViscosity nu=5.53e-7 "kinematic viscosity of water for calculation of alpha from water to pipe";
+  constant Modelica.Units.SI.ThermalConductivity lambda_water=0.597 "thermal conductivity of water for calculation of alpha from water to pipe";
 
   // _____________________________________________
   //
   //                    Variables
   // _____________________________________________
 public
-Modelica.SIunits.Energy  E_stor "Stored Energy (with cp and density of the Storage medium";
+  Modelica.Units.SI.Energy E_stor "Stored Energy (with cp and density of the Storage medium";
     //Modelica.SIunits.HeatFlowRate Q_flow_gen( start=1000) "heat flow from heat generator";
-    Modelica.SIunits.HeatFlowRate Q_flow_con( start=1000) "heat flow to heat consumer";
-Modelica.SIunits.HeatFlowRate Q_flow_loss "surface losses to the environment";
+  Modelica.Units.SI.HeatFlowRate Q_flow_con(start=1000) "heat flow to heat consumer";
+  Modelica.Units.SI.HeatFlowRate Q_flow_loss "surface losses to the environment";
 
-Modelica.SIunits.Temperature T_stor( start=273.15+30) "Temperature of the storage";
+  Modelica.Units.SI.Temperature T_stor(start=273.15 + 30) "Temperature of the storage";
 
-Modelica.SIunits.Temperature T_genOut;
+  Modelica.Units.SI.Temperature T_genOut;
 //Modelica.SIunits.Temperature T_supply_con;
-Modelica.SIunits.Temperature T_conOut(start=273.15+25);
+  Modelica.Units.SI.Temperature T_conOut(start=273.15 + 25);
 //Modelica.SIunits.Temperature T_supply_con;
 
-Modelica.SIunits.SpecificHeatCapacity cpCon;
-Modelica.SIunits.SpecificHeatCapacity cpGen;
+  Modelica.Units.SI.SpecificHeatCapacity cpCon;
+  Modelica.Units.SI.SpecificHeatCapacity cpGen;
 
  Real Re_Gen "Re-number for tube flow";
  Real Pr_Gen "Pr-number";
  Real Nu_Gen "Nu-number Nu=0.021*Re^0.8*Pr^1/3";
- Modelica.SIunits.Velocity v_Gen "flow velocity in the pipe";
- Modelica.SIunits.DynamicViscosity eta_Gen "dynamic viscosity of the water";
- Modelica.SIunits.CoefficientOfHeatTransfer alpha_Gen( start=100) "coefficient of heat transfer from water to the pipe with a turbulent tube flow";
+  Modelica.Units.SI.Velocity v_Gen "flow velocity in the pipe";
+  Modelica.Units.SI.DynamicViscosity eta_Gen "dynamic viscosity of the water";
+  Modelica.Units.SI.CoefficientOfHeatTransfer alpha_Gen(start=100) "coefficient of heat transfer from water to the pipe with a turbulent tube flow";
 
  Real Re_Con( start=2400) "Re-number for tube flow";
  Real Pr_Con "Pr-number";
  Real Nu_Con "Nu-number Nu=0.021*Re^0.8*Pr^1/3";
- Modelica.SIunits.Velocity v_Con( start=0.5) "flow velocity in the pipe";
- Modelica.SIunits.DynamicViscosity eta_Con "dynamic viscosity of the water";
- Modelica.SIunits.CoefficientOfHeatTransfer alpha_Con( start=100) "coefficient of heat transfer from water to the pipe with a turbulent tube flow";
- Modelica.SIunits.ThermalConductivity k_pipe_gen( start=100, fixed=true);
- Modelica.SIunits.ThermalConductivity k_pipe_con( start=100);
+  Modelica.Units.SI.Velocity v_Con(start=0.5) "flow velocity in the pipe";
+  Modelica.Units.SI.DynamicViscosity eta_Con "dynamic viscosity of the water";
+  Modelica.Units.SI.CoefficientOfHeatTransfer alpha_Con(start=100) "coefficient of heat transfer from water to the pipe with a turbulent tube flow";
+  Modelica.Units.SI.ThermalConductivity k_pipe_gen(start=100, fixed=true);
+  Modelica.Units.SI.ThermalConductivity k_pipe_con(start=100);
 
- Modelica.SIunits.MassFlowRate m_flow_con(start=0.05);
- Modelica.SIunits.SpecificEnthalpy h_outflow_con(start=178000);
- Modelica.SIunits.SpecificEnthalpy h_outflow_gen(start=231000);
+  Modelica.Units.SI.MassFlowRate m_flow_con(start=0.05);
+  Modelica.Units.SI.SpecificEnthalpy h_outflow_con(start=178000);
+  Modelica.Units.SI.SpecificEnthalpy h_outflow_gen(start=231000);
 // _____________________________________________
 //
 //                  Interfaces
@@ -264,10 +267,10 @@ ConOut.h_outflow=h_outflow_con;
 protected
   function alpha_for_Nu_lam_d
     input Real Nu;
-   input Modelica.SIunits.ThermalConductivity lambda;
-   input Modelica.SIunits.Length diameter;
+    input Modelica.Units.SI.ThermalConductivity lambda;
+    input Modelica.Units.SI.Length diameter;
 
-    output Modelica.SIunits.CoefficientOfHeatTransfer alpha;
+    output Modelica.Units.SI.CoefficientOfHeatTransfer alpha;
 
   algorithm
     alpha:=Nu*lambda/diameter;
@@ -293,9 +296,9 @@ protected
   //
   function Re_for_v_nu_d
 
-   input Modelica.SIunits.Velocity v;
-   input Modelica.SIunits.KinematicViscosity nu;
-   input Modelica.SIunits.Length diameter;
+    input Modelica.Units.SI.Velocity v;
+    input Modelica.Units.SI.KinematicViscosity nu;
+    input Modelica.Units.SI.Length diameter;
 
     output Real Re;
 
@@ -309,9 +312,9 @@ protected
   //
   function Pr_for_lam_eta_cp
 
-   input Modelica.SIunits.ThermalConductivity lambda;
-   input Modelica.SIunits.DynamicViscosity eta;
-   input Modelica.SIunits.SpecificHeatCapacity cp;
+    input Modelica.Units.SI.ThermalConductivity lambda;
+    input Modelica.Units.SI.DynamicViscosity eta;
+    input Modelica.Units.SI.SpecificHeatCapacity cp;
 
     output Real Pr;
 

@@ -1,36 +1,39 @@
 ﻿within TransiEnt.Producer.Heat.Gas2Heat;
 model HeatPumpGasCharline "Gas heat pump model that produces a given heat flow via fluid ports with a charline"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  extends TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit(final useGasPort=true);
-  extends TransiEnt.Producer.Heat.Base.PartialHeatPumpCharline(
-                                            COP_n=1.37726);
-  import SI = Modelica.SIunits;
+  extends TransiEnt.Producer.Electrical.Base.PartialNaturalGasUnit(final useGasPort=true,final useSecondGasPort=false);
+  extends TransiEnt.Producer.Heat.Base.PartialHeatPumpCharline(COP_n=1.37726);
+  import Modelica.Units.SI;
 
   // _____________________________________________
   //
@@ -56,19 +59,21 @@ model HeatPumpGasCharline "Gas heat pump model that produces a given heat flow v
   // _____________________________________________
 
   Modelica.Blocks.Math.Gain H_flow_set_(k=1) annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
-  Modelica.Blocks.Sources.Constant const1(k=1)
-                                          annotation (Placement(transformation(extent={{-100,46},{-80,66}})));
+  Modelica.Blocks.Sources.Constant const1(k=1) annotation (Placement(transformation(extent={{-100,46},{-80,66}})));
 
   // _____________________________________________
   //
   //             Variable Declarations
   // _____________________________________________
-  Modelica.SIunits.MassFlowRate m_flow_cde_total;
+  Modelica.Units.SI.MassFlowRate m_flow_cde_total;
   SI.EnthalpyFlowRate H_flow;
 public
-  Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric           collectGwpEmissions(typeOfEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas) annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
+  Components.Statistics.Collectors.LocalCollectors.CollectGwpEmissionsElectric collectGwpEmissions(typeOfEnergyCarrier=TransiEnt.Basics.Types.TypeOfPrimaryEnergyCarrier.NaturalGas) annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
+  Modelica.Blocks.Sources.RealExpression realExpression1(y=H_flow) annotation (Placement(transformation(extent={{-88,84},{-68,104}})));
+  Modelica.Blocks.Math.Division division annotation (Placement(transformation(extent={{-60,78},{-40,98}})));
+
 protected
-  Modelica.SIunits.MolarFlowRate[5] ElementCompositionFuel;
+  Modelica.Units.SI.MolarFlowRate[5] ElementCompositionFuel;
 
 equation
   // _____________________________________________
@@ -94,7 +99,6 @@ equation
     vleNCVSensor.xi,
     gasPortIn.m_flow);
 
-  m_flow_gas=H_flow/vleNCVSensor.NCV;
 
   // _____________________________________________
   //
@@ -108,6 +112,13 @@ equation
   else
     connect(const1.y, H_flow_set_.u) annotation (Line(points={{-79,56},{-68,56},{-68,30},{-62,30}}, color={0,0,127}));
   end if;
+
+  connect(realExpression1.y, division.u1) annotation (Line(points={{-67,94},{-62,94}}, color={0,0,127}));
+  connect(division.y, m_flow_gas) annotation (Line(points={{-39,88},{8,88}}, color={0,0,127}));
+
+  connect(vleNCVSensor.NCV, division.u2) annotation (Line(points={{53,92},{50,92},{50,110},{-96,110},{-96,82},{-62,82}},                                         color={0,0,127}));
+
+
 annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
 <p>Base class for simple heat pump models that produce a given heat flow via fluid ports and use a charline.</p>

@@ -1,30 +1,34 @@
-within TransiEnt.Grid.Gas.StaticCycles.Check;
+﻿within TransiEnt.Grid.Gas.StaticCycles.Check;
 model TestStatCycMix
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   import TransiEnt;
   extends TransiEnt.Basics.Icons.Checkmodel;
 
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe1(
     medium=simCenter.gasModel1,
     Delta_p_nom=Init.Delta_p_nom_pipe1,
     frictionAtInlet=true,
@@ -43,7 +47,7 @@ model TestStatCycMix
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={-12,86})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe2(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -73,13 +77,10 @@ model TestStatCycMix
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-44,86})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(
-    p(
-    start = Init.mix.p),
-    xi(
-    start =  Init.mix.xi_out),
-    h(
-    start = Init.mix.h_out),
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio(
+    p(start=Init.mix.p),
+    xi(start=Init.mix.xi_out),
+    h(start=Init.mix.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -105,7 +106,7 @@ model TestStatCycMix
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={20,64})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe3(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe3(
     medium=simCenter.gasModel1,
     Delta_p_nom=Init.Delta_p_nom_pipe1,
     frictionAtInlet=true,
@@ -124,7 +125,7 @@ model TestStatCycMix
         extent={{14,-5},{-14,5}},
         rotation=180,
         origin={-12,-8})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipe4(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipe4(
     medium=simCenter.gasModel1,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -154,13 +155,10 @@ model TestStatCycMix
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-44,-8})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio1(
-    p(
-    start = Init.mix.p),
-    xi(
-    start =  Init.mix.xi_out),
-    h(
-    start = Init.mix.h_out),
+  TransiEnt.Components.Gas.VolumesValvesFittings.Fittings.RealGasJunction_L2 vLEFluidJunction_L2_MediumMixingRatio1(
+    p(start=Init.mix.p),
+    xi(start=Init.mix.xi_out),
+    h(start=Init.mix.h_out),
     volume=1) annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
@@ -183,7 +181,7 @@ model TestStatCycMix
     height=-1.25,
     offset=-0.25)
                annotation (Placement(transformation(extent={{-100,0},{-80,20}})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeH2_1(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipeH2_1(
     constantComposition=true,
     frictionAtInlet=true,
     frictionAtOutlet=true,
@@ -204,7 +202,7 @@ model TestStatCycMix
         extent={{8,-4},{-8,4}},
         rotation=270,
         origin={20,-56})));
-  TransiEnt.Components.Gas.VolumesValvesFittings.PipeFlow_L4_Simple pipeH2(
+  TransiEnt.Components.Gas.VolumesValvesFittings.Pipes.PipeFlow_L4_Simple pipeH2(
     constantComposition=true,
     frictionAtInlet=true,
     frictionAtOutlet=true,

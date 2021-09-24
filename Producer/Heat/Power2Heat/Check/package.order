@@ -1,6 +1,1 @@
-TestBivalentHeatpumpSystem_L0
-TestBivalentHeatpumpSystem_L2
-TestElectricBoiler_L1
-TestPtH_limiter
-HeatPumpElectricCharlineTest
-Test_idContrMFlow_temp
+TestConverter_Heat2Power

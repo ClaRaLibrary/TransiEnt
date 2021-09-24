@@ -1,26 +1,30 @@
-within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell;
+﻿within TransiEnt.Components.Electrical.FuelCellSystems.FuelCell;
 model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal operation, Ramp down)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -48,11 +52,11 @@ model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal oper
 
   parameter Real z = 2 "Quantity of transfered electrons";
 
-  parameter Modelica.SIunits.Area A_cell = 361e-4 "Area of one cell";
+  parameter Modelica.Units.SI.Area A_cell=361e-4 "Area of one cell";
 
-  parameter Modelica.SIunits.Pressure p_Anode = 1.5e5 "Pressure at the anode";
+  parameter Modelica.Units.SI.Pressure p_Anode=1.5e5 "Pressure at the anode";
 
-  parameter Modelica.SIunits.Pressure p_Kathode = 1e5 "Pressure at the cathode";
+  parameter Modelica.Units.SI.Pressure p_Kathode=1e5 "Pressure at the cathode";
 
   parameter TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG7_var Syngas=TransiEnt.Basics.Media.Gases.Gas_VDIWA_SG7_var() "Medium model of Syngas" annotation (choicesAllMatching);
 
@@ -63,17 +67,17 @@ model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal oper
   parameter Real cp_tab[3,3] = [28.91404, -0.00084, 2.01e-6; 25.84512, 0.012987, -3.9e-6; 30.62644, 0.009621, 1.18e-6] "Empiric parameter for calculating Gibbs free energy according to Barbir";
 
   parameter Real ASR_0 = 0.29e-4 "Reference value of the loss resistance at T_0 according to Saarinen in Ohm";
-  parameter Modelica.SIunits.Temperature T_0 = 1073 "Reference value of the temperature for calculating the loss resistance according to Saarinen";
+  parameter Modelica.Units.SI.Temperature T_0=1073 "Reference value of the temperature for calculating the loss resistance according to Saarinen";
   parameter Real E_A = 0.65 "Energy of activation according to Saarinen in eV";
 
-  parameter Modelica.SIunits.Mass m = 5 "Mass of the stack";
-  parameter Modelica.SIunits.SpecificHeatCapacity cp = 1000 "Specific heat capacity of the stack";
+  parameter Modelica.Units.SI.Mass m=5 "Mass of the stack";
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp=1000 "Specific heat capacity of the stack";
   parameter SI.Temperature T_n=820 + 273.15 "Temperature in nominal point (i.e. minimum Temperature for operation)";
-  parameter Modelica.SIunits.Temperature T_heater_restart=T_n - 50 "Heater restarts at this temperature when temperature drops while operating";
-  parameter Modelica.SIunits.HeatFlowRate Q_heater_nom = 3e3 "Nominal power of heater for ramp up process";
-  parameter Modelica.SIunits.ThermalConductance ka = 0.5 "Thermal conductance between FC and ambient when cooling is shut off (i.e. heat loss)";
-  parameter Modelica.SIunits.Temperature T_demand = 50+273.15 "Temperature of heat demand";
-  parameter Modelica.SIunits.Current I_shutdown = 10 "If load controller requests currents below this value, stack will shut down";
+  parameter Modelica.Units.SI.Temperature T_heater_restart=T_n - 50 "Heater restarts at this temperature when temperature drops while operating";
+  parameter Modelica.Units.SI.HeatFlowRate Q_heater_nom=3e3 "Nominal power of heater for ramp up process";
+  parameter Modelica.Units.SI.ThermalConductance ka=0.5 "Thermal conductance between FC and ambient when cooling is shut off (i.e. heat loss)";
+  parameter Modelica.Units.SI.Temperature T_demand=50 + 273.15 "Temperature of heat demand";
+  parameter Modelica.Units.SI.Current I_shutdown=10 "If load controller requests currents below this value, stack will shut down";
 
   parameter SI.Voltage v_n=simCenter.v_n "Nominal Voltage for grid";
 
@@ -84,43 +88,43 @@ model SOFC "Model of one SOFC-Cell Stack with three states (Ramp up, Normal oper
   //             Variable Declarations
   // _____________________________________________
 
-  Modelica.SIunits.Temp_K T_stack( start = 25+273.15) "Temperature of one cell" annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Temp_K T_syng_ein "Temperature of the syngas";
-  Modelica.SIunits.Temp_K T_air_ein "Temperature of the air";
-  Modelica.SIunits.Temperature T_heatdemand = 60+273.15;
-  Modelica.SIunits.CurrentDensity i_cell(start=0) "Electric current of one cell" annotation (Dialog(group="Initialization", showStartAttribute=true));
-  Modelica.SIunits.Pressure P_O2 = air.p_i[3]/air.p "Partial pressure of the oxygen at the cathode";
-  Modelica.SIunits.Pressure P_H2 = syng.p_i[5]/syng.p "Partial pressure of the hydrogen at the anode";
+  Modelica.Units.SI.Temperature T_stack(start=25 + 273.15) "Temperature of one cell" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Temperature T_syng_ein "Temperature of the syngas";
+  Modelica.Units.SI.Temperature T_air_ein "Temperature of the air";
+  Modelica.Units.SI.Temperature T_heatdemand=60 + 273.15;
+  Modelica.Units.SI.CurrentDensity i_cell(start=0) "Electric current of one cell" annotation (Dialog(group="Initialization", showStartAttribute=true));
+  Modelica.Units.SI.Pressure P_O2=air.p_i[3]/air.p "Partial pressure of the oxygen at the cathode";
+  Modelica.Units.SI.Pressure P_H2=syng.p_i[5]/syng.p "Partial pressure of the hydrogen at the anode";
 
-  Modelica.SIunits.Voltage E_cell "Voltage of one cell";
-  Modelica.SIunits.Voltage E_stack "Voltage of one stack";
+  Modelica.Units.SI.Voltage E_cell "Voltage of one cell";
+  Modelica.Units.SI.Voltage E_stack "Voltage of one stack";
   Real ASR = ASR_0*exp(E_A/Modelica.Constants.R * (1/T_stack - 1/T_0)) "Temperature-dependent resistance for calculating the losses";
-  Modelica.SIunits.Voltage VR "Voltage loss 3";
-  Modelica.SIunits.Voltage Er "Reversible electric potential without any losses";
+  Modelica.Units.SI.Voltage VR "Voltage loss 3";
+  Modelica.Units.SI.Voltage Er "Reversible electric potential without any losses";
   Real da= cp_tab[3,1] - cp_tab[1,1] - 0.5* cp_tab[2,1] "Empiric parameter for calculating Gibbs free energy according to Barbir";
   Real db= cp_tab[3,2] - cp_tab[1,2] - 0.5* cp_tab[2,2] "Empiric parameter for calculating Gibbs free energy according to Barbir";
   Real dc= cp_tab[3,3] - cp_tab[1,3] - 0.5* cp_tab[2,3] "Empiric parameter for calculating Gibbs free energy according to Barbir";
   Real Delta_H_T = -241.98*1000 + da*(T_stack-298.15) + db * ((T_stack^2) - 298.15^2)/2 + dc * ((T_stack^3) - 298.15^3)/3 "Empiric equation for calculating the enthalpy of formation according to Barbir";
   Real Delta_S_T = -0.0444*1000 + da*log(T_stack/298.15) + db * (T_stack - 298.15) + dc * ((T_stack^2) - 298.15^2)/2 "Empiric equation for calculating the entropy according to Barbir";
 
-  Modelica.SIunits.MolarFlowRate N_dot_e "Molar flow of the electrons";
-  Modelica.SIunits.MassFlowRate m_dot_H2_react_stack "Required H2 mass flow rate of one cell";
-  Modelica.SIunits.MassFlowRate m_dot_O2_react_stack "Required O2 mass flow rate of one cell";
-  Modelica.SIunits.MassFlowRate m_dot_H2O_gen_stack "Generated H2O mass flow rate of one cell";
-    Modelica.SIunits.MassFlowRate m_dot_air_react_stack "Required air mass flow rate of one cell";
-  Modelica.SIunits.MolarMass M_H2 = syng.M_i[5] "Molar mass H2";
-  Modelica.SIunits.MolarMass M_O2 = syng.M_i[2] "Molar mass O2";
-  Modelica.SIunits.MassFraction xi_O2 "Mass fraction of O2 in the air";
-  Modelica.SIunits.SpecificEnthalpy h_hein = syng.h;
-  Modelica.SIunits.SpecificEnthalpy h_haus = synga.h;
-  Modelica.SIunits.SpecificEnthalpy h_aein = air.h;
-  Modelica.SIunits.SpecificEnthalpy h_aaus = aira.h;
+  Modelica.Units.SI.MolarFlowRate N_dot_e "Molar flow of the electrons";
+  Modelica.Units.SI.MassFlowRate m_dot_H2_react_stack "Required H2 mass flow rate of one cell";
+  Modelica.Units.SI.MassFlowRate m_dot_O2_react_stack "Required O2 mass flow rate of one cell";
+  Modelica.Units.SI.MassFlowRate m_dot_H2O_gen_stack "Generated H2O mass flow rate of one cell";
+  Modelica.Units.SI.MassFlowRate m_dot_air_react_stack "Required air mass flow rate of one cell";
+  Modelica.Units.SI.MolarMass M_H2=syng.M_i[5] "Molar mass H2";
+  Modelica.Units.SI.MolarMass M_O2=syng.M_i[2] "Molar mass O2";
+  Modelica.Units.SI.MassFraction xi_O2 "Mass fraction of O2 in the air";
+  Modelica.Units.SI.SpecificEnthalpy h_hein=syng.h;
+  Modelica.Units.SI.SpecificEnthalpy h_haus=synga.h;
+  Modelica.Units.SI.SpecificEnthalpy h_aein=air.h;
+  Modelica.Units.SI.SpecificEnthalpy h_aaus=aira.h;
   SI.HeatFlowRate Q_flow_reac "Heat flow due to reaction";
   SI.HeatFlowRate Q_flow_heater "Heat flow provided by heater for ramp up";
   SI.HeatFlowRate Q_flow_gas "Heat flow to/from syngas and air";
 
-  Modelica.SIunits.Current I;
-  Modelica.SIunits.Current I_is;
+  Modelica.Units.SI.Current I;
+  Modelica.Units.SI.Current I_is;
 
   // for heating up states:
   Boolean is_T_reac_min_reached(start=false) "true, if minimum temperature for FC reaction reached";

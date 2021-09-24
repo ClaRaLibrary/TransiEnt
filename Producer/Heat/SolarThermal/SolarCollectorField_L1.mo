@@ -1,46 +1,39 @@
 ﻿within TransiEnt.Producer.Heat.SolarThermal;
 model SolarCollectorField_L1 "Solar collector field model with up to 12 collector in series and chooeable number in parallel"
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
-  import TransiEnt;
+
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
   // _____________________________________________
 
-  import SI = Modelica.SIunits;
+  import  Modelica.Units.SI;
   import Const = Modelica.Constants;
+  import TransiEnt;
 
   // _____________________________________________
   //
@@ -78,13 +71,13 @@ model SolarCollectorField_L1 "Solar collector field model with up to 12 collecto
 
   //parameter for SolarTime
   //parameter Real[4] offset(unit={"d","h","m","s"})={0,0,0,0} "(NOT USEABLE) day/hour/month/second; Offset=[0,0,0,0] at t=0 equals 1.1. 00:00:00"  annotation (Dialog(tab="Irradiance", group="Solartime"));
-  parameter SI.Angle longitude_local=SI.Conversions.from_deg(10) "longitude of the local position, east positive, 10 East for Hamburg" annotation (Dialog(tab="Irradiance", group="Solartime"));
-  parameter SI.Angle longitude_standard=SI.Conversions.from_deg(15) "needed for calculation of coordinated universal time (utc), 15 for central european time, 30 for central european summer time" annotation (Dialog(tab="Irradiance", group="Solartime"));
-  SI.Conversions.NonSIunits.Time_day totaldays=365 "total days of the year, standard=365, leap year=366" annotation (Dialog(tab="Irradiance", group="Solartime"));
+  parameter SI.Angle longitude_local=Modelica.Units.Conversions.from_deg(10) "longitude of the local position, east positive, 10 East for Hamburg" annotation (Dialog(tab="Irradiance", group="Solartime"));
+  parameter SI.Angle longitude_standard=Modelica.Units.Conversions.from_deg(15) "needed for calculation of coordinated universal time (utc), 15 for central european time, 30 for central european summer time" annotation (Dialog(tab="Irradiance", group="Solartime"));
+  Modelica.Units.NonSI.Time_day totaldays=365 "total days of the year, standard=365, leap year=366" annotation (Dialog(tab="Irradiance", group="Solartime"));
 
   //parameter for ExtraterrestrialIrradiance
-  parameter SI.Angle latitude=SI.Conversions.from_deg(53.55) "latitude of the local position, north posiive, 53,55 North for Hamburg" annotation (Dialog(tab="Irradiance", group="Extraterrestrial Irradiance"));
-  parameter SI.Angle slope=SI.Conversions.from_deg(53.55) "slope of the tilted surface, assumption"  annotation (Dialog(tab="Irradiance", group="Extraterrestrial Irradiance"));
+  parameter SI.Angle latitude=Modelica.Units.Conversions.from_deg(53.55) "latitude of the local position, north posiive, 53,55 North for Hamburg" annotation (Dialog(tab="Irradiance", group="Extraterrestrial Irradiance"));
+  parameter SI.Angle slope=Modelica.Units.Conversions.from_deg(53.55) "slope of the tilted surface, assumption" annotation (Dialog(tab="Irradiance", group="Extraterrestrial Irradiance"));
   parameter SI.Angle surfaceAzimuthAngle=0 "surface azimuth angle" annotation (Dialog(tab="Irradiance", group="Extraterrestrial Irradiance"));
 
   //Skymodel
@@ -100,7 +93,7 @@ model SolarCollectorField_L1 "Solar collector field model with up to 12 collecto
   parameter Real constant_iam_ground=1 "constant IAM for ground-reflected irradiation" annotation (Dialog(tab="IAM", group="General"));
   parameter Real b0=1 "assumption: constant b0-value for IAM=1-b0*(1/cos(theta)-1)" annotation (Dialog(tab="IAM", group="General"));
   parameter Real[8] iam_SRCC={1,1,1,1,1,1,1,1} "IAM for theta = 0, 10, 20, ..., 70" annotation (Dialog(tab="IAM", group="General"));
-  parameter SI.Conversions.NonSIunits.Angle_deg[8] theta={0,10,20,30,40,50,60,70} annotation (Dialog(tab="IAM", group="General"));
+  parameter Modelica.Units.NonSI.Angle_deg[8] theta={0,10,20,30,40,50,60,70} annotation (Dialog(tab="IAM", group="General"));
 
   // _____________________________________________
   //
@@ -792,7 +785,7 @@ public
     n_parallel=n_parallel,
     downscale=false,
     upscale=true) annotation (Placement(transformation(extent={{648,-54},{668,-34}})));
-  Base.ScaleMassFlow dwonscaling(n_parallel=n_parallel) annotation (Placement(transformation(extent={{-706,-68},{-686,-48}})));
+  Base.ScaleMassFlow downscaling(n_parallel=n_parallel) annotation (Placement(transformation(extent={{-706,-68},{-686,-48}})));
 
 equation
   // _____________________________________________
@@ -1084,11 +1077,11 @@ equation
       points={{740,0},{700,0},{700,-43.4},{667,-43.4}},
       color={175,0,0},
       thickness=0.5));
-  connect(solarcollector_1.waterPortIn, dwonscaling.fluidPortOut) annotation (Line(
+  connect(solarcollector_1.waterPortIn,downscaling. fluidPortOut) annotation (Line(
       points={{-640,-44},{-658,-44},{-658,-56},{-687,-56},{-687,-57.4}},
       color={175,0,0},
       thickness=0.5));
-  connect(waterIn, dwonscaling.fluidPortIn) annotation (Line(
+  connect(waterIn,downscaling. fluidPortIn) annotation (Line(
       points={{-740,0},{-738,0},{-738,-58},{-705,-58},{-705,-57.4}},
       color={175,0,0},
       thickness=0.5));
@@ -1150,8 +1143,7 @@ equation
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
 <p>Model modified by Oliver Schülting (oliver.schuelting@tuhh.de), May 2018: added possibility to use inputs for solar irradiation</p>
 </html>"),
-    Diagram(graphics,
-            coordinateSystem(extent={{-760,-140},{760,140}}, preserveAspectRatio=false)),
+    Diagram(coordinateSystem(extent={{-760,-140},{760,140}}, preserveAspectRatio=false)),
     Icon(coordinateSystem(extent={{-760,-400},{760,400}}, preserveAspectRatio=false), graphics={
         Rectangle(extent={{-760,400},{760,-400}}, pattern=LinePattern.None),
         Rectangle(
@@ -1189,7 +1181,8 @@ equation
           color={0,0,0},
           smooth=Smooth.None,
           origin={-430,177},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1210,7 +1203,8 @@ equation
           color={255,255,255},
           smooth=Smooth.None,
           origin={-155,212},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1231,7 +1225,8 @@ equation
           color={255,255,255},
           smooth=Smooth.None,
           origin={155,212},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1252,7 +1247,8 @@ equation
           color={255,255,255},
           smooth=Smooth.None,
           origin={-85,-28},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1279,7 +1275,8 @@ equation
           color={0,0,0},
           smooth=Smooth.None,
           origin={-432,-5},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1306,7 +1303,8 @@ equation
           color={0,0,0},
           smooth=Smooth.None,
           origin={-474,99},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1327,7 +1325,8 @@ equation
           color={255,255,255},
           smooth=Smooth.None,
           origin={325,212},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1348,7 +1347,8 @@ equation
           color={255,255,255},
           smooth=Smooth.None,
           origin={395,-28},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1369,7 +1369,8 @@ equation
           color={255,255,255},
           smooth=Smooth.None,
           origin={-85,-268},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1396,7 +1397,8 @@ equation
           color={0,0,0},
           smooth=Smooth.None,
           origin={-430,-245},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
@@ -1417,7 +1419,8 @@ equation
           color={255,255,255},
           smooth=Smooth.None,
           origin={85,-268},
-          rotation=360),           Ellipse(
+          rotation=360),
+                                   Ellipse(
           lineColor={0,125,125},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,

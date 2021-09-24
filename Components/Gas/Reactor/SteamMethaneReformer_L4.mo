@@ -1,26 +1,30 @@
-within TransiEnt.Components.Gas.Reactor;
+﻿within TransiEnt.Components.Gas.Reactor;
 model SteamMethaneReformer_L4 "Discretized pseudohomogeneous PFR model of a fixed-bed steam methane reformer"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // all values and formulas (except otherwise stated) are taken from Nandasana, A. D., Ray, A. K., & Gupta, S. K. (2003). Dynamic model of an industrial steam reformer and its use for multiobjective optimization. Industrial & engineering chemistry research, 42(17), 4028-4042.
   // Xu, Froment 1989 Part II: Xu, J., & Froment, G. F. (1989). Methane steam reforming: II. Diffusional limitations and reactor simulation. AIChE Journal, 35(1), 97-103.
@@ -65,7 +69,7 @@ model SteamMethaneReformer_L4 "Discretized pseudohomogeneous PFR model of a fixe
   import Modelica.Constants.pi;
   import Modelica.Constants.sigma;
   import Modelica.Constants.eps;
-  import SI = Modelica.SIunits;
+  import      Modelica.Units.SI;
 
   // _____________________________________________
   //
@@ -180,11 +184,11 @@ protected
   SI.CoefficientOfHeatTransfer U[N_cv] "Heat transfer coefficient from gas and bed to the outer reactor wall";
   SI.ThermalConductivity lambda_wall[N_cv] "Thermal conductivity of tube wall material";
 
-  SI.Conversions.NonSIunits.Pressure_bar p_CH4[N_cv] "Partial pressure CH4";
-  SI.Conversions.NonSIunits.Pressure_bar p_CO2[N_cv] "Partial pressure CO2";
-  SI.Conversions.NonSIunits.Pressure_bar p_H2O[N_cv] "Partial pressure H2O";
-  SI.Conversions.NonSIunits.Pressure_bar p_H2[N_cv] "Partial pressure H2";
-  SI.Conversions.NonSIunits.Pressure_bar p_CO[N_cv] "Partial pressure CO";
+  Modelica.Units.NonSI.Pressure_bar p_CH4[N_cv] "Partial pressure CH4";
+  Modelica.Units.NonSI.Pressure_bar p_CO2[N_cv] "Partial pressure CO2";
+  Modelica.Units.NonSI.Pressure_bar p_H2O[N_cv] "Partial pressure H2O";
+  Modelica.Units.NonSI.Pressure_bar p_H2[N_cv] "Partial pressure H2";
+  Modelica.Units.NonSI.Pressure_bar p_CO[N_cv] "Partial pressure CO";
 
   SI.Temperature T_wall_i[N_cv] "Temperature on the inside of reactor wall";
   SI.Temperature T_wall_o[N_cv] "Temperature on the outside of reactor wall";
@@ -209,11 +213,11 @@ equation
       K_i[n,i] = AK_i[i] * exp(- dH_R_i[i] /(R*T[n]));
     end for;
 
-    p_CH4[n] = SI.Conversions.to_bar(gasBulk[n].p_i[1]);
-    p_CO2[n] = SI.Conversions.to_bar(gasBulk[n].p_i[2]);
-    p_H2O[n] = SI.Conversions.to_bar(gasBulk[n].p_i[3]);
-    p_H2[n] = SI.Conversions.to_bar(gasBulk[n].p_i[4]);
-    p_CO[n] = SI.Conversions.to_bar(gasBulk[n].p_i[5]);
+    p_CH4[n] =Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[1]);
+    p_CO2[n] =Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[2]);
+    p_H2O[n] =Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[3]);
+    p_H2[n] =Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[4]);
+    p_CO[n] =Modelica.Units.Conversions.to_bar(gasBulk[n].p_i[5]);
 
     DEN[n] = 1 + K_j[n,2]*p_CO[n] + K_j[n,3]*p_H2[n] + K_j[n,1]*p_CH4[n] + K_j[n,4]*p_H2O[n]/max(eps,p_H2[n]);
 

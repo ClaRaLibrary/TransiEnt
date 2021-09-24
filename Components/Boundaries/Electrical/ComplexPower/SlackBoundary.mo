@@ -1,26 +1,30 @@
-within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
+﻿within TransiEnt.Components.Boundaries.Electrical.ComplexPower;
 model SlackBoundary "Slack Bus in TransiEnt"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
 // _____________________________________________
 //
@@ -38,9 +42,9 @@ model SlackBoundary "Slack Bus in TransiEnt"
 //                   Parameters
 // _____________________________________________
 
-  parameter Modelica.SIunits.Voltage v_gen=simCenter.v_n "Voltage of Plant, controlled by generator" annotation (Dialog(enable = not useInputConnectorv));
-  parameter Modelica.SIunits.Frequency f_n=simCenter.f_n "Nominal frequency" annotation (Dialog(enable = not useInputConnectorf));
-  parameter Modelica.SIunits.Angle delta_slackgen=0;
+  parameter Modelica.Units.SI.Voltage v_gen=simCenter.v_n "Voltage of Plant, controlled by generator" annotation (Dialog(enable=not useInputConnectorv));
+  parameter Modelica.Units.SI.Frequency f_n=simCenter.f_n "Nominal frequency" annotation (Dialog(enable=not useInputConnectorf));
+  parameter Modelica.Units.SI.Angle delta_slackgen=0;
   parameter Boolean useInputConnectorv = false "Gets parameter v from input connector"
   annotation(Evaluate=true, HideResult=true, choices(__Dymola_checkBox=true));
   parameter Boolean useInputConnectorf = false "Gets parameter f_n from input connector"
@@ -70,8 +74,8 @@ model SlackBoundary "Slack Bus in TransiEnt"
   //                   Variables
   // _____________________________________________
 
-  Modelica.SIunits.ActivePower P_gen(start=180e3) "Active Power of Plant, Load Flow";
-  Modelica.SIunits.ReactivePower Q_gen(start=0) "Reactive Power of Plant, Load Flow";
+  Modelica.Units.SI.ActivePower P_gen(start=180e3) "Active Power of Plant, Load Flow";
+  Modelica.Units.SI.ReactivePower Q_gen(start=0) "Reactive Power of Plant, Load Flow";
 protected
   TransiEnt.Basics.Interfaces.Electrical.VoltageIn v_internal "Needed to connect to conditional connector for fixed voltage";
   TransiEnt.Basics.Interfaces.Electrical.FrequencyIn f_internal "Needed to connect to conditional connector for fixed frequency";

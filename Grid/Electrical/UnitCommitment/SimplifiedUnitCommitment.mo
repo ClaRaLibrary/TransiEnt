@@ -1,25 +1,29 @@
-within TransiEnt.Grid.Electrical.UnitCommitment;
+﻿within TransiEnt.Grid.Electrical.UnitCommitment;
 model SimplifiedUnitCommitment "Very simple unit commitment model"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -43,9 +47,9 @@ model SimplifiedUnitCommitment "Very simple unit commitment model"
 
   parameter Integer nout=simCenter.generationPark.nMODPlants "Number of plants";
   parameter Real C_var[nout]=simCenter.generationPark.C_var_MOD;
-  parameter Modelica.SIunits.Power P_min[nout]=simCenter.generationPark.P_min_MOD;
-  parameter Modelica.SIunits.Power P_max[nout]=simCenter.generationPark.P_max_MOD;
-  parameter Modelica.SIunits.Power P_init[nout]=P_min;
+  parameter Modelica.Units.SI.Power P_min[nout]=simCenter.generationPark.P_min_MOD;
+  parameter Modelica.Units.SI.Power P_max[nout]=simCenter.generationPark.P_max_MOD;
+  parameter Modelica.Units.SI.Power P_init[nout]=P_min;
   parameter Boolean[nout] unit_mustrun = fill(false, nout) "Can be used to prevent plants to shut down (e.g. chp plants)";
 
   // _____________________________________________
@@ -79,8 +83,8 @@ model SimplifiedUnitCommitment "Very simple unit commitment model"
   SI.Power P_thisUnit "Power assigned to this unit";
   Real[nout] C_varsorted;
 
-  Modelica.SIunits.Power P_max_eff[nout]=P_max - P_R_pos "Effective maximum load considering upwards control reserve";
-  Modelica.SIunits.Power P_min_eff[nout]=P_min + P_R_pos "Effective minimum load considering downwards control reserve";
+  Modelica.Units.SI.Power P_max_eff[nout]=P_max - P_R_pos "Effective maximum load considering upwards control reserve";
+  Modelica.Units.SI.Power P_min_eff[nout]=P_min + P_R_pos "Effective minimum load considering downwards control reserve";
 
 algorithm
   (C_varsorted, merit_order):= Modelica.Math.Vectors.sort(C_var,ascending=false);

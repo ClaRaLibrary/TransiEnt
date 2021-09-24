@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Utilities;
+﻿within TransiEnt.Producer.Heat.Gas2Heat.SmallGasBoiler.Utilities;
 model Duty2EfficiencyCharline "Characteristic line of a boiler's efficiency in function of the boiler's duty"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -36,7 +40,7 @@ model Duty2EfficiencyCharline "Characteristic line of a boiler's efficiency in f
 
   parameter Boolean condensing "Condensing operation";
   parameter Boolean referenceNCV = true "true, if efficiencies shall be in respect to NCV, false will give GCV referenced efficiencies";
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_n "Nominal heating power";
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_n "Nominal heating power";
 protected
   parameter String CharLineFileName=if condensing then "WGKennlinie-TL-Wolf450-5200BW4030.txt"
        else "WGKennlinie-TL-Wolf450-5200NT.txt" "Characteristic line data filename with extension";
@@ -63,7 +67,7 @@ public
   //                   Complex Components
   // _____________________________________________
 
-  TransiEnt.Basics.Tables.GenericCombiTable1Ds charLine(relativepath="\\heat\GasBoiler\\" + CharLineFileName, columns=if referenceNCV then {3} else {2}) annotation (Placement(transformation(extent={{-12,-10},{8,10}})));
+  TransiEnt.Basics.Tables.GenericCombiTable1Ds charLine(relativepath="\\heat\\GasBoiler\\" + CharLineFileName, columns=if referenceNCV then {3} else {2}) annotation (Placement(transformation(extent={{-12,-10},{8,10}})));
   Modelica.Blocks.Sources.RealExpression realExpression(y=Q_flow_n)
     annotation (Placement(transformation(extent={{-90,-42},{-70,-22}})));
   Modelica.Blocks.Math.Division division1

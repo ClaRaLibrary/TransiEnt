@@ -1,25 +1,29 @@
-within TransiEnt.Storage.Heat.HotWaterStorage_L4.Base;
+﻿within TransiEnt.Storage.Heat.HotWaterStorage_L4.Base;
 model Buoyancy "Model to add buoyancy if there is a temperature inversion in the tank"
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
   // Model is bases on the model "Bouyncy in the "Buildings-library"
   // A few changes according to the parameters rho_default and cp_default are made
 
@@ -36,11 +40,11 @@ model Buoyancy "Model to add buoyancy if there is a temperature inversion in the
 //______________________________________________________________________________
 //                         Parameter
 //______________________________________________________________________________
-  parameter Modelica.SIunits.Volume V "Volume of tank";
+  parameter Modelica.Units.SI.Volume V "Volume of tank";
   parameter Integer nSeg(min=2) = 2 "Number of volume segments";
-  parameter Modelica.SIunits.Time tau(min=0) "Time constant for mixing";
-  parameter Modelica.SIunits.Density rho_default= 998 "Density, used to compute fluid mass";
-  parameter Modelica.SIunits.SpecificHeatCapacity cp_default= 4200 "Specific heat capacity";
+  parameter Modelica.Units.SI.Time tau(min=0) "Time constant for mixing";
+  parameter Modelica.Units.SI.Density rho_default=998 "Density, used to compute fluid mass";
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp_default=4200 "Specific heat capacity";
   //outer parameter Modelica.SIunits.SpecificHeatCapacity cp_default= Medium.cp
 
 //______________________________________________________________________________
@@ -49,7 +53,7 @@ model Buoyancy "Model to add buoyancy if there is a temperature inversion in the
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a[nSeg] heatPort "Heat input into the volumes" annotation (Placement(transformation(extent={{80,-4},{100,16}}), iconTransformation(extent={{80,-4},{100,16}})));
 
-  Modelica.SIunits.HeatFlowRate[nSeg-1] Q_flow "Heat flow rate from segment i+1 to i";
+  Modelica.Units.SI.HeatFlowRate[nSeg - 1] Q_flow "Heat flow rate from segment i+1 to i";
 
    /*
    parameter Medium.ThermodynamicState sta_default = Medium.setState_pTX(T=Medium.T_default,
@@ -63,7 +67,7 @@ model Buoyancy "Model to add buoyancy if there is a temperature inversion in the
 protected
    parameter Real k(unit="W/K") = V*rho_default*cp_default/tau/nSeg "Proportionality constant, since we use dT instead of dH";
 
-   Modelica.SIunits.TemperatureDifference dT[nSeg-1] "Temperature difference between adjoining volumes";
+  Modelica.Units.SI.TemperatureDifference dT[nSeg - 1] "Temperature difference between adjoining volumes";
 
 equation
   for i in 1:nSeg-1 loop

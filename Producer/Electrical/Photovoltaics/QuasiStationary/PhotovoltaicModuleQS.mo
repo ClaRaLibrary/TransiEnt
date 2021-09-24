@@ -1,26 +1,30 @@
-within TransiEnt.Producer.Electrical.Photovoltaics.QuasiStationary;
+﻿within TransiEnt.Producer.Electrical.Photovoltaics.QuasiStationary;
 model PhotovoltaicModuleQS "PV Module for quasi stationary boundaries with constant efficiency"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 1.3.1                             //
+// Component of the TransiEnt Library, version: 2.0.0                             //
 //                                                                                //
-// Licensed by Hamburg University of Technology under the 3-Clause BSD License    //
-// for the Modelica Association.                                                  //
-// Copyright 2020, Hamburg University of Technology.                              //
+// Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
+// Copyright 2021, Hamburg University of Technology.                              //
 //________________________________________________________________________________//
 //                                                                                //
-// TransiEnt.EE and ResiliEntEE are research projects supported by the German     //
-// Federal Ministry of Economics and Energy (FKZ 03ET4003 and 03ET4048).          //
+// TransiEnt.EE, ResiliEntEE, IntegraNet and IntegraNet II are research projects  //
+// supported by the German Federal Ministry of Economics and Energy               //
+// (FKZ 03ET4003, 03ET4048, 0324027 and 03EI1008).                                //
 // The TransiEnt Library research team consists of the following project partners://
 // Institute of Engineering Thermodynamics (Hamburg University of Technology),    //
 // Institute of Energy Systems (Hamburg University of Technology),                //
 // Institute of Electrical Power and Energy Technology                            //
 // (Hamburg University of Technology)                                             //
-// Institute of Electrical Power Systems and Automation                           //
-// (Hamburg University of Technology)                                             //
-// and is supported by                                                            //
+// Fraunhofer Institute for Environmental, Safety, and Energy Technology UMSICHT, //
+// Gas- und Wärme-Institut Essen						  //
+// and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
+
+
 
   // _____________________________________________
   //
@@ -41,13 +45,11 @@ model PhotovoltaicModuleQS "PV Module for quasi stationary boundaries with const
   // _____________________________________________
   Modelica.Blocks.Math.Gain PVPower(k=-A_module*eta)
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.VariableConductor
-    variableConductor annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.VariableConductor variableConductor annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={50,-8})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Sensors.PowerSensor
-    PowerSensorPVPanel annotation (Placement(transformation(
+  Modelica.Electrical.QuasiStatic.SinglePhase.Sensors.PowerSensor PowerSensorPVPanel annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={50,16})));
@@ -57,19 +59,16 @@ model PhotovoltaicModuleQS "PV Module for quasi stationary boundaries with const
     annotation (Placement(transformation(extent={{14,14},{-6,34}})));
   Modelica.Blocks.Continuous.PI         integrator(k=10, T=1/230/230/1e-6)
     annotation (Placement(transformation(extent={{-4,-30},{16,-10}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Basic.Ground ground
-    annotation (Placement(transformation(extent={{40,-48},{60,-28}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Basic.Ground ground annotation (Placement(transformation(extent={{40,-48},{60,-28}})));
   Modelica.Blocks.Interfaces.RealInput u annotation (Placement(transformation(
           rotation=0, extent={{-114,-10},{-94,10}})));
-  Modelica.Electrical.QuasiStationary.SinglePhase.Interfaces.PositivePin
-    currentP annotation (Placement(transformation(rotation=0, extent={{90,-10},{
-            110,10}})));
+  Modelica.Electrical.QuasiStatic.SinglePhase.Interfaces.PositivePin currentP annotation (Placement(transformation(rotation=0, extent={{90,-10},{110,10}})));
 equation
   // _____________________________________________
   //
   //               Connect Statements
   // _____________________________________________
-  connect(complexToReal.u,PowerSensorPVPanel. y) annotation (Line(points={{16,24},{16,24},{39,24}},    color={85,170,255}));
+  connect(complexToReal.u, PowerSensorPVPanel.apparentPower) annotation (Line(points={{16,24},{16,24},{39,24}}, color={85,170,255}));
   connect(complexToReal.re,feedback. u2) annotation(Line(points={{-8,30},{-26,30},{-26,-12}},       color = {0, 0, 127}));
   connect(feedback.y,integrator. u) annotation(Line(points={{-17,-20},{-6,-20}},   color = {0, 0, 127}));
   connect(PVPower.y,feedback. u1) annotation (Line(points={{-49,0},{-42,0},{-42,-20},{-34,-20}}, color={0,0,127}));
