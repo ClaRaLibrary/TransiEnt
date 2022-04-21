@@ -2,8 +2,9 @@
 model ThreeWayValveRealGas_L1_simple "Three way valve for one phase vle media | no reverse flow | works for zero flow | no pressure dependency |"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model ThreeWayValveRealGas_L1_simple "Three way valve for one phase vle media | 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

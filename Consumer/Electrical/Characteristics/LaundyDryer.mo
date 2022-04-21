@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Electrical.Characteristics;
 record LaundyDryer "Laundry Dryer"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record LaundyDryer "Laundry Dryer"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

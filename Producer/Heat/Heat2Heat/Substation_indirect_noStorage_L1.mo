@@ -2,8 +2,9 @@
 model Substation_indirect_noStorage_L1 "Simple model of a substation with indirect connection."
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -27,6 +28,7 @@ model Substation_indirect_noStorage_L1 "Simple model of a substation with indire
 
 
 
+
  // _____________________________________________
  //
  //          Imports and Class Hierarchy
@@ -41,12 +43,21 @@ model Substation_indirect_noStorage_L1 "Simple model of a substation with indire
  //                   Parameters
  // _____________________________________________
 
- parameter SI.Temperature T_start = 90 + 273.15 "Temperature at start of the simulation";
- parameter Real dT = 20 "Setpoint temperature difference between supply and return pipe";
- parameter SI.MassFlowRate m_flow_min = 0.0001 "Minimum mass flow rate to counteract possible zero massflow sitations, equals a simplified bypass";
-
+ parameter SI.Temperature T_start = simCenter.T_supply "Temperature at start of the simulation";
+ parameter SI.MassFlowRate m_flow_min = simCenter.m_flow_min "Minimum mass flow rate to counteract possible zero massflow sitations, equals a simplified bypass";
+ replaceable model room_heating_hex_model = TransiEnt.Producer.Heat.Heat2Heat.Indirect_HEX_const_T_out_L1  constrainedby  TransiEnt.Producer.Heat.Base.PartialHEX           annotation (Dialog(group="Heat Exchanger"), __Dymola_choicesAllMatching=true);
+ replaceable model dhw_heating_hex_model = TransiEnt.Producer.Heat.Heat2Heat.Indirect_HEX_const_T_out_L1  constrainedby  TransiEnt.Producer.Heat.Base.PartialHEX           annotation (Dialog(group="Heat Exchanger"), __Dymola_choicesAllMatching=true);
  SI.Temperature T_mix "Mixing temperature from room and domestic hot water";
 
+ room_heating_hex_model room_heating_hex(
+    T_start=T_start,
+    m_flow_min=m_flow_min)
+                          annotation (Placement(transformation(extent={{-10,-20},{10,0}})));
+
+ dhw_heating_hex_model domestic_hot_water_hex(
+    T_start=T_start,
+    m_flow_min=m_flow_min)
+                          annotation (Placement(transformation(extent={{-10,30},{10,50}})));
 
  // _____________________________________________
  //
@@ -110,19 +121,11 @@ model Substation_indirect_noStorage_L1 "Simple model of a substation with indire
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={100,-70})));
-  TransiEnt.Producer.Heat.Heat2Heat.Indirect_HEX_L1 room_heating_hex(
-    T_start=T_start,
-    dT_soll=dT,
-    m_flow_min=m_flow_min) annotation (Placement(transformation(extent={{-10,-20},{10,0}})));
+
   Modelica.Blocks.Math.Gain signChanger_1(k=-1) annotation (Placement(transformation(
         extent={{4.5,-4.5},{-4.5,4.5}},
         rotation=0,
         origin={-27.5,-4.5})));
-  TransiEnt.Producer.Heat.Heat2Heat.Indirect_HEX_L1 domestic_hot_water_hex(
-    T_start=T_start,
-    dT_soll=dT,
-    m_flow_min=m_flow_min) annotation (Placement(transformation(extent={{-10,30},{10,50}})));
-
 
   ClaRa.Components.Sensors.SensorVLE_L1_T T_out_sub(unitOption=1)
                                                                  annotation (
@@ -148,8 +151,8 @@ equation
       color={0,131,169},
       pattern=LinePattern.Solid,
       thickness=0.5));
-  connect(room_heating_hex.m_flow, signChanger_1.u) annotation (Line(points={{0,-19.2},{0,-34},{-18,-34},{-18,-4.5},{-22.1,-4.5}}, color={0,0,127}));
-  connect(domestic_hot_water_hex.m_flow, signChanger_2.u) annotation (Line(points={{0,30.8},{0,16},{-18,16},{-18,45.5},{-22.1,45.5}},     color={0,0,127}));
+  connect(room_heating_hex.m_flow, signChanger_1.u) annotation (Line(points={{0,-21.4},{0,-34},{-18,-34},{-18,-4.5},{-22.1,-4.5}}, color={0,0,127}));
+  connect(domestic_hot_water_hex.m_flow, signChanger_2.u) annotation (Line(points={{0,28.6},{0,16},{-18,16},{-18,45.5},{-22.1,45.5}},     color={0,0,127}));
   connect(Q_demand_RH, room_heating_hex.Q_demand) annotation (Line(points={{-90,100},{-90,8},{-7.2,8},{-7.2,-2}}, color={0,0,127}));
   connect(Q_demand_DHW, domestic_hot_water_hex.Q_demand) annotation (Line(points={{90,100},{90,68},{-7.2,68},{-7.2,48}}, color={0,0,127}));
   connect(T_in_sub.port, waterPortIn) annotation (Line(
@@ -168,8 +171,8 @@ equation
   connect(signChanger_2.y, add_supply.u2) annotation (Line(points={{-32.45,45.5},{-110,45.5},{-110,-18}}, color={0,0,127}));
   connect(signChanger_1.y, add_supply.u1) annotation (Line(points={{-32.45,-4.5},{-98,-4.5},{-98,-18}}, color={0,0,127}));
   connect(add_return.y, m_flow_out.m_flow) annotation (Line(points={{106,-41},{106,-58}}, color={0,0,127}));
-  connect(room_heating_hex.m_flow, add_return.u2) annotation (Line(points={{0,-19.2},{0,-34},{82,-34},{82,-6},{100,-6},{100,-18}}, color={0,0,127}));
-  connect(domestic_hot_water_hex.m_flow, add_return.u1) annotation (Line(points={{0,30.8},{0,16},{112,16},{112,-18}}, color={0,0,127}));
+  connect(room_heating_hex.m_flow, add_return.u2) annotation (Line(points={{0,-21.4},{0,-34},{82,-34},{82,-6},{100,-6},{100,-18}}, color={0,0,127}));
+  connect(domestic_hot_water_hex.m_flow, add_return.u1) annotation (Line(points={{0,28.6},{0,16},{112,16},{112,-18}}, color={0,0,127}));
   connect(T_out_sub.port, waterPortOut) annotation (Line(
       points={{66,-70},{66,-100},{101,-100}},
       color={0,131,169},

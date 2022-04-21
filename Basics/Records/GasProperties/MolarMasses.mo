@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Records.GasProperties;
 record MolarMasses "Record containing the molar masses for components of natural gas in kg/mol"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record MolarMasses "Record containing the molar masses for components of natural
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

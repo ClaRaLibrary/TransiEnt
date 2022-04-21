@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Heat.VolumesValvesFittings.Pipes;
 package Base
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ package Base
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -61,6 +63,7 @@ package Base
     //Geometry
     final parameter Real R(unit="(m.K)/W") = (log(diameter_o/(diameter_i+pipe_wall_thickness*2))/(2*Modelica.Constants.pi*lambda_insulation)+ log(2*1/(diameter_o))/(2*Modelica.Constants.pi*simCenter.lambda_ground));
     parameter SI.Length length = 1 "Length of the pipe";
+    parameter SI.Height depth = 1.5 "Deptsh of the pipe";
     parameter SI.Length diameter_i = 0.3 "Inner Diameter of the pipe";
     parameter SI.Length diameter_o = 0.4 "Outer Diameter of the pipe";
     parameter SI.Height z_in = 1 "Inlet Height of the pipe";

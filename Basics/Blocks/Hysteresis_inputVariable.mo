@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Blocks;
 block Hysteresis_inputVariable "Transform Real to Boolean signal with Hysteresis and variables as input values"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ block Hysteresis_inputVariable "Transform Real to Boolean signal with Hysteresis
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

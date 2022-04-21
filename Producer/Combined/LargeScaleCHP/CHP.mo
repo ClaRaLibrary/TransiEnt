@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Combined.LargeScaleCHP;
 model CHP "Recommended model for large scale, combined heat and power plants with second order dynamics, three operating states and optional control power"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model CHP "Recommended model for large scale, combined heat and power plants wit
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

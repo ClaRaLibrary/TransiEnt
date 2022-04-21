@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Systems.HeatpumpSystems;
 function simulateUnits "Function that allows to simulate N uncoordinated heat pump systems in series using parameter values from a N x 24 mat file"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ function simulateUnits "Function that allows to simulate N uncoordinated heat pu
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

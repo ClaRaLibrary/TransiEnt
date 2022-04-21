@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Electrical.Base.PartloadEfficiency;
 record CCGTButtler "CCGT part load efficiency after Buttler et al. 2015"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record CCGTButtler "CCGT part load efficiency after Buttler et al. 2015"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

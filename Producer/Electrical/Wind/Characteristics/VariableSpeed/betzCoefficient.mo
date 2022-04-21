@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed;
 function betzCoefficient "Approximation function for betz coefficient based on six parameters (see Heier2009, page 39)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ function betzCoefficient "Approximation function for betz coefficient based on s
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

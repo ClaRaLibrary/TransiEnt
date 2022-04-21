@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Electrical.Base.ControlPower;
 block CombinedHeatAndPower "Control Power Estimation for Combined heat and power plants (extraction back pressure turbine)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ block CombinedHeatAndPower "Control Power Estimation for Combined heat and power
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

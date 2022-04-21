@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Turbogroups.OperatingStates.Check;
 model TestThreeStateDynamic "Model for testing the three state dynamic"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TestThreeStateDynamic "Model for testing the three state dynamic"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

@@ -2,8 +2,9 @@
 model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power limited (shuts down below minimum power), with primary and secondary balancing controller where secondary balancing power is lumped inside"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model NonlinearThreeStatePlant "Slew Rate limited (=nonlinear), Minimum power li
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

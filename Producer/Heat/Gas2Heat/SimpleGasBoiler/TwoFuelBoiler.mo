@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler;
 model TwoFuelBoiler "Abstract model for boilers using two different fuel types"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TwoFuelBoiler "Abstract model for boilers using two different fuel types"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

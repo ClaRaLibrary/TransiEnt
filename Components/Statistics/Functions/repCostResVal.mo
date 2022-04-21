@@ -2,8 +2,9 @@
 function repCostResVal "Calculates the cost of replacements and the residual value based on investment cost, interest rate, price change rate, observation period and life time; price changes are neglected"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ function repCostResVal "Calculates the cost of replacements and the residual val
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

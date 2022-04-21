@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Electrical.Base;
 partial model PartialCDEUnit "Adds a gas interface with a mass flow defining boundary to child components"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ partial model PartialCDEUnit "Adds a gas interface with a mass flow defining bou
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

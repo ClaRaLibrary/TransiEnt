@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Systems.PVBatteryPoolControl.Base;
 model PeriodicSort "Sorts the values in input vector by value periodically (e.g. sort PBP offer by value every week before auction)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model PeriodicSort "Sorts the values in input vector by value periodically (e.g.
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Heat.Profiles;
 model ExampleHousehold_HotWaterDemand_VDI4665_60s "Example single family house hot water heating demand (VDI4665, RG1, 150m2, 4 person, build in 1991,70l hot water storage)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model ExampleHousehold_HotWaterDemand_VDI4665_60s "Example single family house h
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

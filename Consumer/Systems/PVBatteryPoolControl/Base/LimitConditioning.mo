@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Systems.PVBatteryPoolControl.Base;
 model LimitConditioning "Limits setpoint to loading (P_set_base>0) if battery conditioning is active"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model LimitConditioning "Limits setpoint to loading (P_set_base>0) if battery co
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Interfaces.Electrical;
 connector ComplexPowerPort "Single phase electric connector containing active, reactive power, frequency, voltage and voltage angle for quasistationary ac power models"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ connector ComplexPowerPort "Single phase electric connector containing active, r
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

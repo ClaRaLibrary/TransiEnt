@@ -2,8 +2,9 @@
 model SmallScaleCHP_simple "Small scale CHP model using a constant efficiency and fluid ports"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model SmallScaleCHP_simple "Small scale CHP model using a constant efficiency an
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -125,7 +127,7 @@ model SmallScaleCHP_simple "Small scale CHP model using a constant efficiency an
     redeclare model PowerPlantCostModel = ProducerCosts,
     P_n=P_el_n) annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
 
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional, integrateHeatFlow=integrateHeatFlow) annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectHeatingPower collectHeatingPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration, integrateHeatFlow=integrateHeatFlow) annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
 
   replaceable TransiEnt.Components.Boundaries.Heat.Heatflow_L1 heatFlowBoundary(
     p_drop=p_drop,
@@ -149,7 +151,7 @@ model SmallScaleCHP_simple "Small scale CHP model using a constant efficiency an
         rotation=90,
         origin={70,26})));
 
-  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Conventional, integrateElPower=integrateElPower) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Cogeneration, integrateElPower=integrateElPower) annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
   Modelica.Blocks.Sources.RealExpression P_el_set(y=P_el) if usePowerPort annotation (Placement(transformation(extent={{4,-64},{24,-44}})));
 
@@ -181,10 +183,9 @@ equation
   H_flow = -(P_el - Q_flow_set*sign.k)/(eta_el + eta_th);
   //m_flow_gas=H_flow/vleNCVSensor.NCV;
 
-  //Power.P_el_set=P_el;
 
-  collectElectricPower.powerCollector.P = -P_el;
-  collectHeatingPower.heatFlowCollector.Q_flow = -Q_flow_set;
+  collectElectricPower.powerCollector.P = P_el;
+  collectHeatingPower.heatFlowCollector.Q_flow = -Q_flow_gen;
 
   // _____________________________________________
   //

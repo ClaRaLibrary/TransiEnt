@@ -1,8 +1,9 @@
 ﻿within TransiEnt.SystemGeneration.Superstructure.Components;
 model Superstructure "Representation of a certain region in terms of consumption and production of electrical power and gas"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model Superstructure "Representation of a certain region in terms of consumption
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

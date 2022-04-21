@@ -2,8 +2,9 @@
 model TableBasedGasBurningConsumer_VariableGasComposition "Simple model of a consumer burning natural gas for covering heat demand."
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model TableBasedGasBurningConsumer_VariableGasComposition "Simple model of a con
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

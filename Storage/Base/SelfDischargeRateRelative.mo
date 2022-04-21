@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Base;
 model SelfDischargeRateRelative "Stationary Loss approximated by self discharge rate relative to current stored Energy e.g. 50%/h"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model SelfDischargeRateRelative "Stationary Loss approximated by self discharge 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

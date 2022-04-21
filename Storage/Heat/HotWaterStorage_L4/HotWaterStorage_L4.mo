@@ -2,8 +2,9 @@
 model HotWaterStorage_L4 "Temperature and Heat flow rate based model of a stratified thermal storage with finite volume discretisation (1=top, n=bottom)"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model HotWaterStorage_L4 "Temperature and Heat flow rate based model of a strati
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

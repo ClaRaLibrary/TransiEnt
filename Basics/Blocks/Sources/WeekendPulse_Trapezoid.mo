@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Blocks.Sources;
 model WeekendPulse_Trapezoid "model for producing a trapezoid weekend pulse"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model WeekendPulse_Trapezoid "model for producing a trapezoid weekend pulse"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

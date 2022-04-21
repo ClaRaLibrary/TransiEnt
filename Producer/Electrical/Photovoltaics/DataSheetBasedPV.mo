@@ -2,8 +2,9 @@
 model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -47,6 +49,8 @@ model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
   // _____________________________________________
 
   outer TransiEnt.SimCenter simCenter annotation (Placement(transformation(extent={{-84,-10},{-64,10}})));
+  outer TransiEnt.ModelStatistics modelStatistics;
+
   Modelica.Blocks.Sources.RealExpression GlobalSolarRadiation(y=
         simCenter.ambientConditions.globalSolarRadiation.value)
     annotation (Placement(transformation(extent={{-52,-16},{-36,20}})));
@@ -82,7 +86,32 @@ model DataSheetBasedPV "Efficiency based on Temperature and Radiation"
     annotation (Placement(transformation(extent={{12,-7},{26,7}})));
   Modelica.Blocks.Math.Gain SurfacePower(k(unit="m2")=A_module)
     annotation (Placement(transformation(extent={{35,-7},{49,7}})));
+
+ TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable, integrateElPower=simCenter.integrateElPower)
+                                                                                                             annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost collectCosts(
+    consumes_H_flow=false,
+    produces_m_flow_CDE=false,
+    P_n=A_module*0.2*1000,
+    redeclare model PowerPlantCostModel = ProducerCosts,
+    Q_flow_fuel_is=0,
+    m_flow_CDE_is=0,
+    P_el_is=epp.P,
+    produces_Q_flow=false)
+                     annotation (HideResult=false, Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={90,-90})));
+
+       replaceable model ProducerCosts = TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PV
+                                                                                  constrainedby TransiEnt.Components.Statistics.ConfigurationData.PowerProducerCostSpecs.PartialPowerPlantCostSpecs
+                                               annotation (Dialog(group="Statistics"), choicesAllMatching=true);
+
+
 equation
+
+    collectElectricPower.powerCollector.P=epp.P;
+
   // _____________________________________________
   //
   //               Connect Statements
@@ -112,6 +141,8 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(SurfacePower.y, pQ_To_EPP.P_el_set) annotation (Line(points={{49.7,0},{62,0},{62,24},{82.4,24},{82.4,10.8}}, color={0,0,127}));
+  connect(modelStatistics.powerCollector[TransiEnt.Basics.Types.TypeOfResource.Renewable],collectElectricPower.powerCollector);
+  connect(modelStatistics.costsCollector, collectCosts.costsCollector);
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}),                                                                     graphics={
                                                      Line(

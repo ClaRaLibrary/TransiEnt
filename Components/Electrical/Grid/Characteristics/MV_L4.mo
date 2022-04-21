@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Electrical.Grid.Characteristics;
 record MV_L4 "MV_L4 10 kV Cable, 3 * 120 mm^2 Cu"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record MV_L4 "MV_L4 10 kV Cable, 3 * 120 mm^2 Cu"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

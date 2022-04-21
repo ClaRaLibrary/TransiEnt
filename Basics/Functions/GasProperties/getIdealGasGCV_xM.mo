@@ -3,8 +3,9 @@ function getIdealGasGCV_xM "Adaptive function for gross calorific value calculat
   // LA: has to be adapted according to the realGas function, but adaptions in models where the function is used are also necessary!
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -23,6 +24,7 @@ function getIdealGasGCV_xM "Adaptive function for gross calorific value calculat
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

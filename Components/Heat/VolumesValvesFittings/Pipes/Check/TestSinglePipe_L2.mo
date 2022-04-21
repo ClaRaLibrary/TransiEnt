@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Heat.VolumesValvesFittings.Pipes.Check;
 model TestSinglePipe_L2
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -25,13 +26,14 @@ model TestSinglePipe_L2
 
 
 
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   TransiEnt.Components.Heat.VolumesValvesFittings.Pipes.SinglePipe_L2 singlePipe_LX(
     p_start=simCenter.p_nom[1],
     T_start=333.15,
     m_flow_start=0.4,
-    v_nom=1,
+    v_nom=1.1,
     activate_volumes=true,
     length=1000,
     calc_initial_dstrb=true,
@@ -41,7 +43,10 @@ model TestSinglePipe_L2
   inner SimCenter simCenter(
     activate_volumes=true,
     calc_initial_dstrb=true,
-    v_nom=0.18,
+    T_supply=333.15,
+    T_return=333.15,
+    m_flow_min=0.0001,
+    v_nom=1.1,
     lambda_ground=1.2)      annotation (Placement(transformation(extent={{58,54},{68,64}})));
   ClaRa.Components.BoundaryConditions.BoundaryVLE_Txim_flow boundaryVLE_Txim_flow(
     variable_m_flow=false,

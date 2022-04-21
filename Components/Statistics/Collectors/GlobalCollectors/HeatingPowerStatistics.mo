@@ -2,8 +2,9 @@
 model HeatingPowerStatistics "showing heat power and energy by type"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model HeatingPowerStatistics "showing heat power and energy by type"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -49,7 +51,7 @@ public
   SI.HeatFlowRate Q_flow_gen_cogeneration=heatFlowCollector[EnergyResource.Cogeneration];
   SI.HeatFlowRate Q_flow_gen_renewable=heatFlowCollector[EnergyResource.Renewable];
   SI.HeatFlowRate Q_flow_gen_generic=heatFlowCollector[EnergyResource.Generic];
-  SI.HeatFlowRate Q_flow_gen_total=sum(heatFlowCollector)-Q_flow_consumed;
+  SI.HeatFlowRate Q_flow_gen_total=sum(heatFlowCollector)-heatFlowCollector[EnergyResource.Consumer];
   SI.HeatFlowRate Q_flow_losses=Q_flow_gen_total-Q_flow_consumed;
 
    // Energy

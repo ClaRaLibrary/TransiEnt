@@ -2,8 +2,9 @@
 model WobbeGCVSensor "Sensor calculating the Wobbe-Index and gross calorific value for for real gas mixtures"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model WobbeGCVSensor "Sensor calculating the Wobbe-Index and gross calorific val
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

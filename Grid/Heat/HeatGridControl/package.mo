@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Grid.Heat;
 package HeatGridControl "Components used for the determination of set values for large scale heat plants and combined heat and power plants connected to a district heating grid"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ package HeatGridControl "Components used for the determination of set values for
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

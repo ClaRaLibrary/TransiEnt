@@ -2,8 +2,9 @@
 model ControllerH2OForReformer_StoCbeforePrere "Controller to control the water mass flow rate for the prereformer and steam methane reformer for given steam to carbon ratio in front of Prereformer"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model ControllerH2OForReformer_StoCbeforePrere "Controller to control the water 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

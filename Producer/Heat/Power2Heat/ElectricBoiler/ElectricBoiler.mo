@@ -2,8 +2,9 @@
 model ElectricBoiler "Electric Boiler with constant efficiency, spatial resolution can be chosen to be 0d or 1d"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model ElectricBoiler "Electric Boiler with constant efficiency, spatial resoluti
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -66,9 +68,11 @@ model ElectricBoiler "Electric Boiler with constant efficiency, spatial resoluti
   //                Interfaces
   // _____________________________________________
 
-  replaceable TransiEnt.Basics.Interfaces.Electrical.ActivePowerPort epp if usePowerPort constrainedby TransiEnt.Basics.Interfaces.Electrical.PartialPowerPort "Choice of power port" annotation (
-    Dialog(group="Replaceable Components", enable=usePowerPort),
+  replaceable connector PowerPortModel = Basics.Interfaces.Electrical.ActivePowerPort  constrainedby Basics.Interfaces.Electrical.ActivePowerPort  "Choice of power port" annotation (
     choicesAllMatching=true,
+    Dialog(group="Replaceable Components"));
+
+   PowerPortModel epp if usePowerPort annotation (
     Placement(transformation(extent={{-10,88},{10,108}}), iconTransformation(extent={{-10,-112},{10,-92}})));
 
   TransiEnt.Basics.Interfaces.Thermal.FluidPortIn fluidPortIn(Medium=medium) if
@@ -87,14 +91,16 @@ model ElectricBoiler "Electric Boiler with constant efficiency, spatial resoluti
   // _____________________________________________
 
 public
-  replaceable TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary if
-                                                                                usePowerPort constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary "Choice of power boundary model. The power boundary model must match the power port." annotation (
-    Dialog(group="Replaceable Components", enable=usePowerPort),
-    choices(choice(redeclare TransiEnt.Components.Boundaries.Electrical.ActivePower.Power powerBoundary "PowerBoundary for ActivePowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower powerBoundary(useInputConnectorQ=false, cosphi_boundary=0.99)  "PowerBoundary for ApparentPowerPort"), choice(redeclare TransiEnt.Components.Boundaries.Electrical.ComplexPower.PQBoundary powerBoundary(useInputConnectorQ=false, cosphi_boundary=0.99) "Power Boundary for ComplexPowerPort")),
+  replaceable model PowerBoundaryModel = TransiEnt.Components.Boundaries.Electrical.ActivePower.Power constrainedby TransiEnt.Components.Boundaries.Electrical.Base.PartialModelPowerBoundary  "Choice of power boundary model. The power boundary model must match the power port."     annotation (
+    choicesAllMatching=true,
+    Dialog(group="Replaceable Components"));
+
+  PowerBoundaryModel powerBoundary if usePowerPort "Choice of power boundary model. The power boundary model must match the power port."     annotation (
     Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={-10,30})));
+
 
   replaceable TransiEnt.Components.Boundaries.Heat.Heatflow_L1 heatFlowBoundary(change_sign=true) if useFluidPorts constrainedby TransiEnt.Components.Boundaries.Heat.Base.PartialHeatBoundary "Choice of heat boundary model" annotation (Dialog(group="Replaceable Components"),choicesAllMatching=true, Placement(transformation(
         extent={{-10,-10},{10,10}},

@@ -1,8 +1,9 @@
 ﻿within TransiEnt.UsersGuide.CodingConventions.Examples;
 partial model EmptyTemplateModel "EmptyTemplate to get things started (copy paste before starting to write a model)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ partial model EmptyTemplateModel "EmptyTemplate to get things started (copy past
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

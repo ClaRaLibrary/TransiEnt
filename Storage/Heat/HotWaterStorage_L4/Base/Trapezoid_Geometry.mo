@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Heat.HotWaterStorage_L4.Base;
 model Trapezoid_Geometry "Geometry with vertical trapezoid crosssection extending the partial_Geometry"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model Trapezoid_Geometry "Geometry with vertical trapezoid crosssection extendin
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

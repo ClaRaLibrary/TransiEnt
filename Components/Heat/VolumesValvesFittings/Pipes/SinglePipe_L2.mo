@@ -2,8 +2,9 @@
 model SinglePipe_L2 "Model of a pipe for use in district heating networks"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model SinglePipe_L2 "Model of a pipe for use in district heating networks"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -95,6 +97,7 @@ model SinglePipe_L2 "Model of a pipe for use in district heating networks"
                                                                                                                                                                                       annotation (choicesAllMatching=true,Dialog(group="HeatTransfer"));
   inner TransiEnt.Components.Heat.VolumesValvesFittings.Pipes.Base.pipe_parameters pipe_parameter(
     calc_initial_dstrb=calc_initial_dstrb,
+    depth=depth,
     diameter_i=diameter_i,
     p_start=p_start,
     T_start=T_start,
@@ -121,64 +124,64 @@ public
         simCenter.fluid1) "Outlet port" annotation (Placement(transformation(
           extent={{90,-10},{110,10}}), iconTransformation(extent={{90,-10},{110,
             10}})));
-  Pipes.Base.dp_residencetime dp_residencetime(calc_initial_dstrb=calc_initial_dstrb) annotation (Placement(transformation(extent={{-78,-16},{-42,16}})));
-  HeatTransfer hT_PlugFlow_LX_nom annotation (Placement(transformation(extent={{20,-15},
-            {52,15}})));
-  HeatTransfer hT_PlugFlow_LX_rev annotation (Placement(transformation(extent={{2,-15},
-            {-30,15}})));
+  Pipes.Base.dp_residencetime dp_residencetime(calc_initial_dstrb=calc_initial_dstrb) annotation (Placement(transformation(extent={{-28,-16},{8,16}})));
+  HeatTransfer hT_PlugFlow_LX_nom annotation (Placement(transformation(extent={{20,-15},{52,15}})));
+  HeatTransfer hT_PlugFlow_LX_rev annotation (Placement(transformation(extent={{-40,-15},{-72,15}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heat
     annotation (Placement(transformation(extent={{-10,90},{10,110}})));
 
-  ClaRa.Components.VolumesValvesFittings.Fittings.SplitVLE_L2_flex volume(
-    useHomotopy=false,
-    volume=pipe_parameter.carrier_pipe_capacity/(pipe_parameter.rho*pipe_parameter.cp_w),
+  Base.Fluid_Volume fluid_Volume(
     p_nom=p_start,
     h_nom=pipe_parameter.h_start,
-    h_start=pipe_parameter.h_start_out,
+    h_start=pipe_parameter.h_start,
     p_start=p_start,
-    initOption=208) if  activate_volumes annotation (Placement(transformation(extent={{60,-10},{80,10}})));
+    V_const=pipe_parameter.carrier_pipe_capacity/(pipe_parameter.rho*pipe_parameter.cp_w))
+                                 if activate_volumes annotation (Placement(transformation(extent={{60,20},{80,40}})));
+  Modelica.Thermal.HeatTransfer.Sources.FixedHeatFlow fixedHeatFlow(Q_flow=0) if activate_volumes annotation (Placement(transformation(extent={{40,60},{60,80}})));
 equation
  // _____________________________________________
  //
  //            Connect statements
  // _____________________________________________
 
-  connect(waterPortIn, dp_residencetime.waterPortIn) annotation (Line(
-      points={{-100,0},{-78,0}},
-      color={175,0,0},
-      thickness=0.5));
-  connect(hT_PlugFlow_LX_rev.waterPortIn, hT_PlugFlow_LX_nom.waterPortIn) annotation (Line(
-      points={{2,0},{20,0}},
-      color={175,0,0},
-      thickness=0.5));
-  connect(dp_residencetime.waterPortOut, hT_PlugFlow_LX_rev.waterPortOut) annotation (Line(
-      points={{-42,0},{-30,0}},
-      color={175,0,0},
-      thickness=0.5));
-  connect(dp_residencetime.residence_time_reversed, hT_PlugFlow_LX_rev.residence_time) annotation (Line(points={{-40.2,
-          -14.4},{-34,-14.4},{-34,-32},{-14,-32},{-14,-12}},                                                                                                            color={0,0,127}));
-  connect(dp_residencetime.residence_time_nom, hT_PlugFlow_LX_nom.residence_time) annotation (Line(points={{-40.2,14.4},{-28,14.4},{-28,-40},{36,-40},{36,-12}}, color={0,0,127}));
+  connect(dp_residencetime.residence_time_reversed, hT_PlugFlow_LX_rev.residence_time) annotation (Line(points={{9.8,-14.4},{2,-14.4},{2,-30},{-56,-30},{-56,-12}},     color={0,0,127}));
+  connect(dp_residencetime.residence_time_nom, hT_PlugFlow_LX_nom.residence_time) annotation (Line(points={{9.8,14.4},{16,14.4},{16,-24},{36,-24},{36,-12}},     color={0,0,127}));
 
   connect(heat, heat)
     annotation (Line(points={{0,100},{0,100}}, color={191,0,0}));
-  connect(hT_PlugFlow_LX_rev.heat, heat) annotation (Line(points={{-14,15},{-14,52},{0,52},{0,100}},
+  connect(hT_PlugFlow_LX_rev.heat, heat) annotation (Line(points={{-56,15},{-56,86},{0,86},{0,100}},
                                         color={191,0,0}));
   connect(heat, hT_PlugFlow_LX_nom.heat) annotation (Line(points={{0,100},{0,52},{36,52},{36,15}},
                             color={191,0,0}));
-  connect(hT_PlugFlow_LX_nom.waterPortOut, volume.inlet) annotation (Line(
-      points={{52,0},{60,0}},
+
+  connect(waterPortIn, hT_PlugFlow_LX_rev.waterPortOut) annotation (Line(
+      points={{-100,0},{-72,0}},
       color={175,0,0},
       thickness=0.5));
-
-  if activate_volumes then
-    connect(volume.outlet[1], waterPortOut) annotation (Line(
-      points={{80,0},{100,0}},
-      color={0,131,169},
-      pattern=LinePattern.Solid,
+  connect(hT_PlugFlow_LX_rev.waterPortIn, dp_residencetime.waterPortIn) annotation (Line(
+      points={{-40,0},{-28,0}},
+      color={175,0,0},
+      thickness=0.5));
+  connect(dp_residencetime.waterPortOut, hT_PlugFlow_LX_nom.waterPortIn) annotation (Line(
+      points={{8,0},{20,0}},
+      color={175,0,0},
+      thickness=0.5));
+  if not activate_volumes then
+    connect(hT_PlugFlow_LX_nom.waterPortOut, waterPortOut) annotation (Line(
+      points={{52,0},{100,0}},
+      color={175,0,0},
       thickness=0.5));
   else
-    connect(hT_PlugFlow_LX_nom.waterPortOut, waterPortOut);
+    connect(fluid_Volume.waterPort_in[1], hT_PlugFlow_LX_nom.waterPortOut) annotation (Line(
+      points={{70,20},{70,0},{52,0}},
+      color={175,0,0},
+      thickness=0.5));
+    connect(fluid_Volume.waterPort_in[2], waterPortOut) annotation (Line(
+      points={{70,20},{70,0},{100,0}},
+      color={175,0,0},
+      thickness=0.5));
   end if;
+  connect(fixedHeatFlow.port, fluid_Volume.heatPort) annotation (Line(points={{60,70},{70,70},{70,39.6}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-78,24},{74,-24}},
@@ -273,12 +276,14 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b></p>
-<p>For bigger simulations deactivate volume - underestimates the thermal delay by heating / cooling of the steel pipes </p>
+<p>For bigger simulations deactivate volume - underestimates the thermal delay by heating / cooling of the steel pipes.</p>
+<p>Residence time is limited to 10h to improve initialisation at time = 0 with no mass flow present in the system. </p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p>Heat transfer based on: B. van der Heijde, M. Fuchs, C. Ribas Tugores &quot;Dynamic equation-based thermo-hydraulic pipe model for district heating and cooling systems&quot;, 2017</p>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Philipp Huismann (huismann@gwi-essen.de) on 10.10.2018</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised by Philipp Huismann (huismann@gwi-essen.de) on 07.04.2022 | Pressure Loss linearisation for small mass flow rates, Residence Time limitation</span></p>
 </html>"));
 end SinglePipe_L2;

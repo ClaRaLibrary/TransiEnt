@@ -2,8 +2,9 @@
 model MeritOrderDispatcherStatePrediction "Forward-looking control (for plant status z as well as load), min, max and gradient constraints"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model MeritOrderDispatcherStatePrediction "Forward-looking control (for plant st
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

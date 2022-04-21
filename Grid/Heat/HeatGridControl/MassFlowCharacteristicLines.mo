@@ -2,8 +2,9 @@
 model MassFlowCharacteristicLines "Model for the specification of the heating water massflow at each feed-in point as a funcion of the total amount of heating water massflow"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model MassFlowCharacteristicLines "Model for the specification of the heating wa
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

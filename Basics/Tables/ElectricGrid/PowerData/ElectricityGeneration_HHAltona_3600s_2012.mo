@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Tables.ElectricGrid.PowerData;
 model ElectricityGeneration_HHAltona_3600s_2012 "Hourly electricity generation data in Hamburg-Altona. Source: Energie Portal Hamburg"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model ElectricityGeneration_HHAltona_3600s_2012 "Hourly electricity generation d
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

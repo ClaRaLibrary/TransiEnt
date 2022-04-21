@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Electrical.Check;
 model TestFlywheelEfficiency "Example that keeps a flywheel's input and output at full power to check maximum efficiency"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TestFlywheelEfficiency "Example that keeps a flywheel's input and output a
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Boundaries.Ambient;
 model AmbientConditions "Contains the time varying ambient condition parameters used in simCenter block"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model AmbientConditions "Contains the time varying ambient condition parameters 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

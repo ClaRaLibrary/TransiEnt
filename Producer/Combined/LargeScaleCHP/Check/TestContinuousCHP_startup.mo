@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Combined.LargeScaleCHP.Check;
 model TestContinuousCHP_startup "Example how the continuous plant model behaves when ramping up"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TestContinuousCHP_startup "Example how the continuous plant model behaves 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

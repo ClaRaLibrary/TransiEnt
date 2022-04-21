@@ -2,8 +2,9 @@
 model solarThermal_Boiler "Solar heating and gas boiler"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model solarThermal_Boiler "Solar heating and gas boiler"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -182,8 +184,8 @@ model solarThermal_Boiler "Solar heating and gas boiler"
 
   TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower apparentPower(useInputConnectorQ=false) annotation (Placement(transformation(extent={{-92,-60},{-72,-40}})));
 
-  TransiEnt.Producer.Heat.SolarThermal.Control.ControllerPumpSolarCollectorTandG controller annotation (Placement(transformation(extent={{74,34},{100,54}})));
-  Modelica.Blocks.Math.Gain P_drive2m_flow(k=-0.0205) annotation (Placement(transformation(extent={{66,52},{58,60}})));
+  TransiEnt.Producer.Heat.SolarThermal.Control.ControllerPumpSolarCollectorTandG controller(P_drive_min(k=controller.m_flow_min))
+                                                                                            annotation (Placement(transformation(extent={{74,34},{100,54}})));
   TransiEnt.Producer.Heat.Gas2Heat.SimpleGasBoiler.SimpleBoiler boiler(
     useFluidPorts=false,
     useHeatPort=false,
@@ -253,14 +255,16 @@ equation
   connect(T_in1.y, controller.T_stor) annotation (Line(points={{61.65,16.5},{64,16.5},{64,34},{75.7333,34}}, color={0,0,127}));
   connect(controller.G_total, solarCollector.G) annotation (Line(points={{75.7333,38.1667},{70,38.1667},{70,0},{78.2,0},{78.2,-6.9}}, color={0,0,127}));
   connect(solarCollector.T_out, controller.T_out) annotation (Line(points={{76.4,-6.9},{76.4,-8},{78,-8},{76,-8},{76,-2},{68,-2},{68,42.3333},{75.7333,42.3333}}, color={0,0,127}));
-  connect(controller.P_drive, P_drive2m_flow.u) annotation (Line(points={{75.7333,49},{76,49},{76,56},{66.8,56}}, color={0,0,127}));
-  connect(P_drive2m_flow.y, solarCollector.m_flow) annotation (Line(points={{57.6,56},{46,56},{46,0},{62.63,0},{62.63,-6.81}}, color={0,0,127}));
   connect(heatFlowRate_boiler.y, boiler.Q_flow_set) annotation (Line(points={{-37,-50},{32,-50},{32,-54}}, color={0,0,127}));
   connect(gasPortIn, boiler.gasIn) annotation (Line(
       points={{80,-96},{64,-96},{64,-84},{32.2,-84},{32.2,-74}},
       color={255,255,0},
       thickness=1.5));
   connect(T_in1.y, solarCollector.T_inflow) annotation (Line(points={{61.65,16.5},{64.79,16.5},{64.79,-5.91}}, color={0,0,127}));
+  connect(controller.P_drive, solarCollector.m_flow) annotation (Line(
+      points={{75.7333,49},{46,49},{46,-6.81},{62.63,-6.81}},
+      color={0,135,135},
+      pattern=LinePattern.Dash));
   annotation (Icon(graphics={
         Ellipse(
           lineColor={0,125,125},

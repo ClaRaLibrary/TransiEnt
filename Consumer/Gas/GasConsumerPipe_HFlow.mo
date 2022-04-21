@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Gas;
 model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control with a pipe representing the distance to a consumer within this district"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model GasConsumerPipe_HFlow "Gas sink dependent on gross calorific value control
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

@@ -6,7 +6,7 @@ LibraryInfoMenuCommand(
  category="libraries",
  text = "TransiEnt",
  reference= "TransiEnt",
- version="2.0.0",
+ version="2.0.1",
  isModel=true,
  description="Transient simulation of coupled energy networks with high share of renewable energy",
  ModelicaVersion="4.0.0",

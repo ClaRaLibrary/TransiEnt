@@ -1,8 +1,9 @@
 ﻿within TransiEnt.SystemGeneration.GridConstructor;
 model GridConstructor
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model GridConstructor
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -105,9 +107,9 @@ public
   parameter Real timezone=simCenter.timezone "timezone of location (UTC+) - for Hamburg timezone=1" annotation (Dialog(tab="PV", group="Location parameters"), HideResult=true);
 
   //Global Solar heating parameters
-  parameter SI.Angle latitude_ST=simCenter.phi "latitude of the local position, north posiive, 53,55 North for Hamburg" annotation (Dialog(tab="SolarThermal", group="Location parameters"), HideResult=true);
-  parameter SI.Angle longitude_standard_ST=simCenter.timezone*15 "needed for calculation of coordinated universal time (utc), 15 for central european time, 30 for central european summer time" annotation (Dialog(tab="SolarThermal", group="Location parameters"), HideResult=true);
-  parameter SI.Angle longitude_ST=simCenter.lambda "longitude of the local position, east positive, 10 East for Hamburg" annotation (Dialog(tab="SolarThermal", group="Location parameters"), HideResult=true);
+  parameter Real latitude_ST=simCenter.phi "Degree of latitude of the local position, north posiive, 53,55 North for Hamburg" annotation (Dialog(tab="SolarThermal", group="Location parameters"), HideResult=true);
+  parameter Real longitude_standard_ST=simCenter.timezone*15 "needed for calculation of coordinated universal time (utc), 15 for central european time, 30 for central european summer time" annotation (Dialog(tab="SolarThermal", group="Location parameters"), HideResult=true);
+  parameter Real longitude_ST=simCenter.lambda "Degree of longitude of the local position, east positive, 10 East for Hamburg" annotation (Dialog(tab="SolarThermal", group="Location parameters"), HideResult=true);
 
   //Global Heat pump parameters
   SI.Temperature T_source_ground=simCenter.T_ground "Temperature of ground as heat source" annotation (Dialog(tab="HeatPump", group="Source temperature"), HideResult=true);

@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Tables.Ambient;
 model DHI_Hamburg_3600s_2012_TMY "Hamburg's diffuse horizontal irradiation, 1 h resolution, Source: IWEC"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model DHI_Hamburg_3600s_2012_TMY "Hamburg's diffuse horizontal irradiation, 1 h 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

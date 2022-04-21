@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Turbogroups.OperatingStates.Check;
 model TestThreeStateDynamic_Initatmin "Model for testing three state dynamic with an initial minimum"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TestThreeStateDynamic_Initatmin "Model for testing three state dynamic wit
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

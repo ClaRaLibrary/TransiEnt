@@ -3,8 +3,9 @@ function ADM1_Inhibition_BSM2
   "A Function calculating the inhibition Coefficients using constants from Rosén, C., & Jeppsson, U. (2006). Aspects on ADM1 Implementation within the BSM2 Framework."
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -23,6 +24,7 @@ function ADM1_Inhibition_BSM2
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

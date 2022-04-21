@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model Electrolyzer_2050 "Cost model for electrolyzers in 2050"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model Electrolyzer_2050 "Cost model for electrolyzers in 2050"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

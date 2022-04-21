@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Grid.Gas.Check;
 model TestGasGridHamburgVarGCV "High pressure gas grid of Hamburg with variable gross calorific value at consumption side"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TestGasGridHamburgVarGCV "High pressure gas grid of Hamburg with variable 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

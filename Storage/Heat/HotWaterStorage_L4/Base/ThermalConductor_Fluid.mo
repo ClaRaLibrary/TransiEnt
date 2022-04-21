@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Heat.HotWaterStorage_L4.Base;
 model ThermalConductor_Fluid "Thermal Conduction between two fluid layers (based on ThermalConductor from MSL)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model ThermalConductor_Fluid "Thermal Conduction between two fluid layers (based
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

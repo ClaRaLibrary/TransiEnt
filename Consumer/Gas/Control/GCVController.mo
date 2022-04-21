@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Gas.Control;
 model GCVController "Gas adaptive controller with demanded enthalpy flow rate and gross calorific value as inputs and desired mass flow rate as output"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model GCVController "Gas adaptive controller with demanded enthalpy flow rate an
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

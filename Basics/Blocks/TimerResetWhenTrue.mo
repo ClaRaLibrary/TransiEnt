@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Blocks;
 block TimerResetWhenTrue "Timer measuring the time from the time instant where the Boolean input became true and only resetting when it becomes true again"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ block TimerResetWhenTrue "Timer measuring the time from the time instant where t
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

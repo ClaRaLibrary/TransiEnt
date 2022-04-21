@@ -2,8 +2,9 @@
 model GHI_Cologne_3600s_TRY "GHI Cologne TRY, 1 h resolution, Source: DWD"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model GHI_Cologne_3600s_TRY "GHI Cologne TRY, 1 h resolution, Source: DWD"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

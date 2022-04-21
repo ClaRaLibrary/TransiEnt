@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Grid.Electrical.LumpedPowerGrid.Components;
 model AGC "Automatic generation control model for just one secondary balancing provider (used in lumped grid models)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model AGC "Automatic generation control model for just one secondary balancing p
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

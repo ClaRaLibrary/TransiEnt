@@ -2,8 +2,9 @@
 model PackedBedControlVolume_L4 "An array of packed bed cells with a single energy equation for particles and fluid and heat connector at in- and outlet"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model PackedBedControlVolume_L4 "An array of packed bed cells with a single ener
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

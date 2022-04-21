@@ -1,8 +1,9 @@
 ﻿within TransiEnt.SystemGeneration.Superstructure.Components.GasGrid;
 model GasGrid_JunctionWithConstantPressureSource "Model of a gas grid with a constant pressure indefinite gas source connected to a mixing volume with a pipeline"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model GasGrid_JunctionWithConstantPressureSource "Model of a gas grid with a con
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

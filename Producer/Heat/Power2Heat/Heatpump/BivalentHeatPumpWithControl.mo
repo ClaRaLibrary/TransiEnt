@@ -2,8 +2,9 @@
 model BivalentHeatPumpWithControl "Heatpump with selectable Controller and electric heater for bivalent operation if selected"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model BivalentHeatPumpWithControl "Heatpump with selectable Controller and elect
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -61,6 +63,8 @@ model BivalentHeatPumpWithControl "Heatpump with selectable Controller and elect
 
   parameter SI.Pressure p_drop=heatPump.simCenter.p_nom[2] - heatPump.simCenter.p_nom[1] annotation (Dialog(group="Heatpump"));
 
+  //Heater
+  parameter SI.Power P_el_n_heater=10e3 "Nominal electric power of the backup heater" annotation (Dialog(group="Heater"));
    //___________________________________________________________________________
    //
    //                      Variables
@@ -100,16 +104,16 @@ model BivalentHeatPumpWithControl "Heatpump with selectable Controller and elect
     redeclare model heatFlowBoundaryModel = heatFlowBoundaryModel,
     redeclare model PowerBoundaryModel = PowerBoundaryModel) annotation (Placement(transformation(extent={{2,-28},{44,12}})));
 
-  replaceable TransiEnt.Producer.Heat.Power2Heat.Heatpump.Controller.ControlHeatpump_heatdriven_BVTemp controller(
-    control_SoC=control_SoC,
+  replaceable TransiEnt.Producer.Heat.Power2Heat.Heatpump.Controller.ControlHeatpump_heatdriven_BVTemp controller constrainedby Controller.Base.Controller(
     t_min_on=t_min_on,
-    t_min_off=t_min_off) constrainedby Controller.Base.Controller(
+    t_min_off=t_min_off,
     init_state=init_state,
     Q_flow_n=Q_flow_n,
-    control_SoC=false,
+    control_SoC=control_SoC,
     Modulating=Modulating,
     Delta_T_db=Delta_T_db,
     CalculatePHeater=CalculatePHeater,
+    P_elHeater=P_el_n_heater,
     MinTimes=MinTimes) "Choose controller model" annotation (
     Dialog(group="Control"),
     choicesAllMatching=true,
@@ -122,9 +126,12 @@ model BivalentHeatPumpWithControl "Heatpump with selectable Controller and elect
   ElectricBoiler.ElectricBoiler electricBoiler(
     change_sign=true,
     usePelset=true,
+    Q_flow_n=P_el_n_heater*electricBoiler.eta,
     useFluidPorts=useFluidPorts,
     useHeatPort=useHeatPort,
-    usePowerPort=usePowerPort) if                                                       CalculatePHeater annotation (Placement(transformation(extent={{2,-78},{34,-46}})));
+    usePowerPort=usePowerPort,
+    redeclare connector PowerPortModel = PowerPortModel,
+    redeclare model PowerBoundaryModel = PowerBoundaryModel) if                                                       CalculatePHeater annotation (Placement(transformation(extent={{2,-78},{34,-46}})));
 
    //___________________________________________________________________________
    //

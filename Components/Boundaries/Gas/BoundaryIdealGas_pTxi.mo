@@ -2,8 +2,9 @@
 model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as inputs"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model BoundaryIdealGas_pTxi "Gas boundary for ideal gases with p, T, xi as input
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

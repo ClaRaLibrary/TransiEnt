@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Tables.HeatGrid.HeatingCurves;
 model HeatingCurveEONHanse "Supply and return temperatures as function of ambient temperature in LHN of Eon Hanse"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model HeatingCurveEONHanse "Supply and return temperatures as function of ambien
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

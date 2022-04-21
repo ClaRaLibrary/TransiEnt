@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Boundaries.Heat.Base;
 partial model Heatflow_L1_idContr_temp_base "Base class for heat flow boundaries with ideal control to get a given outlet temperature"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ partial model Heatflow_L1_idContr_temp_base "Base class for heat flow boundaries
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

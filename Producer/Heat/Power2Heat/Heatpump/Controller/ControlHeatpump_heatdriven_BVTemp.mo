@@ -2,8 +2,9 @@
 model ControlHeatpump_heatdriven_BVTemp "Heat-driven operation with optional startup ramp, if bivalent mode selected, heater will switch on instead of heatpump below T_bivalent"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model ControlHeatpump_heatdriven_BVTemp "Heat-driven operation with optional sta
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

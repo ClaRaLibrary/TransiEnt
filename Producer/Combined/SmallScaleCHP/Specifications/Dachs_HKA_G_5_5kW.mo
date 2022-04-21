@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Combined.SmallScaleCHP.Specifications;
 record Dachs_HKA_G_5_5kW "ICE 5.5 kWel"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record Dachs_HKA_G_5_5kW "ICE 5.5 kWel"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

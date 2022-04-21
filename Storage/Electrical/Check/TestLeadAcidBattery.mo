@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Electrical.Check;
 model TestLeadAcidBattery
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -24,13 +25,14 @@ model TestLeadAcidBattery
 
 
 
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
   inner TransiEnt.SimCenter simCenter
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   TransiEnt.Components.Boundaries.Electrical.ActivePower.Frequency ElectricGrid annotation (Placement(transformation(extent={{66,-40},{86,-20}})));
   TransiEnt.Producer.Electrical.Wind.WindProfiles.WindProfileLoader P_wind(REProfile=TransiEnt.Producer.Electrical.Wind.WindProfiles.WindData.Wind2012_TenneT_900s, constantfactor=0.2*30000e6) annotation (Placement(transformation(extent={{-80,-2},{-60,18}})));
-  Modelica.Blocks.Math.Add P_residual(k1=-1, k2=+1)
+  Modelica.Blocks.Math.Add P_residual(k1=+1, k2=-1)
     annotation (Placement(transformation(extent={{-40,-22},{-20,-2}})));
   TransiEnt.Basics.Tables.ElectricGrid.PowerData.ElectricityDemand_HH_900s_2012 P_load annotation (Placement(transformation(extent={{-78,-36},{-58,-16}})));
 

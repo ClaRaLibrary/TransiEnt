@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Boundaries.Electrical;
 package ComplexPowerAdvanced "Boundaries with characteristics for the Complex Power Port"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ package ComplexPowerAdvanced "Boundaries with characteristics for the Complex Po
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

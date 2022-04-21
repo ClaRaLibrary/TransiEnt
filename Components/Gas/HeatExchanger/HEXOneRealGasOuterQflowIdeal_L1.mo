@@ -2,8 +2,9 @@
 model HEXOneRealGasOuterQflowIdeal_L1 "Ideal heat exchanger for one real gas with heat port for heat flow"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model HEXOneRealGasOuterQflowIdeal_L1 "Ideal heat exchanger for one real gas wit
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

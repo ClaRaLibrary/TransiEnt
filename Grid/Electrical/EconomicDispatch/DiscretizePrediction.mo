@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Grid.Electrical.EconomicDispatch;
 model DiscretizePrediction "Produces short time predictions by linear interpolation between present value (P_is) and base prediction (P_prediction)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model DiscretizePrediction "Produces short time predictions by linear interpolat
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

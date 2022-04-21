@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Heat.HotWaterStorage_L4.Checks;
 model Test_HeatStorageL4_Electrical "Test of one dimensional heat storage model with electrical heating"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model Test_HeatStorageL4_Electrical "Test of one dimensional heat storage model 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

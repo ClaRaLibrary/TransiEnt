@@ -2,8 +2,9 @@
 model HeatFlow_SolarThermal "Heat flow boundary with h_in and Q_flow_collector as input to be used in SolarCollector"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model HeatFlow_SolarThermal "Heat flow boundary with h_in and Q_flow_collector a
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4.Check;
 model CheckStratifiedHotWaterStorage_L4_Unloading "Validation of one dimensional hot water storage with CHP loading scenario"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model CheckStratifiedHotWaterStorage_L4_Unloading "Validation of one dimensional
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

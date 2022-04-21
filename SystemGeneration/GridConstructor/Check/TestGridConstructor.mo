@@ -1,8 +1,9 @@
 ﻿within TransiEnt.SystemGeneration.GridConstructor.Check;
 model TestGridConstructor
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -25,6 +26,7 @@ model TestGridConstructor
 
 
 
+
   extends TransiEnt.Basics.Icons.Checkmodel;
 
 public
@@ -36,7 +38,9 @@ public
       redeclare TransiEnt.Basics.Tables.Ambient.Temperature_Hamburg_3600s_TMY temperature),
     T_ground=278.15,
     v_n=400,
-    p_eff_1=5000) annotation (Placement(transformation(extent={{-84,74},{-56,100}})));
+    p_eff_1=5000,
+    tableInterpolationSmoothness=Modelica.Blocks.Types.Smoothness.MonotoneContinuousDerivative1)
+                  annotation (Placement(transformation(extent={{-84,74},{-56,100}})));
   Components.Boundaries.Electrical.ApparentPower.FrequencyVoltage ElectricGrid(
     epp(
       P(start=1),

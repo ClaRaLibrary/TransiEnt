@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Adapters.Check;
 model TestEPP_to_QS "Model for testing an adapter from epp pin to quasi stationary"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TestEPP_to_QS "Model for testing an adapter from epp pin to quasi stationa
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

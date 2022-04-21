@@ -2,8 +2,9 @@
 model SolarTime "Calculates the solar time"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -26,6 +27,7 @@ model SolarTime "Calculates the solar time"
 
 
 
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -41,8 +43,9 @@ model SolarTime "Calculates the solar time"
   // _____________________________________________
 
   parameter Real[4] offset(unit={"d","h","m","s"})={0,0,0,0}; //d,h,m,s; Offset=0 means t=0 equals 1.1. 00:00:00
-  parameter SI.Angle longitude_local=Modelica.Units.Conversions.from_deg(10);
-  parameter SI.Angle longitude_standard=Modelica.Units.Conversions.from_deg(15) "East positive, west negative, 10 for Hamburg, 15 needed for offset calculation of central european time, 30 for central european summer time";
+  parameter SI.Angle longitude_local=Modelica.Units.Conversions.from_deg(10)
+                                                                            "East positive, west negative, 10 for Hamburg";
+  parameter SI.Angle longitude_standard=Modelica.Units.Conversions.from_deg(15) "15 needed for offset calculation of central european time, 30 for central european summer time";
   parameter Real utc=longitude_standard*12/Const.pi "Difference between UTC and zone time; i.e. +1 in Amsterdam/Berlin/Bern/Rome; default works for standard time, beware of summer time !";
 
   // _____________________________________________
@@ -66,17 +69,15 @@ equation
 
   offset_sec=((offset[1]*24+offset[2])*60+offset[3])*60+offset[4];
   J=Modelica.Units.Conversions.from_deg((dayoftheyear)*360/totaldays);
-                                                           // +0.5 leads to an average of "1" for day 1, "2" for day 2 etc.
 
   equationOfTime=60*(0.0066 + 7.3525*cos(J + Modelica.Units.Conversions.from_deg(85.9)) + 9.9359*cos(2*J + Modelica.Units.Conversions.from_deg(108.99)) + 0.3387*cos(3*J + Modelica.Units.Conversions.from_deg(105.2)));
 
   dayoftheyear=noEvent(integer((time+offset_sec)/(24*60*60)+1));
-  solarTime=time-utc+offset_sec+4*60*longitude_local+equationOfTime;
+  solarTime=time-utc*60*60+offset_sec+4*60*Modelica.Units.Conversions.to_deg(longitude_local)+equationOfTime;
 
   annotation (Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>
-<p>Calculates the solar time at a given longitude in respect of zone time, difference to UTC and an optional offset.</p>
-<p>Note: Here day is provided as a floating point value which means that other models might have to use integer() if they need an integer value.</p>
+<p>Calculates the solar time at a given longitude in respect of time zone, difference to UTC and an optional offset.</p>
 <h4><span style=\"color: #008000\">2. Level of detail, physical effects considered, and physical insight</span></h4>
 <p>(Purely technical component without physical modeling.)</p>
 <h4><span style=\"color: #008000\">3. Limits of validity </span></h4>
@@ -86,30 +87,32 @@ equation
 <h4><span style=\"color: #008000\">5. Nomenclature</span></h4>
 <p><br>Parameters:</p>
 <p><br>offset: Sets the offset of simulation time [0, ...] to time to simulate. Type ist Real[4]: seconds, minutes, hours, day. {10,5,1,0} starts at 3910s </p>
-<p><br>longitude_local: longitude of position, west positive </p>
-<p><br>longitude_standard: standard longitude of time zone, west positive, e.g. -15&deg; for UTC+1 regular time.</p>
-<p><br>utc: difference to utc in hours, e.g. +1 for Amsterdam/Berlin/Bern/Rome</p>
+<p>longitude_local: longitude of position, west positive in rad</p>
+<p>longitude_standard: standard longitude of time zone, e.g. 15&deg; for UTC+1 regular time (in rad)</p>
+<p>utc: difference to utc in hours, e.g. +1 for Amsterdam/Berlin/Bern/Rome - will be calculated from longitude_standard as default</p>
 <p>public variables:</p>
 <p>solarTime: gives calculated solar time in seconds</p>
-<p>day_floatingpoint: gives day as floating point value, day=0 means 0:0:0, day=0.5 means 12:0:0 (h,m,s) </p>
+<p>dayoftheyear: returns day of the year as integer value</p>
+<p>totaldays: total&nbsp;days&nbsp;of&nbsp;the&nbsp;year,&nbsp;standard=365,&nbsp;leap&nbsp;year=366</p>
 <h4><span style=\"color: #008000\">6. Governing Equations</span></h4>
 <p>offset_sec=((offset[1]*24+offset[2]*60)+offset[3]*60)+offset[4]</p>
-<p><img src=\"modelica://TransiEnt/Images/equations/equation-LFRCa0cj.png\" alt=\"day_floatingpoint=(time+offset_sec)/(24*60*60)\"/></p>
-<p><img src=\"modelica://TransiEnt/Images/equations/equation-NMaYc4qJ.png\" alt=\"
-be=(day_floatingpoint+0.5)*360/365\"/></p>
-<p><img src=\"modelica://TransiEnt/Images/equations/equation-0o7nqU2o.png\" alt=\"solarTime=time-utc+offset_sec+4*60*(-longitude_local)+equationOfTime\"/></p>
-<p><img src=\"modelica://TransiEnt/Images/equations/equation-XBRg3dnS.png\" alt=\"equationOfTime=60*(0.0066+7.3525*cos(J+SI.Conversions.from_deg(85.9))+9.9359*cos(2*J+SI.Conversions.from_deg(108.99))+0.3387*cos(3*J+SI.Conversions.from_deg(105.2)))\"/></p>
+<p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-VfoFXPDP.png\" alt=\"dayoftheyear=Integer((time+offset_sec)/(24*60*60)+1)\"/></p>
+<p><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-Yxlv6S40.png\" alt=\"
+J=Modelica.Units.Conversion.from_deg(dayoftheyear*360/totaldays)\"/></p>
+<p><br><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-ezeagr8S.png\" alt=\"solarTime=time-utc*60*60+offset_sec+4*60*Modelica.Units.Conversion.to_deg(longitude_local)+equationOfTime\"/></p>
+<p><br><img src=\"modelica://TransiEnt/Resources/Images/equations/equation-fzGBK5MY.png\" alt=\"equationOfTime=60*(0.0066+7.3525*cos(J+SI.Conversions.from_deg(85.9))+9.9359*cos(2*J+SI.Conversions.from_deg(108.99))+0.3387*cos(3*J+SI.Conversions.from_deg(105.2)))\"/></p>
 <h4><span style=\"color: #008000\">7. Remarks for Usage</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">8. Validation</span></h4>
 <p>(no remarks)</p>
 <h4><span style=\"color: #008000\">9. References</span></h4>
-<p>DIN 5034 as cited by Quschning: Regenerative Energiesysteme (2014)</p>
+<p>DIN 5034 as cited by Quaschning: Regenerative Energiesysteme (2014)</p>
 <h4><span style=\"color: #008000\">10. Version History</span></h4>
 <p>Model created by Tobias Toerber (tobias.toerber@tuhh.de), Jul 2015</p>
 <p>Edited by Sascha Guddusch (sascha.guddusch@tuhh.de), May 2016</p>
 <p>Modified by Anne Senkel (anne.senkel@tuhh.de), Mar 2017</p>
 <p>Modified by Lisa Andresen (andresen@tuhh.de), Apr. 2017</p>
+<p>Modified by Annika Heyer (heyer@gwi-essen.de), Dec 2021</p>
 </html>"), experiment(
       StopTime=604800,
       Interval=100,

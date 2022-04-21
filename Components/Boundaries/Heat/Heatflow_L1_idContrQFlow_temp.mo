@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Boundaries.Heat;
 model Heatflow_L1_idContrQFlow_temp "Heat flow boundary with ideal heat flow rate control to get a given outlet temperature"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model Heatflow_L1_idContrQFlow_temp "Heat flow boundary with ideal heat flow rat
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

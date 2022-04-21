@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Tables.Ambient;
 model POAIrradiaton_Az0_Tilt0_Hamburg_3600s_2012_TMY "Radiation on a surface with Azimutz=0 and Tilt=0, Hamburg TMY weather data, 1 h resolution, Source: IWEC and calculations"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model POAIrradiaton_Az0_Tilt0_Hamburg_3600s_2012_TMY "Radiation on a surface wit
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

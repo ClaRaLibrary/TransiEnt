@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Tables.Ambient;
 model Wind_Hamburg_3600s_TMY "Hamburg TMY, Source: DOE/ASHRAE2015"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model Wind_Hamburg_3600s_TMY "Hamburg TMY, Source: DOE/ASHRAE2015"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

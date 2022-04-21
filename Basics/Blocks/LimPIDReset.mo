@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Blocks;
 block LimPIDReset "P, PI, PD, and PID controller with limited output, anti-windup compensation and setpoint weighting"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ block LimPIDReset "P, PI, PD, and PID controller with limited output, anti-windu
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

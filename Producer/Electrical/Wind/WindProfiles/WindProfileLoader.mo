@@ -8,8 +8,9 @@ model WindProfileLoader "Loads wind profiles from csv files for 2011-2015, scale
   'Measured Data' refers to wind power generation measured by the TSOs"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -28,6 +29,7 @@ model WindProfileLoader "Loads wind profiles from csv files for 2011-2015, scale
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

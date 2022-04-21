@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Electrical.Controllers.Check;
 model TestPrimaryBalancingPowerDemand2012 "Example how to calculate the demand of primary balancing power"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model TestPrimaryBalancingPowerDemand2012 "Example how to calculate the demand o
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

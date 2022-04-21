@@ -2,8 +2,9 @@
 model HeatPumpSystem "Heat pump system with storage and controller, input: heat demand, output: electrical power"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model HeatPumpSystem "Heat pump system with storage and controller, input: heat 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -98,6 +100,7 @@ model HeatPumpSystem "Heat pump system with storage and controller, input: heat 
     Delta_T_internal=Delta_T_internal,
     Q_flow_n=Q_flow_n,
     COP_n=COP_n,
+    P_el_n_heater=P_el_n,
     T_source=T_source,
     Modulating=Modulating,
     usePowerPort=usePowerPort,

@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Examples.Hamburg;
 model SectorCouplingPtH "Example of an electric generation park coupled with a district heating grid and a power-to-heat unit"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model SectorCouplingPtH "Example of an electric generation park coupled with a d
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

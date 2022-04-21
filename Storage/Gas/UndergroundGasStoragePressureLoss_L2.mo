@@ -2,8 +2,9 @@
 model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume for constant composition with adiabatic inlet and outlet pipes with pressure losses"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model UndergroundGasStoragePressureLoss_L2 "Model of a simple gas storage volume
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

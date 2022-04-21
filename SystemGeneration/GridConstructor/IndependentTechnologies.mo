@@ -1,8 +1,9 @@
 ﻿within TransiEnt.SystemGeneration.GridConstructor;
 model IndependentTechnologies
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model IndependentTechnologies
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -165,7 +167,7 @@ public
         rotation=0,
         origin={-64,2})));
 
-  Modelica.Blocks.Sources.RealExpression PVPower(y=pVModule.P_DC) if PV == 1 and E_max_PV > 0 annotation (Placement(transformation(
+  Modelica.Blocks.Sources.RealExpression PVPower(y=pVModule.P_dc) if PV == 1 and E_max_PV > 0 annotation (Placement(transformation(
         extent={{-7,-6},{7,6}},
         rotation=0,
         origin={-71,-8})));
@@ -192,7 +194,7 @@ public
     k=k_s_HP,
     T_source=T_source_HP,
     P_el_n=P_el_backup_HP,
-    redeclare model PowerBoundaryModel = TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower,
+    redeclare model PowerBoundaryModel = TransiEnt.Components.Boundaries.Electrical.ApparentPower.ApparentPower (useInputConnectorQ=false, useCosPhi=false),
     redeclare connector PowerPortModel = TransiEnt.Basics.Interfaces.Electrical.ApparentPowerPort,
     heatPumpWithControl(heatPump(Power(
           useInputConnectorP=true,
@@ -239,7 +241,6 @@ public
 public
   TransiEnt.Producer.Heat.Heat2Heat.Substation_indirect_noStorage_L1 substation_indirect_noStorage(
     T_start=simCenter.T_supply,
-    dT=simCenter.dT,
     m_flow_min=simCenter.m_flow_min) if DHN == 1 annotation (Placement(transformation(extent={{-8,-24},{20,-4}})));
 
   //Boiler

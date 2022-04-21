@@ -2,8 +2,9 @@
 model ControlBoilerCHP_modulatingBoiler_HeatLed "Simple controller for a heat led CHP system with modulating boiler based on SoC or temperature of a heat storage"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model ControlBoilerCHP_modulatingBoiler_HeatLed "Simple controller for a heat le
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

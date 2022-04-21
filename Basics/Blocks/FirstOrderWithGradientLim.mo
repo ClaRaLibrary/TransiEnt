@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Blocks;
 block FirstOrderWithGradientLim "First order transfer function block (= 1 pole, allows Tau = 0 and a gain)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ block FirstOrderWithGradientLim "First order transfer function block (= 1 pole, 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

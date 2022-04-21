@@ -2,8 +2,9 @@
 model PVPlant "Simple efficiency-based PV model"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -26,6 +27,7 @@ model PVPlant "Simple efficiency-based PV model"
 
 
 
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -39,6 +41,7 @@ model PVPlant "Simple efficiency-based PV model"
   //                   Outer
   // _____________________________________________
 
+  outer TransiEnt.SimCenter simCenter;
   outer ModelStatistics modelStatistics;
 
   // _____________________________________________
@@ -175,7 +178,13 @@ model PVPlant "Simple efficiency-based PV model"
   Modelica.Units.SI.Area Area_demand;
   Real ModulesPerString "Choose amount of modules per string";
 
-  //input variables:
+
+  // _____________________________________________
+  //
+  //                    Interfaces
+  // _____________________________________________
+
+
   TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn T_in
     "ambient temperature in Celcius" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
@@ -215,10 +224,15 @@ model PVPlant "Simple efficiency-based PV model"
     irradiance(redeclare model Skymodel = Skymodel, use_input_data=true)
     annotation (Placement(transformation(extent={{-58,-14},{-28,14}})));
 
-public
   TransiEnt.Basics.Interfaces.Ambient.IrradianceIn GHI_in
     "Global Horizontal Irradiation in W/m^2"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+
+  // _____________________________________________
+  //
+  //                    Complex Components
+  // _____________________________________________
+
   Modelica.Blocks.Tables.CombiTable1Ds PowerCurve_PV_Irradiation(
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
     table=PVModuleCharacteristics.MPP_dependency_on_irradiation_fixedTemperature,
@@ -273,6 +287,9 @@ public
   TransiEnt.Producer.Heat.SolarThermal.Base.GHI_Splitter gHI_Splitter(
       DiffuseModel=DiffuseModel)
     annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
+
+   TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable, integrateElPower=simCenter.integrateElPower)
+                                                                                                             annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
 equation
   // _____________________________________________
@@ -339,14 +356,18 @@ equation
   ModulesPerString = P_inst/(Pmpp*Strings);
 
   //Connection to output
-
   epp.P = -P_out;
+
+  //Statistics
+  collectElectricPower.powerCollector.P=-P_out;
 
   // _____________________________________________
   //
   //               Connect Statements
   // _____________________________________________
   connect(modelStatistics.costsCollector, collectCosts_PowerProducer.costsCollector);
+  connect(modelStatistics.powerCollector[TransiEnt.Basics.Types.TypeOfResource.Renewable],collectElectricPower.powerCollector);
+
 
   connect(GHI_in, gHI_Splitter.GHI_input)
     annotation (Line(points={{-120,0},{-92,0}}, color={0,0,127}));

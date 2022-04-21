@@ -2,8 +2,9 @@
 model ElectricBoilerImpedance "Electric Boiler with constant efficiency, spatial resolution can be chosen to be 0d or 1d"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model ElectricBoilerImpedance "Electric Boiler with constant efficiency, spatial
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

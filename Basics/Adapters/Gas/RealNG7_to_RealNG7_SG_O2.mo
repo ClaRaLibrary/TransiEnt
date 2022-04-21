@@ -2,8 +2,9 @@
 model RealNG7_to_RealNG7_SG_O2 "Adapter that switches from real ng7 to real ng7_sg_o2 fluid models"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model RealNG7_to_RealNG7_SG_O2 "Adapter that switches from real ng7 to real ng7_
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

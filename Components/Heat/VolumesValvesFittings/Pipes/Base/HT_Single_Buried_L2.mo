@@ -2,8 +2,9 @@
 model HT_Single_Buried_L2 "Heat Transfer Calculation with spatialDistribution() for a single buried pipe"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -26,6 +27,7 @@ model HT_Single_Buried_L2 "Heat Transfer Calculation with spatialDistribution() 
 
 
 
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -41,8 +43,8 @@ model HT_Single_Buried_L2 "Heat Transfer Calculation with spatialDistribution() 
   //                   Parameters
   // _____________________________________________
 
-   parameter SI.Length depth = 1.2 "Depth of the pipe";
-  parameter SI.ThermalConductivity lambda_ground = 1.5  "Thermal conductivity of the soil";
+  parameter SI.Length depth = pipe_parameter.depth "Depth of the pipe";
+  parameter SI.ThermalConductivity lambda_ground = simCenter.lambda_ground  "Thermal conductivity of the soil";
 
   // _____________________________________________
   //

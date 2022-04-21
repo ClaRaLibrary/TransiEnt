@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Heat.Base;
 partial model XtH_L1_idContrMFlow_temp_base "Base class for heat producers with a pump with ideal mass flow control to get a given outlet temperature"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ partial model XtH_L1_idContrMFlow_temp_base "Base class for heat producers with 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

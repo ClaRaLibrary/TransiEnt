@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.DemAndRevCostSpecs.HeatCostSpecs;
 partial record PartialCostHeat "Cost record for heat"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ partial record PartialCostHeat "Cost record for heat"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

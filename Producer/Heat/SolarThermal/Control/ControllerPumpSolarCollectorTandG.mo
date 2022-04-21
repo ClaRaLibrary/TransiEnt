@@ -2,8 +2,9 @@
 model ControllerPumpSolarCollectorTandG "Model for controlling the pump drive supplying of the collector field"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model ControllerPumpSolarCollectorTandG "Model for controlling the pump drive su
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -80,6 +82,9 @@ parameter Boolean strict=false "= true, if strict limits with noEvent(..)" annot
 //numerical stablity
 parameter Real eps=1e-6 "smallest output" annotation (Dialog(tab="Expert Settings"));
 
+//hysteresis
+parameter SI.TemperatureDifference Delta_T_db = 1 "Deadband of maximum storage temperature hysteresis" annotation (Dialog(tab="General", group="Hysteresis"));
+
 // _____________________________________________
 //
 //           Instances of other Classes
@@ -112,7 +117,7 @@ parameter Real eps=1e-6 "smallest output" annotation (Dialog(tab="Expert Setting
     initType=initType_first)                            annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-34,8})));
-  Modelica.Blocks.Logical.GreaterEqual greaterEqual annotation (Placement(transformation(extent={{-44,-64},{-24,-44}})));
+  Modelica.Blocks.Logical.GreaterEqual greaterEqual annotation (Placement(transformation(extent={{-44,-66},{-24,-46}})));
   Modelica.Blocks.Sources.Constant min_irradiance(k=G_min) annotation (Placement(transformation(extent={{12,-88},{-8,-68}})));
   Modelica.Blocks.Logical.Switch switch2 annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -130,7 +135,7 @@ parameter Real eps=1e-6 "smallest output" annotation (Dialog(tab="Expert Setting
   Modelica.Blocks.Sources.Constant P_drive_min(k=m_flow_min*Delta_p/(eta_mech*rho_m)) annotation (Placement(transformation(extent={{112,48},{92,68}})));
   Modelica.Blocks.Math.Add add annotation (Placement(transformation(extent={{-16,42},{-36,62}})));
 
-  Modelica.Blocks.Logical.LessThreshold Lesshreshold_T_stor(threshold=T_stor_max) annotation (Placement(transformation(extent={{-68,-120},{-48,-100}})));
+  Modelica.Blocks.Logical.Hysteresis Hysteresis_T_stor(uLow=T_stor_max - Delta_T_db,                         uHigh=T_stor_max) annotation (Placement(transformation(extent={{-68,-120},{-48,-100}})));
 
   TransiEnt.Basics.Interfaces.General.TemperatureIn T_stor
                                              annotation (Placement(transformation(extent={{-148,-122},{-120,-94}}),
@@ -140,6 +145,7 @@ parameter Real eps=1e-6 "smallest output" annotation (Dialog(tab="Expert Setting
   TransiEnt.Basics.Interfaces.General.TemperatureIn T_in annotation (Placement(transformation(extent={{-154,76},{-126,104}}), iconTransformation(extent={{-160,4},{-120,44}})));
   Modelica.Blocks.Logical.GreaterThreshold greaterThreshold_freezingPoint(threshold=T_min)  annotation (Placement(transformation(extent={{-112,100},{-92,120}})));
   Modelica.Blocks.Logical.And and2 annotation (Placement(transformation(extent={{70,76},{50,96}})));
+  Modelica.Blocks.Logical.Not not1 annotation (Placement(transformation(extent={{-30,-120},{-10,-100}})));
 equation
 // _____________________________________________
 //
@@ -149,22 +155,22 @@ equation
   connect(PID.u_m, set_point_temp.y) annotation (Line(points={{40,-4},{40,-26},{-23,-26}},color={0,0,127}));
   connect(firstOrder.y,PID. u_s) annotation (Line(points={{-23,8},{-23,8},{28,8}},                       color={0,0,127}));
   connect(T_out, firstOrder.u) annotation (Line(points={{-134,-14},{-66,-14},{-66,8},{-46,8}},color={0,0,127}));
-  connect(min_irradiance.y, greaterEqual.u2) annotation (Line(points={{-9,-78},{-56,-78},{-56,-62},{-46,-62}}, color={0,0,127}));
+  connect(min_irradiance.y, greaterEqual.u2) annotation (Line(points={{-9,-78},{-56,-78},{-56,-64},{-46,-64}}, color={0,0,127}));
   connect(add.u1, P_drive_min.y) annotation (Line(points={{-14,58},{-14,58},{91,58}}, color={0,0,127}));
   connect(add.u2, PID.y) annotation (Line(points={{-14,46},{-14,46},{72,46},{72,8},{51,8}}, color={0,0,127}));
   connect(switch2.u1, add.y) annotation (Line(points={{-62,68},{-44,68},{-44,52},{-37,52}}, color={0,0,127}));
   connect(switch2.u3, zero.y) annotation (Line(points={{-62,84},{-42,84},{-42,94},{-31,94}},        color={0,0,127}));
   connect(switch2.y, P_drive) annotation (Line(points={{-85,76},{-100,76},{-100,30},{-134,30}}, color={0,0,127}));
-  connect(greaterEqual.u1, G_total) annotation (Line(points={{-46,-54},{-84,-54},{-84,-64},{-134,-64}}, color={0,0,127}));
-  connect(T_stor, Lesshreshold_T_stor.u) annotation (Line(points={{-134,-108},{-70,-108},{-70,-110}}, color={0,0,127}));
-  connect(Lesshreshold_T_stor.y, and1.u2) annotation (Line(points={{-47,-110},{82,-110},{82,-68}}, color={255,0,255}));
-  connect(greaterEqual.y, and1.u1) annotation (Line(points={{-23,-54},{0,-54},{0,-56},{82,-56},{82,-60}}, color={255,0,255}));
+  connect(greaterEqual.u1, G_total) annotation (Line(points={{-46,-56},{-84,-56},{-84,-64},{-134,-64}}, color={0,0,127}));
+  connect(T_stor, Hysteresis_T_stor.u) annotation (Line(points={{-134,-108},{-70,-108},{-70,-110}}, color={0,0,127}));
+  connect(greaterEqual.y, and1.u1) annotation (Line(points={{-23,-56},{82,-56},{82,-60}},                 color={255,0,255}));
   connect(T_in, greaterThreshold_freezingPoint.u) annotation (Line(points={{-140,90},{-126,90},{-126,110},{-114,110}}, color={0,0,127}));
   connect(greaterThreshold_freezingPoint.y, and2.u1) annotation (Line(points={{-91,110},{-80,110},{-80,110},{-56,110},{-56,110},{76,110},{76,86},{72,86}}, color={255,0,255}));
   connect(and1.y, and2.u2) annotation (Line(points={{105,-60},{132,-60},{132,78},{72,78}}, color={255,0,255}));
   connect(and2.y, switch2.u2) annotation (Line(points={{49,86},{28,86},{28,76},{-62,76},{-62,76}}, color={255,0,255}));
-  annotation (Diagram(graphics,
-                      coordinateSystem(preserveAspectRatio=false, extent={{-160,-120},{140,120}})),Icon(graphics,
+  connect(Hysteresis_T_stor.y, not1.u) annotation (Line(points={{-47,-110},{-32,-110}}, color={255,0,255}));
+  connect(not1.y, and1.u2) annotation (Line(points={{-9,-110},{50,-110},{50,-68},{82,-68}}, color={255,0,255}));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-120},{140,120}})),Icon(graphics,
                                                                                                         coordinateSystem(extent={{-160,-120},{140,120}}, preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4><span style=\"color: #008000\">1. Purpose of model</span></h4>

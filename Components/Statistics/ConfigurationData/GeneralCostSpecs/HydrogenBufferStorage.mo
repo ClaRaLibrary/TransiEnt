@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Statistics.ConfigurationData.GeneralCostSpecs;
 model HydrogenBufferStorage "Cost model for small cylindrical hydrogen buffer storage (82m3 geo, max. 80 bar)"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model HydrogenBufferStorage "Cost model for small cylindrical hydrogen buffer st
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

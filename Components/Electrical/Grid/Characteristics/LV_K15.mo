@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Electrical.Grid.Characteristics;
 record LV_K15 "K15 BA 4x16 H07RN-F_NS"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record LV_K15 "K15 BA 4x16 H07RN-F_NS"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

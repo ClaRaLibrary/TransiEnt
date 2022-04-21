@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Heat.SpaceHeating.Characteristics;
 record HouseType55 "House type 55 characteristics according to EnEV 2007"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record HouseType55 "House type 55 characteristics according to EnEV 2007"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

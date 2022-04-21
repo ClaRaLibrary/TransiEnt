@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Heat.SolarThermal.Base;
 model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of solar irradiance and different models for calculating the solar irradiance on a tilted surface"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model IrradianceOnATiltedSurface "Combines the calculation of incidence angle of
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

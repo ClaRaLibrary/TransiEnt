@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Heat.Power2Heat.Heatpump;
 model Heatpump "Simple heatpump model that calculates the heat output from the externally specified electric power"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model Heatpump "Simple heatpump model that calculates the heat output from the e
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

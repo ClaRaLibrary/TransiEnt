@@ -2,8 +2,9 @@
 model PowerProfileWindPlant "Ideal continuous wind plant model based on a power production input (e.g. if wind production data is available from tso), adds to statistics"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model PowerProfileWindPlant "Ideal continuous wind plant model based on a power 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

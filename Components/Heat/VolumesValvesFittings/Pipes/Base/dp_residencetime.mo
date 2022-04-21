@@ -2,8 +2,9 @@
 model dp_residencetime "Calculates the residence time as well as the pressure loss and delays enthalpy changes according to it"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model dp_residencetime "Calculates the residence time as well as the pressure lo
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -46,6 +48,7 @@ model dp_residencetime "Calculates the residence time as well as the pressure lo
   final parameter SI.Temperature T_start = pipe_parameter.T_start "Temperature at start of simulation";
   final parameter SI.Temperature T_start_out = pipe_parameter.T_start_out;
   final parameter SI.MassFlowRate m_flow_start= 0.005 "Start Massflow";
+  final parameter SI.MassFlowRate m_flow_small_local=0.05*Modelica.Constants.pi/4*diameter_i*diameter_i*rho*v_nom "For linearization of pressure drop at mass flow below 5% of nominal velocity";
   final parameter SI.Length diameter_i = pipe_parameter.diameter_i "Inner Diameter of the Pipe";
   final parameter SI.Height z_in = pipe_parameter.z_in "Inlet Height of the pipe";
   final parameter SI.Height z_out = pipe_parameter.z_out "Outlet Height of the pipe";
@@ -70,7 +73,7 @@ model dp_residencetime "Calculates the residence time as well as the pressure lo
 
   SI.Pressure dp(start= 0.005) "Pressure difference between inlet and outlet by friction";
   SI.Pressure dp_h(start = 0) "Pressure difference between inlet and outlet due to geostatic height difference";
-
+  SI.PressureDifference dp_small;
   Real time_flow;
   Real time_reversed;
   SI.Velocity v_water "Velocity of the fluid";
@@ -111,20 +114,27 @@ equation
   //            Characteristic equations
   // _____________________________________________
 
-  // Transport time calculation
-  v_water =waterPortIn.m_flow/(rho*(1/4)*Modelica.Constants.pi*diameter_i^2);
+  //Tansport time calculation
+  v_water = waterPortIn.m_flow/(rho*(1/4)*Modelica.Constants.pi*diameter_i^2);
   der(x) = v_water;
-  (time_reversed,time_flow) = spatialDistribution(time,time,x/length,noEvent(v_water>=0), {1/v_nom,1.0},{ if calc_initial_dstrb then -((Modelica.Constants.pi*(1/4))*diameter_i^2*rho*cp_w) else 0, if calc_initial_dstrb then -((Modelica.Constants.pi*(1/4))*diameter_i^2*rho*cp_w) else 0});
-  residence_time_nom = time - time_flow;
-  residence_time_reversed = time - time_reversed;
+  (time_reversed,time_flow) = spatialDistribution(
+    time,
+    time,
+    x/length,
+    noEvent(v_water >= 0),
+    {1/v_nom,1.0},
+    {if calc_initial_dstrb then -((Modelica.Constants.pi*(1/4))*diameter_i^2*rho*cp_w) else 0,if calc_initial_dstrb then -((Modelica.Constants.pi*(1/4))*diameter_i^2*rho*cp_w) else 0});
+  // x normalised
+  residence_time_nom = min(36000, time - time_flow);
+  residence_time_reversed = min(36000, time - time_reversed);
 
-  // Delayed flow calculation
+  //Delayed flow calculation
   (waterPortIn.h_outflow,waterPortOut.h_outflow) = spatialDistribution(
     inStream(waterPortIn.h_outflow),
     inStream(waterPortOut.h_outflow),
     x/length,
-    v_water >= 0,
-     {1/v_nom,1.0},
+    noEvent(v_water >= 0),
+    {1/v_nom,1.0},
     {h_start_out,h_start_out});
 
   // Conservation equations
@@ -132,16 +142,24 @@ equation
   waterPortIn.xi_outflow = inStream(waterPortOut.xi_outflow);
   waterPortOut.xi_outflow = inStream(waterPortIn.xi_outflow);
 
-  // PressureLoss with Darcy-Weißbach-Equation
-  waterPortIn.m_flow = Modelica.Fluid.Dissipation.PressureLoss.StraightPipe.dp_overall_MFLOW(
+  // PressureLoss with Darcy-Weißbach-Equation, linearized for small mass flow rates
+  dp_small = Modelica.Fluid.Dissipation.PressureLoss.StraightPipe.dp_overall_DP(
     inCon,
     inVar,
-    dp);
+    m_flow_small_local);
+  if noEvent(abs(waterPortIn.m_flow) < m_flow_small_local) then
+    dp = dp_small/m_flow_small_local*waterPortIn.m_flow;
+  else
+    dp = Modelica.Fluid.Dissipation.PressureLoss.StraightPipe.dp_overall_DP(
+      inCon,
+      inVar,
+      waterPortIn.m_flow);
+  end if;
 
   if dz == 0 then
     dp_h = 0;
   else
-    dp_h = ((1.2041 - rho)/dz)*Modelica.Constants.g_n;
+    dp_h = rho*dz*Modelica.Constants.g_n;
   end if;
 
   waterPortOut.p = waterPortIn.p - (dp+dp_h);
@@ -218,11 +236,14 @@ equation
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">6. Governing Equations</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">See Reference</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">7. Remarks for Usage</span></b> </p>
+<p>Pressure loss is linearized for mass flow rates below 5&percnt; of the nominal velocity.</p>
+<p>Residence time is limited to 10h to improve initialisation with no mass flow present in the system at time = 0. </p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">8. Validation</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">(no remarks)</span></p>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">9. References</span></b></p>
 <p>B. van der Heijde, M. Fuchs, C. Ribas Tugores &quot;Dynamic equation-based thermo-hydraulic pipe model for district heating and cooling systems&quot;, 2017</p>
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Philipp Huismann (huismann@gwi-essen.de) on 10.10.2018</span></p>
+<p><span style=\"font-family: MS Shell Dlg 2;\">Model revised by Philipp Huismann (huismann@gwi-essen.de) on 07.04.2022 | Pressure Loss linearisation for small mass flow rates, Residence Time limitation</span></p>
 </html>"));
 end dp_residencetime;

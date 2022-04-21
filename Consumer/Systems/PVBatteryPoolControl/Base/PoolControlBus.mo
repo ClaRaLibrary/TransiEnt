@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Systems.PVBatteryPoolControl.Base;
 expandable connector PoolControlBus "Empty control bus that is adapted to the signals connected to it"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ expandable connector PoolControlBus "Empty control bus that is adapted to the si
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

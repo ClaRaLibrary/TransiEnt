@@ -104,7 +104,7 @@
 package TransiEnt "Library for transient simulation of integrated energy networks with a high share of renewable energies"
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -271,21 +271,23 @@ annotation (uses(
 <h4><span style=\"color: #008000\">List of developers (since 2013)</span></h4>
 <p>Coordinating developers:</p>
 <ul>
-<li>Bode, Carsten</li>
+<li>Gillner, Markus</li>
 <li>Heckel, Jan-Peter</li>
-<li>Schuelting, Oliver</li>
-<li>Senkel, Anne</li>
 </ul>
 <p>Consulting developers:</p>
 <ul>
 <li>Brunnemann, Johannes</li>
 <li>Flesch, Robert</li>
+<li>Rohde, Daniel</li>
 </ul>
 <p>Other developers:</p>
 <ul>
 <li>Andresen, Lisa</li>
+<li>Babst, Jon Frederik</li>
 <li>Becke, Tobias</li>
+<li>Benthin, Joern</li>
 <li>Bixel, Tonio</li>
+<li>Bode, Carsten</li>
 <li>Braune, Jan</li>
 <li>Denninger, Rebekka</li>
 <li>Djukow, Michael</li>
@@ -296,6 +298,7 @@ annotation (uses(
 <li>Gaeth, Jakobus</li>
 <li>Goettsch, Patrick</li>
 <li>Guddusch, Sascha</li>
+<li>Hagemeier, Anne</li>
 <li>Harling, Verena</li>
 <li>Helbig, Christopher</li>
 <li>Heyer, Annika</li>
@@ -309,7 +312,10 @@ annotation (uses(
 <li>Lindemann, Tom Oliver</li>
 <li>Peniche Garcia, Ricardo</li>
 <li>Ramm, Tobias</li>
+<li>Ruppert, Stefanie</li>
 <li>Schroeder, Vitja</li>
+<li>Schuelting, Oliver</li>
+<li>Senkel, Anne</li>
 <li>Settgast, Christine</li>
 <li>Toerber, Tobias</li>
 <li>Urbansky, Julian</li>
@@ -317,16 +323,18 @@ annotation (uses(
 <li>Webster, John</li>
 <li>Westphal, Jan</li>
 <li>Weilbach, Simon</li>
+<li>Vojacek, Ales</li>
 <li>Zaczek, Alexander</li>
 </ul>
 </html>"),
-  version="2.0.0",
+  version="2.0.1",
   conversion(from(version="0.3", to="1.1.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
   from(version="1.0.1", to="1.1.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.0_to_1.1.mos"),
   from(version="1.1.0", to="1.2.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.1.0_to_1.2.0.mos"),
   from(version="1.2.0", to="1.3.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.2.0_to_1.3.0.mos"),
   from(version="1.3.0", to="2.0.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.3.1_to_2.0.0.mos"),
-  from(version="1.3.1", to="2.0.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.3.1_to_2.0.0.mos")));
+  from(version="1.3.1", to="2.0.0", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_1.3.1_to_2.0.0.mos"),
+  from(version="2.0.0", to="2.0.1", script="modelica://TransiEnt/Scripts/ConvertTransiEnt_from_2.0.0_to_2.0.1.mos")));
 end TransiEnt;
 
 

@@ -2,8 +2,9 @@
 record Gas_VDIWA_NG7_H2_var "var{CH4,C2H6,C3H8,C4H10,N2,CO2,H2} VDIWA"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ record Gas_VDIWA_NG7_H2_var "var{CH4,C2H6,C3H8,C4H10,N2,CO2,H2} VDIWA"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

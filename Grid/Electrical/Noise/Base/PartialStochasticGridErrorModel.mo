@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Grid.Electrical.Noise.Base;
 partial model PartialStochasticGridErrorModel "Base model for prediction errors based on stochastic distributions"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ partial model PartialStochasticGridErrorModel "Base model for prediction errors 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

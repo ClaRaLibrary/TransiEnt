@@ -2,8 +2,9 @@
 model PVPlant "Simple efficiency-based PV model"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -26,6 +27,7 @@ model PVPlant "Simple efficiency-based PV model"
 
 
 
+
   // _____________________________________________
   //
   //          Imports and Class Hierarchy
@@ -40,6 +42,7 @@ model PVPlant "Simple efficiency-based PV model"
   //                 Outer Models
   // _____________________________________________
   outer TransiEnt.ModelStatistics modelStatistics;
+  outer SimCenter simCenter;
 
   // _____________________________________________
   //
@@ -81,8 +84,7 @@ model PVPlant "Simple efficiency-based PV model"
   parameter SI.Angle longitude_standard=Modelica.Units.Conversions.from_deg(15)
     "needed for calculation of coordinated universal time (utc), 15 for central european time, 30 for central european summer time"
     annotation (Dialog(tab="Irradiance", group="Solartime", enable=not input_POA_irradiation));
-  Modelica.Units.NonSI.Time_day totaldays=365
-    "total days of the year, standard=365, leap year=366"
+  Modelica.Units.NonSI.Time_day totaldays=365 "total days of the year, standard=365, leap year=366"
     annotation (Dialog(tab="Irradiance", group="Solartime"));
 
   //Parameters for ExtraterrestrialIrradiance
@@ -149,8 +151,7 @@ model PVPlant "Simple efficiency-based PV model"
   // _____________________________________________
 
   //variables dependend on irradiation and temperature:
- // Modelica.Units.SI.Power POA_Irradiation(min=0)
-  //  "plane of array irradiation usable for PV generation";
+
   Modelica.Units.SI.Temperature T_module "module temperature";
   Modelica.Units.SI.Temperature T_cell "cell temperature";
 
@@ -168,7 +169,12 @@ model PVPlant "Simple efficiency-based PV model"
   Modelica.Units.SI.Area Area_demand;
   Real ModulesPerString "Choose amount of modules per string";
 
-  //input variables:
+
+  // _____________________________________________
+  //
+  //                    Interfaces
+  // _____________________________________________
+
   TransiEnt.Basics.Interfaces.General.TemperatureCelsiusIn T_in
     "ambient temperature in Celcius" annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
@@ -188,8 +194,7 @@ model PVPlant "Simple efficiency-based PV model"
     annotation (Placement(transformation(extent={{88,-8},{108,12}}),
         iconTransformation(extent={{76,-22},{110,10}})));
 
-  Modelica.Blocks.Interfaces.RealInput POA_radiation_in if
-                                                       input_POA_irradiation "Radiation on module in W/m^2" annotation (Placement(transformation(extent={{-140,-22},{-100,18}}), iconTransformation(extent={{-126,-20},{-86,20}})));
+  Modelica.Blocks.Interfaces.RealInput POA_radiation_in if input_POA_irradiation "Radiation on module in W/m^2" annotation (Placement(transformation(extent={{-140,-22},{-100,18}}), iconTransformation(extent={{-126,-20},{-86,20}})));
   TransiEnt.Basics.Interfaces.Ambient.IrradianceIn DNI_in if not input_POA_irradiation==true
     "Direct Normal Irradiation in W/m^2" annotation (Placement(transformation(
           extent={{-140,4},{-100,44}}), iconTransformation(extent={{-140,4},{-100,
@@ -202,6 +207,10 @@ model PVPlant "Simple efficiency-based PV model"
   TransiEnt.Basics.Interfaces.Ambient.IrradianceOut POA_Irradiation annotation (Placement(transformation(extent={{-28,-16},{-8,4}})));
 
 
+  // _____________________________________________
+  //
+  //                    Complex Components
+  // _____________________________________________
 
   TransiEnt.Components.Statistics.Collectors.LocalCollectors.PowerPlantCost
     collectCosts_PowerProducer(
@@ -223,11 +232,11 @@ model PVPlant "Simple efficiency-based PV model"
     annotation (Placement(transformation(extent={{14,-14},{34,6}})));
   inner TransiEnt.Producer.Heat.SolarThermal.Base.IrradianceOnATiltedSurface
     irradiance(use_input_data=true, redeclare model Skymodel =
-        Skymodel) if not input_POA_irradiation
-    annotation (Placement(transformation(extent={{-58,-18},{-28,10}})));
+        Skymodel) if not input_POA_irradiation  annotation (Placement(transformation(extent={{-58,-18},{-28,10}})));
 
+  TransiEnt.Components.Statistics.Collectors.LocalCollectors.CollectElectricPower collectElectricPower(typeOfResource=TransiEnt.Basics.Types.TypeOfResource.Renewable, integrateElPower=simCenter.integrateElPower)
+                                                                                                             annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
-public
   Modelica.Blocks.Tables.CombiTable1Ds PowerCurve_PV_Irradiation(
     smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments,
     table=PVModuleCharacteristics.MPP_dependency_on_irradiation_fixedTemperature,
@@ -290,11 +299,6 @@ equation
   //           Characteristic equations
   // _____________________________________________
 
-  //Input irradiation
-//   POA_Irradiation = (IAM.iam_dir*irradiance.irradiance_direct_tilted + IAM.iam_diff
-//     *irradiance.irradiance_diffuse_tilted + IAM.iam_ground*irradiance.irradiance_ground_tilted)
-//     *(100 - Soiling)/100;
-
   //calculation of module temperature
   T_module = 273.15 + T_in + POA_Irradiation*(exp(-3.47 - 0.0594*WindSpeed_in));
   //https://pvpmc.sandia.gov/modeling-steps/2-dc-module-iv/module-temperature/sandia-module-temperature-model/
@@ -351,11 +355,16 @@ equation
   //Connection to output
   epp.P = -P_out;
 
+  //Statistics
+  collectElectricPower.powerCollector.P=-P_out;
+
   // _____________________________________________
   //
   //               Connect Statements
   // _____________________________________________
   connect(modelStatistics.costsCollector, collectCosts_PowerProducer.costsCollector);
+  connect(modelStatistics.powerCollector[TransiEnt.Basics.Types.TypeOfResource.Renewable],collectElectricPower.powerCollector);
+
   if not input_POA_irradiation then
     connect(DNI_in, irradiance.irradiance_direct_measured_input) annotation (
         Line(points={{-120,24},{-68,24},{-68,1.6},{-61,1.6}}, color={0,0,127}));

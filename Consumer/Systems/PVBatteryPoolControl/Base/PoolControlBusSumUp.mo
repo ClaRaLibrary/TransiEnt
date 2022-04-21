@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Systems.PVBatteryPoolControl.Base;
 model PoolControlBusSumUp "Sums up the state information of N units control busses to one single control bus which can then be connected to a controller"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model PoolControlBusSumUp "Sums up the state information of N units control buss
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

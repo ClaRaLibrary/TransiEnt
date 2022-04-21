@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Electrical.Base.ControlPower;
 block PrimarySecondaryAndSchedule "Plant in both scheduled and Primary and Secondary Control operation"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ block PrimarySecondaryAndSchedule "Plant in both scheduled and Primary and Secon
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

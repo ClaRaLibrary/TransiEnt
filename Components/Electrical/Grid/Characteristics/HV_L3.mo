@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Components.Electrical.Grid.Characteristics;
 record HV_L3 "HV_L3 380 kV overhead line, 3-wire-bundle Al/St 380/500"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record HV_L3 "HV_L3 380 kV overhead line, 3-wire-bundle Al/St 380/500"
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

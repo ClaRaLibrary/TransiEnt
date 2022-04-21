@@ -1,9 +1,9 @@
 ﻿within TransiEnt.Producer.Heat.Heat2Heat;
-model Indirect_HEX_L1 "A model representing a energy based HEX as part of a substation with indirect connection."
+model Indirect_HEX_const_dT_L1 "Constant dT Heat Exchanger Model"
 
 
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -24,24 +24,22 @@ model Indirect_HEX_L1 "A model representing a energy based HEX as part of a subs
 //________________________________________________________________________________//
 
 
-
-
  // _____________________________________________
  //
  //          Imports and Class Hierarchy
  // _____________________________________________
-  extends TransiEnt.Basics.Icons.Model;
+
  import Modelica.Units.SI;
  import TIL = TILMedia.VLEFluidFunctions;
  outer TransiEnt.SimCenter simCenter;
-
+ extends TransiEnt.Producer.Heat.Base.PartialHEX;
  // _____________________________________________
  //
  //                   Parameters
  // _____________________________________________
 
  parameter SI.Temperature T_start = 90 + 273.15 "Temperature at start of simulation";
- parameter Real dT_soll = 10 "Setpoint temperature difference between supply and return pipe";
+ parameter Real dT_set = simCenter.dT "Setpoint temperature difference between supply and return pipe";
  parameter SI.MassFlowRate m_flow_min = 0.01 "Minimum mass flow rate to counteract possible zero massflow sitations";
  final parameter SI.SpecificHeatCapacityAtConstantPressure cp = TIL.specificIsobaricHeatCapacity_pTxi(simCenter.fluid1,simCenter.p_nom[2],T_start,{1,0,0});
 
@@ -66,12 +64,12 @@ model Indirect_HEX_L1 "A model representing a energy based HEX as part of a subs
         rotation=-90,
         origin={-72,80})));
   Modelica.Blocks.Interfaces.RealOutput T_out_calc annotation (Placement(
-        transformation(extent={{100,-60},{120,-40}}),iconTransformation(extent={{74,-20},{114,20}})));
+        transformation(extent={{100,-60},{120,-40}}),iconTransformation(extent={{90,-20},{130,20}})));
   Modelica.Blocks.Interfaces.RealOutput m_flow annotation (Placement(
         transformation(extent={{100,30},{140,70}}),  iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
-        origin={0,-92})));
+        origin={0,-104})));
   Modelica.Blocks.Interfaces.RealInput T_in annotation (Placement(
         transformation(extent={{-120,64},{-80,104}}), iconTransformation(
         extent={{-20,-20},{20,20}},
@@ -82,51 +80,12 @@ equation
   // Calculation of the necessary mass flow to achive the given constant temperature difference between supply and return.
 
     Q_withdrawal = Q_demand;
-    m_flow = max(Q_withdrawal/(cp*dT_soll),m_flow_min);
+    m_flow = max(Q_withdrawal/(cp*dT_set),m_flow_min);
     T_out =  T_in - Q_withdrawal/(cp*m_flow);
     T_out_calc = T_out;
 
     annotation (Line(points={{120,50},{11,50},{11,50},{120,50}}, color={0,0,127}),
-              Icon(coordinateSystem(preserveAspectRatio=false), graphics={
-        Polygon(
-          points={{-84,6},{-84,6}},
-          lineColor={0,0,0},
-          lineThickness=1,
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid),
-        Line(
-          points={{-92,0},{-40,0},{92,0}},
-          color={238,46,47},
-          thickness=1),
-        Line(
-          points={{4,0},{4,0},{92,0}},
-          color={28,108,200},
-          thickness=1),
-        Rectangle(
-          extent={{-38,22},{46,-22}},
-          lineColor={0,0,0},
-          lineThickness=1,
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid),
-        Line(
-          points={{-38,0},{-18,14},{-18,-10},{6,14},{6,-10},{30,14},{30,-10},{46,
-              0}},
-          color={0,0,0},
-          thickness=1),
-        Rectangle(
-          extent={{2,20},{10,4}},
-          lineThickness=0.5,
-          fillColor={238,46,47},
-          fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None,
-          lineColor={0,0,0}),
-        Polygon(
-          points={{-4,20},{6,34},{16,20},{-4,20}},
-          lineThickness=0.5,
-          fillColor={238,46,47},
-          fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None,
-          lineColor={0,0,0})}),                                  Diagram(
+              Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">1. Purpose of model</span></b></p>
@@ -151,4 +110,4 @@ equation
 <p><br><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">10. Version History</span></b></p>
 <p><span style=\"font-family: MS Shell Dlg 2;\">Model created by Philipp Huismann (huismann@gwi-essen.de), Oct 2018</span></p>
 </html>"));
-end Indirect_HEX_L1;
+end Indirect_HEX_const_dT_L1;

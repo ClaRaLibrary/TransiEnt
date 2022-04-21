@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Heat.HotWaterStorage_constProp_L4;
 model HotWaterStorage_constProp_L4 "Temperature and heat flow rate based model of a stratified thermal storage with finite volume discretisation (1=top, n=bottom) and constant fluid properties, electric heating rods can be added"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model HotWaterStorage_constProp_L4 "Temperature and heat flow rate based model o
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
@@ -56,7 +58,7 @@ model HotWaterStorage_constProp_L4 "Temperature and heat flow rate based model o
   parameter Boolean useFluidPorts=true annotation (Dialog(group="Geometry"),choices(checkBox=true));
 
   parameter SI.Volume V = 1e3 "Volume of tank" annotation(Dialog(group="Geometry"));
-  parameter Real p_Volume[N_cv]=fill(V/N_cv, N_cv) "Proportion of the total volume for the parts of the tank" annotation (Dialog(group="Geometry"));
+  parameter Real p_Volume[N_cv]=fill(1/N_cv, N_cv) "Proportion of the total volume for the parts of the tank" annotation (Dialog(group="Geometry"));
   parameter SI.Height h = 1 "Height of tank" annotation(Dialog(group="Geometry"));
   parameter Integer n_prodIn=1 "Number of inlet ports on producer side" annotation(Dialog(group="Geometry", enable=useFluidPorts));
   parameter Integer n_prodOut=n_prodIn "Number of outlet ports on producer side" annotation(Dialog(group="Geometry", enable=useFluidPorts));
@@ -177,8 +179,8 @@ model HotWaterStorage_constProp_L4 "Temperature and heat flow rate based model o
     each eta=eta_elHeater,
     useHeatPort=true,
     redeclare model ProducerCosts = ProducerCosts_elHeater,
-    redeclare ElectricPowerPort epp,
-    redeclare PowerBoundary powerBoundary) if useElHeater annotation (Placement(transformation(
+    redeclare connector PowerPortModel = ElectricPowerPort,
+    redeclare model PowerBoundaryModel = PowerBoundary) if useElHeater annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-40,-48})));

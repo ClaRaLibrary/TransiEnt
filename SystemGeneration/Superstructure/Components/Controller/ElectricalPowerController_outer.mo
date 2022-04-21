@@ -1,8 +1,9 @@
 ﻿within TransiEnt.SystemGeneration.Superstructure.Components.Controller;
 model ElectricalPowerController_outer "Controller for superstructure masks, currently supports only 2 types of power plants"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model ElectricalPowerController_outer "Controller for superstructure masks, curr
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

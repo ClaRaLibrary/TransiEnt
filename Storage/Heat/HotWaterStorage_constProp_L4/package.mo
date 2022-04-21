@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Storage.Heat;
 package HotWaterStorage_constProp_L4 "Package contains model of one dimensional heat storage with constant thermodynamic properties"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ package HotWaterStorage_constProp_L4 "Package contains model of one dimensional 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

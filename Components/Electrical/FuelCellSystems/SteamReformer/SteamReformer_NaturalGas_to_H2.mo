@@ -2,8 +2,9 @@
 model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction kinetics depending on input gascomposition, including mass fraction balance and reaction volume (input natural gas, output H2 rich syngas)"
 
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -22,6 +23,7 @@ model SteamReformer_NaturalGas_to_H2 "SteamReformer with calculation of reaction
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

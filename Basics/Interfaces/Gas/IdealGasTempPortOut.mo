@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Basics.Interfaces.Gas;
 connector IdealGasTempPortOut "A connector for ideal gas outlets featuring T,p,xi,m_flow"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ connector IdealGasTempPortOut "A connector for ideal gas outlets featuring T,p,x
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

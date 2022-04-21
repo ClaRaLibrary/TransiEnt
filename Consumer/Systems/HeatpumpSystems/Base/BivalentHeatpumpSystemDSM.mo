@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Consumer.Systems.HeatpumpSystems.Base;
 model BivalentHeatpumpSystemDSM "Model of a bivalent heat pump system for demand side management scenarios"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ model BivalentHeatpumpSystemDSM "Model of a bivalent heat pump system for demand
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 

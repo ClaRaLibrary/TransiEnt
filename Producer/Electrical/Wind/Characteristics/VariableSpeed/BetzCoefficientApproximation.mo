@@ -1,8 +1,9 @@
 ﻿within TransiEnt.Producer.Electrical.Wind.Characteristics.VariableSpeed;
 record BetzCoefficientApproximation "Six parameter approximation model for betz coefficient taken from Heier2009"
 
+
 //________________________________________________________________________________//
-// Component of the TransiEnt Library, version: 2.0.0                             //
+// Component of the TransiEnt Library, version: 2.0.1                             //
 //                                                                                //
 // Licensed by Hamburg University of Technology under the 3-BSD-clause.           //
 // Copyright 2021, Hamburg University of Technology.                              //
@@ -21,6 +22,7 @@ record BetzCoefficientApproximation "Six parameter approximation model for betz 
 // and                                                                            //
 // XRG Simulation GmbH (Hamburg, Germany).                                        //
 //________________________________________________________________________________//
+
 
 
 
